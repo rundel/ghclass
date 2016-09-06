@@ -2,13 +2,26 @@
 
 library(gh)
 
-acc_file = commandArgs(trailingOnly=TRUE)
+args = commandArgs(trailingOnly=TRUE)
 
-stopifnot(length(acc_file) == 1)
-stopifnot(file.exists(acc_file))
+if(length(args)!=1)
+{
+  cat("Usage: check_accounts.R ACCOUNT_FILE")
+  stop()
+}
+
+account_file = args[1]
+
+
+stopifnot(file.exists(account_file))
 
 token = readLines("secret/github_token")
-accounts = readLines(acc_file)
+
+stopifnot(file.exists(account_file))
+team_info = read.csv(account_file, stringsAsFactors=FALSE)
+
+stopifnot(all(c("Name","Account","Team") %in% names(team_info)))
+accounts = team_info$Account
 
 res = lapply(
   accounts, 

@@ -17,12 +17,11 @@ org = args[2]
 prefix = args[3]
 
 stopifnot(file.exists(account_file))
+team_info = read.csv(account_file, stringsAsFactors=FALSE)
 
-account_info = read.csv(account_file, stringsAsFactors=FALSE)
-
-account_info$Team = paste0(prefix, account_info$Team)
-
-teams = account_info$Team %>%
+stopifnot(all(c("Name","Account","Team") %in% names(team_info)))
+team_info$Team = paste0(prefix, team_info$Team)
+teams = team_info$Team %>%
         unique() %>%
         sort()
         
@@ -41,16 +40,16 @@ for(team in teams)
      .token=token)
 }
 
-team_info = gh("/orgs/:org/teams", org=org, .token=token)
-team_ids = sapply(team_info, function(x) x$id)
-names(team_ids) = sapply(team_info, function(x) x$name)
+teams = gh("/orgs/:org/teams", org=org, .token=token)
+team_ids = sapply(teams, function(x) x$id)
+names(team_ids) = sapply(teams, function(x) x$name)
 
-for(i in seq_len(nrow(account_info)))
+for(i in seq_len(nrow(team_info)))
 {
     Sys.sleep(0.2)
 
-    team = account_info$Team[i]
-    acc = account_info$Account[i]
+    team = team_info$Team[i]
+    acc = team_info$Account[i]
     id = team_ids[team]
 
     cat("Adding ", acc, " to ", team, "...\n", sep="")
