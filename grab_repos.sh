@@ -5,7 +5,7 @@ if [ $# != 1 ]; then
     exit 1
 fi
 
-github='git@github.com:Sta323-Sp16/'
+github='git@github.com:Sta523-Fa16/'
 teams=('Team1' 'Team2' 'Team3' 'Team4' 'Team5' 'Team6' 'Team7' 'Team8' 'Team9' 'Team10')
 
 suffix=${1}
