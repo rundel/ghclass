@@ -8,7 +8,7 @@ args = commandArgs(trailingOnly=TRUE)
 
 if(length(args)!=2)
 {
-  cat("Usage: invite_accounts.R ACCOUNT_FILE ORGANIZATION")
+  cat("Usage: invite_accounts.R <account file> <organization>")
   stop()
 }
 
