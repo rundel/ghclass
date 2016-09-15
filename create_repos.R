@@ -9,7 +9,7 @@ token = readLines("secret/github_token")
 
 if(!length(args) %in% 2:3)
 {
-  cat("Usage: create_repos.R <organization> <suffix> [public repo]")
+  cat("Usage: create_repos.R <organization> <suffix> [public repo]\n")
   stop()
 }
 

@@ -10,7 +10,7 @@ token = readLines("secret/github_token")
 
 if(length(args) < 4)
 {
-  cat("Usage: add_files.R <organization> <repo suffix> <message> <file1> <file2> ...")
+  cat("Usage: add_files.R <organization> <repo suffix> <message> <file1> <file2> ...\n")
   stop()
 }
 
