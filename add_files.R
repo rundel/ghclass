@@ -36,7 +36,7 @@ for(repo in selected_repos)
   local_repo = clone(org_url, path, progress=FALSE)  
   for(file in files)
   {
-    file.copy(file, path)
+    file.copy(file, path, overwrite = TRUE)
     add(local_repo, basename(file))
   }
 
