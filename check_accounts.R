@@ -6,7 +6,7 @@ args = commandArgs(trailingOnly=TRUE)
 
 if(length(args)!=1)
 {
-  cat("Usage: check_accounts.R <account file>")
+  cat("Usage: check_accounts.R <account file>\n")
   stop()
 }
 

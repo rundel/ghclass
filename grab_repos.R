@@ -10,7 +10,7 @@ token = readLines("secret/github_token")
 
 if(length(args) != 3)
 {
-  cat("Usage: grab_repos.R <organization> <repo pattern> <local path>")
+  cat("Usage: grab_repos.R <organization> <repo pattern> <local path>\n")
   stop()
 }
 
