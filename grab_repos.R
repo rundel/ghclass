@@ -24,7 +24,7 @@ repo_names = sapply(repos, function(x) x$name)
 selected_repos = str_detect(repo_names,pattern) %>% repo_names[.]
 
 
-for(repo in repo_names)
+for(repo in selected_repos)
 {
   cat("Grabbing", repo, "...\n")
   org_url = paste0('git@github.com:',org,'/',repo,'.git')
