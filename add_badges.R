@@ -54,8 +54,9 @@ for(repo in selected_repos)
 
   stopifnot(file.exists(readme))
 
+  prev_contents = readLines(readme, warn=FALSE)
   writeLines(
-    c(link, readLines(readme, warn=FALSE)),
+    c(link, prev_contents),
     readme
   )
 
