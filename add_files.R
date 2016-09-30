@@ -42,15 +42,17 @@ for(repo in selected_repos)
   dir.create(path, recursive=TRUE)
 
   local_repo = clone(org_url, path, progress=FALSE, credentials = cred)
-  for(file in files)
-  {
-    file.copy(file, path, overwrite = TRUE)
-    add(local_repo, basename(file))
-  }
+  try({
+    for(file in files)
+    {
+      file.copy(file, path, overwrite = TRUE)
+      add(local_repo, basename(file))
+    }
 
-  commit(local_repo, message)
-  push(local_repo, credentials = cred)
-
+    commit(local_repo, message)
+    push(local_repo, credentials = cred)
+  })
+  
   unlink(path, recursive=TRUE)
 }
 

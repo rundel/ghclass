@@ -51,19 +51,20 @@ for(repo in selected_repos)
   local_repo = clone(org_url, path, progress=FALSE, credentials = cred)
 
   readme = file.path(path,"README.md")
-
   stopifnot(file.exists(readme))
 
-  prev_contents = readLines(readme, warn=FALSE)
-  writeLines(
-    c(link, prev_contents),
-    readme
-  )
-
-  add(local_repo, readme)
-  commit(local_repo, "Adding badge")
-  push(local_repo, credentials = cred)
-
+  try({
+    prev_contents = readLines(readme, warn=FALSE)
+    writeLines(
+      c(link, prev_contents),
+      readme
+    )
+  
+    add(local_repo, readme)
+    commit(local_repo, "Adding badge")
+    push(local_repo, credentials = cred)
+  })
+  
   unlink(path, recursive=TRUE)
 }
 
