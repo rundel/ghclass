@@ -34,10 +34,11 @@ names(team_ids) = sapply(team_info, function(x) x$name)
 
 for(team in names(team_ids))
 {
-    Sys.sleep(0.2)
+    Sys.sleep(1)
 
     repo_name = paste0(team,suffix)
-    
+    cat("Creating", repo_name, "\n")
+
     gh("POST /orgs/:org/repos", 
        org = org,
        name=repo_name, private=TRUE, team_id=team_ids[team], 
