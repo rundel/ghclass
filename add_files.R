@@ -20,20 +20,28 @@ message = args[3]
 files = args[4:length(args)]
 
 
-repos = gh("GET /orgs/:org/repos", org = org, .token=token)
+repos = gh("GET /orgs/:org/repos", org = org, .token=token, .limit=1000)
 repo_names = sapply(repos, function(x) x$name)   
 
 selected_repos = str_detect(repo_names,suffix) %>% repo_names[.]
 
+cat("Username: ")
+user = readLines(file("stdin"),1)
+cat("Password: ")
+pass = readLines(file("stdin"),1)
+
+cred = cred_user_pass(user,pass)
+
 for(repo in selected_repos)
 {
   cat("Updating", repo, "...\n")
-  org_url = paste0('git@github.com:',org,'/',repo,'.git')
+  #org_url = paste0('git@github.com:',org,'/',repo,'.git')
+  org_url = paste0("https://github.com/",org,"/",repo,".git")
 
   path = file.path(tempdir(),repo)
   dir.create(path, recursive=TRUE)
 
-  local_repo = clone(org_url, path, progress=FALSE)  
+  local_repo = clone(org_url, path, progress=FALSE, credentials = cred)
   for(file in files)
   {
     file.copy(file, path, overwrite = TRUE)
@@ -41,7 +49,7 @@ for(repo in selected_repos)
   }
 
   commit(local_repo, message)
-  push(local_repo)
+  push(local_repo, credentials = cred)
 
   unlink(path, recursive=TRUE)
 }
