@@ -19,6 +19,7 @@ public = NULL
 if (length(args)==3)
 {
   repo_name = paste0(args[3], suffix)
+  cat("Creating", repo_name, "\n")
   
   x = gh("POST /orgs/:org/repos", 
          org = org,
@@ -28,7 +29,7 @@ if (length(args)==3)
 }
         
 
-team_info = gh("/orgs/:org/teams", org=org, .token=token)
+team_info = gh("/orgs/:org/teams", org=org, .token=token, .limit=1000)
 team_ids = sapply(team_info, function(x) x$id)
 names(team_ids) = sapply(team_info, function(x) x$name)
 

@@ -27,12 +27,12 @@ repo_names = sapply(repos, function(x) x$name)
 selected_repos = str_detect(repo_names,suffix) %>% repo_names[.]
 
 
-cat("Username: ")
-user = readLines(file("stdin"),1)
-cat("Password: ")
-pass = readLines(file("stdin"),1)
-
-cred = cred_user_pass(user,pass)
+#cat("Username: ")
+#user = readLines(file("stdin"),1)
+#cat("Password: ")
+#pass = readLines(file("stdin"),1)
+#
+#cred = cred_user_pass(user,pass)
 
 for(repo in selected_repos)
 {
@@ -48,7 +48,7 @@ for(repo in selected_repos)
   path = file.path(tempdir(),repo)
   dir.create(path, recursive=TRUE)
 
-  local_repo = clone(org_url, path, progress=FALSE, credentials = cred)
+  local_repo = clone(org_url, path, progress=FALSE)#, credentials = cred)
 
   readme = file.path(path,"README.md")
   stopifnot(file.exists(readme))
@@ -62,7 +62,7 @@ for(repo in selected_repos)
   
     add(local_repo, readme)
     commit(local_repo, "Adding badge")
-    push(local_repo, credentials = cred)
+    push(local_repo)#, credentials = cred)
   })
   
   unlink(path, recursive=TRUE)

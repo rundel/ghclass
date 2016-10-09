@@ -18,7 +18,7 @@ org = args[1]
 pattern = args[2]
 local_path = args[3]
 
-repos = gh("GET /orgs/:org/repos", org = org, .token=token)
+repos = gh("GET /orgs/:org/repos", org = org, .token=token, .limit=1000)
 repo_names = sapply(repos, function(x) x$name)   
 
 selected_repos = str_detect(repo_names,pattern) %>% repo_names[.]
