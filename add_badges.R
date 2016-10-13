@@ -42,8 +42,8 @@ for(repo in selected_repos)
   stopifnot(length(link) == 1)
 
   cat("Adding badge for", repo, "...\n")
-  #org_url = paste0('git@github.com:',org,'/',repo,'.git')
-  org_url = paste0("https://github.com/",org,"/",repo,".git")
+  org_url = paste0('git@github.com:',org,'/',repo,'.git')
+  #org_url = paste0("https://github.com/",org,"/",repo,".git")
 
   path = file.path(tempdir(),repo)
   dir.create(path, recursive=TRUE)
