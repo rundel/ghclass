@@ -17,7 +17,7 @@ if(length(args) != 3)
 
 org = args[1]
 suffix = args[2]
-badges = read.csv(args[3], stringsAsFactors=FALSE, quote="")
+badges = read.csv(args[3], stringsAsFactors=FALSE, quote="'")
 
 stopifnot(all(names(badges) == c("team","link")))
 

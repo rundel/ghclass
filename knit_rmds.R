@@ -18,6 +18,8 @@ stopifnot(dir.exists(local_path))
 
 repos = list.dirs(path = local_path, full.names = TRUE, recursive = FALSE)      
 
+prev_dir = getwd()
+
 for(repo in repos)
 {
   cat("Knitting in", repo, "...\n")
@@ -25,4 +27,6 @@ for(repo in repos)
   setwd(repo)
   rmds = list.files("./", pattern="[Rr]md$")
   lapply(rmds, render, quiet=TRUE)
+
+  setwd(prev_dir)
 }
