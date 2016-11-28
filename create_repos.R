@@ -21,11 +21,13 @@ if (length(args)==3)
   repo_name = paste0(args[3], suffix)
   cat("Creating", repo_name, "\n")
   
-  x = gh("POST /orgs/:org/repos", 
-         org = org,
-         name=repo_name, private=FALSE,
-         auto_init=TRUE, gitignore_template="R",
-         .token=token) 
+  try({
+    x = gh("POST /orgs/:org/repos", 
+           org = org,
+           name=repo_name, private=FALSE,
+           auto_init=TRUE, gitignore_template="R",
+           .token=token) 
+  })
 }
         
 
@@ -38,18 +40,24 @@ for(team in names(team_ids))
     Sys.sleep(1)
 
     repo_name = paste0(team,suffix)
-    cat("Creating", repo_name, "\n")
+    cat("Creating ", repo_name, " for ",team," (", team_ids[team],")\n",sep="")
 
-    gh("POST /orgs/:org/repos", 
-       org = org,
-       name=repo_name, private=TRUE, team_id=team_ids[team], 
-       auto_init=TRUE, gitignore_template="R",
-       .token=token)
+    try({
+      gh("POST /orgs/:org/repos", 
+         org = org,
+         name=repo_name, private=TRUE, team_id=team_ids[team], 
+         auto_init=TRUE, gitignore_template="R",
+         .token=token)
+    })
 
-    gh("PUT /teams/:id/repos/:org/:repo", 
-       id = team_ids[team], org = org, repo = repo_name,
-       permission="push",
-       .token=token)
+    Sys.sleep(2)
+
+    try({
+      gh("PUT /teams/:id/repos/:org/:repo", 
+         id = team_ids[team], org = org, repo = repo_name,
+         permission="push",
+         .token=token)
+    })
 }
 
 

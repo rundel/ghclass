@@ -25,8 +25,11 @@ for(repo in repos)
   cat("Knitting in", repo, "...\n")
 
   setwd(repo)
-  rmds = list.files("./", pattern="[Rr]md$")
-  lapply(rmds, render, quiet=TRUE)
+
+  try({
+    rmds = list.files("./", pattern="[Rr]md$")
+    lapply(rmds, render, quiet=TRUE)        
+  })
 
   setwd(prev_dir)
 }
