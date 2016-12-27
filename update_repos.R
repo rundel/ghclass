@@ -14,11 +14,11 @@ if (!length(args) == 1)
 local_path = args[1]
 
 repos = list.dirs(path = local_path, full.names = TRUE, recursive=FALSE)
-print(repos)
 
 for(repo in repos)
 {
-  cat("Updating", repo, "...")
+  cat("Updating", repo, "... (")
   pull(repo = repository(repo))
+  cat(")\n")
 }
 
