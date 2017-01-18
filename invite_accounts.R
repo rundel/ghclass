@@ -1,27 +1,37 @@
 #!/usr/bin/env Rscript
 
 library(gh)
+library(purrr)
 
 args = commandArgs(trailingOnly=TRUE)
 
 
-
-if(length(args)!=2)
+if(length(args) != 3)
 {
-  cat("Usage: invite_accounts.R <account file> <organization>\n")
+  cat("Usage: invite_accounts.R <organization> <account file> <account column> \n")
   stop()
 }
 
-account_file = args[1]
-org = args[2]
+token = readLines("secret/github_token")
+
+org = args[1]
+account_file = args[2]
+account_col  = args[3]
+
 
 stopifnot(file.exists(account_file))
 
-accounts = read.csv(account_file, stringsAsFactors=FALSE)$Account
-token = readLines("secret/github_token")
+file = read.csv(account_file, stringsAsFactors=FALSE)
+
+stopifnot(account_col %in% names(file))
+accounts = file[[account_col]]
 
 
-for(acc in accounts)
+members = map_chr(gh("GET /orgs/:org/members", org=org, .token=token, .limit=1000), "login")
+
+need_invite = setdiff(accounts, members)
+
+for(acc in need_invite)
 {
   Sys.sleep(0.2)
 

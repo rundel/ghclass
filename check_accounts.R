@@ -4,24 +4,24 @@ library(gh)
 
 args = commandArgs(trailingOnly=TRUE)
 
-if(length(args)!=1)
+if(length(args) != 2)
 {
-  cat("Usage: check_accounts.R <account file>\n")
+  cat("Usage: check_accounts.R <account file> <account column>\n")
   stop()
 }
 
 account_file = args[1]
-
+account_col  = args[2]
 
 stopifnot(file.exists(account_file))
 
 token = readLines("secret/github_token")
 
 stopifnot(file.exists(account_file))
-team_info = read.csv(account_file, stringsAsFactors=FALSE)
+account_info = read.csv(account_file, stringsAsFactors=FALSE)
 
-stopifnot(all(c("Name","Account","Team") %in% names(team_info)))
-accounts = team_info$Account
+stopifnot(account_col %in% names(account_info))
+accounts = account_info[[account_col]]
 
 res = lapply(
   accounts, 
