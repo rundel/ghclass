@@ -1,8 +1,14 @@
 .ghclass = new.env(FALSE, parent=globalenv())
 
-.onLoad = function(libname, pkgname) {
+.onAttach = function(libname, pkgname) {
   assign("api_limit", value = 1000L, envir = .ghclass)
+  assign("phantom", value = NULL, envir = .ghclass)
+  assign("session", value = NULL, envir = .ghclass)
   get_github_token(quiet=TRUE)
+}
+
+.onUnload = function(libpath) {
+  # Cleanup phantom
 }
 
 get_api_limit = function()

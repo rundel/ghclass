@@ -12,7 +12,7 @@ get_github_token = function(quiet=FALSE)
 
   if (file.exists("~/.github/token"))
   {
-    set_github_token("~/.github/token")
+    set_github_token(file="~/.github/token")
     return(get_github_token())
   }
 
