@@ -6,28 +6,29 @@ library(magrittr)
 args = commandArgs(trailingOnly=TRUE)
 
 
-if(length(args)!=3)
+if(length(args)!=4)
 {
-  cat("Usage: invite_accounts.R <account file> <organization> <prefix>\n")
+  cat("Usage: create_teams.R <organization> <account file> <account column> <team column>\n")
   stop()
 }
 
-account_file = args[1]
-org = args[2]
-prefix = args[3]
+token = readLines("secret/github_token")
+
+org = args[1]
+account_file = args[2]
+account_col = args[3]
+team_col = args[4]
 
 stopifnot(file.exists(account_file))
 team_info = read.csv(account_file, stringsAsFactors=FALSE)
 
-stopifnot(all(c("Name","Account","Team") %in% names(team_info)))
-team_info$Team = paste0(prefix, team_info$Team)
-teams = team_info$Team %>%
+stopifnot(all(c(account_col, team_col) %in% names(team_info)))
+stopifnot(all(team_info[[team_col]] != ""))
+
+teams = team_info[[team_col]] %>%
         unique() %>%
         sort()
         
-
-token = readLines("secret/github_token")
-
 
 for(team in teams)
 {
@@ -48,9 +49,12 @@ for(i in seq_len(nrow(team_info)))
 {
     Sys.sleep(0.2)
 
-    team = team_info$Team[i]
-    acc = team_info$Account[i]
+    team = team_info[[team_col]][i]
+    acc = team_info[[account_col]][i]
     id = team_ids[team]
+
+    if (acc == "")
+      next
 
     cat("Adding ", acc, " to ", team, "...\n", sep="")
 

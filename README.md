@@ -10,5 +10,6 @@
 * Step 2 - invite students
 
 ```
+# Invites students to the organization, avoids re-inviting existing members
 ./invite_accounts.R class_org example/teams.csv github
 ```

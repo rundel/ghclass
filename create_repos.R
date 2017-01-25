@@ -2,6 +2,7 @@
 
 library(gh)
 library(magrittr)
+library(stringr)
 
 args = commandArgs(trailingOnly=TRUE)
 
@@ -9,26 +10,27 @@ token = readLines("secret/github_token")
 
 if(!length(args) %in% 2:3)
 {
-  cat("Usage: create_repos.R <organization> <suffix> [public repo]\n")
+  cat("Usage: create_repos.R <organization> <prefix>\n")
   stop()
 }
 
 org = args[1]
-suffix = args[2]
-public = NULL
-if (length(args)==3)
-{
-  repo_name = paste0(args[3], suffix)
-  cat("Creating", repo_name, "\n")
-  
-  try({
-    x = gh("POST /orgs/:org/repos", 
-           org = org,
-           name=repo_name, private=FALSE,
-           auto_init=TRUE, gitignore_template="R",
-           .token=token) 
-  })
-}
+prefix = args[2]
+
+# public = NULL
+# if (length(args)==3)
+# {
+#   repo_name = paste0(args[3], suffix)
+#   cat("Creating", repo_name, "\n")
+#   
+#   try({
+#     x = gh("POST /orgs/:org/repos", 
+#            org = org,
+#            name=repo_name, private=FALSE,
+#            auto_init=TRUE, gitignore_template="R",
+#            .token=token) 
+#   })
+# }
         
 
 team_info = gh("/orgs/:org/teams", org=org, .token=token, .limit=1000)
@@ -39,7 +41,7 @@ for(team in names(team_ids))
 {
     Sys.sleep(1)
 
-    repo_name = paste0(team,suffix)
+    repo_name = str_replace(paste0(prefix,'_',team), " ", "_")
     cat("Creating ", repo_name, " for ",team," (", team_ids[team],")\n",sep="")
 
     try({

@@ -10,12 +10,12 @@ token = readLines("secret/github_token")
 
 if(length(args) < 4)
 {
-  cat("Usage: add_files.R <organization> <repo suffix> <message> <file1> <file2> ...\n")
+  cat("Usage: add_files.R <organization> <repo pattern> <message> <file1> <file2> ...\n")
   stop()
 }
 
 org = args[1]
-suffix = args[2]
+pattern = args[2]
 message = args[3]
 files = args[4:length(args)]
 
@@ -23,14 +23,7 @@ files = args[4:length(args)]
 repos = gh("GET /orgs/:org/repos", org = org, .token=token, .limit=1000)
 repo_names = sapply(repos, function(x) x$name)   
 
-selected_repos = str_detect(repo_names,suffix) %>% repo_names[.]
-
-#cat("Username: ")
-#user = readLines(file("stdin"),1)
-#cat("Password: ")
-#pass = readLines(file("stdin"),1)
-#
-#cred = cred_user_pass(user,pass)
+selected_repos = str_detect(repo_names, pattern) %>% repo_names[.]
 
 for(repo in selected_repos)
 {
