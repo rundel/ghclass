@@ -1,9 +1,9 @@
 Package: ghclass
-Title: What the Package Does (one line, title case)
+Title: Tools for managing classes with gitbub
 Version: 0.0.0.9000
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
-Depends: R (>= 3.3.2)
-License: What license is it under?
+Authors@R: person("Colin", "Rundel", email = "rundel@gmail.com", role = c("aut", "cre"))
+Description: Tools for managing classes with gitbub
+Depends: R (>= 3.3.2), gh, git2r, magrittr, dplyr, stringr, webdriver, purrr
+License: GPL3
 Encoding: UTF-8
 LazyData: true
