@@ -1,7 +1,8 @@
 get_github_token = function(quiet=FALSE)
 {
-  if (exists("token", envir=.ghclass))
-    return(get("token", envir=.ghclass))
+  token = get("token", envir=.ghclass)
+  if (!is.null(token))
+    return(token)
 
   token = Sys.getenv("GITHUB_TOKEN")
   if (token != "")
