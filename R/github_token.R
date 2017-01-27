@@ -12,7 +12,7 @@ get_github_token = function(quiet=FALSE)
 
   if (file.exists("~/.github/token"))
   {
-    set_github_token(file="~/.github/token")
+    set_github_token("~/.github/token")
     return(get_github_token())
   }
 
@@ -21,18 +21,20 @@ get_github_token = function(quiet=FALSE)
           define the GITHUB_TOKEN environmental variable.")
 }
 
-set_github_token = function(token=NULL, file)
+set_github_token = function(token)
 {
-  if (!missing(file))
+  stopifnot(!missing(token))
+  stopifnot(is.character(token))
+
+  if (file.exists(token))
     token = readLines(file, warn=FALSE)
 
-  if(!is.null(token))
-    assign("token", token, envir=.ghclass)
+  assign("token", token, envir=.ghclass)
 }
 
-test_github_token = function(token=NULL)
+test_github_token = function(token)
 {
-  if (is.null(token))
+  if (missing(token))
     token = get_github_token()
 
   test = try( gh("/", .token=token), silent = TRUE)
