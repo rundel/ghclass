@@ -83,7 +83,7 @@ wecker_create_app = function(org, repo, wercker_org = org, debug=FALSE)
 add_wercker = function(org, pattern, wercker_org = org)
 {
   repos = get_org_repos(org, pattern)
-  wercker_login(username, password)
+  wercker_login()
 
   urls = list()
 
