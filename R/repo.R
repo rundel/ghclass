@@ -41,81 +41,97 @@ create_repos = function(org, teams=get_org_teams(org), prefix="", suffix="", ver
 }
 
 
-add_badge = function(org, pattern, badge, verbose=TRUE, url_type = c("ssh","https"))
-{
-  stopifnot(length(pattern) == 1)
-  stopifnot(length(badge) == 1)
+#add_badge = function(org, pattern, badge, verbose=TRUE, url_type = c("ssh","https"))
+#{
+#  stopifnot(length(pattern) == 1)
+#  stopifnot(length(badge) == 1)
+#
+#  url_type = match.arg(url_type)
+#
+#  repos = get_org_repos(org, pattern)
+#
+#
+#  for(repo in repo)
+#  {
+#    if (verbose)
+#      cat("Adding badge for", repo, "...\n")
+#
+#    if (url_type == "ssh")
+#      org_url = paste0('git@github.com:',org,'/',repo,'.git')
+#    else
+#      org_url = paste0("https://github.com/",org,"/",repo,".git")
+#
+#    path = file.path(tempdir(),repo)
+#    dir.create(path, recursive=TRUE)
+#
+#    local_repo = clone(org_url, path, progress=FALSE)
+#
+#    readme = file.path(path,"README.md")
+#
+#    try({
+#      stopifnot(file.exists(readme))
+#
+#      prev_contents = readLines(readme, warn=FALSE)
+#      writeLines(
+#        c(badge, prev_contents),
+#        readme
+#      )
+#
+#      add(local_repo, readme)
+#      commit(local_repo, "Added badge")
+#      push(local_repo)
+#    })
+#
+#    unlink(path, recursive=TRUE)
+#  }
+#}
 
-  url_type = match.arg(url_type)
+add_files = function(org, pattern=NULL, message, files, branch = "master", preserve_path=FALSE, verbose=TRUE)
+{
+  stopifnot(all(file.exists(files)))
 
   repos = get_org_repos(org, pattern)
 
-
-  for(repo in repo)
+  for(repo in repos)
   {
     if (verbose)
-      cat("Adding badge for", repo, "...\n")
+      cat("Adding files to", repo, "...\n")
 
-    if (url_type == "ssh")
-      org_url = paste0('git@github.com:',org,'/',repo,'.git')
-    else
-      org_url = paste0("https://github.com/",org,"/",repo,".git")
 
-    path = file.path(tempdir(),repo)
-    dir.create(path, recursive=TRUE)
+    for(file in files)
+    {
+      gh_path = file
+      if (!preserve_path)
+        gh_path = basename(file)
 
-    local_repo = clone(org_url, path, progress=FALSE)
+      gh_file = try({
+        gh("GET /repos/:owner/:repo/contents/:path",
+          owner = org, repo = repo, path=gh_path,
+          ref = branch,
+         .token=get_github_token(), .limit=get_api_limit())
+      }, silent = TRUE)
 
-    readme = file.path(path,"README.md")
+      content = base64enc::base64encode(file)
 
-    try({
-      stopifnot(file.exists(readme))
-
-      prev_contents = readLines(readme, warn=FALSE)
-      writeLines(
-        c(badge, prev_contents),
-        readme
+      tryCatch(
+        {
+          if ("try-error" %in% class(gh_file)) # File does not exist
+          {
+            gh("PUT /repos/:owner/:repo/contents/:path",
+               owner = org, repo = repo, path=gh_path,
+               message = message, content = content, branch = branch)
+          } else { # File already exists
+            gh("PUT /repos/:owner/:repo/contents/:path",
+               owner = org, repo = repo, path=gh_path,
+               message = message, content = content, branch = branch,
+               sha = gh_file$sha)
+          }
+        },
+        error = function(e)
+          message("Adding ", file, " to ", repo, "failed.")
       )
-
-      add(local_repo, readme)
-      commit(local_repo, "Added badge")
-      push(local_repo)
-    })
-
-    unlink(path, recursive=TRUE)
+    }
   }
-}
-
-add_files = function(org, pattern, message, files)
-{
-  # repos = gh("GET /orgs/:org/repos", org = org, .token=token, .limit=1000)
-  # repo_names = sapply(repos, function(x) x$name)
-  #
-  # selected_repos = str_detect(repo_names, pattern) %>% repo_names[.]
-  #
-  # for(repo in selected_repos)
-  # {
-  #   cat("Updating", repo, "...\n")
-  #   org_url = paste0('git@github.com:',org,'/',repo,'.git')
-  #   #org_url = paste0("https://github.com/",org,"/",repo,".git")
-  #
-  #   path = file.path(tempdir(),repo)
-  #   dir.create(path, recursive=TRUE)
-  #
-  #   local_repo = clone(org_url, path, progress=FALSE)#, credentials = cred)
-  #   try({
-  #     for(file in files)
-  #     {
-  #       file.copy(file, path, overwrite = TRUE)
-  #       add(local_repo, basename(file))
-  #     }
-  #
-  #     commit(local_repo, message)
-  #     push(local_repo)#, credentials = cred)
-  #   })
-  #
-  #   unlink(path, recursive=TRUE)
-  # }
 }
 
 
