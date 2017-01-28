@@ -28,7 +28,7 @@ set_github_token = function(token)
   stopifnot(is.character(token))
 
   if (file.exists(token))
-    token = readLines(file, warn=FALSE)
+    token = readLines(token, warn=FALSE)
 
   assign("token", token, envir=.ghclass)
 }
