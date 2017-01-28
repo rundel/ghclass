@@ -1,51 +1,33 @@
 #!/usr/bin/env Rscript
 
-suppressMessages(library(gh))
-suppressMessages(library(magrittr))
-suppressMessages(library(stringr))
-suppressMessages(library(git2r))
+suppressMessages(library(ghclass))
+suppressMessages(library(optparse))
 
-args = commandArgs(trailingOnly=TRUE)
-token = readLines("secret/github_token")
+options = list(
+  make_option(c("-v", "--verbose"), action="store_true", default=TRUE,
+              help="Print extra output [default]"),
+  make_option(c("-b", "--branch"), type = "character", default="master",
+              dest="branch", help="Which branch to use [default \"%default\"]"),
+  make_option(c("-m", "--message"), type="character", default="Adding files",
+              help="Commit message [default \"%default\"]"),
+  make_option(c("-p", "--preserve"), action="store_true", default=FALSE,
+              help="Perserve full path when commiting to github")
+)
 
-if(length(args) < 4)
+
+parser = OptionParser(usage = "%prog [options] organization pattern file1 [file2 ...]", option_list=options)
+
+cmd = parse_args(parser, positional_arguments = TRUE)
+
+str(cmd)
+
+if (length(cmd$args) < 3)
 {
-  cat("Usage: add_files.R <organization> <repo pattern> <message> <file1> <file2> ...\n")
-  stop()
+  message("\nError - Missing arguments, at least 3 are required but ", length(cmd$args)," given.\n")
+  print_help(parser)
+  quit("no", status=1)
 }
 
-org = args[1]
-pattern = args[2]
-message = args[3]
-files = args[4:length(args)]
-
-
-repos = gh("GET /orgs/:org/repos", org = org, .token=token, .limit=1000)
-repo_names = sapply(repos, function(x) x$name)   
-
-selected_repos = str_detect(repo_names, pattern) %>% repo_names[.]
-
-for(repo in selected_repos)
-{
-  cat("Updating", repo, "...\n")
-  org_url = paste0('git@github.com:',org,'/',repo,'.git')
-  #org_url = paste0("https://github.com/",org,"/",repo,".git")
-
-  path = file.path(tempdir(),repo)
-  dir.create(path, recursive=TRUE)
-
-  local_repo = clone(org_url, path, progress=FALSE)#, credentials = cred)
-  try({
-    for(file in files)
-    {
-      file.copy(file, path, overwrite = TRUE)
-      add(local_repo, basename(file))
-    }
-
-    commit(local_repo, message)
-    push(local_repo)#, credentials = cred)
-  })
-  
-  unlink(path, recursive=TRUE)
-}
-
+add_files(org = cmd$args[1], pattern = cmd$args[2], files = cmd$args[-(1:2)],
+          message = cmd$options$message, branch = cmd$options$branch,
+          preserve_path = cmd$options$preserve, verbose=cmd$options$verbose)
