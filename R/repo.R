@@ -5,12 +5,18 @@ clean_repo_names = function(repo_names)
     str_replace("__", "_")
 }
 
-create_repos = function(org, teams=get_org_teams(org), prefix="", suffix="", verbose=TRUE)
+create_repos = function(org, teams=NULL, prefix="", suffix="", verbose=TRUE)
 {
-  if (prefix != "" & str_detect(prefix,"_$"))
+  if (is.null(teams))
+    teams = get_org_teams(org)
+
+  if (prefix == "" & suffix == "")
+    stop("Either prefix or suffix must be specified")
+
+  if (prefix != "" & !str_detect(prefix,"_$"))
     prefix = paste0(prefix,"_")
 
-  if (suffix != "" & str_detect(suffix,"^_"))
+  if (suffix != "" & !str_detect(suffix,"^_"))
     suffix = paste0("_",suffix)
 
 
@@ -26,7 +32,7 @@ create_repos = function(org, teams=get_org_teams(org), prefix="", suffix="", ver
          org = org,
          name=repo_name, private=TRUE, team_id=teams[team],
          auto_init=TRUE, gitignore_template="R",
-         .token=token)
+         .token=get_github_token())
     })
 
     Sys.sleep(0.5)
@@ -35,7 +41,7 @@ create_repos = function(org, teams=get_org_teams(org), prefix="", suffix="", ver
       gh("PUT /teams/:id/repos/:org/:repo",
          id = teams[team], org = org, repo = repo_name,
          permission="push",
-         .token=token)
+         .token=get_github_token())
     })
   }
 }
