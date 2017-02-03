@@ -61,6 +61,6 @@ wercker_login = function(account)
 
   Sys.sleep(1)
 
-  if (session$getUrl() != "https://app.wercker.com")
+  if (session$getUrl() == "https://app.wercker.co/new/")
     stop("Unable to login to wercker")
 }
