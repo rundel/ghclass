@@ -1,6 +1,6 @@
 
 
-wecker_create_app = function(org, repo, wercker_org = org, debug=FALSE)
+wercker_create_app = function(org, repo, wercker_org = org, debug=FALSE)
 {
   session = get_session()
 
