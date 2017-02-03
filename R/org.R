@@ -1,29 +1,51 @@
-get_org_repos = function(org, pattern=NULL)
+get_org_repos = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE)
 {
-  repos = gh("GET /orgs/:org/repos", org = org, .token=get_github_token(), .limit=get_api_limit()) %>%
+  res = gh("GET /orgs/:org/repos", org = org, .token=get_github_token(), .limit=get_api_limit()) %>%
     map_chr("name")
 
-  if (!is.null(pattern))
-    repos %<>% str_detect(pattern) %>% repos[.]
+  if (!is.null(filter))
+  {
+    subset = res %>% str_detect(filter)
 
-  repos
+    if (exclude)
+      res = res[!subset]
+    else
+      res = res[subset]
+  }
+
+  if (full_repo)
+    paste0(org,"/",res)
+  else
+    res
 }
 
 
-get_org_members = function(org)
+get_org_members = function(org, filter=NULL, exclude=FALSE)
 {
-  gh("GET /orgs/:org/members", org=org, .token=get_github_token(), .limit=get_api_limit()) %>%
+  res = gh("GET /orgs/:org/members", org=org, .token=get_github_token(), .limit=get_api_limit()) %>%
     map_chr("login")
+
+  if (!is.null(filter))
+  {
+    subset = res %>% str_detect(filter)
+
+    if (exclude)
+      res = res[!subset]
+    else
+      res = res[subset]
+  }
+
+  res
 }
 
-get_org_teams = function(org, filter, exclude=TRUE)
+get_org_teams = function(org, filter=NULL, exclude=FALSE)
 {
   teams = gh("/orgs/:org/teams", org=org, .token=get_github_token(), .limit=get_api_limit())
 
   res = map_int(teams, "id") %>%
     setNames(map(teams, "name"))
 
-  if (!missing(filter))
+  if (!is.null(filter))
   {
     subset = names(res) %>% str_detect(filter)
 

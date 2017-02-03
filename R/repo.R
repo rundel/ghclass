@@ -1,24 +1,5 @@
-clean_repo_names = function(repo_names)
+create_team_repos = function(org, teams=get_org_teams(org), prefix="", suffix="", verbose=TRUE)
 {
-  repo_names %>%
-    str_replace(" ", "_") %>%
-    str_replace("__", "_")
-}
-
-check_repos = function(repos)
-{
-  #users %>%
-  #  clean_usernames() %>%
-  #  map(~ try( {gh("GET /repos/:owner/:repo", username=., .token=get_github_token())}, silent=TRUE)) %>%
-  #  map_lgl(~ !any(class(.) == "try-error"))
-}
-
-
-create_repos = function(org, teams=NULL, prefix="", suffix="", verbose=TRUE)
-{
-  if (is.null(teams))
-    teams = get_org_teams(org)
-
   if (prefix == "" & suffix == "")
     stop("Either prefix or suffix must be specified")
 
@@ -31,7 +12,9 @@ create_repos = function(org, teams=NULL, prefix="", suffix="", verbose=TRUE)
 
   for(team in names(teams))
   {
-    repo_name = paste0(prefix, team, suffix) %>% clean_repo_names()
+    repo_name = paste0(prefix, team, suffix) %>%
+        str_replace_all(" ", "_") %>%
+        str_replace_all("_+", "_")
 
     if (verbose)
       cat("Creating ", repo_name, " for ",team," (", teams[team],")\n",sep="")
@@ -101,17 +84,21 @@ create_repos = function(org, teams=NULL, prefix="", suffix="", verbose=TRUE)
 #  }
 #}
 
-add_files = function(org, pattern=NULL, message, files, branch = "master", preserve_path=FALSE, verbose=TRUE)
+add_files = function(repos, message, files, branch = "master", preserve_path=FALSE, verbose=TRUE)
 {
   stopifnot(all(file.exists(files)))
+  stopifnot(all(valid_repo(repos, requier_owner = TRUE)))
 
-  repos = get_org_repos(org, pattern)
+  repo_name  = get_repo_name(repos)
+  repo_owner = get_repo_owner(repos)
 
-  for(repo in repos)
+  for(i in seq_along(repos))
   {
-    if (verbose)
-      cat("Adding files to", repo, "...\n")
+    repo = repo_name[i]
+    owner = repo_owner[i]
 
+    if (verbose)
+      cat("Adding files to", repos[i], "...\n")
 
     for(file in files)
     {
@@ -121,7 +108,7 @@ add_files = function(org, pattern=NULL, message, files, branch = "master", prese
 
       gh_file = try({
         gh("GET /repos/:owner/:repo/contents/:path",
-          owner = org, repo = repo, path=gh_path,
+          owner = owner, repo = repo, path=gh_path,
           ref = branch,
          .token=get_github_token(), .limit=get_api_limit())
       }, silent = TRUE)
@@ -133,11 +120,11 @@ add_files = function(org, pattern=NULL, message, files, branch = "master", prese
           if ("try-error" %in% class(gh_file)) # File does not exist
           {
             gh("PUT /repos/:owner/:repo/contents/:path",
-               owner = org, repo = repo, path=gh_path,
+               owner = owner, repo = repo, path=gh_path,
                message = message, content = content, branch = branch)
           } else { # File already exists
             gh("PUT /repos/:owner/:repo/contents/:path",
-               owner = org, repo = repo, path=gh_path,
+               owner = owner, repo = repo, path=gh_path,
                message = message, content = content, branch = branch,
                sha = gh_file$sha)
           }
@@ -149,52 +136,36 @@ add_files = function(org, pattern=NULL, message, files, branch = "master", prese
   }
 }
 
-repo_url = function(repo, type = c("https","ssh"), use_token = TRUE)
-{
-  type = match.arg(type)
 
-  if (type == "https")
-  {
-    if (use_token)
-      url = paste0("https://", get_github_token(), "@github.com/",repo,".git")
-    else
-      url = paste0("https://github.com/",repo,".git")
-  } else {
-    url = paste0("git@github.com:",repo,".git")
-  }
 
-  return(url)
-}
-
-copy_contents = function(source_repo, target_repos, verbose=TRUE)
+mirror_repo = function(source_repo, target_repos, verbose=TRUE)
 {
   stopifnot(!missing(source_repo))
   stopifnot(!missing(target_repos))
   stopifnot(length(source_repo) == 1)
 
-  if (Sys.which("git") == "")
-    stop("git must be installed for this function to work")
+  git = require_git()
 
-  cur_wd = getwd()
+  cur_dir = getwd()
   setwd(tempdir())
 
   if (verbose)
     cat("Cloning source repo ...\n")
 
-  system(paste0("git clone --bare ", repo_url(source_repo)), intern = FALSE,
+  system(paste0(git, " clone --bare ", repo_url(source_repo)), intern = FALSE,
          wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
-  git_dir = dir(pattern = "\\.git")
-  stopifnot(length(git_dir) == 1)
+  repo_dir = dir(pattern = "\\.git")
+  stopifnot(length(repo_dir) == 1)
 
-  setwd(git_dir)
+  setwd(repo_dir)
 
   for(repo in target_repos)
   {
     if (verbose)
       cat("Mirroring to", repo," ...\n")
 
-    system(paste0("git push --mirror ", repo_url(repo)), intern = FALSE,
+    system(paste0(git, " push --mirror ", repo_url(repo)), intern = FALSE,
            wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
   }
 
@@ -203,7 +174,7 @@ copy_contents = function(source_repo, target_repos, verbose=TRUE)
   if (verbose)
     cat("Cleaning up ...\n")
 
-  unlink(git_dir, recursive = TRUE)
+  unlink(repo_dir, recursive = TRUE)
   setwd(cur_wd)
 }
 
