@@ -19,8 +19,6 @@ parser = OptionParser(usage = "%prog [options] organization pattern file1 [file2
 
 cmd = parse_args(parser, positional_arguments = TRUE)
 
-str(cmd)
-
 if (length(cmd$args) < 3)
 {
   message("\nError - Missing arguments, at least 3 are required but ", length(cmd$args)," given.\n")

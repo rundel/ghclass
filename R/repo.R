@@ -5,6 +5,15 @@ clean_repo_names = function(repo_names)
     str_replace("__", "_")
 }
 
+check_repos = function(repos)
+{
+  #users %>%
+  #  clean_usernames() %>%
+  #  map(~ try( {gh("GET /repos/:owner/:repo", username=., .token=get_github_token())}, silent=TRUE)) %>%
+  #  map_lgl(~ !any(class(.) == "try-error"))
+}
+
+
 create_repos = function(org, teams=NULL, prefix="", suffix="", verbose=TRUE)
 {
   if (is.null(teams))
@@ -140,7 +149,62 @@ add_files = function(org, pattern=NULL, message, files, branch = "master", prese
   }
 }
 
+repo_url = function(repo, type = c("https","ssh"), use_token = TRUE)
+{
+  type = match.arg(type)
 
+  if (type == "https")
+  {
+    if (use_token)
+      url = paste0("https://", get_github_token(), "@github.com/",repo,".git")
+    else
+      url = paste0("https://github.com/",repo,".git")
+  } else {
+    url = paste0("git@github.com:",repo,".git")
+  }
 
+  return(url)
+}
+
+copy_contents = function(source_repo, target_repos, verbose=TRUE)
+{
+  stopifnot(!missing(source_repo))
+  stopifnot(!missing(target_repos))
+  stopifnot(length(source_repo) == 1)
+
+  if (Sys.which("git") == "")
+    stop("git must be installed for this function to work")
+
+  cur_wd = getwd()
+  setwd(tempdir())
+
+  if (verbose)
+    cat("Cloning source repo ...\n")
+
+  system(paste0("git clone --bare ", repo_url(source_repo)), intern = FALSE,
+         wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
+
+  git_dir = dir(pattern = "\\.git")
+  stopifnot(length(git_dir) == 1)
+
+  setwd(git_dir)
+
+  for(repo in target_repos)
+  {
+    if (verbose)
+      cat("Mirroring to", repo," ...\n")
+
+    system(paste0("git push --mirror ", repo_url(repo)), intern = FALSE,
+           wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
+  }
+
+  setwd("..")
+
+  if (verbose)
+    cat("Cleaning up ...\n")
+
+  unlink(git_dir, recursive = TRUE)
+  setwd(cur_wd)
+}
 
 
