@@ -26,7 +26,7 @@ create_repos = function(org, teams=get_org_teams(org), prefix="", suffix="", ver
          org = org,
          name=repo_name, private=TRUE, team_id=teams[team],
          auto_init=TRUE, gitignore_template="R",
-         .token=token)
+         .token=get_github_token())
     })
 
     Sys.sleep(0.5)
@@ -35,7 +35,7 @@ create_repos = function(org, teams=get_org_teams(org), prefix="", suffix="", ver
       gh("PUT /teams/:id/repos/:org/:repo",
          id = teams[team], org = org, repo = repo_name,
          permission="push",
-         .token=token)
+         .token=get_github_token())
     })
   }
 }
