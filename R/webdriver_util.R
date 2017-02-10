@@ -15,7 +15,7 @@ click_element = function(css)
   elem$click()
 }
 
-wait_for_element = function(css, timeout=15000)
+wait_for_element = function(css, timeout=30000)
 {
   session = get_session()
 
@@ -23,3 +23,13 @@ wait_for_element = function(css, timeout=15000)
   if (!session$waitFor(js, timeout=timeout))
     stop("Unable to locate ", css, " within ", timeout/1000, " seconds.")
 }
+
+detect_element = function(css)
+{
+  session = get_session()
+
+  node = try(session$findElement(css=css), silent = TRUE)
+
+  !inherits(node, "try-error")
+}
+

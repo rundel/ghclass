@@ -1,10 +1,10 @@
-
-
-wercker_create_app = function(org, repo, wercker_org = org, debug=FALSE)
+wecker_create_app = function(repo, wercker_org, verbose=TRUE, debug=FALSE)
 {
   session = get_session()
+  session$takeScreenshot()
 
-  full_repo = paste0(org,"/",repo)
+  if (missing(wercker_org))
+    wercker_org = get_repo_owner(repo)
 
   if (debug)
     cat("Creating wercker app for", repo, "in", org, "\n")
@@ -14,7 +14,7 @@ wercker_create_app = function(org, repo, wercker_org = org, debug=FALSE)
   # Connect and wait for loading
   session$go(create_url)
   wait_for_element("li.js-repository.private")
-  set_element(".js-repository-filter", full_repo)
+  set_element(".js-repository-filter", repo)
 
   if (debug)
     cat("  * Connected and loaded repos\n")
@@ -23,9 +23,9 @@ wercker_create_app = function(org, repo, wercker_org = org, debug=FALSE)
   repos = session$findElements(css="li.js-repository:not(.force-hidden)")
 
   if (length(repos) == 0) {
-    stop("Unable to find repo ", full_repo)
+    stop("Unable to find repo ", repo)
   } else if (length(repos) > 1) {
-    stop("Multiple repos matched ", full_repo)
+    stop("Multiple repos matched ", repo)
   }
 
   repos[[1]]$click()
@@ -76,26 +76,31 @@ wercker_create_app = function(org, repo, wercker_org = org, debug=FALSE)
 
   if (debug)
     cat("  * App created.\n\n")
-
-  return(session$getUrl())
 }
 
-add_wercker = function(org, pattern, wercker_org = org)
+add_wercker = function(repos, wercker_org, verbose=TRUE, debug=FALSE)
 {
-  repos = get_org_repos(org, pattern)
-  wercker_login()
+  require_valid_repo(repos, require_owner = TRUE)
 
-  urls = list()
-
+  wercker_login(debug=debug)
   for(repo in repos)
   {
-    urls[[repo]] = wecker_create_app(org, repo, wercker_org, debug=TRUE)
+    wecker_create_app(repo, wercker_org, verbose=verbose, debug=debug)
   }
 }
 
+wercker_repo_url = function(repos)
+{
+  stopifnot(all(valid_repo(repos, requier_owner = TRUE)))
 
-#wercker_login(session, username, password)
-#session$takeScreenshot()
-#wecker_create_app(session, repo, org, TRUE)
 
 
+  return(urls)
+}
+
+
+
+get_badges = function(repos, wercker_org)
+{
+
+}

@@ -1,22 +1,21 @@
-clean_repo_names = function(repo_names)
+create_team_repos = function(org, prefix="", suffix="", verbose=TRUE, delay=0.2)
 {
-  repo_names %>%
-    str_replace(" ", "_") %>%
-    str_replace("__", "_")
-}
+  if (prefix == "" & suffix == "")
+    stop("Either prefix or suffix must be specified")
 
-create_repos = function(org, teams=get_org_teams(org), prefix="", suffix="", verbose=TRUE)
-{
-  if (prefix != "" & str_detect(prefix,"_$"))
+  if (prefix != "" & !str_detect(prefix,"_$"))
     prefix = paste0(prefix,"_")
 
-  if (suffix != "" & str_detect(suffix,"^_"))
+  if (suffix != "" & !str_detect(suffix,"^_"))
     suffix = paste0("_",suffix)
 
+  teams=get_org_teams(org)
 
   for(team in names(teams))
   {
-    repo_name = paste0(prefix, team, suffix) %>% clean_repo_names()
+    repo_name = paste0(prefix, team, suffix) %>%
+        str_replace_all(" ", "_") %>%
+        str_replace_all("_+", "_")
 
     if (verbose)
       cat("Creating ", repo_name, " for ",team," (", teams[team],")\n",sep="")
@@ -29,7 +28,7 @@ create_repos = function(org, teams=get_org_teams(org), prefix="", suffix="", ver
          .token=get_github_token())
     })
 
-    Sys.sleep(0.5)
+    Sys.sleep(delay)
 
     try({
       gh("PUT /teams/:id/repos/:org/:repo",
@@ -86,17 +85,21 @@ create_repos = function(org, teams=get_org_teams(org), prefix="", suffix="", ver
 #  }
 #}
 
-add_files = function(org, pattern=NULL, message, files, branch = "master", preserve_path=FALSE, verbose=TRUE)
+add_files = function(repos, message, files, branch = "master", preserve_path=FALSE, verbose=TRUE)
 {
   stopifnot(all(file.exists(files)))
+  stopifnot(all(valid_repo(repos, requier_owner = TRUE)))
 
-  repos = get_org_repos(org, pattern)
+  repo_name  = get_repo_name(repos)
+  repo_owner = get_repo_owner(repos)
 
-  for(repo in repos)
+  for(i in seq_along(repos))
   {
-    if (verbose)
-      cat("Adding files to", repo, "...\n")
+    repo = repo_name[i]
+    owner = repo_owner[i]
 
+    if (verbose)
+      cat("Adding files to", repos[i], "...\n")
 
     for(file in files)
     {
@@ -106,7 +109,7 @@ add_files = function(org, pattern=NULL, message, files, branch = "master", prese
 
       gh_file = try({
         gh("GET /repos/:owner/:repo/contents/:path",
-          owner = org, repo = repo, path=gh_path,
+          owner = owner, repo = repo, path=gh_path,
           ref = branch,
          .token=get_github_token(), .limit=get_api_limit())
       }, silent = TRUE)
@@ -118,11 +121,11 @@ add_files = function(org, pattern=NULL, message, files, branch = "master", prese
           if ("try-error" %in% class(gh_file)) # File does not exist
           {
             gh("PUT /repos/:owner/:repo/contents/:path",
-               owner = org, repo = repo, path=gh_path,
+               owner = owner, repo = repo, path=gh_path,
                message = message, content = content, branch = branch)
           } else { # File already exists
             gh("PUT /repos/:owner/:repo/contents/:path",
-               owner = org, repo = repo, path=gh_path,
+               owner = owner, repo = repo, path=gh_path,
                message = message, content = content, branch = branch,
                sha = gh_file$sha)
           }
@@ -136,5 +139,44 @@ add_files = function(org, pattern=NULL, message, files, branch = "master", prese
 
 
 
+mirror_repo = function(source_repo, target_repos, verbose=TRUE)
+{
+  stopifnot(!missing(source_repo))
+  stopifnot(!missing(target_repos))
+  stopifnot(length(source_repo) == 1)
+
+  git = require_git()
+
+  cur_dir = getwd()
+  setwd(tempdir())
+
+  if (verbose)
+    cat("Cloning source repo ...\n")
+
+  system(paste0(git, " clone --bare ", repo_url(source_repo)), intern = FALSE,
+         wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
+
+  repo_dir = dir(pattern = "\\.git")
+  stopifnot(length(repo_dir) == 1)
+
+  setwd(repo_dir)
+
+  for(repo in target_repos)
+  {
+    if (verbose)
+      cat("Mirroring to", repo," ...\n")
+
+    system(paste0(git, " push --mirror ", repo_url(repo)), intern = FALSE,
+           wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
+  }
+
+  setwd("..")
+
+  if (verbose)
+    cat("Cleaning up ...\n")
+
+  unlink(repo_dir, recursive = TRUE)
+  setwd(cur_wd)
+}
 
 
