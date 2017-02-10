@@ -1,4 +1,4 @@
-create_team_repos = function(org, teams=get_org_teams(org), prefix="", suffix="", verbose=TRUE)
+create_team_repos = function(org, prefix="", suffix="", verbose=TRUE, delay=0.2)
 {
   if (prefix == "" & suffix == "")
     stop("Either prefix or suffix must be specified")
@@ -9,6 +9,7 @@ create_team_repos = function(org, teams=get_org_teams(org), prefix="", suffix=""
   if (suffix != "" & !str_detect(suffix,"^_"))
     suffix = paste0("_",suffix)
 
+  teams=get_org_teams(org)
 
   for(team in names(teams))
   {
@@ -27,7 +28,7 @@ create_team_repos = function(org, teams=get_org_teams(org), prefix="", suffix=""
          .token=get_github_token())
     })
 
-    Sys.sleep(0.5)
+    Sys.sleep(delay)
 
     try({
       gh("PUT /teams/:id/repos/:org/:repo",
