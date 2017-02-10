@@ -48,10 +48,14 @@ test_wercker_account = function(account)
 
 
 
-wercker_login = function(account)
+wercker_login = function(account, debug=FALSE)
 {
   if (missing(account))
     account = get_wercker_account()
+
+  if (debug)
+    cat("Logging into wercker ...\n")
+
 
   session = get_session()
   session$go("https://app.wercker.com/sessions/new/")
@@ -65,4 +69,15 @@ wercker_login = function(account)
  #   session$takeScreenshot()
     stop("Unable to login to wercker")
   }
+
+  if (debug)
+    cat("Successfully logged into wercker.\n")
+}
+
+wercker_logged_in = function()
+{
+  session = get_session()
+  session$go("https://app.wercker.com/")
+
+  !detect_element('a.navbar-item[title="Log in"]')
 }
