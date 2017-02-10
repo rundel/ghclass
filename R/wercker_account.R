@@ -7,7 +7,7 @@ get_wercker_account = function()
   if (file.exists("~/.wercker/account"))
   {
     set_wercker_account("~/.wercker/account")
-    return(get_github_token())
+    return(get_wercker_account())
   }
 
   stop("Unable to locate wercker account information, please use set_wercker_account")

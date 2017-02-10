@@ -1,13 +1,3 @@
-
-wercker_login = function(username, password)
-{
-  session = get_session()
-  session$go("https://app.wercker.com/sessions/new/")
-  set_element("#username", username)
-  set_element("#password", password)
-  click_element("#login")
-}
-
 wecker_create_app = function(org, repo, wercker_org = org, debug=FALSE)
 {
   session = get_session()
@@ -91,7 +81,7 @@ wecker_create_app = function(org, repo, wercker_org = org, debug=FALSE)
 add_wercker = function(org, pattern)
 {
   repos = get_org_repos(org, pattern)
-  wercker_login(username, password)
+  wercker_login()
 
   urls = list()
 
@@ -100,10 +90,3 @@ add_wercker = function(org, pattern)
     urls[[repo]] = wecker_create_app(org, repo, debug=TRUE)
   }
 }
-
-
-#wercker_login(session, username, password)
-#session$takeScreenshot()
-#wecker_create_app(session, repo, org, TRUE)
-
-
