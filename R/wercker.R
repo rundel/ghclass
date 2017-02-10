@@ -1,4 +1,4 @@
-wecker_create_app = function(repo, wercker_org, verbose=TRUE, debug=FALSE)
+wercker_create_app = function(repo, wercker_org, verbose=TRUE, debug=FALSE)
 {
   session = get_session()
   session$takeScreenshot()
@@ -85,7 +85,7 @@ add_wercker = function(repos, wercker_org, verbose=TRUE, debug=FALSE)
   wercker_login(debug=debug)
   for(repo in repos)
   {
-    wecker_create_app(repo, wercker_org, verbose=verbose, debug=debug)
+    wercker_create_app(repo, wercker_org, verbose=verbose, debug=debug)
   }
 }
 
