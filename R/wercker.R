@@ -21,14 +21,19 @@ wercker_create_app = function(repo, wercker_org, verbose=TRUE, debug=FALSE)
 
   # Select repo
   repos = session$findElements(css="li.js-repository:not(.force-hidden)")
+  repo_names = map_chr(repos, ~ .$getText()) %>%
+    str_replace("\n.*","") %>%
+    str_replace(" / ", "/")
 
-  if (length(repos) == 0) {
-    stop("Unable to find repo ", repo)
-  } else if (length(repos) > 1) {
-    stop("Multiple repos matched ", repo)
+  matches = which(repo == repo_names)
+
+  if (length(matches) != 1) {
+    if (debug)
+      session$takeScreenshot()
+    stop("Unable to find unique match for repo ", repo)
   }
 
-  repos[[1]]$click()
+  repos[[matches]]$click()
   click_element(".js-repository-selector-select")
   Sys.sleep(1)
 
