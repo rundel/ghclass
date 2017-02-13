@@ -17,7 +17,7 @@ options = list(
               help="Print extra output [default]"),
   make_option(c("-b", "--branch"), type = "character", default="master",
               dest="branch", help="Which branch to use [default \"%default\"]"),
-  make_option(c("-m", "--message"), type="character", default="Adding files",
+  make_option(c("-m", "--message"), type = "character", default="Adding files",
               help="Commit message [default \"%default\"]"),
   make_option(c("--preserve"), action="store_true", default=FALSE,
               help="Perserve full path when commiting to github"),

@@ -137,6 +137,33 @@ add_files = function(repos, message, files, branch = "master", preserve_path=FAL
   }
 }
 
+grab_repos = function(repos, localpath="./", verbose=TRUE)
+{
+  stopifnot(!missing(repos))
+
+  git = require_git()
+
+  cur_dir = getwd()
+  setwd(localpath)
+
+
+
+  for (repo in repos)
+  {
+    if (verbose)
+      cat("Cloning ", repo, "\n")
+
+    system(
+      paste0(git, " clone ", repo_url(repo)),
+      intern = FALSE, wait = TRUE, ignore.stdout = TRUE,
+      ignore.stderr = TRUE
+    )
+  }
+
+  setwd(cur_dir)
+}
+
+
 
 
 mirror_repo = function(source_repo, target_repos, verbose=TRUE)
@@ -176,7 +203,7 @@ mirror_repo = function(source_repo, target_repos, verbose=TRUE)
     cat("Cleaning up ...\n")
 
   unlink(repo_dir, recursive = TRUE)
-  setwd(cur_wd)
+  setwd(cur_dir)
 }
 
 
