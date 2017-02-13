@@ -1,15 +1,13 @@
 ## Tools for managing github class organization accounts
 
-* Step 1 - validating student provided accounts
+Expects two files:
 
-```
-# Provide a csv file with a column containing the account names
-./check_accounts.R example/teams.csv github
+`~/.github/token` which is a text file containing your secret github token
+
+`~/.wercker/account` which is a yaml file that defines `username` and `password`.
+
+```yaml
+username: my_account
+password: my_password
 ```
 
-* Step 2 - invite students
-
-```
-# Invites students to the organization, avoids re-inviting existing members
-./invite_accounts.R class_org example/teams.csv github
-```
