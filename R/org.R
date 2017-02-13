@@ -13,6 +13,9 @@ get_org_repos = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE)
       res = res[subset]
   }
 
+  if (length(res) == 0)
+    stop("No repos found in ", org, " matching ", filter)
+
   if (full_repo)
     paste0(org,"/",res)
   else
