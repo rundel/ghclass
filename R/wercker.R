@@ -7,7 +7,7 @@ wercker_create_app = function(repo, wercker_org, verbose=TRUE, debug=FALSE)
     wercker_org = get_repo_owner(repo)
 
   if (debug)
-    cat("Creating wercker app for", repo, "in", werker_org, "\n")
+    cat("Creating wercker app for", repo, "in", wercker_org, "\n")
 
   create_url = "https://app.wercker.com/applications/create"
 
