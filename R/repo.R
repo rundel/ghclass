@@ -1,7 +1,7 @@
-create_team_repos = function(org, prefix="", suffix="", verbose=TRUE, delay=0.2)
+create_team_repos = function(org, teams = get_org_teams(org), prefix="", suffix="", verbose=TRUE, delay=0.2)
 {
   if (prefix == "" & suffix == "")
-    stop("Either prefix or suffix must be specified")
+    stop("Either a prefix or a suffix must be specified")
 
   if (prefix != "" & !str_detect(prefix,"_$"))
     prefix = paste0(prefix,"_")
@@ -9,7 +9,11 @@ create_team_repos = function(org, prefix="", suffix="", verbose=TRUE, delay=0.2)
   if (suffix != "" & !str_detect(suffix,"^_"))
     suffix = paste0("_",suffix)
 
-  teams=get_org_teams(org)
+  if (is.character(teams))
+  {
+    org_teams = get_org_teams(org)
+    teams = org_teams[ teams %in% names(org_teams) ]
+  }
 
   for(team in names(teams))
   {
@@ -88,7 +92,7 @@ create_team_repos = function(org, prefix="", suffix="", verbose=TRUE, delay=0.2)
 add_files = function(repos, message, files, branch = "master", preserve_path=FALSE, verbose=TRUE)
 {
   stopifnot(all(file.exists(files)))
-  stopifnot(all(valid_repo(repos, requier_owner = TRUE)))
+  stopifnot(all(valid_repo(repos, require_owner = TRUE)))
 
   repo_name  = get_repo_name(repos)
   repo_owner = get_repo_owner(repos)
@@ -122,12 +126,13 @@ add_files = function(repos, message, files, branch = "master", preserve_path=FAL
           {
             gh("PUT /repos/:owner/:repo/contents/:path",
                owner = owner, repo = repo, path=gh_path,
-               message = message, content = content, branch = branch)
+               message = message, content = content, branch = branch,
+               .token=get_github_token())
           } else { # File already exists
             gh("PUT /repos/:owner/:repo/contents/:path",
                owner = owner, repo = repo, path=gh_path,
                message = message, content = content, branch = branch,
-               sha = gh_file$sha)
+               sha = gh_file$sha, .token=get_github_token())
           }
         },
         error = function(e)

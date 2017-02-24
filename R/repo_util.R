@@ -1,15 +1,15 @@
 require_valid_repo = function(repos, require_owner)
 {
-  valid = valid_repo(repos, requier_owner = require_owner)
+  valid = valid_repo(repos, require_owner = require_owner)
   if (!all(valid))
   {
     stop("Invalid repo names: \n\t", paste(repos[!valid], collapse="\n\t"))
   }
 }
 
-valid_repo = function(repos, requier_owner=TRUE)
+valid_repo = function(repos, require_owner=TRUE)
 {
-  if (requier_owner)
+  if (require_owner)
     str_detect(repos, "^[A-Za-z0-9]+[A-Za-z0-9-]*[A-Za-z0-9]+/[A-Za-z0-9_.-]+$")
   else
     str_detect(repos, "^([A-Za-z0-9]+[A-Za-z0-9-]*[A-Za-z0-9]+/)?[A-Za-z0-9_.-]+$")
@@ -34,7 +34,7 @@ repo_url = function(repos, type = c("https","ssh"), use_token = TRUE)
 {
   type = match.arg(type)
 
-  stopifnot(all(valid_repo(repos, requier_owner = TRUE)))
+  stopifnot(all(valid_repo(repos, require_owner = TRUE)))
 
   if (type == "https")
   {
