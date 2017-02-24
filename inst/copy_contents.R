@@ -20,13 +20,13 @@ if (length(cmd$args) != 3)
   quit("no", status=1)
 }
 
-teams = NULL
-if (length(cmd$args) != 1)
-  teams = cmd$args[-1]
-
-create_repos(org = cmd$args[1],
-             teams   = teams,
-             prefix  = cmd$options$prefix,
-             suffix  = cmd$options$suffix,
-             verbose = cmd$options$verbose)
+#teams = NULL
+#if (length(cmd$args) != 1)
+#  teams = cmd$args[-1]
+#
+#create_repos(org = cmd$args[1],
+#             teams   = teams,
+#             prefix  = cmd$options$prefix,
+#             suffix  = cmd$options$suffix,
+#             verbose = cmd$options$verbose)
 
