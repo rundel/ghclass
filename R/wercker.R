@@ -1,10 +1,7 @@
-wercker_create_app = function(repo, wercker_org, verbose=TRUE, debug=FALSE)
+wercker_create_app = function(repo, wercker_org = get_repo_owner(repo), verbose=TRUE, debug=FALSE)
 {
   session = get_session()
   session$takeScreenshot()
-
-  if (missing(wercker_org))
-    wercker_org = get_repo_owner(repo)
 
   if (debug)
     cat("Creating wercker app for", repo, "in", wercker_org, "\n")
@@ -13,7 +10,7 @@ wercker_create_app = function(repo, wercker_org, verbose=TRUE, debug=FALSE)
 
   # Connect and wait for loading
   session$go(create_url)
-  wait_for_element("li.js-repository.private")
+  wait_for_element("li.js-repository.private", timeout=60000)
   set_element(".js-repository-filter", repo)
 
   if (debug)
@@ -94,18 +91,97 @@ add_wercker = function(repos, wercker_org, verbose=TRUE, debug=FALSE)
   }
 }
 
-wercker_repo_url = function(repos)
+wercker_app_url = function(apps)
 {
-  stopifnot(all(valid_repo(repos, requier_owner = TRUE)))
-
-
-
-  return(urls)
+  stopifnot(all(valid_repo(apps, require_owner = TRUE)))
+  paste0("https://app.wercker.com/", apps)
 }
 
-
-
-get_badges = function(repos, wercker_org)
+require_valid_app = function(apps, require_owner=TRUE)
 {
-
+  valid = valid_repo(apps, require_owner = require_owner)
+  if (!all(valid))
+    stop("Invalid app names: \n\t", paste(apps[!valid], collapse="\n\t"))
 }
+
+get_badges = function(apps, size = c("small", "large"), branch=c("master","all"),
+                      type=c("markdown","hmtl"), debug=FALSE)
+{
+  option_urls = wercker_app_url(apps) %>% paste0("/options")
+
+  size   = match.arg(size)
+  branch = match.arg(branch)
+  type   = match.arg(type)
+
+  wercker_login(debug=debug)
+
+  session = get_session()
+  session$takeScreenshot()
+
+  map_chr(
+    option_urls,
+    function(url)
+    {
+      session$go(url)
+      Sys.sleep(1)
+      click_element(paste0("input#", size))
+      click_element(paste0("input#", branch))
+      click_element(paste0("input#", type))
+      get_element(".sharingBadge textarea")
+    }
+  )
+}
+
+add_badges = function(repos, badges=get_badges(repos), branch = "master",
+                      message = "Adding wercker badge", verbose=TRUE)
+{
+  stopifnot(all(valid_repo(repos, require_owner = TRUE)))
+
+  repo_name  = get_repo_name(repos)
+  repo_owner = get_repo_owner(repos)
+
+  for(i in seq_along(repos))
+  {
+    repo = repo_name[i]
+    owner = repo_owner[i]
+    file = "README.md"
+
+    readme = try({
+      gh("GET /repos/:owner/:repo/readme",
+         owner = owner, repo = repo, ref = branch,
+         .token=get_github_token(), .limit=get_api_limit())
+    }, silent = TRUE)
+
+    tryCatch(
+      {
+        if (inherits(readme, "try-error")) # README.md does not exist
+        {
+          file = "README.md"
+          content = paste0(badges[i],"\n\n") %>% charToRaw() %>% base64enc::base64encode()
+
+          gh("PUT /repos/:owner/:repo/contents/:path",
+             owner = owner, repo = repo, path=file,
+             message = message, content = content,
+             branch = branch, .token=get_github_token())
+        } else {                           # README.md exists
+          new_readme = base64enc::base64decode(readme$content) %>% rawToChar()
+          file = readme$path
+          content = paste0(badges[i],"\n\n", new_readme) %>% charToRaw() %>% base64enc::base64encode()
+
+          cat(repo, owner, file, readme$sha,"\n", sep=" - ")
+          gh("PUT /repos/:owner/:repo/contents/:path",
+             owner = owner, repo = repo, path=file,
+             message = message, content = content,
+             sha = readme$sha, branch = branch,
+             .token=get_github_token())
+        }
+
+        if (verbose)
+          cat("Added badge to ", repo, ".\n", sep="")
+      },
+      error = function(e)
+        message("Adding badge to ", repo, " failed.")
+    )
+  }
+}
+

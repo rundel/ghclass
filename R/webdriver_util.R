@@ -7,6 +7,16 @@ set_element = function(css, value)
   elem$setValue(value)
 }
 
+get_element = function(css)
+{
+  session = get_session()
+
+  elem = session$findElement(css=css)
+  elem$getValue()
+}
+
+
+
 click_element = function(css)
 {
   session = get_session()

@@ -57,6 +57,12 @@ wercker_login = function(account, debug=FALSE)
     cat("Logging into wercker ...\n")
 
 
+  if (wercker_logged_in())
+  {
+    cat("Logged in already ...\n")
+    return()
+  }
+
   session = get_session()
   session$go("https://app.wercker.com/sessions/new/")
   set_element("#username", account$username)
