@@ -10,7 +10,7 @@ wercker_create_app = function(repo, wercker_org = get_repo_owner(repo), verbose=
 
   # Connect and wait for loading
   session$go(create_url)
-  wait_for_element("li.js-repository.private", timeout=60000)
+  wait_for_element("li.js-repository.private", timeout=120000)
   set_element(".js-repository-filter", repo)
 
   if (debug)
@@ -87,6 +87,8 @@ add_wercker = function(repos, wercker_org, verbose=TRUE, debug=FALSE)
   wercker_login(debug=debug)
   for(repo in repos)
   {
+    if (verbose)
+      cat("Creating wercker app for", repo, "...\n")
     wercker_create_app(repo, wercker_org, verbose=verbose, debug=debug)
   }
 }
