@@ -80,7 +80,7 @@ wercker_create_app = function(repo, wercker_org = get_repo_owner(repo), verbose=
     cat("  * App created.\n\n")
 }
 
-add_wercker = function(repos, wercker_org, verbose=TRUE, debug=FALSE)
+add_wercker = function(repos, wercker_org = get_repo_owner(repo), verbose=TRUE, debug=FALSE)
 {
   require_valid_repo(repos, require_owner = TRUE)
 
@@ -170,7 +170,6 @@ add_badges = function(repos, badges=get_badges(repos), branch = "master",
           file = readme$path
           content = paste0(badges[i],"\n\n", new_readme) %>% charToRaw() %>% base64enc::base64encode()
 
-          cat(repo, owner, file, readme$sha,"\n", sep=" - ")
           gh("PUT /repos/:owner/:repo/contents/:path",
              owner = owner, repo = repo, path=file,
              message = message, content = content,
