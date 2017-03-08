@@ -183,7 +183,7 @@ mirror_repo = function(source_repo, target_repos, verbose=TRUE)
   setwd(tempdir())
 
   if (verbose)
-    cat("Cloning source repo ...\n")
+    cat("Cloning source repo (", source_repo, ") ...\n", sep = "")
 
   system(paste0(git, " clone --bare ", repo_url(source_repo)), intern = FALSE,
          wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
@@ -196,7 +196,7 @@ mirror_repo = function(source_repo, target_repos, verbose=TRUE)
   for(repo in target_repos)
   {
     if (verbose)
-      cat("Mirroring to", repo," ...\n")
+      cat("Mirroring to", repo,"...\n")
 
     system(paste0(git, " push --mirror ", repo_url(repo)), intern = FALSE,
            wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
