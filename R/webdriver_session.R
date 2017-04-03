@@ -8,7 +8,7 @@ start_phantom = function()
   #cat("Starting phantom ...\n")
   stop_phantom()
 
-  phantom = run_phantomjs(debugLevel = get_debug_level())
+  phantom = run_phantomjs(debugLevel = get_debug_level(), timeout=30000)
   assign("phantom", value = phantom, envir = .ghclass)
 }
 
