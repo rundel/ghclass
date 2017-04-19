@@ -106,15 +106,15 @@ add_org_team_member = function(org, users, teams, create_missing_teams=FALSE, ve
   {
     team = info$teams[i]
     acc  = info$users[i]
-    team_id = team_ids[team]
+    team_id = team_ids[teams[i]]
 
     if (verbose)
       cat("Adding ", acc, " to ", team, "...\n", sep="")
 
     gh("PUT /teams/:id/memberships/:username",
-       id=id, username=acc,
+       id=team_id, username=acc,
        role="member",
-       .token=token)
+       .token=get_github_token())
 
     Sys.sleep(delay)
   }
