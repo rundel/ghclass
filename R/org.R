@@ -102,7 +102,7 @@ add_org_team_member = function(org, users, teams, create_missing_teams=FALSE, ve
       stop("Team(s) ",paste(new_teams,collapse=", "), " do(es) not exist for ", org)
   }
 
-  for(i in seq_along(nrow(info)))
+  for(i in 1:nrow(info))
   {
     team = info$teams[i]
     acc  = info$users[i]
