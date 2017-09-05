@@ -1,4 +1,37 @@
-get_org_repos = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE)
+get_org_repos(org, filter=NULL, exclude=FALSE, full_repo=TRUE)
+{
+  .Depricated("get_repos")
+  get_org_repos(org, filter, exclude, full_repo)
+}
+
+get_org_members = function(org, filter=NULL, exclude=FALSE)
+{
+  .Depricated("get_members")
+  get_members(org, filter, exclude)
+}
+
+get_org_teams = function(org, filter=NULL, exclude=FALSE)
+{
+  .Deprecated("get_teams")
+  get_teams(org, filter, exclude)
+}
+
+create_org_teams = function(org, teams=character(), privacy = c("closed","secret"),
+                            verbose=TRUE, delay=0.2)
+{
+  .Deprecated("create_teams")
+  create_teams(org, teams, privacy, vebose, delay)
+}
+
+add_org_team_member(org, users, teams, create_missing_teams=FALSE, verbose=TRUE, delay=0.2)
+{
+  .Deprecated("add_team_member")
+  add_team_member(org, users, teams, create_missing_teams, verbose, delay)
+}
+
+
+
+get_repos = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE)
 {
   .Depricated("get_repos")
   get_repos(org, filter, exclude, full_repo)
