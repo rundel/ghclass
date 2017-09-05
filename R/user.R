@@ -23,10 +23,12 @@ invite_users = function(org, users, verbose=TRUE)
   for(user in need_invite)
   {
     if (verbose)
-      cat("Adding ", acc, " to ", org, " ...\n", sep="")
+      cat("Adding ", user, " to ", org, " ...\n", sep="")
 
-    gh("PUT /orgs/:org/memberships/:username",
-       org=org, username=user, role="member",
-       .token=token)
+    try({
+      gh("PUT /orgs/:org/memberships/:username",
+         org=org, username=user, role="member",
+        .token=get_github_token())
+    })
   }
 }
