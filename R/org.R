@@ -1,5 +1,38 @@
 get_org_repos = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE)
 {
+  .Depricated("get_repos")
+  get_repos(org, filter, exclude, full_repo)
+}
+
+get_org_members = function(org, filter=NULL, exclude=FALSE)
+{
+  .Depricated("get_members")
+  get_members(org, filter, exclude)
+}
+
+get_org_teams = function(org, filter=NULL, exclude=FALSE)
+{
+  .Deprecated("get_teams")
+  get_teams(org, filter, exclude)
+}
+
+create_org_teams = function(org, teams=character(), privacy = c("closed","secret"),
+                            verbose=TRUE, delay=0.2)
+{
+  .Deprecated("create_teams")
+  create_teams(org, teams, privacy, vebose, delay)
+}
+
+add_org_team_member = function(org, users, teams, create_missing_teams=FALSE, verbose=TRUE, delay=0.2)
+{
+  .Deprecated("add_team_member")
+  add_team_member(org, users, teams, create_missing_teams, verbose, delay)
+}
+
+
+
+get_repos = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE)
+{
   res = gh("GET /orgs/:org/repos", org = org, .token=get_github_token(), .limit=get_api_limit()) %>%
     map_chr("name")
 
@@ -22,26 +55,37 @@ get_org_repos = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE)
     res
 }
 
-
-get_org_members = function(org, filter=NULL, exclude=FALSE)
+get_members = function(org, filter=NULL, exclude=FALSE)
 {
   res = gh("GET /orgs/:org/members", org=org, .token=get_github_token(), .limit=get_api_limit()) %>%
     map_chr("login")
 
-  if (!is.null(filter))
-  {
+  if (!is.null(filter)) {
     subset = res %>% str_detect(filter)
-
-    if (exclude)
-      res = res[!subset]
-    else
-      res = res[subset]
+    if (exclude) res = res[!subset]
+    else         res = res[subset]
   }
 
   res
 }
 
-get_org_teams = function(org, filter=NULL, exclude=FALSE)
+get_pending_members = function(org, filter=NULL, exclude=FALSE)
+{
+  res = gh("GET /orgs/:org/invitations", org=org,
+           .token=get_github_token(), .limit=get_api_limit()) %>%
+    map_chr("login")
+
+  if (!is.null(filter)) {
+    subset = res %>% str_detect(filter)
+    if (exclude) res = res[!subset]
+    else         res = res[subset]
+  }
+
+  res
+}
+
+
+get_teams = function(org, filter=NULL, exclude=FALSE)
 {
   teams = gh("/orgs/:org/teams", org=org, .token=get_github_token(), .limit=get_api_limit())
 
@@ -61,7 +105,7 @@ get_org_teams = function(org, filter=NULL, exclude=FALSE)
   return(res)
 }
 
-create_org_teams = function(org, teams=character(), privacy = c("closed","secret"),
+create_teams = function(org, teams=character(), privacy = c("closed","secret"),
                             verbose=TRUE, delay=0.2)
 {
   stopifnot(!missing(org))
@@ -81,7 +125,7 @@ create_org_teams = function(org, teams=character(), privacy = c("closed","secret
   }
 }
 
-add_org_team_member = function(org, users, teams, create_missing_teams=FALSE, verbose=TRUE, delay=0.2)
+add_team_member = function(org, users, teams, create_missing_teams=FALSE, verbose=TRUE, delay=0.2)
 {
   stopifnot(!missing(org))
   stopifnot(is.character(users) & length(users) >=1)
@@ -118,4 +162,45 @@ add_org_team_member = function(org, users, teams, create_missing_teams=FALSE, ve
 
     Sys.sleep(delay)
   }
+}
+
+clean_usernames = function(usernames)
+{
+  usernames %<>%
+    str_trim() %>%
+    {.[. != ""]}
+}
+
+check_users = function(users)
+{
+  users %>%
+    clean_usernames() %>%
+    map(~ try( {gh("/users/:username", username=., .token=get_github_token())}, silent=TRUE)) %>%
+    map_lgl(~ !any(class(.) == "try-error"))
+}
+
+invite_users = function(org, users, verbose=TRUE, exclude_pending = FALSE)
+{
+  users = users %>% clean_usernames() %>% tolower()
+  current = get_members(org) %>% tolower()
+  pending = get_pending_members(org) %>% tolower()
+
+  need_invite = setdiff(users, c(current, pending))
+
+  for(user in need_invite)
+  {
+    if (verbose)
+      cat("Adding ", user, " to ", org, " ...\n", sep="")
+
+    try({
+      gh("PUT /orgs/:org/memberships/:username",
+         org=org, username=user, role="member",
+         .token=get_github_token())
+    })
+  }
+  if (verbose)
+    sprintf("Current status: %i invited, %i pending, %i joined.",
+            length(need_invite), length(pending),
+            length(users) - length(need_invite) - length(pending)) %>%
+    cat("\n", sep="")
 }

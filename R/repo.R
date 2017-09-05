@@ -51,7 +51,7 @@ create_team_repos = function(org, teams = get_org_teams(org), prefix="", suffix=
 #
 #  url_type = match.arg(url_type)
 #
-#  repos = get_org_repos(org, pattern)
+#  repos = get_repos(org, pattern)
 #
 #
 #  for(repo in repo)

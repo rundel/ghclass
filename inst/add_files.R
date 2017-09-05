@@ -39,7 +39,7 @@ if (length(cmd$args) < 1)
 
 repos = c()
 if (!is.null(cmd$options$org))
-  repos = get_org_repos(cmd$options$org, cmd$options$filter, cmd$options$exclude, full_repo=TRUE)
+  repos = get_repos(cmd$options$org, cmd$options$filter, cmd$options$exclude, full_repo=TRUE)
 
 if (!is.null(cmd$options$repos))
   repos = c(repos, str_split(cmd$options$repos,",")[[1]])

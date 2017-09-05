@@ -28,7 +28,7 @@ cmd = parse_args(parser, positional_arguments = FALSE)
 
 repos = c()
 if (!is.null(cmd$org))
-  repos = get_org_repos(cmd$org, cmd$filter, cmd$exclude, full_repo=TRUE)
+  repos = get_repos(cmd$org, cmd$filter, cmd$exclude, full_repo=TRUE)
 
 if (!is.null(cmd$repos))
   repos = c(repos, str_split(cmd$repos,",")[[1]])
