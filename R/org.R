@@ -215,8 +215,8 @@ check_users = function(users)
 invite_users = function(org, users, verbose=TRUE, exclude_pending = FALSE)
 {
   users = users %>% clean_usernames() %>% tolower()
-  current = get_members(org) %>% tolower()
-  pending = get_pending_members(org) %>% tolower()
+  current = get_members(org) %>% tolower() %>% intersect(users)
+  pending = get_pending_members(org) %>% tolower() %>% intersect(users)
 
   need_invite = setdiff(users, c(current, pending))
 
@@ -233,7 +233,6 @@ invite_users = function(org, users, verbose=TRUE, exclude_pending = FALSE)
   }
   if (verbose)
     sprintf("Current status: %i invited, %i pending, %i joined.",
-            length(need_invite), length(pending),
-            length(users) - length(need_invite) - length(pending)) %>%
+            length(need_invite), length(pending), length(current)) %>%
     cat("\n", sep="")
 }
