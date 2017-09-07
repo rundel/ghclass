@@ -1,110 +1,141 @@
-wercker_create_app = function(repo, wercker_org = get_repo_owner(repo), verbose=TRUE, debug=FALSE)
+add_wercker_app = function(repo, org_id, privacy = c("public", "private"), provider = "github")
 {
-  session = get_session()
-  session$takeScreenshot()
+  is_private = gh("GET /repos/:owner/:repo",
+                  owner=get_repo_owner(repo),
+                  repo = get_repo_name(repo),
+                  .token = get_github_token())$private
 
-  if (debug)
-    cat("Creating wercker app for", repo, "in", wercker_org, "\n")
-
-  create_url = "https://app.wercker.com/applications/create"
-
-  # Connect and wait for loading
-  session$go(create_url)
-  wait_for_element("li.js-repository.private", timeout=120000)
-  set_element(".js-repository-filter", repo)
-
-  if (debug)
-    cat("  * Connected and loaded repos\n")
-
-  # Select repo
-  repos = session$findElements(css="li.js-repository:not(.force-hidden)")
-  repo_names = map_chr(repos, ~ .$getText()) %>%
-    str_replace("\n.*","") %>%
-    str_replace(" / ", "/")
-
-  matches = which(repo == repo_names)
-
-  if (length(matches) != 1) {
-    if (debug)
-      session$takeScreenshot()
-    stop("Unable to find unique match for repo ", repo)
+  if (is_private) # setup a deploy key for private repos
+  {
+    res = add_wercker_deploy_key(repo)
+    stopifnot(!is.null(res$success))
   }
 
-  repos[[matches]]$click()
-  click_element(".js-repository-selector-select")
-  Sys.sleep(1)
+  privacy = match.arg(privacy)
 
-  if (debug)
-    cat("  * Selected repo\n")
+  req = POST(
+    "https://app.wercker.com/api/v2/applications",
+    add_headers(
+      Authorization = paste("Bearer", get_wercker_token())
+    ),
+    encode = "json",
+    body = list(
+      owner = org_id,
+      privacy = privacy,
+      scmName = get_repo_name(repo),
+      scmOwner = get_repo_owner(repo),
+      scmProvider = provider,
+      stack = "6"
+    )
+  )
 
-  # Select org
-  orgs = session$findElements(css=".js-owner-option")
-  org_names = map_chr(orgs, ~ .x$getText())
-  i = which(org_names == wercker_org)
+  res = httr::content(req)
+  stopifnot(!is.null(res$success))
 
-  if (length(i) == 0) {
-    stop("Unable to find wercker organization ", wercker_org)
-  } else if (length(i) > 1) {
-    stop("Multiple organizations matched ", wercker_org)
-  }
-
-  radio = orgs[[i]]$findElement(css = "input")
-  radio$click()
-  click_element(".js-select-owner-select")
-  Sys.sleep(1)
-
-  if (debug)
-    cat("  * Selected organization\n")
-
-  # Configure access (just use the default)
-  click_element(".js-werckerbot-select")
-  Sys.sleep(1)
-
-  # Make app public
-  click_element("#appIsPublic")
-  Sys.sleep(1)
-
-  # Create app
-  click_element(".js-create-application")
-
-
-  # Wait for creation to finish
-  repeat {
-    Sys.sleep(1)
-
-    if (session$getUrl() != create_url)
-      break
-  }
-
-  if (debug)
-    cat("  * App created.\n\n")
+  res
 }
 
-add_wercker = function(repos, wercker_org = get_repo_owner(repo), verbose=TRUE, debug=FALSE)
+get_wercker_deploy_key = function()
+{
+  req = httr::POST(
+    paste0("https://app.wercker.com/api/v2/checkoutKeys"),
+    httr::add_headers(
+      Authorization = paste("Bearer", get_wercker_token())
+    ),
+    encode = "json"
+  )
+
+  httr::content(req)
+}
+
+add_wercker_deploy_key = function(repo, key_id = get_wercker_deploy_key()$id, provider = "github")
+{
+  req = httr::POST(
+    paste0("https://app.wercker.com/api/v2/checkoutKeys/",key_id,"/link"),
+    httr::add_headers(
+      Authorization = paste("Bearer", get_wercker_token())
+    ),
+    encode = "json",
+    body = list(
+      scmName = get_repo_name(repo),
+      scmOwner = get_repo_owner(repo),
+      scmProvider = provider
+    )
+  )
+
+  httr::content(req)
+}
+
+
+get_wercker_whoami = function()
+{
+  req = httr::GET(
+    paste0("https://app.wercker.com/api/v2/profile"),
+    httr::add_headers(
+      Authorization = paste("Bearer", get_wercker_token())
+    ),
+    encode = "json"
+  )
+
+  content(req, as="text") %>%
+    jsonlite::fromJSON()
+}
+
+get_wercker_orgs = function()
+{
+  req = httr::GET(
+    paste0("https://app.wercker.com/api/v2/users/me/organizations"),
+    httr::add_headers(
+      Authorization = paste("Bearer", get_wercker_token())
+    ),
+    encode = "json"
+  )
+
+  content(req, as="text") %>%
+    jsonlite::fromJSON() %>%
+    select(-allowedActions)
+}
+
+get_wercker_apps = function(user)
+{
+  req = httr::GET(
+    paste0("https://app.wercker.com/api/v3/applications/", user),
+    httr::add_headers(
+      Authorization = paste("Bearer", get_wercker_token())
+    ),
+    body = list(limit = 100),
+    encode = "json"
+  )
+
+  content(req, as="text") %>% jsonlite::fromJSON()
+}
+
+get_wercker_org_id = function(org)
+{
+  orgs = get_wercker_orgs() %>%
+    filter(username == org)
+
+  if (nrow(orgs) != 1)
+    stop("Unable to find organization called ", wercker_org, " on wercker.")
+
+  orgs$id
+}
+
+add_wercker = function(repos, wercker_org, verbose=TRUE)
 {
   require_valid_repo(repos, require_owner = TRUE)
+  org_id = get_wercker_org_id(wercker_org)
 
-  wercker_login(debug=debug)
   for(repo in repos)
   {
     if (verbose)
       cat("Creating wercker app for", repo, "...\n")
-    wercker_create_app(repo, wercker_org, verbose=verbose, debug=debug)
+
+    add_wercker_app(repo, org_id)
   }
 }
 
-wercker_app_url = function(apps)
-{
-  stopifnot(all(valid_repo(apps, require_owner = TRUE)))
-  paste0("https://app.wercker.com/", apps)
-}
 
-require_valid_app = function(apps, require_owner=TRUE)
-{
-  valid = valid_repo(apps, require_owner = require_owner)
-  if (!all(valid))
-    stop("Invalid app names: \n\t", paste(apps[!valid], collapse="\n\t"))
-}
 
 get_badges = function(apps, size = c("small", "large"), branch=c("master","all"),
                       type=c("markdown","hmtl"), debug=FALSE)
@@ -125,7 +156,7 @@ get_badges = function(apps, size = c("small", "large"), branch=c("master","all")
     function(url)
     {
       session$go(url)
-      Sys.sleep(1)
+      Sys.sleep(2)
       click_element(paste0("input#", size))
       click_element(paste0("input#", branch))
       click_element(paste0("input#", type))
@@ -133,6 +164,40 @@ get_badges = function(apps, size = c("small", "large"), branch=c("master","all")
     }
   )
 }
+
+
+set_wercker_env = function(repos, key, value, protected = TRUE, verbose=TRUE, debug=FALSE)
+{
+  stopifnot(all(valid_repo(repos, require_owner = TRUE)))
+
+  url = wercker_app_url(repos) %>% paste0("/environment")
+
+  wercker_login(debug=debug)
+  session = get_session()
+  session$takeScreenshot()
+
+  pmap(
+    data_frame(url, key, value, protected),
+    function(url, key, value)
+    {
+      session$go(url)
+      set_element('td.envvarItem_key input', key)
+      set_element("textarea.false", value)
+      if (protected)
+        click_element('input[type="checkbox"]')
+
+      click_element(button[class="small radius"])
+
+      session$takeScreenshot()
+      Sys.sleep(2)
+
+    }
+  )
+}
+
+
+
+
 
 add_badges = function(repos, badges=get_badges(repos), branch = "master",
                       message = "Adding wercker badge", verbose=TRUE)
