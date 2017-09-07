@@ -99,11 +99,10 @@ get_wercker_orgs = function()
 get_wercker_apps = function(user)
 {
   req = httr::GET(
-    paste0("https://app.wercker.com/api/v3/applications/", user),
+    paste0("https://app.wercker.com/api/v3/applications/", user,"?limit=100"),
     httr::add_headers(
       Authorization = paste("Bearer", get_wercker_token())
     ),
-    body = list(limit = 100),
     encode = "json"
   )
 
@@ -126,8 +125,17 @@ add_wercker = function(repos, wercker_org, verbose=TRUE)
   require_valid_repo(repos, require_owner = TRUE)
   org_id = get_wercker_org_id(wercker_org)
 
+  existing_apps = get_wercker_apps(wercker_org)
+
   for(repo in repos)
   {
+    if (get_repo_name(repo) %in% existing_apps$name)
+    {
+      if (verbose)
+        cat("Skipping, app already exists for", repo, "...\n")
+      next
+    }
+
     if (verbose)
       cat("Creating wercker app for", repo, "...\n")
 
@@ -135,71 +143,48 @@ add_wercker = function(repos, wercker_org, verbose=TRUE)
   }
 }
 
-
-
-get_badges = function(apps, size = c("small", "large"), branch=c("master","all"),
-                      type=c("markdown","hmtl"), debug=FALSE)
+get_wercker_app_info = function(repos)
 {
-  option_urls = wercker_app_url(apps) %>% paste0("/options")
-
-  size   = match.arg(size)
-  branch = match.arg(branch)
-  type   = match.arg(type)
-
-  wercker_login(debug=debug)
-
-  session = get_session()
-  session$takeScreenshot()
-
-  map_chr(
-    option_urls,
-    function(url)
+  map(
+    repos,
+    function(repo)
     {
-      session$go(url)
-      Sys.sleep(2)
-      click_element(paste0("input#", size))
-      click_element(paste0("input#", branch))
-      click_element(paste0("input#", type))
-      get_element(".sharingBadge textarea")
+      req = httr::GET(
+        paste0("https://app.wercker.com/api/v3/applications/", repo),
+        httr::add_headers(
+          Authorization = paste("Bearer", get_wercker_token())
+        ),
+        encode = "json"
+      )
+
+      content(req)
     }
   )
 }
 
-
-set_wercker_env = function(repos, key, value, protected = TRUE, verbose=TRUE, debug=FALSE)
+get_wercker_badge_key = function(repos)
 {
-  stopifnot(all(valid_repo(repos, require_owner = TRUE)))
-
-  url = wercker_app_url(repos) %>% paste0("/environment")
-
-  wercker_login(debug=debug)
-  session = get_session()
-  session$takeScreenshot()
-
-  pmap(
-    data_frame(url, key, value, protected),
-    function(url, key, value)
-    {
-      session$go(url)
-      set_element('td.envvarItem_key input', key)
-      set_element("textarea.false", value)
-      if (protected)
-        click_element('input[type="checkbox"]')
-
-      click_element(button[class="small radius"])
-
-      session$takeScreenshot()
-      Sys.sleep(2)
-
-    }
-  )
+  app_info = get_wercker_app_info(repos)
+  data_frame(repo = repos, badge_key = map_chr(app_info, "badgeKey"))
 }
 
+get_wercker_badges = function(repos, size = c("small", "large"), branch = "master")
+{
+  size = match.arg(size)
+  size_lookup = c("small" = "s", "large" = "m")
 
+  get_wercker_badge_key(repos) %>%
+    mutate(
+      img_url = sprintf("https://app.wercker.com/status/%s/%s/%s", badge_key, size_lookup[size], branch),
+      app_url = sprintf("https://app.wercker.com/project/byKey/%s", badge_key)
+    ) %>%
+    mutate(
+      markdown_link = sprintf('[![wercker status](%s "wercker status")](%s)', img_url, app_url),
+      html_link = sprintf('<a href="%s"><img alt="Wercker status" src="%s"></a>', app_url, img_url)
+    )
+}
 
-
-
-add_badges = function(repos, badges=get_badges(repos), branch = "master",
+add_wercker_badges = function(repos, badges=get_wercker_badges(repos)$markdown_link, branch = "master",
                       message = "Adding wercker badge", verbose=TRUE)
 {
   stopifnot(all(valid_repo(repos, require_owner = TRUE)))
