@@ -1,13 +1,13 @@
 get_github_token = function(quiet=FALSE)
 {
-  token = get("token", envir=.ghclass)
+  token = get("github_token", envir=.ghclass)
   if (!is.null(token))
     return(token)
 
   token = Sys.getenv("GITHUB_TOKEN")
   if (token != "")
   {
-    assign("token", token, envir=.ghclass)
+    assign("github_token", token, envir=.ghclass)
     return(token)
   }
 
@@ -19,7 +19,7 @@ get_github_token = function(quiet=FALSE)
 
   if (!quiet)
     stop("Unable to locate github token, please use set_github_token or
-          define the GITHUB_TOKEN environmental variable.")
+         define the GITHUB_TOKEN environmental variable.")
 }
 
 set_github_token = function(token)
@@ -30,7 +30,7 @@ set_github_token = function(token)
   if (file.exists(token))
     token = readLines(token, warn=FALSE)
 
-  assign("token", token, envir=.ghclass)
+  assign("github_token", token, envir=.ghclass)
 }
 
 test_github_token = function(token)

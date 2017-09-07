@@ -5,11 +5,11 @@
   assign("api_limit", value = 1000L, envir = .ghclass)
   assign("phantom", value = NULL, envir = .ghclass)
   assign("session", value = NULL, envir = .ghclass)
-  assign("token",   value = NULL, envir = .ghclass)
-  assign("wercker", value = NULL, envir = .ghclass)
+  assign("github_token", value = NULL, envir = .ghclass)
+  assign("wercker_token", value = NULL, envir = .ghclass)
 
-  try(get_github_token(),silent = TRUE)
-  try(get_wercker_account(),silent = TRUE)
+  try(get_github_token(), silent = TRUE)
+  try(get_wercker_account(), silent = TRUE)
 }
 
 .onUnload = function(libpath)
