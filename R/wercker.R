@@ -1,16 +1,29 @@
+add_wercker_build_pipeline = function(app_id)
+{
+  req = POST(
+    "https://app.wercker.com/api/v3/pipelines",
+    add_headers(
+      Authorization = paste("Bearer", get_wercker_token())
+    ),
+    encode = "json",
+    body = list(
+      application = app_id,
+      name = "build",
+      permissions = "public",
+      pipelineName = "build",
+      setScmProviderStatus = TRUE,
+      type = "git"
+    )
+  )
+
+  res = httr::content(req)
+  stopifnot(!is.null(res$id))
+
+  res$id
+}
+
 add_wercker_app = function(repo, org_id, privacy = c("public", "private"), provider = "github")
 {
-  is_private = gh("GET /repos/:owner/:repo",
-                  owner=get_repo_owner(repo),
-                  repo = get_repo_name(repo),
-                  .token = get_github_token())$private
-
-  if (is_private) # setup a deploy key for private repos
-  {
-    res = add_wercker_deploy_key(repo)
-    stopifnot(!is.null(res$success))
-  }
-
   privacy = match.arg(privacy)
 
   req = POST(
@@ -25,14 +38,48 @@ add_wercker_app = function(repo, org_id, privacy = c("public", "private"), provi
       scmName = get_repo_name(repo),
       scmOwner = get_repo_owner(repo),
       scmProvider = provider,
-      stack = "6"
+      stack = "6" # Docker
     )
   )
 
   res = httr::content(req)
   stopifnot(!is.null(res$success))
 
-  res
+  app_id = res$data$id
+
+  is_private = gh("GET /repos/:owner/:repo",
+                  owner=get_repo_owner(repo),
+                  repo = get_repo_name(repo),
+                  .token = get_github_token())$private
+
+  if (is_private) # setup a deploy key for private repos
+  {
+    add_wercker_deploy_key(repo, app_id)
+  }
+
+  pipeline_id = add_wercker_build_pipeline(app_id)
+  run_id = run_wercker_pipeline(pipeline_id)
+
+  invisible(NULL)
+}
+
+run_wercker_pipeline = function(pipeline_id)
+{
+  req = POST(
+    "https://app.wercker.com/api/v3/runs",
+    add_headers(
+      Authorization = paste("Bearer", get_wercker_token())
+    ),
+    encode = "json",
+    body = list(
+      pipelineId = pipeline_id
+    )
+  )
+
+  res = httr::content(req)
+  stopifnot(!is.null(res$id))
+
+  res$id
 }
 
 get_wercker_deploy_key = function()
@@ -48,7 +95,7 @@ get_wercker_deploy_key = function()
   httr::content(req)
 }
 
-add_wercker_deploy_key = function(repo, key_id = get_wercker_deploy_key()$id, provider = "github")
+add_key_to_github = function(repo, key_id, provider = "github")
 {
   req = httr::POST(
     paste0("https://app.wercker.com/api/v2/checkoutKeys/",key_id,"/link"),
@@ -63,7 +110,33 @@ add_wercker_deploy_key = function(repo, key_id = get_wercker_deploy_key()$id, pr
     )
   )
 
-  httr::content(req)
+  res = httr::content(req)
+  stopifnot(!is.null(res$success))
+}
+
+add_key_to_app = function(app_id, key_id, type="unique")
+{
+  req = httr::POST(
+    paste0("https://app.wercker.com/api/v2/applications/",app_id,"/checkoutKey"),
+    httr::add_headers(
+      Authorization = paste("Bearer", get_wercker_token())
+    ),
+    encode = "json",
+    body = list(
+      checkoutKeyId = key_id,
+      checkoutKeyType = type
+    )
+  )
+
+  res = httr::content(req)
+  stopifnot(!is.null(res$success))
+}
+
+add_wercker_deploy_key = function(repo, app_id, provider = "github")
+{
+  key = get_wercker_deploy_key()
+  add_key_to_github(repo, key$id, provider)
+  add_key_to_app(app_id, key$id)
 }
 
 
