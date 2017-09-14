@@ -1,13 +1,7 @@
-create_team_repos = function(org, teams = get_org_teams(org), prefix="", suffix="", verbose=TRUE, delay=0.2)
+create_team_repos = function(org, teams = get_teams(org), prefix="", suffix="", verbose=TRUE, delay=0.2)
 {
   if (prefix == "" & suffix == "")
     stop("Either a prefix or a suffix must be specified")
-
-  if (prefix != "" & !str_detect(prefix,"_$"))
-    prefix = paste0(prefix,"_")
-
-  if (suffix != "" & !str_detect(suffix,"^_"))
-    suffix = paste0("_",suffix)
 
   if (is.character(teams))
   {
@@ -17,9 +11,7 @@ create_team_repos = function(org, teams = get_org_teams(org), prefix="", suffix=
 
   for(team in names(teams))
   {
-    repo_name = paste0(prefix, team, suffix) %>%
-        str_replace_all(" ", "_") %>%
-        str_replace_all("_+", "_")
+    repo_name = paste0(prefix, team, suffix)
 
     if (verbose)
       cat("Creating ", repo_name, " for ",team," (", teams[team],")\n",sep="")
