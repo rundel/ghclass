@@ -165,9 +165,9 @@ add_team_member = function(org, users, teams, create_missing_teams=FALSE, verbos
   stopifnot(is.character(teams) & length(teams) >=1)
   stopifnot(length(users)==length(teams) | length(teams) == 1)
 
-  info = data.frame(users, teams)
+  info = data.frame(users, teams, stringsAsFactors = FALSE)
 
-  team_ids = get_org_teams(org)
+  team_ids = get_teams(org)
 
   new_teams = setdiff(unique(teams), names(team_ids))
 
@@ -179,19 +179,15 @@ add_team_member = function(org, users, teams, create_missing_teams=FALSE, verbos
       stop("Team(s) ",paste(new_teams,collapse=", "), " do(es) not exist for ", org)
   }
 
-  for(i in seq_along(nrow(info)))
+  for(i in seq_along(users))
   {
-    team = info$teams[i]
-    acc  = info$users[i]
-    team_id = team_ids[team]
-
     if (verbose)
-      cat("Adding ", acc, " to ", team, "...\n", sep="")
+      cat("Adding ", users[i], " to ", teams[i], "...\n", sep="")
 
     gh("PUT /teams/:id/memberships/:username",
-       id=id, username=acc,
+       id=team_ids[team], username=users[i],
        role="member",
-       .token=token)
+       .token=get_github_token())
 
     Sys.sleep(delay)
   }
