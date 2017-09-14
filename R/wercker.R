@@ -301,7 +301,7 @@ add_wercker_badges = function(repos, badges=get_wercker_badges(repos)$markdown_l
         }
 
         if (verbose)
-          cat("Added badge to ", repo, ".\n", sep="")
+          cat("Added badge to ", repo, " ...\n", sep="")
       },
       error = function(e)
         message("Adding badge to ", repo, " failed.")

@@ -148,7 +148,7 @@ create_teams = function(org, teams=character(), privacy = c("closed","secret"),
   for(team in teams)
   {
     if (verbose)
-      cat("Adding ", team, "...\n", sep="")
+      cat("Adding", team, "...\n")
 
     gh("POST /orgs/:org/teams",
        org=org, name=team, privacy=privacy,
@@ -182,7 +182,7 @@ add_team_member = function(org, users, teams, create_missing_teams=FALSE, verbos
   for(i in seq_along(users))
   {
     if (verbose)
-      cat("Adding ", users[i], " to ", teams[i], "...\n", sep="")
+      cat("Adding ", users[i], " to ", teams[i], " ...\n", sep="")
 
     gh("PUT /teams/:id/memberships/:username",
        id=team_ids[team], username=users[i],

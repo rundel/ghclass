@@ -14,7 +14,7 @@ create_team_repos = function(org, teams = get_teams(org), prefix="", suffix="", 
     repo_name = paste0(prefix, team, suffix)
 
     if (verbose)
-      cat("Creating ", repo_name, " for ",team," (", teams[team],")\n",sep="")
+      cat("Creating ", repo_name, " for ",team," ...\n",sep="")
 
     try({
       gh("POST /orgs/:org/repos",
@@ -188,7 +188,7 @@ mirror_repo = function(source_repo, target_repos, verbose=TRUE)
   for(repo in target_repos)
   {
     if (verbose)
-      cat("Mirroring to", repo,"...\n")
+      cat("Mirroring ", source_repo, " to", repo,"...\n")
 
     system(paste0(git, " push --mirror ", repo_url(repo)), intern = FALSE,
            wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
