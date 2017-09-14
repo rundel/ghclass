@@ -11,7 +11,7 @@ create_team_repos = function(org, teams = get_org_teams(org), prefix="", suffix=
 
   if (is.character(teams))
   {
-    org_teams = get_org_teams(org)
+    org_teams = get_teams(org)
     teams = org_teams[ teams %in% names(org_teams) ]
   }
 

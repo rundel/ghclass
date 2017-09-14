@@ -174,7 +174,7 @@ add_team_member = function(org, users, teams, create_missing_teams=FALSE, verbos
   if (length(new_teams) != 0)
   {
     if (create_missing_teams)
-      create_org_teams(org=org, new_teams, verbose=verbose)
+      create_teams(org=org, new_teams, verbose=verbose)
     else
       stop("Team(s) ",paste(new_teams,collapse=", "), " do(es) not exist for ", org)
   }
