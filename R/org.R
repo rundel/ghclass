@@ -185,7 +185,7 @@ add_team_member = function(org, users, teams, create_missing_teams=FALSE, verbos
       cat("Adding ", users[i], " to ", teams[i], " ...\n", sep="")
 
     gh("PUT /teams/:id/memberships/:username",
-       id=team_ids[team], username=users[i],
+       id=team_ids[teams[i]], username=users[i],
        role="member",
        .token=get_github_token())
 
