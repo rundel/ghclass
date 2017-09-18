@@ -79,6 +79,15 @@ mirror_repo(source_repo = "Sta523-Fa17/hw2", dest_repo = get_repos("Sta523-Fa17"
 ## Cleaning up ...
 ```
 
+Before running the following step(s) involving Wercker make sure you've done the following:
+
+* If you do not have one already create an account with Wercker 
+
+* Create an organization with Wercker that will contain all of your apps for this class
+
+* Create and save a Wercker [token](https://app.wercker.com/profile/tokens) to `~/.wercker/token`
+
+* Make sure third party access is allowed for your github organization (See Settings / Third-party access)
 
 ```r
 add_wercker(get_repos("Sta523-Fa17", "hw2-"), "Sta523-Fa17")
