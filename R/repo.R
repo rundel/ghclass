@@ -1,3 +1,17 @@
+check_repos = function(repos)
+{
+  exists = function(owner, repo)
+  {
+    gh("GET /repos/:owner/:repo", owner=owner, repo=repo, .token=get_github_token())
+    TRUE
+  }
+
+  map2_lgl(
+    get_repo_owner(repos), get_repo_name(repos),
+    possibly(exists, FALSE)
+  )
+}
+
 create_team_repos = function(org, teams = get_teams(org), prefix="", suffix="", verbose=TRUE, delay=0.2)
 {
   if (prefix == "" & suffix == "")
@@ -127,8 +141,11 @@ add_files = function(repos, message, files, branch = "master", preserve_path=FAL
                sha = gh_file$sha, .token=get_github_token())
           }
         },
-        error = function(e)
-          message("Adding ", file, " to ", repo, "failed.")
+        error = function(e) {
+          message("Adding ", file, " to ", repo, " failed.")
+          if (verbose)
+            print(e)
+        }
       )
     }
   }
@@ -148,7 +165,7 @@ grab_repos = function(repos, localpath="./", verbose=TRUE)
   for (repo in repos)
   {
     if (verbose)
-      cat("Cloning ", repo, "\n")
+      cat("Cloning", repo, "\n")
 
     system(
       paste0(git, " clone ", repo_url(repo)),
@@ -165,9 +182,11 @@ grab_repos = function(repos, localpath="./", verbose=TRUE)
 
 mirror_repo = function(source_repo, target_repos, verbose=TRUE)
 {
-  stopifnot(!missing(source_repo))
-  stopifnot(!missing(target_repos))
   stopifnot(length(source_repo) == 1)
+  stopifnot(length(target_repos) >= 1)
+
+  stopifnot(check_repos(source_repo))
+  stopifnot(all(check_repos(target_repos)))
 
   git = require_git()
 
@@ -178,7 +197,7 @@ mirror_repo = function(source_repo, target_repos, verbose=TRUE)
     cat("Cloning source repo (", source_repo, ") ...\n", sep = "")
 
   system(paste0(git, " clone --bare ", repo_url(source_repo)), intern = FALSE,
-         wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
+         wait = TRUE, ignore.stdout = TRUE, ignore.stderr = FALSE)
 
   repo_dir = dir(pattern = "\\.git")
   stopifnot(length(repo_dir) == 1)
@@ -191,7 +210,7 @@ mirror_repo = function(source_repo, target_repos, verbose=TRUE)
       cat("Mirroring ", source_repo, " to", repo,"...\n")
 
     system(paste0(git, " push --mirror ", repo_url(repo)), intern = FALSE,
-           wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
+           wait = TRUE, ignore.stdout = TRUE, ignore.stderr = FALSE)
   }
 
   setwd("..")
