@@ -49,106 +49,66 @@ create_team_repos = function(org, teams = get_teams(org), prefix="", suffix="", 
   }
 }
 
+check_files = function(repos, files, branch = "master")
+{
+  get_file = function(repo, file, branch)
+  {
+    repo_name  = get_repo_name(repo)
+    repo_owner = get_repo_owner(repo)
 
-#add_badge = function(org, pattern, badge, verbose=TRUE, url_type = c("ssh","https"))
-#{
-#  stopifnot(length(pattern) == 1)
-#  stopifnot(length(badge) == 1)
-#
-#  url_type = match.arg(url_type)
-#
-#  repos = get_repos(org, pattern)
-#
-#
-#  for(repo in repo)
-#  {
-#    if (verbose)
-#      cat("Adding badge for", repo, "...\n")
-#
-#    if (url_type == "ssh")
-#      org_url = paste0('git@github.com:',org,'/',repo,'.git')
-#    else
-#      org_url = paste0("https://github.com/",org,"/",repo,".git")
-#
-#    path = file.path(tempdir(),repo)
-#    dir.create(path, recursive=TRUE)
-#
-#    local_repo = clone(org_url, path, progress=FALSE)
-#
-#    readme = file.path(path,"README.md")
-#
-#    try({
-#      stopifnot(file.exists(readme))
-#
-#      prev_contents = readLines(readme, warn=FALSE)
-#      writeLines(
-#        c(badge, prev_contents),
-#        readme
-#      )
-#
-#      add(local_repo, readme)
-#      commit(local_repo, "Added badge")
-#      push(local_repo)
-#    })
-#
-#    unlink(path, recursive=TRUE)
-#  }
-#}
+    gh("GET /repos/:owner/:repo/contents/:path",
+       owner = repo_owner, repo = repo_name, path=file,
+       ref = branch,
+       .token=get_github_token(), .limit=get_api_limit())
+    TRUE
+  }
+
+  pmap_lgl(list(repos, files, branch), possibly(get_file,FALSE))
+}
 
 add_files = function(repos, message, files, branch = "master", preserve_path=FALSE, verbose=TRUE)
 {
   stopifnot(all(file.exists(files)))
-  stopifnot(all(valid_repo(repos, require_owner = TRUE)))
+  stopifnot(all(check_repos(repos)))
 
   repo_name  = get_repo_name(repos)
   repo_owner = get_repo_owner(repos)
 
-  for(i in seq_along(repos))
-  {
-    repo = repo_name[i]
-    owner = repo_owner[i]
+  walk(repos, function(repo) {
+
+    name = get_repo_name(repo)
+    owner = get_repo_owner(repo)
 
     if (verbose)
-      cat("Adding files to", repos[i], "...\n")
+      cat("Adding files to", repo, "...\n")
 
-    for(file in files)
-    {
+    walk(files, function(file) {
+
       gh_path = file
       if (!preserve_path)
         gh_path = basename(file)
 
-      gh_file = try({
-        gh("GET /repos/:owner/:repo/contents/:path",
-          owner = owner, repo = repo, path=gh_path,
-          ref = branch,
-         .token=get_github_token(), .limit=get_api_limit())
-      }, silent = TRUE)
-
       content = base64enc::base64encode(file)
 
-      tryCatch(
-        {
-          if ("try-error" %in% class(gh_file)) # File does not exist
-          {
-            gh("PUT /repos/:owner/:repo/contents/:path",
-               owner = owner, repo = repo, path=gh_path,
-               message = message, content = content, branch = branch,
-               .token=get_github_token())
-          } else { # File already exists
-            gh("PUT /repos/:owner/:repo/contents/:path",
-               owner = owner, repo = repo, path=gh_path,
-               message = message, content = content, branch = branch,
-               sha = gh_file$sha, .token=get_github_token())
-          }
-        },
-        error = function(e) {
+      tryCatch({
+        if (check_files(repos[i], gh_path, branch))
+          gh("PUT /repos/:owner/:repo/contents/:path",
+             owner = owner, repo = name, path=gh_path,
+             message = message, content = content, branch = branch,
+             sha = gh_file$sha,
+              .token=get_github_token())
+        else
+          gh("PUT /repos/:owner/:repo/contents/:path",
+             owner = owner, repo = name, path=gh_path,
+             message = message, content = content, branch = branch,
+             .token=get_github_token())
+      }, error = function(e) {
           message("Adding ", file, " to ", repo, " failed.")
           if (verbose)
             print(e)
-        }
-      )
-    }
-  }
+      })
+    })
+  })
 }
 
 grab_repos = function(repos, localpath="./", verbose=TRUE)
@@ -160,18 +120,18 @@ grab_repos = function(repos, localpath="./", verbose=TRUE)
   cur_dir = getwd()
   setwd(localpath)
 
-
-
   for (repo in repos)
   {
     if (verbose)
       cat("Cloning", repo, "\n")
 
-    system(
-      paste0(git, " clone ", repo_url(repo)),
-      intern = FALSE, wait = TRUE, ignore.stdout = TRUE,
-      ignore.stderr = TRUE
-    )
+    try({
+      system(
+        paste0(git, " clone ", repo_url(repo)),
+        intern = FALSE, wait = TRUE, ignore.stdout = TRUE,
+        ignore.stderr = TRUE
+      )
+    })
   }
 
   setwd(cur_dir)
@@ -192,34 +152,33 @@ mirror_repo = function(source_repo, target_repos, verbose=TRUE)
 
   cur_dir = getwd()
   setwd(tempdir())
+  on.exit({setwd(cur_dir)})
 
   if (verbose)
     cat("Cloning source repo (", source_repo, ") ...\n", sep = "")
 
   system(paste0(git, " clone --bare ", repo_url(source_repo)), intern = FALSE,
-         wait = TRUE, ignore.stdout = TRUE, ignore.stderr = FALSE)
+         wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
   repo_dir = dir(pattern = "\\.git")
   stopifnot(length(repo_dir) == 1)
-
   setwd(repo_dir)
 
   for(repo in target_repos)
   {
     if (verbose)
-      cat("Mirroring ", source_repo, " to", repo,"...\n")
+      cat("Mirroring ", source_repo, " to", repo,"...\n", sep="")
 
-    system(paste0(git, " push --mirror ", repo_url(repo)), intern = FALSE,
-           wait = TRUE, ignore.stdout = TRUE, ignore.stderr = FALSE)
+    try({
+      system(paste0(git, " push --mirror ", repo_url(repo)), intern = FALSE,
+             wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
+    })
   }
-
-  setwd("..")
 
   if (verbose)
     cat("Cleaning up ...\n")
 
-  unlink(repo_dir, recursive = TRUE)
-  setwd(cur_dir)
+  unlink(file.path("..",repo_dir), recursive = TRUE)
 }
 
 
