@@ -91,7 +91,7 @@ add_files = function(repos, message, files, branch = "master", preserve_path=FAL
       content = base64enc::base64encode(file)
 
       tryCatch({
-        if (check_files(repos[i], gh_path, branch))
+        if (check_files(repo, gh_path, branch))
           gh("PUT /repos/:owner/:repo/contents/:path",
              owner = owner, repo = name, path=gh_path,
              message = message, content = content, branch = branch,
@@ -111,31 +111,7 @@ add_files = function(repos, message, files, branch = "master", preserve_path=FAL
   })
 }
 
-grab_repos = function(repos, localpath="./", verbose=TRUE)
-{
-  stopifnot(!missing(repos))
 
-  git = require_git()
-
-  cur_dir = getwd()
-  setwd(localpath)
-
-  for (repo in repos)
-  {
-    if (verbose)
-      cat("Cloning", repo, "\n")
-
-    try({
-      system(
-        paste0(git, " clone ", repo_url(repo)),
-        intern = FALSE, wait = TRUE, ignore.stdout = TRUE,
-        ignore.stderr = TRUE
-      )
-    })
-  }
-
-  setwd(cur_dir)
-}
 
 
 
