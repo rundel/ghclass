@@ -139,7 +139,7 @@ add_wercker_deploy_key = function(repo, app_id, provider = "github")
   add_key_to_app(app_id, key$id)
 }
 
-
+#' @export
 get_wercker_whoami = function()
 {
   req = httr::GET(
@@ -154,6 +154,7 @@ get_wercker_whoami = function()
     jsonlite::fromJSON()
 }
 
+#' @export
 get_wercker_orgs = function()
 {
   req = httr::GET(
@@ -169,7 +170,8 @@ get_wercker_orgs = function()
     select(-allowedActions)
 }
 
-get_wercker_apps = function(user)
+#' @export
+get_wercker_apps = function(user = get_wercker_whoami())
 {
   req = httr::GET(
     paste0("https://app.wercker.com/api/v3/applications/", user,"?limit=100"),
@@ -193,28 +195,7 @@ get_wercker_org_id = function(org)
   orgs$id
 }
 
-add_wercker = function(repos, wercker_org, verbose=TRUE)
-{
-  require_valid_repo(repos, require_owner = TRUE)
-  org_id = get_wercker_org_id(wercker_org)
 
-  existing_apps = get_wercker_apps(wercker_org)
-
-  for(repo in repos)
-  {
-    if (get_repo_name(repo) %in% existing_apps$name)
-    {
-      if (verbose)
-        cat("Skipping, app already exists for", repo, "...\n")
-      next
-    }
-
-    if (verbose)
-      cat("Creating wercker app for", repo, "...\n")
-
-    add_wercker_app(repo, org_id)
-  }
-}
 
 get_wercker_app_info = function(repos)
 {
@@ -235,12 +216,14 @@ get_wercker_app_info = function(repos)
   )
 }
 
+
 get_wercker_badge_key = function(repos)
 {
   app_info = get_wercker_app_info(repos)
   data_frame(repo = repos, badge_key = map_chr(app_info, "badgeKey"))
 }
 
+#' @export
 get_wercker_badges = function(repos, size = c("small", "large"), branch = "master")
 {
   size = match.arg(size)
@@ -257,6 +240,36 @@ get_wercker_badges = function(repos, size = c("small", "large"), branch = "maste
     )
 }
 
+#' @export
+add_wercker = function(repos, wercker_org, add_badges=TRUE, verbose=TRUE)
+{
+  size = match.arg(size)
+
+  require_valid_repo(repos)
+  org_id = get_wercker_org_id(wercker_org)
+
+  existing_apps = get_wercker_apps(wercker_org)
+
+  for(repo in repos)
+  {
+    if (get_repo_name(repo) %in% existing_apps$name)
+    {
+      if (verbose)
+        cat("Skipping, app already exists for", repo, "...\n")
+      next
+    }
+
+    if (verbose)
+      cat("Creating wercker app for", repo, "...\n")
+
+    add_wercker_app(repo, org_id)
+  }
+
+  if (add_badges)
+    add_wercker_badges(repos)
+}
+
+#' @export
 add_wercker_badges = function(repos, badges=get_wercker_badges(repos)$markdown_link, branch = "master",
                       message = "Adding wercker badge", verbose=TRUE)
 {
@@ -274,7 +287,7 @@ add_wercker_badges = function(repos, badges=get_wercker_badges(repos)$markdown_l
     readme = try({
       gh("GET /repos/:owner/:repo/readme",
          owner = owner, repo = repo, ref = branch,
-         .token=get_github_token(), .limit=get_api_limit())
+         .token=get_github_token(), .limit=get_github_api_limit())
     }, silent = TRUE)
 
     tryCatch(

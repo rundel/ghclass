@@ -1,35 +1,32 @@
-require_valid_repo = function(repos, require_owner)
+github_repo_pattern ="^([A-Za-z0-9]+[A-Za-z0-9-]*[A-Za-z0-9]+)/([A-Za-z0-9_.-]+)$"
+
+#' @export
+require_valid_repo = function(repos)
 {
-  valid = valid_repo(repos, require_owner = require_owner)
+  valid = valid_repo(repos)
   if (!all(valid))
-  {
     stop("Invalid repo names: \n\t", paste(repos[!valid], collapse="\n\t"))
-  }
 }
 
+#' @export
 valid_repo = function(repos, require_owner=TRUE)
 {
-  if (require_owner)
-    str_detect(repos, "^[A-Za-z0-9]+[A-Za-z0-9-]*[A-Za-z0-9]+/[A-Za-z0-9_.-]+$")
-  else
-    str_detect(repos, "^([A-Za-z0-9]+[A-Za-z0-9-]*[A-Za-z0-9]+/)?[A-Za-z0-9_.-]+$")
+  str_detect(repos, github_repo_pattern)
 }
 
+#' @export
 get_repo_name = function(repos)
 {
-  res = str_match(repos, "^([A-Za-z0-9]+[A-Za-z0-9-]*[A-Za-z0-9]+/)?([A-Za-z0-9_.-]+)$")
-  res = res[,3]
-  res
+  str_match(repos, github_repo_pattern)[,3]
 }
 
+#' @export
 get_repo_owner = function(repos)
 {
-  res = str_match(repos, "^([A-Za-z0-9]+[A-Za-z0-9-]*[A-Za-z0-9]+)/[A-Za-z0-9_.-]+$")
-  res = res[,2]
-  res
+  str_match(repos, github_repo_pattern)[,2]
 }
 
-
+#' @export
 repo_url = function(repos, type = c("https","ssh"), use_token = TRUE)
 {
   type = match.arg(type)

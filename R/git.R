@@ -1,3 +1,4 @@
+#' @export
 require_git = function()
 {
   git = Sys.which("git")

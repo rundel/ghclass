@@ -1,3 +1,5 @@
+#' @export
+#'
 check_repos = function(repos)
 {
   exists = function(owner, repo)
@@ -12,6 +14,7 @@ check_repos = function(repos)
   )
 }
 
+#' @export
 create_team_repos = function(org, teams = get_teams(org), prefix="", suffix="", verbose=TRUE, delay=0.2)
 {
   if (prefix == "" & suffix == "")
@@ -49,23 +52,31 @@ create_team_repos = function(org, teams = get_teams(org), prefix="", suffix="", 
   }
 }
 
+#' @export
+get_file = function(repo, file, branch)
+{
+  repo_name  = get_repo_name(repo)
+  repo_owner = get_repo_owner(repo)
+
+  gh("GET /repos/:owner/:repo/contents/:path",
+     owner = repo_owner, repo = repo_name, path=file,
+     ref = branch,
+     .token=get_github_token(), .limit=get_api_limit())
+}
+
+#' @export
 check_files = function(repos, files, branch = "master")
 {
-  get_file = function(repo, file, branch)
+  file_exists = function(repo, file, branch)
   {
-    repo_name  = get_repo_name(repo)
-    repo_owner = get_repo_owner(repo)
-
-    gh("GET /repos/:owner/:repo/contents/:path",
-       owner = repo_owner, repo = repo_name, path=file,
-       ref = branch,
-       .token=get_github_token(), .limit=get_api_limit())
+    get_file(repo,file,branch)
     TRUE
   }
 
-  pmap_lgl(list(repos, files, branch), possibly(get_file,FALSE))
+  pmap_lgl(list(repos, files, branch), possibly(file_exists,FALSE))
 }
 
+#' @export
 add_files = function(repos, message, files, branch = "master", preserve_path=FALSE, verbose=TRUE)
 {
   stopifnot(all(file.exists(files)))
@@ -91,17 +102,19 @@ add_files = function(repos, message, files, branch = "master", preserve_path=FAL
       content = base64enc::base64encode(file)
 
       tryCatch({
-        if (check_files(repo, gh_path, branch))
+        if (check_files(repo, gh_path, branch)) {
+          gh_file = get_file(repo, gh_path, branch)
           gh("PUT /repos/:owner/:repo/contents/:path",
              owner = owner, repo = name, path=gh_path,
              message = message, content = content, branch = branch,
              sha = gh_file$sha,
               .token=get_github_token())
-        else
+        } else {
           gh("PUT /repos/:owner/:repo/contents/:path",
              owner = owner, repo = name, path=gh_path,
              message = message, content = content, branch = branch,
              .token=get_github_token())
+        }
       }, error = function(e) {
           message("Adding ", file, " to ", repo, " failed.")
           if (verbose)
@@ -115,7 +128,7 @@ add_files = function(repos, message, files, branch = "master", preserve_path=FAL
 
 
 
-
+#' @export
 mirror_repo = function(source_repo, target_repos, verbose=TRUE)
 {
   stopifnot(length(source_repo) == 1)

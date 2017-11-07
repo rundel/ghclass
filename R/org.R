@@ -1,21 +1,25 @@
+#' @export
 get_org_repos = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE)
 {
   .Depricated("get_repos")
   get_org_repos(org, filter, exclude, full_repo)
 }
 
+#' @export
 get_org_members = function(org, filter=NULL, exclude=FALSE)
 {
   .Depricated("get_members")
   get_members(org, filter, exclude)
 }
 
+#' @export
 get_org_teams = function(org, filter=NULL, exclude=FALSE)
 {
   .Deprecated("get_teams")
   get_teams(org, filter, exclude)
 }
 
+#' @export
 create_org_teams = function(org, teams=character(), privacy = c("closed","secret"),
                             verbose=TRUE, delay=0.2)
 {
@@ -23,6 +27,7 @@ create_org_teams = function(org, teams=character(), privacy = c("closed","secret
   create_teams(org, teams, privacy, vebose, delay)
 }
 
+#' @export
 add_org_team_member = function(org, users, teams, create_missing_teams=FALSE, verbose=TRUE, delay=0.2)
 {
   .Deprecated("add_team_member")
@@ -30,25 +35,21 @@ add_org_team_member = function(org, users, teams, create_missing_teams=FALSE, ve
 }
 
 
-
-get_repos = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE)
-{
-  .Depricated("get_repos")
-  get_repos(org, filter, exclude, full_repo)
-}
-
+#' @export
 get_org_members = function(org, filter=NULL, exclude=FALSE)
 {
   .Depricated("get_members")
   get_members(org, filter, exclude)
 }
 
+#' @export
 get_org_teams = function(org, filter=NULL, exclude=FALSE)
 {
   .Deprecated("get_teams")
   get_teams(org, filter, exclude)
 }
 
+#' @export
 create_org_teams = function(org, teams=character(), privacy = c("closed","secret"),
                             verbose=TRUE, delay=0.2)
 {
@@ -56,6 +57,7 @@ create_org_teams = function(org, teams=character(), privacy = c("closed","secret
   create_teams(org, teams, privacy, vebose, delay)
 }
 
+#' @export
 add_org_team_member = function(org, users, teams, create_missing_teams=FALSE, verbose=TRUE, delay=0.2)
 {
   .Deprecated("add_team_member")
@@ -63,10 +65,10 @@ add_org_team_member = function(org, users, teams, create_missing_teams=FALSE, ve
 }
 
 
-
+#' @export
 get_repos = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE)
 {
-  res = gh("GET /orgs/:org/repos", org = org, .token=get_github_token(), .limit=get_api_limit()) %>%
+  res = gh("GET /orgs/:org/repos", org = org, .token=get_github_token(), .limit=get_github_api_limit()) %>%
     map_chr("name")
 
   if (!is.null(filter))
@@ -88,9 +90,10 @@ get_repos = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE)
     res
 }
 
+#' @export
 get_members = function(org, filter=NULL, exclude=FALSE)
 {
-  res = gh("GET /orgs/:org/members", org=org, .token=get_github_token(), .limit=get_api_limit()) %>%
+  res = gh("GET /orgs/:org/members", org=org, .token=get_github_token(), .limit=get_github_api_limit()) %>%
     map_chr("login")
 
   if (!is.null(filter)) {
@@ -102,6 +105,7 @@ get_members = function(org, filter=NULL, exclude=FALSE)
   res
 }
 
+#' @export
 get_pending_members = function(org, filter=NULL, exclude=FALSE)
 {
   res = gh("GET /orgs/:org/invitations", org=org,
@@ -117,10 +121,10 @@ get_pending_members = function(org, filter=NULL, exclude=FALSE)
   res
 }
 
-
+#' @export
 get_teams = function(org, filter=NULL, exclude=FALSE)
 {
-  teams = gh("/orgs/:org/teams", org=org, .token=get_github_token(), .limit=get_api_limit())
+  teams = gh("/orgs/:org/teams", org=org, .token=get_github_token(), .limit=get_github_api_limit())
 
   res = map_int(teams, "id") %>%
     setNames(map(teams, "name"))
@@ -138,6 +142,7 @@ get_teams = function(org, filter=NULL, exclude=FALSE)
   return(res)
 }
 
+#' @export
 create_teams = function(org, teams=character(), privacy = c("closed","secret"),
                             verbose=TRUE, delay=0.2)
 {
@@ -158,6 +163,7 @@ create_teams = function(org, teams=character(), privacy = c("closed","secret"),
   }
 }
 
+#' @export
 add_team_member = function(org, users, teams, create_missing_teams=FALSE, verbose=TRUE, delay=0.2)
 {
   stopifnot(!missing(org))
@@ -193,6 +199,8 @@ add_team_member = function(org, users, teams, create_missing_teams=FALSE, verbos
   }
 }
 
+
+#' @export
 clean_usernames = function(usernames)
 {
   usernames %<>%
@@ -200,6 +208,7 @@ clean_usernames = function(usernames)
     {.[. != ""]}
 }
 
+#' @export
 check_users = function(users)
 {
   users %>%
@@ -208,6 +217,7 @@ check_users = function(users)
     map_lgl(~ !any(class(.) == "try-error"))
 }
 
+#' @export
 invite_users = function(org, users, verbose=TRUE, exclude_pending = FALSE)
 {
   users = users %>% clean_usernames() %>% tolower()

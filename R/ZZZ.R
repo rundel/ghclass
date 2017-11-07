@@ -18,12 +18,14 @@
   stop_phantom()
 }
 
-get_api_limit = function()
+#' @export
+get_github_api_limit = function()
 {
   get("api_limit", envir = .ghclass)
 }
 
-set_api_limit = function(limit)
+#' @export
+set_github_api_limit = function(limit)
 {
   limit = as.integer(limit)
   stopifnot(limit >= 1)
