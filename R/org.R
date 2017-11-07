@@ -109,7 +109,7 @@ get_members = function(org, filter=NULL, exclude=FALSE)
 get_pending_members = function(org, filter=NULL, exclude=FALSE)
 {
   res = gh("GET /orgs/:org/invitations", org=org,
-           .token=get_github_token(), .limit=get_api_limit()) %>%
+           .token=get_github_token(), .limit=get_github_api_limit()) %>%
     map_chr("login")
 
   if (!is.null(filter)) {

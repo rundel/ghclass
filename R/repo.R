@@ -53,7 +53,7 @@ create_team_repos = function(org, teams = get_teams(org), prefix="", suffix="", 
 }
 
 #' @export
-get_file = function(repo, file, branch)
+get_file = function(repo, file, branch="master")
 {
   repo_name  = get_repo_name(repo)
   repo_owner = get_repo_owner(repo)
@@ -61,7 +61,7 @@ get_file = function(repo, file, branch)
   gh("GET /repos/:owner/:repo/contents/:path",
      owner = repo_owner, repo = repo_name, path=file,
      ref = branch,
-     .token=get_github_token(), .limit=get_api_limit())
+     .token=get_github_token(), .limit=get_github_api_limit())
 }
 
 #' @export
