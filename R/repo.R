@@ -156,7 +156,7 @@ mirror_repo = function(source_repo, target_repos, verbose=TRUE)
   for(repo in target_repos)
   {
     if (verbose)
-      cat("Mirroring ", source_repo, " to", repo,"...\n", sep="")
+      cat("Mirroring ", source_repo, " to ", repo,"...\n", sep="")
 
     try({
       system(paste0(git, " push --mirror ", repo_url(repo)), intern = FALSE,
