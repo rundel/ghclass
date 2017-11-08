@@ -243,8 +243,6 @@ get_wercker_badges = function(repos, size = c("small", "large"), branch = "maste
 #' @export
 add_wercker = function(repos, wercker_org, add_badges=TRUE, verbose=TRUE)
 {
-  size = match.arg(size)
-
   require_valid_repo(repos)
   org_id = get_wercker_org_id(wercker_org)
 
