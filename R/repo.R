@@ -15,6 +15,16 @@ check_repos = function(repos)
 }
 
 #' @export
+#'
+fix_repo_name = function(repos)
+{
+  repos %>%
+    str_replace_all(" ", "_") %>%
+    str_replace_all("[^A-Za-z0-9_.-]+","-")
+}
+
+#' @export
+#'
 create_team_repos = function(org, teams, prefix="", suffix="", verbose=TRUE, delay=0.2)
 {
   if (prefix == "" & suffix == "")
@@ -40,7 +50,7 @@ create_team_repos = function(org, teams, prefix="", suffix="", verbose=TRUE, del
     team = teams$name[i]
     id = teams$id[i]
 
-    repo_name = paste0(prefix, team, suffix)
+    repo_name = paste0(prefix, team, suffix) %>% fix_repo_name()
 
     if (verbose)
       cat("Creating ", repo_name, " for ",team," ...\n",sep="")
