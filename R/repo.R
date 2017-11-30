@@ -15,19 +15,31 @@ check_repos = function(repos)
 }
 
 #' @export
-create_team_repos = function(org, teams = get_teams(org), prefix="", suffix="", verbose=TRUE, delay=0.2)
+create_team_repos = function(org, teams, prefix="", suffix="", verbose=TRUE, delay=0.2)
 {
   if (prefix == "" & suffix == "")
     stop("Either a prefix or a suffix must be specified")
 
-  if (is.character(teams))
-  {
-    org_teams = get_teams(org)
-    teams = org_teams[ teams %in% names(org_teams) ]
+  org_teams = get_teams(org)
+
+  if (missing(teams)) {
+    teams = org_teams
+  } else {
+    teams = left_join(
+      data.frame(name = teams, stringsAsFactors = FALSE),
+      org_teams,
+      by = "name")
   }
 
-  for(team in names(teams))
+  missing_ids = is.na(teams$id)
+  if (any(missing_ids))
+    stop("Unable to locate team(s): ", paste(teams$name[missing_ids], collapse=", "))
+
+  for(i in seq_len(nrow(teams)))
   {
+    team = teams$name[i]
+    id = teams$id[i]
+
     repo_name = paste0(prefix, team, suffix)
 
     if (verbose)
@@ -36,7 +48,7 @@ create_team_repos = function(org, teams = get_teams(org), prefix="", suffix="", 
     try({
       gh("POST /orgs/:org/repos",
          org = org,
-         name=repo_name, private=TRUE, team_id=teams[team],
+         name=repo_name, private=TRUE, team_id=id,
          auto_init=TRUE, gitignore_template="R",
          .token=get_github_token())
     })
@@ -45,7 +57,7 @@ create_team_repos = function(org, teams = get_teams(org), prefix="", suffix="", 
 
     try({
       gh("PUT /teams/:id/repos/:org/:repo",
-         id = teams[team], org = org, repo = repo_name,
+         id = id, org = org, repo = repo_name,
          permission="push",
          .token=get_github_token())
     })

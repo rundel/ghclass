@@ -43,13 +43,6 @@ get_org_members = function(org, filter=NULL, exclude=FALSE)
 }
 
 #' @export
-get_org_teams = function(org, filter=NULL, exclude=FALSE)
-{
-  .Deprecated("get_teams")
-  get_teams(org, filter, exclude)
-}
-
-#' @export
 create_org_teams = function(org, teams=character(), privacy = c("closed","secret"),
                             verbose=TRUE, delay=0.2)
 {
@@ -124,22 +117,25 @@ get_pending_members = function(org, filter=NULL, exclude=FALSE)
 #' @export
 get_teams = function(org, filter=NULL, exclude=FALSE)
 {
-  teams = gh("/orgs/:org/teams", org=org, .token=get_github_token(), .limit=get_github_api_limit())
+  res = gh("/orgs/:org/teams", org=org, .token=get_github_token(), .limit=get_github_api_limit())
 
-  res = map_int(teams, "id") %>%
-    setNames(map(teams, "name"))
+  teams = data.frame(
+    name = map_chr(res, "name"),
+    id =  map_int(res, "id"),
+    stringsAsFactors = FALSE
+  )
 
   if (!is.null(filter))
   {
-    subset = names(res) %>% str_detect(filter)
+    subset = str_detect(teams$names, filter)
 
     if (exclude)
-      res = res[!subset]
+      teams = teams[!subset,]
     else
-      res = res[subset]
+      teams = teams[subset,]
   }
 
-  return(res)
+  return(teams)
 }
 
 #' @export
@@ -173,25 +169,32 @@ add_team_member = function(org, users, teams, create_missing_teams=FALSE, verbos
 
   info = data.frame(users, teams, stringsAsFactors = FALSE)
 
-  team_ids = get_teams(org)
+  org_teams = get_teams(org)
 
-  new_teams = setdiff(unique(teams), names(team_ids))
-
+  new_teams = setdiff(unique(teams), org_teams$names)
   if (length(new_teams) != 0)
   {
-    if (create_missing_teams)
+    if (create_missing_teams) {
       create_teams(org=org, new_teams, verbose=verbose)
-    else
-      stop("Team(s) ",paste(new_teams,collapse=", "), " do(es) not exist for ", org)
+      org_teams = get_teams(org)
+    } else {
+      stop("Team(s) ", paste(new_teams,collapse=", "), " do(es) not exist in ", org)
+    }
   }
+
+
+  teams = left_join(
+    data.frame(name = teams, stringsAsFactors = FALSE),
+    org_teams,
+    by = "name")
 
   for(i in seq_along(users))
   {
     if (verbose)
-      cat("Adding ", users[i], " to ", teams[i], " ...\n", sep="")
+      cat("Adding ", users[i], " to ", teams$name[i], " ...\n", sep="")
 
     gh("PUT /teams/:id/memberships/:username",
-       id=team_ids[teams[i]], username=users[i],
+       id=teams$id[i], username=users[i],
        role="member",
        .token=get_github_token())
 
