@@ -115,8 +115,80 @@ get_pending_members = function(org, filter=NULL, exclude=FALSE)
 }
 
 #' @export
+get_team_repos = function(org, teams = get_teams(org))
+{
+  stopifnot(length(org) == 1)
+
+  if (is.character(teams))
+  {
+    org_teams = get_teams(org)
+
+    sub = teams %in% org_teams$name
+    match = filter(org_teams, name %in% teams)
+
+    if (nrow(teams) != length(orig_teams))
+      stop("Unable to find teams: ", paste(teams[sub], collapse=", "))
+
+    teams = match
+  }
+
+  map2_df(
+    teams$name, teams$id,
+    function(team, id) {
+      res = gh(
+        "GET /teams/:id/repos", id=id,
+        .token=get_github_token(), .limit=get_github_api_limit()
+      )
+
+      data_frame(
+        team = team,
+        repo = map_chr(res, "full_name")
+      )
+    }
+  )
+}
+
+#' @export
+get_team_members = function(org, teams = get_teams(org))
+{
+  stopifnot(length(org) == 1)
+
+  if (is.character(teams))
+  {
+    org_teams = get_teams(org)
+
+    sub = teams %in% org_teams$name
+    match = filter(org_teams, name %in% teams)
+
+    if (nrow(teams) != length(orig_teams))
+      stop("Unable to find teams: ", paste(teams[sub], collapse=", "))
+
+    teams = match
+  }
+  map2_df(
+    teams$name, teams$id,
+    function(team, id) {
+      res = gh(
+        "GET /teams/:id/members",
+        id=id, role = "all",
+        .token=get_github_token(), .limit=get_github_api_limit()
+      )
+
+      data_frame(
+        team = team,
+        member = map_chr(res, "login")
+      )
+    }
+  )
+}
+
+#' @export
 get_teams = function(org, filter=NULL, exclude=FALSE)
 {
+  stopifnot(length(org)==1)
+  stopifnot(length(filter)<=1)
+  stopifnot(length(exclude)==1)
+
   res = gh("/orgs/:org/teams", org=org, .token=get_github_token(), .limit=get_github_api_limit())
 
   teams = data.frame(

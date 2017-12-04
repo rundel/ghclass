@@ -1,9 +1,9 @@
 Package: ghclass
 Title: Tools for managing classes with gitbub
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: person("Colin", "Rundel", email = "rundel@gmail.com", role = c("aut", "cre"))
 Description: Tools for managing classes with gitbub
-Depends: R (>= 3.3.2), gh, magrittr, dplyr, stringr, webdriver, purrr, yaml, base64enc, httr, jsonlite
+Depends: R (>= 3.4.0), gh, magrittr, dplyr, stringr, purrr, yaml, base64enc, httr, jsonlite
 License: GPL3
 Encoding: UTF-8
 LazyData: true
