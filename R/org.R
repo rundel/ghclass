@@ -171,7 +171,7 @@ add_team_member = function(org, users, teams, create_missing_teams=FALSE, verbos
 
   org_teams = get_teams(org)
 
-  new_teams = setdiff(unique(teams), org_teams$names)
+  new_teams = setdiff(unique(teams), org_teams$name)
   if (length(new_teams) != 0)
   {
     if (create_missing_teams) {
