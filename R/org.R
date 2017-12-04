@@ -127,7 +127,7 @@ get_teams = function(org, filter=NULL, exclude=FALSE)
 
   if (!is.null(filter))
   {
-    subset = str_detect(teams$names, filter)
+    subset = str_detect(teams$name, filter)
 
     if (exclude)
       teams = teams[!subset,]
