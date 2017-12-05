@@ -1,10 +1,7 @@
 .ghclass = new.env(FALSE, parent=globalenv())
 
-.onAttach = function(libname, pkgname)
-{
+.onAttach = function(libname, pkgname) {
   assign("api_limit", value = 1000L, envir = .ghclass)
-  assign("phantom", value = NULL, envir = .ghclass)
-  assign("session", value = NULL, envir = .ghclass)
   assign("github_token", value = NULL, envir = .ghclass)
   assign("wercker_token", value = NULL, envir = .ghclass)
 
@@ -12,21 +9,16 @@
   try(get_wercker_account(), silent = TRUE)
 }
 
-.onUnload = function(libpath)
-{
-  stop_session()
-  stop_phantom()
+.onUnload = function(libpath) {
 }
 
 #' @export
-get_github_api_limit = function()
-{
+get_github_api_limit = function() {
   get("api_limit", envir = .ghclass)
 }
 
 #' @export
-set_github_api_limit = function(limit)
-{
+set_github_api_limit = function(limit) {
   limit = as.integer(limit)
   stopifnot(limit >= 1)
 
