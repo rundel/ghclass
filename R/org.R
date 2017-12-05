@@ -1,193 +1,137 @@
+#' Get organization repos
+#'
+#' \code{get_repos} returns a (filtered) vector of repos belonging to a GitHub organization.
+#'
+#' @param org character, name of the GitHub organization.
+#' @param filter character, regex pattern for matching (or excluding) repos.
+#' @param exclude logical, should entries matching the regex be excluded or included.
+#' @param full_repo logical, should the full repo name be returned (e.g. \code{org/repo} instead of just \code{repo})
+#'
+#' @examples
+#' \dontrun{
+#' get_repos("ghclass")
+#' get_repos("ghclass", "hw1-")
+#' }
+#'
+#' @family github organization related functions
+#'
 #' @export
-get_org_repos = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE)
-{
-  .Depricated("get_repos")
-  get_org_repos(org, filter, exclude, full_repo)
-}
-
-#' @export
-get_org_members = function(org, filter=NULL, exclude=FALSE)
-{
-  .Depricated("get_members")
-  get_members(org, filter, exclude)
-}
-
-#' @export
-get_org_teams = function(org, filter=NULL, exclude=FALSE)
-{
-  .Deprecated("get_teams")
-  get_teams(org, filter, exclude)
-}
-
-#' @export
-create_org_teams = function(org, teams=character(), privacy = c("closed","secret"),
-                            verbose=TRUE, delay=0.2)
-{
-  .Deprecated("create_teams")
-  create_teams(org, teams, privacy, vebose, delay)
-}
-
-#' @export
-add_org_team_member = function(org, users, teams, create_missing_teams=FALSE, verbose=TRUE, delay=0.2)
-{
-  .Deprecated("add_team_member")
-  add_team_member(org, users, teams, create_missing_teams, verbose, delay)
-}
-
-
-#' @export
-get_org_members = function(org, filter=NULL, exclude=FALSE)
-{
-  .Depricated("get_members")
-  get_members(org, filter, exclude)
-}
-
-#' @export
-create_org_teams = function(org, teams=character(), privacy = c("closed","secret"),
-                            verbose=TRUE, delay=0.2)
-{
-  .Deprecated("create_teams")
-  create_teams(org, teams, privacy, vebose, delay)
-}
-
-#' @export
-add_org_team_member = function(org, users, teams, create_missing_teams=FALSE, verbose=TRUE, delay=0.2)
-{
-  .Deprecated("add_team_member")
-  add_team_member(org, users, teams, create_missing_teams, verbose, delay)
-}
-
-
-#' @export
-get_repos = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE)
-{
-  res = gh("GET /orgs/:org/repos", org = org, .token=get_github_token(), .limit=get_github_api_limit()) %>%
-    map_chr("name")
-
-  if (!is.null(filter))
-  {
-    subset = res %>% str_detect(filter)
-
-    if (exclude)
-      res = res[!subset]
-    else
-      res = res[subset]
-  }
-
-  if (length(res) == 0)
-    stop("No repos found in ", org, " matching ", filter)
-
-  if (full_repo)
-    paste0(org,"/",res)
-  else
-    res
-}
-
-#' @export
-get_members = function(org, filter=NULL, exclude=FALSE)
-{
-  res = gh("GET /orgs/:org/members", org=org, .token=get_github_token(), .limit=get_github_api_limit()) %>%
-    map_chr("login")
-
-  if (!is.null(filter)) {
-    subset = res %>% str_detect(filter)
-    if (exclude) res = res[!subset]
-    else         res = res[subset]
-  }
-
-  res
-}
-
-#' @export
-get_pending_members = function(org, filter=NULL, exclude=FALSE)
-{
-  res = gh("GET /orgs/:org/invitations", org=org,
-           .token=get_github_token(), .limit=get_github_api_limit()) %>%
-    map_chr("login")
-
-  if (!is.null(filter)) {
-    subset = res %>% str_detect(filter)
-    if (exclude) res = res[!subset]
-    else         res = res[subset]
-  }
-
-  res
-}
-
-#' @export
-get_team_repos = function(org, teams = get_teams(org))
-{
-  stopifnot(length(org) == 1)
-
-  if (is.character(teams))
-  {
-    org_teams = get_teams(org)
-
-    sub = teams %in% org_teams$name
-    match = filter(org_teams, name %in% teams)
-
-    if (nrow(teams) != length(orig_teams))
-      stop("Unable to find teams: ", paste(teams[sub], collapse=", "))
-
-    teams = match
-  }
-
-  map2_df(
-    teams$name, teams$id,
-    function(team, id) {
-      res = gh(
-        "GET /teams/:id/repos", id=id,
-        .token=get_github_token(), .limit=get_github_api_limit()
-      )
-
-      data_frame(
-        team = team,
-        repo = map_chr(res, "full_name")
-      )
-    }
-  )
-}
-
-#' @export
-get_team_members = function(org, teams = get_teams(org))
-{
-  stopifnot(length(org) == 1)
-
-  if (is.character(teams))
-  {
-    org_teams = get_teams(org)
-
-    sub = teams %in% org_teams$name
-    match = filter(org_teams, name %in% teams)
-
-    if (nrow(teams) != length(orig_teams))
-      stop("Unable to find teams: ", paste(teams[sub], collapse=", "))
-
-    teams = match
-  }
-  map2_df(
-    teams$name, teams$id,
-    function(team, id) {
-      res = gh(
-        "GET /teams/:id/members",
-        id=id, role = "all",
-        .token=get_github_token(), .limit=get_github_api_limit()
-      )
-
-      data_frame(
-        team = team,
-        member = map_chr(res, "login")
-      )
-    }
-  )
-}
-
-#' @export
-get_teams = function(org, filter=NULL, exclude=FALSE)
-{
+#'
+get_repos = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE) {
   stopifnot(length(org)==1)
   stopifnot(length(filter)<=1)
-  stopifnot(length(exclude)==1)
+
+  res = map_chr(
+    gh("GET /orgs/:org/repos", org = org, .token=get_github_token(), .limit=get_github_api_limit()),
+    "name"
+  )
+
+  if (!is.null(filter)){
+    subset = grepl(filter, res)
+    if (exclude) res = res[!subset]
+    else         res = res[subset]
+  }
+
+  if (full_repo)
+    res = paste0(org,"/",res)
+
+  res
+}
+
+
+#' Get organization members
+#'
+#' \code{get_members} returns a (filtered) vector of organization memebers.
+#'
+#' @param org character, name of the GitHub organization.
+#' @param filter character, regex pattern for matching (or excluding) repos.
+#' @param exclude logical, should entries matching the regex be excluded or included.
+#'
+#' @examples
+#' \dontrun{
+#' get_members("ghclass")
+#' }
+#'
+#' @family github organization related functions
+#'
+#' @export
+#'
+get_members = function(org, filter=NULL, exclude=FALSE) {
+  stopifnot(length(org)==1)
+  stopifnot(length(filter)<=1)
+
+  res = map_chr(
+    gh("GET /orgs/:org/members", org=org, .token=get_github_token(), .limit=get_github_api_limit()),
+    "login"
+  )
+
+  if (!is.null(filter)) {
+    subset = grepl(filter, res)
+    if (exclude) res = res[!subset]
+    else         res = res[subset]
+  }
+
+  res
+}
+
+
+#' Get pending organization members
+#'
+#' \code{get_pending_members} returns a (filtered) vector of pending organization memebers.
+#'
+#' @param org character, name of the GitHub organization.
+#' @param filter character, regex pattern for matching (or excluding) repos.
+#' @param exclude logical, should entries matching the regex be excluded or included.
+#'
+#' @examples
+#' \dontrun{
+#' get_pending_members("ghclass")
+#' }
+#'
+#' @family github organization related functions
+#'
+#' @export
+#'
+get_pending_members = function(org, filter=NULL, exclude=FALSE) {
+  stopifnot(length(org)==1)
+  stopifnot(length(filter)<=1)
+
+  res = map_chr(
+    gh("GET /orgs/:org/invitations", org=org, .token=get_github_token(), .limit=get_github_api_limit()),
+    "login"
+  )
+
+  if (!is.null(filter)) {
+    subset = grepl(filter,res)
+    if (exclude) res = res[!subset]
+    else         res = res[subset]
+  }
+
+  res
+}
+
+#' Get organization teams
+#'
+#' \code{get_teams} returns a (filtered) data frame organization teams and their unique ids.
+#'
+#' @param org character, name of the GitHub organization.
+#' @param filter character, regex pattern for matching (or excluding) repos.
+#' @param exclude logical, should entries matching the regex be excluded or included.
+#'
+#' @examples
+#' \dontrun{
+#' get_team_repos("ghclass",c("team01","team02"))
+#' }
+#'
+#' @family github organization related functions
+#'
+#' @export
+#'
+
+#' @export
+get_teams = function(org, filter=NULL, exclude=FALSE) {
+  stopifnot(length(org)==1)
+  stopifnot(length(filter)<=1)
 
   res = gh("/orgs/:org/teams", org=org, .token=get_github_token(), .limit=get_github_api_limit())
 
@@ -197,18 +141,119 @@ get_teams = function(org, filter=NULL, exclude=FALSE)
     stringsAsFactors = FALSE
   )
 
-  if (!is.null(filter))
-  {
-    subset = str_detect(teams$name, filter)
-
-    if (exclude)
-      teams = teams[!subset,]
-    else
-      teams = teams[subset,]
+  if (!is.null(filter)) {
+    subset = grepl(filter, teams$name)
+    if (exclude) teams = teams[!subset,]
+    else         teams = teams[subset,]
   }
 
-  return(teams)
+  teams
 }
+
+
+#' Get teams' repos
+#'
+#' \code{get_team_repos} returns a (filtered) data frame of teams and their repos.
+#'
+#' @param org character, name of the GitHub organization.
+#' @param teams character or data frame, listing one or more team
+#'
+#' @examples
+#' \dontrun{
+#' get_team_repos("ghclass",c("team01","team02"))
+#' }
+#'
+#' @family github organization related functions
+#'
+#' @export
+#'
+get_team_repos = function(org, teams = get_teams(org))
+{
+  stopifnot(length(org) == 1)
+
+  if (is.character(teams))
+  {
+    org_teams = get_teams(org)
+
+    sub = teams %in% org_teams$name
+    match = org_teams[org_teams$name %in% teams,]
+
+    if (sum(sub) != length(teams))
+      stop("Unable to find teams: ", paste(teams[!sub], collapse=", "))
+
+    teams = match
+  }
+
+  stopifnot(all(c("name","id") %in% names(teams)))
+
+  map2_df(
+    teams$name, teams$id,
+    function(team, id) {
+      res = gh(
+        "GET /teams/:id/repos", id=id,
+        .token=get_github_token(), .limit=get_github_api_limit()
+      )
+      data.frame(
+        team = team,
+        repo = map_chr(res, "full_name"),
+        stringsAsFactors = FALSE
+      )
+    }
+  )
+}
+
+#' Get teams' members
+#'
+#' \code{get_team_members} returns a data frame of teams and their members.
+#'
+#' @param org character, name of the GitHub organization.
+#' @param teams character or data frame, listing one or more team
+#'
+#' @examples
+#' \dontrun{
+#' get_team_members("ghclass",c("team01","team02"))
+#' }
+#'
+#' @family github organization related functions
+#'
+#' @export
+#'
+get_team_members = function(org, teams = get_teams(org))
+{
+  stopifnot(length(org) == 1)
+
+  if (is.character(teams))
+  {
+    org_teams = get_teams(org)
+
+    sub = teams %in% org_teams$name
+    match = org_teams[org_teams$name %in% teams,]
+
+    if (sum(sub) != length(teams))
+      stop("Unable to find teams: ", paste(teams[!sub], collapse=", "))
+
+    teams = match
+  }
+
+  stopifnot(all(c("name","id") %in% names(teams)))
+
+  map2_df(
+    teams$name, teams$id,
+    function(team, id) {
+      res = gh(
+        "GET /teams/:id/members",
+        id=id, role = "all",
+        .token=get_github_token(), .limit=get_github_api_limit()
+      )
+      data_frame(
+        team = team,
+        member = map_chr(res, "login")
+      )
+    }
+  )
+}
+
+
 
 #' @export
 create_teams = function(org, teams=character(), privacy = c("closed","secret"),
@@ -275,13 +320,7 @@ add_team_member = function(org, users, teams, create_missing_teams=FALSE, verbos
 }
 
 
-#' @export
-clean_usernames = function(usernames)
-{
-  usernames %<>%
-    str_trim() %>%
-    {.[. != ""]}
-}
+
 
 #' @export
 check_users = function(users)

@@ -1,6 +1,13 @@
 github_repo_pattern ="^([A-Za-z0-9]+[A-Za-z0-9-]*[A-Za-z0-9]+)/([A-Za-z0-9_.-]+)$"
+github_username_pattern = "^[A-Za-z\\d](?:[A-Za-z\\d]|-(?=[A-Za-z\\d])){0,38}$"
 
-#' @export
+
+clean_usernames = function(usernames)
+{
+  s = str_trim(usernames)
+  s[s != ""]
+}
+
 require_valid_repo = function(repos)
 {
   valid = valid_repo(repos)
@@ -27,7 +34,7 @@ get_repo_owner = function(repos)
 }
 
 #' @export
-repo_url = function(repos, type = c("https","ssh"), use_token = TRUE)
+get_repo_url = function(repos, type = c("https","ssh"), use_token = TRUE)
 {
   type = match.arg(type)
 

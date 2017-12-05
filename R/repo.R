@@ -168,7 +168,7 @@ mirror_repo = function(source_repo, target_repos, verbose=TRUE)
   if (verbose)
     cat("Cloning source repo (", source_repo, ") ...\n", sep = "")
 
-  system(paste0(git, " clone --bare ", repo_url(source_repo)), intern = FALSE,
+  system(paste0(git, " clone --bare ", get_repo_url(source_repo)), intern = FALSE,
          wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
   repo_dir = dir(pattern = "\\.git")
@@ -181,7 +181,7 @@ mirror_repo = function(source_repo, target_repos, verbose=TRUE)
       cat("Mirroring ", source_repo, " to ", repo,"...\n", sep="")
 
     try({
-      system(paste0(git, " push --mirror ", repo_url(repo)), intern = FALSE,
+      system(paste0(git, " push --mirror ", get_repo_url(repo)), intern = FALSE,
              wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
     })
   }

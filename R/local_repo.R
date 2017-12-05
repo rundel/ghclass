@@ -30,7 +30,7 @@ clone_repos = function(repos, local_path="./", git = require_git(), options="", 
 
   walk(repos, function(repo) {
     dir = file.path(local_path, get_repo_name(repo))
-    cmd = paste(git, "clone", options, repo_url(repo), dir)
+    cmd = paste(git, "clone", options, get_repo_url(repo), dir)
     status = system(
       cmd, intern = FALSE, wait = TRUE,
       ignore.stdout = !verbose, ignore.stderr = !verbose
