@@ -133,7 +133,7 @@ get_teams = function(org, filter=NULL, exclude=FALSE) {
   stopifnot(length(org)==1)
   stopifnot(length(filter)<=1)
 
-  res = gh("/orgs/:org/teams", org=org, .token=get_github_token(), .limit=get_github_api_limit())
+  res = gh("GET /orgs/:org/teams", org=org, .token=get_github_token(), .limit=get_github_api_limit())
 
   teams = data.frame(
     name = map_chr(res, "name"),
@@ -148,6 +148,17 @@ get_teams = function(org, filter=NULL, exclude=FALSE) {
   }
 
   teams
+}
+
+
+get_teams_by_list = function(org, teams) {
+  org_teams = get_teams(org)
+
+  sub = teams %in% org_teams$name
+  if (sum(sub) != length(teams))
+    stop("Unable to find team(s): ", paste(teams[!sub], collapse=", "))
+
+  org_teams[org_teams$name %in% teams,]
 }
 
 
@@ -172,17 +183,7 @@ get_team_repos = function(org, teams = get_teams(org))
   stopifnot(length(org) == 1)
 
   if (is.character(teams))
-  {
-    org_teams = get_teams(org)
-
-    sub = teams %in% org_teams$name
-    match = org_teams[org_teams$name %in% teams,]
-
-    if (sum(sub) != length(teams))
-      stop("Unable to find teams: ", paste(teams[!sub], collapse=", "))
-
-    teams = match
-  }
+    teams = get_teams_by_list(org, teams)
 
   stopifnot(all(c("name","id") %in% names(teams)))
 
@@ -223,17 +224,7 @@ get_team_members = function(org, teams = get_teams(org))
   stopifnot(length(org) == 1)
 
   if (is.character(teams))
-  {
-    org_teams = get_teams(org)
-
-    sub = teams %in% org_teams$name
-    match = org_teams[org_teams$name %in% teams,]
-
-    if (sum(sub) != length(teams))
-      stop("Unable to find teams: ", paste(teams[!sub], collapse=", "))
-
-    teams = match
-  }
+    teams = get_teams_by_list(org, teams)
 
   stopifnot(all(c("name","id") %in% names(teams)))
 
@@ -256,8 +247,7 @@ get_team_members = function(org, teams = get_teams(org))
 
 
 #' @export
-create_teams = function(org, teams=character(), privacy = c("closed","secret"),
-                            verbose=TRUE, delay=0.2)
+create_teams = function(org, teams=character(), privacy = c("closed","secret"), verbose=TRUE)
 {
   stopifnot(!missing(org))
   teams = as.character(teams)
@@ -268,16 +258,16 @@ create_teams = function(org, teams=character(), privacy = c("closed","secret"),
     if (verbose)
       cat("Adding", team, "...\n")
 
-    gh("POST /orgs/:org/teams",
-       org=org, name=team, privacy=privacy,
-       .token=get_github_token())
-
-    Sys.sleep(delay)
+    try({
+      gh("POST /orgs/:org/teams",
+         org=org, name=team, privacy=privacy,
+        .token=get_github_token())
+    })
   }
 }
 
 #' @export
-add_team_member = function(org, users, teams, create_missing_teams=FALSE, verbose=TRUE, delay=0.2)
+add_team_member = function(org, users, teams, create_missing_teams=FALSE, verbose=TRUE)
 {
   stopifnot(!missing(org))
   stopifnot(is.character(users) & length(users) >=1)
@@ -289,56 +279,53 @@ add_team_member = function(org, users, teams, create_missing_teams=FALSE, verbos
   org_teams = get_teams(org)
 
   new_teams = setdiff(unique(teams), org_teams$name)
-  if (length(new_teams) != 0)
-  {
-    if (create_missing_teams) {
-      create_teams(org=org, new_teams, verbose=verbose)
-      org_teams = get_teams(org)
-    } else {
-      stop("Team(s) ", paste(new_teams,collapse=", "), " do(es) not exist in ", org)
+  if (length(new_teams) != 0) {
+    if (!create_missing_teams)
+      stop("Team(s) ", paste(new_teams,collapse=", "), " do(es) not exist in ", org,".")
+
+    create_teams(org=org, new_teams, verbose=verbose)
+    org_teams = get_teams(org)
+  }
+
+  teams = org_teams[org_teams$names %in% teams,]
+
+  pwalk(
+    list(users, teams$name, teams$id),
+    function(user, team, id) {
+      if (verbose)
+        message("Adding ", user, " to ", team, " ...\n", sep="")
+
+      try({
+        gh("PUT /teams/:id/memberships/:username",
+           id=id, username=user, role="member",
+          .token=get_github_token())
+      })
     }
-  }
-
-
-  teams = left_join(
-    data.frame(name = teams, stringsAsFactors = FALSE),
-    org_teams,
-    by = "name")
-
-  for(i in seq_along(users))
-  {
-    if (verbose)
-      cat("Adding ", users[i], " to ", teams$name[i], " ...\n", sep="")
-
-    gh("PUT /teams/:id/memberships/:username",
-       id=teams$id[i], username=users[i],
-       role="member",
-       .token=get_github_token())
-
-    Sys.sleep(delay)
-  }
+  )
 }
 
 
 
 
 #' @export
-check_users = function(users)
+check_users_exist = function(users)
 {
-  users %>%
-    clean_usernames() %>%
-    map(~ try( {gh("/users/:username", username=., .token=get_github_token())}, silent=TRUE)) %>%
-    map_lgl(~ !any(class(.) == "try-error"))
+  check_user = function(user) {
+    gh("/users/:username", username=user, .token=get_github_token())
+    TRUE
+  }
+
+  map_lgl(users, possibly(check_user, FALSE))
 }
 
 #' @export
 invite_users = function(org, users, verbose=TRUE, exclude_pending = FALSE)
 {
-  users = users %>% clean_usernames() %>% tolower()
-  current = get_members(org) %>% tolower() %>% intersect(users)
-  pending = get_pending_members(org) %>% tolower() %>% intersect(users)
+  users = tolower(users)
+  members = tolower(get_members(org))
+  pending = tolower(get_pending_members(org))
 
-  need_invite = setdiff(users, c(current, pending))
+  need_invite = setdiff(users, c(members, pending))
 
   for(user in need_invite)
   {
@@ -351,8 +338,4 @@ invite_users = function(org, users, verbose=TRUE, exclude_pending = FALSE)
          .token=get_github_token())
     })
   }
-  if (verbose)
-    sprintf("Current status: %i invited, %i pending, %i joined.",
-            length(need_invite), length(pending), length(current)) %>%
-    cat("\n", sep="")
 }
