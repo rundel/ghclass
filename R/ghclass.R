@@ -1,13 +1,21 @@
-#' ghclass: A package for github based assignment management
+#' ghclass: A package for github based classroom and assignment management
 #'
-#' @section repository functions:
+#' @section github repo functions:
 #'
 #' \itemize{
 #'   \item \code{One} -
 #'   \item \code{Two} -
 #' }
 #'
-#' @section organization functions:
+#' @section local repo functions:
+#'
+#' \itemize{
+#'   \item \code{\link{clone_repos}} - clone repos locally
+#'   \item \code{\link{update_repos}} - update local repos via pull
+#' }
+#'
+#'
+#' @section github organization functions:
 #'
 #' \itemize{
 #'   \item \code{One} -
@@ -19,6 +27,21 @@
 #' \itemize{
 #'   \item \code{One} -
 #'   \item \code{Two} -
+#' }
+#'
+#' @section authentication functions:
+#'
+#' GitHub
+#' \itemize{
+#'   \item \code{\link{get_github_token}} - get github token
+#'   \item \code{\link{set_github_token}} - set github token
+#'   \item \code{\link{test_github_token}} - test github token
+#' }
+#' Wercker
+#' \itemize{
+#'   \item \code{\link{get_wercker_token}} - get wercker token
+#'   \item \code{\link{set_wercker_token}} - set wercker token
+#'   \item \code{\link{test_wercker_token}} - test wercker token
 #' }
 #'
 #' @docType package

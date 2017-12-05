@@ -17,6 +17,8 @@
 #' get_github_token()
 #' }
 #'
+#' @family authentication functions
+#'
 #' @export
 #'
 get_github_token = function()
@@ -56,6 +58,8 @@ get_github_token = function()
 #' set_github_token("0123456789ABCDEF0123456789ABCDEF01234567")
 #' }
 #'
+#' @family authentication functions
+#'
 #' @export
 #'
 set_github_token = function(token)
@@ -80,6 +84,8 @@ set_github_token = function(token)
 #' test_github_token()
 #' test_github_token("bad_token")
 #' }
+#'
+#' @family authentication functions
 #'
 #' @export
 #'
@@ -112,6 +118,8 @@ test_github_token = function(token)
 #' \dontrun{
 #' get_wercker_token()
 #' }
+#'
+#' @family authentication functions
 #'
 #' @export
 #'
@@ -152,6 +160,8 @@ get_wercker_token = function()
 #' set_wercker_token("0123456789ABCDEF0123456789ABCDEF01234567")
 #' }
 #'
+#' @family authentication functions
+#'
 #' @export
 #'
 set_wercker_token = function(token)
@@ -177,6 +187,8 @@ set_wercker_token = function(token)
 #' test_wercker_token()
 #' test_wercker_token("bad_token")
 #' }
+#'
+#' @family authentication functions
 #'
 #' @export
 #'

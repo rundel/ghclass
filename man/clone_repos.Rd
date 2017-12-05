@@ -5,7 +5,8 @@
 \alias{grab_repos}
 \title{Clone repos from github}
 \usage{
-clone_repos(repos, local_path = "./", git = require_git(), options = "")
+clone_repos(repos, local_path = "./", git = require_git(), options = "",
+  verbose = FALSE)
 }
 \arguments{
 \item{repos}{Character vector of repo names with the form \emph{owner/name}.}
@@ -15,7 +16,9 @@ clone_repos(repos, local_path = "./", git = require_git(), options = "")
 \item{git}{Path to the local git binary. \code{require_git()} attempts to
 find the git binary based on your \code{PATH}, it will throw an error if git cannot be found.}
 
-\item{options}{git binary options (e.g. \code{--bare})}
+\item{options}{Additional git binary options (e.g. \code{--bare})}
+
+\item{verbose}{Display verbose output.}
 }
 \description{
 \code{clone_repos} uses the git binary to clone the provided repositories
@@ -26,4 +29,7 @@ into a local directory.
 clone_repos("rundel/ghclass")
 }
 
+}
+\seealso{
+Other local repo functions: \code{\link{update_repos}}
 }

@@ -2,7 +2,6 @@
 % Please edit documentation in R/local_repo.R
 \name{update_repos}
 \alias{update_repos}
-\alias{grab_repos}
 \title{Update local repos via git pull}
 \usage{
 update_repos(repo_dirs, git = require_git(), options = "",
@@ -12,19 +11,23 @@ update_repos(repo_dirs, git = require_git(), options = "",
 \item{git}{Path to the local git binary. \code{require_git()} attempts to
 find the git binary based on your \code{PATH}, it will throw an error if git cannot be found.}
 
-\item{options}{git binary options (e.g. \code{--bare})}
+\item{options}{Additional git binary options (e.g. \code{--all}).}
 
-\item{repos}{Character vector of repo names with the form \emph{owner/name}.}
+\item{verbose}{Display verbose output.}
 
-\item{local_path}{Local directory into which the repos will be cloned.}
+\item{repos_dir}{Character vector of repo directories or a single directory containing the repo directories.}
 }
 \description{
-\code{clone_repos} uses the git binary to clone the provided repositories
-into a local directory.
+\code{update_repos} uses the git binary to update the provided repositories
+using git pull.
 }
 \examples{
 \dontrun{
-clone_repos("rundel/ghclass")
+update_repos("hw1/")
+update_repos(c("hw1/team01","hw1/team02","hw1/team03"))
 }
 
+}
+\seealso{
+Other local repo functions: \code{\link{clone_repos}}
 }

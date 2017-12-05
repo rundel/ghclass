@@ -17,6 +17,8 @@
 #'
 #' @aliases grab_repos
 #'
+#' @family local repo functions
+#'
 #' @export
 #'
 clone_repos = function(repos, local_path="./", git = require_git(), options="", verbose=FALSE)
@@ -64,6 +66,8 @@ grab_repos = function(repos, local_path="./", verbose=TRUE)
 #' update_repos("hw1/")
 #' update_repos(c("hw1/team01","hw1/team02","hw1/team03"))
 #' }
+#'
+#' @family local repo functions
 #'
 #' @export
 #'
