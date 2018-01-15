@@ -2,7 +2,7 @@
 
 ### Authentication
 
-This package uses tokens for authentication with both [wercker](https://app.wercker.com/profile/tokens) and github, these values can be supplied via environmental variables `GITHUB_TOKEN` and `WERCKER_TOKEN` respectively or in `~/.github/token` and `~/.wercker/token`.
+This package uses tokens for authentication with both [wercker](https://app.wercker.com/profile/tokens) and [github](https://github.com/settings/tokens), these values can be supplied via environmental variables `GITHUB_TOKEN` and `WERCKER_TOKEN` respectively or in `~/.github/token` and `~/.wercker/token`.
 
 Alternative token locations can be specified with `set_github_token` or `set_wercker_token`.
 
