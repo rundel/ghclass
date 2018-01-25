@@ -68,7 +68,7 @@ create_team_repos("Sta523-Fa17", prefix="hw2-")
 ```
 
 ```r
-mirror_repo(source_repo = "Sta523-Fa17/hw2", dest_repo = get_repos("Sta523-Fa17","hw2-"))
+mirror_repo(source_repo = "Sta523-Fa17/hw2", target_repos = get_repos("Sta523-Fa17","hw2-"))
 
 ## Cloning source repo (Sta523-Fa17/hw2) ...
 ## Mirroring Sta523-Fa17/hw2 to Sta523-Fa17/hw2-Team01 ...
