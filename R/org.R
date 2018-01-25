@@ -32,7 +32,7 @@ get_repos = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE) {
     else         res = res[subset]
   }
 
-  if (full_repo)
+  if (full_repo & length(res) > 0)
     res = paste0(org,"/",res)
 
   res
