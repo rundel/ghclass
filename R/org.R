@@ -256,7 +256,7 @@ create_teams = function(org, teams=character(), privacy = c("closed","secret"), 
   for(team in teams)
   {
     if (verbose)
-      cat("Adding", team, "...\n")
+      cat("Creating", team, "...\n")
 
     try({
       gh("POST /orgs/:org/teams",
@@ -267,7 +267,7 @@ create_teams = function(org, teams=character(), privacy = c("closed","secret"), 
 }
 
 #' @export
-add_team_member = function(org, users, teams, create_missing_teams=FALSE, verbose=TRUE)
+add_team_members = function(org, users, teams, create_missing_teams=FALSE, verbose=TRUE)
 {
   stopifnot(!missing(org))
   stopifnot(is.character(users) & length(users) >=1)
@@ -287,7 +287,11 @@ add_team_member = function(org, users, teams, create_missing_teams=FALSE, verbos
     org_teams = get_teams(org)
   }
 
-  teams = org_teams[org_teams$names %in% teams,]
+  teams = merge(
+    data.frame(name = teams, stringsAsFactors = FALSE),
+    org_teams, all.x = TRUE
+  )
+  stopifnot(!any(is.na(teams$id)))
 
   pwalk(
     list(users, teams$name, teams$id),
