@@ -96,10 +96,13 @@ get_pending_members = function(org, filter=NULL, exclude=FALSE) {
   stopifnot(length(org)==1)
   stopifnot(length(filter)<=1)
 
-  res = map_chr(
-    gh("GET /orgs/:org/invitations", org=org, .token=get_github_token(), .limit=get_github_api_limit()),
-    "login"
-  )
+  req = gh("GET /orgs/:org/invitations", org=org, .token=get_github_token(), .limit=get_github_api_limit())
+
+  res = if (req != "") {
+    map_chr(req, "login")
+  } else {
+    character()
+  }
 
   if (!is.null(filter)) {
     subset = grepl(filter,res)
