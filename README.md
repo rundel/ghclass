@@ -87,7 +87,7 @@ Before running the following step(s) involving Wercker make sure you've done the
 
 * Create and save a Wercker [token](https://app.wercker.com/profile/tokens) to `~/.wercker/token`
 
-* Make sure third party access is allowed for your github organization (See Settings / Third-party access)
+* Make sure third party access is allowed for your github organization (See Settings / Third-party access then click on remote restrictions)
 
 ```r
 add_wercker(get_repos("Sta523-Fa17", "hw2-"), "Sta523-Fa17")
