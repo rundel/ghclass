@@ -25,7 +25,50 @@ fix_repo_name = function(repos)
 
 #' @export
 #'
-create_team_repos = function(org, teams, prefix="", suffix="", verbose=TRUE, delay=0.2)
+create_individual_repos = function(org, users,
+                                   prefix="", suffix="", verbose=TRUE,
+                                   auto_init=FALSE, gitignore_template="R") {
+  if (prefix == "" & suffix == "")
+    stop("Either a prefix or a suffix must be specified")
+
+  org_users = get_members(org)
+
+  walk(
+    users,
+    function(user) {
+      repo_name = fix_repo_name(paste0(prefix, user, suffix))
+
+      if (check_repos(repo_name)) {
+        warning("Repo ", org,"/",repo_name, " already exists", call. = FALSE, noBreaks. = TRUE)
+        return(invisible(NULL))
+      }
+
+      if (verbose)
+        message("Creating repo ", org, "/", repo_name, " ...", sep="")
+
+      try({
+        gh("POST /orgs/:org/repos",
+           org = org,
+           name=repo_name, private=TRUE,
+           auto_init=auto_init,
+           gitignore_template=gitignore_template,
+           .token=get_github_token())
+      })
+
+      try({
+        gh("PUT /repos/:owner/:repo/collaborators/:username",
+           owner = org, repo = repo_name, username = user,
+           permission="push",
+           .token=get_github_token())
+      })
+    }
+  )
+}
+
+
+#' @export
+#'
+create_team_repos = function(org, teams, prefix="", suffix="", verbose=TRUE)
 {
   if (prefix == "" & suffix == "")
     stop("Either a prefix or a suffix must be specified")
@@ -53,7 +96,7 @@ create_team_repos = function(org, teams, prefix="", suffix="", verbose=TRUE, del
     repo_name = paste0(prefix, team, suffix) %>% fix_repo_name()
 
     if (verbose)
-      cat("Creating ", repo_name, " for ",team," ...\n",sep="")
+      message("Creating repo ", org, "/", repo_name, " ...", sep="")
 
     try({
       gh("POST /orgs/:org/repos",
@@ -62,8 +105,6 @@ create_team_repos = function(org, teams, prefix="", suffix="", verbose=TRUE, del
          auto_init=TRUE, gitignore_template="R",
          .token=get_github_token())
     })
-
-    Sys.sleep(delay)
 
     try({
       gh("PUT /teams/:id/repos/:org/:repo",
