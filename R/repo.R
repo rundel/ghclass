@@ -234,3 +234,88 @@ mirror_repo = function(source_repo, target_repos, verbose=TRUE)
 }
 
 
+get_commit = function(repo, ref="HEAD") {
+  stopifnot(length(repo)==1)
+
+  name = get_repo_name(repo)
+  owner = get_repo_owner(repo)
+
+  gh("GET /repos/:owner/:repo/commits/:ref",
+     owner = owner, repo = name, ref = ref,
+     .token=get_github_token())
+}
+
+#' @export
+branch_repo = function(repos, branch, verbose=TRUE)
+{
+  walk2(
+    repos, branch,
+    function(repo, branch) {
+
+      tryCatch({
+        if (!check_repos(repo))
+          stop(repo, "does not exist.")
+
+        name = get_repo_name(repo)
+        owner = get_repo_owner(repo)
+
+        head = get_commit(repo)
+
+        gh("POST /repos/:owner/:repo/git/refs",
+           owner = owner, repo = name,
+           ref = paste0("refs/heads/",branch),
+           sha = head$sha,
+           .token=get_github_token())
+      }, error = function(e) {
+        warning("Failed to create ", repo, "@", branch, " branch. (", e$content$message, ")", call. = FALSE)
+      })
+    }
+  )
+}
+
+
+#' @export
+style_repo = function(repos, files=c("*.R","*.Rmd"), branch="styler", git = require_git(), verbose=TRUE)
+{
+  stopifnot(styler_available())
+  stopifnot(length(repos) >= 1)
+
+  dir = file.path(tempdir(),"styler")
+  dir.create(dir, showWarnings = FALSE, recursive = TRUE)
+
+  on.exit({
+    unlink(file.path(dir), recursive = TRUE)
+  })
+
+  walk2(
+    repos, branch,
+    function(repo, branch) {
+
+      branch_repo(repo, branch, verbose = FALSE)
+      path = clone_repos(repo, local_path = dir, branch = branch)
+
+      file_paths = unlist(map(files, ~ fs::dir_ls(path, recursive = TRUE, glob = .x)), use.names = FALSE)
+
+      cur_dir = getwd()
+      setwd(path)
+
+      on.exit({
+        setwd(cur_dir)
+      })
+
+      writeLines(
+        c("Results of running styler:", capture.output( styler::style_file(file_paths) )),
+        "commit_msg"
+      )
+
+      system(paste0(git, " add ", paste0(file_paths, collapse=" ")),
+             intern = FALSE, wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
+
+      system(paste0(git, " commit -F commit_msg"),
+             intern = FALSE, wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
+
+      system(paste0(git, " push"),
+             intern = FALSE, wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
+    }
+  )
+}

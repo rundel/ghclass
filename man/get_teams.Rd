@@ -14,7 +14,8 @@ get_teams(org, filter = NULL, exclude = FALSE)
 \item{exclude}{logical, should entries matching the regex be excluded or included.}
 }
 \description{
-\code{get_teams} returns a (filtered) data frame organization teams and their unique ids.
+\code{get_teams} returns a (filtered) data frame of teams in the organization with columns for
+their names (`name`) and their unique ids (`id`).
 }
 \examples{
 \dontrun{

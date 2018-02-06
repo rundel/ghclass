@@ -1,13 +1,15 @@
 #' Clone repos from github
 #'
 #' \code{clone_repos} uses the git binary to clone the provided repositories
-#' into a local directory.
+#' into a local directory. The function returns a character vector of paths for the cloned repos.
 #'
-#' @param repos Character vector of repo names with the form \emph{owner/name}.
+#' @param repos Vector of repo names with the form \emph{owner/name}.
 #' @param local_path Local directory into which the repos will be cloned.
+#' @param branch Name of branch(es) to clone, defaults to master.
 #' @param git Path to the local git binary. \code{require_git()} attempts to
 #' find the git binary based on your \code{PATH}, it will throw an error if git cannot be found.
 #' @param options Additional git binary options (e.g. \code{--bare})
+#' @param absolute_path Should absolute path be returned for cloned repos.
 #' @param verbose Display verbose output.
 #'
 #' @examples
@@ -21,33 +23,39 @@
 #'
 #' @export
 #'
-clone_repos = function(repos, local_path="./", git = require_git(), options="", verbose=FALSE)
+clone_repos = function(repos, local_path="./", branch = "master",
+                       git = require_git(), options="", absolute_path=TRUE,
+                       verbose=FALSE)
 {
   stopifnot(!missing(repos))
   stopifnot(file.exists(git))
 
   dir.create(local_path, showWarnings = FALSE, recursive = TRUE)
 
-  walk(repos, function(repo) {
-    dir = file.path(local_path, get_repo_name(repo))
-    cmd = paste(git, "clone", options, get_repo_url(repo), dir)
-    status = system(
-      cmd, intern = FALSE, wait = TRUE,
-      ignore.stdout = !verbose, ignore.stderr = !verbose
-    )
-    if (status != 0)
-      warning("Cloning ", repo, " failed.", call. = FALSE, immediate. = TRUE, noBreaks. = TRUE)
-  })
-}
+  map2_chr(
+    repos, branch,
+    function(repo, branch) {
+      dir = fs::path(local_path, get_repo_name(repo))
 
-#' @export
-#'
-grab_repos = function(repos, local_path="./", verbose=TRUE)
-{
-  .Deprecated("clone_repos")
-  clone_repos(repos,local_path)
-}
+      if (branch != "")
+        branch = paste("-b", branch)
 
+      cmd = paste(git, "clone", branch, options, get_repo_url(repo), dir)
+
+      status = system(
+        cmd, intern = FALSE, wait = TRUE,
+        ignore.stdout = !verbose, ignore.stderr = !verbose
+      )
+      if (status != 0)
+        warning("Cloning ", repo, " failed.", call. = FALSE, immediate. = TRUE, noBreaks. = TRUE)
+
+      if (absolute_path)
+        dir = fs::path_real(dir)
+
+      dir
+    }
+  )
+}
 
 
 #' Update local repos via git pull
@@ -55,7 +63,7 @@ grab_repos = function(repos, local_path="./", verbose=TRUE)
 #' \code{update_repos} uses the git binary to update the provided repositories
 #' using git pull.
 #'
-#' @param repos_dir Character vector of repo directories or a single directory containing the repo directories.
+#' @param repo_dirs Vector of repo directories or a single directory containing one or more repos.
 #' @param git Path to the local git binary. \code{require_git()} attempts to
 #' find the git binary based on your \code{PATH}, it will throw an error if git cannot be found.
 #' @param options Additional git binary options (e.g. \code{--all}).
@@ -73,20 +81,26 @@ grab_repos = function(repos, local_path="./", verbose=TRUE)
 #'
 update_repos = function(repo_dirs, git = require_git(), options = "", verbose = FALSE)
 {
-  stopifnot(dir.exists(repo_dirs))
-  stopifnot(file.exists(git))
+  stopifnot(all(fs::dir_exists(repo_dirs)))
+  stopifnot(fs::file_exists(git))
 
   # If we are given a single repo directory check if it is a repo or a directory of repos
-  if (length(repo_dirs) == 1 & !any(dir.exists(file.path(repo_dirs,".git"))))
-    repo_dirs = list.dirs(repo_dirs, full.names=TRUE, recursive = FALSE)
+  if ( length(repo_dirs) == 1 &
+      !any(fs::dir_exists(fs::path(repo_dirs,".git"))))
+    repo_dirs = fs::path(
+      repo_dirs,
+      fs::dir_ls(repo_dirs, type="directory")
+    )
 
   walk(
     repo_dirs,
     function(repo) {
       cur_dir = getwd()
-      on.exit({setwd(cur_dir)})
+      on.exit({
+        setwd(cur_dir)
+      })
 
-      setwd(normalizePath(repo))
+      setwd(fs::path_real(repo))
 
       cmd = paste(git, "pull", options)
       status = system(

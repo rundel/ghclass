@@ -115,7 +115,8 @@ get_pending_members = function(org, filter=NULL, exclude=FALSE) {
 
 #' Get organization teams
 #'
-#' \code{get_teams} returns a (filtered) data frame organization teams and their unique ids.
+#' \code{get_teams} returns a (filtered) data frame of teams in the organization with columns for
+#' their names (`name`) and their unique ids (`id`).
 #'
 #' @param org character, name of the GitHub organization.
 #' @param filter character, regex pattern for matching (or excluding) repos.

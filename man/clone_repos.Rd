@@ -5,24 +5,29 @@
 \alias{grab_repos}
 \title{Clone repos from github}
 \usage{
-clone_repos(repos, local_path = "./", git = require_git(), options = "",
+clone_repos(repos, local_path = "./", branch = "master",
+  git = require_git(), options = "", absolute_path = TRUE,
   verbose = FALSE)
 }
 \arguments{
-\item{repos}{Character vector of repo names with the form \emph{owner/name}.}
+\item{repos}{Vector of repo names with the form \emph{owner/name}.}
 
 \item{local_path}{Local directory into which the repos will be cloned.}
+
+\item{branch}{Name of branch(es) to clone, defaults to master.}
 
 \item{git}{Path to the local git binary. \code{require_git()} attempts to
 find the git binary based on your \code{PATH}, it will throw an error if git cannot be found.}
 
 \item{options}{Additional git binary options (e.g. \code{--bare})}
 
+\item{absolute_path}{Should absolute path be returned for cloned repos.}
+
 \item{verbose}{Display verbose output.}
 }
 \description{
 \code{clone_repos} uses the git binary to clone the provided repositories
-into a local directory.
+into a local directory. The function returns a character vector of paths for the cloned repos.
 }
 \examples{
 \dontrun{

@@ -8,14 +8,14 @@ update_repos(repo_dirs, git = require_git(), options = "",
   verbose = FALSE)
 }
 \arguments{
+\item{repo_dirs}{Vector of repo directories or a single directory containing one or more repos.}
+
 \item{git}{Path to the local git binary. \code{require_git()} attempts to
 find the git binary based on your \code{PATH}, it will throw an error if git cannot be found.}
 
 \item{options}{Additional git binary options (e.g. \code{--all}).}
 
 \item{verbose}{Display verbose output.}
-
-\item{repos_dir}{Character vector of repo directories or a single directory containing the repo directories.}
 }
 \description{
 \code{update_repos} uses the git binary to update the provided repositories

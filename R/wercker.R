@@ -262,10 +262,9 @@ add_wercker = function(repos, wercker_org, add_badges=TRUE, verbose=TRUE)
       cat("Creating wercker app for", repo, "...\n")
 
     add_wercker_app(repo, org_id)
+    if (add_badges)
+      add_wercker_badges(repo)
   }
-
-  if (add_badges)
-    add_wercker_badges(repos)
 }
 
 #' @export
