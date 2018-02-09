@@ -32,7 +32,7 @@ clone_repos = function(repos, local_path="./", branch = "master",
 
   dir.create(local_path, showWarnings = FALSE, recursive = TRUE)
 
-  map2_chr(
+  invisibile(map2_chr(
     repos, branch,
     function(repo, branch) {
       dir = fs::path(local_path, get_repo_name(repo))
@@ -40,8 +40,8 @@ clone_repos = function(repos, local_path="./", branch = "master",
       if (branch != "")
         branch = paste("-b", branch)
 
-      cmd = paste(git, "clone", branch, options, get_repo_url(repo), dir)
 
+      cmd = paste(git, "clone", branch, options, get_repo_url(repo), dir)
       status = system(
         cmd, intern = FALSE, wait = TRUE,
         ignore.stdout = !verbose, ignore.stderr = !verbose
@@ -54,7 +54,7 @@ clone_repos = function(repos, local_path="./", branch = "master",
 
       dir
     }
-  )
+  ))
 }
 
 
