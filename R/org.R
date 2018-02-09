@@ -139,6 +139,16 @@ get_teams = function(org, filter=NULL, exclude=FALSE) {
 
   res = gh("GET /orgs/:org/teams", org=org, .token=get_github_token(), .limit=get_github_api_limit())
 
+  if (length(res) == 1 & all(res == "")) {
+    return(
+      teams = data.frame(
+        name = character(),
+        id =  integer(),
+        stringsAsFactors = FALSE
+      )
+    )
+  }
+
   teams = data.frame(
     name = map_chr(res, "name"),
     id =  map_int(res, "id"),
