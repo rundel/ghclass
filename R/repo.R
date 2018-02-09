@@ -70,9 +70,6 @@ create_individual_repos = function(org, users,
 #'
 create_team_repos = function(org, teams, prefix="", suffix="", verbose=TRUE)
 {
-  if (prefix == "" & suffix == "")
-    stop("Either a prefix or a suffix must be specified")
-
   org_teams = get_teams(org)
 
   if (missing(teams)) {
