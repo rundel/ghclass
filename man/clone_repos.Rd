@@ -36,5 +36,7 @@ clone_repos("rundel/ghclass")
 
 }
 \seealso{
-Other local repo functions: \code{\link{update_repos}}
+Other local repo functions: \code{\link{add_repos}},
+  \code{\link{commit_repos}}, \code{\link{push_repos}},
+  \code{\link{update_repos}}
 }
