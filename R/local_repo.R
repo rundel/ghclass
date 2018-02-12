@@ -32,7 +32,7 @@ clone_repos = function(repos, local_path="./", branch = "master",
 
   dir.create(local_path, showWarnings = FALSE, recursive = TRUE)
 
-  invisibile(map2_chr(
+  invisible(map2_chr(
     repos, branch,
     function(repo, branch) {
       dir = fs::path(local_path, get_repo_name(repo))
