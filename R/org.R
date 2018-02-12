@@ -139,21 +139,17 @@ get_teams = function(org, filter=NULL, exclude=FALSE) {
 
   res = gh("GET /orgs/:org/teams", org=org, .token=get_github_token(), .limit=get_github_api_limit())
 
-  if (length(res) == 1 & all(res == "")) {
-    return(
-      teams = data.frame(
-        name = character(),
-        id =  integer(),
-        stringsAsFactors = FALSE
-      )
+  teams = if (empty_result(res)) {
+    tibble::data_frame(
+      name = character(),
+      id =  integer()
+    )
+  } else {
+    tibble::data_frame(
+      name = map_chr(res, "name"),
+      id =  map_int(res, "id")
     )
   }
-
-  teams = data.frame(
-    name = map_chr(res, "name"),
-    id =  map_int(res, "id"),
-    stringsAsFactors = FALSE
-  )
 
   if (!is.null(filter)) {
     subset = grepl(filter, teams$name)
@@ -208,11 +204,18 @@ get_team_repos = function(org, teams = get_teams(org))
         "GET /teams/:id/repos", id=id,
         .token=get_github_token(), .limit=get_github_api_limit()
       )
-      data.frame(
-        team = team,
-        repo = map_chr(res, "full_name"),
-        stringsAsFactors = FALSE
-      )
+
+      if (empty_result(res)) {
+        tibble::data_frame(
+          team = character(),
+          repo = character()
+        )
+      } else {
+        tibble::data_frame(
+          team = team,
+          repo = map_chr(res, "full_name")
+        )
+      }
     }
   )
 }
@@ -233,7 +236,69 @@ get_team_repos = function(org, teams = get_teams(org))
 #'
 #' @export
 #'
-get_team_members = function(org, teams = get_teams(org))
+get_team_members = function(org, teams = get_teams(org), get_pending = TRUE)
+{
+  stopifnot(length(org) == 1)
+
+  pend = if (get_pending) {
+    get_pending_team_members(org, teams)
+  }
+
+  if (is.character(teams))
+    teams = get_teams_by_list(org, teams)
+
+  stopifnot(all(c("name","id") %in% names(teams)))
+
+  cur = map2_df(
+    teams$name, teams$id,
+    function(team, id) {
+      res = gh(
+        "GET /teams/:id/members",
+        id=id, role = "all",
+        .token=get_github_token(), .limit=get_github_api_limit()
+      )
+
+      if (empty_result(res)) {
+        tibble::data_frame(
+          team = character(),
+          github = character()
+        )
+      } else {
+        tibble::data_frame(
+          team = team,
+          github = map_chr(res, "login")
+        )
+      }
+    }
+  )
+
+  if (get_pending) {
+    tibble::as_data_frame( rbind(
+      cbind(cur, pending=FALSE),
+      cbind(pend, pending=TRUE)
+    ) )
+  } else {
+    cur
+  }
+}
+
+#' Get pending team members
+#'
+#' \code{get_pending_team_members} returns a data frame of pending team members.
+#'
+#' @param org character, name of the GitHub organization.
+#' @param teams character or data frame, listing one or more team
+#'
+#' @examples
+#' \dontrun{
+#' get_pending_team_members("ghclass",c("team01","team02"))
+#' }
+#'
+#' @family github organization related functions
+#'
+#' @export
+#'
+get_pending_team_members = function(org, teams = get_teams(org))
 {
   stopifnot(length(org) == 1)
 
@@ -246,17 +311,26 @@ get_team_members = function(org, teams = get_teams(org))
     teams$name, teams$id,
     function(team, id) {
       res = gh(
-        "GET /teams/:id/members",
-        id=id, role = "all",
+        "GET /teams/:id/invitations",
+        id=id,
         .token=get_github_token(), .limit=get_github_api_limit()
       )
-      data_frame(
-        team = team,
-        member = map_chr(res, "login")
-      )
+
+      if (empty_result(res)) {
+        tibble::data_frame(
+          team = character(),
+          github = character()
+        )
+      } else {
+        tibble::data_frame(
+          team = team,
+          github = map_chr(res, "login")
+        )
+      }
     }
   )
 }
+
 
 
 

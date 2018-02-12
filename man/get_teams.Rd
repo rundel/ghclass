@@ -26,6 +26,7 @@ get_team_repos("ghclass",c("team01","team02"))
 \seealso{
 Other github organization related functions: \code{\link{get_members}},
   \code{\link{get_pending_members}},
+  \code{\link{get_pending_team_members}},
   \code{\link{get_repos}}, \code{\link{get_team_members}},
   \code{\link{get_team_repos}}
 }
