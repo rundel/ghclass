@@ -30,8 +30,3 @@ add_files("rundel/ghclass", "Update DESCRIPTION", "./DESCRIPTION")
 }
 
 }
-\seealso{
-Other local repo functions: \code{\link{add_repos}},
-  \code{\link{clone_repos}}, \code{\link{commit_repos}},
-  \code{\link{push_repos}}, \code{\link{update_repos}}
-}
