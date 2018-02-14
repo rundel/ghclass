@@ -112,77 +112,9 @@ create_team_repos = function(org, teams, prefix="", suffix="", verbose=TRUE)
   }
 }
 
-#' @export
-get_file = function(repo, file, branch="master")
-{
-  repo_name  = get_repo_name(repo)
-  repo_owner = get_repo_owner(repo)
 
-  gh("GET /repos/:owner/:repo/contents/:path",
-     owner = repo_owner, repo = repo_name, path=file,
-     ref = branch,
-     .token=get_github_token(), .limit=get_github_api_limit())
-}
 
-#' @export
-check_files = function(repos, files, branch = "master")
-{
-  file_exists = function(repo, file, branch)
-  {
-    get_file(repo,file,branch)
-    TRUE
-  }
 
-  pmap_lgl(list(repos, files, branch), possibly(file_exists,FALSE))
-}
-
-#' @export
-add_files = function(repos, message, files, branch = "master", preserve_path=FALSE, verbose=TRUE)
-{
-  stopifnot(all(file.exists(files)))
-  stopifnot(all(check_repos(repos)))
-
-  repo_name  = get_repo_name(repos)
-  repo_owner = get_repo_owner(repos)
-
-  walk(repos, function(repo) {
-
-    name = get_repo_name(repo)
-    owner = get_repo_owner(repo)
-
-    if (verbose)
-      cat("Adding files to", repo, "...\n")
-
-    walk(files, function(file) {
-
-      gh_path = file
-      if (!preserve_path)
-        gh_path = basename(file)
-
-      content = base64enc::base64encode(file)
-
-      tryCatch({
-        if (check_files(repo, gh_path, branch)) {
-          gh_file = get_file(repo, gh_path, branch)
-          gh("PUT /repos/:owner/:repo/contents/:path",
-             owner = owner, repo = name, path=gh_path,
-             message = message, content = content, branch = branch,
-             sha = gh_file$sha,
-              .token=get_github_token())
-        } else {
-          gh("PUT /repos/:owner/:repo/contents/:path",
-             owner = owner, repo = name, path=gh_path,
-             message = message, content = content, branch = branch,
-             .token=get_github_token())
-        }
-      }, error = function(e) {
-          message("Adding ", file, " to ", repo, " failed.")
-          if (verbose)
-            print(e)
-      })
-    })
-  })
-}
 
 
 
