@@ -15,7 +15,7 @@ get_teams(org, filter = NULL, exclude = FALSE)
 }
 \description{
 \code{get_teams} returns a (filtered) data frame of teams in the organization with columns for
-their names (`name`) and their unique ids (`id`).
+their names (\code{name}) and their unique ids (\code{id}).
 }
 \examples{
 \dontrun{

@@ -12,8 +12,8 @@ get_wercker_token()
 \details{
 This function looks for the token in the following places (in order):
 \enumerate{
-  \item Value of \code{wercker_token} variable in \code{.ghclass} environment
-  (this is where the package caches the token).
+\item Value of \code{wercker_token} variable in \code{.ghclass} environment
+(this is where the package caches the token).
 
 \item Value of \code{WERCKER_TOKEN} environmental variable.
 
