@@ -24,24 +24,21 @@ empty_result = function(res) {
 
 # Check for errors that result from using purrr::safely
 check_errors = function(res) {
-  purrr::map(res, "error") %>%
-    purrr::map_lgl(is.null) %>%
-    `!`()
+  errs = purrr::map(res, "error")
+  purrr::map_lgl(errs, ~!is.null(.x))
 }
 
 # Collect errors that result from using purrr::safely
 get_errors = function(res) {
-  purrr::map(res, "error") %>%
-    purrr::discard(is.null) %>%
-    purrr::map_chr(as.character)
+  errs = purrr::map(res, "error")
+  errs = purrr::discard(errs, is.null)
+  purrr::map_chr(errs, as.character)
 }
 
-format_errors = function(errors, indent=2) {
-
+format_list = function(lines, indent=2, indent_char=" ") {
   if (is.numeric(indent))
-    indent = paste(rep(" ", indent), collapse="")
+    indent = paste(rep(indent_char, indent), collapse="")
 
-  errors %>%
-    paste(indent, "*", ., collapse="") %>%
-    sub("\n$", "", .)
+  lines = sub("\n$", "", lines)
+  paste(indent, "*", lines, collapse="\n")
 }
