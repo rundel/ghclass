@@ -1,5 +1,5 @@
 Package: ghclass
-Title: Tools for managing classes with gitbub
+Title: Tools for managing classes with github
 Version: 0.1.0
 Authors@R: person("Colin", "Rundel", email = "rundel@gmail.com", role = c("aut", "cre"))
 Description: Tools for managing classes with gitbub
