@@ -1,8 +1,8 @@
 add_wercker_build_pipeline = function(app_id)
 {
-  req = POST(
+  req = httr::POST(
     "https://app.wercker.com/api/v3/pipelines",
-    add_headers(
+    httr::add_headers(
       Authorization = paste("Bearer", get_wercker_token())
     ),
     encode = "json",
@@ -15,9 +15,9 @@ add_wercker_build_pipeline = function(app_id)
       type = "git"
     )
   )
-  stop_for_status(req)
+  httr::stop_for_status(req)
 
-  res = content(req)
+  res = httr::content(req)
   stopifnot(!is.null(res$id))
 
   res$id
@@ -27,9 +27,9 @@ add_wercker_app = function(repo, org_id, privacy = c("public", "private"), provi
 {
   privacy = match.arg(privacy)
 
-  req = POST(
+  req = httr::POST(
     "https://app.wercker.com/api/v2/applications",
-    add_headers(
+    httr::add_headers(
       Authorization = paste("Bearer", get_wercker_token())
     ),
     encode = "json",
@@ -42,9 +42,9 @@ add_wercker_app = function(repo, org_id, privacy = c("public", "private"), provi
       stack = "6" # Docker
     )
   )
-  stop_for_status(req)
+  httr::stop_for_status(req)
 
-  res = content(req)
+  res = httr::content(req)
   stopifnot(!is.null(res$success))
 
   app_id = res$data$id
@@ -67,9 +67,9 @@ add_wercker_app = function(repo, org_id, privacy = c("public", "private"), provi
 
 run_wercker_pipeline = function(pipeline_id)
 {
-  req = POST(
+  req = httr::POST(
     "https://app.wercker.com/api/v3/runs",
-    add_headers(
+    httr::add_headers(
       Authorization = paste("Bearer", get_wercker_token())
     ),
     encode = "json",
@@ -77,8 +77,8 @@ run_wercker_pipeline = function(pipeline_id)
       pipelineId = pipeline_id
     )
   )
-  stop_for_status(req)
-  res = content(req)
+  httr::stop_for_status(req)
+  res = httr::content(req)
   stopifnot(!is.null(res$id))
 
   res$id
@@ -86,22 +86,22 @@ run_wercker_pipeline = function(pipeline_id)
 
 get_wercker_deploy_key = function()
 {
-  req = POST(
+  req = httr::POST(
     paste0("https://app.wercker.com/api/v2/checkoutKeys"),
-    add_headers(
+    httr::add_headers(
       Authorization = paste("Bearer", get_wercker_token())
     ),
     encode = "json"
   )
-  stop_for_status(req)
-  content(req)
+  httr::stop_for_status(req)
+  httr::content(req)
 }
 
 add_key_to_github = function(repo, key_id, provider = "github")
 {
-  req = POST(
+  req = httr::POST(
     paste0("https://app.wercker.com/api/v2/checkoutKeys/",key_id,"/link"),
-    add_headers(
+    httr::add_headers(
       Authorization = paste("Bearer", get_wercker_token())
     ),
     encode = "json",
@@ -111,16 +111,16 @@ add_key_to_github = function(repo, key_id, provider = "github")
       scmProvider = provider
     )
   )
-  stop_for_status(req)
-  res = content(req)
+  httr::stop_for_status(req)
+  res = httr::content(req)
   stopifnot(!is.null(res$success))
 }
 
 add_key_to_app = function(app_id, key_id, type="unique")
 {
-  req = POST(
+  req = httr::POST(
     paste0("https://app.wercker.com/api/v2/applications/",app_id,"/checkoutKey"),
-    add_headers(
+    httr::add_headers(
       Authorization = paste("Bearer", get_wercker_token())
     ),
     encode = "json",
@@ -129,8 +129,8 @@ add_key_to_app = function(app_id, key_id, type="unique")
       checkoutKeyType = type
     )
   )
-  stop_for_status(req)
-  res = content(req)
+  httr::stop_for_status(req)
+  res = httr::content(req)
   stopifnot(!is.null(res$success))
 }
 
@@ -144,30 +144,30 @@ add_wercker_deploy_key = function(repo, app_id, provider = "github")
 #' @export
 get_wercker_whoami = function()
 {
-  req = GET(
+  req = httr::GET(
     paste0("https://app.wercker.com/api/v2/profile"),
-    add_headers(
+    httr::add_headers(
       Authorization = paste("Bearer", get_wercker_token())
     ),
     encode = "json"
   )
-  stop_for_status(req)
-  content(req, as="text") %>%
+  httr::stop_for_status(req)
+  httr::content(req, as="text") %>%
     jsonlite::fromJSON()
 }
 
 #' @export
 get_wercker_orgs = function()
 {
-  req = GET(
+  req = httr::GET(
     paste0("https://app.wercker.com/api/v2/users/me/organizations"),
-    add_headers(
+    httr::add_headers(
       Authorization = paste("Bearer", get_wercker_token())
     ),
     encode = "json"
   )
-  stop_for_status(req)
-  content(req, as="text") %>%
+  httr::stop_for_status(req)
+  httr::content(req, as="text") %>%
     jsonlite::fromJSON() %>%
     select(-allowedActions)
 }
@@ -175,15 +175,15 @@ get_wercker_orgs = function()
 #' @export
 get_wercker_apps = function(owner)
 {
-  req = GET(
+  req = httr::GET(
     paste0("https://app.wercker.com/api/v3/applications/", owner, "?limit=100"),
-    add_headers(
+    httr::add_headers(
       Authorization = paste("Bearer", get_wercker_token())
     ),
     encode = "json"
   )
-  stop_for_status(req)
-  content(req, as="text") %>% jsonlite::fromJSON()
+  httr::stop_for_status(req)
+  httr::content(req, as="text") %>% jsonlite::fromJSON()
 }
 
 get_wercker_org_id = function(org)
@@ -197,31 +197,31 @@ get_wercker_org_id = function(org)
   orgs$id
 }
 
-get_wercker_app_ids = function(repos)
+get_wercker_app_id = function(repo)
 {
-  apps = map(repos, get_wercker_app_info)
-  map_chr(apps, "id")
+  app = purrr::map(repo, get_wercker_app_info)
+  purrr::map_chr(app, "id")
 }
 
 
 get_wercker_app_info = function(repo)
 {
-  req = GET(
+  req = httr::GET(
     paste0("https://app.wercker.com/api/v3/applications/", repo),
-    add_headers(
+    httr::add_headers(
       Authorization = paste("Bearer", get_wercker_token())
     ),
     encode = "json"
   )
-  stop_for_status(req)
-  content(req)
+  httr::stop_for_status(req)
+  httr::content(req)
 }
 
 
 get_wercker_badge_key = function(repos)
 {
   app_info = map(repos, get_wercker_app_info)
-  data_frame(repo = repos, badge_key = map_chr(app_info, "badgeKey"))
+  data_frame(repo = repos, badge_key = purrr::map_chr(app_info, "badgeKey"))
 }
 
 #' @export
@@ -321,60 +321,61 @@ add_wercker_badges = function(repos, badges=get_wercker_badges(repos)$markdown_l
 }
 
 
-add_wercker_env_var = function(repo, key, value, protected=TRUE)
-{
-  req = POST(
-    "https://app.wercker.com/api/v3/envvars",
-    add_headers(
-      Authorization = paste("Bearer", get_wercker_token())
-    ),
-    encode = "json",
-    body = list(
-      key       = as.character(key),
-      protected = protected,
-      scope     = "application",
-      target    = get_wercker_app_ids(repo),
-      value     = as.character(value)
-    )
-  )
-
-  stop_for_status(req)
-
-  res = content(req)
-  stopifnot(!is.null(res$id))
-
-  invisible(res$id)
-}
 
 #' @export
-add_wercker_env_vars = function(repos, keys, values, protected)
+add_wercker_env_var = function(repo, key, value, protected=FALSE)
 {
-  invisible(pmap(
-    list(repos, keys, values, protected),
-    add_wercker_env_var
-  ))
-}
+  id = purrr::pmap_chr(
+    list(repo, key, value, protected),
+    function(repo, key, value, protected=TRUE) {
+      req = httr::POST(
+        "https://app.wercker.com/api/v3/envvars",
+        httr::add_headers(
+          Authorization = paste("Bearer", get_wercker_token())
+        ),
+        encode = "json",
+        body = list(
+          key       = as.character(key),
+          protected = protected,
+          scope     = "application",
+          target    = get_wercker_app_id(repo),
+          value     = as.character(value)
+        )
+      )
 
+      httr::stop_for_status(req)
 
-
-WAPI_env_vars = function(repo)
-{
-  if (valid_repo(repo))
-    repo = get_wercker_app_ids(repo)
-
-  req = GET(
-    paste0("https://app.wercker.com/api/v3/envvars?scope=application&target=", repo),
-    add_headers(
-      Authorization = paste("Bearer", get_wercker_token())
-    ),
-    encode = "json"
+      purrr::pluck(httr::content(req), "id", .default = NA)
+    }
   )
-  stop_for_status(req)
-  content(req)$results[[1]]
+
+  invisible(id)
 }
+
 
 #' @export
-get_wercker_env_vars = function(repos)
+get_wercker_env_vars = function(repo)
 {
-  map_df(repos, WAPI_env_vars)
+  require_valid_repo(repo)
+
+  purrr::map2_df(
+    repo, get_wercker_app_id(repo),
+    function(repo, id)
+    {
+      req = httr::GET(
+        paste0("https://app.wercker.com/api/v3/envvars?scope=application&target=", id),
+        httr::add_headers(
+          Authorization = paste("Bearer", get_wercker_token())
+        ),
+        encode = "json"
+      )
+      httr::stop_for_status(req)
+
+      c(
+        repo = repo,
+        repo_id = id,
+        purrr::pluck(httr::content(req), "results", 1L)
+      )
+    }
+  )
 }
