@@ -14,39 +14,38 @@ get_file = function(repo, file, branch="master")
   )
 }
 
-find_files = function(repo, file_pattern, file_extension, limit=NULL)
+find_file = function(repo, file)
 {
   stopifnot(length(repo)==1)
+  require_valid_repo(repo)
 
-  q = paste0("repo:",repo)
+  purrr::flatten_chr(
+    purrr::map(
+      file,
+      function(file) {
+        q = paste0("repo:", repo,
+               " path:", fs::path_dir(file),
+               " filename:", fs::path_file(file))
 
-  if (!missing(file_pattern))
-    q = paste(q, paste0("filename:", file_pattern, collapse=" "))
-  if (!missing(file_extension))
-    q = paste(q, paste0("extension:", file_extension, collapse=" "))
+        res = gh("GET /search/code", q=q,
+                 .token=get_github_token(), .limit=get_github_api_limit())
 
-  res = gh("GET /search/code",
-           q=q, .token=get_github_token(), .limit=limit)
-
-  map_chr(res[["items"]], "path")
+        purrr::map_chr(res[["items"]], "path")
+      }
+    )
+  )
 }
 
 
-file_exists = function(repos, files, branch = "master")
+file_exists = function(repo, file, branch = "master")
 {
   purrr::pmap_lgl(
-    list(repos, files, branch),
+    list(repo, file, branch),
     function(repo, file, branch) {
       if (branch == "master") {
-        q = paste0("repo:", repo,
-                   " path:", fs::path_dir(file),
-                   " filename:", fs::path_file(file))
-
-        res = gh("GET /search/code",
-                 q=q, .token=get_github_token(), .limit=NULL)
-
-        (length(res[["items"]]) > 0)
+        (length(find_file(repo,file)) > 0)
       } else {
+        # Only the master branch is indexed for search
         is.null(get_file(repo, file, branch))
       }
     }
