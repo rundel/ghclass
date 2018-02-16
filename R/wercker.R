@@ -206,6 +206,9 @@ get_wercker_app_id = function(repo)
 
 get_wercker_app_info = function(repo)
 {
+  stopifnot(length(repo) == 1)
+  require_valid_repo(repo)
+
   req = httr::GET(
     paste0("https://app.wercker.com/api/v3/applications/", repo),
     httr::add_headers(
@@ -218,28 +221,8 @@ get_wercker_app_info = function(repo)
 }
 
 
-get_wercker_badge_key = function(repos)
-{
-  app_info = map(repos, get_wercker_app_info)
-  data_frame(repo = repos, badge_key = purrr::map_chr(app_info, "badgeKey"))
-}
 
-#' @export
-get_wercker_badges = function(repos, size = c("small", "large"), branch = "master")
-{
-  size = match.arg(size)
-  size_lookup = c("small" = "s", "large" = "m")
 
-  get_wercker_badge_key(repos) %>%
-    mutate(
-      img_url = sprintf("https://app.wercker.com/status/%s/%s/%s", badge_key, size_lookup[size], branch),
-      app_url = sprintf("https://app.wercker.com/project/byKey/%s", badge_key)
-    ) %>%
-    mutate(
-      markdown_link = sprintf('[![wercker status](%s "wercker status")](%s)', img_url, app_url),
-      html_link = sprintf('<a href="%s"><img alt="Wercker status" src="%s"></a>', app_url, img_url)
-    )
-}
 
 #' @export
 add_wercker = function(repos, wercker_org, add_badges=TRUE, verbose=TRUE)
@@ -267,58 +250,106 @@ add_wercker = function(repos, wercker_org, add_badges=TRUE, verbose=TRUE)
   }
 }
 
-#' @export
-add_wercker_badges = function(repos, badges=get_wercker_badges(repos)$markdown_link, branch = "master",
-                      message = "Adding wercker badge", verbose=TRUE)
+
+
+get_wercker_badge_key = function(repo)
 {
-  stopifnot(all(valid_repo(repos, require_owner = TRUE)))
-
-  repo_name  = get_repo_name(repos)
-  repo_owner = get_repo_owner(repos)
-
-  for(i in seq_along(repos))
-  {
-    repo = repo_name[i]
-    owner = repo_owner[i]
-    file = "README.md"
-
-    readme = try({
-      gh("GET /repos/:owner/:repo/readme",
-         owner = owner, repo = repo, ref = branch,
-         .token=get_github_token(), .limit=get_github_api_limit())
-    }, silent = TRUE)
-
-    tryCatch(
-      {
-        if (inherits(readme, "try-error")) # README.md does not exist
-        {
-          file = "README.md"
-          content = paste0(badges[i],"\n\n") %>% charToRaw() %>% base64enc::base64encode()
-
-          gh("PUT /repos/:owner/:repo/contents/:path",
-             owner = owner, repo = repo, path=file,
-             message = message, content = content,
-             branch = branch, .token=get_github_token())
-        } else {                           # README.md exists
-          new_readme = base64enc::base64decode(readme$content) %>% rawToChar()
-          file = readme$path
-          content = paste0(badges[i],"\n\n", new_readme) %>% charToRaw() %>% base64enc::base64encode()
-
-          gh("PUT /repos/:owner/:repo/contents/:path",
-             owner = owner, repo = repo, path=file,
-             message = message, content = content,
-             sha = readme$sha, branch = branch,
-             .token=get_github_token())
-        }
-
-        if (verbose)
-          cat("Added badge to ", repo, " ...\n", sep="")
-      },
-      error = function(e)
-        message("Adding badge to ", repo, " failed.")
-    )
-  }
+  app_info = purrr::map(repo, get_wercker_app_info)
+  purrr::map_chr(app_info, "badgeKey")
 }
+
+#' @export
+get_wercker_badge = function(repo, size = "small", type = "markdown", branch = "master")
+{
+  size = match.arg(size, c("small", "large"), several.ok = TRUE)
+  type = match.arg(type, c("markdown", "html"), several.ok = TRUE)
+
+  size = switch(
+    size,
+    small = "s",
+    large = "m"
+  )
+
+  key = get_wercker_badge_key(repo)
+
+  purrr::pmap_chr(
+    list(size, type, key, branch),
+    function(size, type, key, branch) {
+      img_url = sprintf("https://app.wercker.com/status/%s/%s/%s", key, size, branch)
+      app_url = sprintf("https://app.wercker.com/project/byKey/%s", key)
+
+      if (type == "markdown")
+        sprintf('[![wercker status](%s "wercker status")](%s)', img_url, app_url)
+      else
+        sprintf('<a href="%s"><img alt="Wercker status" src="%s"></a>', app_url, img_url)
+    }
+  )
+}
+
+
+#' @export
+add_wercker_badge = function(repo, branch = "master", message = "Adding wercker badge", verbose = TRUE)
+{
+  require_valid_repo(repo)
+
+  badge = get_wercker_badge(repo, branch = branch)
+
+  repo_name  = get_repo_name(repo)
+  repo_owner = get_repo_owner(repo)
+
+  purrr::pwalk(
+    list(repo, badge, branch, message),
+    function(repo, badge, branch, message) {
+
+      readme = get_readme(repo, branch)
+
+      if (is.null(readme)) { # README.md does not exist
+        file = "README.md"
+        content = paste0(badges[i],"\n\n") %>% charToRaw() %>% base64enc::base64encode()
+
+        gh("PUT /repos/:owner/:repo/contents/:path",
+           owner = owner, repo = repo, path=file,
+           message = message, content = content,
+           branch = branch, .token=get_github_token())
+      } else {                           # README.md exists
+        new_readme = base64enc::base64decode(readme$content) %>% rawToChar()
+        file = readme$path
+        content = paste0(badges[i],"\n\n", new_readme) %>% charToRaw() %>% base64enc::base64encode()
+
+        gh("PUT /repos/:owner/:repo/contents/:path",
+           owner = owner, repo = repo, path=file,
+           message = message, content = content,
+           sha = readme$sha, branch = branch,
+           .token=get_github_token())
+      }
+    }
+  )
+
+
+
+
+  #for(i in seq_along(repos))
+  #{
+  #  repo = repo_name[i]
+  #  owner = repo_owner[i]
+  #  file = "README.md"
+
+  #  readme = get_readme()
+
+
+
+  #      if (verbose)
+  #        cat("Added badge to ", repo, " ...\n", sep="")
+  #    },
+  #    error = function(e)
+  #      message("Adding badge to ", repo, " failed.")
+  #  )
+  #}
+}
+
+
+
+
 
 
 
