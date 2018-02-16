@@ -94,7 +94,8 @@ test_github_token = function(token)
   if (missing(token))
     token = get_github_token()
 
-  invisible(gh("/", .token=token))
+  gh("/user", .token=token)
+  invisible(NULL)
 }
 
 
@@ -197,12 +198,12 @@ test_wercker_token = function(token)
   if (missing(token))
     token = get_wercker_token()
 
-  req = GET(
+  req = httr::GET(
     paste0("https://app.wercker.com/api/v2/profile"),
-    add_headers(
+    httr::add_headers(
       Authorization = paste("Bearer", token)
     ),
     encode = "json"
   )
-  stop_for_status(req)
+  httr::stop_for_status(req)
 }
