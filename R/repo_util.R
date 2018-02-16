@@ -4,7 +4,7 @@ github_username_pattern = "^[A-Za-z\\d](?:[A-Za-z\\d]|-(?=[A-Za-z\\d])){0,38}$"
 
 clean_usernames = function(usernames)
 {
-  s = str_trim(usernames)
+  s = stringr::str_trim(usernames)
   s[s != ""]
 }
 
@@ -18,19 +18,19 @@ require_valid_repo = function(repo)
 #' @export
 valid_repo = function(repo)
 {
-  str_detect(repo, github_repo_pattern)
+  stringr::str_detect(repo, github_repo_pattern)
 }
 
 #' @export
 get_repo_name = function(repo)
 {
-  str_match(repo, github_repo_pattern)[,3]
+  stringr::str_match(repo, github_repo_pattern)[,3]
 }
 
 #' @export
 get_repo_owner = function(repo)
 {
-  str_match(repo, github_repo_pattern)[,2]
+  stringr::str_match(repo, github_repo_pattern)[,2]
 }
 
 #' @export
