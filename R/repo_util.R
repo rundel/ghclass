@@ -8,47 +8,43 @@ clean_usernames = function(usernames)
   s[s != ""]
 }
 
-require_valid_repo = function(repos)
+require_valid_repo = function(repo)
 {
-  valid = valid_repo(repos)
+  valid = valid_repo(repo)
   if (!all(valid))
-    stop("Invalid repo names: \n\t", paste(repos[!valid], collapse="\n\t"))
+    stop("Invalid repo names: \n\t", paste(repo[!valid], collapse="\n\t"), call. = FALSE)
 }
 
 #' @export
-valid_repo = function(repos, require_owner=TRUE)
+valid_repo = function(repo)
 {
-  str_detect(repos, github_repo_pattern)
+  str_detect(repo, github_repo_pattern)
 }
 
 #' @export
-get_repo_name = function(repos)
+get_repo_name = function(repo)
 {
-  str_match(repos, github_repo_pattern)[,3]
+  str_match(repo, github_repo_pattern)[,3]
 }
 
 #' @export
-get_repo_owner = function(repos)
+get_repo_owner = function(repo)
 {
-  str_match(repos, github_repo_pattern)[,2]
+  str_match(repo, github_repo_pattern)[,2]
 }
 
 #' @export
-get_repo_url = function(repos, type = c("https","ssh"), use_token = TRUE)
+get_repo_url = function(repo, type = c("https","ssh"), use_token = TRUE)
 {
+  require_valid_repo(repo)
   type = match.arg(type)
 
-  stopifnot(all(valid_repo(repos, require_owner = TRUE)))
-
-  if (type == "https")
-  {
+  if (type == "https") {
     if (use_token)
-      urls = paste0("https://", get_github_token(), "@github.com/",repos,".git")
+      paste0("https://", get_github_token(), "@github.com/",repo,".git")
     else
-      urls = paste0("https://github.com/",repos,".git")
+      paste0("https://github.com/",repo,".git")
   } else {
-    urls = paste0("git@github.com:",repos,".git")
+    paste0("git@github.com:",repo,".git")
   }
-
-  return(urls)
 }
