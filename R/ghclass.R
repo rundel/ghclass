@@ -44,6 +44,8 @@
 #'   \item \code{\link{test_wercker_token}} - test wercker token
 #' }
 #'
+#' @import gh magrittr
+#'
 #' @docType package
 #' @name ghclass
 NULL
