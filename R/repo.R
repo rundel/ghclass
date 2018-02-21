@@ -222,7 +222,7 @@ style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler", git = requi
     function(repo, branch) {
 
       branch_repo(repo, branch, verbose = FALSE)
-      path = clone_repos(repo, local_path = dir, branch = branch)
+      path = clone_repo(repo, local_path = dir, branch = branch)
 
       file_paths = unlist(purrr::map(files, ~ fs::dir_ls(path, recursive = TRUE, glob = .x)), use.names = FALSE)
 

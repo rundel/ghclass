@@ -21,8 +21,8 @@ ghclass: A package for github based classroom and assignment management
 
 
 \itemize{
-\item \code{\link{clone_repos}} - clone repos locally
-\item \code{\link{update_repos}} - update local repos via pull
+\item \code{\link{clone_repo}} - clone repos locally
+\item \code{\link{pull_repo}} - update local repos via pull
 }
 }
 

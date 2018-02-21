@@ -1,11 +1,11 @@
 #' Local repository tools
 #'
 #' The functions provide tools for working with local git repositories, ghclass includes support for following git commands:
-#' * git clone = `clone_repos`
-#' * git add = `add_repos`
-#' * git commit = `commit_repos`
-#' * git push = `push_repos`
-#' * git pull = `pull_repos`
+#' * git clone = `clone_repo`
+#' * git add = `add_repo`
+#' * git commit = `commit_repo`
+#' * git push = `push_repo`
+#' * git pull = `pull_repo`
 #'
 #' @param repos GitHub repo names with the form \emph{owner/name}.
 #' @param repo_dir Vector of repo directories or a single directory containing one or more repos.
@@ -19,26 +19,25 @@
 #'
 #' @examples
 #' \dontrun{
-#' g = get_repos("Sta323-Sp18","hw3-")
-#' clone_repos(g, "hw3")
+#' g = get_repo("Sta323-Sp18","hw3-")
+#' clone_repo(g, "hw3")
 #'
-#' pull_repos(g, "hw3")
+#' pull_repo(g, "hw3")
 #'
 #' # After Modifying hw3.Rmd
-#' add_repos("hw3", "hw3.Rmd")
-#' commit_repos("hw3", "Revised homework")
-#' push_repos("hw3")
+#' add_repo("hw3", "hw3.Rmd")
+#' commit_repo("hw3", "Revised homework")
+#' push_repo("hw3")
 #' }
 #'
-#' @aliases clone_repos add_repos commit_repos push_repos pull_repos
+#' @aliases clone_repo add_repo commit_repo push_repo pull_repo
 #'
 NULL
 
 
 
 # If we are given a single repo directory check if it is a repo or a directory of repos
-repo_dir_helper = function(repo_dir)
-{
+repo_dir_helper = function(repo_dir) {
   if (length(repo_dir) == 1 & !fs::dir_exists(fs::path(repo_dir[1],".git"))) {
     dir = fs::dir_ls(repo_dir, type="directory")
   } else {
@@ -50,17 +49,17 @@ repo_dir_helper = function(repo_dir)
 
 
 #' @export
-clone_repos = function(repos, local_path="./", branch = "master",
-                       git = require_git(), options="", absolute_path=TRUE,
-                       verbose=FALSE)
+clone_repo = function(repo, local_path="./", branch = "master",
+                      git = require_git(), options="", absolute_path=TRUE,
+                      verbose=FALSE)
 {
-  stopifnot(!missing(repos))
+  stopifnot(!missing(repo))
   stopifnot(file.exists(git))
 
   dir.create(local_path, showWarnings = FALSE, recursive = TRUE)
 
   res = purrr::map2_chr(
-    repos, branch,
+    repo, branch,
     function(repo, branch) {
       dir = fs::path(local_path, get_repo_name(repo))
 
@@ -86,8 +85,8 @@ clone_repos = function(repos, local_path="./", branch = "master",
 }
 
 #' @export
-add_repos = function(repo_dir, files = ".",
-                     git = require_git(), options = "", verbose = TRUE)
+add_repo = function(repo_dir, files = ".",
+                    git = require_git(), options = "", verbose = TRUE)
 {
   stopifnot(all(fs::dir_exists(repo_dir)))
   stopifnot(fs::file_exists(git))
@@ -122,8 +121,8 @@ add_repos = function(repo_dir, files = ".",
 
 
 #' @export
-commit_repos = function(repo_dir, message,
-                        git = require_git(), options = "", verbose = FALSE)
+commit_repo = function(repo_dir, message,
+                       git = require_git(), options = "", verbose = FALSE)
 {
   stopifnot(all(fs::dir_exists(repo_dir)))
   stopifnot(fs::file_exists(git))
@@ -156,7 +155,7 @@ commit_repos = function(repo_dir, message,
 
 #' @export
 push_repo = function(repo_dir, remote = "origin", branch="master",
-                      git = require_git(), options = "", verbose = FALSE)
+                     git = require_git(), options = "", verbose = FALSE)
 {
   stopifnot(all(fs::dir_exists(repo_dir)))
   stopifnot(fs::file_exists(git))
@@ -188,8 +187,8 @@ push_repo = function(repo_dir, remote = "origin", branch="master",
 
 
 #' @export
-pull_repos = function(repo_dir, remote="origin", branch="master",
-                      git = require_git(), options = "", verbose = FALSE)
+pull_repo = function(repo_dir, remote="origin", branch="master",
+                     git = require_git(), options = "", verbose = FALSE)
 {
   stopifnot(all(fs::dir_exists(repo_dir)))
   stopifnot(fs::file_exists(git))
