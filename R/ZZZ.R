@@ -6,7 +6,7 @@
   assign("wercker_token", value = NULL, envir = .ghclass)
 
   try(get_github_token(), silent = TRUE)
-  try(get_wercker_account(), silent = TRUE)
+  try(get_wercker_token(), silent = TRUE)
 }
 
 .onUnload = function(libpath) {

@@ -152,8 +152,8 @@ get_wercker_whoami = function()
     encode = "json"
   )
   httr::stop_for_status(req)
-  httr::content(req, as="text") %>%
-    jsonlite::fromJSON()
+  res = httr::content(req, as="text")
+  jsonlite::fromJSON(res)
 }
 
 #' @export
@@ -167,9 +167,10 @@ get_wercker_orgs = function()
     encode = "json"
   )
   httr::stop_for_status(req)
-  httr::content(req, as="text") %>%
-    jsonlite::fromJSON() %>%
-    select(-allowedActions)
+
+  res = httr::content(req, as="text")
+  res = jsonlite::fromJSON(res)
+  res[-which(names(res) == "allowedActions")]
 }
 
 #' @export
@@ -183,18 +184,19 @@ get_wercker_apps = function(owner)
     encode = "json"
   )
   httr::stop_for_status(req)
-  httr::content(req, as="text") %>% jsonlite::fromJSON()
+  res = httr::content(req, as="text")
+  jsonlite::fromJSON(res)
 }
 
 get_wercker_org_id = function(org)
 {
-  orgs = get_wercker_orgs() %>%
-    filter(username == org)
+  orgs = get_wercker_orgs()
+  orgs = orgs[orgs$username == org,]
 
   if (nrow(orgs) != 1)
-    stop("Unable to find organization called ", wercker_org, " on wercker.")
+    stop("Unable to find organization called ", org, " on wercker.", call. = FALSE)
 
-  orgs$id
+  orgs[["id"]]
 }
 
 get_wercker_app_id = function(repo)
@@ -225,29 +227,30 @@ get_wercker_app_info = function(repo)
 
 
 #' @export
-add_wercker = function(repos, wercker_org, add_badges=TRUE, verbose=TRUE)
+add_wercker = function(repo, wercker_org, add_badge=TRUE, verbose=TRUE)
 {
-  require_valid_repo(repos)
+  require_valid_repo(repo)
   org_id = get_wercker_org_id(wercker_org)
 
-  existing_apps = get_wercker_apps(wercker_org)
+  existing_apps = get_wercker_apps(wercker_org)[["name"]]
 
-  for(repo in repos)
-  {
-    if (get_repo_name(repo) %in% existing_apps$name)
-    {
+  purrr::walk(
+    repo,
+    function(repo) {
+      if (get_repo_name(repo) %in% existing_apps) {
+        if (verbose)
+          cat("Skipping, app already exists for", repo, "...\n")
+        next
+      }
+
       if (verbose)
-        cat("Skipping, app already exists for", repo, "...\n")
-      next
+        cat("Creating wercker app for", repo, "...\n")
+
+      add_wercker_app(repo, org_id)
+      if (add_badge)
+        add_wercker_badge(repo)
     }
-
-    if (verbose)
-      cat("Creating wercker app for", repo, "...\n")
-
-    add_wercker_app(repo, org_id)
-    if (add_badges)
-      add_wercker_badges(repo)
-  }
+  )
 }
 
 
@@ -287,64 +290,63 @@ get_wercker_badge = function(repo, size = "small", type = "markdown", branch = "
 }
 
 
+strip_existing_badge = function(content)
+{
+  md_badge_pattern = "\\[\\!\\[wercker status\\]\\(.*? \"wercker status\"\\)\\]\\(.*?\\)\n*"
+  html_badge_pattern = "<a href=\".*?\"><img alt=\"Wercker status\" src=\".*?\"></a>"
+
+  content = gsub(md_badge_pattern, "", content)
+  content = gsub(html_badge_pattern, "", content)
+}
+
+
+
+
+
 #' @export
-add_wercker_badge = function(repo, branch = "master", message = "Adding wercker badge", verbose = TRUE)
+add_wercker_badge = function(repo, badge = get_wercker_badge(repo, branch = branch),
+                             branch = "master", message = "Adding wercker badge",
+                             strip_existing_badge = TRUE, verbose = TRUE)
 {
   require_valid_repo(repo)
 
-  badge = get_wercker_badge(repo, branch = branch)
-
-  repo_name  = get_repo_name(repo)
-  repo_owner = get_repo_owner(repo)
-
-  purrr::pwalk(
+  res = purrr::pmap(
     list(repo, badge, branch, message),
     function(repo, badge, branch, message) {
+
+      if (verbose)
+        message("Adding badge to ", repo, " ...")
 
       readme = get_readme(repo, branch)
 
       if (is.null(readme)) { # README.md does not exist
-        file = "README.md"
-        content = paste0(badges[i],"\n\n") %>% charToRaw() %>% base64enc::base64encode()
+        content = paste0(badge,"\n\n")
+        gh_file = "README.md"
+      } else {
+        cur_readme = rawToChar(base64enc::base64decode(readme$content))
+        if (strip_existing_badge)
+          cur_readme = strip_existing_badge(cur_readme)
 
-        gh("PUT /repos/:owner/:repo/contents/:path",
-           owner = owner, repo = repo, path=file,
-           message = message, content = content,
-           branch = branch, .token=get_github_token())
-      } else {                           # README.md exists
-        new_readme = base64enc::base64decode(readme$content) %>% rawToChar()
-        file = readme$path
-        content = paste0(badges[i],"\n\n", new_readme) %>% charToRaw() %>% base64enc::base64encode()
-
-        gh("PUT /repos/:owner/:repo/contents/:path",
-           owner = owner, repo = repo, path=file,
-           message = message, content = content,
-           sha = readme$sha, branch = branch,
-           .token=get_github_token())
+        gh_file = purrr::pluck(readme,"path")
+        content = paste0(badge, "\n\n", cur_readme)
       }
+
+      put_file(repo, gh_file, charToRaw(content), message, branch)
     }
   )
 
+  purrr::walk2(
+    repo[check_errors(res)], get_errors(res),
+    function(repo, error) {
+      msg = sprintf("Adding badge to %s failed.\n", repo)
+      if (verbose) {
+        bad_repos = paste0(repo, ": ", error)
+        msg = paste0(msg, format_list(bad_repos))
+      }
 
-
-
-  #for(i in seq_along(repos))
-  #{
-  #  repo = repo_name[i]
-  #  owner = repo_owner[i]
-  #  file = "README.md"
-
-  #  readme = get_readme()
-
-
-
-  #      if (verbose)
-  #        cat("Added badge to ", repo, " ...\n", sep="")
-  #    },
-  #    error = function(e)
-  #      message("Adding badge to ", repo, " failed.")
-  #  )
-  #}
+      warning(msg, call. = FALSE, immediate. = TRUE)
+    }
+  )
 }
 
 

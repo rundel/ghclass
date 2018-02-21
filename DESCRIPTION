@@ -3,8 +3,8 @@ Title: Tools for managing classes with github
 Version: 0.1.0
 Authors@R: person("Colin", "Rundel", email = "rundel@gmail.com", role = c("aut", "cre"))
 Description: Tools for managing classes with gitbub
-Depends: R (>= 3.4.0), gh, magrittr, 
-Imports: fs, dplyr, stringr, purrr, yaml, base64enc, httr, jsonlite
+Depends: R (>= 3.4.0), gh
+Imports: fs, stringr, purrr, yaml, base64enc, httr, jsonlite, tibble
 Suggests: styler
 License: GPL3
 Encoding: UTF-8

@@ -8,9 +8,9 @@ check_repos = function(repos)
     TRUE
   }
 
-  map2_lgl(
+  purrr::map2_lgl(
     get_repo_owner(repos), get_repo_name(repos),
-    possibly(exists, FALSE)
+    purrr::possibly(exists, FALSE)
   )
 }
 
@@ -18,23 +18,22 @@ check_repos = function(repos)
 #'
 fix_repo_name = function(repos)
 {
-  repos %>%
-    str_replace_all(" ", "_") %>%
-    str_replace_all("[^A-Za-z0-9_.-]+","-")
+  repos = stringr::str_replace_all(repos, " ", "_")
+  stringr::str_replace_all(repos, "[^A-Za-z0-9_.-]+","-")
 }
 
 #' @export
 #'
-create_individual_repos = function(org, users,
-                                   prefix="", suffix="", verbose=TRUE,
-                                   auto_init=FALSE, gitignore_template="R") {
+create_individual_repo = function(org, user,
+                                  prefix="", suffix="", verbose=TRUE,
+                                  auto_init=FALSE, gitignore_template="R") {
   if (prefix == "" & suffix == "")
     stop("Either a prefix or a suffix must be specified")
 
   org_users = get_members(org)
 
-  walk(
-    users,
+  purrr::walk(
+    user,
     function(user) {
       repo_name = fix_repo_name(paste0(prefix, user, suffix))
 
@@ -68,48 +67,47 @@ create_individual_repos = function(org, users,
 
 #' @export
 #'
-create_team_repos = function(org, teams, prefix="", suffix="", verbose=TRUE)
+create_team_repo = function(org, team, prefix="", suffix="", verbose=TRUE)
 {
   org_teams = get_teams(org)
 
-  if (missing(teams)) {
-    teams = org_teams
-  } else {
-    teams = left_join(
-      data.frame(name = teams, stringsAsFactors = FALSE),
-      org_teams,
-      by = "name")
+  if (is.character(team)) {
+    team = merge(
+      tibble::data_frame(name = team), org_teams,
+      by = "name", all.x = TRUE
+    )
   }
 
-  missing_ids = is.na(teams$id)
+  stopifnot(is.data.frame(team) & all( c("name","id") %in% names(team)))
+
+  missing_ids = is.na(team[["id"]])
   if (any(missing_ids))
-    stop("Unable to locate team(s): ", paste(teams$name[missing_ids], collapse=", "))
+    stop("Unable to locate team(s): ", paste(team[["name"]][missing_ids], collapse=", "), call. = FALSE)
 
-  for(i in seq_len(nrow(teams)))
-  {
-    team = teams$name[i]
-    id = teams$id[i]
+  purrr::pmap(
+    team,
+    function(name, id) {
+      repo_name = fix_repo_name( paste0(prefix, name, suffix) )
+      print(repo_name)
 
-    repo_name = paste0(prefix, team, suffix) %>% fix_repo_name()
 
-    if (verbose)
-      message("Creating repo ", org, "/", repo_name, " ...", sep="")
+      if (verbose)
+        message("Creating repo ", org, "/", repo_name, " ...", sep="")
 
-    try({
-      gh("POST /orgs/:org/repos",
-         org = org,
-         name=repo_name, private=TRUE, team_id=id,
-         auto_init=TRUE, gitignore_template="R",
-         .token=get_github_token())
-    })
+      res = purrr::safely(function() {
+        gh("POST /orgs/:org/repos",
+           org = org,
+           name=repo_name, private=TRUE, team_id=id,
+           auto_init=TRUE, gitignore_template="R",
+           .token=get_github_token())
 
-    try({
-      gh("PUT /teams/:id/repos/:org/:repo",
-         id = id, org = org, repo = repo_name,
-         permission="push",
-         .token=get_github_token())
-    })
-  }
+        gh("PUT /teams/:id/repos/:org/:repo",
+           id = id, org = org, repo = repo_name,
+           permission="push",
+           .token=get_github_token())
+      })
+    }
+  )
 }
 
 
@@ -145,16 +143,19 @@ mirror_repo = function(source_repo, target_repos, verbose=TRUE)
   stopifnot(length(repo_dir) == 1)
   setwd(repo_dir)
 
-  for(repo in target_repos)
-  {
-    if (verbose)
-      cat("Mirroring ", source_repo, " to ", repo,"...\n", sep="")
+  purrr::walk(
+    target_repos,
+    function(repo) {
 
-    try({
-      system(paste0(git, " push --mirror ", get_repo_url(repo)), intern = FALSE,
-             wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
-    })
-  }
+      if (verbose)
+        cat("Mirroring ", source_repo, " to ", repo,"...\n", sep="")
+
+      try({
+        system(paste0(git, " push --mirror ", get_repo_url(repo)), intern = FALSE,
+               wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
+      })
+    }
+  )
 
   if (verbose)
     cat("Cleaning up ...\n")
@@ -177,7 +178,7 @@ get_commit = function(repo, ref="HEAD") {
 #' @export
 branch_repo = function(repos, branch, verbose=TRUE)
 {
-  walk2(
+  purrr::walk2(
     repos, branch,
     function(repo, branch) {
 
@@ -204,10 +205,10 @@ branch_repo = function(repos, branch, verbose=TRUE)
 
 
 #' @export
-style_repo = function(repos, files=c("*.R","*.Rmd"), branch="styler", git = require_git(), verbose=TRUE)
+style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler", git = require_git(), verbose=TRUE)
 {
   stopifnot(styler_available())
-  stopifnot(length(repos) >= 1)
+  stopifnot(length(repo) >= 1)
 
   dir = file.path(tempdir(),"styler")
   dir.create(dir, showWarnings = FALSE, recursive = TRUE)
@@ -216,14 +217,14 @@ style_repo = function(repos, files=c("*.R","*.Rmd"), branch="styler", git = requ
     unlink(file.path(dir), recursive = TRUE)
   })
 
-  walk2(
-    repos, branch,
+  purrr::walk2(
+    repo, branch,
     function(repo, branch) {
 
       branch_repo(repo, branch, verbose = FALSE)
       path = clone_repos(repo, local_path = dir, branch = branch)
 
-      file_paths = unlist(map(files, ~ fs::dir_ls(path, recursive = TRUE, glob = .x)), use.names = FALSE)
+      file_paths = unlist(purrr::map(files, ~ fs::dir_ls(path, recursive = TRUE, glob = .x)), use.names = FALSE)
 
       cur_dir = getwd()
       setwd(path)
@@ -233,7 +234,7 @@ style_repo = function(repos, files=c("*.R","*.Rmd"), branch="styler", git = requ
       })
 
       writeLines(
-        c("Results of running styler:", capture.output( styler::style_file(file_paths) )),
+        c("Results of running styler:", utils::capture.output( styler::style_file(file_paths) )),
         "commit_msg"
       )
 

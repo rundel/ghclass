@@ -8,7 +8,7 @@
 #' * git pull = `pull_repos`
 #'
 #' @param repos GitHub repo names with the form \emph{owner/name}.
-#' @param repo_dirs Vector of repo directories or a single directory containing one or more repos.
+#' @param repo_dir Vector of repo directories or a single directory containing one or more repos.
 #' @param message commit message
 #' @param git Path to the local git binary. \code{require_git()} attempts to
 #' find the git binary based on your \code{PATH}, it will throw an error if git cannot be found.
@@ -37,15 +37,15 @@ NULL
 
 
 # If we are given a single repo directory check if it is a repo or a directory of repos
-repo_dirs_helper = function(repo_dirs)
+repo_dir_helper = function(repo_dir)
 {
-  dirs = if (length(repo_dirs) == 1 & !fs::dir_exists(fs::path(repo_dirs[1],".git"))) {
-    fs::dir_ls(repo_dirs, type="directory")
+  if (length(repo_dir) == 1 & !fs::dir_exists(fs::path(repo_dir[1],".git"))) {
+    dir = fs::dir_ls(repo_dir, type="directory")
   } else {
-    repo_dirs
+    dir = repo_dir
   }
 
-  fs::path_real(dirs)
+  fs::path_real(dir)
 }
 
 
@@ -59,7 +59,7 @@ clone_repos = function(repos, local_path="./", branch = "master",
 
   dir.create(local_path, showWarnings = FALSE, recursive = TRUE)
 
-  invisible(map2_chr(
+  res = purrr::map2_chr(
     repos, branch,
     function(repo, branch) {
       dir = fs::path(local_path, get_repo_name(repo))
@@ -80,22 +80,24 @@ clone_repos = function(repos, local_path="./", branch = "master",
 
       dir
     }
-  ))
+  )
+
+  invisible(res)
 }
 
 #' @export
-add_repos = function(repo_dirs, files = ".",
+add_repos = function(repo_dir, files = ".",
                      git = require_git(), options = "", verbose = TRUE)
 {
-  stopifnot(all(fs::dir_exists(repo_dirs)))
+  stopifnot(all(fs::dir_exists(repo_dir)))
   stopifnot(fs::file_exists(git))
 
-  repo_dirs = repo_dirs_helper(repo_dirs)
+  repo_dir = repo_dir_helper(repo_dir)
 
-  print(repo_dirs)
+  print(repo_dir)
 
-  walk(
-    repo_dirs,
+  purrr::walk(
+    repo_dir,
     function(repo) {
       cur_dir = getwd()
       on.exit({
@@ -120,17 +122,17 @@ add_repos = function(repo_dirs, files = ".",
 
 
 #' @export
-commit_repos = function(repo_dirs, message,
+commit_repos = function(repo_dir, message,
                         git = require_git(), options = "", verbose = FALSE)
 {
-  stopifnot(all(fs::dir_exists(repo_dirs)))
+  stopifnot(all(fs::dir_exists(repo_dir)))
   stopifnot(fs::file_exists(git))
   stopifnot(!missing(message))
 
-  repo_dirs = repo_dirs_helper(repo_dirs)
+  repo_dir = repo_dir_helper(repo_dir)
 
   purrr::walk2(
-    repo_dirs, message,
+    repo_dir, message,
     function(repo, message) {
       cur_dir = getwd()
       on.exit({
@@ -153,17 +155,17 @@ commit_repos = function(repo_dirs, message,
 
 
 #' @export
-push_repos = function(repo_dirs, remote = "origin", branch="master",
+push_repo = function(repo_dir, remote = "origin", branch="master",
                       git = require_git(), options = "", verbose = FALSE)
 {
-  stopifnot(all(fs::dir_exists(repo_dirs)))
+  stopifnot(all(fs::dir_exists(repo_dir)))
   stopifnot(fs::file_exists(git))
 
-  repo_dirs = repo_dirs_helper(repo_dirs)
+  repo_dir = repo_dir_helper(repo_dir)
 
-  walk2(
-    repo_dirs,
-    remotes,
+  purrr::walk2(
+    repo_dir,
+    remote,
     function(repo, remote) {
       cur_dir = getwd()
       on.exit({
@@ -186,16 +188,16 @@ push_repos = function(repo_dirs, remote = "origin", branch="master",
 
 
 #' @export
-pull_repos = function(repo_dirs, remote="origin", branch="master",
+pull_repos = function(repo_dir, remote="origin", branch="master",
                       git = require_git(), options = "", verbose = FALSE)
 {
-  stopifnot(all(fs::dir_exists(repo_dirs)))
+  stopifnot(all(fs::dir_exists(repo_dir)))
   stopifnot(fs::file_exists(git))
 
-  repo_dirs = repo_dirs_helper(repo_dirs)
+  repo_dir = repo_dir_helper(repo_dir)
 
   purrr::pwalk(
-    list(repo_dirs, remote, branch),
+    list(repo_dir, remote, branch),
     function(repo, remote, branch) {
       cur_dir = getwd()
       on.exit({

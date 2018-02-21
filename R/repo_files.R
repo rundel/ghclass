@@ -70,7 +70,6 @@ file_exists = function(repo, file, branch = "master")
 put_file = function(repo, gh_path, file, message, branch)
 {
   stopifnot(length(repo)==1)
-  stopifnot(length(file)==1)
   stopifnot(length(gh_path)==1)
   stopifnot(length(message)==1)
   stopifnot(length(branch)==1)
@@ -88,15 +87,7 @@ put_file = function(repo, gh_path, file, message, branch)
   if (!is.null(gh_file))
     args[["sha"]] = purrr::pluck(gh_file, "sha")
 
-  res = do.call(purrr::safely(gh::gh), args)
-
-  if (any(check_errors(res))) {
-    msg = sprintf("Adding %s to %s failed.\n", file, repo)
-    if (verbose)
-      msg = paste0(msg, format_list(get_errors(res)))
-
-    warning(msg, call. = FALSE, immediate. = TRUE)
-  }
+  do.call(safe_gh, args)
 }
 
 
@@ -145,16 +136,21 @@ add_files = function(repo, message, files, branch = "master", preserve_path=FALS
       owner = get_repo_owner(repo)
 
       if (verbose)
-        message("Adding files to ", repo, "...")
+        message("Adding files to ", repo, " ...")
 
       gh_paths = files
       if (!preserve_path)
         gh_paths = fs::path_file(files)
 
-      purrr::walk2(
+      res = purrr::map2(
         files, gh_paths,
         put_file,
         repo = repo, message = message, branch = branch
+      )
+
+      check_result(
+        res, sprintf("Failed to add files to %s.", repo),
+        verbose, error_prefix = paste0(files,": ")
       )
     }
   )

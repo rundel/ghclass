@@ -11,7 +11,7 @@
 \arguments{
 \item{repos}{GitHub repo names with the form \emph{owner/name}.}
 
-\item{repo_dirs}{Vector of repo directories or a single directory containing one or more repos.}
+\item{repo_dir}{Vector of repo directories or a single directory containing one or more repos.}
 
 \item{message}{commit message}
 

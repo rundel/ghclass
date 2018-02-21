@@ -4,12 +4,12 @@
 \alias{get_pending_team_members}
 \title{Get pending team members}
 \usage{
-get_pending_team_members(org, teams = get_teams(org))
+get_pending_team_members(org, team = get_teams(org))
 }
 \arguments{
 \item{org}{character, name of the GitHub organization.}
 
-\item{teams}{character or data frame, listing one or more team}
+\item{team}{character or data frame, listing one or more team}
 }
 \description{
 \code{get_pending_team_members} returns a data frame of pending team members.

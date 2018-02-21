@@ -4,12 +4,12 @@
 \alias{get_team_repos}
 \title{Get teams' repos}
 \usage{
-get_team_repos(org, teams = get_teams(org))
+get_team_repos(org, team = get_teams(org))
 }
 \arguments{
 \item{org}{character, name of the GitHub organization.}
 
-\item{teams}{character or data frame, listing one or more team}
+\item{team}{character or data frame, listing one or more team}
 }
 \description{
 \code{get_team_repos} returns a (filtered) data frame of teams and their repos.
