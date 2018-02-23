@@ -105,7 +105,7 @@ create_team_repo = function(org, team, prefix="", suffix="", verbose=TRUE)
            id = id, org = org, repo = repo_name,
            permission="push",
            .token=get_github_token())
-      })
+      })()
 
       check_result(res, sprintf("Failed to create team repo %s.", repo_name), verbose)
     }
