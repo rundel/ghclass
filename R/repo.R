@@ -84,7 +84,7 @@ create_team_repo = function(org, team, prefix="", suffix="", verbose=TRUE)
   if (any(missing_ids))
     stop("Unable to locate team(s): ", paste(team[["name"]][missing_ids], collapse=", "), call. = FALSE)
 
-  purrr::pmap(
+  purrr::pwalk(
     team,
     function(name, id) {
       repo_name = fix_repo_name( paste0(prefix, name, suffix) )
@@ -106,6 +106,8 @@ create_team_repo = function(org, team, prefix="", suffix="", verbose=TRUE)
            permission="push",
            .token=get_github_token())
       })
+
+      check_result(res, sprintf("Failed to create team repo %s.", repo_name), verbose)
     }
   )
 }
