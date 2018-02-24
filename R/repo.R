@@ -88,11 +88,9 @@ create_team_repo = function(org, team, prefix="", suffix="", verbose=TRUE)
     team,
     function(name, id) {
       repo_name = fix_repo_name( paste0(prefix, name, suffix) )
-      print(repo_name)
 
-
-      if (verbose)
-        message("Creating repo ", org, "/", repo_name, " ...", sep="")
+      #if (verbose)
+      #  message("Creating repo ", org, "/", repo_name, " ...", sep="")
 
       res = purrr::safely(function() {
         gh("POST /orgs/:org/repos",
