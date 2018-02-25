@@ -204,9 +204,40 @@ branch_repo = function(repos, branch, verbose=TRUE)
 }
 
 
+create_pull_request = function(repo, title, base, head = "master", body = "", verbose = TRUE) {
+
+  stopifnot(!missing(repo))
+  stopifnot(!missing(base))
+  stopifnot(!missing(head))
+  stopifnot(!missing(title))
+
+  purrr::pwalk(
+    list(repo, base, head, title, body),
+    function(repo, base, head, tile, body) {
+      res = safe_gh(
+        "POST /repos/:owner/:repo/pulls",
+        owner = get_repo_owner(repo), repo = get_repo_name(repo),
+        base = base, head = head, title = title, body = body,
+        .token = get_github_token()
+      )
+
+      check_result(
+        res,
+        sprintf("Failed to create pull request for %s (%s => %s).", repo, base, head),
+        verbose
+      )
+    }
+
+  )
+
+
+
+}
+
+
 #' @export
-style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler", git = require_git(), verbose=TRUE)
-{
+style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler",
+                      create_pull_request = TRUE, git = require_git(), verbose=TRUE) {
   stopifnot(styler_available())
   stopifnot(length(repo) >= 1)
 
@@ -224,7 +255,8 @@ style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler", git = requi
       branch_repo(repo, branch, verbose = FALSE)
       path = clone_repo(repo, local_path = dir, branch = branch)
 
-      file_paths = unlist(purrr::map(files, ~ fs::dir_ls(path, recursive = TRUE, glob = .x)), use.names = FALSE)
+      file_paths = unlist(purrr::map(files, ~ fs::dir_ls(path, recursive = TRUE, glob = .x)),
+                          use.names = FALSE)
 
       cur_dir = getwd()
       setwd(path)
@@ -246,6 +278,14 @@ style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler", git = requi
 
       system(paste0(git, " push"),
              intern = FALSE, wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
+
+      if (create_pull_request) {
+        create_pull_request(
+          repo, title="Styler revisions",
+          base = branch, head = "master",
+          body = "", verbose = verbose
+        )
+      }
     }
   )
 }
