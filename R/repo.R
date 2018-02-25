@@ -236,7 +236,7 @@ create_pull_request = function(repo, title, base, head = "master", body = "", ve
 
 
 #' @export
-style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler",
+style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler", base="master",
                       create_pull_request = TRUE, git = require_git(), verbose=TRUE) {
   stopifnot(styler_available())
   stopifnot(length(repo) >= 1)
@@ -252,6 +252,7 @@ style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler",
     repo, branch,
     function(repo, branch) {
 
+      ## TODO add base to branch
       branch_repo(repo, branch, verbose = FALSE)
       path = clone_repo(repo, local_path = dir, branch = branch)
 
@@ -265,10 +266,8 @@ style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler",
         setwd(cur_dir)
       })
 
-      writeLines(
-        c("Results of running styler:", utils::capture.output( styler::style_file(file_paths) )),
-        "commit_msg"
-      )
+      msg = c("Results of running styler:", utils::capture.output( styler::style_file(file_paths) ))
+      writeLines(msg, "commit_msg")
 
       system(paste0(git, " add ", paste0(file_paths, collapse=" ")),
              intern = FALSE, wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
@@ -282,8 +281,8 @@ style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler",
       if (create_pull_request) {
         create_pull_request(
           repo, title="Styler revisions",
-          base = branch, head = "master",
-          body = "", verbose = verbose
+          base = base, head = branch,
+          body = msg, verbose = verbose
         )
       }
     }
