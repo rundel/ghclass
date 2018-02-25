@@ -213,7 +213,7 @@ create_pull_request = function(repo, title, base, head = "master", body = "", ve
 
   purrr::pwalk(
     list(repo, base, head, title, body),
-    function(repo, base, head, tile, body) {
+    function(repo, base, head, title, body) {
       res = safe_gh(
         "POST /repos/:owner/:repo/pulls",
         owner = get_repo_owner(repo), repo = get_repo_name(repo),
@@ -227,17 +227,14 @@ create_pull_request = function(repo, title, base, head = "master", body = "", ve
         verbose
       )
     }
-
   )
-
-
-
 }
 
 
 #' @export
 style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler", base="master",
-                      create_pull_request = TRUE, git = require_git(), verbose=TRUE) {
+                      create_pull_request = TRUE, tag_collaborators = TRUE,
+                      git = require_git(), verbose=TRUE) {
   stopifnot(styler_available())
   stopifnot(length(repo) >= 1)
 
@@ -251,7 +248,6 @@ style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler", base="maste
   purrr::walk2(
     repo, branch,
     function(repo, branch) {
-
       ## TODO add base to branch
       branch_repo(repo, branch, verbose = FALSE)
       path = clone_repo(repo, local_path = dir, branch = branch)
@@ -266,7 +262,7 @@ style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler", base="maste
         setwd(cur_dir)
       })
 
-      msg = c("Results of running styler:", utils::capture.output( styler::style_file(file_paths) ))
+      msg = c("Results of running styler:\n", utils::capture.output( styler::style_file(file_paths) ))
       writeLines(msg, "commit_msg")
 
       system(paste0(git, " add ", paste0(file_paths, collapse=" ")),
@@ -279,12 +275,72 @@ style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler", base="maste
              intern = FALSE, wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
       if (create_pull_request) {
+
+        msg = paste(c(
+          "This pull request contains the results of running the automated R code formating tool styler ",
+          "on your repo. Styling is based on Hadley's [R style guide](http://adv-r.had.co.nz/Style.html)\n",
+          "\n",
+          "Click on the commit below to see details of recommended changes. It is not necessary that your ",
+          "code cleanly pass these checks, but if there is a large number of significant changes suggested ",
+          "you should review the style guide with an eye towards potentially improving your code formatting."
+        ), collapse="")
+
+        if (tag_collaborators)
+          msg = paste0(msg,"\n\n@", get_collaborators(repo)[[1]], collapse=", ")
+
         create_pull_request(
-          repo, title="Styler revisions",
+          repo, title="styler revisions",
           base = base, head = branch,
-          body = msg, verbose = verbose
+          body = paste0(msg, collapse="\n"),
+          verbose = verbose
         )
       }
+    }
+  )
+}
+
+#' @export
+get_admins = function(org, verbose = FALSE) {
+
+  purrr::map(
+    org,
+    function(org) {
+      res = gh(
+        "GET /orgs/:org/members",
+        org = org,
+        role = "admin",
+        .token = get_github_token(),
+        .limit = get_github_api_limit()
+      )
+
+      purrr::map_chr(res, "login")
+    }
+  )
+}
+
+#' @export
+get_collaborators = function(repo, include_admins = FALSE, verbose = FALSE) {
+
+  stopifnot(!missing(repo))
+
+  admins = list(NULL)
+  if (!include_admins)
+    admins = get_admins(get_repo_owner(repo))
+
+  purrr::map2(
+    repo, admins,
+    function(repo, admins) {
+      res = safe_gh(
+        "GET /repos/:owner/:repo/collaborators",
+        owner = get_repo_owner(repo), repo = get_repo_name(repo),
+        affiliation = "all",
+        .token = get_github_token(),
+        .limit = get_github_api_limit()
+      )
+
+      check_result(res, sprintf("Unable to retrieve collaborators for %s.", repo), verbose)
+
+      setdiff(purrr::map_chr(res$result, "login"), admins)
     }
   )
 }
