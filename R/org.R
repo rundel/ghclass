@@ -242,7 +242,11 @@ get_team_members = function(org, team = get_teams(org), get_pending = TRUE)
   stopifnot(length(org) == 1)
 
   pend = if (get_pending) {
-    get_pending_team_members(org, team)
+    res = get_pending_team_members(org, team)
+    res[["pending"]] = rep(FALSE, nrow(res))
+    res
+  } else {
+    tibble::data_frame(team = character(), github = character(), pending = logical())
   }
 
   if (is.character(team))
@@ -262,27 +266,20 @@ get_team_members = function(org, team = get_teams(org), get_pending = TRUE)
       if (empty_result(res)) {
         tibble::data_frame(
           team = character(),
-          github = character()
+          github = character(),
+          pending = logical()
         )
       } else {
         tibble::data_frame(
           team = name,
-          github = purrr::map_chr(res, "login")
+          github = purrr::map_chr(res, "login"),
+          pending = FALSE
         )
       }
     }
   )
 
-  if (get_pending) {
-    tibble::as_data_frame(
-      rbind(
-        cbind(cur, pending=FALSE),
-        cbind(pend, pending=TRUE)
-      )
-    )
-  } else {
-    cur
-  }
+  tibble::as_data_frame( rbind(cur, pend) )
 }
 
 #' Get pending team members
