@@ -84,15 +84,13 @@ create_team_repo = function(org, team, prefix="", suffix="", verbose=TRUE)
   if (any(missing_ids))
     stop("Unable to locate team(s): ", paste(team[["name"]][missing_ids], collapse=", "), call. = FALSE)
 
-  purrr::pmap(
+  purrr::pwalk(
     team,
     function(name, id) {
       repo_name = fix_repo_name( paste0(prefix, name, suffix) )
-      print(repo_name)
 
-
-      if (verbose)
-        message("Creating repo ", org, "/", repo_name, " ...", sep="")
+      #if (verbose)
+      #  message("Creating repo ", org, "/", repo_name, " ...", sep="")
 
       res = purrr::safely(function() {
         gh("POST /orgs/:org/repos",
@@ -105,7 +103,9 @@ create_team_repo = function(org, team, prefix="", suffix="", verbose=TRUE)
            id = id, org = org, repo = repo_name,
            permission="push",
            .token=get_github_token())
-      })
+      })()
+
+      check_result(res, sprintf("Failed to create team repo %s.", repo_name), verbose)
     }
   )
 }
@@ -204,9 +204,37 @@ branch_repo = function(repos, branch, verbose=TRUE)
 }
 
 
+create_pull_request = function(repo, title, base, head = "master", body = "", verbose = TRUE) {
+
+  stopifnot(!missing(repo))
+  stopifnot(!missing(base))
+  stopifnot(!missing(head))
+  stopifnot(!missing(title))
+
+  purrr::pwalk(
+    list(repo, base, head, title, body),
+    function(repo, base, head, title, body) {
+      res = safe_gh(
+        "POST /repos/:owner/:repo/pulls",
+        owner = get_repo_owner(repo), repo = get_repo_name(repo),
+        base = base, head = head, title = title, body = body,
+        .token = get_github_token()
+      )
+
+      check_result(
+        res,
+        sprintf("Failed to create pull request for %s (%s => %s).", repo, base, head),
+        verbose
+      )
+    }
+  )
+}
+
+
 #' @export
-style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler", git = require_git(), verbose=TRUE)
-{
+style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler", base="master",
+                      create_pull_request = TRUE, tag_collaborators = TRUE,
+                      git = require_git(), verbose=TRUE) {
   stopifnot(styler_available())
   stopifnot(length(repo) >= 1)
 
@@ -220,11 +248,12 @@ style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler", git = requi
   purrr::walk2(
     repo, branch,
     function(repo, branch) {
-
+      ## TODO add base to branch
       branch_repo(repo, branch, verbose = FALSE)
       path = clone_repo(repo, local_path = dir, branch = branch)
 
-      file_paths = unlist(purrr::map(files, ~ fs::dir_ls(path, recursive = TRUE, glob = .x)), use.names = FALSE)
+      file_paths = unlist(purrr::map(files, ~ fs::dir_ls(path, recursive = TRUE, glob = .x)),
+                          use.names = FALSE)
 
       cur_dir = getwd()
       setwd(path)
@@ -233,10 +262,8 @@ style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler", git = requi
         setwd(cur_dir)
       })
 
-      writeLines(
-        c("Results of running styler:", utils::capture.output( styler::style_file(file_paths) )),
-        "commit_msg"
-      )
+      msg = c("Results of running styler:\n", utils::capture.output( styler::style_file(file_paths) ))
+      writeLines(msg, "commit_msg")
 
       system(paste0(git, " add ", paste0(file_paths, collapse=" ")),
              intern = FALSE, wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
@@ -246,6 +273,74 @@ style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler", git = requi
 
       system(paste0(git, " push"),
              intern = FALSE, wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
+
+      if (create_pull_request) {
+
+        msg = paste(c(
+          "This pull request contains the results of running the automated R code formating tool styler ",
+          "on your repo. Styling is based on Hadley's [R style guide](http://adv-r.had.co.nz/Style.html)\n",
+          "\n",
+          "Click on the commit below to see details of recommended changes. It is not necessary that your ",
+          "code cleanly pass these checks, but if there is a large number of significant changes suggested ",
+          "you should review the style guide with an eye towards potentially improving your code formatting."
+        ), collapse="")
+
+        if (tag_collaborators)
+          msg = paste0(msg,"\n\n@", get_collaborators(repo)[[1]], collapse=", ")
+
+        create_pull_request(
+          repo, title="styler revisions",
+          base = base, head = branch,
+          body = paste0(msg, collapse="\n"),
+          verbose = verbose
+        )
+      }
+    }
+  )
+}
+
+#' @export
+get_admins = function(org, verbose = FALSE) {
+
+  purrr::map(
+    org,
+    function(org) {
+      res = gh(
+        "GET /orgs/:org/members",
+        org = org,
+        role = "admin",
+        .token = get_github_token(),
+        .limit = get_github_api_limit()
+      )
+
+      purrr::map_chr(res, "login")
+    }
+  )
+}
+
+#' @export
+get_collaborators = function(repo, include_admins = FALSE, verbose = FALSE) {
+
+  stopifnot(!missing(repo))
+
+  admins = list(NULL)
+  if (!include_admins)
+    admins = get_admins(get_repo_owner(repo))
+
+  purrr::map2(
+    repo, admins,
+    function(repo, admins) {
+      res = safe_gh(
+        "GET /repos/:owner/:repo/collaborators",
+        owner = get_repo_owner(repo), repo = get_repo_name(repo),
+        affiliation = "all",
+        .token = get_github_token(),
+        .limit = get_github_api_limit()
+      )
+
+      check_result(res, sprintf("Unable to retrieve collaborators for %s.", repo), verbose)
+
+      setdiff(purrr::map_chr(res$result, "login"), admins)
     }
   )
 }
