@@ -141,18 +141,18 @@ get_teams = function(org, filter=NULL, exclude=FALSE) {
 
   teams = if (empty_result(res)) {
     tibble::data_frame(
-      name = character(),
+      team = character(),
       id   =  integer()
     )
   } else {
     tibble::data_frame(
-      name = purrr::map_chr(res, "name"),
+      team = purrr::map_chr(res, "name"),
       id   = purrr::map_int(res, "id")
     )
   }
 
   if (!is.null(filter)) {
-    subset = grepl(filter, teams$name)
+    subset = grepl(filter, teams$team)
     if (exclude) teams = teams[!subset,]
     else         teams = teams[subset,]
   }
@@ -164,11 +164,11 @@ get_teams = function(org, filter=NULL, exclude=FALSE) {
 get_teams_by_list = function(org, teams) {
   org_teams = get_teams(org)
 
-  sub = teams %in% org_teams$name
+  sub = teams %in% org_teams$team
   if (sum(sub) != length(teams))
     stop("Unable to find team(s): ", paste(teams[!sub], collapse=", "))
 
-  org_teams[org_teams$name %in% teams,]
+  org_teams[org_teams$team %in% teams,]
 }
 
 
@@ -195,11 +195,11 @@ get_team_repos = function(org, team = get_teams(org))
   if (is.character(team))
     team = get_teams_by_list(org, team)
 
-  stopifnot(all(c("name","id") %in% names(team)))
+  stopifnot(all(c("team","id") %in% names(team)))
 
   purrr::pmap_df(
     team,
-    function(name, id) {
+    function(team, id) {
       res = gh(
         "GET /teams/:id/repos", id=id,
         .token=get_github_token(), .limit=get_github_api_limit()
@@ -212,7 +212,7 @@ get_team_repos = function(org, team = get_teams(org))
         )
       } else {
         tibble::data_frame(
-          team = name,
+          team = team,
           repo = purrr::map_chr(res, "full_name")
         )
       }
@@ -252,11 +252,11 @@ get_team_members = function(org, team = get_teams(org), get_pending = TRUE)
   if (is.character(team))
     team = get_teams_by_list(org, team)
 
-  stopifnot(all(c("name","id") %in% names(team)))
+  stopifnot(all(c("team","id") %in% names(team)))
 
   cur = purrr::pmap_df(
     team,
-    function(name, id) {
+    function(team, id) {
       res = gh(
         "GET /teams/:id/members",
         id=id, role = "all",
@@ -271,7 +271,7 @@ get_team_members = function(org, team = get_teams(org), get_pending = TRUE)
         )
       } else {
         tibble::data_frame(
-          team = name,
+          team = team,
           github = purrr::map_chr(res, "login"),
           pending = FALSE
         )
@@ -305,11 +305,11 @@ get_pending_team_members = function(org, team = get_teams(org))
   if (is.character(team))
     team = get_teams_by_list(org, team)
 
-  stopifnot(all(c("name","id") %in% names(team)))
+  stopifnot(all(c("team","id") %in% names(team)))
 
   purrr::pmap_df(
     team,
-    function(name, id) {
+    function(team, id) {
       res = gh(
         "GET /teams/:id/invitations",
         id=id,
@@ -323,7 +323,7 @@ get_pending_team_members = function(org, team = get_teams(org))
         )
       } else {
         tibble::data_frame(
-          team = name,
+          team = team,
           github = purrr::map_chr(res, "login")
         )
       }
@@ -369,24 +369,24 @@ add_team_member = function(org, user, team, create_missing_teams=FALSE, verbose=
 
   org_teams = get_teams(org)
 
-  new_teams = setdiff(unique(team), org_teams[["name"]])
+  new_teams = setdiff(unique(team), org_teams[["team"]])
   if (length(new_teams) != 0 & create_missing_teams) {
     create_team(org, new_teams, verbose=verbose)
     org_teams = get_teams(org)
   }
 
-  team = merge(
-    tibble::data_frame(name = team), org_teams,
-    by = "name", all.x = TRUE
+  info = merge(
+    info, org_teams,
+    by = "team", all.x = TRUE
   )
 
-  missing_teams = is.na(team[["id"]])
+  missing_teams = is.na(info[["id"]])
   if (any(missing_teams))
     stop("Team(s) ", paste(new_teams,collapse=", "), " do(es) not exist in ", org, ".", call. = FALSE)
 
   purrr::pwalk(
-    list(user, team[["name"]], team[["id"]]),
-    function(user, name, id) {
+    info,
+    function(user, team, id) {
       res = safe_gh(
         "PUT /teams/:id/memberships/:username",
         id=id, username=user, role="member",

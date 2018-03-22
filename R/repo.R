@@ -73,21 +73,21 @@ create_team_repo = function(org, team, prefix="", suffix="", verbose=TRUE)
 
   if (is.character(team)) {
     team = merge(
-      tibble::data_frame(name = team), org_teams,
-      by = "name", all.x = TRUE
+      tibble::data_frame(team = team), org_teams,
+      by = "team", all.x = TRUE
     )
   }
 
-  stopifnot(is.data.frame(team) & all( c("name","id") %in% names(team)))
+  stopifnot(is.data.frame(team) & all( c("team","id") %in% names(team)))
 
   missing_ids = is.na(team[["id"]])
   if (any(missing_ids))
-    stop("Unable to locate team(s): ", paste(team[["name"]][missing_ids], collapse=", "), call. = FALSE)
+    stop("Unable to locate team(s): ", paste(team[["team"]][missing_ids], collapse=", "), call. = FALSE)
 
   purrr::pwalk(
     team,
-    function(name, id) {
-      repo_name = fix_repo_name( paste0(prefix, name, suffix) )
+    function(team, id) {
+      repo_name = fix_repo_name( paste0(prefix, team, suffix) )
 
       #if (verbose)
       #  message("Creating repo ", org, "/", repo_name, " ...", sep="")
