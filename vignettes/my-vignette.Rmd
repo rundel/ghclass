@@ -1,0 +1,260 @@
+---
+title: "Course management with ghclass"
+author: "Mine Çetinkaya-Rundel"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Course management with ghclass}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Who is this package for?
+
+This package is for everyone! But really, if you're an instructor who uses 
+GitHub for your class management, e.g. students submit assignments via GitHub 
+repos, this package is definitely for you! The package also assumes that you're 
+and R user, and you probably teach R as well, though that's not a requirement 
+since this package is all about setting up repositories with the right 
+permissions, not what your students put in those repositories. (If you're a 
+Python user, see [this post](https://ubc-mds.github.io/2017-08-24-teaching-with-github/) for a Python 
+based alternative.)
+
+## What is this vignette about?
+
+This vignette is about the nitty-gritty of setting your class up in GitHub with 
+ghclass. For a higher level discussion of why and how to use Git/GitHub in data 
+science education, see [this paper](https://peerj.com/preprints/3181/) by the 
+package authors.
+
+## Structuring your class on GitHub
+
+The general framework is outlined below. This is not the only way to structure 
+a class on GitHub, but it's a good way, and one that ghclass is optimized to 
+work with.
+
+We outline steps for achieving this structure in the next section. This section 
+is meant to give a high level view of what your course looks like on GitHub.
+
+- One organization per class: If you teach at a university, this means one 
+semester of a given course. If you teach workshops, this would be one workshop. 
+The instructor and any additional instructional staff, e.g. teaching assistants, 
+are owners. Going forward we will refer to this group of people as "instructors". 
+The students are members.
+
+- One repo per student (or team) per assignment: The instructors have admin 
+access to repos, i.e. they can read, clone, push, and add collaborators to 
+assignment repositories as well as delete them. The students have write access 
+to repo, which means that they can read, clone, and push to this repository but 
+they cannot delete them and they cannot add others to them. This can help with 
+minimizing accidents that cannot be undone and makes sure students cannot peek 
+into each others' repositories unless you explicitly allow them to do so.
+
+If you have a teamwork component to your course, you can also set up teams on 
+GitHub and give them access to repositories for team assignments.
+
+Suppose you have 48 students in your class, and they are in 12 teams of 4 
+students each. Suppose also that students turn in the following throughout 
+a semester:
+
+- Individual: 10 homework assignments + 2 exams
+- Teamwork: 8 lab assignments + 1 project
+
+Then, throughout the semester you will need to create total of
+
+```{r repos}
+repo_indiv <- 10 + 2
+repo_team <- 8 + 1
+48 * repo_indiv + 12 * repo_team
+```
+
+That is a lot of repos to create and set permissions to manually! It's 
+also a lot of repos to clone when it comes time to grading. ghclass addresses 
+this problem, and more! It does not, however, address the problem that that's a 
+lot of grading. Sorry, you're on your own there!
+
+That being said, ghclass does also facilitates setting up continuous integration 
+for students' assignment repos, which means that some of the checking and 
+feedback giving can be done automatically each time they push to the repo 
+without intervention from the instructors.
+
+## Step by step guide
+
+1. Create an organization on GitHub for the course.
+
+  - Naming recommendation: We recommend you use the course number, semester, and
+  year, e.g. for a course numbered Sta 199 in Spring 18, you can use 
+  `Sta199-Sp18`.
+
+2. Apply for GitHub Education credits ([here](https://education.github.com/discount_requests/new)) 
+so that you can get unlimited private repositories for your students' 
+assignment repos.
+
+  - This is actually an optional step, but one that many will want to do. GitHub
+  charges for private repositories unless they are used for teaching purposes. 
+  To take advantage of this promotion you need to apply for GitHub Education.
+  - The application will require that you submit a course syllabus and/or a 
+  link to the course homepage. Make sure you have (at least a draft of) a 
+  syllabus ready at this point.
+  - Approval is usually pretty quick, but you don't wnat to do this the night 
+  before classes begin. Give yourself at least a week to be safe.
+
+
+
+
+
+
+
+
+
+### Authentication
+
+This package uses tokens for authentication with both [wercker](https://app.wercker.com/profile/tokens) and [github](https://github.com/settings/tokens), these values can be supplied via environmental variables `GITHUB_TOKEN` and `WERCKER_TOKEN` respectively or in `~/.github/token` and `~/.wercker/token`.
+
+Alternative token locations can be specified with `set_github_token` or `set_wercker_token`.
+
+
+### Example Session - Class setup
+
+This section assumes that you have a roster file that has been read into R as a data frame, and this data frame includes a column called `github` which contains students' GitHub user names and a column called `team` that contains the team name for each student.
+
+For example your roster file might look something like the following:
+
+```csv
+github,team
+Alice,Team1
+Bob,Team2
+Carol,Team3
+Dave,Team4
+Eve,Team5
+```
+
+Using the `roster` data frame we can then invite the students to class' organzation as well as create and add them to their teams. 
+
+```r
+invite_users("Sta523-Fa17", roster$github)
+
+## Adding Alice to Sta523-Fa17 ...
+## Adding Bob to Sta523-Fa17 ...
+## Adding Carol to Sta523-Fa17 ...
+## Adding Dave to Sta523-Fa17 ...
+## Adding Eve to Sta523-Fa17 ...
+```
+
+```r
+create_teams("Sta523-Fa17", unique(d$Team))
+
+## Adding Team1 ...
+## Adding Team2 ...
+## Adding Team3 ...
+## Adding Team4 ...
+## Adding Team5 ...
+```
+ 
+```r
+add_team_member("Sta523-Fa17", roster$github, roster$team)
+
+## Adding Alice to Team1 ...
+## Adding Bob to Team2 ...
+## Adding Carol to Team3 ...
+## Adding Dave to Team4 ...
+## Adding Eve to Team5 ...
+```
+ 
+
+### Example Session - Creating an assignment
+
+```r
+create_team_repos("Sta523-Fa17", prefix="hw2-")
+
+## Creating hw2-Team01 for Team01 ...
+## Creating hw2-Team02 for Team02 ...
+## Creating hw2-Team03 for Team03 ...
+## Creating hw2-Team04 for Team04 ...
+## Creating hw2-Team05 for Team05 ...
+```
+
+```r
+mirror_repo(source_repo = "Sta523-Fa17/hw2", target_repos = get_repos("Sta523-Fa17","hw2-"))
+
+## Cloning source repo (Sta523-Fa17/hw2) ...
+## Mirroring Sta523-Fa17/hw2 to Sta523-Fa17/hw2-Team01 ...
+## Mirroring Sta523-Fa17/hw2 to Sta523-Fa17/hw2-Team02 ...
+## Mirroring Sta523-Fa17/hw2 to Sta523-Fa17/hw2-Team03 ...
+## Mirroring Sta523-Fa17/hw2 to Sta523-Fa17/hw2-Team04 ...
+## Mirroring Sta523-Fa17/hw2 to Sta523-Fa17/hw2-Team05 ...
+## Cleaning up ...
+```
+
+Before running the following step(s) involving Wercker make sure you've done the following:
+
+* If you do not have one already create an account with Wercker 
+
+* Create an organization with Wercker that will contain all of your apps for this class
+
+* Create and save a Wercker [token](https://app.wercker.com/profile/tokens) to `~/.wercker/token`
+
+* Make sure third party access is allowed for your github organization (See Settings / Third-party access then click on remote restrictions)
+
+```r
+add_wercker(get_repos("Sta523-Fa17", "hw2-"), "Sta523-Fa17")
+
+## Creating wercker app for Sta523-Fa17/hw2-Team01 ...
+## Creating wercker app for Sta523-Fa17/hw2-Team02 ...
+## Creating wercker app for Sta523-Fa17/hw2-Team03 ...
+## Creating wercker app for Sta523-Fa17/hw2-Team04 ...
+## Creating wercker app for Sta523-Fa17/hw2-Team05 ...
+```
+
+
+### Modifying repos
+
+```r
+add_files(
+  get_repos("Sta523-Fa17","hw2-"), 
+  message = "Remove wrong wercker badge", 
+  files = "~/Desktop/Sta523/Homework/hw2/repo/README.md"
+)
+
+## Adding files to Sta523-Fa17/hw2-Team01 ...
+## Adding files to Sta523-Fa17/hw2-Team02 ...
+## Adding files to Sta523-Fa17/hw2-Team03 ...
+## Adding files to Sta523-Fa17/hw2-Team04 ...
+## Adding files to Sta523-Fa17/hw2-Team05 ...
+```
+
+## FAQ
+
+1. Do I really need private repositories for my students' assignments? I don't 
+care if they see each others' work.
+
+You might not care, but the law might. For example, in the United States, FERPA 
+regulations stipulate that student information should be kept private. If you 
+use public repositories, anyone can find out who is enrolled in your course. 
+Additionally, you will likely be using GitHub issues for providing feedback 
+on the students' work, and potentially even mention their grade in a given 
+assignment. This information should not be publicly available to anyone.
+
+Also, your students may not want their coursework to be publicly available. 
+They are bound to make mistakes as they learn and it should be up to them 
+whether they want those to be a piece of their public profile on GitHub.
+
+2. Why not use [GitHub Classroom](https://classroom.github.com/)?
+
+At some level this is a matter of preference, but there are a few 
+functionalities here that are not present in GitHub Classroom:
+
+- Pre-defined teams -- as opposed to relying on students to pick their team when 
+creating their assignment repo.
+- Command-line interface -- if you like writing R code to solve your problems 
+this may be a better fit for you as it provides a greater level of control and
+more flexibility.
+- Actually you don't have to choose between ghclass and [GitHub Classroom](https://classroom.github.com/), your workflow might involve using both.
+
