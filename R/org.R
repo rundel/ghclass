@@ -334,8 +334,25 @@ get_pending_team_members = function(org, team = get_teams(org))
 
 
 
+#' Create team(s)
+#'
+#' \code{create_team} creates teams in your organization
+#'
+#' @param org character, name of the GitHub organization
+#' @param team character, listing one or more teams
+#' @param privacy character, level of privacy of teams, closed (visible to all
+#' members of the organization) or secret (only visible to organization owners
+#' and members of a team), default is closed
+#'
+#' @examples
+#' \dontrun{
+#' create_team("ghclass",c("team01","team01"))
+#' }
+#'
+#' @family github organization related functions
+#'
 #' @export
-create_team = function(org, team=character(), privacy = c("closed","secret"), verbose=TRUE)
+create_team = function(org, team = character(), privacy = c("closed","secret"), verbose = TRUE)
 {
   stopifnot(!missing(org))
   team = as.character(team)
@@ -413,6 +430,20 @@ check_user_exists = function(user)
 }
 
 
+#' Invite user(s)
+#'
+#' \code{invite_user} invites users to your organization
+#'
+#' @param org character, name of the GitHub organization.
+#' @param user character or data frame, listing one or more users
+#'
+#' @examples
+#' \dontrun{
+#' invite_user("ghclass",c("user01","user02"))
+#' }
+#'
+#' @family github organization related functions
+#'
 #' @export
 invite_user = function(org, user, verbose=TRUE, exclude_pending = FALSE)
 {
