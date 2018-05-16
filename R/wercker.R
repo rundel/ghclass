@@ -240,7 +240,7 @@ add_wercker = function(repo, wercker_org, add_badge=TRUE, verbose=TRUE)
       if (get_repo_name(repo) %in% existing_apps) {
         if (verbose)
           cat("Skipping, app already exists for", repo, "...\n")
-        next
+        return()
       }
 
       if (verbose)
