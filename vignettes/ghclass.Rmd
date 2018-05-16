@@ -85,45 +85,35 @@ for students' assignment repos, which means that some of the checking and
 feedback giving can be done automatically each time they push to the repo 
 without intervention from the instructors.
 
-## Step by step guide
-
-1. Create an organization on GitHub for the course.
-
-  - Naming recommendation: We recommend you use the course number, semester, and
-  year, e.g. for a course numbered Sta 199 in Spring 18, you can use 
-  `Sta199-Sp18`.
-
-2. Apply for GitHub Education credits ([here](https://education.github.com/discount_requests/new)) 
-so that you can get unlimited private repositories for your students' 
-assignment repos.
-
-  - This is actually an optional step, but one that many will want to do. GitHub
-  charges for private repositories unless they are used for teaching purposes. 
-  To take advantage of this promotion you need to apply for GitHub Education.
-  - The application will require that you submit a course syllabus and/or a 
-  link to the course homepage. Make sure you have (at least a draft of) a 
-  syllabus ready at this point.
-  - Approval is usually pretty quick, but you don't wnat to do this the night 
-  before classes begin. Give yourself at least a week to be safe.
-
-
-
-
-
-
-
-
-
-### Authentication
+## Authentication
 
 This package uses tokens for authentication with both [wercker](https://app.wercker.com/profile/tokens) and [github](https://github.com/settings/tokens), these values can be supplied via environmental variables `GITHUB_TOKEN` and `WERCKER_TOKEN` respectively or in `~/.github/token` and `~/.wercker/token`.
 
 Alternative token locations can be specified with `set_github_token` or `set_wercker_token`.
 
+## Step-by-step guide
 
-### Example Session - Class setup
+Start with creating an organization on GitHub for the course. We recommend 
+using the course number, semester/quarter, and year in the organization name, 
+e.g. for a course numbered Sta 199 in Spring 18, you can use `Sta199-Sp18`.
 
-This section assumes that you have a roster file that has been read into R as a data frame, and this data frame includes a column called `github` which contains students' GitHub user names and a column called `team` that contains the team name for each student.
+Then go [here](https://education.github.com/discount_requests/new) to apply 
+for GitHub Education discount for unlimited private repositories. This is an 
+optional step, but one that many will want to do. GitHub charges for private 
+repositories unless they are used for teaching purposes. The application for 
+GitHub Education discount requires that you submit a course syllabus and/or 
+a link to the course homepage. Make sure you have (at least a draft of) a 
+syllabus ready at this point. Approval is usually pretty quick, but you don't 
+want to do this the night before classes begin. Give yourself at least a week 
+to be safe.
+
+### Adding students and creating teams
+
+Next, you should collect your students' GitHub user names. You can do this with 
+a Google form and then read the spreadsheet containing their responses into R 
+using the **googlesheets** package. The resulting data frame should include two 
+columns: one called `github` which contains students' GitHub user names and a column called `team` that contains the team 
+name for each student.
 
 For example your roster file might look something like the following:
 
@@ -139,7 +129,7 @@ Eve,Team5
 Using the `roster` data frame we can then invite the students to class' organzation as well as create and add them to their teams. 
 
 ```r
-invite_users("Sta523-Fa17", roster$github)
+invite_user("Sta523-Fa17", roster$github)
 
 ## Adding Alice to Sta523-Fa17 ...
 ## Adding Bob to Sta523-Fa17 ...
@@ -149,7 +139,7 @@ invite_users("Sta523-Fa17", roster$github)
 ```
 
 ```r
-create_teams("Sta523-Fa17", unique(d$Team))
+create_team("Sta523-Fa17", unique(roster$team))
 
 ## Adding Team1 ...
 ## Adding Team2 ...
@@ -167,9 +157,12 @@ add_team_member("Sta523-Fa17", roster$github, roster$team)
 ## Adding Dave to Team4 ...
 ## Adding Eve to Team5 ...
 ```
- 
 
-### Example Session - Creating an assignment
+### Creating a team assignment
+
+First you create repositories for each team with a prefix identifying the 
+assignment. The resulting repo names will be this prefix followed by the 
+team name.
 
 ```r
 create_team_repos("Sta523-Fa17", prefix="hw2-")
@@ -181,8 +174,16 @@ create_team_repos("Sta523-Fa17", prefix="hw2-")
 ## Creating hw2-Team05 for Team05 ...
 ```
 
+If you want to place starter docs into the assignment repos that you just 
+created, you should first create a repo in this organization containing these 
+starter docs and then mirrow the contents of that repo to the repos you created 
+earlier. You can do this with the `mirror_repo` function.
+
 ```r
-mirror_repo(source_repo = "Sta523-Fa17/hw2", target_repos = get_repos("Sta523-Fa17","hw2-"))
+mirror_repo(
+  source_repo = "Sta523-Fa17/hw2", 
+  target_repos = get_repos("Sta523-Fa17","hw2-")
+  )
 
 ## Cloning source repo (Sta523-Fa17/hw2) ...
 ## Mirroring Sta523-Fa17/hw2 to Sta523-Fa17/hw2-Team01 ...
@@ -192,6 +193,14 @@ mirror_repo(source_repo = "Sta523-Fa17/hw2", target_repos = get_repos("Sta523-Fa
 ## Mirroring Sta523-Fa17/hw2 to Sta523-Fa17/hw2-Team05 ...
 ## Cleaning up ...
 ```
+
+### Creating an individual assignment
+
+The process for creating an individual assignment is very similar to that for
+creating a team assignment, but uses the `create_individual_assignment()` 
+function instead.
+
+### Adding Wercker badges to repos
 
 Before running the following step(s) involving Wercker make sure you've done the following:
 
@@ -213,8 +222,11 @@ add_wercker(get_repos("Sta523-Fa17", "hw2-"), "Sta523-Fa17")
 ## Creating wercker app for Sta523-Fa17/hw2-Team05 ...
 ```
 
-
 ### Modifying repos
+
+You can also modify repos afer they have been created. This will overwrite 
+existing files with the same name in the repo so you should be careful not to
+do this if students have already started working on the repos.
 
 ```r
 add_files(
@@ -257,4 +269,3 @@ creating their assignment repo.
 this may be a better fit for you as it provides a greater level of control and
 more flexibility.
 - Actually you don't have to choose between ghclass and [GitHub Classroom](https://classroom.github.com/), your workflow might involve using both.
-

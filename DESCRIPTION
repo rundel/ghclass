@@ -5,9 +5,12 @@ Authors@R: person("Colin", "Rundel", email = "rundel@gmail.com", role = c("aut",
 Description: Tools for managing classes with gitbub
 Depends: R (>= 3.4.0), gh
 Imports: fs, stringr, purrr, yaml, base64enc, httr, jsonlite, tibble
-Suggests: styler
+Suggests: styler,
+    knitr,
+    rmarkdown
 License: GPL3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.0.1
+VignetteBuilder: knitr
