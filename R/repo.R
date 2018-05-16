@@ -22,6 +22,23 @@ fix_repo_name = function(repos)
   stringr::str_replace_all(repos, "[^A-Za-z0-9_.-]+","-")
 }
 
+#' Creeate individual repositories
+#'
+#' \code{create_individual_repo} creates repos for each student for a given
+#' assignment
+#'
+#' @param org character, name of the GitHub organization.
+#' @param user character or data frame, listing one or more users
+#' @param prefix character, resulting repo name will start with this character string
+#' @param suffix character, resulting repo name will end with this character string
+#'
+#' @examples
+#' \dontrun{
+#' create_individual_repo("ghclass",c("user01","user02"))
+#' }
+#'
+#' @family github organization related functions
+#'
 #' @export
 #'
 create_individual_repo = function(org, user,

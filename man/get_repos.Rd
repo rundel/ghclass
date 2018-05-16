@@ -26,9 +26,11 @@ get_repos("ghclass", "hw1-")
 
 }
 \seealso{
-Other github organization related functions: \code{\link{get_members}},
+Other github organization related functions: \code{\link{create_individual_repo}},
+  \code{\link{create_team}}, \code{\link{get_members}},
   \code{\link{get_pending_members}},
   \code{\link{get_pending_team_members}},
   \code{\link{get_team_members}},
-  \code{\link{get_team_repos}}, \code{\link{get_teams}}
+  \code{\link{get_team_repos}}, \code{\link{get_teams}},
+  \code{\link{invite_user}}
 }

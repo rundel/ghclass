@@ -2,3 +2,4 @@ secret/
 .Rproj.user
 .Rhistory
 .RData
+inst/doc
