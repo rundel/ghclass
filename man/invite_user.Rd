@@ -16,12 +16,14 @@ invite_user(org, user, verbose = TRUE, exclude_pending = FALSE)
 }
 \examples{
 \dontrun{
-invite_user("ghclass",c("user01","user02"))
+users = c("Alice","Bob","Carol","Dave","Eve")
+invite_user("ghclass", users)
 }
 
 }
 \seealso{
 Other github organization related functions: \code{\link{create_individual_repo}},
+  \code{\link{create_team_repo}},
   \code{\link{create_team}}, \code{\link{get_members}},
   \code{\link{get_pending_members}},
   \code{\link{get_pending_team_members}},

@@ -439,7 +439,8 @@ check_user_exists = function(user)
 #'
 #' @examples
 #' \dontrun{
-#' invite_user("ghclass",c("user01","user02"))
+#' users = c("Alice","Bob","Carol","Dave","Eve")
+#' invite_user("ghclass", users)
 #' }
 #'
 #' @family github organization related functions
