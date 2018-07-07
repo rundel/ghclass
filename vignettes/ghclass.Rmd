@@ -165,7 +165,7 @@ assignment. The resulting repo names will be this prefix followed by the
 team name.
 
 ```r
-create_team_repos("Sta523-Fa17", prefix="hw2-")
+create_team_repo("Sta523-Fa17", prefix="hw2-")
 
 ## Creating hw2-Team01 for Team01 ...
 ## Creating hw2-Team02 for Team02 ...
@@ -183,7 +183,7 @@ earlier. You can do this with the `mirror_repo` function.
 mirror_repo(
   source_repo = "Sta523-Fa17/hw2", 
   target_repos = get_repos("Sta523-Fa17","hw2-")
-  )
+)
 
 ## Cloning source repo (Sta523-Fa17/hw2) ...
 ## Mirroring Sta523-Fa17/hw2 to Sta523-Fa17/hw2-Team01 ...
