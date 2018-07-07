@@ -22,7 +22,7 @@ fix_repo_name = function(repos)
   stringr::str_replace_all(repos, "[^A-Za-z0-9_.-]+","-")
 }
 
-#' Creeate individual repositories
+#' Create individual repositories
 #'
 #' \code{create_individual_repo} creates repos for each student for a given
 #' assignment
@@ -31,18 +31,22 @@ fix_repo_name = function(repos)
 #' @param user character or data frame, listing one or more users
 #' @param prefix character, resulting repo name will start with this character string
 #' @param suffix character, resulting repo name will end with this character string
+#' @param private logical, create private repos
+#' @param verbose logical, display verbose output
+#' @param auto_init logical, initialize the repository with a README.md
+#' @param gitignore_template character, .gitignore template language
 #'
 #' @examples
 #' \dontrun{
-#' create_individual_repo("ghclass",c("user01","user02"))
+#' create_individual_repo("ghclass",c("user01","user02"), prefix="hw01-")
 #' }
 #'
 #' @family github organization related functions
 #'
 #' @export
 #'
-create_individual_repo = function(org, user,
-                                  prefix="", suffix="", verbose=TRUE,
+create_individual_repo = function(org, user, prefix="", suffix="",
+                                  private=TRUE, verbose=TRUE,
                                   auto_init=FALSE, gitignore_template="R") {
   if (prefix == "" & suffix == "")
     stop("Either a prefix or a suffix must be specified")
@@ -65,7 +69,7 @@ create_individual_repo = function(org, user,
       try({
         gh("POST /orgs/:org/repos",
            org = org,
-           name=repo_name, private=TRUE,
+           name=repo_name, private=private,
            auto_init=auto_init,
            gitignore_template=gitignore_template,
            .token=get_github_token())
@@ -82,10 +86,31 @@ create_individual_repo = function(org, user,
 }
 
 
+#' Create individual repositories
+#'
+#' \code{create_team_repo} creates repos for team(s)
+#'
+#' @param org character, name of the GitHub organization.
+#' @param team character or data frame, vector of team names
+#' @param prefix character, resulting repo name will start with this character string
+#' @param suffix character, resulting repo name will end with this character string
+#' @param private logical, create private repos
+#' @param verbose logical, display verbose output
+#' @param auto_init logical, initialize the repository with a README.md
+#' @param gitignore_template character, .gitignore template language
+#'
+#' @examples
+#' \dontrun{
+#' create_team_repo("ghclass",c("team01","team02"), prefix="hw01-")
+#' }
+#'
+#' @family github organization related functions
+#'
 #' @export
 #'
-create_team_repo = function(org, team, prefix="", suffix="", verbose=TRUE)
-{
+create_team_repo = function(org, team,  prefix="", suffix="",
+                            private=TRUE, verbose=TRUE,
+                            auto_init=FALSE, gitignore_template="R") {
   org_teams = get_teams(org)
 
   if (is.character(team)) {
@@ -106,16 +131,18 @@ create_team_repo = function(org, team, prefix="", suffix="", verbose=TRUE)
     function(team, id) {
       repo_name = fix_repo_name( paste0(prefix, team, suffix) )
 
-      #if (verbose)
-      #  message("Creating repo ", org, "/", repo_name, " ...", sep="")
+      if (verbose)
+        message("Creating repo ", org, "/", repo_name, " ...", sep="")
 
       res = purrr::safely(function() {
+        # Create repo
         gh("POST /orgs/:org/repos",
            org = org,
-           name=repo_name, private=TRUE, team_id=id,
-           auto_init=TRUE, gitignore_template="R",
+           name=repo_name, private=private, team_id=id,
+           auto_init=auto_init, gitignore_template=gitignore_template,
            .token=get_github_token())
 
+        # Give time write access
         gh("PUT /teams/:id/repos/:org/:repo",
            id = id, org = org, repo = repo_name,
            permission="push",
