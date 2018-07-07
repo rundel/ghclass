@@ -34,7 +34,34 @@
 #'
 NULL
 
+rename_repo = function(repo_dir, repo_pattern, github, new_name) {
 
+  stopifnot(length(github) == length(new_name))
+
+  repos = repo_dir_helper(repo_dir)
+
+  purrr::walk(
+    repos,
+    function(repo) {
+      repo_name = fs::path_file(repo)
+      repo_path = fs::path_dir(repo)
+
+      user = tolower(sub(repo_pattern, "", repo_name))
+      s = grepl(user, tolower(github))
+
+      if (sum(s) != 1) {
+        warning("Could not find ", user, " for ", repo, "\n", call. = FALSE, immediate. = TRUE)
+        return()
+      }
+
+      fs::file_move(
+        repo,
+        paste0(repo_dir, new_name[s], "-", repo_name)
+      )
+
+    }
+  )
+}
 
 # If we are given a single repo directory check if it is a repo or a directory of repos
 repo_dir_helper = function(repo_dir) {
