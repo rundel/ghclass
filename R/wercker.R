@@ -196,11 +196,12 @@ add_wercker = function(repo, wercker_org = get_repo_owner(repo), add_badge=TRUE,
 {
   require_valid_repo(repo)
 
-  existing_apps = get_wercker_apps(wercker_org)[["name"]]
+  purrr::walk2(
+    repo, wercker_org,
+    function(repo, wercker_org) {
 
-  purrr::walk(
-    repo,
-    function(repo) {
+      existing_apps = get_wercker_apps(wercker_org)[["name"]]
+
       if (get_repo_name(repo) %in% existing_apps) {
         if (verbose)
           cat("Skipping, app already exists for", repo, "...\n")
@@ -210,7 +211,7 @@ add_wercker = function(repo, wercker_org = get_repo_owner(repo), add_badge=TRUE,
       if (verbose)
         cat("Creating wercker app for", repo, "...\n")
 
-      add_wercker_app(repo, org_id)
+      add_wercker_app(repo, wercker_org)
       if (add_badge)
         add_wercker_badge(repo)
     }
