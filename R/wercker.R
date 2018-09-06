@@ -270,17 +270,16 @@ strip_existing_badge = function(content)
 
 #' @export
 add_wercker_badge = function(repo, badge = get_wercker_badge(repo, branch = branch),
-                             branch = "master", message = "Adding wercker badge",
-                             strip_existing_badge = TRUE, verbose = TRUE)
+                             branch = "master", strip_existing_badge = TRUE, verbose = TRUE)
 {
   require_valid_repo(repo)
 
   res = purrr::pmap(
-    list(repo, badge, branch, message),
-    function(repo, badge, branch, message) {
+    list(repo, badge, branch),
+    function(repo, badge, branch) {
 
       if (verbose)
-        message("Adding badge to ", repo, " ...")
+        message("Adding wercker badge to ", repo, " ...")
 
       readme = get_readme(repo, branch)
 
@@ -296,7 +295,7 @@ add_wercker_badge = function(repo, badge = get_wercker_badge(repo, branch = bran
         content = paste0(badge, "\n\n", cur_readme)
       }
 
-      put_file(repo, gh_file, charToRaw(content), message, branch)
+      put_file(repo, gh_file, charToRaw(content), "Added wercker badge", branch)
     }
   )
 
