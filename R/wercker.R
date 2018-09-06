@@ -1,7 +1,74 @@
-add_wercker_build_pipeline = function(app_id)
-{
+wercker_api_checkout_key = function() {
   req = httr::POST(
-    "https://app.wercker.com/api/v3/pipelines",
+    "https://app.wercker.com/api/v2/checkoutKeys",
+    httr::add_headers(
+      Authorization = paste("Bearer", get_wercker_token())
+    ),
+    encode = "json"
+  )
+  httr::stop_for_status(req)
+
+  httr::content(req)
+}
+
+wercker_api_link_key = function(repo, provider = "github", key) {
+  repo_owner = get_repo_owner(repo)
+  repo_name  = get_repo_name(repo)
+
+  req = httr::POST(
+    paste0("https://app.wercker.com/api/v2/checkoutKeys/",key[["id"]],"/link"),
+    httr::add_headers(
+      Authorization = paste("Bearer", get_wercker_token())
+    ),
+    encode = "json",
+    body = list(
+      scmName     = repo_name,
+      scmOwner    = repo_owner,
+      scmProvider = provider
+    )
+  )
+  httr::stop_for_status(req)
+
+  res = httr::content(req)
+  stopifnot(res[["success"]])
+
+  invisible(res)
+}
+
+wercker_api_add_app = function(repo, provider, privacy, wercker_org_id, key) {
+  repo_owner = get_repo_owner(repo)
+  repo_name  = get_repo_name(repo)
+
+  req = httr::POST(
+    paste0("https://app.wercker.com/api/v2/applications"),
+    httr::add_headers(
+      Authorization = paste("Bearer", get_wercker_token())
+    ),
+    encode = "json",
+    body = list(
+      checkoutKeyId = key[["id"]],
+      owner         = wercker_org_id,
+      privacy       = privacy,
+      pushKey       = "",
+      scmName       = repo_name,
+      scmOwner      = repo_owner,
+      scmProvider   = provider,
+      sshUrl        = "",
+      stack         = "6"
+    )
+  )
+
+  httr::stop_for_status(req)
+
+  res = httr::content(req)
+  stopifnot(res[["success"]])
+  invisible(res)
+}
+
+wercker_api_add_build_pipeline = function(app_id, privacy) {
+
+  req = httr::POST(
+    paste0("https://app.wercker.com/api/v3/pipelines"),
     httr::add_headers(
       Authorization = paste("Bearer", get_wercker_token())
     ),
@@ -9,137 +76,35 @@ add_wercker_build_pipeline = function(app_id)
     body = list(
       application = app_id,
       name = "build",
-      permissions = "public",
+      permissions = privacy,
       pipelineName = "build",
       setScmProviderStatus = TRUE,
       type = "git"
     )
   )
+
   httr::stop_for_status(req)
 
   res = httr::content(req)
-  stopifnot(!is.null(res$id))
-
-  res$id
+  invisible(res)
 }
 
-add_wercker_app = function(repo, org_id, privacy = c("public", "private"), provider = "github")
+
+
+add_wercker_app = function(repo, wercker_org = get_repo_owner(repo), privacy = c("public", "private"), provider = "github")
 {
   privacy = match.arg(privacy)
+  org_id = get_wercker_org_id(wercker_org)
 
-  req = httr::POST(
-    "https://app.wercker.com/api/v2/applications",
-    httr::add_headers(
-      Authorization = paste("Bearer", get_wercker_token())
-    ),
-    encode = "json",
-    body = list(
-      owner = org_id,
-      privacy = privacy,
-      scmName = get_repo_name(repo),
-      scmOwner = get_repo_owner(repo),
-      scmProvider = provider,
-      stack = "6" # Docker
-    )
-  )
-  httr::stop_for_status(req)
+  key = wercker_api_checkout_key()
+  wercker_api_link_key(repo, provider, key)
 
-  res = httr::content(req)
-  stopifnot(!is.null(res$success))
-
-  app_id = res$data$id
-
-  is_private = gh("GET /repos/:owner/:repo",
-                  owner=get_repo_owner(repo),
-                  repo = get_repo_name(repo),
-                  .token = get_github_token())$private
-
-  if (is_private) # setup a deploy key for private repos
-  {
-    add_wercker_deploy_key(repo, app_id)
-  }
-
-  pipeline_id = add_wercker_build_pipeline(app_id)
-  run_id = run_wercker_pipeline(pipeline_id)
+  app = wercker_api_add_app(repo, provider, privacy, org_id, key)
+  pipeline = wercker_api_add_build_pipeline(app$data$id, privacy)
 
   invisible(NULL)
 }
 
-run_wercker_pipeline = function(pipeline_id)
-{
-  req = httr::POST(
-    "https://app.wercker.com/api/v3/runs",
-    httr::add_headers(
-      Authorization = paste("Bearer", get_wercker_token())
-    ),
-    encode = "json",
-    body = list(
-      pipelineId = pipeline_id
-    )
-  )
-  httr::stop_for_status(req)
-  res = httr::content(req)
-  stopifnot(!is.null(res$id))
-
-  res$id
-}
-
-get_wercker_deploy_key = function()
-{
-  req = httr::POST(
-    paste0("https://app.wercker.com/api/v2/checkoutKeys"),
-    httr::add_headers(
-      Authorization = paste("Bearer", get_wercker_token())
-    ),
-    encode = "json"
-  )
-  httr::stop_for_status(req)
-  httr::content(req)
-}
-
-add_key_to_github = function(repo, key_id, provider = "github")
-{
-  req = httr::POST(
-    paste0("https://app.wercker.com/api/v2/checkoutKeys/",key_id,"/link"),
-    httr::add_headers(
-      Authorization = paste("Bearer", get_wercker_token())
-    ),
-    encode = "json",
-    body = list(
-      scmName = get_repo_name(repo),
-      scmOwner = get_repo_owner(repo),
-      scmProvider = provider
-    )
-  )
-  httr::stop_for_status(req)
-  res = httr::content(req)
-  stopifnot(!is.null(res$success))
-}
-
-add_key_to_app = function(app_id, key_id, type="unique")
-{
-  req = httr::POST(
-    paste0("https://app.wercker.com/api/v2/applications/",app_id,"/checkoutKey"),
-    httr::add_headers(
-      Authorization = paste("Bearer", get_wercker_token())
-    ),
-    encode = "json",
-    body = list(
-      checkoutKeyId = key_id,
-      checkoutKeyType = type
-    )
-  )
-  httr::stop_for_status(req)
-  res = httr::content(req)
-  stopifnot(!is.null(res$success))
-}
-
-add_wercker_deploy_key = function(repo, app_id, provider = "github")
-{
-  key = get_wercker_deploy_key()
-  add_key_to_github(repo, key$id, provider)
-  add_key_to_app(app_id, key$id)
-}
 
 #' @export
 get_wercker_whoami = function()
@@ -227,10 +192,9 @@ get_wercker_app_info = function(repo)
 
 
 #' @export
-add_wercker = function(repo, wercker_org, add_badge=TRUE, verbose=TRUE)
+add_wercker = function(repo, wercker_org = get_repo_owner(repo), add_badge=TRUE, verbose=TRUE)
 {
   require_valid_repo(repo)
-  org_id = get_wercker_org_id(wercker_org)
 
   existing_apps = get_wercker_apps(wercker_org)[["name"]]
 
