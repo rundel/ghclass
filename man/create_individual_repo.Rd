@@ -44,3 +44,4 @@ Other github organization related functions: \code{\link{create_team_repo}},
   \code{\link{get_team_repos}}, \code{\link{get_teams}},
   \code{\link{invite_user}}
 }
+\concept{github organization related functions}

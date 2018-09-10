@@ -27,3 +27,4 @@ Other authentication functions: \code{\link{get_github_token}},
   \code{\link{test_github_token}},
   \code{\link{test_wercker_token}}
 }
+\concept{authentication functions}

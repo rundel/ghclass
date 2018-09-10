@@ -5,8 +5,8 @@
 \alias{grab_repos}
 \title{Add files to a repo}
 \usage{
-add_files(repo, message, files, branch = "master", preserve_path = FALSE,
-  verbose = TRUE)
+add_files(repo, message, files, branch = "master",
+  preserve_path = FALSE, verbose = TRUE)
 }
 \arguments{
 \item{repo}{repo names in the form of \emph{owner/name}.}
@@ -30,3 +30,4 @@ add_files("rundel/ghclass", "Update DESCRIPTION", "./DESCRIPTION")
 }
 
 }
+\concept{local repo functions}
