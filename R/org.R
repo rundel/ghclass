@@ -380,7 +380,7 @@ create_team = function(org, team = character(), privacy = c("closed","secret"), 
   privacy = match.arg(privacy)
 
   purrr::walk(
-    team,
+    unique(team),
     function(team) {
       res = safe_gh(
         "POST /orgs/:org/teams",

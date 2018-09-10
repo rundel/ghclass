@@ -127,7 +127,7 @@ create_team_repo = function(org, team,  prefix="", suffix="",
     stop("Unable to locate team(s): ", paste(team[["team"]][missing_ids], collapse=", "), call. = FALSE)
 
   purrr::pwalk(
-    team,
+    unique(team),
     function(team, id) {
       repo_name = fix_repo_name( paste0(prefix, team, suffix) )
 
