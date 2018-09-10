@@ -34,7 +34,7 @@
 #'
 NULL
 
-rename_repo = function(repo_dir, repo_pattern, github, new_name) {
+rename_local_repo = function(repo_dir, repo_pattern, github, new_name) {
 
   stopifnot(length(github) == length(new_name))
 

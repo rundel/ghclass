@@ -155,8 +155,25 @@ create_team_repo = function(org, team,  prefix="", suffix="",
 }
 
 
+#' @export
+rename_repo = function(repo, new_name) {
+  purrr::walk2(
+    repo, new_name,
+    function(repo, new_name) {
+      res = safe_gh("PATCH /repos/:owner/:repo",
+                    owner = get_repo_owner(repo),
+                    repo = get_repo_name(repo),
+                    name = new_name,
+                    .token=get_github_token())
 
-
+      check_result(
+        res,
+        sprintf("Failed to rename %s to %s.", repo, new_name),
+        verbose
+      )
+    }
+  )
+}
 
 
 

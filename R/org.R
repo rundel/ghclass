@@ -394,6 +394,32 @@ create_team = function(org, team = character(), privacy = c("closed","secret"), 
 }
 
 #' @export
+rename_team = function(org, cur_team, new_team) {
+
+  stopifnot(length(org) == 1)
+
+  org_teams = get_teams(org)
+  team_id_lookup = setNames(org_teams[["id"]], org_teams[["team"]])
+
+  purrr::pwalk(
+    list(cur_team, new_team),
+    function(cur_team, new_team) {
+      res = safe_gh("PATCH /teams/:team_id",
+                    team_id = team_id_lookup[cur_team],
+                    name = new_team,
+                    .token=get_github_token())
+
+      check_result(
+        res,
+        sprintf("Failed to rename team %s to %s.", repo, new_name),
+        verbose
+      )
+    }
+  )
+}
+
+
+#' @export
 add_team_member = function(org, user, team, create_missing_teams=FALSE, verbose=TRUE)
 {
   stopifnot(!missing(org))
