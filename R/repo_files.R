@@ -67,7 +67,7 @@ file_exists = function(repo, file, branch = "master")
   )
 }
 
-put_file = function(repo, gh_path, file, message, branch)
+put_file = function(repo, file, gh_path, message, branch)
 {
   stopifnot(length(repo)==1)
   stopifnot(length(gh_path)==1)
