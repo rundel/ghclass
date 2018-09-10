@@ -204,12 +204,12 @@ add_wercker = function(repo, wercker_org = get_repo_owner(repo), add_badge=TRUE,
 
       if (get_repo_name(repo) %in% existing_apps) {
         if (verbose)
-          message("Skipping, app already exists for", repo, "...\n")
+          message("Skipping, app already exists for ", repo, " ...")
         return()
       }
 
       if (verbose)
-        message("Creating wercker app for", repo, "...\n")
+        message("Creating wercker app for ", repo, " ...")
 
       add_wercker_app(repo, wercker_org)
       if (add_badge)

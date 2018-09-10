@@ -195,7 +195,7 @@ mirror_repo = function(source_repo, target_repos, verbose=TRUE)
   on.exit({setwd(cur_dir)})
 
   if (verbose)
-    message("Cloning source repo (", source_repo, ") ...\n", sep = "")
+    message("Cloning source repo (", source_repo, ") ...")
 
   system(paste0(git, " clone --bare ", get_repo_url(source_repo)), intern = FALSE,
          wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
@@ -209,7 +209,7 @@ mirror_repo = function(source_repo, target_repos, verbose=TRUE)
     function(repo) {
 
       if (verbose)
-        message("Mirroring ", source_repo, " to ", repo,"...\n", sep="")
+        message("Mirroring ", source_repo, " to ", repo," ...")
 
       try({
         system(paste0(git, " push --mirror ", get_repo_url(repo)), intern = FALSE,
