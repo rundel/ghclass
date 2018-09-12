@@ -225,40 +225,9 @@ mirror_repo = function(source_repo, target_repos, verbose=TRUE)
 }
 
 
-get_ref = function(repo, branch="master") {
-  stopifnot(length(repo) == 1)
-  stopifnot(length(branch) == 1)
 
-  gh("GET /repos/:owner/:repo/commits/:ref",
-     owner = get_repo_owner(repo),
-     repo = get_repo_name(repo),
-     ref = paste0("heads/", branch),
-     .token=get_github_token())
-}
 
-#' @export
-create_branch = function(repo, cur_branch = "master", new_branch, verbose=TRUE) {
-  purrr::pwalk(
-    list(repo, cur_branch, new_branch),
-    function(repo, cur_branch, new_branch) {
 
-      head = get_ref(repo, cur_branch)
-
-      res = safe_gh("POST /repos/:owner/:repo/git/refs",
-                    owner = get_repo_owner(repo),
-                    repo = get_repo_name(repo),
-                    ref = paste0("refs/heads/",new_branch),
-                    sha = head[["sha"]],
-                    .token=get_github_token())
-
-      check_result(
-        res,
-        sprintf("Failed to create branch %s@(%s => %s).", repo, cur_branch, new_branch),
-        verbose
-      )
-    }
-  )
-}
 
 
 create_pull_request = function(repo, title, base, head = "master", body = "", verbose = TRUE) {
@@ -287,37 +256,7 @@ create_pull_request = function(repo, title, base, head = "master", body = "", ve
   )
 }
 
-#' @export
-protect_branch = function(repo, branch = "master", verbose = TRUE) {
 
-  stopifnot(!missing(repo))
-
-  purrr::walk2(
-    repo, branch,
-    function(repo, branch) {
-      res = safe_gh(
-        "PUT /repos/:owner/:repo/branches/:branch/protection",
-        owner = get_repo_owner(repo),
-        repo = get_repo_name(repo),
-        branch = branch,
-        required_status_checks = NA,
-        enforce_admins = NA,
-        required_pull_request_reviews = NA,
-        restrictions = list(
-          users = list(),
-          teams = list()
-        ),
-        .token = get_github_token()
-      )
-
-      check_result(
-        res,
-        sprintf("Failed to protect %s@%s.", repo, branch),
-        verbose
-      )
-    }
-  )
-}
 
 
 

@@ -48,3 +48,14 @@ get_repo_url = function(repo, type = c("https","ssh"), use_token = TRUE)
     paste0("git@github.com:",repo,".git")
   }
 }
+
+get_ref = function(repo, branch="master") {
+  stopifnot(length(repo) == 1)
+  stopifnot(length(branch) == 1)
+
+  gh("GET /repos/:owner/:repo/commits/:ref",
+     owner = get_repo_owner(repo),
+     repo = get_repo_name(repo),
+     ref = paste0("heads/", branch),
+     .token=get_github_token())
+}
