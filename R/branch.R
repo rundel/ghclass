@@ -53,3 +53,28 @@ protect_branch = function(repo, branch = "master", verbose = TRUE) {
     }
   )
 }
+
+#' @export
+unprotect_branch = function(repo, branch = "master", verbose = TRUE) {
+
+  stopifnot(!missing(repo))
+
+  purrr::walk2(
+    repo, branch,
+    function(repo, branch) {
+      res = safe_gh(
+        "DELETE /repos/:owner/:repo/branches/:branch/protection",
+        owner = get_repo_owner(repo),
+        repo = get_repo_name(repo),
+        branch = branch,
+        .token = get_github_token()
+      )
+
+      check_result(
+        res,
+        sprintf("Failed to unprotect %s@%s.", repo, branch),
+        verbose
+      )
+    }
+  )
+}
