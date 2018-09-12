@@ -52,19 +52,23 @@ create_individual_repo = function(org, user, prefix="", suffix="",
     stop("Either a prefix or a suffix must be specified")
 
   org_users = get_members(org)
+  org_repos = get_repos(org)
 
   purrr::walk(
     user,
     function(user) {
       repo_name = fix_repo_name(paste0(prefix, user, suffix))
+      repo = paste0(org, "/", repo_name)
 
-      if (check_repos(repo_name)) {
-        warning("Repo ", org,"/",repo_name, " already exists", call. = FALSE, noBreaks. = TRUE)
-        return(invisible(NULL))
+      if (repo %in% org_repos) {
+        if (verbose)
+          message("Skipping repo ", repo, ", already exists ...",)
+
+        return()
       }
 
       if (verbose)
-        message("Creating repo ", org, "/", repo_name, " ...", sep="")
+        message("Creating repo ", repo, " ...", sep="")
 
       try({
         gh("POST /orgs/:org/repos",
