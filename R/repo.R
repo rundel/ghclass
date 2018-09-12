@@ -126,13 +126,21 @@ create_team_repo = function(org, team,  prefix="", suffix="",
   if (any(missing_ids))
     stop("Unable to locate team(s): ", paste(team[["team"]][missing_ids], collapse=", "), call. = FALSE)
 
+  org_repos = get_repos(org)
+
   purrr::pwalk(
     unique(team),
     function(team, id) {
       repo_name = fix_repo_name( paste0(prefix, team, suffix) )
+      repo = paste0(org, "/", repo_name)
+
+      if (repo %in% org_repos) {
+        message("Skipping repo ", repo, ", already exists ...")
+        return()
+      }
 
       if (verbose)
-        message("Creating repo ", org, "/", repo_name, " ...", sep="")
+        message("Creating repo ", repo, " ...")
 
       res = purrr::safely(function() {
         # Create repo
