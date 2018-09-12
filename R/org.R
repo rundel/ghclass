@@ -376,19 +376,36 @@ get_pending_team_members = function(org, team = get_teams(org))
 create_team = function(org, team = character(), privacy = c("closed","secret"), verbose = TRUE)
 {
   stopifnot(!missing(org))
+
   team = as.character(team)
   privacy = match.arg(privacy)
+
+  org_teams = get_teams(org)
 
   purrr::walk(
     unique(team),
     function(team) {
+
+      if (team %in% org_teams[["team"]]) {
+        if (verbose)
+          message("Skipping ", team, ", already exists for ", org, " ...")
+        return()
+      }
+
+      if (verbose)
+        message("Adding ", team, " to ", org, " ...")
+
       res = safe_gh(
         "POST /orgs/:org/teams",
          org=org, name=team, privacy=privacy,
         .token=get_github_token()
       )
 
-      check_result(res, sprintf("Failed to create team %s.", team), verbose)
+      check_result(
+        res,
+        sprintf("Failed to create team %s.", team),
+        verbose
+      )
     }
   )
 }
