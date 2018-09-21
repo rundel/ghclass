@@ -295,7 +295,8 @@ add_wercker_badge = function(repo, badge = get_wercker_badge(repo, branch = bran
         content = paste0(badge, "\n\n", cur_readme)
       }
 
-      put_file(repo, gh_file, charToRaw(content), "Added wercker badge", branch)
+      put_file(repo, file=gh_file, content=charToRaw(content),
+               message="Added wercker badge", branch=branch)
     }
   )
 
