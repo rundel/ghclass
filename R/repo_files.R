@@ -203,7 +203,7 @@ add_files = function(repo, message, files, branch = "master", preserve_path=FALS
         gh_paths = fs::path_file(files)
 
       res = purrr::map2(
-        files, gh_paths,
+        gh_paths, files,
         put_file,
         repo = repo, message = message, branch = branch
       )
