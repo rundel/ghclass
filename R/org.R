@@ -393,7 +393,7 @@ create_team = function(org, team = character(), privacy = c("closed","secret"), 
       }
 
       if (verbose)
-        message("Adding ", team, " to ", org, " ...")
+        message("Adding team ", team, " to ", org, " ...")
 
       res = safe_gh(
         "POST /orgs/:org/teams",
@@ -421,6 +421,11 @@ rename_team = function(org, cur_team, new_team) {
   purrr::pwalk(
     list(cur_team, new_team),
     function(cur_team, new_team) {
+
+      if (verbose)
+        message("Renaming team ", cur_team, " to ", new_team, " ...")
+
+
       res = safe_gh("PATCH /teams/:team_id",
                     team_id = team_id_lookup[cur_team],
                     name = new_team,
@@ -468,6 +473,10 @@ add_team_member = function(org, user, team, create_missing_teams=FALSE, verbose=
   purrr::pwalk(
     info,
     function(user, team, id) {
+
+      if (verbose)
+        message("Adding ", user, " to team ", team, " ...")
+
       res = safe_gh(
         "PUT /teams/:id/memberships/:username",
         id=id, username=user, role="member",
@@ -523,6 +532,11 @@ invite_user = function(org, user, verbose=TRUE, exclude_pending = FALSE)
   purrr::walk(
     need_invite,
     function(user) {
+
+      if (verbose)
+        message("Adding ", user, " to ", org, " ...")
+
+
       res = safe_gh(
         "PUT /orgs/:org/memberships/:username",
         org=org, username=user, role="member",
