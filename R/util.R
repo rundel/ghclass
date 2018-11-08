@@ -1,5 +1,4 @@
-require_git = function()
-{
+require_git = function() {
   git = Sys.which("git")
 
   if (git == "") {
@@ -9,6 +8,18 @@ require_git = function()
 
   return(git)
 }
+
+require_wercker_cli = function() {
+  wercker = Sys.which("wercker")
+
+  if (wercker == "") {
+    stop("wercker cli executable not found, if it is installed,",
+         "please make sure it can be found using your PATH variable.")
+  }
+
+  return(wercker)
+}
+
 
 safe_gh = purrr::safely(gh)
 
