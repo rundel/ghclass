@@ -30,7 +30,7 @@ get_file = function(repo, file, branch="master")
 }
 
 #' @export
-add_content = function(repo, file, content, after=NULL, message="Added content", branch="master") {
+add_content = function(repo, file, content, after=NULL, message="Added content", branch="master", verbose=TRUE) {
   require_valid_repo(repo)
 
   purrr::pwalk(
@@ -58,6 +58,9 @@ add_content = function(repo, file, content, after=NULL, message="Added content",
           )
         }
       }
+
+      if (verbose)
+        message("Adding content to ", org, "/", repo, "/", file, " ...")
 
       put_file(repo, file, charToRaw(content), message, branch)
     }
