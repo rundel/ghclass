@@ -224,6 +224,7 @@ get_wercker_org_id = function(org)
   orgs[["id"]]
 }
 
+
 get_wercker_app_id = function(repo)
 {
   app = purrr::map(repo, wercker_api_get_app)
@@ -231,9 +232,9 @@ get_wercker_app_id = function(repo)
 }
 
 
-
-wercker_app_exists = function(repo) {
-  !is.na(wecker_api_get_app(repo))
+wercker_app_exists = function(repo)
+{
+  purrr::map_lgl(repo, ~ !is.na(wecker_api_get_app(.x)))
 }
 
 
