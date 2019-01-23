@@ -39,10 +39,12 @@ wercker_api_add_app = function(repo, provider, privacy, wercker_org_id, key) {
   repo_owner = get_repo_owner(repo)
   repo_name  = get_repo_name(repo)
 
-  req = httr::POST(
+  req = purrr::safely(httr::POST)(
     paste0("https://app.wercker.com/api/v2/applications"),
     httr::add_headers(
-      Authorization = paste("Bearer", get_wercker_token())
+      Authorization = paste("Bearer", get_wercker_token()),
+      origin = "https://app.wercker.com",
+      referer = "https://app.wercker.com/applications/create"
     ),
     encode = "json",
     body = list(
@@ -55,14 +57,19 @@ wercker_api_add_app = function(repo, provider, privacy, wercker_org_id, key) {
       scmProvider   = provider,
       sshUrl        = "",
       stack         = "6"
-    )
+    ),
+    httr::timeout(120)
   )
 
-  httr::stop_for_status(req)
+  if (!is.null(req$error)) {
+    warning("", req$error, immediate. = TRUE)
+  }
 
-  res = httr::content(req)
-  stopifnot(res[["success"]])
-  invisible(res)
+  #res = httr::content(req)
+  #stopifnot(res[["success"]])
+  #invisible(res)
+
+  invisible(NULL)
 }
 
 wercker_api_add_build_pipeline = function(app_id, privacy) {
@@ -83,12 +90,34 @@ wercker_api_add_build_pipeline = function(app_id, privacy) {
     )
   )
 
+
   httr::stop_for_status(req)
 
   res = httr::content(req)
   invisible(res)
 }
 
+wercker_api_delete_app = function(repo) {
+
+  id = get_wercker_app_id(repo)
+
+  req = httr::POST(
+    paste0("https://app.wercker.com/deleteproject"),
+    httr::add_headers(
+      Authorization = paste("Bearer", get_wercker_token())
+    ),
+    encode = "json",
+    body = list(
+      id = id
+    )
+  )
+
+  httr::stop_for_status(req)
+
+  res = httr::content(req)
+  stopifnot(res[["success"]])
+  invisible(res)
+}
 
 
 add_wercker_app = function(repo, wercker_org = get_repo_owner(repo), privacy = c("public", "private"), provider = "github")
@@ -99,14 +128,31 @@ add_wercker_app = function(repo, wercker_org = get_repo_owner(repo), privacy = c
   key = wercker_api_checkout_key()
   wercker_api_link_key(repo, provider, key)
 
-  app = wercker_api_add_app(repo, provider, privacy, org_id, key)
-  pipeline = wercker_api_add_build_pipeline(app$data$id, privacy)
+  wercker_api_add_app(repo, provider, privacy, org_id, key)
+  wercker_api_add_build_pipeline(get_wercker_app(repo, strict = TRUE)$id, privacy)
 
   invisible(NULL)
 }
 
+wercker_api_get_pipelines = function(repo, as_df = TRUE) {
+  req = httr::GET(
+    paste0("https://app.wercker.com/api/v3/applications/", repo, "/pipelines?limit=60"),
+    httr::add_headers(
+      Authorization = paste("Bearer", get_wercker_token())
+    ),
+    encode = "json"
+  )
 
-#' @export
+  httr::stop_for_status(req)
+
+  if (as_df)
+    jsonlite::fromJSON( httr::content(req, as="text") )
+  else
+    httr::content(req)
+}
+
+
+
 get_wercker_whoami = function()
 {
   req = httr::GET(
@@ -166,12 +212,12 @@ get_wercker_org_id = function(org)
 
 get_wercker_app_id = function(repo)
 {
-  app = purrr::map(repo, get_wercker_app_info)
-  purrr::map_chr(app, "id")
+  app = purrr::map(repo, get_wercker_app)
+  purrr::map_chr(app, "id", .default=NA)
 }
 
-
-get_wercker_app_info = function(repo)
+#' @export
+get_wercker_app = function(repo, strict = FALSE)
 {
   stopifnot(length(repo) == 1)
   require_valid_repo(repo)
@@ -183,8 +229,19 @@ get_wercker_app_info = function(repo)
     ),
     encode = "json"
   )
-  httr::stop_for_status(req)
-  httr::content(req)
+
+  if (strict)
+    httr::stop_for_status(req)
+
+  if (httr::status_code(req) < 300) {
+    httr::content(req)
+  } else {
+    NA
+  }
+}
+
+wercker_app_exists = function(repo) {
+  !is.na(get_wercker_app(repo))
 }
 
 
@@ -211,9 +268,16 @@ add_wercker = function(repo, wercker_org = get_repo_owner(repo), add_badge=TRUE,
       if (verbose)
         message("Creating wercker app for ", repo, " ...")
 
-      add_wercker_app(repo, wercker_org)
-      if (add_badge)
-        add_wercker_badge(repo)
+      res = purrr::safely(add_wercker_app)(repo, wercker_org)
+
+      if (!is.null(res$error)) {
+        message("App creation failed")
+        if (wercker_app_exists(repo))
+          wercker_api_delete_app(repo)
+      } else {
+        if (add_badge)
+          add_wercker_badge(repo)
+      }
     }
   )
 }
@@ -222,8 +286,8 @@ add_wercker = function(repo, wercker_org = get_repo_owner(repo), add_badge=TRUE,
 
 get_wercker_badge_key = function(repo)
 {
-  app_info = purrr::map(repo, get_wercker_app_info)
-  purrr::map_chr(app_info, "badgeKey")
+  app_info = purrr::map(repo, get_wercker_app)
+  purrr::map_chr(app_info, "badgeKey", .default=NA)
 }
 
 #' @export
