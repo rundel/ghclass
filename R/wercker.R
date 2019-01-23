@@ -173,7 +173,7 @@ wercker_api_get_app = function(repo, strict = FALSE)
   if (httr::status_code(req) < 300) {
     httr::content(req)
   } else {
-    NA
+    NULL
   }
 }
 
@@ -229,10 +229,17 @@ get_wercker_app_id = function(repo)
   purrr::map_chr(app, "id", .default=NA)
 }
 
+wercker_pipelines_exist = function(repo)
+{
+  p = purrr::map(repo, wercker_api_get_pipelines, as_df=FALSE)
+  p = purrr::map_int(p, length)
+  p != 0
+}
 
 wercker_app_exists = function(repo)
 {
-  purrr::map_lgl(repo, ~ !is.na(wecker_api_get_app(.x)))
+  p = purrr::map(repo, wercker_api_get_app)
+  purrr::map_lgl(p, ~!is.null(.x))
 }
 
 
