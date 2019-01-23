@@ -120,21 +120,11 @@ wercker_api_delete_app = function(repo) {
 }
 
 
-add_wercker_app = function(repo, wercker_org = get_repo_owner(repo), privacy = c("public", "private"), provider = "github")
+wercker_api_get_pipelines = function(repo, as_df = TRUE)
 {
-  privacy = match.arg(privacy)
-  org_id = get_wercker_org_id(wercker_org)
+  stopifnot(length(repo) == 1)
+  require_valid_repo(repo)
 
-  key = wercker_api_checkout_key()
-  wercker_api_link_key(repo, provider, key)
-
-  wercker_api_add_app(repo, provider, privacy, org_id, key)
-  wercker_api_add_build_pipeline(get_wercker_app(repo, strict = TRUE)$id, privacy)
-
-  invisible(NULL)
-}
-
-wercker_api_get_pipelines = function(repo, as_df = TRUE) {
   req = httr::GET(
     paste0("https://app.wercker.com/api/v3/applications/", repo, "/pipelines?limit=60"),
     httr::add_headers(
@@ -153,7 +143,7 @@ wercker_api_get_pipelines = function(repo, as_df = TRUE) {
 
 
 
-get_wercker_whoami = function()
+wercker_api_whoami = function()
 {
   req = httr::GET(
     paste0("https://app.wercker.com/api/v2/profile"),
@@ -163,9 +153,33 @@ get_wercker_whoami = function()
     encode = "json"
   )
   httr::stop_for_status(req)
-  res = httr::content(req, as="text")
-  jsonlite::fromJSON(res)
+  httr::content(req)
 }
+
+wercker_api_get_app = function(repo, strict = FALSE)
+{
+  stopifnot(length(repo) == 1)
+  require_valid_repo(repo)
+
+  req = httr::GET(
+    paste0("https://app.wercker.com/api/v3/applications/", repo),
+    httr::add_headers(
+      Authorization = paste("Bearer", get_wercker_token())
+    ),
+    encode = "json"
+  )
+
+  if (strict)
+    httr::stop_for_status(req)
+
+  if (httr::status_code(req) < 300) {
+    httr::content(req)
+  } else {
+    NA
+  }
+}
+
+
 
 #' @export
 get_wercker_orgs = function()
@@ -212,41 +226,31 @@ get_wercker_org_id = function(org)
 
 get_wercker_app_id = function(repo)
 {
-  app = purrr::map(repo, get_wercker_app)
+  app = purrr::map(repo, wercker_api_get_app)
   purrr::map_chr(app, "id", .default=NA)
 }
 
-#' @export
-get_wercker_app = function(repo, strict = FALSE)
-{
-  stopifnot(length(repo) == 1)
-  require_valid_repo(repo)
 
-  req = httr::GET(
-    paste0("https://app.wercker.com/api/v3/applications/", repo),
-    httr::add_headers(
-      Authorization = paste("Bearer", get_wercker_token())
-    ),
-    encode = "json"
-  )
-
-  if (strict)
-    httr::stop_for_status(req)
-
-  if (httr::status_code(req) < 300) {
-    httr::content(req)
-  } else {
-    NA
-  }
-}
 
 wercker_app_exists = function(repo) {
-  !is.na(get_wercker_app(repo))
+  !is.na(wecker_api_get_app(repo))
 }
 
 
 
+add_wercker_app = function(repo, wercker_org = get_repo_owner(repo), privacy = c("public", "private"), provider = "github")
+{
+  privacy = match.arg(privacy)
+  org_id = get_wercker_org_id(wercker_org)
 
+  key = wercker_api_checkout_key()
+  wercker_api_link_key(repo, provider, key)
+
+  wercker_api_add_app(repo, provider, privacy, org_id, key)
+  wercker_api_add_build_pipeline(wecker_api_get_app(repo, strict = TRUE)$id, privacy)
+
+  invisible(NULL)
+}
 
 #' @export
 add_wercker = function(repo, wercker_org = get_repo_owner(repo), add_badge=TRUE, verbose=TRUE)
