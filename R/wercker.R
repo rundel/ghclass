@@ -274,7 +274,7 @@ add_wercker = function(repo, wercker_org = get_repo_owner(repo), add_badge=TRUE,
       res = purrr::safely(add_wercker_app)(repo, wercker_org)
 
       if (!is.null(res$error)) {
-        message("App creation failed")
+        message("App creation failed:", res$error)
         if (wercker_app_exists(repo))
           wercker_api_delete_app(repo)
       } else {
