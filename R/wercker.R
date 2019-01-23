@@ -259,6 +259,21 @@ add_wercker_app = function(repo, wercker_org = get_repo_owner(repo), privacy = c
 }
 
 #' @export
+check_wercker = function(repo)
+{
+  apps = wercker_app_exists(repo)
+  pipes = rep(FALSE, length(repo))
+  pipes[apps] = wercker_pipelines_exist(repo[apps])
+
+  tibble::data_frame(
+    repo = repo,
+    app_exists = apps,
+    pipelines_exists = pipes
+  )
+}
+
+
+#' @export
 add_wercker = function(repo, wercker_org = get_repo_owner(repo), add_badge=TRUE, verbose=TRUE)
 {
   require_valid_repo(repo)
