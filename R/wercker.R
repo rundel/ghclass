@@ -246,7 +246,7 @@ add_wercker_app = function(repo, wercker_org = get_repo_owner(repo), privacy = c
   wercker_api_link_key(repo, provider, key)
 
   wercker_api_add_app(repo, provider, privacy, org_id, key)
-  wercker_api_add_build_pipeline(wecker_api_get_app(repo, strict = TRUE)$id, privacy)
+  wercker_api_add_build_pipeline(wercker_api_get_app(repo, strict = TRUE)$id, privacy)
 
   invisible(NULL)
 }
