@@ -141,9 +141,7 @@ wercker_api_get_pipelines = function(repo, as_df = TRUE)
     httr::content(req)
 }
 
-
-
-wercker_api_whoami = function()
+wercker_api_get_profile = function()
 {
   req = httr::GET(
     paste0("https://app.wercker.com/api/v2/profile"),
