@@ -6,6 +6,10 @@ create_branch = function(repo, cur_branch = "master", new_branch, verbose=TRUE) 
 
       head = get_ref(repo, cur_branch)
 
+      if (verbose)
+        message(sprintf("Creating branch %s@(%s => %s) ...", repo, cur_branch, new_branch))
+
+
       res = safe_gh("POST /repos/:owner/:repo/git/refs",
                     owner = get_repo_owner(repo),
                     repo = get_repo_name(repo),
@@ -15,7 +19,7 @@ create_branch = function(repo, cur_branch = "master", new_branch, verbose=TRUE) 
 
       check_result(
         res,
-        sprintf("Failed to create branch %s@(%s => %s).", repo, cur_branch, new_branch),
+        "Failed to create branch.",
         verbose
       )
     }
@@ -30,6 +34,10 @@ protect_branch = function(repo, branch = "master", verbose = TRUE) {
   purrr::walk2(
     repo, branch,
     function(repo, branch) {
+
+      if (verbose)
+        message(sprintf("Protecting branch %s@% ...", repo, branch))
+
       res = safe_gh(
         "PUT /repos/:owner/:repo/branches/:branch/protection",
         owner = get_repo_owner(repo),
@@ -47,7 +55,7 @@ protect_branch = function(repo, branch = "master", verbose = TRUE) {
 
       check_result(
         res,
-        sprintf("Failed to protect %s@%s.", repo, branch),
+        "Failed to protect branch.",
         verbose
       )
     }
@@ -62,6 +70,11 @@ unprotect_branch = function(repo, branch = "master", verbose = TRUE) {
   purrr::walk2(
     repo, branch,
     function(repo, branch) {
+
+      if (verbose)
+        message(sprintf("Unprotecting branch %s@% ...", repo, branch))
+
+
       res = safe_gh(
         "DELETE /repos/:owner/:repo/branches/:branch/protection",
         owner = get_repo_owner(repo),
@@ -72,7 +85,7 @@ unprotect_branch = function(repo, branch = "master", verbose = TRUE) {
 
       check_result(
         res,
-        sprintf("Failed to unprotect %s@%s.", repo, branch),
+        "Failed to unprotect branch.",
         verbose
       )
     }
