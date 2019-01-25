@@ -60,7 +60,7 @@ add_content = function(repo, file, content, after=NULL, message="Added content",
       }
 
       if (verbose)
-        message("Adding content to ", org, "/", repo, "/", file, " ...")
+        message("Adding content to ", repo, "/", file, " ...")
 
       put_file(repo, file, charToRaw(content), message, branch)
     }
