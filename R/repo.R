@@ -111,7 +111,6 @@ create_individual_repo = function(org, user, prefix="", suffix="",
 #' @family github organization related functions
 #'
 #' @export
-#'
 create_team_repo = function(org, team,  prefix="", suffix="",
                             private=TRUE, verbose=TRUE,
                             auto_init=FALSE, gitignore_template="R") {
@@ -165,6 +164,68 @@ create_team_repo = function(org, team,  prefix="", suffix="",
     }
   )
 }
+
+get_team_id_tbl = function(org, team) {
+
+  stopifnot(is.character(org))
+  stopifnot(length(org) == 1)
+  stopifnot(is.character(team))
+
+  org_teams = get_teams(org)
+
+  team = unique(team)
+
+  team_tbl = merge(
+    tibble::tibble(team = team), org_teams,
+    by = "team", all.x = TRUE
+  )
+
+  missing_ids = is.na(team_tbl[["id"]])
+  if (any(missing_ids))
+    stop(
+      "Unable to locate team(s): ",
+      paste(team_tbl[["team"]][missing_ids], collapse=", "),
+      " in ", org, ".",
+      call. = FALSE
+    )
+
+  team_tbl
+}
+
+#' @export
+add_team_to_repo = function(repo, team,
+                            permission = c("pull", "push", "admin"),
+                            verbose=TRUE) {
+
+  stopifnot(is.character(repo))
+  stopifnot(is.character(team))
+
+  permission = match.arg(permission)
+
+  purrr::walk2(
+    repo, team,
+    function(repo, team) {
+      org = get_repo_owner(repo)
+      reponame = get_repo_name(repo)
+
+      team_id = get_team_id_tbl(org, team)
+
+      if (verbose)
+        message("Adding ", team, " to ", repo, " (", permission, ") ...")
+
+      res = safe_gh(
+        "PUT /teams/:id/repos/:org/:repo",
+        id = team_id[["id"]], org = org, repo = reponame,
+        permission = permission,
+        .token=get_github_token()
+      )
+
+      check_result(res, sprintf("Failed to add %s to %s.", team, repo), verbose)
+    }
+  )
+}
+
+
 
 
 #' @export
