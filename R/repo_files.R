@@ -1,3 +1,18 @@
+extract_content = function(file, include_details = TRUE) {
+  if (is.null(file))
+    return(NULL)
+
+  content = base64enc::base64decode(file[["content"]])
+  content = rawToChar(content)
+
+  if (include_details) {
+    file[["content"]] = NULL
+    attributes(content) = file
+  }
+
+  content
+}
+
 #' @export
 get_readme = function(repo, branch="master")
 {
@@ -7,20 +22,17 @@ get_readme = function(repo, branch="master")
   repo_name  = get_repo_name(repo)
   repo_owner = get_repo_owner(repo)
 
-  readme = purrr::possibly(gh::gh, NULL)(
+  file = purrr::possibly(gh::gh, NULL)(
     "GET /repos/:owner/:repo/readme",
     owner = repo_owner, repo = repo_name, ref = branch,
     .token=get_github_token(), .limit=get_github_api_limit()
   )
 
-  if (!is.null(readme)) {
-    readme = rawToChar(base64enc::base64decode(readme$content))
-  }
-
-  readme
+  extract_content(file)
 }
 
-get_file_handle = function(repo, file, branch)
+#' @export
+get_file = function(repo, file, branch="master")
 {
   stopifnot(length(repo) == 1)
   stopifnot(length(file) == 1)
@@ -28,28 +40,14 @@ get_file_handle = function(repo, file, branch)
   repo_name  = get_repo_name(repo)
   repo_owner = get_repo_owner(repo)
 
-  purrr::possibly(gh::gh, NULL)(
+  file = purrr::possibly(gh::gh, NULL)(
     "GET /repos/:owner/:repo/contents/:path",
     owner = repo_owner, repo = repo_name, path=file,
     ref = branch,
     .token=get_github_token(), .limit=get_github_api_limit()
   )
-}
 
-#' @export
-get_file = function(repo, file, branch="master")
-{
-  file = get_file_handle(repo, file, branch)
-  if (!is.null(file))
-    file = rawToChar(base64enc::base64decode(file$content))
-
-  file
-}
-
-#' @export
-get_file_sha = function(repo, file, branch="master")
-{
-  get_file_handle(repo, file, branch)[["sha"]]
+  extract_content(file)
 }
 
 #' @export
@@ -127,7 +125,7 @@ file_exists = function(repo, file, branch = "master")
         (length(find_file(repo,file)) > 0)
       } else {
         # Only the master branch is indexed for search
-        is.null(get_file_handle(repo, file, branch))
+        is.null(get_file(repo, file, branch))
       }
     }
   )
@@ -151,7 +149,7 @@ put_file = function(repo, file, content, message, branch)
     message = message, branch = branch,
     .token = get_github_token()
   )
-  args[["sha"]] = get_file_sha(repo, file, branch)
+  args[["sha"]] = attr(get_file(repo, file, branch), "sha")
 
   do.call(safe_gh, args)
 }
