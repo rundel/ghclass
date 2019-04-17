@@ -1,3 +1,16 @@
+format_repo = function(repo, branch = "master", file = NULL) {
+  repo = if (branch == "master") {
+    repo
+  } else{
+    paste(repo, branch, sep="@")
+  }
+
+  if (!is.null(file))
+    repo = file.path(repo, file)
+
+  repo
+}
+
 require_git = function() {
   git = Sys.which("git")
 

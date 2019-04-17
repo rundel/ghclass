@@ -1,3 +1,4 @@
+#' @export
 get_readme = function(repo, branch="master")
 {
   stopifnot(length(repo) == 1)
@@ -6,14 +7,20 @@ get_readme = function(repo, branch="master")
   repo_name  = get_repo_name(repo)
   repo_owner = get_repo_owner(repo)
 
-  purrr::possibly(gh::gh, NULL)(
+  readme = purrr::possibly(gh::gh, NULL)(
     "GET /repos/:owner/:repo/readme",
     owner = repo_owner, repo = repo_name, ref = branch,
     .token=get_github_token(), .limit=get_github_api_limit()
   )
+
+  if (!is.null(readme)) {
+    readme = rawToChar(base64enc::base64decode(readme$content))
+  }
+
+  readme
 }
 
-get_file = function(repo, file, branch="master")
+get_file_handle = function(repo, file, branch)
 {
   stopifnot(length(repo) == 1)
   stopifnot(length(file) == 1)
@@ -30,6 +37,22 @@ get_file = function(repo, file, branch="master")
 }
 
 #' @export
+get_file = function(repo, file, branch="master")
+{
+  file = get_file_handle(repo, file, branch)
+  if (!is.null(file))
+    file = rawToChar(base64enc::base64decode(file$content))
+
+  file
+}
+
+#' @export
+get_file_sha = function(repo, file, branch="master")
+{
+  get_file_handle(repo, file, branch)[["sha"]]
+}
+
+#' @export
 add_content = function(repo, file, content, after=NULL, message="Added content", branch="master", verbose=TRUE) {
   require_valid_repo(repo)
 
@@ -37,19 +60,24 @@ add_content = function(repo, file, content, after=NULL, message="Added content",
     list(repo, file, content, after, message, branch),
     function(repo, file, content, after, message, branch) {
 
-      gh_file = get_file(repo, file, branch)
+      cur_content = get_file(repo, file, branch)
 
-      if (!is.null(gh_file)) {
+      if (is.null(cur_content)) {
+        usethis::ui_oops(
+          "Unable to retrieve {usethis::ui_value(format_repo(repo, branch, file))}."
+        )
+      } else {
 
-        cur_content = rawToChar(base64enc::base64decode(gh_file$content))
         if (!is.null(after)) {
           pat_loc = regexec(after, cur_content)
           if (length(pat_loc) == 0) {
-            warning("Unable to match pattern: \"", after,"\" in ", repo,"/",file,".", sep="")
-            content = paste0(content, cur_content)
+            usethis::ui_oops(
+              "Unable to find pattern {usethis::ui_value(after)} in {usethis::ui_value(format_repo(repo, branch, file))}."
+            )
+            return(NULL)
           }
-          split_loc =  pat_loc[[1]][[1]] +  attr(pat_loc[[1]], "match.length")
 
+          split_loc =  pat_loc[[1]][[1]] +  attr(pat_loc[[1]], "match.length")
 
           content = paste0(
             substr(cur_content, 1, split_loc-1),
@@ -57,35 +85,10 @@ add_content = function(repo, file, content, after=NULL, message="Added content",
             substr(cur_content, split_loc, nchar(cur_content))
           )
         }
+
+        put_file(repo, file, content, message, branch)
+        usethis::ui_done("Added content to {usethis::ui_value(format_repo(repo, branch, file))}.")
       }
-
-      if (verbose)
-        message("Adding content to ", repo, "/", file, " ...")
-
-      put_file(repo, file, charToRaw(content), message, branch)
-    }
-  )
-}
-
-#' @export
-replace_content = function(repo, file, pattern, replacement, message="Replaced content", branch="master") {
-  require_valid_repo(repo)
-
-  purrr::pwalk(
-    list(repo, file, pattern, replacement, message, branch),
-    function(repo, file, pattern, replacement, message, branch) {
-
-      gh_file = get_file(repo, file, branch)
-
-      if (is.null(gh_file)) {
-        warning("Unable to locate ", repo, "/", file, ".", sep="")
-      }
-
-      cur_content = rawToChar(base64enc::base64decode(gh_file$content))
-
-      content = gsub(pattern, replacement, cur_content)
-      put_file(repo, file, charToRaw(content), message, branch)
-
     }
   )
 }
@@ -124,7 +127,7 @@ file_exists = function(repo, file, branch = "master")
         (length(find_file(repo,file)) > 0)
       } else {
         # Only the master branch is indexed for search
-        is.null(get_file(repo, file, branch))
+        is.null(get_file_handle(repo, file, branch))
       }
     }
   )
@@ -137,6 +140,9 @@ put_file = function(repo, file, content, message, branch)
   stopifnot(length(message)==1)
   stopifnot(length(branch)==1)
 
+  if (is.character(content))
+    content = charToRaw(content)
+
   args = list(
     endpoint = "PUT /repos/:owner/:repo/contents/:path",
     owner = get_repo_owner(repo), repo = get_repo_name(repo),
@@ -145,10 +151,7 @@ put_file = function(repo, file, content, message, branch)
     message = message, branch = branch,
     .token = get_github_token()
   )
-
-  gh_file = get_file(repo, file, branch)
-  if (!is.null(gh_file))
-    args[["sha"]] = purrr::pluck(gh_file, "sha")
+  args[["sha"]] = get_file_sha(repo, file, branch)
 
   do.call(safe_gh, args)
 }
