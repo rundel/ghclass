@@ -39,7 +39,7 @@ rename_local_repo = function(repo_dir, pattern, replacement) {
 
   stopifnot(length(pattern) == length(replacement))
 
-  repos = ghclass:::repo_dir_helper(repo_dir)
+  repos = repo_dir_helper(repo_dir)
   cur_repos = repos
 
   for(i in seq_along(pattern)) {
@@ -100,8 +100,8 @@ wercker_local_build = function(repo_dir,
 
 #' @export
 clone_repo = function(repo, local_path="./", branch = "master",
-                      git = require_git(), options="", absolute_path=TRUE,
-                      verbose=FALSE)
+                      git = require_git(), options = "", absolute_path = TRUE,
+                      verbose = TRUE)
 {
   stopifnot(!missing(repo))
   stopifnot(file.exists(git))
@@ -116,13 +116,16 @@ clone_repo = function(repo, local_path="./", branch = "master",
       if (branch != "")
         branch = paste("-b", branch)
 
+      if (verbose)
+        message("Cloning ", repo, " to ", dir, " ...")
+
       cmd = paste(git, "clone", branch, options, get_repo_url(repo), dir)
       status = system(
         cmd, intern = FALSE, wait = TRUE,
         ignore.stdout = !verbose, ignore.stderr = !verbose
       )
       if (status != 0)
-        warning("Cloning ", repo, " failed.", call. = FALSE, immediate. = TRUE, noBreaks. = TRUE)
+        warning("Cloning failed.", call. = FALSE, immediate. = TRUE, noBreaks. = TRUE)
 
       if (absolute_path)
         dir = fs::path_real(dir)
