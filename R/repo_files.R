@@ -131,6 +131,7 @@ file_exists = function(repo, file, branch = "master")
   )
 }
 
+#' @export
 put_file = function(repo, file, content, message, branch)
 {
   stopifnot(length(repo)==1)
