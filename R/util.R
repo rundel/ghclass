@@ -1,15 +1,3 @@
-format_repo = function(repo, branch = "master", file = NULL) {
-  repo = if (branch == "master") {
-    repo
-  } else{
-    paste(repo, branch, sep="@")
-  }
-
-  if (!is.null(file))
-    repo = file.path(repo, file)
-
-  repo
-}
 
 require_git = function() {
   git = Sys.which("git")
@@ -102,20 +90,36 @@ check_result = function(res, fail_msg, verbose=FALSE, error_prefix = "") {
   }
 }
 
+flag_experimental = function() {
+  calling_func = as.character(sys.calls()[[sys.nframe()-1]])[1]
+
+  usethis::ui_warn( paste0(
+    "This function ({usethis::ui_value(calling_func)}) is currently ",
+    "considered experimental. Its interface, implementation, and other ",
+    "features may change significantly in future versions of the package. ",
+    "Use with caution.\n"
+  ) )
+}
 
 
+result = function(x) {
+  x[["result"]]
+}
 
+error = function(x) {
+  x[["error"]]
+}
 
 succeeded = function(x) {
-  !is.null(x$result)
+  !is.null(result(x))
 }
 
 failed = function(x) {
-  !is.null(x$error)
+  !is.null(error(x))
 }
 
 error_msg = function(x) {
-  x[["error"]][["message"]]
+  error(x)[["message"]]
 }
 
 status_msg = function(x, success, fail, include_error_msg = TRUE) {
@@ -125,7 +129,7 @@ status_msg = function(x, success, fail, include_error_msg = TRUE) {
 
   if (failed(x) & !missing(fail)) {
     if (include_error_msg)
-      fail = paste(fail, "[Error: {usethis::ui_value(error_msg(x))}]")
+      fail = c(fail, "[Error: {error_msg(x)}]")
     usethis::ui_oops(fail)
   }
 }

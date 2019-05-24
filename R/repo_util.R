@@ -49,13 +49,18 @@ get_repo_url = function(repo, type = c("https","ssh"), use_token = TRUE)
   }
 }
 
-get_ref = function(repo, branch="master") {
-  stopifnot(length(repo) == 1)
-  stopifnot(length(branch) == 1)
 
-  gh("GET /repos/:owner/:repo/commits/:ref",
-     owner = get_repo_owner(repo),
-     repo = get_repo_name(repo),
-     ref = paste0("heads/", branch),
-     .token=get_github_token())
+
+format_repo = function(repo, branch = "master", file = NULL) {
+  repo = if (branch == "master") {
+    repo
+  } else{
+    paste(repo, branch, sep="@")
+  }
+
+  if (!is.null(file))
+    repo = file.path(repo, file)
+
+  repo
 }
+

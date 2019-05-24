@@ -1,92 +1,150 @@
+github_api_create_branch = function(repo, cur_branch, new_branch) {
+  head = github_api_get_branch_ref(repo, cur_branch)
+
+  gh("POST /repos/:owner/:repo/git/refs",
+     owner = get_repo_owner(repo),
+     repo = get_repo_name(repo),
+     ref = paste0("refs/heads/",new_branch),
+     sha = head[["sha"]],
+     .token=get_github_token())
+}
+
+github_api_get_branch_ref = function(repo, branch="master") {
+  res = safe_gh("GET /repos/:owner/:repo/commits/:ref",
+                owner = get_repo_owner(repo),
+                repo = get_repo_name(repo),
+                ref = paste0("heads/", branch),
+                .token=get_github_token())
+
+  if (failed(res)) {
+    usethis::ui_stop("Unable to locate branch {usethis::ui_value(format_repo(repo, branch))}.")
+  } else {
+    result(res)
+  }
+}
+
+
+
+#' Create branch
+#'
+#' \code{create_branch} creates a new branch from an existing git repo.
+#'
+#' @param repo github repository address in `owner/repo` format
+#' @param cur_branch name of existing branch
+#' @param new_branch name of branch to create
+#'
+#' @family branch functions
+#'
 #' @export
-create_branch = function(repo, cur_branch = "master", new_branch, verbose=TRUE) {
+#'
+create_branch = function(repo, cur_branch = "master", new_branch) {
   purrr::pwalk(
     list(repo, cur_branch, new_branch),
     function(repo, cur_branch, new_branch) {
+      res = purrr::safely(github_api_create_branch)(repo, cur_branch, new_branch)
 
-      head = get_ref(repo, cur_branch)
+      repo_fmt = usethis::ui_value(format_repo(repo, cur_branch))
 
-      if (verbose)
-        message(sprintf("Creating branch %s@(%s => %s) ...", repo, cur_branch, new_branch))
-
-
-      res = safe_gh("POST /repos/:owner/:repo/git/refs",
-                    owner = get_repo_owner(repo),
-                    repo = get_repo_name(repo),
-                    ref = paste0("refs/heads/",new_branch),
-                    sha = head[["sha"]],
-                    .token=get_github_token())
-
-      check_result(
+      status_msg(
         res,
-        "Failed to create branch.",
-        verbose
+        glue::glue("Created branch {usethis::ui_value(new_branch)} from {repo_fmt}."),
+        glue::glue("Failed to create branch {usethis::ui_value(new_branch)} from {repo_fmt}.")
       )
     }
   )
 }
 
-#' @export
-protect_branch = function(repo, branch = "master", verbose = TRUE) {
 
-  stopifnot(!missing(repo))
+github_api_protect_branch = function(repo, branch) {
+  gh(
+    "PUT /repos/:owner/:repo/branches/:branch/protection",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    branch = branch,
+    required_status_checks = NA,
+    enforce_admins = NA,
+    required_pull_request_reviews = NA,
+    restrictions = list(
+      users = list(),
+      teams = list()
+    ),
+    .token = get_github_token()
+  )
+}
+
+github_api_unprotect_branch = function(repo, branch) {
+  gh(
+    "DELETE /repos/:owner/:repo/branches/:branch/protection",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    branch = branch,
+    .token = get_github_token()
+  )
+}
+
+
+#' Protect branch
+#'
+#' \code{protect_branch} turns on protection for the specified branch. See
+#' [https://help.github.com/en/articles/about-protected-branches] for more details
+#' on what this changes.
+#'
+#' @param repo github repository address in `owner/repo` format
+#' @param cur_branch name of existing branch
+#' @param new_branch name of branch to create
+#'
+#' @family branch functions
+#'
+#' @export
+#'
+protect_branch = function(repo, branch = "master") {
+  flag_experimental()
 
   purrr::walk2(
     repo, branch,
     function(repo, branch) {
+      res = purrr::safely(github_api_protect_branch)(repo, branch)
 
-      if (verbose)
-        message(sprintf("Protecting branch %s@% ...", repo, branch))
+      repo_fmt = usethis::ui_value(format_repo(repo, branch))
 
-      res = safe_gh(
-        "PUT /repos/:owner/:repo/branches/:branch/protection",
-        owner = get_repo_owner(repo),
-        repo = get_repo_name(repo),
-        branch = branch,
-        required_status_checks = NA,
-        enforce_admins = NA,
-        required_pull_request_reviews = NA,
-        restrictions = list(
-          users = list(),
-          teams = list()
-        ),
-        .token = get_github_token()
-      )
-
-      check_result(
+      status_msg(
         res,
-        "Failed to protect branch.",
-        verbose
+        glue::glue("Protecting branch {repo_fmt}."),
+        glue::glue("Failed to protect branch {repo_fmt}.")
       )
     }
   )
 }
 
+#' Unprotect branch
+#'
+#' \code{unprotect_branch} removes protections from the specified branch. See
+#' [https://help.github.com/en/articles/about-protected-branches] for more details
+#' on what this changes.
+#'
+#' @param repo github repository address in `owner/repo` format
+#' @param cur_branch name of existing branch
+#' @param new_branch name of branch to create
+#'
+#' @family branch functions
+#'
 #' @export
+#'
 unprotect_branch = function(repo, branch = "master", verbose = TRUE) {
-
-  stopifnot(!missing(repo))
+  flag_experimental()
 
   purrr::walk2(
     repo, branch,
     function(repo, branch) {
 
-      if (verbose)
-        message(sprintf("Unprotecting branch %s@% ...", repo, branch))
+      res = purrr::safely(github_api_unprotect_branch)(repo, branch)
 
+      repo_fmt = usethis::ui_value(format_repo(repo, branch))
 
-      res = safe_gh(
-        "DELETE /repos/:owner/:repo/branches/:branch/protection",
-        owner = get_repo_owner(repo),
-        repo = get_repo_name(repo),
-        branch = branch,
-        .token = get_github_token()
-      )
-
-      check_result(
+      status_msg(
         res,
-        "Failed to unprotect branch.",
-        verbose
+        glue::glue("Removing protection from branch {repo_fmt}."),
+        glue::glue("Failed to remove protection from branch {repo_fmt}.")
       )
     }
   )
