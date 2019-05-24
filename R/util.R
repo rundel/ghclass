@@ -22,17 +22,6 @@ require_git = function() {
   return(git)
 }
 
-require_wercker_cli = function() {
-  wercker = Sys.which("wercker")
-
-  if (wercker == "") {
-    stop("wercker cli executable not found, if it is installed,",
-         "please make sure it can be found using your PATH variable.")
-  }
-
-  return(wercker)
-}
-
 
 safe_gh = purrr::safely(gh)
 
@@ -112,3 +101,34 @@ check_result = function(res, fail_msg, verbose=FALSE, error_prefix = "") {
     warning(fail_msg, call. = FALSE, immediate. = TRUE)
   }
 }
+
+
+
+
+
+succeeded = function(x) {
+  !is.null(x$result)
+}
+
+failed = function(x) {
+  !is.null(x$error)
+}
+
+error_msg = function(x) {
+  x[["error"]][["message"]]
+}
+
+status_msg = function(x, success, fail, include_error_msg = TRUE) {
+  if (succeeded(x) & !missing(success)) {
+    usethis::ui_done(success)
+  }
+
+  if (failed(x) & !missing(fail)) {
+    if (include_error_msg)
+      fail = paste(fail, "[Error: {usethis::ui_value(error_msg(x))}]")
+    usethis::ui_oops(fail)
+  }
+}
+
+
+

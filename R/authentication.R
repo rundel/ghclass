@@ -66,7 +66,7 @@ set_github_token = function(token) {
 #'
 #' \code{test_github_token} checks if a token is valid by attempting to authenticate with the GitHub api.
 #'
-#' @param token character or missing, if missing the token is obtained using \code{get_github_token}.
+#' @param token github api personal access token
 #'
 #' @examples
 #' \dontrun{
@@ -78,11 +78,13 @@ set_github_token = function(token) {
 #'
 #' @export
 #'
-test_github_token = function(token)
-{
-  if (missing(token))
-    token = get_github_token()
+test_github_token = function(token = get_github_token()) {
 
-  gh("/user", .token=token)
-  invisible(NULL)
+  res = safe_gh("/user", .token=token)
+
+  status_msg(
+    res,
+    "Your github token is functioning correctly.",
+    "Your github token failed to authenticate.",
+  )
 }

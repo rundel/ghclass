@@ -4,10 +4,10 @@
 \alias{test_github_token}
 \title{Test github token}
 \usage{
-test_github_token(token)
+test_github_token(token = get_github_token())
 }
 \arguments{
-\item{token}{character or missing, if missing the token is obtained using \code{get_github_token}.}
+\item{token}{github api personal access token}
 }
 \description{
 \code{test_github_token} checks if a token is valid by attempting to authenticate with the GitHub api.
