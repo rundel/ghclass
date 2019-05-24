@@ -12,8 +12,7 @@ get_github_token()
 \details{
 This function looks for the token in the following places (in order):
 \enumerate{
-\item Value of \code{github_token} variable in \code{.ghclass} environment
-(this is where the package caches the token).
+\item Value of \code{GITHUB_PAT} environmental variable.
 
 \item Value of \code{GITHUB_TOKEN} environmental variable.
 

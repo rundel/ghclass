@@ -4,8 +4,7 @@
 #'
 #' This function looks for the token in the following places (in order):
 #' \enumerate{
-#'   \item Value of \code{github_token} variable in \code{.ghclass} environment
-#'   (this is where the package caches the token).
+#'   \item Value of \code{GITHUB_PAT} environmental variable.
 #'
 #'   \item Value of \code{GITHUB_TOKEN} environmental variable.
 #'
@@ -21,21 +20,12 @@
 #'
 #' @export
 #'
-get_github_token = function()
-{
-  token = get("github_token", envir=.ghclass)
-  if (!is.null(token))
-    return(token)
-
-  token = Sys.getenv("GITHUB_TOKEN")
+get_github_token = function() {
+  token = usethis::github_token()
   if (token != "")
-  {
-    assign("github_token", token, envir=.ghclass)
     return(token)
-  }
 
-  if (file.exists("~/.github/token"))
-  {
+  if (file.exists("~/.github/token")) {
     set_github_token("~/.github/token")
     return(get_github_token())
   }
@@ -62,15 +52,14 @@ get_github_token = function()
 #'
 #' @export
 #'
-set_github_token = function(token)
-{
+set_github_token = function(token) {
   stopifnot(!missing(token))
   stopifnot(is.character(token))
 
   if (file.exists(token))
     token = readLines(token, warn=FALSE)
 
-  assign("github_token", token, envir=.ghclass)
+  Sys.setenv(GITHUB_PAT = token)
 }
 
 #' Test github token
