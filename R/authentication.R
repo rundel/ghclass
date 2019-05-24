@@ -53,8 +53,7 @@ get_github_token = function() {
 #' @export
 #'
 set_github_token = function(token) {
-  stopifnot(!missing(token))
-  stopifnot(is.character(token))
+   token = as.character(token)
 
   if (file.exists(token))
     token = readLines(token, warn=FALSE)
