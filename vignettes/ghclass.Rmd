@@ -80,7 +80,7 @@ also a lot of repos to clone when it comes time to grading. ghclass addresses
 this problem, and more! It does not, however, address the problem that that's a 
 lot of grading. Sorry, you're on your own there!
 
-That being said, ghclass does also facilitates setting up continuous integration 
+That being said, ghclass does also facilitate setting up continuous integration 
 for students' assignment repos, which means that some of the checking and 
 feedback giving can be done automatically each time they push to the repo 
 without intervention from the instructors.
