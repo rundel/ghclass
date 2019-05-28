@@ -128,7 +128,7 @@ Dave,Team4
 Eve,Team5
 ```
 
-Using the `roster` data frame, we can then invite the students to the class' organzation. This will send and email to each students inviting them to join the GitHub organization.
+Using the `roster` data frame, we can then invite the students to the class' organzation. This will send and email to each students inviting them to join the GitHub organization. If students are first-time GitHub users, they will need to verify the email address associated with their GitHub account and accept the invitation before they show up as a member of the new organization.
 
 ```r
 invite_user("Sta523-Fa17", roster$github)
@@ -161,6 +161,8 @@ add_team_member("Sta523-Fa17", roster$github, roster$team)
 ## Adding Dave to Team4 ...
 ## Adding Eve to Team5 ...
 ```
+
+You can check which students are added to the organization using `get_members` and pending invitations using `get_pending_members` functions.
 
 ### Creating a team assignment
 
