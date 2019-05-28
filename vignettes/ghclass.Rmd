@@ -128,7 +128,7 @@ Dave,Team4
 Eve,Team5
 ```
 
-Using the `roster` data frame we can then invite the students to class' organzation as well as create and add them to their teams. 
+Using the `roster` data frame, we can then invite the students to the class' organzation. This will send and email to each students inviting them to join the GitHub organization.
 
 ```r
 invite_user("Sta523-Fa17", roster$github)
@@ -139,6 +139,8 @@ invite_user("Sta523-Fa17", roster$github)
 ## Adding Dave to Sta523-Fa17 ...
 ## Adding Eve to Sta523-Fa17 ...
 ```
+
+We can use the variable `team` within the `roster` data frame to create teams within the organization and add students to their teams. 
 
 ```r
 create_team("Sta523-Fa17", unique(roster$team))
