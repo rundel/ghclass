@@ -162,7 +162,7 @@ add_team_member("Sta523-Fa17", roster$github, roster$team)
 ## Adding Eve to Team5 ...
 ```
 
-You can check which students are added to the organization using `get_members` and pending invitations using `get_pending_members` functions.
+You can check which students are added to the organization using the `get_members`, and pending invitations using the `get_pending_members`, functions respectively.
 
 ### Creating a team assignment
 
@@ -171,7 +171,7 @@ assignment. The resulting repo names will be this prefix followed by the
 team name.
 
 ```r
-create_team_repo("Sta523-Fa17", prefix="hw2-")
+create_team_repo("Sta523-Fa17", unique(roster$team), prefix="hw2-")
 
 ## Creating hw2-Team01 for Team01 ...
 ## Creating hw2-Team02 for Team02 ...
