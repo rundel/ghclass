@@ -87,6 +87,8 @@ without intervention from the instructors.
 
 ## Authentication
 
+<!-- Still need to decide whether to completely drop the wercker token part -->
+
 This package uses tokens for authentication with both [wercker](https://app.wercker.com/profile/tokens) and [github](https://github.com/settings/tokens), these values can be supplied via environmental variables `GITHUB_TOKEN` and `WERCKER_TOKEN` respectively or in `~/.github/token` and `~/.wercker/token`.
 
 If this is your first time setting up a personal access token (PAT), generate a token in the browser after logging into Github (Settings > Developer Settings > Personal access tokens) or use [`usethis::browse_github_token`](https://usethis.r-lib.org/articles/articles/usethis-setup.html#get-and-store-a-github-personal-access-token). Copy your token to the clipboard and paste it as a character string into the `set_github_token` function.
@@ -111,13 +113,13 @@ to be safe.
 
 ### Adding students and creating teams
 
-Next, you should collect your students' GitHub user names. You can do this with 
+Next, collect your students' GitHub user names. You can do this with 
 a Google form and then read the spreadsheet containing their responses into R 
 using the **googlesheets** package. The resulting data frame should include two 
-columns: one called `github` which contains students' GitHub user names and a column called `team` that contains the team 
+columns: one called `github` which contains students' GitHub user names and another column called `team` that contains the team 
 name for each student.
 
-For example your roster file might look something like the following:
+For example, your roster file might look something like the following:
 
 ```csv
 github,team
@@ -128,7 +130,7 @@ Dave,Team4
 Eve,Team5
 ```
 
-Using the `roster` data frame, we can then invite the students to the class' organzation. This will send and email to each students inviting them to join the GitHub organization. If students are first-time GitHub users, they will need to verify the email address associated with their GitHub account and accept the invitation before they show up as a member of the new organization.
+Using the `roster` data frame, we can then invite the students to the class' organzation. This will send and email to each student inviting them to join the GitHub organization. 
 
 ```r
 invite_user("Sta523-Fa17", roster$github)
@@ -140,16 +142,16 @@ invite_user("Sta523-Fa17", roster$github)
 ## Adding Eve to Sta523-Fa17 ...
 ```
 
-We can use the variable `team` within the `roster` data frame to create teams within the organization and add students to their teams. 
+We use the variable `team` within the `roster` data frame to create teams within the organization and add students to their teams. 
 
 ```r
 create_team("Sta523-Fa17", unique(roster$team))
 
-## Adding Team1 ...
-## Adding Team2 ...
-## Adding Team3 ...
-## Adding Team4 ...
-## Adding Team5 ...
+## Adding Team1 to Sta523-Fa17 ...
+## Adding Team2 to Sta523-Fa17 ...
+## Adding Team3 to Sta523-Fa17 ...
+## Adding Team4 to Sta523-Fa17 ...
+## Adding Team5 to Sta523-Fa17 ...
 ```
  
 ```r
@@ -162,22 +164,22 @@ add_team_member("Sta523-Fa17", roster$github, roster$team)
 ## Adding Eve to Team5 ...
 ```
 
-You can check which students are added to the organization using the `get_members`, and pending invitations using the `get_pending_members`, functions respectively.
+You can check which students are added to the organization using the `get_members` function, and pending invitations using the `get_pending_members` function. Note that if students are first-time GitHub users, they will need to verify the email address associated with their GitHub account and accept the invitation before they show up as a member of the organization.
 
 ### Creating a team assignment
 
-First you create repositories for each team with a prefix identifying the 
+First, create repositories for each team with a prefix identifying the 
 assignment. The resulting repo names will be this prefix followed by the 
 team name.
 
 ```r
 create_team_repo("Sta523-Fa17", unique(roster$team), prefix="hw2-")
 
-## Creating hw2-Team01 for Team01 ...
-## Creating hw2-Team02 for Team02 ...
-## Creating hw2-Team03 for Team03 ...
-## Creating hw2-Team04 for Team04 ...
-## Creating hw2-Team05 for Team05 ...
+## Creating repo Sta523-Fa17/hw2-Team01 ...
+## Creating repo Sta523-Fa17/hw2-Team02 ...
+## Creating repo Sta523-Fa17/hw2-Team03 ...
+## Creating repo Sta523-Fa17/hw2-Team04 ...
+## Creating repo Sta523-Fa17/hw2-Team05 ...
 ```
 
 If you want to place starter docs into the assignment repos that you just 
@@ -230,8 +232,10 @@ add_wercker(get_repos("Sta523-Fa17", "hw2-"), "Sta523-Fa17")
 
 ### Modifying repos
 
-You can also modify repos afer they have been created. This will overwrite 
-existing files with the same name in the repo so you should be careful not to
+<!-- This part needs to be changed based on the discussion regarding GH issue #16 -->
+
+You can modify repos after they have been created. This will overwrite 
+existing files with the same name in the repo, so you should be careful not to
 do this if students have already started working on the repos.
 
 ```r
@@ -247,6 +251,28 @@ add_files(
 ## Adding files to Sta523-Fa17/hw2-Team04 ...
 ## Adding files to Sta523-Fa17/hw2-Team05 ...
 ```
+
+### Managing repository permissions
+Individual-level permissions can be set via the "People" tab on the organization page. We recommend the course instructor to be the owner of the organization and teaching assistants to receive admin privileges. Students should receive member privileges.
+
+Github allows further permissions for accessing and changing repositories to be set for each individual member or at the organization-level (under Settings > Member Privileges). We suggest the organization-level settings below.
+
+*Member repository permissions*
+
+* Base permissions: None
+* Repository creation: Disabled
+* Repository forking: Disabled
+
+*Admin repository permissions*
+
+* Repository visibility change: Disabled
+* Repository deletion and transfer: Disabled
+* Issue deletion: Disabled
+
+*Member team permissions*
+
+* Allow members to create teams: Disabled
+
 
 ## FAQ
 
