@@ -131,11 +131,12 @@ file_exists = function(repo, file, branch = "master")
   )
 }
 
+
+
 #' @export
-put_file = function(repo, file, content, message, branch)
-{
+put_file = function(repo, path, content, message, branch) {
   stopifnot(length(repo)==1)
-  stopifnot(length(file)==1)
+  stopifnot(length(path)==1)
   stopifnot(length(message)==1)
   stopifnot(length(branch)==1)
 
@@ -145,12 +146,12 @@ put_file = function(repo, file, content, message, branch)
   args = list(
     endpoint = "PUT /repos/:owner/:repo/contents/:path",
     owner = get_repo_owner(repo), repo = get_repo_name(repo),
-    path = file,
+    path = path,
     content = base64enc::base64encode(content),
     message = message, branch = branch,
     .token = get_github_token()
   )
-  args[["sha"]] = attr(get_file(repo, file, branch), "sha")
+  args[["sha"]] = attr(get_file(repo, path, branch), "sha")
 
   do.call(safe_gh, args)
 }
@@ -209,7 +210,10 @@ add_files = function(repo, message, files, branch = "master", preserve_path=FALS
 
       res = purrr::map2(
         gh_paths, files,
-        put_file,
+        function(path, file, repo, message, branch) {
+          content = paste(readLines(file), collapse = "\n")
+          put_file(repo, path, content, message, branch)
+        },
         repo = repo, message = message, branch = branch
       )
 
