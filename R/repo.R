@@ -1,19 +1,21 @@
 #' Check whether repository exists
 #'
-#' \code{check_repos} checks whether a given repository exists
+#' \code{check_repo} checks whether a given repository exists
 #'
-#' @param repos repo names in the form of \emph{owner/name}. Can be a vector or list of repo names.
+#' @param repos character, repo names in the form of \emph{owner/name}. Can be a vector or list of  names.
 #'
 #' @examples
 #' \dontrun{
-#' check_repos(c("))
+#' check_repo(c("ghclass-test/hw1", "ghclass-test/hw1-Team1"))
 #' }
 #'
 #' @return \code{TRUE} or \code{FALSE}
 #'
+#' @family github organization related functions
+#'
 #' @export
 #'
-check_repos = function(repos)
+check_repo = function(repos)
 {
   exists = function(owner, repo)
   {
@@ -27,8 +29,17 @@ check_repos = function(repos)
   )
 }
 
-#' @export
+#' Fix repository names
 #'
+#' \code{fix_repo_name} replaces spaces in repo names with \code{_}. It also replaces non-alphanumeric characters and special characters other than \code{_}, \code{.}, or \code{-} with \code{-}.
+#'
+#' @param repos character, repo names in the form of \emph{owner/name}. Can be a vector or list of  names.
+#'
+#' @examples
+#' \dontrun{
+#' fix_repo_name("ghclass-test/base hw1")
+#'
+#' @export
 fix_repo_name = function(repos)
 {
   repos = stringr::str_replace_all(repos, " ", "_")
@@ -51,7 +62,7 @@ fix_repo_name = function(repos)
 #'
 #' @examples
 #' \dontrun{
-#' create_individual_repo("ghclass",c("user01","user02"), prefix="hw01-")
+#' create_individual_repo("ghclass-test",c("user01","user02"), prefix="hw01-")
 #' }
 #'
 #' @family github organization related functions
@@ -83,6 +94,7 @@ create_individual_repo = function(org, user, prefix="", suffix="",
       if (verbose)
         message("Creating repo ", repo, " ...", sep="")
 
+      # Create repo
       try({
         gh("POST /orgs/:org/repos",
            org = org,
@@ -92,6 +104,7 @@ create_individual_repo = function(org, user, prefix="", suffix="",
            .token=get_github_token())
       })
 
+      # Give time write access
       try({
         gh("PUT /repos/:owner/:repo/collaborators/:username",
            owner = org, repo = repo_name, username = user,
@@ -103,7 +116,7 @@ create_individual_repo = function(org, user, prefix="", suffix="",
 }
 
 
-#' Create individual repositories
+#' Create team repositories
 #'
 #' \code{create_team_repo} creates repos for team(s)
 #'
@@ -118,7 +131,7 @@ create_individual_repo = function(org, user, prefix="", suffix="",
 #'
 #' @examples
 #' \dontrun{
-#' create_team_repo("ghclass",c("team01","team02"), prefix="hw01-")
+#' create_team_repo("ghclass-test",c("team01","team02"), prefix="hw01-")
 #' }
 #'
 #' @family github organization related functions
@@ -131,7 +144,7 @@ create_team_repo = function(org, team,  prefix="", suffix="",
 
   if (is.character(team)) {
     team = merge(
-      tibble::data_frame(team = team), org_teams,
+      tibble::tibble(team = team), org_teams,
       by = "team", all.x = TRUE
     )
   }
@@ -178,6 +191,21 @@ create_team_repo = function(org, team,  prefix="", suffix="",
   )
 }
 
+#' Access unique team ids
+#'
+#' \code{get_team_id_tbl} returns a (filtered) data frame of teams in the organization with columns for their names (`team`) and their unique ids (`id`).
+#'
+#' @param org character, name of the GitHub organization.
+#' @param team character or data frame, vector of team names
+#'
+#' @examples
+#' \dontrun{
+#' get_team_id_tbl("ghclass-test", c("Team1", "Team2"))
+#' }
+#'
+#' @return A data frame with two columns and the number of rows equivalent to the length of the vector `team`
+#'
+#' @export
 get_team_id_tbl = function(org, team) {
 
   stopifnot(is.character(org))
@@ -205,6 +233,20 @@ get_team_id_tbl = function(org, team) {
   team_tbl
 }
 
+#' Adding a team to existing repository
+#'
+#' \code{add_team_to_repo} adds a team to an existing repository. `pull` results in read privileges, `push` in write privileges, and `admin` in Admin privileges for the team in the respective repository. Note that permissions will overwrite existing access privileges.
+#'
+#' @param repo character, existing repo name in the form of \emph{owner/name}
+#' @param team character or data frame, vector of existing team names
+#' @param permission character vector, permissions to be granted to team for repo ("pull", "push", or "admin"), default is "pull"
+#' @param verbose logical, display verbose output
+#'
+#' @examples
+#' \donotrun{
+#' add_team_to_repo("ghclass-test/resources", c("Team1", "Team2))
+#' }
+#'
 #' @export
 add_team_to_repo = function(repo, team,
                             permission = c("pull", "push", "admin"),
@@ -240,9 +282,19 @@ add_team_to_repo = function(repo, team,
 
 
 
-
-#' @export
+#' Rename existing repository
+#'
+#' @param repo character, existing repo name in the form of \emph{owner/name}
+#' @param newname character, new repository name
+#'
+#' @examples
+#' \donotrun{
+#' rename_repo("ghclass-test/resources", "literature")
+#' }
+#'
+#'   @export
 rename_repo = function(repo, new_name) {
+
   purrr::walk2(
     repo, new_name,
     function(repo, new_name) {
@@ -276,8 +328,8 @@ mirror_repo = function(source_repo, target_repos, verbose=TRUE)
   stopifnot(length(source_repo) == 1)
   stopifnot(length(target_repos) >= 1)
 
-  stopifnot(check_repos(source_repo))
-  stopifnot(all(check_repos(target_repos)))
+  stopifnot(check_repo(source_repo))
+  stopifnot(all(check_repo(target_repos)))
 
   git = require_git()
 
