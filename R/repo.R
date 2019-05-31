@@ -1,8 +1,8 @@
 #' Check whether repository exists
 #'
-#' \code{check_repo} checks whether a given repository exists
+#' \code{check_repo} checks whether a given repository exists.
 #'
-#' @param repos character, repo names in the form of \emph{owner/name}. Can be a vector or list of  names.
+#' @param repos character, list, or vector, repo names in the form of \emph{owner/name}
 #'
 #' @examples
 #' \dontrun{
@@ -284,8 +284,11 @@ add_team_to_repo = function(repo, team,
 
 #' Rename existing repository
 #'
-#' @param repo character, existing repo name in the form of \emph{owner/name}
-#' @param newname character, new repository name
+#' \code{rename_repo} renames existing repositories.
+#'
+#' @param repo character, or character vector, existing repo name in the form of \emph{owner/name}
+#' @param newname character, or character vector, of new repository name
+#' @param verbose logical, display verbose output
 #'
 #' @examples
 #' \donotrun{
@@ -293,7 +296,16 @@ add_team_to_repo = function(repo, team,
 #' }
 #'
 #'   @export
-rename_repo = function(repo, new_name) {
+rename_repo = function(repo, new_name, verbose = T) {
+
+  stopifnot(is.character(repo))
+  stopifnot(is.character(new_name))
+
+  stopifnot(all(check_repo(repo)))
+
+  # Adding error handling
+  if(length(repo) > length(new_name))
+    stop("Provided more repos than names to be applied ...")
 
   purrr::walk2(
     repo, new_name,
@@ -303,6 +315,9 @@ rename_repo = function(repo, new_name) {
                     repo = get_repo_name(repo),
                     name = new_name,
                     .token=get_github_token())
+
+      if (verbose)
+        message("Renaming ", repo, " to ", new_name, " ...")
 
       check_result(
         res,
