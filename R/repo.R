@@ -1,3 +1,16 @@
+#' Check whether repository exists
+#'
+#' \code{check_repos} checks whether a given repository exists
+#'
+#' @param repos repo names in the form of \emph{owner/name}. Can be a vector or list of repo names.
+#'
+#' @examples
+#' \dontrun{
+#' check_repos(c("))
+#' }
+#'
+#' @return \code{TRUE} or \code{FALSE}
+#'
 #' @export
 #'
 check_repos = function(repos)
@@ -251,7 +264,12 @@ rename_repo = function(repo, new_name) {
 
 
 
-
+#' Mirror repository
+#'
+#' @param source_repo repo name of source in the form of \emph{owner/name}
+#' @param target_repos repo names of target in the form of \emph{owner/name}
+#' @param verbose logical, display verbose output
+#'
 #' @export
 mirror_repo = function(source_repo, target_repos, verbose=TRUE)
 {
