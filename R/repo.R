@@ -1,17 +1,32 @@
+github_api_repo_exists = function(repo) {
+  owner = get_repo_owner(repo)
+  repo = get_repo_name(repo)
+  res = safe_gh(
+    "GET /repos/:owner/:repo",
+    owner=owner, repo=repo, .token=get_github_token()
+  )
+  succeeded(res)
+}
+
+#' Check existance of github repo
+#'
+#' \code{check_repo} returns TRUE if the github repository exists
+#'
+#' @param repo github repository address in `owner/repo` format
+#'
+#' @examples
+#' \dontrun{
+#' check_repo("rundel/ghclass")
+#' check_repo("rundel/ghclass_fake")
+#' }
+#'
+#' @family github repo related functions
+#'
+
 #' @export
 #'
-check_repos = function(repos)
-{
-  exists = function(owner, repo)
-  {
-    gh("GET /repos/:owner/:repo", owner=owner, repo=repo, .token=get_github_token())
-    TRUE
-  }
-
-  purrr::map2_lgl(
-    get_repo_owner(repos), get_repo_name(repos),
-    purrr::possibly(exists, FALSE)
-  )
+check_repo = function(repo) {
+  purrr::map_lgl(repo, github_api_repo_exists)
 }
 
 #' @export
@@ -258,8 +273,8 @@ mirror_repo = function(source_repo, target_repos, verbose=TRUE)
   stopifnot(length(source_repo) == 1)
   stopifnot(length(target_repos) >= 1)
 
-  stopifnot(check_repos(source_repo))
-  stopifnot(all(check_repos(target_repos)))
+  stopifnot(check_repo(source_repo))
+  stopifnot(all(check_repo(target_repos)))
 
   git = require_git()
 
