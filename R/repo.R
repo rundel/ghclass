@@ -37,11 +37,11 @@ get_repo_collaborators = function(repo) {
 
 
 github_api_repo_exists = function(repo) {
-  owner = get_repo_owner(repo)
-  repo = get_repo_name(repo)
   res = safe_gh(
     "GET /repos/:owner/:repo",
-    owner=owner, repo=repo, .token=get_github_token()
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    .token=get_github_token()
   )
   succeeded(res)
 }
@@ -60,7 +60,6 @@ github_api_repo_exists = function(repo) {
 #'
 #' @family github repo related functions
 #'
-
 #' @export
 #'
 check_repo = function(repo) {
@@ -102,7 +101,7 @@ fix_repo_name = function(repo)
 #'
 #' @examples
 #' \dontrun{
-#' create_individual_repo("ghclass",c("user01","user02"), prefix="hw01-")
+#' create_individual_repo("Sta523-Fa17",c("user01","user02"), prefix="hw01-")
 #' }
 #'
 #' @family github organization related functions
@@ -175,6 +174,7 @@ create_individual_repo = function(org, user, prefix="", suffix="",
 #' @family github organization related functions
 #'
 #' @export
+#'
 create_team_repo = function(org, team,  prefix="", suffix="",
                             private=TRUE, verbose=TRUE,
                             auto_init=FALSE, gitignore_template="R") {
