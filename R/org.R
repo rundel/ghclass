@@ -69,6 +69,12 @@ get_members = function(org, filter=NULL, exclude=FALSE) {
 }
 
 
+
+github_api_get_invitations = function(org) {
+  gh("GET /orgs/:org/invitations", org=org,
+     .token=get_github_token(), .limit=get_github_api_limit())
+}
+
 #' Get pending organization members
 #'
 #' \code{get_pending_members} returns a (filtered) vector of pending organization memebers.
@@ -90,21 +96,11 @@ get_pending_members = function(org, filter=NULL, exclude=FALSE) {
   stopifnot(length(org)==1)
   stopifnot(length(filter)<=1)
 
-  req = gh("GET /orgs/:org/invitations", org=org, .token=get_github_token(), .limit=get_github_api_limit())
+  res = github_api_get_invitations(org)
+  res = purrr::map(res, "login")
+  res = as.character(unlist(res))
 
-  res = if (req != "") {
-    purrr::map_chr(req, "login")
-  } else {
-    character()
-  }
-
-  if (!is.null(filter)) {
-    subset = grepl(filter,res)
-    if (exclude) res = res[!subset]
-    else         res = res[subset]
-  }
-
-  res
+  filter_results(res, filter, exclude)
 }
 
 #' Get organization teams
