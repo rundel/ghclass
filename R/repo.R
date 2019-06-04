@@ -50,7 +50,28 @@ github_api_repo_exists = function(repo) {
 #' @export
 #'
 check_repo = function(repo) {
-  purrr::map_lgl(repo, github_api_repo_exists)
+
+  check = purrr::map_lgl(repo, github_api_repo_exists)
+
+  if(check){
+
+    current_name = gh("GET /repositories/:id", id = repo_info$result$id)$name
+
+    if(current_name != get_repo_name(repo)){
+
+      message(paste("Repository", get_repo_name(repo), "renamed to", current_name))
+
+    } else {
+
+      return(check)
+
+    }
+
+  } else {
+
+      return(check)
+
+    }
 }
 
 #' @export
