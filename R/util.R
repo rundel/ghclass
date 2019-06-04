@@ -1,4 +1,13 @@
 
+filter_results = function(res, pattern = NULL, exclude = FALSE) {
+  if (!is.null(pattern)) {
+    subset = grepl(pattern, res)
+    if (exclude) res = res[!subset]
+    else         res = res[subset]
+  }
+  res
+}
+
 require_git = function() {
   git = Sys.which("git")
 
