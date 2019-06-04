@@ -103,6 +103,14 @@ get_pending_members = function(org, filter=NULL, exclude=FALSE) {
   filter_results(res, filter, exclude)
 }
 
+
+
+
+github_api_get_teams = function(org) {
+  gh("GET /orgs/:org/teams", org=org,
+     .token=get_github_token(), .limit=get_github_api_limit())
+}
+
 #' Get organization teams
 #'
 #' \code{get_teams} returns a (filtered) data frame of teams in the organization with columns for
@@ -127,7 +135,7 @@ get_teams = function(org, filter=NULL, exclude=FALSE) {
   stopifnot(length(org)==1)
   stopifnot(length(filter)<=1)
 
-  res = gh("GET /orgs/:org/teams", org=org, .token=get_github_token(), .limit=get_github_api_limit())
+  res = github_api_get_teams(org)
 
   teams = if (empty_result(res)) {
     tibble::data_frame(
@@ -141,20 +149,14 @@ get_teams = function(org, filter=NULL, exclude=FALSE) {
     )
   }
 
-  if (!is.null(filter)) {
-    subset = grepl(filter, teams$team)
-    if (exclude) teams = teams[!subset,]
-    else         teams = teams[subset,]
-  }
-
-  teams
+  filter_results(teams, "team", filter, exclude)
 }
 
 
 get_teams_by_list = function(org, teams) {
   org_teams = get_teams(org)
 
-  sub = teams %in% org_teams$team
+  sub = teams %in% org_teams[["team"]]
   if (sum(sub) != length(teams))
     stop("Unable to find team(s): ", paste(teams[!sub], collapse=", "))
 
