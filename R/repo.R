@@ -7,12 +7,25 @@ github_api_get_repo_collaborators = function(repo) {
 }
 
 
+#' List repository collaborators
+#'
+#' \code{get_repo_collaborators} returns collaborator usernames.
+#'
+#' @param repo character, Address of repository in "owner/name" format.
+#'
+#' @return Character vector of collaborator usernames.
+#'
+#' @examples
+#' \donotrun{
+#' get_repo_collaborators("Sta523-Fa17/hw1")
+#' }
+#'
 #' @export
 #'
-get_repo_collaborators = function(repos) {
+get_repo_collaborators = function(repo) {
 
   users = purrr::map(
-    repos,
+    repo,
     function(repo) {
       res = github_api_get_repo_collaborators(repo)
       purrr::map_chr(res, "login")
@@ -21,6 +34,7 @@ get_repo_collaborators = function(repos) {
 
   unique(unlist(users))
 }
+
 
 github_api_repo_exists = function(repo) {
   owner = get_repo_owner(repo)
