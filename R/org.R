@@ -153,12 +153,16 @@ get_teams = function(org, filter=NULL, exclude=FALSE) {
 }
 
 
-get_teams_by_list = function(org, teams) {
+get_specific_teams = function(org, teams, strict = TRUE) {
   org_teams = get_teams(org)
 
   sub = teams %in% org_teams[["team"]]
-  if (sum(sub) != length(teams))
-    stop("Unable to find team(s): ", paste(teams[!sub], collapse=", "))
+  if (sum(sub) != length(teams) & strict) {
+    missing = paste(teams[!sub], collapse=", ")
+    usethis::ui_stop(paste(
+      "Unable to find team(s):", missing
+    ))
+  }
 
   org_teams[org_teams$team %in% teams,]
 }
@@ -185,7 +189,7 @@ get_team_repos = function(org, team = get_teams(org))
   stopifnot(length(org) == 1)
 
   if (is.character(team))
-    team = get_teams_by_list(org, team)
+    team = get_specific_teams(org, team)
 
   stopifnot(all(c("team","id") %in% names(team)))
 
@@ -242,7 +246,7 @@ get_team_members = function(org, team = get_teams(org), get_pending = TRUE)
   }
 
   if (is.character(team))
-    team = get_teams_by_list(org, team)
+    team = get_specific_teams(org, team)
 
   stopifnot(all(c("team","id") %in% names(team)))
 
@@ -295,7 +299,7 @@ get_pending_team_members = function(org, team = get_teams(org))
   stopifnot(length(org) == 1)
 
   if (is.character(team))
-    team = get_teams_by_list(org, team)
+    team = get_specific_teams(org, team)
 
   stopifnot(all(c("team","id") %in% names(team)))
 
