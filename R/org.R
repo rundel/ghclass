@@ -1,3 +1,8 @@
+github_api_get_repos = function(org) {
+  stopifnot(length(org)==1)
+  gh("GET /orgs/:org/repos", org = org, .token=get_github_token(), .limit=get_github_api_limit())
+}
+
 #' Get organization repos
 #'
 #' \code{get_repos} returns a (filtered) vector of repos belonging to a GitHub organization.
@@ -21,10 +26,7 @@ get_repos = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE) {
   stopifnot(length(org)==1)
   stopifnot(length(filter)<=1)
 
-  res = purrr::map_chr(
-    gh("GET /orgs/:org/repos", org = org, .token=get_github_token(), .limit=get_github_api_limit()),
-    "name"
-  )
+  res = purrr::map_chr(github_api_get_repos(org), "name")
 
   if (!is.null(filter)){
     subset = grepl(filter, res)
@@ -37,6 +39,8 @@ get_repos = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE) {
 
   res
 }
+
+
 
 #' @export
 #'
