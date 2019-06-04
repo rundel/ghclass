@@ -42,28 +42,6 @@ get_repos = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE) {
 
 
 
-#' @export
-#'
-get_repo_collaborators = function(repos) {
-
-  res = purrr::map(
-    repos,
-    function(repo) {
-      res = gh(
-        "GET /repos/:owner/:repo/collaborators",
-        owner = get_repo_owner(repo), repo = get_repo_name(repo),
-        .token=get_github_token(), .limit=get_github_api_limit()
-      )
-
-      purrr::map_chr(res, "login")
-    }
-  )
-
-  unique(unlist(res))
-}
-
-
-
 #' Get organization members
 #'
 #' \code{get_members} returns a (filtered) vector of organization memebers.

@@ -1,3 +1,27 @@
+github_api_get_repo_collaborators = function(repo) {
+  gh(
+    "GET /repos/:owner/:repo/collaborators",
+    owner = get_repo_owner(repo), repo = get_repo_name(repo),
+    .token=get_github_token(), .limit=get_github_api_limit()
+  )
+}
+
+
+#' @export
+#'
+get_repo_collaborators = function(repos) {
+
+  users = purrr::map(
+    repos,
+    function(repo) {
+      res = github_api_get_repo_collaborators(repo)
+      purrr::map_chr(res, "login")
+    }
+  )
+
+  unique(unlist(users))
+}
+
 github_api_repo_exists = function(repo) {
   owner = get_repo_owner(repo)
   repo = get_repo_name(repo)
