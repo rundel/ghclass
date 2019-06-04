@@ -64,7 +64,7 @@ check_repo = function(repo, redirect = F) {
     if(current_name == get_repo_name(repo)){
       succeeded(res)
     } else {
-      message(paste("Repository", get_repo_name(repo), "renamed to", current_name))
+      message(paste("Repository", get_repo_name(repo), "was previously renamed to", current_name))
       if(redirect == F){
         FALSE
       } else {
