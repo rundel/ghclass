@@ -16,7 +16,7 @@ github_api_get_repo_collaborators = function(repo) {
 #' @return Character vector of collaborator usernames.
 #'
 #' @examples
-#' \donotrun{
+#' \dontrun{
 #' get_repo_collaborators("Sta523-Fa17/hw1")
 #' }
 #'
@@ -67,24 +67,35 @@ check_repo = function(repo) {
   purrr::map_lgl(repo, github_api_repo_exists)
 }
 
+#' Fix repository names
+#'
+#' \code{fix_repo_name} replaces spaces in repository names with \code{_}. It also replaces non-alphanumeric characters and special characters other than \code{_}, \code{.}, or \code{-} with \code{-}.
+#'
+#' @param repo character, Address of repository in "owner/name" format.
+#'
+#' @examples
+#' \dontrun{
+#' fix_repo_name("Sta523-Fa17/base hw1")
+#' }
+#'
 #' @export
 #'
-fix_repo_name = function(repos)
+fix_repo_name = function(repo)
 {
-  repos = stringr::str_replace_all(repos, " ", "_")
-  stringr::str_replace_all(repos, "[^A-Za-z0-9_.-]+","-")
+  repo = stringr::str_replace_all(repo, " ", "_")
+  stringr::str_replace_all(repo, "[^A-Za-z0-9_.-]+","-")
 }
 
 #' Create individual repositories
 #'
-#' \code{create_individual_repo} creates repos for each student for a given
+#' \code{create_individual_repo} creates repositories for each student for a given
 #' assignment
 #'
 #' @param org character, name of the GitHub organization.
 #' @param user character or data frame, listing one or more users
-#' @param prefix character, resulting repo name will start with this character string
-#' @param suffix character, resulting repo name will end with this character string
-#' @param private logical, create private repos
+#' @param prefix character, resulting repository name will start with this character string
+#' @param suffix character, resulting repository name will end with this character string
+#' @param private logical, create private repositories
 #' @param verbose logical, display verbose output
 #' @param auto_init logical, initialize the repository with a README.md
 #' @param gitignore_template character, .gitignore template language
