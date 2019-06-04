@@ -36,7 +36,8 @@ github_api_repo_exists = function(repo) {
 #'
 #' \code{check_repo} returns TRUE if the github repository exists
 #'
-#' @param repo github repository address in `owner/repo` format
+#' @param repo character, Address of repository in "owner/name" format
+#' @param redirect logical, Specifies whether previous names of repositories should be considered. The default is FALSE, such that only current repository names will be considered.
 #'
 #' @examples
 #' \dontrun{
@@ -48,30 +49,32 @@ github_api_repo_exists = function(repo) {
 #'
 
 #' @export
-#'
-check_repo = function(repo) {
+check_repo = function(repo, redirect = F) {
 
-  check = purrr::map_lgl(repo, github_api_repo_exists)
+  res = safe_gh(
+    "GET /repos/:owner/:repo",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    .token=get_github_token()
+  )
 
-  if(check){
-
-    current_name = gh("GET /repositories/:id", id = repo_info$result$id)$name
-
-    if(current_name != get_repo_name(repo)){
-
-      message(paste("Repository", get_repo_name(repo), "renamed to", current_name))
-
+  if(succeeded(res)){
+    current_name = gh("GET /repositories/:id",
+                      id = res$result$id)$name
+    if(current_name == get_repo_name(repo)){
+      succeeded(res)
     } else {
-
-      return(check)
-
+      message(paste("Repository", get_repo_name(repo), "renamed to", current_name))
+      if(redirect == F){
+        FALSE
+      } else {
+        succeeded(res)
+      }
     }
 
   } else {
-
-      return(check)
-
-    }
+    succeeded(res)
+  }
 }
 
 #' @export
