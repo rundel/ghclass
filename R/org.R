@@ -41,6 +41,11 @@ get_repos = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE) {
 }
 
 
+github_api_get_members = function(org) {
+  stopifnot(length(org)==1)
+  gh("GET /orgs/:org/members", org=org, .token=get_github_token(), .limit=get_github_api_limit())
+}
+
 
 #' Get organization members
 #'
@@ -63,10 +68,7 @@ get_members = function(org, filter=NULL, exclude=FALSE) {
   stopifnot(length(org)==1)
   stopifnot(length(filter)<=1)
 
-  res = purrr::map_chr(
-    gh("GET /orgs/:org/members", org=org, .token=get_github_token(), .limit=get_github_api_limit()),
-    "login"
-  )
+  res = purrr::map_chr(github_api_get_members(org), "login")
 
   if (!is.null(filter)) {
     subset = grepl(filter, res)
