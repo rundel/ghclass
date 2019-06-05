@@ -11,7 +11,7 @@ github_api_get_repo_collaborators = function(repo) {
 #'
 #' \code{get_repo_collaborators} returns collaborator usernames.
 #'
-#' @param repo character, Address of repository in "owner/name" format.
+#' @param repo Character. Address of repository in "owner/name" format.
 #'
 #' @return Character vector of collaborator usernames.
 #'
@@ -48,17 +48,21 @@ github_api_repo_exists = function(repo) {
 
 #' Check existance of github repo
 #'
-#' \code{check_repo} returns TRUE if the github repository exists
+#' \code{check_repo} returns TRUE if the GitHub repository exists.
 #'
-#' @param repo github repository address in `owner/repo` format
+#' @param repo Character. Address of repository in "owner/name" format. Can be vector or list of characters.
 #'
 #' @examples
 #' \dontrun{
 #' check_repo("rundel/ghclass")
 #' check_repo("rundel/ghclass_fake")
+#' check_repo(c("rundel/ghclass", "rundel/ghclass_fake"))
+#' check_repo(list("rundel/ghclass", "rundel/ghclass_fake"))
 #' }
 #'
 #' @family github repo related functions
+#'
+#' @return logical
 #'
 #' @export
 #'
@@ -66,42 +70,63 @@ check_repo = function(repo) {
   purrr::map_lgl(repo, github_api_repo_exists)
 }
 
+
+check_repos = function(repos)
+{
+  exists = function(owner, repo)
+  {
+    gh("GET /repos/:owner/:repo", owner=owner, repo=repo, .token=get_github_token())
+    TRUE
+  }
+
+  purrr::map2_lgl(
+    get_repo_owner(repos), get_repo_name(repos),
+    purrr::possibly(exists, FALSE)
+  )
+}
+
+
+
 #' Fix repository names
 #'
 #' \code{fix_repo_name} replaces spaces in repository names with \code{_}. It also replaces non-alphanumeric characters and special characters other than \code{_}, \code{.}, or \code{-} with \code{-}.
 #'
-#' @param repo character, Address of repository in "owner/name" format.
+#' @param repo_name Character. Name of repository. Can be vector of list of characters.
 #'
 #' @examples
 #' \dontrun{
-#' fix_repo_name("Sta523-Fa17/base hw1")
+#' fix_repo_name("base hw1")
+#' fix_repo_name(c("base hw1", "final*draft"))
+#' fix_repo_name(list("base hw1", "final*draft"))
 #' }
+#'
+#' @return A character vector of repository names in the corrected format.
 #'
 #' @export
 #'
-fix_repo_name = function(repo)
+fix_repo_name = function(repo_name)
 {
-  repo = stringr::str_replace_all(repo, " ", "_")
-  stringr::str_replace_all(repo, "[^A-Za-z0-9_.-]+","-")
+  repo_name = stringr::str_replace_all(repo_name, " ", "_")
+  stringr::str_replace_all(repo_name, "[^A-Za-z0-9_.-]+","-")
 }
 
 #' Create individual repositories
 #'
 #' \code{create_individual_repo} creates repositories for each student for a given
-#' assignment
+#' assignment.
 #'
-#' @param org character, name of the GitHub organization.
-#' @param user character or data frame, listing one or more users
-#' @param prefix character, resulting repository name will start with this character string
-#' @param suffix character, resulting repository name will end with this character string
-#' @param private logical, create private repositories
-#' @param verbose logical, display verbose output
-#' @param auto_init logical, initialize the repository with a README.md
-#' @param gitignore_template character, .gitignore template language
+#' @param org Character. Name of the GitHub organization.
+#' @param user Character or data frame. Listing one or more users.
+#' @param prefix Character. Resulting repository name will start with this. character string.
+#' @param suffix Character. Resulting repository name will end with this character string.
+#' @param private Logical. Create private repositories.
+#' @param verbose Logical. Display verbose output.
+#' @param auto_init Logical. Initialize the repository with a README.md.
+#' @param gitignore_template Character. .gitignore template language.
 #'
 #' @examples
 #' \dontrun{
-#' create_individual_repo("Sta523-Fa17",c("user01","user02"), prefix="hw01-")
+#' create_individual_repo("Sta523-Fa17", c("user01","user02"), prefix = "hw01-")
 #' }
 #'
 #' @family github organization related functions
@@ -153,22 +178,22 @@ create_individual_repo = function(org, user, prefix="", suffix="",
 }
 
 
-#' Create individual repositories
+#' Create team repositories
 #'
-#' \code{create_team_repo} creates repos for team(s)
+#' \code{create_team_repo} creates repos for team(s).
 #'
-#' @param org character, name of the GitHub organization.
-#' @param team character or data frame, vector of team names
-#' @param prefix character, resulting repo name will start with this character string
-#' @param suffix character, resulting repo name will end with this character string
-#' @param private logical, create private repos
-#' @param verbose logical, display verbose output
-#' @param auto_init logical, initialize the repository with a README.md
-#' @param gitignore_template character, .gitignore template language
+#' @param org Character. Name of the GitHub organization.
+#' @param team Character or data frame. Vector of team names.
+#' @param prefix Character. Resulting repo name will start with this character string.
+#' @param suffix Character. Resulting repo name will end with this character string.
+#' @param private Logical. Create private repos.
+#' @param verbose Logical. Display verbose output.
+#' @param auto_init Logical. Initialize the repository with a README.md.
+#' @param gitignore_template Character. .gitignore template language.
 #'
 #' @examples
 #' \dontrun{
-#' create_team_repo("ghclass",c("team01","team02"), prefix="hw01-")
+#' create_team_repo("Sta523-Fa17", c("team01","team02"), prefix = "hw01-")
 #' }
 #'
 #' @family github organization related functions
@@ -256,7 +281,22 @@ get_team_id_tbl = function(org, team) {
   team_tbl
 }
 
+#' Add a team to a repository
+#'
+#' \code{add_team_to_repo} adds a team to an existing repository. `pull` results in read privileges, `push` in write privileges, and `admin` in Admin privileges for the team in the respective repository. Note that permissions will overwrite existing access privileges.
+#'
+#' @param repo Character. Address of repository in "owner/name" format.
+#' @param team Character or data frame. Vector of team names.
+#' @param permission Character. Permission to be granted to team for repo ("pull", "push", or "admin"), default is "pull".
+#' @param verbose Logical. Display verbose output.
+#'
+#' @examples
+#' \dontrun{
+#' add_team_to_repo("Sta523-Fa17/resources", c("Team1", "Team2))
+#' }
+#'
 #' @export
+#'
 add_team_to_repo = function(repo, team,
                             permission = c("pull", "push", "admin"),
                             verbose=TRUE) {
@@ -292,6 +332,18 @@ add_team_to_repo = function(repo, team,
 
 
 
+#' Rename repository
+#'
+#' \code{rename_repo} renames repositories. Use with caution as repositories retain their unique identifier upon renaming and can be accessed under their old names due to GitHub re-directing.
+#'
+#' @param repo Character. Address of repository in "owner/name" format.
+#' @param new_name Character. New name of repository in the "name" format.
+#'
+#' @examples
+#' \dontrun{
+#' rename_repo("Sta523-Fa17/hw1", "homework1")
+#' }
+#'
 #' @export
 rename_repo = function(repo, new_name) {
   purrr::walk2(
@@ -314,16 +366,28 @@ rename_repo = function(repo, new_name) {
 
 
 
-
-
+#' Mirror repository
+#'
+#' \code{mirror_repo} mirrors the content of one repository to another repository, or set of repositories. Use the \code{get_repos} function as a wrapper for the target_repo parameter to enable mirroring to multiple repositories.
+#'
+#' @param source_repo Character. Address of repository in "owner/name" format.
+#' @param target_repo Character or vector of characters.  Address of repository in "owner/name" format.
+#' @param verbose Logical. Display verbose output.
+#'
+#' @examples
+#' \dontrun{
+#' mirror_repo("Sta523/hw1_base", get_repos("Sta523-Fa17","hw1-"))
+#' }
+#'
 #' @export
-mirror_repo = function(source_repo, target_repos, verbose=TRUE)
+#'
+mirror_repo = function(source_repo, target_repo, verbose=TRUE)
 {
   stopifnot(length(source_repo) == 1)
-  stopifnot(length(target_repos) >= 1)
+  stopifnot(length(target_repo) >= 1)
 
   stopifnot(check_repo(source_repo))
-  stopifnot(all(check_repo(target_repos)))
+  stopifnot(all(check_repo(target_repo)))
 
   git = require_git()
 
@@ -342,7 +406,7 @@ mirror_repo = function(source_repo, target_repos, verbose=TRUE)
   setwd(repo_dir)
 
   purrr::walk(
-    target_repos,
+    target_repo,
     function(repo) {
 
       if (verbose)
@@ -360,9 +424,6 @@ mirror_repo = function(source_repo, target_repos, verbose=TRUE)
 
   unlink(file.path("..",repo_dir), recursive = TRUE)
 }
-
-
-
 
 
 
@@ -397,7 +458,25 @@ create_pull_request = function(repo, title, base, head = "master", body = "", ve
 
 
 
+#' Style repository
+#'
+#' \code{style_repo} implements "non-invasive pretty-printing of R source code" of .R or .Rmd files within a repository using the \code{styler} package and adhering to \code{tidyverse} formatting guidelines.
+#'
+#' @param repo Character. Address of repository in "owner/name" format.
+#' @param files Character or vector of characters. Names of .R and/or .Rmd files that styler should be applied to.
+#' @param branch Character. Name of new branch to be created. Default is "styler".
+#' @param base Character. Name of branch that contains the .R and/or .Rmd files to be reformatted.
+#' @param create_pull_request Logical. If TRUE, a pull request is created from branch to base.
+#' @param tag_collaborators Logical. If TRUE, a message with the repository collaborators is displayed.
+#' @param verbose Logical. Display verbose output.
+#'
+#' @examples
+#' \dontrun{
+#' style_repo("Sta523-Fa17/base_hw1", files = c("hw1_sample.Rmd"))
+#' }
+#'
 #' @export
+#'
 style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler", base="master",
                       create_pull_request = TRUE, tag_collaborators = TRUE,
                       git = require_git(), verbose=TRUE) {
@@ -465,7 +544,22 @@ style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler", base="maste
   )
 }
 
+#' List repository administrators
+#'
+#' \code{get_admins} creates a list of repository administrators.
+#'
+#' @param org Character. Name of GitHub organization.
+#' @param verbose Logical. Display verbose output.
+#'
+#' \examples
+#' \dontrun{
+#' get_admins("Sta523-Fa17")
+#' }
+#'
+#' @return A list containing a character vector of repository administrators.
+#'
 #' @export
+#'
 get_admins = function(org, verbose = FALSE) {
 
   purrr::map(
@@ -484,7 +578,24 @@ get_admins = function(org, verbose = FALSE) {
   )
 }
 
+
+#' List collaborators
+#'
+#' \code{get_collaborators} Returns a vector of collaborator user names. Users with Admin rights are by default excluded, but can be included manually.
+#'
+#' @param repo Character. Address of repository in "owner/name" format.
+#' @param include_admins Logical. If FALSE, user names of users with Admin rights are not included. Default is FALSE.
+#' @param verbose Logical. Display verbose output.
+#'
+#' @return A list containing a character vector of user names.
+#'
+#' @examples
+#' \dontrun{
+#' get_collaborators("Sta523-Fa17")
+#' }
+#'
 #' @export
+#'
 get_collaborators = function(repo, include_admins = FALSE, verbose = FALSE) {
 
   stopifnot(!missing(repo))
