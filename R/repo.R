@@ -46,7 +46,7 @@ github_api_repo_exists = function(repo) {
   succeeded(res)
 }
 
-#' Check existance of github repo
+#' Check existence of github repo
 #'
 #' \code{check_repo} returns TRUE if the GitHub repository exists.
 #'
