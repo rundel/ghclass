@@ -129,7 +129,7 @@ create_individual_repo = function(org, user, prefix="", suffix="",
 }
 
 
-#' Create individual repositories
+#' Create team repositories
 #'
 #' \code{create_team_repo} creates repos for team(s)
 #'
