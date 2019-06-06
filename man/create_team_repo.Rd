@@ -8,28 +8,28 @@ create_team_repo(org, team, prefix = "", suffix = "", private = TRUE,
   verbose = TRUE, auto_init = FALSE, gitignore_template = "R")
 }
 \arguments{
-\item{org}{character, name of the GitHub organization.}
+\item{org}{Character. Name of the GitHub organization.}
 
-\item{team}{character or data frame, vector of team names}
+\item{team}{Character or data frame. Vector of team names.}
 
-\item{prefix}{character, resulting repo name will start with this character string}
+\item{prefix}{Character. Resulting repo name will start with this character string.}
 
-\item{suffix}{character, resulting repo name will end with this character string}
+\item{suffix}{Character. Resulting repo name will end with this character string.}
 
-\item{private}{logical, create private repos}
+\item{private}{Logical. Create private repos.}
 
-\item{verbose}{logical, display verbose output}
+\item{verbose}{Logical. Display verbose output.}
 
-\item{auto_init}{logical, initialize the repository with a README.md}
+\item{auto_init}{Logical. Initialize the repository with a README.md.}
 
-\item{gitignore_template}{character, .gitignore template language}
+\item{gitignore_template}{Character. .gitignore template language.}
 }
 \description{
-\code{create_team_repo} creates repos for team(s)
+\code{create_team_repo} creates repos for team(s).
 }
 \examples{
 \dontrun{
-create_team_repo("ghclass",c("team01","team02"), prefix="hw01-")
+create_team_repo("Sta523-Fa17", c("team01","team02"), prefix = "hw01-")
 }
 
 }

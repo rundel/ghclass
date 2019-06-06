@@ -7,15 +7,20 @@
 check_repo(repo)
 }
 \arguments{
-\item{repo}{github repository address in \code{owner/repo} format}
+\item{repo}{Character. Address of repository in "owner/name" format. Can be vector or list of characters.}
+}
+\value{
+logical
 }
 \description{
-\code{check_repo} returns TRUE if the github repository exists
+\code{check_repo} returns TRUE if the GitHub repository exists.
 }
 \examples{
 \dontrun{
 check_repo("rundel/ghclass")
 check_repo("rundel/ghclass_fake")
+check_repo(c("rundel/ghclass", "rundel/ghclass_fake"))
+check_repo(list("rundel/ghclass", "rundel/ghclass_fake"))
 }
 
 }
