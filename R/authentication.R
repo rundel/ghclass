@@ -38,7 +38,7 @@ get_github_token = function() {
 #' Set github token
 #'
 #' \code{set_github_token} defines the user's github authentication token,
-#' this value is then accessed usin \code{get_github_token}
+#' this value is then accessed using \code{get_github_token}
 #'
 #' @param token character, either the path of a file contained the token or the actual token.
 #'
