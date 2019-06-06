@@ -64,7 +64,7 @@
       <h1>Course management with ghclass</h1>
                         <h4 class="author">Mine Çetinkaya-Rundel</h4>
             
-            <h4 class="date">2019-05-30</h4>
+            <h4 class="date">2019-06-06</h4>
       
       
       <div class="hidden name"><code>ghclass.Rmd</code></div>
@@ -76,7 +76,7 @@
 <div id="who-is-this-package-for" class="section level2">
 <h2 class="hasAnchor">
 <a href="#who-is-this-package-for" class="anchor"></a>Who is this package for?</h2>
-<p>This package is for everyone! But really, if you’re an instructor who uses GitHub for your class management, e.g. students submit assignments via GitHub repos, this package is definitely for you! The package also assumes that you’re a R user, and you probably teach R as well, though that’s not a requirement since this package is all about setting up repositories with the right permissions, not what your students put in those repositories. (If you’re a Python user, see <a href="https://ubc-mds.github.io/2017-08-24-teaching-with-github/">this post</a> for a Python based alternative.)</p>
+<p>This package is for everyone! But really, if you’re an instructor who uses GitHub for your class management, e.g. students submit assignments via GitHub repos, this package is definitely for you! The package also assumes that you’re an R user, and you probably teach R as well, though that’s not a requirement since this package is all about setting up repositories with the right permissions, not what your students put in those repositories. (If you’re a Python user, see <a href="https://ubc-mds.github.io/2017-08-24-teaching-with-github/">this post</a> for a Python based alternative.)</p>
 </div>
 <div id="what-is-this-vignette-about" class="section level2">
 <h2 class="hasAnchor">
@@ -130,7 +130,7 @@ Bob,Team2
 Carol,Team3
 Dave,Team1
 Eve,Team2</code></pre>
-<p>Using the <code>roster</code> data frame, we can then invite the students to the class’ organzation. This will send and email to each student inviting them to join the GitHub organization.</p>
+<p>Using the <code>roster</code> data frame, we can then invite the students to the class’ organzation. This will send an email to each student inviting them to join the GitHub organization.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">invite_user</span>(<span class="st">"Sta523-Fa17"</span>, roster<span class="op">$</span>github)</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">## Adding Alice to Sta523-Fa17 ...</span></a>
@@ -138,12 +138,13 @@ Eve,Team2</code></pre>
 <a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">## Adding Carol to Sta523-Fa17 ...</span></a>
 <a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">## Adding Dave to Sta523-Fa17 ...</span></a>
 <a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">## Adding Eve to Sta523-Fa17 ...</span></a></code></pre></div>
-<p>We use the variable <code>team</code> within the <code>roster</code> data frame to create teams within the organization and add students to their teams.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">create_team</span>(<span class="st">"Sta523-Fa17"</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/unique">unique</a></span>(roster<span class="op">$</span>team))</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">## Adding team Team1 to Sta523-Fa17 ...</span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">## Adding team Team2 to Sta523-Fa17 ...</span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">## Adding team Team3 to Sta523-Fa17 ...</span></a></code></pre></div>
+<p>We use the variable <code>team</code> within the <code>roster</code> data frame to create a vector of unique team names, here called <code>teams</code>. We then use the <code>teams</code> vector to add students to their teams within the organization via the <code>create_team()</code> function.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">teams &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/unique">unique</a></span>(roster<span class="op">$</span>team)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">create_team</span>(<span class="st">"Sta523-Fa17"</span>, teams)</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">## Adding team Team1 to Sta523-Fa17 ...</span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">## Adding team Team2 to Sta523-Fa17 ...</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">## Adding team Team3 to Sta523-Fa17 ...</span></a></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">add_team_member</span>(<span class="st">"Sta523-Fa17"</span>, roster<span class="op">$</span>github, roster<span class="op">$</span>team)</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">## Adding Alice to team Team1 ...</span></a>
@@ -151,13 +152,13 @@ Eve,Team2</code></pre>
 <a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">## Adding Carol to team Team3 ...</span></a>
 <a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">## Adding Dave to team Team1 ...</span></a>
 <a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">## Adding Eve to team Team2 ...</span></a></code></pre></div>
-<p>You can check which students are added to the organization using the <code>get_members</code> function, and pending invitations using the <code>get_pending_members</code> function. Note that if students are first-time GitHub users, they will need to verify the email address associated with their GitHub account and accept the invitation before they show up as a member of the organization.</p>
+<p>You can check which students are added to the organization using the <code>get_members</code> function, and pending invitations using the <code>get_pending_members</code> function, respectively. Note that if students are first-time GitHub users, they will need to verify the email address associated with their GitHub account and accept the invitation before they show up as a member of the organization.</p>
 </div>
 <div id="creating-a-team-assignment" class="section level3">
 <h3 class="hasAnchor">
 <a href="#creating-a-team-assignment" class="anchor"></a>Creating a team assignment</h3>
-<p>First, create repositories for each team with a prefix identifying the assignment. The resulting repo names will be this prefix followed by the team name.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">create_team_repo</span>(<span class="st">"Sta523-Fa17"</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/unique">unique</a></span>(roster<span class="op">$</span>team), <span class="dt">prefix=</span><span class="st">"hw2-"</span>)</a>
+<p>First, create repositories for each team in the <code>teams</code> vector; with a prefix identifying the assignment. The resulting repo names will be this prefix followed by the team name.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">create_team_repo</span>(<span class="st">"Sta523-Fa17"</span>, teams, <span class="dt">prefix=</span><span class="st">"hw2-"</span>)</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">## Creating repo Sta523-Fa17/hw2-Team1 ...</span></a>
 <a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">## Creating repo Sta523-Fa17/hw2-Team2 ...</span></a>
