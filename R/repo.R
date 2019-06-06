@@ -1,4 +1,4 @@
-github_api_get_repo_collaborators = function(repo) {
+github_api_get_collaborators = function(repo) {
   gh(
     "GET /repos/:owner/:repo/collaborators",
     owner = get_repo_owner(repo), repo = get_repo_name(repo),
@@ -14,7 +14,7 @@ get_repo_collaborators = function(repos) {
   users = purrr::map(
     repos,
     function(repo) {
-      res = github_api_get_repo_collaborators(repo)
+      res = github_api_get_collaborators(repo)
       purrr::map_chr(res, "login")
     }
   )
