@@ -23,16 +23,23 @@ get_repo_collaborators = function(repos) {
 }
 
 github_api_repo_exists = function(repo) {
-  owner = get_repo_owner(repo)
-  repo = get_repo_name(repo)
-  res = safe_gh(
+  safe_gh(
     "GET /repos/:owner/:repo",
-    owner=owner, repo=repo, .token=get_github_token()
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    .token=get_github_token()
   )
-  succeeded(res)
 }
 
-#' Check existance of github repo
+github_api_get_repo_id = function(id) {
+  safe_gh(
+    "GET /repositories/:id",
+    id = id,
+    .token=get_github_token()
+  )
+}
+
+#' Check existence of github repo
 #'
 #' \code{check_repo} returns TRUE if the github repository exists
 #'
@@ -51,16 +58,11 @@ github_api_repo_exists = function(repo) {
 #' @export
 check_repo = function(repo, redirect = F) {
 
-  res = safe_gh(
-    "GET /repos/:owner/:repo",
-    owner = get_repo_owner(repo),
-    repo = get_repo_name(repo),
-    .token=get_github_token()
-  )
+  res = github_api_repo_exists(repo)
 
   if(succeeded(res)){
-    current_name = gh("GET /repositories/:id",
-                      id = res$result$id)$name
+    current_name = github_api_get_repo_id(res$result$id)$result$name
+
     if(current_name == get_repo_name(repo)){
       succeeded(res)
     } else {
