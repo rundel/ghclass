@@ -71,8 +71,24 @@ check_repo = function(repo) {
 }
 
 
+#' Check if repository exists
+#'
+#' @param repos Character. Address of repository in "owner/name" format.
+#'
+#' @templateVar fun check_repos
+#' @template template-depr_fun
+#'
+#' @templateVar old check_repos
+#' @templateVar new check_repo
+#' @template template-depr_pkg
+#'
+#' @export
+#'
 check_repos = function(repos)
 {
+  .Deprecated(msg = "'check_repos' will be removed in the next version. Use 'check_repo' instead.",
+              new = "check_repo")
+
   exists = function(owner, repo)
   {
     gh("GET /repos/:owner/:repo", owner=owner, repo=repo, .token=get_github_token())
@@ -292,7 +308,7 @@ get_team_id_tbl = function(org, team) {
 #'
 #' @examples
 #' \dontrun{
-#' add_team_to_repo("Sta523-Fa17/resources", c("Team1", "Team2))
+#' add_team_to_repo("Sta523-Fa17/resources", c("Team1", "Team2"))
 #' }
 #'
 #' @export
