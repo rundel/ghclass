@@ -11,7 +11,7 @@ set_github_token(token)
 }
 \description{
 \code{set_github_token} defines the user's github authentication token,
-this value is then accessed usin \code{get_github_token}
+this value is then accessed using \code{get_github_token}
 }
 \examples{
 \dontrun{

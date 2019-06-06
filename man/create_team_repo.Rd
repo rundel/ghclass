@@ -2,7 +2,7 @@
 % Please edit documentation in R/repo.R
 \name{create_team_repo}
 \alias{create_team_repo}
-\title{Create individual repositories}
+\title{Create team repositories}
 \usage{
 create_team_repo(org, team, prefix = "", suffix = "", private = TRUE,
   verbose = TRUE, auto_init = FALSE, gitignore_template = "R")

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create team(s) — create_team • ghclass</title>
+<title>Unprotect branch — unprotect_branch • ghclass</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,11 @@
 
 
 
-<meta property="og:title" content="Create team(s) — create_team" />
+<meta property="og:title" content="Unprotect branch — unprotect_branch" />
 
-<meta property="og:description" content="create_team creates teams in your organization" />
+<meta property="og:description" content="unprotect_branch removes protections from the specified branch. See
+https://help.github.com/en/articles/about-protected-branches for more details
+on what this changes." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -97,56 +99,44 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create team(s)</h1>
+    <h1>Unprotect branch</h1>
     
-    <div class="hidden name"><code>create_team.Rd</code></div>
+    <div class="hidden name"><code>unprotect_branch.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p><code>create_team</code> creates teams in your organization</p>
+    <p><code>unprotect_branch</code> removes protections from the specified branch. See
+https://help.github.com/en/articles/about-protected-branches for more details
+on what this changes.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>create_team</span>(<span class='no'>org</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>(), <span class='kw'>privacy</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"closed"</span>, <span class='st'>"secret"</span>),
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>unprotect_branch</span>(<span class='no'>repo</span>, <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>org</th>
-      <td><p>character, name of the GitHub organization</p></td>
+      <th>repo</th>
+      <td><p>github repository address in <code>owner/repo</code> format</p></td>
     </tr>
     <tr>
-      <th>team</th>
-      <td><p>character, listing one or more teams</p></td>
+      <th>cur_branch</th>
+      <td><p>name of existing branch</p></td>
     </tr>
     <tr>
-      <th>privacy</th>
-      <td><p>character, level of privacy of teams, closed (visible to all
-members of the organization) or secret (only visible to organization owners
-and members of a team), default is closed</p></td>
+      <th>new_branch</th>
+      <td><p>name of branch to create</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other github organization related functions: <code>create_individual_repo</code>,
-  <code>create_team_repo</code>,
-  <code>get_members</code>,
-  <code>get_pending_members</code>,
-  <code>get_pending_team_members</code>,
-  <code>get_repos</code>, <code>get_team_members</code>,
-  <code>get_team_repos</code>, <code>get_teams</code>,
-  <code>invite_user</code></p></div>
+    <div class='dont-index'><p>Other branch functions: <code>create_branch</code>,
+  <code>protect_branch</code></p></div>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>create_team</span>(<span class='st'>"ghclass"</span>,<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"team01"</span>,<span class='st'>"team01"</span>))
-<span class='co'># }</span><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -154,9 +144,7 @@ and members of a team), default is closed</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+          </ul>
 
   </div>
 </div>
