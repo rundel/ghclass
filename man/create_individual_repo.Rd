@@ -9,29 +9,29 @@ create_individual_repo(org, user, prefix = "", suffix = "",
   gitignore_template = "R")
 }
 \arguments{
-\item{org}{character, name of the GitHub organization.}
+\item{org}{Character. Name of the GitHub organization.}
 
-\item{user}{character or data frame, listing one or more users}
+\item{user}{Character or data frame. Listing one or more users.}
 
-\item{prefix}{character, resulting repo name will start with this character string}
+\item{prefix}{Character. Resulting repository name will start with this. character string.}
 
-\item{suffix}{character, resulting repo name will end with this character string}
+\item{suffix}{Character. Resulting repository name will end with this character string.}
 
-\item{private}{logical, create private repos}
+\item{private}{Logical. Create private repositories.}
 
-\item{verbose}{logical, display verbose output}
+\item{verbose}{Logical. Display verbose output.}
 
-\item{auto_init}{logical, initialize the repository with a README.md}
+\item{auto_init}{Logical. Initialize the repository with a README.md.}
 
-\item{gitignore_template}{character, .gitignore template language}
+\item{gitignore_template}{Character. .gitignore template language.}
 }
 \description{
-\code{create_individual_repo} creates repos for each student for a given
-assignment
+\code{create_individual_repo} creates repositories for each student for a given
+assignment.
 }
 \examples{
 \dontrun{
-create_individual_repo("ghclass",c("user01","user02"), prefix="hw01-")
+create_individual_repo("Sta523-Fa17", c("user01","user02"), prefix = "hw01-")
 }
 
 }
