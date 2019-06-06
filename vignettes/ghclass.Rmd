@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 This package is for everyone! But really, if you're an instructor who uses 
 GitHub for your class management, e.g. students submit assignments via GitHub 
 repos, this package is definitely for you! The package also assumes that you're 
-a R user, and you probably teach R as well, though that's not a requirement 
+an R user, and you probably teach R as well, though that's not a requirement 
 since this package is all about setting up repositories with the right 
 permissions, not what your students put in those repositories. (If you're a 
 Python user, see [this post](https://ubc-mds.github.io/2017-08-24-teaching-with-github/) for a Python 
@@ -141,7 +141,7 @@ Eve,Team2
 ```
 
 Using the `roster` data frame, we can then invite the students to the class'
-organzation. This will send and email to each student inviting them to join the
+organzation. This will send an email to each student inviting them to join the
 GitHub organization.
 
 ```r
@@ -154,11 +154,11 @@ invite_user("Sta523-Fa17", roster$github)
 ## Adding Eve to Sta523-Fa17 ...
 ```
 
-We use the variable `team` within the `roster` data frame to create teams
-within the organization and add students to their teams.
+We use the variable `team` within the `roster` data frame to create a vector of unique team names, here called `teams`. We then use the `teams` vector to add students to their teams within the organization via the `create_team()` function.
 
 ```r
-create_team("Sta523-Fa17", unique(roster$team))
+teams <- unique(roster$team)
+create_team("Sta523-Fa17", teams)
 
 ## Adding team Team1 to Sta523-Fa17 ...
 ## Adding team Team2 to Sta523-Fa17 ...
@@ -177,18 +177,18 @@ add_team_member("Sta523-Fa17", roster$github, roster$team)
 
 You can check which students are added to the organization using the
 `get_members` function, and pending invitations using the `get_pending_members`
-function. Note that if students are first-time GitHub users, they will need to
+function, respectively. Note that if students are first-time GitHub users, they will need to
 verify the email address associated with their GitHub account and accept the
 invitation before they show up as a member of the organization.
 
 ### Creating a team assignment
 
-First, create repositories for each team with a prefix identifying the
+First, create repositories for each team in the `teams` vector; with a prefix identifying the
 assignment. The resulting repo names will be this prefix followed by the team
 name.
 
 ```r
-create_team_repo("Sta523-Fa17", unique(roster$team), prefix="hw2-")
+create_team_repo("Sta523-Fa17", teams, prefix="hw2-")
 
 ## Creating repo Sta523-Fa17/hw2-Team1 ...
 ## Creating repo Sta523-Fa17/hw2-Team2 ...
