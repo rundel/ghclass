@@ -64,7 +64,7 @@
       <h1>Course management with ghclass</h1>
                         <h4 class="author">Mine Çetinkaya-Rundel</h4>
             
-            <h4 class="date">2019-06-06</h4>
+            <h4 class="date">2019-06-07</h4>
       
       
       <div class="hidden name"><code>ghclass.Rmd</code></div>
@@ -131,16 +131,16 @@ Carol,Team3
 Dave,Team1
 Eve,Team2</code></pre>
 <p>Using the <code>roster</code> data frame, we can then invite the students to the class’ organzation. This will send an email to each student inviting them to join the GitHub organization.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">invite_user</span>(<span class="st">"Sta523-Fa17"</span>, roster<span class="op">$</span>github)</a>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="../reference/invite_user.html">invite_user</a></span>(<span class="st">"Sta523-Fa17"</span>, roster<span class="op">$</span>github)</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">## Adding Alice to Sta523-Fa17 ...</span></a>
 <a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">## Adding Bob to Sta523-Fa17 ...</span></a>
 <a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">## Adding Carol to Sta523-Fa17 ...</span></a>
 <a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">## Adding Dave to Sta523-Fa17 ...</span></a>
 <a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">## Adding Eve to Sta523-Fa17 ...</span></a></code></pre></div>
-<p>We use the variable <code>team</code> within the <code>roster</code> data frame to create a vector of unique team names, here called <code>teams</code>. We then use the <code>teams</code> vector to add students to their teams within the organization via the <code>create_team()</code> function.</p>
+<p>We use the variable <code>team</code> within the <code>roster</code> data frame to create a vector of unique team names, here called <code>teams</code>. We then use the <code>teams</code> vector to add students to their teams within the organization via the <code><a href="../reference/create_team.html">create_team()</a></code> function.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">teams &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/unique">unique</a></span>(roster<span class="op">$</span>team)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">create_team</span>(<span class="st">"Sta523-Fa17"</span>, teams)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw"><a href="../reference/create_team.html">create_team</a></span>(<span class="st">"Sta523-Fa17"</span>, teams)</a>
 <a class="sourceLine" id="cb4-3" data-line-number="3"></a>
 <a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">## Adding team Team1 to Sta523-Fa17 ...</span></a>
 <a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">## Adding team Team2 to Sta523-Fa17 ...</span></a>
@@ -158,7 +158,7 @@ Eve,Team2</code></pre>
 <h3 class="hasAnchor">
 <a href="#creating-a-team-assignment" class="anchor"></a>Creating a team assignment</h3>
 <p>First, create repositories for each team in the <code>teams</code> vector; with a prefix identifying the assignment. The resulting repo names will be this prefix followed by the team name.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">create_team_repo</span>(<span class="st">"Sta523-Fa17"</span>, teams, <span class="dt">prefix=</span><span class="st">"hw2-"</span>)</a>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="../reference/create_team_repo.html">create_team_repo</a></span>(<span class="st">"Sta523-Fa17"</span>, teams, <span class="dt">prefix=</span><span class="st">"hw2-"</span>)</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">## Creating repo Sta523-Fa17/hw2-Team1 ...</span></a>
 <a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">## Creating repo Sta523-Fa17/hw2-Team2 ...</span></a>
@@ -166,7 +166,7 @@ Eve,Team2</code></pre>
 <p>If you want to place starter docs into the assignment repos that you just created, you should first create a repo in this organization containing these starter docs and then mirrow the contents of that repo to the repos you created earlier. You can do this with the <code>mirror_repo</code> function.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">mirror_repo</span>(</a>
 <a class="sourceLine" id="cb7-2" data-line-number="2">  <span class="dt">source_repo =</span> <span class="st">"Sta523-Fa17/hw2"</span>,</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">  <span class="dt">target_repos =</span> <span class="kw">get_repos</span>(<span class="st">"Sta523-Fa17"</span>,<span class="st">"hw2-"</span>)</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">  <span class="dt">target_repos =</span> <span class="kw"><a href="../reference/get_repos.html">get_repos</a></span>(<span class="st">"Sta523-Fa17"</span>,<span class="st">"hw2-"</span>)</a>
 <a class="sourceLine" id="cb7-4" data-line-number="4">)</a>
 <a class="sourceLine" id="cb7-5" data-line-number="5"></a>
 <a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">## Cloning source repo (Sta523-Fa17/hw2) ...</span></a>
@@ -190,7 +190,7 @@ Eve,Team2</code></pre>
 <li><p>Create and save a Wercker <a href="https://app.wercker.com/profile/tokens">token</a> to <code>~/.wercker/token</code></p></li>
 <li><p>Make sure third party access is allowed for your github organization (See Settings / Third-party access then click on remote restrictions)</p></li>
 </ul>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">add_wercker</span>(<span class="kw">get_repos</span>(<span class="st">"Sta523-Fa17"</span>, <span class="st">"hw2-"</span>), <span class="st">"Sta523-Fa17"</span>)</a>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">add_wercker</span>(<span class="kw"><a href="../reference/get_repos.html">get_repos</a></span>(<span class="st">"Sta523-Fa17"</span>, <span class="st">"hw2-"</span>), <span class="st">"Sta523-Fa17"</span>)</a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">## Creating wercker app for Sta523-Fa17/hw2-Team1 ...</span></a>
 <a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">## Creating wercker app for Sta523-Fa17/hw2-Team2 ...</span></a>
@@ -202,8 +202,8 @@ Eve,Team2</code></pre>
 <!-- This part needs to be changed based on the discussion regarding GH issue
 #16 -->
 <p>You can modify repos after they have been created. This will overwrite existing files with the same name in the repo, so you should be careful not to do this if students have already started working on the repos.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">add_files</span>(</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">  <span class="kw">get_repos</span>(<span class="st">"Sta523-Fa17"</span>,<span class="st">"hw2-"</span>),</a>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="../reference/add_files.html">add_files</a></span>(</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">  <span class="kw"><a href="../reference/get_repos.html">get_repos</a></span>(<span class="st">"Sta523-Fa17"</span>,<span class="st">"hw2-"</span>),</a>
 <a class="sourceLine" id="cb9-3" data-line-number="3">  <span class="dt">message =</span> <span class="st">"Remove wrong wercker badge"</span>,</a>
 <a class="sourceLine" id="cb9-4" data-line-number="4">  <span class="dt">files =</span> <span class="st">"~/Desktop/Sta523/Homework/hw2/repo/README.md"</span></a>
 <a class="sourceLine" id="cb9-5" data-line-number="5">)</a>

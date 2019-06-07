@@ -52,7 +52,8 @@ get_file = function(repo, file, branch="master")
 
 #' @export
 add_content = function(repo, file, content, after=NULL, message="Added content", branch="master", verbose=TRUE) {
-  require_valid_repo(repo)
+  #TO DO: Fix since require_valid_repo is no longer vectorized
+  #require_valid_repo(repo)
 
   purrr::pwalk(
     list(repo, file, content, after, message, branch),
@@ -96,7 +97,8 @@ add_content = function(repo, file, content, after=NULL, message="Added content",
 find_file = function(repo, file)
 {
   stopifnot(length(repo)==1)
-  require_valid_repo(repo)
+  #TO DO: Fix since require_valid_repo is no longer vectorized
+  #require_valid_repo(repo)
 
   purrr::flatten_chr(
     purrr::map(
