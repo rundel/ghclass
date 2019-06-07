@@ -4,7 +4,7 @@
 \alias{invite_user}
 \title{Invite user(s)}
 \usage{
-invite_user(org, user, verbose = TRUE, exclude_pending = FALSE)
+invite_user(org, user, exclude_pending = FALSE)
 }
 \arguments{
 \item{org}{character, name of the GitHub organization.}
