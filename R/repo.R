@@ -157,7 +157,7 @@ create_team_repo = function(org, team,  prefix="", suffix="",
 
   if (is.character(team)) {
     team = merge(
-      tibble::data_frame(team = team), org_teams,
+      tibble::tibble(team = team), org_teams,
       by = "team", all.x = TRUE
     )
   }

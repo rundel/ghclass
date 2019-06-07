@@ -30,12 +30,12 @@ get_teams = function(org, filter=NULL, exclude=FALSE) {
   res = github_api_get_teams(org)
 
   teams = if (empty_result(res)) {
-    tibble::data_frame(
+    tibble::tibble(
       team = character(),
       id   =  integer()
     )
   } else {
-    tibble::data_frame(
+    tibble::tibble(
       team = purrr::map_chr(res, "name"),
       id   = purrr::map_int(res, "id")
     )
@@ -94,12 +94,12 @@ get_team_repos = function(org, team = get_teams(org))
       )
 
       if (empty_result(res)) {
-        tibble::data_frame(
+        tibble::tibble(
           team = character(),
           repo = character()
         )
       } else {
-        tibble::data_frame(
+        tibble::tibble(
           team = team,
           repo = purrr::map_chr(res, "full_name")
         )
@@ -134,7 +134,7 @@ get_team_members = function(org, team = get_teams(org), get_pending = TRUE)
     res[["pending"]] = rep(FALSE, nrow(res))
     res
   } else {
-    tibble::data_frame(team = character(), github = character(), pending = logical())
+    tibble::tibble(team = character(), github = character(), pending = logical())
   }
 
   if (is.character(team))
@@ -152,13 +152,13 @@ get_team_members = function(org, team = get_teams(org), get_pending = TRUE)
       )
 
       if (empty_result(res)) {
-        tibble::data_frame(
+        tibble::tibble(
           team = character(),
           github = character(),
           pending = logical()
         )
       } else {
-        tibble::data_frame(
+        tibble::tibble(
           team = team,
           github = purrr::map_chr(res, "login"),
           pending = FALSE
@@ -167,7 +167,7 @@ get_team_members = function(org, team = get_teams(org), get_pending = TRUE)
     }
   )
 
-  tibble::as_data_frame( rbind(cur, pend) )
+  tibble::as_tibble( rbind(cur, pend) )
 }
 
 #' Get pending team members
@@ -205,12 +205,12 @@ get_pending_team_members = function(org, team = get_teams(org))
       )
 
       if (empty_result(res)) {
-        tibble::data_frame(
+        tibble::tibble(
           team = character(),
           github = character()
         )
       } else {
-        tibble::data_frame(
+        tibble::tibble(
           team = team,
           github = purrr::map_chr(res, "login")
         )
@@ -312,7 +312,7 @@ add_team_member = function(org, user, team, create_missing_teams = FALSE)
   stopifnot(is.character(user) & length(user) >=1)
   stopifnot(is.character(team) & length(team) >=1)
 
-  info = tibble::data_frame(
+  info = tibble::tibble(
     user,
     team
   )
