@@ -89,7 +89,7 @@ is_safely_result = function(res) {
 }
 
 # Expects one or more results from purrr::safely
-check_result = function(res, fail_msg, verbose=FALSE, error_prefix = "") {
+check_result = function(res, fail_msg, error_prefix = "") {
   res = listify_result(res)
   stopifnot(is_safely_result(res))
 
@@ -98,7 +98,7 @@ check_result = function(res, fail_msg, verbose=FALSE, error_prefix = "") {
     error_prefix = error_prefix[errs]
 
   if (any(errs)) {
-    if (verbose)
+    if (TRUE)
       fail_msg = paste0(
         fail_msg,
         "\n",

@@ -17,7 +17,7 @@ github_api_get_teams = function(org) {
 #' get_team_repos("ghclass",c("team01","team02"))
 #' }
 #'
-#' @family github organization related functions
+#' @family github organization team related functions
 #'
 #' @export
 #'
@@ -30,12 +30,12 @@ get_teams = function(org, filter=NULL, exclude=FALSE) {
   res = github_api_get_teams(org)
 
   teams = if (empty_result(res)) {
-    tibble::data_frame(
+    tibble::tibble(
       team = character(),
       id   =  integer()
     )
   } else {
-    tibble::data_frame(
+    tibble::tibble(
       team = purrr::map_chr(res, "name"),
       id   = purrr::map_int(res, "id")
     )
@@ -94,12 +94,12 @@ get_team_repos = function(org, team = get_teams(org))
       )
 
       if (empty_result(res)) {
-        tibble::data_frame(
+        tibble::tibble(
           team = character(),
           repo = character()
         )
       } else {
-        tibble::data_frame(
+        tibble::tibble(
           team = team,
           repo = purrr::map_chr(res, "full_name")
         )
@@ -121,7 +121,7 @@ get_team_repos = function(org, team = get_teams(org))
 #' get_team_members("ghclass",c("team01","team02"))
 #' }
 #'
-#' @family github organization related functions
+#' @family github organization team related functions
 #'
 #' @export
 #'
@@ -134,7 +134,7 @@ get_team_members = function(org, team = get_teams(org), get_pending = TRUE)
     res[["pending"]] = rep(FALSE, nrow(res))
     res
   } else {
-    tibble::data_frame(team = character(), github = character(), pending = logical())
+    tibble::tibble(team = character(), github = character(), pending = logical())
   }
 
   if (is.character(team))
@@ -152,13 +152,13 @@ get_team_members = function(org, team = get_teams(org), get_pending = TRUE)
       )
 
       if (empty_result(res)) {
-        tibble::data_frame(
+        tibble::tibble(
           team = character(),
           github = character(),
           pending = logical()
         )
       } else {
-        tibble::data_frame(
+        tibble::tibble(
           team = team,
           github = purrr::map_chr(res, "login"),
           pending = FALSE
@@ -167,7 +167,7 @@ get_team_members = function(org, team = get_teams(org), get_pending = TRUE)
     }
   )
 
-  tibble::as_data_frame( rbind(cur, pend) )
+  tibble::as_tibble( rbind(cur, pend) )
 }
 
 #' Get pending team members
@@ -182,7 +182,7 @@ get_team_members = function(org, team = get_teams(org), get_pending = TRUE)
 #' get_pending_team_members("ghclass",c("team01","team02"))
 #' }
 #'
-#' @family github organization related functions
+#' @family github organization team related functions
 #'
 #' @export
 #'
@@ -205,12 +205,12 @@ get_pending_team_members = function(org, team = get_teams(org))
       )
 
       if (empty_result(res)) {
-        tibble::data_frame(
+        tibble::tibble(
           team = character(),
           github = character()
         )
       } else {
-        tibble::data_frame(
+        tibble::tibble(
           team = team,
           github = purrr::map_chr(res, "login")
         )
@@ -220,11 +220,17 @@ get_pending_team_members = function(org, team = get_teams(org))
 }
 
 
-
+github_api_create_team = function(org, name, privacy) {
+  gh(
+    "POST /orgs/:org/teams",
+    org=org, name=name, privacy=privacy,
+    .token=get_github_token()
+  )
+}
 
 #' Create team(s)
 #'
-#' \code{create_team} creates teams in your organization
+#' \code{create_team} creates teams in your GitHub organization
 #'
 #' @param org character, name of the GitHub organization
 #' @param team character, listing one or more teams
@@ -237,120 +243,160 @@ get_pending_team_members = function(org, team = get_teams(org))
 #' create_team("ghclass",c("team01","team01"))
 #' }
 #'
-#' @family github organization related functions
+#' @family github organization team related functions
 #'
 #' @export
-create_team = function(org, team = character(), privacy = c("closed","secret"), verbose = TRUE)
-{
-  stopifnot(!missing(org))
-
-  team = as.character(team)
+create_team = function(org, team, privacy = c("closed","secret")) {
+  team = unique(as.character(team))
   privacy = match.arg(privacy)
 
-  org_teams = get_teams(org)
+  org_teams = get_teams(org)[["team"]]
+
+  new_teams = setdiff(team, org_teams)
+  existing_teams = intersect(team, org_teams)
+
+  if (length(existing_teams) > 0)
+    usethis::ui_info("Skipping existing teams: {usethis::ui_value(existing_teams)}.")
 
   purrr::walk(
-    unique(team),
+    new_teams,
     function(team) {
-
-      if (team %in% org_teams[["team"]]) {
-        if (verbose)
-          message("Skipping ", team, ", already exists for ", org, " ...")
-        return()
-      }
-
-      if (verbose)
-        message("Adding team ", team, " to ", org, " ...")
-
-      res = safe_gh(
-        "POST /orgs/:org/teams",
-        org=org, name=team, privacy=privacy,
-        .token=get_github_token()
+      res = purrr::safely(github_api_create_team)(
+        org=org, name=team, privacy=privacy
       )
 
-      check_result(
+      status_msg(
         res,
-        sprintf("Failed to create team %s.", team),
-        verbose
+        glue::glue("Added team {usethis::ui_value(team)} to org {usethis::ui_value(org)}."),
+        glue::glue("Failed to add team {usethis::ui_value(team)} to org {usethis::ui_value(org)}."),
       )
     }
   )
 }
 
-#' @export
-rename_team = function(org, cur_team, new_team) {
+github_api_rename_team = function(id, new_name) {
+  gh(
+    "PATCH /teams/:team_id",
+    team_id = id,
+    name = new_name,
+    .token=get_github_token()
+  )
+}
 
+team_id_lookup = function(d, org_teams, strict = TRUE) {
+  d = merge(
+    org_teams, d,
+    by = "team", all.y = TRUE
+  )
+
+  missing_teams = unique( d[["team"]][is.na(d[["id"]])] )
+
+  if (strict & length(missing_teams) > 0)
+      usethis::ui_stop( paste(
+        "Cannot find team(s) {usethis::ui_value(missing_teams)}",
+        "in org {usethis::ui_value(org)}."
+      ) )
+
+  d
+}
+
+
+#' Rename existing team(s)
+#'
+#' \code{rename_team} renames an existing team within the given GitHub organization.
+#'
+#' @param org character, name of the GitHub organization
+#' @param team character, one or more existing team names
+#' @param new_team character, one or more new team names
+#'
+#' @examples
+#' \dontrun{
+#' rename_team("ghclass-test", "hw1-team01", "hw01-team01")
+#' }
+#'
+#' @family github organization team related functions
+#'
+#' @export
+rename_team = function(org, team, new_team) {
   stopifnot(length(org) == 1)
 
-  org_teams = get_teams(org)
-  team_id_lookup = setNames(org_teams[["id"]], org_teams[["team"]])
+  d = tibble::tibble(
+    team = team,
+    new_team = new_team
+  )
+
+  d = team_id_lookup(d, get_teams(org), strict = TRUE)
 
   purrr::pwalk(
-    list(cur_team, new_team),
-    function(cur_team, new_team) {
+    d,
+    function(team, id, new_team) {
+      res = purrr::safely(github_api_rename_team)(id, new_team)
 
-      if (verbose)
-        message("Renaming team ", cur_team, " to ", new_team, " ...")
-
-
-      res = safe_gh("PATCH /teams/:team_id",
-                    team_id = team_id_lookup[cur_team],
-                    name = new_team,
-                    .token=get_github_token())
-
-      check_result(
+      status_msg(
         res,
-        sprintf("Failed to rename team %s to %s.", repo, new_name),
-        verbose
+        glue::glue("Renamed team {usethis::ui_value(team)} to {usethis::ui_value(new_team)}."),
+        glue::glue("Failed to rename team {usethis::ui_value(team)} to {usethis::ui_value(new_team)}.")
       )
     }
   )
 }
 
 
+github_api_add_team_member = function(team_id, username) {
+  gh(
+    "PUT /teams/:id/memberships/:username",
+    id=team_id, username=username, role="member",
+    .token=get_github_token()
+  )
+}
+
+#' Add Members to an Organizaton's Team(s)
+#'
+#' \code{add_team_member} add members to GitHub Organization Teams.
+#'
+#' @param org character, name of the GitHub organization
+#' @param user character, one or more usernames to invite
+#' @param team character, one or more team names
+#' @param create_missing_teams logical, if a team does not already exist
+#' should it be added to the GitHub organization.
+#'
+#' @examples
+#' \dontrun{
+#' add_team_member("ghclass-test", "rundel", c("hw1-team01","hw1-team02"))
+#' }
+#'
+#' @family github organization team related functions
+#'
 #' @export
-add_team_member = function(org, user, team, create_missing_teams=FALSE, verbose=TRUE)
-{
+add_team_member = function(org, user, team, create_missing_teams = TRUE) {
   stopifnot(!missing(org))
+
   stopifnot(is.character(user) & length(user) >=1)
   stopifnot(is.character(team) & length(team) >=1)
+  stopifnot(length(create_missing_teams) == 1)
 
-  info = tibble::data_frame(
-    user,
-    team
-  )
+  d = tibble::tibble(user, team)
 
   org_teams = get_teams(org)
-
   new_teams = setdiff(unique(team), org_teams[["team"]])
-  if (length(new_teams) != 0 & create_missing_teams) {
-    create_team(org, new_teams, verbose=verbose)
+
+  if (length(new_teams) > 0 & create_missing_teams) {
+    create_team(org, new_teams)
     org_teams = get_teams(org)
   }
 
-  info = merge(
-    info, org_teams,
-    by = "team", all.x = TRUE
-  )
-
-  missing_teams = is.na(info[["id"]])
-  if (any(missing_teams))
-    stop("Team(s) ", paste(new_teams,collapse=", "), " do(es) not exist in ", org, ".", call. = FALSE)
+  d = team_id_lookup(d, org_teams, strict=TRUE)
 
   purrr::pwalk(
-    info,
+    d,
     function(user, team, id) {
+      res = purrr::safely(github_api_add_team_member)(id, user)
 
-      if (verbose)
-        message("Adding ", user, " to team ", team, " ...")
-
-      res = safe_gh(
-        "PUT /teams/:id/memberships/:username",
-        id=id, username=user, role="member",
-        .token=get_github_token()
+      status_msg(
+        res,
+        glue::glue("Added {usethis::ui_value(user)} to team {usethis::ui_value(team)}."),
+        glue::glue("Failed to add {usethis::ui_value(user)} to team {usethis::ui_value(team)}.")
       )
-
-      check_result(res, sprintf("Failed to add %s to %s in %s.", user, team, org), verbose)
     }
   )
 }
