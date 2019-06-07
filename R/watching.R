@@ -2,16 +2,17 @@
 github_api_get_watching = function(){
   gh(
     "GET /user/subscriptions",
-    .token = ghclass::get_github_token(),
-    .limit = ghclass::get_github_api_limit()
+    .token = get_github_token(),
+    .limit = get_github_api_limit()
   )
 }
 
 #' Get repos user is watching
 #'
 #' Returns all of the authenticated user's watched repositories. This should
-#' match the list at https://github.com/watching. The function can also
-#' filter the results for matching (or excluding) repositories.
+#' match the list at [github.com/watching](https://github.com/watching).
+#' The function can also filter the results for matching (or excluding)
+#' repositories.
 #'
 #' @param filter character, regex pattern for matching (or excluding) repositories.
 #' @param exclude logical, should entries matching the regex be excluded or included.
@@ -39,13 +40,13 @@ github_api_unwatch_repo = function(repo){
 
   require_valid_repo(repo)
 
-  owner = ghclass::get_repo_owner(repo)
-  name = ghclass::get_repo_name(repo)
+  owner = get_repo_owner(repo)
+  name = get_repo_name(repo)
 
   gh(
     "DELETE /repos/:owner/:repo/subscription",
     owner = owner, repo = name,
-    .token = ghclass::get_github_token()
+    .token = get_github_token()
   )
 
 }
