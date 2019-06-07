@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get teams' repos — get_team_repos • ghclass</title>
+<title>Unwatch repository — unwatch_repo • ghclass</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Get teams' repos — get_team_repos" />
+<meta property="og:title" content="Unwatch repository — unwatch_repo" />
 
-<meta property="og:description" content="get_team_repos returns a (filtered) data frame of teams and their repos." />
+<meta property="og:description" content="Unwatches / unsubscribes from the provided GitHub repositories." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -97,46 +97,38 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get teams' repos</h1>
+    <h1>Unwatch repository</h1>
     
-    <div class="hidden name"><code>get_team_repos.Rd</code></div>
+    <div class="hidden name"><code>unwatch_repo.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p><code>get_team_repos</code> returns a (filtered) data frame of teams and their repos.</p>
+    <p>Unwatches / unsubscribes from the provided GitHub repositories.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>get_team_repos</span>(<span class='no'>org</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='fu'><a href='get_teams.html'>get_teams</a></span>(<span class='no'>org</span>))</pre>
+    <pre class="usage"><span class='fu'>unwatch_repo</span>(<span class='no'>repo</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>org</th>
-      <td><p>character, name of the GitHub organization.</p></td>
-    </tr>
-    <tr>
-      <th>team</th>
-      <td><p>character or data frame, listing one or more team</p></td>
+      <th>repo</th>
+      <td><p>github repository address in <code>owner/repo</code> format</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other github organization related functions: <code><a href='create_individual_repo.html'>create_individual_repo</a></code>,
-  <code><a href='create_team_repo.html'>create_team_repo</a></code>,
-  <code><a href='create_team.html'>create_team</a></code>, <code><a href='get_members.html'>get_members</a></code>,
-  <code><a href='get_pending_members.html'>get_pending_members</a></code>,
-  <code><a href='get_pending_team_members.html'>get_pending_team_members</a></code>,
-  <code><a href='get_repos.html'>get_repos</a></code>, <code><a href='get_team_members.html'>get_team_members</a></code>,
-  <code><a href='get_teams.html'>get_teams</a></code>, <code><a href='invite_user.html'>invite_user</a></code></p></div>
+    <div class='dont-index'><p>Other github repo related functions: <code><a href='check_repo.html'>check_repo</a></code>,
+  <code><a href='get_watching.html'>get_watching</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>get_team_repos</span>(<span class='st'>"ghclass"</span>,<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"team01"</span>,<span class='st'>"team02"</span>))
+<span class='fu'>unwatch_repo</span>()
+<span class='fu'>unwatch_repo</span>(<span class='st'>"Sta523-Fa15/hw1-Tim"</span>)
 <span class='co'># }</span><div class='input'>
 </div></pre>
   </div>
