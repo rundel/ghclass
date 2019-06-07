@@ -220,11 +220,17 @@ get_pending_team_members = function(org, team = get_teams(org))
 }
 
 
-
+github_api_create_team = function(org, name, privacy) {
+  gh(
+    "POST /orgs/:org/teams",
+    org=org, name=name, privacy=privacy,
+    .token=get_github_token()
+  )
+}
 
 #' Create team(s)
 #'
-#' \code{create_team} creates teams in your organization
+#' \code{create_team} creates teams in your GitHub organization
 #'
 #' @param org character, name of the GitHub organization
 #' @param team character, listing one or more teams
@@ -240,38 +246,29 @@ get_pending_team_members = function(org, team = get_teams(org))
 #' @family github organization related functions
 #'
 #' @export
-create_team = function(org, team = character(), privacy = c("closed","secret"))
-{
-  stopifnot(!missing(org))
-
-  team = as.character(team)
+create_team = function(org, team, privacy = c("closed","secret")) {
+  team = unique(as.character(team))
   privacy = match.arg(privacy)
 
-  org_teams = get_teams(org)
+  org_teams = get_teams(org)[["team"]]
+
+  new_teams = setdiff(team, org_teams)
+  existing_teams = intersect(team, org_teams)
+
+  if (length(existing_teams) > 0)
+    usethis::ui_info("Skipping existing teams: {usethis::ui_value(existing_teams)}.")
 
   purrr::walk(
-    unique(team),
+    new_teams,
     function(team) {
-
-      if (team %in% org_teams[["team"]]) {
-        if (TRUE)
-          message("Skipping ", team, ", already exists for ", org, " ...")
-        return()
-      }
-
-      if (TRUE)
-        message("Adding team ", team, " to ", org, " ...")
-
-      res = safe_gh(
-        "POST /orgs/:org/teams",
-        org=org, name=team, privacy=privacy,
-        .token=get_github_token()
+      res = purrr::safely(github_api_create_team)(
+        org=org, name=team, privacy=privacy
       )
 
-      check_result(
+      status_msg(
         res,
-        sprintf("Failed to create team %s.", team),
-        TRUE
+        glue::glue("Added team {usethis::ui_value(team)} to {usethis::ui_value(org)}."),
+        glue::glue("Failed to add team {usethis::ui_value(team)} to {usethis::ui_value(org)}."),
       )
     }
   )
