@@ -35,7 +35,7 @@ get_watching = function(filter = NULL, exclude = FALSE){
 
 }
 
-# GitHub API call to unwatch a repos
+# GitHub API call to unwatch a repo
 github_api_unwatch_repo = function(repo){
 
   require_valid_repo(repo)
@@ -66,7 +66,7 @@ github_api_unwatch_repo = function(repo){
 #' @family github repo related functions
 #'
 #' @export
-unwatch_repo <- function(repo) {
+unwatch_repo = function(repo) {
 
   purrr::walk(
     repo,
@@ -79,6 +79,87 @@ unwatch_repo <- function(repo) {
         res,
         glue::glue("Unwatched {repo_fmt}."),
         glue::glue("Failed to unwatch {repo_fmt}.")
+      )
+    }
+  )
+}
+
+
+
+# GitHub API change a repo subscription
+github_api_set_subscription = function(repo, subscribed, ignored){
+
+  if (subscribed ==ignored)
+    usethis::ui_stop("{usethis::ui_code('subscribed != ignored')} must be true")
+
+  require_valid_repo(repo)
+
+  owner = get_repo_owner(repo)
+  name = get_repo_name(repo)
+
+  gh(
+    "PUT /repos/:owner/:repo/subscription",
+    owner = owner, repo = name,
+    subscribed = subscribed,
+    ignored = ignored,
+    .token = get_github_token()
+  )
+}
+
+#' Watch repository
+#'
+#' Watches / subscribes to the provided GitHub repositories.
+#'
+#' @param repo github repository address in `owner/repo` format
+#'
+#' @family github repo related functions
+#'
+#' @export
+watch_repo = function(repo) {
+
+  purrr::walk(
+    repo,
+    function(repo, notifications) {
+      res = purrr::safely(github_api_set_subscription)(
+        repo,
+        subscribed = TRUE,
+        ignored = FALSE
+      )
+
+      status_msg(
+        res,
+        glue::glue("Watched {usethis::ui_value(repo)}."),
+        glue::glue("Failed to watch {usethis::ui_value(repo)}.")
+      )
+    }
+  )
+}
+
+
+#' Ignore repository
+#'
+#' Ignores the provided GitHub repositories.
+#'
+#' @param repo github repository address in `owner/repo` format
+#'
+#' @family github repo related functions
+#'
+#' @export
+ignore_repo = function(repo) {
+
+  purrr::walk(
+    repo,
+    function(repo, notifications) {
+      res = purrr::safely(github_api_set_subscription)(
+        repo,
+        subscribed = FALSE,
+        ignored = TRUE
+      )
+
+      status_msg(
+        res,
+        glue::glue("Ignored {usethis::ui_value(repo)}."),
+        glue::glue("Failed to ignore {usethis::ui_value(repo)}.")
       )
     }
   )
