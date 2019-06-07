@@ -15,6 +15,13 @@ github_api_get_collaborators = function(repo) {
 #'
 #' @return Character vector of collaborator usernames.
 #'
+#' @templateVar fun get_repo_collaborators
+#' @template template-depr_fun
+#'
+#' @templateVar old get_repo_collaborators
+#' @templateVar new get_collaborators
+#' @template template-depr_pkg
+#'
 #' @examples
 #' \dontrun{
 #' get_repo_collaborators("Sta523-Fa17/hw1")
@@ -23,6 +30,9 @@ github_api_get_collaborators = function(repo) {
 #' @export
 #'
 get_repo_collaborators = function(repo) {
+
+  .Deprecated(msg = "'get_repo_collaborators' will be removed in the next version. Use 'get_collaborators' instead.",
+              new = "get_collaborators")
 
   users = purrr::map(
     repo,
@@ -423,6 +433,7 @@ rename_repo = function(repo, new_name) {
 #'
 #' @examples
 #' \dontrun{
+#' mirror_repo("Sta523/hw1_base", c("Sta523-Fa17/hw1-Team1", "Sta523-Fa17/hw1-Team2"))
 #' mirror_repo("Sta523/hw1_base", get_repos("Sta523-Fa17","hw1-"))
 #' }
 #'
