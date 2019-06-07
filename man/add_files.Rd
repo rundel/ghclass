@@ -6,7 +6,7 @@
 \title{Add files to a repo}
 \usage{
 add_files(repo, message, files, branch = "master",
-  preserve_path = FALSE, verbose = TRUE)
+  preserve_path = FALSE)
 }
 \arguments{
 \item{repo}{repo names in the form of \emph{owner/name}.}
@@ -18,8 +18,6 @@ add_files(repo, message, files, branch = "master",
 \item{branch}{name of branch to use, defaults to master.}
 
 \item{preserve_path}{should the local relative path be preserved.}
-
-\item{verbose}{display verbose output.}
 }
 \description{
 \code{add_files} uses the GitHub api to add/update files in an existing repo on GitHub.
