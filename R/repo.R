@@ -1,5 +1,5 @@
 github_api_get_collaborators = function(repo) {
-  gh(
+  safe_gh(
     "GET /repos/:owner/:repo/collaborators",
     owner = get_repo_owner(repo), repo = get_repo_name(repo),
     .token=get_github_token(), .limit=get_github_api_limit()
@@ -642,7 +642,7 @@ get_admins = function(org, verbose = FALSE) {
 #' \code{get_collaborators} Returns a vector of collaborator user names. Users with Admin rights are by default excluded, but can be included manually.
 #'
 #' @param repo Character. Address of repository in "owner/name" format.
-#' @param include_admins Logical. If FALSE, user names of users with Admin rights are not included. Default is FALSE.
+#' @param include_admins Logical. If FALSE, user names of users with Admin rights are not included. Default is TRUE.
 #' @param verbose Logical. Display verbose output.
 #'
 #' @return A list containing a character vector of user names.
@@ -654,7 +654,7 @@ get_admins = function(org, verbose = FALSE) {
 #'
 #' @export
 #'
-get_collaborators = function(repo, include_admins = FALSE, verbose = FALSE) {
+get_collaborators = function(repo, include_admins = TRUE, verbose = FALSE) {
 
   stopifnot(!missing(repo))
 
@@ -665,13 +665,7 @@ get_collaborators = function(repo, include_admins = FALSE, verbose = FALSE) {
   purrr::map2(
     repo, admins,
     function(repo, admins) {
-      res = safe_gh(
-        "GET /repos/:owner/:repo/collaborators",
-        owner = get_repo_owner(repo), repo = get_repo_name(repo),
-        affiliation = "all",
-        .token = get_github_token(),
-        .limit = get_github_api_limit()
-      )
+      res = github_api_get_collaborators(repo)
 
       check_result(res, sprintf("Unable to retrieve collaborators for %s.", repo), verbose)
 
@@ -679,3 +673,4 @@ get_collaborators = function(repo, include_admins = FALSE, verbose = FALSE) {
     }
   )
 }
+
