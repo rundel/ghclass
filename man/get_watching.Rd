@@ -26,6 +26,7 @@ get_watching("Sta523-Fa15")
 }
 \seealso{
 Other github repo related functions: \code{\link{check_repo}},
-  \code{\link{unwatch_repo}}
+  \code{\link{ignore_repo}}, \code{\link{unwatch_repo}},
+  \code{\link{watch_repo}}
 }
 \concept{github repo related functions}
