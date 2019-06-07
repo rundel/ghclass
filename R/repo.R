@@ -41,16 +41,17 @@ github_api_get_repo_id = function(id) {
 
 #' Check existence of github repo
 #'
-#' \code{check_repo} returns TRUE if the github repository exists
+#' \code{check_repo} returns TRUE if the github repository exists. The function also returns a message if a repository was previously renamed.
 #'
-#' @param repo character, Address of repository in "owner/name" format
-#' @param redirect logical, Specifies whether previous names of repositories should be considered. The default is FALSE, such that only current repository names will be considered.
+#' @param repo Character. Address of repository in "owner/name" format. Can be a vector or list of repository addresses.
+#' @param redirect Logical. Specifies whether previous names of repositories should be considered. The default is FALSE, such that only current repository names will be considered as existing.
 #'
 #' @examples
 #' \dontrun{
-#' check_repo("rundel/ghclass")
-#' check_repo("rundel/ghclass_fake")
+#' check_repo(c("rundel/ghclass", "rundel/ghclass_fake"))
 #' }
+#'
+#' @return A logical vector
 #'
 #' @family github repo related functions
 #'
