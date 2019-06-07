@@ -51,8 +51,9 @@ get_file = function(repo, file, branch="master")
 }
 
 #' @export
-add_content = function(repo, file, content, after=NULL, message="Added content", branch="master", verbose=TRUE) {
-  require_valid_repo(repo)
+add_content = function(repo, file, content, after=NULL, message="Added content", branch="master") {
+  #TO DO: Fix since require_valid_repo is no longer vectorized
+  #require_valid_repo(repo)
 
   purrr::pwalk(
     list(repo, file, content, after, message, branch),
@@ -96,7 +97,8 @@ add_content = function(repo, file, content, after=NULL, message="Added content",
 find_file = function(repo, file)
 {
   stopifnot(length(repo)==1)
-  require_valid_repo(repo)
+  #TO DO: Fix since require_valid_repo is no longer vectorized
+  #require_valid_repo(repo)
 
   purrr::flatten_chr(
     purrr::map(
@@ -167,7 +169,6 @@ put_file = function(repo, path, content, message, branch) {
 #' @param files local file paths of files to be added.
 #' @param branch name of branch to use, defaults to master.
 #' @param preserve_path should the local relative path be preserved.
-#' @param verbose display verbose output.
 #'
 #' @examples
 #' \dontrun{
@@ -180,7 +181,7 @@ put_file = function(repo, path, content, message, branch) {
 #'
 #' @export
 #'
-add_files = function(repo, message, files, branch = "master", preserve_path=FALSE, verbose=TRUE)
+add_files = function(repo, message, files, branch = "master", preserve_path = FALSE)
 {
   stopifnot(!missing(repo))
   stopifnot(!missing(message))
@@ -201,7 +202,7 @@ add_files = function(repo, message, files, branch = "master", preserve_path=FALS
       name = get_repo_name(repo)
       owner = get_repo_owner(repo)
 
-      if (verbose)
+      if (TRUE)
         message("Adding files to ", repo, " ...")
 
       gh_paths = files
@@ -219,7 +220,7 @@ add_files = function(repo, message, files, branch = "master", preserve_path=FALS
 
       check_result(
         res, sprintf("Failed to add files to %s.", repo),
-        verbose, error_prefix = paste0(files,": ")
+        error_prefix = paste0(files,": ")
       )
     }
   )

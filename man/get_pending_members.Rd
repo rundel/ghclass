@@ -25,10 +25,7 @@ get_pending_members("ghclass")
 \seealso{
 Other github organization related functions: \code{\link{create_individual_repo}},
   \code{\link{create_team_repo}},
-  \code{\link{create_team}}, \code{\link{get_members}},
-  \code{\link{get_pending_team_members}},
-  \code{\link{get_repos}}, \code{\link{get_team_members}},
-  \code{\link{get_team_repos}}, \code{\link{get_teams}},
-  \code{\link{invite_user}}
+  \code{\link{get_members}}, \code{\link{get_repos}},
+  \code{\link{get_team_repos}}, \code{\link{invite_user}}
 }
 \concept{github organization related functions}

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add files to a repo — add_files • ghclass</title>
+<title>Watch repository — watch_repo • ghclass</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Add files to a repo — add_files" />
+<meta property="og:title" content="Watch repository — watch_repo" />
 
-<meta property="og:description" content="add_files uses the GitHub api to add/update files in an existing repo on GitHub." />
+<meta property="og:description" content="Watches / subscribes to the provided GitHub repositories." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -97,59 +97,43 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add files to a repo</h1>
+    <h1>Watch repository</h1>
     
-    <div class="hidden name"><code>add_files.Rd</code></div>
+    <div class="hidden name"><code>watch_repo.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p><code>add_files</code> uses the GitHub api to add/update files in an existing repo on GitHub.</p>
+    <p>Watches / subscribes to the provided GitHub repositories.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>add_files</span>(<span class='no'>repo</span>, <span class='no'>message</span>, <span class='no'>files</span>, <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>,
-  <span class='kw'>preserve_path</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>watch_repo</span>(<span class='no'>repo</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>repo</th>
-      <td><p>repo names in the form of <em>owner/name</em>.</p></td>
-    </tr>
-    <tr>
-      <th>message</th>
-      <td><p>commit message.</p></td>
-    </tr>
-    <tr>
-      <th>files</th>
-      <td><p>local file paths of files to be added.</p></td>
-    </tr>
-    <tr>
-      <th>branch</th>
-      <td><p>name of branch to use, defaults to master.</p></td>
-    </tr>
-    <tr>
-      <th>preserve_path</th>
-      <td><p>should the local relative path be preserved.</p></td>
+      <td><p>github repository address in <code>owner/repo</code> format</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>add_files</span>(<span class='st'>"rundel/ghclass"</span>, <span class='st'>"Update DESCRIPTION"</span>, <span class='st'>"./DESCRIPTION"</span>)
-<span class='co'># }</span><div class='input'>
-</div></pre>
+    <div class='dont-index'><p>Other github repo related functions: <code><a href='check_repo.html'>check_repo</a></code>,
+  <code><a href='get_watching.html'>get_watching</a></code>, <code><a href='ignore_repo.html'>ignore_repo</a></code>,
+  <code><a href='unwatch_repo.html'>unwatch_repo</a></code></p></div>
+    
+
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+      
+      <li><a href="#see-also">See also</a></li>
+          </ul>
 
   </div>
 </div>

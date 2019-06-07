@@ -4,7 +4,7 @@
 \alias{invite_user}
 \title{Invite user(s)}
 \usage{
-invite_user(org, user, verbose = TRUE, exclude_pending = FALSE)
+invite_user(org, user, exclude_pending = FALSE)
 }
 \arguments{
 \item{org}{character, name of the GitHub organization.}
@@ -24,10 +24,8 @@ invite_user("ghclass", users)
 \seealso{
 Other github organization related functions: \code{\link{create_individual_repo}},
   \code{\link{create_team_repo}},
-  \code{\link{create_team}}, \code{\link{get_members}},
+  \code{\link{get_members}},
   \code{\link{get_pending_members}},
-  \code{\link{get_pending_team_members}},
-  \code{\link{get_repos}}, \code{\link{get_team_members}},
-  \code{\link{get_team_repos}}, \code{\link{get_teams}}
+  \code{\link{get_repos}}, \code{\link{get_team_repos}}
 }
 \concept{github organization related functions}
