@@ -1,4 +1,4 @@
-github_api_get_repo_collaborators = function(repo) {
+github_api_get_collaborators = function(repo) {
   gh(
     "GET /repos/:owner/:repo/collaborators",
     owner = get_repo_owner(repo), repo = get_repo_name(repo),
@@ -27,7 +27,7 @@ get_repo_collaborators = function(repo) {
   users = purrr::map(
     repo,
     function(repo) {
-      res = github_api_get_repo_collaborators(repo)
+      res = github_api_get_collaborators(repo)
       purrr::map_chr(res, "login")
     }
   )
@@ -36,29 +36,36 @@ get_repo_collaborators = function(repo) {
 }
 
 
-github_api_repo_exists = function(repo) {
-  res = safe_gh(
+github_api_get_repo = function(repo) {
+  safe_gh(
     "GET /repos/:owner/:repo",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
     .token=get_github_token()
   )
-  succeeded(res)
 }
 
-#' Check existence of github repo
+github_api_get_repo_id = function(id) {
+  safe_gh(
+    "GET /repositories/:id",
+    id = id,
+    .token=get_github_token()
+  )
+}
+
+#' Check existence of GitHub repository
 #'
-#' \code{check_repo} returns TRUE if the GitHub repository exists.
+#' \code{check_repo} returns TRUE if the github repository exists. The function also returns a message if a repository was previously renamed.
 #'
-#' @param repo Character. Address of repository in "owner/name" format. Can be vector or list of characters.
+#' @param repo Character. Address of repository in "owner/name" format. Can be a vector or list of repository addresses.
+#' @param redirect Logical. Specifies whether previous names of repositories should be considered. The default is FALSE, such that only current repository names will be considered as existing.
 #'
 #' @examples
 #' \dontrun{
-#' check_repo("rundel/ghclass")
-#' check_repo("rundel/ghclass_fake")
 #' check_repo(c("rundel/ghclass", "rundel/ghclass_fake"))
-#' check_repo(list("rundel/ghclass", "rundel/ghclass_fake"))
 #' }
+#'
+#' @return A logical vector
 #'
 #' @family github repo related functions
 #'
@@ -66,8 +73,32 @@ github_api_repo_exists = function(repo) {
 #'
 #' @export
 #'
-check_repo = function(repo) {
-  purrr::map_lgl(repo, github_api_repo_exists)
+check_repo = function(repo, redirect = F) {
+
+  # Checking if repo exists
+  res = purrr::map(repo, github_api_get_repo)
+  repo_exists = purrr::map_lgl(res, succeeded)
+
+  # Checking whether user-provided repo name is current
+  id = purrr::map_int(res, c("result", "id"), .default = NA)
+  current_name = purrr::map_chr(purrr::map(id, github_api_get_repo_id), c("result", "name"), .default = NA)
+  repo_name = get_repo_name(repo)
+
+  # Replacing with F if user-provided repo name is NOT current
+  if(redirect == F){
+    repo_exists = ifelse(repo_exists & current_name != repo_name, F, repo_exists)
+  }
+
+  # Messaging
+  purrr::walk2(current_name,
+               repo_name,
+               function(current_name, repo_name)
+
+                 if(current_name != repo_name & !is.na(current_name))
+                   message(paste("Repository", repo_name, "was previously renamed to", current_name)))
+
+  # Output
+  repo_exists
 }
 
 
