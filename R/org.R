@@ -140,19 +140,25 @@ github_api_get_user = function(user)
   )
 }
 
-#' Check if user name exists
+#' Check if username(s) exists
 #'
-#' @param user
+#' \code{check_user_exists} returns TRUE if the supplied username(s) exists on GitHub and FALSE otherwise.
+#'
+#' @param user Character. Username to be checked. Can be a vector or list of usernames.
+#'
+#' @return TRUE or FALSE
+#'
+#' @examples
+#' \dontrun{
+#' check_user_exists(c("rundel","hopefullydoesnotexist"))
+#' }
 #'
 #' @export
+#'
 check_user_exists = function(user)
 {
-  check_user = function(user) {
-    gh("/users/:username", username=user, .token=get_github_token())
-    TRUE
-  }
-
-  purrr::map_lgl(user, purrr::possibly(check_user, FALSE))
+  res = purrr::map(user, github_api_get_user)
+  purrr::map_lgl(res, succeeded)
 }
 
 
