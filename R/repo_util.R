@@ -8,11 +8,18 @@ clean_usernames = function(usernames)
   s[s != ""]
 }
 
+# Should only be used within GitHub API calls,
+# i.e. functions starting with github_api_*
+# Explicitly not vectorized
 require_valid_repo = function(repo)
 {
-  valid = valid_repo(repo)
-  if (!all(valid))
-    stop("Invalid repo names: \n\t", paste(repo[!valid], collapse="\n\t"), call. = FALSE)
+  stopifnot(length(repo) == 1)
+
+  if (!valid_repo(repo))
+    usethis::ui_stop(paste(
+      "Invalid repository name {usethis::ui_value(repo)}.",
+      "Repository names must be in {usethis::ui_code('owner/name')} format."
+    ) )
 }
 
 #' @export
@@ -36,7 +43,8 @@ get_repo_owner = function(repo)
 #' @export
 get_repo_url = function(repo, type = c("https","ssh"), use_token = TRUE)
 {
-  require_valid_repo(repo)
+  #TO DO: Fix since require_valid_repo is no longer vectorized
+  #require_valid_repo(repo)
   type = match.arg(type)
 
   if (type == "https") {
