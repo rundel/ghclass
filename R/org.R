@@ -3,6 +3,11 @@ github_api_get_repos = function(org) {
   gh("GET /orgs/:org/repos", org = org, .token=get_github_token(), .limit=get_github_api_limit())
 }
 
+#' @export
+get_repo = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE) {
+  get_repos(org, filter, exclude, full_repo)
+}
+
 #' Get organization repos
 #'
 #' \code{get_repos} returns a (filtered) vector of repos belonging to a GitHub organization.
@@ -11,6 +16,8 @@ github_api_get_repos = function(org) {
 #' @param filter character, regex pattern for matching (or excluding) repos.
 #' @param exclude logical, should entries matching the regex be excluded or included.
 #' @param full_repo logical, should the full repo name be returned (e.g. \code{org/repo} instead of just \code{repo})
+#'
+#' @aliases get_repo
 #'
 #' @examples
 #' \dontrun{
