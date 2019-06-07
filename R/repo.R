@@ -22,7 +22,7 @@ get_repo_collaborators = function(repos) {
   unique(unlist(users))
 }
 
-github_api_repo_exists = function(repo) {
+github_api_get_repo = function(repo) {
   safe_gh(
     "GET /repos/:owner/:repo",
     owner = get_repo_owner(repo),
@@ -54,30 +54,36 @@ github_api_get_repo_id = function(id) {
 #'
 #' @family github repo related functions
 #'
-
 #' @export
 check_repo = function(repo, redirect = F) {
 
-  res = github_api_repo_exists(repo)
+  # Checking if repo exists
+  res = purrr::map(repo, github_api_get_repo)
+  repo_exists = purrr::map_lgl(res, succeeded)
 
-  if(succeeded(res)){
-    current_name = github_api_get_repo_id(res$result$id)$result$name
+  # Checking whether user-provided repo name is current
+  id = purrr::map_int(res, c("result", "id"), .default = NA)
+  current_name = purrr::map_chr(purrr::map(id, github_api_get_repo_id), c("result", "name"), .default = NA)
+  repo_name = get_repo_name(repo)
 
-    if(current_name == get_repo_name(repo)){
-      succeeded(res)
-    } else {
-      message(paste("Repository", get_repo_name(repo), "was previously renamed to", current_name))
-      if(redirect == F){
-        FALSE
-      } else {
-        succeeded(res)
-      }
-    }
-
-  } else {
-    succeeded(res)
+  # Replacing with F if user-provided repo name is NOT current
+  if(redirect == F){
+    repo_exists = ifelse(repo_exists & current_name != repo_name, F, repo_exists)
   }
+
+  # Messaging
+  purrr::walk2(current_name,
+               repo_name,
+               function(current_name, repo_name)
+
+                 if(current_name != repo_name & !is.na(current_name))
+                   message(paste("Repository", repo_name, "was previously renamed to", current_name)))
+
+  # Output
+  repo_exists
 }
+
+
 
 #' @export
 #'
