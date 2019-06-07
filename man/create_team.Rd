@@ -16,7 +16,7 @@ members of the organization) or secret (only visible to organization owners
 and members of a team), default is closed}
 }
 \description{
-\code{create_team} creates teams in your organization
+\code{create_team} creates teams in your GitHub organization
 }
 \examples{
 \dontrun{
@@ -25,13 +25,9 @@ create_team("ghclass",c("team01","team01"))
 
 }
 \seealso{
-Other github organization related functions: \code{\link{create_individual_repo}},
-  \code{\link{create_team_repo}},
-  \code{\link{get_members}},
-  \code{\link{get_pending_members}},
+Other github organization team related functions: \code{\link{add_team_member}},
   \code{\link{get_pending_team_members}},
-  \code{\link{get_repos}}, \code{\link{get_team_members}},
-  \code{\link{get_team_repos}}, \code{\link{get_teams}},
-  \code{\link{invite_user}}
+  \code{\link{get_team_members}}, \code{\link{get_teams}},
+  \code{\link{rename_team}}
 }
-\concept{github organization related functions}
+\concept{github organization team related functions}
