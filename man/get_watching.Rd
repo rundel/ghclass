@@ -13,8 +13,9 @@ get_watching(filter = NULL, exclude = FALSE)
 }
 \description{
 Returns all of the authenticated user's watched repositories. This should
-match the list at https://github.com/watching. The function can also
-filter the results for matching (or excluding) repositories.
+match the list at \href{https://github.com/watching}{github.com/watching}.
+The function can also filter the results for matching (or excluding)
+repositories.
 }
 \examples{
 \dontrun{
