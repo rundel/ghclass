@@ -1,8 +1,28 @@
+#' @templateVar fun github_api_get_repos
+#' @template template-depr_fun
+#'
+#' @templateVar old github_api_get_repos
+#' @templateVar new github_api_get_repo
+#' @template template-depr_pkg
+#'
 github_api_get_repos = function(org) {
+
+  .Deprecated(msg = "'github_api_get_repos' will be removed in the next version. Use 'github_api_get_repo' instead.",
+              new = "github_api_get_repo")
   stopifnot(length(org)==1)
   gh("GET /orgs/:org/repos", org = org, .token=get_github_token(), .limit=get_github_api_limit())
 }
 
+
+github_api_get_repo = function(org) {
+  stopifnot(length(org)==1)
+  safe_gh("GET /orgs/:org/repos",
+          org = org,
+          .token=get_github_token(),
+          .limit=get_github_api_limit())
+}
+
+#'
 #' @export
 get_repo = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE) {
   get_repos(org, filter, exclude, full_repo)
@@ -12,10 +32,10 @@ get_repo = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE) {
 #'
 #' \code{get_repos} returns a (filtered) vector of repos belonging to a GitHub organization.
 #'
-#' @param org character, name of the GitHub organization.
-#' @param filter character, regex pattern for matching (or excluding) repos.
-#' @param exclude logical, should entries matching the regex be excluded or included.
-#' @param full_repo logical, should the full repo name be returned (e.g. \code{org/repo} instead of just \code{repo})
+#' @param org Character. Name of the GitHub organization.
+#' @param filter Character. Regular expression pattern for matching (or excluding) repositories.
+#' @param exclude Logical. Should entries matching the regular expression in \code{filter} be excluded or included?
+#' @param full_repo Logical. Should the full repository name be returned (e.g. \code{org/repo} instead of just \code{repo})?
 #'
 #' @aliases get_repo
 #'
@@ -33,7 +53,7 @@ get_repos = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE) {
   stopifnot(length(org)==1)
   stopifnot(length(filter)<=1)
 
-  res = purrr::map_chr(github_api_get_repos(org), "name")
+  res = purrr::map_chr(github_api_get_repo(org), "name")
   res = filter_results(res, filter, exclude)
 
   if (full_repo & length(res) > 0)
@@ -111,8 +131,19 @@ get_pending_members = function(org, filter=NULL, exclude=FALSE) {
 }
 
 
+github_api_get_user = function(user)
+{
+  safe_gh(
+    "/users/:username",
+    username = user,
+    .token = get_github_token()
+  )
+}
 
-
+#' Check if user name exists
+#'
+#' @param user
+#'
 #' @export
 check_user_exists = function(user)
 {
