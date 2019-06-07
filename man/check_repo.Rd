@@ -2,25 +2,26 @@
 % Please edit documentation in R/repo.R
 \name{check_repo}
 \alias{check_repo}
-\title{Check existance of github repo}
+\title{Check existence of GitHub repository}
 \usage{
-check_repo(repo)
+check_repo(repo, redirect = F)
 }
 \arguments{
-\item{repo}{Character. Address of repository in "owner/name" format. Can be vector or list of characters.}
+\item{repo}{Character. Address of repository in "owner/name" format. Can be a vector or list of repository addresses.}
+
+\item{redirect}{Logical. Specifies whether previous names of repositories should be considered. The default is FALSE, such that only current repository names will be considered as existing.}
 }
 \value{
+A logical vector
+
 logical
 }
 \description{
-\code{check_repo} returns TRUE if the GitHub repository exists.
+\code{check_repo} returns TRUE if the github repository exists. The function also returns a message if a repository was previously renamed.
 }
 \examples{
 \dontrun{
-check_repo("rundel/ghclass")
-check_repo("rundel/ghclass_fake")
 check_repo(c("rundel/ghclass", "rundel/ghclass_fake"))
-check_repo(list("rundel/ghclass", "rundel/ghclass_fake"))
 }
 
 }

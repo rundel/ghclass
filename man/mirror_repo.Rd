@@ -18,6 +18,7 @@ mirror_repo(source_repo, target_repo, verbose = TRUE)
 }
 \examples{
 \dontrun{
+mirror_repo("Sta523/hw1_base", c("Sta523-Fa17/hw1-Team1", "Sta523-Fa17/hw1-Team2"))
 mirror_repo("Sta523/hw1_base", get_repos("Sta523-Fa17","hw1-"))
 }
 

@@ -4,12 +4,12 @@
 \alias{get_collaborators}
 \title{List collaborators}
 \usage{
-get_collaborators(repo, include_admins = FALSE, verbose = FALSE)
+get_collaborators(repo, include_admins = TRUE, verbose = FALSE)
 }
 \arguments{
 \item{repo}{Character. Address of repository in "owner/name" format.}
 
-\item{include_admins}{Logical. If FALSE, user names of users with Admin rights are not included. Default is FALSE.}
+\item{include_admins}{Logical. If FALSE, user names of users with Admin rights are not included. Default is TRUE.}
 
 \item{verbose}{Logical. Display verbose output.}
 }
