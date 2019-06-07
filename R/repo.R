@@ -27,7 +27,6 @@ github_api_get_collaborators = function(repo) {
 #' get_repo_collaborators("Sta523-Fa17/hw1")
 #' }
 #'
-#' @export
 #'
 get_repo_collaborators = function(repo) {
 
@@ -609,7 +608,7 @@ style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler", base="maste
 #' @param org Character. Name of GitHub organization.
 #' @param verbose Logical. Display verbose output.
 #'
-#' \examples
+#' @examples
 #' \dontrun{
 #' get_admins("Sta523-Fa17")
 #' }

@@ -9,16 +9,17 @@ get_admins(org, verbose = FALSE)
 \arguments{
 \item{org}{Character. Name of GitHub organization.}
 
-\item{verbose}{Logical. Display verbose output.
-
-\examples
-\dontrun{
-get_admins("Sta523-Fa17")
-}}
+\item{verbose}{Logical. Display verbose output.}
 }
 \value{
 A list containing a character vector of repository administrators.
 }
 \description{
 \code{get_admins} creates a list of repository administrators.
+}
+\examples{
+\dontrun{
+get_admins("Sta523-Fa17")
+}
+
 }
