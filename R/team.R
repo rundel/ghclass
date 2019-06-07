@@ -240,7 +240,7 @@ get_pending_team_members = function(org, team = get_teams(org))
 #' @family github organization related functions
 #'
 #' @export
-create_team = function(org, team = character(), privacy = c("closed","secret"), verbose = TRUE)
+create_team = function(org, team = character(), privacy = c("closed","secret"))
 {
   stopifnot(!missing(org))
 
@@ -254,12 +254,12 @@ create_team = function(org, team = character(), privacy = c("closed","secret"), 
     function(team) {
 
       if (team %in% org_teams[["team"]]) {
-        if (verbose)
+        if (TRUE)
           message("Skipping ", team, ", already exists for ", org, " ...")
         return()
       }
 
-      if (verbose)
+      if (TRUE)
         message("Adding team ", team, " to ", org, " ...")
 
       res = safe_gh(
@@ -271,7 +271,7 @@ create_team = function(org, team = character(), privacy = c("closed","secret"), 
       check_result(
         res,
         sprintf("Failed to create team %s.", team),
-        verbose
+        TRUE
       )
     }
   )
@@ -283,13 +283,13 @@ rename_team = function(org, cur_team, new_team) {
   stopifnot(length(org) == 1)
 
   org_teams = get_teams(org)
-  team_id_lookup = setNames(org_teams[["id"]], org_teams[["team"]])
+  team_id_lookup = stats::setNames(org_teams[["id"]], org_teams[["team"]])
 
   purrr::pwalk(
     list(cur_team, new_team),
     function(cur_team, new_team) {
 
-      if (verbose)
+      if (TRUE)
         message("Renaming team ", cur_team, " to ", new_team, " ...")
 
 
@@ -300,8 +300,8 @@ rename_team = function(org, cur_team, new_team) {
 
       check_result(
         res,
-        sprintf("Failed to rename team %s to %s.", repo, new_name),
-        verbose
+        sprintf("Failed to rename team %s to %s.", cur_team, new_team),
+        TRUE
       )
     }
   )
@@ -309,7 +309,7 @@ rename_team = function(org, cur_team, new_team) {
 
 
 #' @export
-add_team_member = function(org, user, team, create_missing_teams=FALSE, verbose=TRUE)
+add_team_member = function(org, user, team, create_missing_teams = FALSE)
 {
   stopifnot(!missing(org))
   stopifnot(is.character(user) & length(user) >=1)
@@ -324,7 +324,7 @@ add_team_member = function(org, user, team, create_missing_teams=FALSE, verbose=
 
   new_teams = setdiff(unique(team), org_teams[["team"]])
   if (length(new_teams) != 0 & create_missing_teams) {
-    create_team(org, new_teams, verbose=verbose)
+    create_team(org, new_teams)
     org_teams = get_teams(org)
   }
 
@@ -341,7 +341,7 @@ add_team_member = function(org, user, team, create_missing_teams=FALSE, verbose=
     info,
     function(user, team, id) {
 
-      if (verbose)
+      if (TRUE)
         message("Adding ", user, " to team ", team, " ...")
 
       res = safe_gh(
@@ -350,7 +350,7 @@ add_team_member = function(org, user, team, create_missing_teams=FALSE, verbose=
         .token=get_github_token()
       )
 
-      check_result(res, sprintf("Failed to add %s to %s in %s.", user, team, org), verbose)
+      check_result(res, sprintf("Failed to add %s to %s in %s.", user, team, org))
     }
   )
 }

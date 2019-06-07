@@ -281,7 +281,7 @@ rename_repo = function(repo, new_name) {
       check_result(
         res,
         sprintf("Failed to rename %s to %s.", repo, new_name),
-        verbose
+        TRUE
       )
     }
   )
@@ -390,7 +390,7 @@ style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler", base="maste
     repo, branch,
     function(repo, branch) {
       ## TODO add base to branch
-      branch_repo(repo, branch, verbose = FALSE)
+      create_branch(repo, branch)
       path = clone_repo(repo, local_path = dir, branch = branch)
 
       file_paths = unlist(purrr::map(files, ~ fs::dir_ls(path, recursive = TRUE, glob = .x)),

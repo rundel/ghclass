@@ -134,7 +134,7 @@ check_user_exists = function(user)
 #' @family github organization related functions
 #'
 #' @export
-invite_user = function(org, user, verbose=TRUE, exclude_pending = FALSE)
+invite_user = function(org, user, exclude_pending = FALSE)
 {
   stopifnot(length(org) == 1)
 
@@ -148,7 +148,7 @@ invite_user = function(org, user, verbose=TRUE, exclude_pending = FALSE)
     need_invite,
     function(user) {
 
-      if (verbose)
+      if (TRUE)
         message("Adding ", user, " to ", org, " ...")
 
 
@@ -159,7 +159,7 @@ invite_user = function(org, user, verbose=TRUE, exclude_pending = FALSE)
       )
 
       fail = sprintf("Inviting %s to %s failed.", user, org)
-      check_result(res, fail, verbose=verbose)
+      check_result(res, fail)
     }
   )
 }
