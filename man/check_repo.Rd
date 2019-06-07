@@ -19,8 +19,4 @@ check_repo("rundel/ghclass_fake")
 }
 
 }
-\seealso{
-Other github repo related functions: \code{\link{get_watching}},
-  \code{\link{unwatch_repo}}
-}
 \concept{github repo related functions}
