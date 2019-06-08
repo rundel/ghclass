@@ -166,6 +166,45 @@ fix_repo_name = function(repo_name)
   stringr::str_replace_all(repo_name, "[^A-Za-z0-9_.-]+","-")
 }
 
+
+github_api_create_repo = function(org, name, private, auto_init, gitignore_template){
+  safe_gh("POST /orgs/:org/repos",
+          org = org,
+          name = name, private=private,
+          auto_init = auto_init,
+          gitignore_template = gitignore_template,
+          .token=get_github_token())
+}
+
+github_api_create_team_repo = function(org, name, private, auto_init, gitignore_template, team_id){
+  safe_gh("POST /orgs/:org/repos",
+          org = org,
+          name = name, private = private,
+          team_id = team_id,
+          auto_init = auto_init,
+          gitignore_template = gitignore_template,
+          .token=get_github_token())
+}
+
+github_api_add_user = function(owner, repo, username, permission){
+  safe_gh("PUT /repos/:owner/:repo/collaborators/:username",
+          owner = owner,
+          repo = repo,
+          username = username,
+          permission = permission,
+          .token = get_github_token())
+}
+
+github_api_add_team = function(id, org, repo, permission){
+  safe_gh("PUT /teams/:id/repos/:org/:repo",
+          id = id,
+          org = org,
+          repo = repo,
+          permission = permission,
+          .token=get_github_token())
+}
+
+
 #' Create individual repositories
 #'
 #' \code{create_individual_repo} creates repositories for each student for a given
@@ -215,19 +254,18 @@ create_individual_repo = function(org, user, prefix="", suffix="",
         message("Creating repo ", repo, " ...", sep="")
 
       try({
-        gh("POST /orgs/:org/repos",
-           org = org,
-           name=repo_name, private=private,
-           auto_init=auto_init,
-           gitignore_template=gitignore_template,
-           .token=get_github_token())
+        github_api_create_repo(org = org,
+                               name = repo_name,
+                               private = private,
+                               auto_init = auto_init,
+                               gitignore_template = gitignore_template)
       })
 
       try({
-        gh("PUT /repos/:owner/:repo/collaborators/:username",
-           owner = org, repo = repo_name, username = user,
-           permission="push",
-           .token=get_github_token())
+        github_api_add_user(owner = org,
+                            repo = repo_name,
+                            username = user,
+                            permission = "push")
       })
     }
   )
@@ -274,7 +312,7 @@ create_team_repo = function(org, team,  prefix="", suffix="",
   if (any(missing_ids))
     stop("Unable to locate team(s): ", paste(team[["team"]][missing_ids], collapse=", "), call. = FALSE)
 
-  org_repos = get_repos(org)
+  org_repos = get_repo(org)
 
   purrr::pwalk(
     unique(team),
@@ -290,20 +328,22 @@ create_team_repo = function(org, team,  prefix="", suffix="",
       if (verbose)
         message("Creating repo ", repo, " ...")
 
-      res = purrr::safely(function() {
-        # Create repo
-        gh("POST /orgs/:org/repos",
-           org = org,
-           name=repo_name, private=private, team_id=id,
-           auto_init=auto_init, gitignore_template=gitignore_template,
-           .token=get_github_token())
+      # Create
+      try({
+      res = github_api_create_team_repo(org = org,
+                                        name=repo_name, private=private,
+                                        team_id = id,
+                                        auto_init = auto_init,
+                                        gitignore_template = gitignore_template)
+      })
 
-        # Give time write access
-        gh("PUT /teams/:id/repos/:org/:repo",
-           id = id, org = org, repo = repo_name,
-           permission="push",
-           .token=get_github_token())
-      })()
+      # Give time write access
+      try({
+      github_api_add_team(id = id,
+                          org = org,
+                          repo = repo_name,
+                          permission = "push")
+      })
 
       check_result(res, sprintf("Failed to create team repo %s.", repo_name), verbose)
     }
@@ -373,20 +413,23 @@ add_team_to_repo = function(repo, team,
       if (verbose)
         message("Adding ", team, " to ", repo, " (", permission, ") ...")
 
-      res = safe_gh(
-        "PUT /teams/:id/repos/:org/:repo",
-        id = team_id[["id"]], org = org, repo = reponame,
-        permission = permission,
-        .token=get_github_token()
-      )
+      res = github_api_add_team(id = team_id[["id"]],
+                                org = org,
+                                repo = reponame,
+                                permission = permission)
 
       check_result(res, sprintf("Failed to add %s to %s.", team, repo), verbose)
     }
   )
 }
 
-
-
+github_api_rename_repo = function(owner, repo, name){
+  safe_gh("PATCH /repos/:owner/:repo",
+          owner = owner,
+          repo = repo,
+          name = name,
+          .token = get_github_token())
+}
 
 #' Rename repository
 #'
@@ -405,11 +448,9 @@ rename_repo = function(repo, new_name) {
   purrr::walk2(
     repo, new_name,
     function(repo, new_name) {
-      res = safe_gh("PATCH /repos/:owner/:repo",
-                    owner = get_repo_owner(repo),
-                    repo = get_repo_name(repo),
-                    name = new_name,
-                    .token=get_github_token())
+      res = github_api_rename_repo(owner = get_repo_owner(repo),
+                                   repo = get_repo_name(repo),
+                                   name = new_name)
 
       check_result(
         res,
@@ -483,6 +524,14 @@ mirror_repo = function(source_repo, target_repo, verbose=TRUE)
 }
 
 
+github_api_create_pull = function(owner, repo, base, head, title, body){
+  safe_gh(
+    "POST /repos/:owner/:repo/pulls",
+    owner = owner,
+    repo = repo,
+    base = base, head = head, title = title, body = body,
+    .token = get_github_token())
+}
 
 
 create_pull_request = function(repo, title, base, head = "master", body = "", verbose = TRUE) {
@@ -495,12 +544,9 @@ create_pull_request = function(repo, title, base, head = "master", body = "", ve
   purrr::pwalk(
     list(repo, base, head, title, body),
     function(repo, base, head, title, body) {
-      res = safe_gh(
-        "POST /repos/:owner/:repo/pulls",
-        owner = get_repo_owner(repo), repo = get_repo_name(repo),
-        base = base, head = head, title = title, body = body,
-        .token = get_github_token()
-      )
+      res = github_api_create_pull(owner = get_repo_owner(repo),
+                                   repo = get_repo_name(repo),
+                                   base = base, head = head, title = title, body = body)
 
       check_result(
         res,
@@ -601,6 +647,14 @@ style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler", base="maste
   )
 }
 
+github_api_get_admins = function(org){
+    safe_gh("GET /orgs/:org/members",
+            org = org,
+            role = "admin",
+            .token = get_github_token(),
+            .limit = get_github_api_limit())
+}
+
 #' List repository administrators
 #'
 #' \code{get_admins} creates a list of repository administrators.
@@ -622,15 +676,9 @@ get_admins = function(org, verbose = FALSE) {
   purrr::map(
     org,
     function(org) {
-      res = gh(
-        "GET /orgs/:org/members",
-        org = org,
-        role = "admin",
-        .token = get_github_token(),
-        .limit = get_github_api_limit()
-      )
+      res = github_api_get_admins(org = org)
 
-      purrr::map_chr(res, "login")
+      purrr::map_chr(res$result, "login")
     }
   )
 }
