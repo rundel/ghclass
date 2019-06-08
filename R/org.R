@@ -162,23 +162,34 @@ check_user_exists = function(user)
 }
 
 
+github_api_create_invitation = function(org, user){
+  safe_gh(
+    "PUT /orgs/:org/memberships/:username",
+    org=org, username=user, role="member",
+    .token=get_github_token()
+  )
+}
+
+
 #' Invite user(s)
 #'
-#' \code{invite_user} invites users to your organization
+#' \code{invite_user} invites user(s) to your organization.
 #'
-#' @param org character, name of the GitHub organization.
-#' @param user character or data frame, listing one or more users
+#' @param org Character. Name of the GitHub organization.
+#' @param user Character, character vector, or list. Listing one or more user names.
+#' @param exclude_pending Logical. If \code{exclude_pending = TRUE}, pending members will not receive another invitation tp join the organization. The default is FALSE, such that pending members will receive another invitation email.
+#' @param verbose Logical. Display verbose output.
 #'
 #' @examples
 #' \dontrun{
 #' users = c("Alice","Bob","Carol","Dave","Eve")
-#' invite_user("ghclass", users)
+#' invite_user("Sta523-Fa17", users)
 #' }
 #'
 #' @family github organization related functions
 #'
 #' @export
-invite_user = function(org, user, exclude_pending = FALSE)
+invite_user = function(org, user, exclude_pending = FALSE, verbose = TRUE)
 {
   stopifnot(length(org) == 1)
 
@@ -186,24 +197,30 @@ invite_user = function(org, user, exclude_pending = FALSE)
   members = tolower(get_members(org))
   pending = tolower(get_pending_members(org))
 
-  need_invite = setdiff(user, c(members, pending))
+  need_invite = ifelse(exclude_pending == T,
+                       setdiff(user, c(members, pending)),
+                       setdiff(user, c(members)))
 
   purrr::walk(
     need_invite,
     function(user) {
 
-      if (TRUE)
-        message("Adding ", user, " to ", org, " ...")
+      if (verbose)
+        message("Inviting ", user, " to ", org, " ...")
 
-
-      res = safe_gh(
-        "PUT /orgs/:org/memberships/:username",
-        org=org, username=user, role="member",
-        .token=get_github_token()
-      )
+      res = github_api_create_invitation(org, user)
 
       fail = sprintf("Inviting %s to %s failed.", user, org)
       check_result(res, fail)
     }
+  )
+
+  already_member = setdiff(user, c(members))
+
+  purrr::walk(
+    already_member,
+    function(user)
+      if(verbose)
+        message(user, " already part of ", org, " ...")
   )
 }
