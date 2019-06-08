@@ -65,7 +65,7 @@ get_repos = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE) {
 
 github_api_get_members = function(org) {
   stopifnot(length(org)==1)
-  gh("GET /orgs/:org/members", org=org, .token=get_github_token(), .limit=get_github_api_limit())
+  safe_gh("GET /orgs/:org/members", org=org, .token=get_github_token(), .limit=get_github_api_limit())
 }
 
 
@@ -90,15 +90,16 @@ get_members = function(org, filter=NULL, exclude=FALSE) {
   stopifnot(length(org)==1)
   stopifnot(length(filter)<=1)
 
-  res = purrr::map_chr(github_api_get_members(org), "login")
+  res = github_api_get_members(org)
+  members = purrr::map_chr(res$result, "login")
 
-  filter_results(res, filter, exclude)
+  filter_results(members, filter, exclude)
 }
 
 
 
 github_api_get_invitations = function(org) {
-  gh("GET /orgs/:org/invitations", org=org,
+  safe_gh("GET /orgs/:org/invitations", org=org,
      .token=get_github_token(), .limit=get_github_api_limit())
 }
 
@@ -124,10 +125,9 @@ get_pending_members = function(org, filter=NULL, exclude=FALSE) {
   stopifnot(length(filter)<=1)
 
   res = github_api_get_invitations(org)
-  res = purrr::map(res, "login")
-  res = as.character(unlist(res))
+  invites = purrr::map_chr(res$result, "login")
 
-  filter_results(res, filter, exclude)
+  filter_results(invites, filter, exclude)
 }
 
 
