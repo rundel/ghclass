@@ -97,6 +97,7 @@ add_content = function(repo, file, content, after=NULL, message="Added content",
 find_file = function(repo, file)
 {
   stopifnot(length(repo)==1)
+  stopifnot(length(file)==1) #currently not vectorized
   #TO DO: Fix since require_valid_repo is no longer vectorized
   #require_valid_repo(repo)
 
@@ -104,9 +105,9 @@ find_file = function(repo, file)
     purrr::map(
       file,
       function(file) {
-        q = paste0("repo:", repo,
-               " path:", fs::path_dir(file),
-               " filename:", fs::path_file(file))
+
+        q = paste0("repo:",repo,
+                   " filename:",fs::path_file(file))
 
         res = gh("GET /search/code", q=q,
                  .token=get_github_token(), .limit=get_github_api_limit())
@@ -181,7 +182,7 @@ put_file = function(repo, path, content, message, branch) {
 #'
 #' @export
 #'
-add_files = function(repo, message, files, branch = "master", preserve_path = FALSE)
+add_files = function(repo, message, files, branch = "master", preserve_path = FALSE, overwrite = F)
 {
   stopifnot(!missing(repo))
   stopifnot(!missing(message))
@@ -196,8 +197,8 @@ add_files = function(repo, message, files, branch = "master", preserve_path = FA
     files = list(files)
 
   purrr::pwalk(
-    list(repo, message, files),
-    function(repo, message, files) {
+    list(repo, message, files, branch),
+    function(repo, message, files, branch) {
 
       name = get_repo_name(repo)
       owner = get_repo_owner(repo)
