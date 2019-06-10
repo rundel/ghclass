@@ -31,23 +31,28 @@ get_readme = function(repo, branch="master")
   extract_content(file)
 }
 
+github_api_get_file = function(repo, file, branch = "master"){
+
+  safe_gh("GET /repos/:owner/:repo/contents/:path",
+          owner = get_repo_owner(repo),
+          repo = get_repo_name(repo),
+          path = file,
+          ref = branch,
+          .token = get_github_token(),
+          .limit = get_github_api_limit())
+}
+
 #' @export
-get_file = function(repo, file, branch="master")
+get_file = function(repo, file, branch = "master")
 {
   stopifnot(length(repo) == 1)
   stopifnot(length(file) == 1)
+  stopifnot(file_exists(repo, file, branch))
 
-  repo_name  = get_repo_name(repo)
-  repo_owner = get_repo_owner(repo)
+  res = github_api_get_file(repo, file, branch)
 
-  file = purrr::possibly(gh::gh, NULL)(
-    "GET /repos/:owner/:repo/contents/:path",
-    owner = repo_owner, repo = repo_name, path=file,
-    ref = branch,
-    .token=get_github_token(), .limit=get_github_api_limit()
-  )
+  extract_content(res$result)
 
-  extract_content(file)
 }
 
 #' @export
@@ -93,11 +98,11 @@ add_content = function(repo, file, content, after=NULL, message="Added content",
 }
 
 
-
+# Note: This function is currently not vectorized
 find_file = function(repo, file)
 {
   stopifnot(length(repo)==1)
-  stopifnot(length(file)==1) #currently not vectorized
+  stopifnot(length(file)==1)
   #TO DO: Fix since require_valid_repo is no longer vectorized
   #require_valid_repo(repo)
 
@@ -171,10 +176,17 @@ put_file = function(repo, path, content, message, branch) {
 #' @param branch name of branch to use, defaults to master.
 #' @param preserve_path should the local relative path be preserved.
 #'
+#' @templateVar fun add_files
+#' @template template-depr_fun
+#'
 #' @examples
 #' \dontrun{
 #' add_files("rundel/ghclass", "Update DESCRIPTION", "./DESCRIPTION")
 #' }
+#'
+#' @templateVar old add_files
+#' @templateVar new add_file
+#' @template template-depr_pkg
 #'
 #' @aliases grab_repos
 #'
@@ -182,8 +194,11 @@ put_file = function(repo, path, content, message, branch) {
 #'
 #' @export
 #'
-add_files = function(repo, message, files, branch = "master", preserve_path = FALSE, overwrite = F)
+add_files = function(repo, message, files, branch = "master", preserve_path = FALSE)
 {
+  .Deprecated(msg = "'add_files' will be removed in the next version. Use 'add_file' instead.",
+              new = "add_file")
+
   stopifnot(!missing(repo))
   stopifnot(!missing(message))
   stopifnot(!missing(files))
@@ -197,8 +212,8 @@ add_files = function(repo, message, files, branch = "master", preserve_path = FA
     files = list(files)
 
   purrr::pwalk(
-    list(repo, message, files, branch),
-    function(repo, message, files, branch) {
+    list(repo, message, files),
+    function(repo, message, files) {
 
       name = get_repo_name(repo)
       owner = get_repo_owner(repo)
@@ -222,6 +237,91 @@ add_files = function(repo, message, files, branch = "master", preserve_path = FA
       check_result(
         res, sprintf("Failed to add files to %s.", repo),
         error_prefix = paste0(files,": ")
+      )
+    }
+  )
+}
+
+
+#' Add files to a repo
+#'
+#' \code{add_files} uses the GitHub API to add/update files in an existing repo on GitHub.
+#'
+#' @param repo Character. Address of repository in "owner/name" format.
+#' @param message Character. Commit message.
+#' @param file Character. Local file paths of file or files to be added.
+#' @param branch Character. Name of branch to use, defaults to "master".
+#' @param preserve_path Logical. Should the local relative path be preserved.
+#' @param overwrite Logical. Should existing file or files with same name be overwritten, defaults to FALSE.
+#'
+#' @examples
+#' \dontrun{
+#' add_files("rundel/ghclass", "Update DESCRIPTION", "./DESCRIPTION")
+#' }
+#'
+#' @aliases grab_repos
+#'
+#' @family local repo functions
+#'
+#' @export
+#'
+add_file = function(repo, message, file, branch = "master", preserve_path = FALSE, overwrite = F)
+{
+  stopifnot(!missing(repo))
+  stopifnot(!missing(message))
+  stopifnot(!missing(file))
+
+  file_status = fs::file_exists(file)
+  if (any(!file_status))
+    stop("Unable to locate the following file(s):\n", format_list(file[!file_status]),
+         call. = FALSE)
+
+  if (is.character(file) & length(repo) != length(file))
+    file = list(file)
+
+  purrr::pwalk(
+    list(repo, message, file, branch),
+    function(repo, message, file, branch) {
+
+      name = get_repo_name(repo)
+      owner = get_repo_owner(repo)
+
+      gh_paths = file
+      if (!preserve_path)
+        gh_paths = fs::path_file(file)
+
+      if (TRUE)
+        message("Adding file to ", repo, " ...")
+
+      if (overwrite == F){
+        purrr::map2(
+          repo, gh_paths,
+          function(repo, gh_paths){
+
+            if(file_exists(repo, gh_paths, branch)){
+              message("File ", gh_paths, " already exists on ", repo, " ...")
+
+              res = get_file(repo, gh_paths, branch = branch)
+
+
+
+            }
+          }
+        )
+      }
+
+      res = purrr::map2(
+        gh_paths, file,
+        function(path, file, repo, message, branch) {
+          content = paste(readLines(file), collapse = "\n")
+          put_file(repo, path, content, message, branch)
+        },
+        repo = repo, message = message, branch = branch
+      )
+
+      check_result(
+        res, sprintf("Failed to add file to %s.", repo),
+        error_prefix = paste0(file,": ")
       )
     }
   )
