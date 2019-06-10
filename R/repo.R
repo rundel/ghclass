@@ -173,7 +173,7 @@ github_api_create_repo = function(org, name, private, auto_init, gitignore_templ
           name = name, private=private,
           auto_init = auto_init,
           gitignore_template = gitignore_template,
-          .token=get_github_token())
+          .token = get_github_token())
 }
 
 github_api_create_team_repo = function(org, name, private, auto_init, gitignore_template, team_id){
