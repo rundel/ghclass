@@ -1,8 +1,10 @@
 github_api_get_collaborators = function(repo) {
   safe_gh(
     "GET /repos/:owner/:repo/collaborators",
-    owner = get_repo_owner(repo), repo = get_repo_name(repo),
-    .token=get_github_token(), .limit=get_github_api_limit()
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    .token = get_github_token(),
+    .limit = get_github_api_limit()
   )
 }
 
