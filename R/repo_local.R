@@ -63,7 +63,7 @@ rename_local_repo = function(repo_dir, pattern, replacement) {
   purrr::walk2(
     cur_repos[sub], repos[sub],
     function(cur, new) {
-      res = purrr::safefly(fs::file_move)(cur, new)
+      res = purrr::safely(fs::file_move)(cur, new)
       status_msg(
         res,
         glue::glue("Renaming {usethis::ui_value(cur)} to {usethis::ui_value(to)}."),
