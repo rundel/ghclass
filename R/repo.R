@@ -11,7 +11,7 @@ github_api_get_collaborators = function(repo) {
 
 #' List repository collaborators
 #'
-#' \code{get_repo_collaborators} returns collaborator usernames.
+#' `get_repo_collaborators` returns collaborator usernames.
 #'
 #' @param repo Character. Address of repository in "owner/name" format.
 #'
@@ -66,7 +66,7 @@ github_api_get_repo_id = function(id) {
 
 #' Check existence of GitHub repository
 #'
-#' \code{check_repo} returns TRUE if the github repository exists. The function also returns a message if a repository was previously renamed.
+#' `check_repo` returns TRUE if the github repository exists. The function also returns a message if a repository was previously renamed.
 #'
 #' @param repo Character. Address of repository in "owner/name" format. Can be a vector or list of repository addresses.
 #' @param redirect Logical. Specifies whether previous names of repositories should be considered. The default is FALSE, such that only current repository names will be considered as existing.
@@ -147,7 +147,7 @@ check_repos = function(repos)
 
 #' Fix repository names
 #'
-#' \code{fix_repo_name} replaces spaces in repository names with \code{_}. It also replaces non-alphanumeric characters and special characters other than \code{_}, \code{.}, or \code{-} with \code{-}.
+#' `fix_repo_name` replaces spaces in repository names with `_`. It also replaces non-alphanumeric characters and special characters other than `_`, `.`, or `-` with `-`.
 #'
 #' @param repo_name Character. Name of repository. Can be vector of list of characters.
 #'
@@ -209,7 +209,7 @@ github_api_add_team = function(id, org, repo, permission){
 
 #' Create individual repositories
 #'
-#' \code{create_individual_repo} creates repositories for each student for a given
+#' `create_individual_repo` creates repositories for each student for a given
 #' assignment.
 #'
 #' @param org Character. Name of the GitHub organization.
@@ -276,7 +276,7 @@ create_individual_repo = function(org, user, prefix = "", suffix = "",
 
 #' Create team repositories
 #'
-#' \code{create_team_repo} creates repos for team(s).
+#' `create_team_repo` creates repos for team(s).
 #'
 #' @param org Character. Name of the GitHub organization.
 #' @param team Character or data frame. Vector of team names.
@@ -381,7 +381,7 @@ get_team_id_tbl = function(org, team) {
 
 #' Add a team to a repository
 #'
-#' \code{add_team_to_repo} adds a team to an existing repository. `pull` results in read privileges, `push` in write privileges, and `admin` in Admin privileges for the team in the respective repository. Note that permissions will overwrite existing access privileges.
+#' `add_team_to_repo` adds a team to an existing repository. `pull` results in read privileges, `push` in write privileges, and `admin` in Admin privileges for the team in the respective repository. Note that permissions will overwrite existing access privileges.
 #'
 #' @param repo Character. Address of repository in "owner/name" format.
 #' @param team Character or data frame. Vector of team names.
@@ -435,7 +435,7 @@ github_api_rename_repo = function(owner, repo, name){
 
 #' Rename repository
 #'
-#' \code{rename_repo} renames repositories. Use with caution as repositories retain their unique identifier upon renaming and can be accessed under their old names due to GitHub re-directing.
+#' `rename_repo` renames repositories. Use with caution as repositories retain their unique identifier upon renaming and can be accessed under their old names due to GitHub re-directing.
 #'
 #' @param repo Character. Address of repository in "owner/name" format.
 #' @param new_name Character. New name of repository in the "name" format.
@@ -467,7 +467,7 @@ rename_repo = function(repo, new_name) {
 
 #' Mirror repository
 #'
-#' \code{mirror_repo} mirrors the content of one repository to another repository, or set of repositories. Use the \code{get_repos} function as a wrapper for the target_repo parameter to enable mirroring to multiple repositories.
+#' `mirror_repo` mirrors the content of one repository to another repository, or set of repositories. Use the `get_repos` function as a wrapper for the target_repo parameter to enable mirroring to multiple repositories.
 #'
 #' @param source_repo Character. Address of repository in "owner/name" format.
 #' @param target_repo Character or vector of characters.  Address of repository in "owner/name" format.
@@ -565,7 +565,7 @@ create_pull_request = function(repo, title, base, head = "master", body = "", ve
 
 #' Style repository
 #'
-#' \code{style_repo} implements "non-invasive pretty-printing of R source code" of .R or .Rmd files within a repository using the \code{styler} package and adhering to \code{tidyverse} formatting guidelines.
+#' `style_repo` implements "non-invasive pretty-printing of R source code" of .R or .Rmd files within a repository using the `styler` package and adhering to `tidyverse` formatting guidelines.
 #'
 #' @param repo Character. Address of repository in "owner/name" format.
 #' @param files Character or vector of characters. Names of .R and/or .Rmd files that styler should be applied to.
@@ -659,7 +659,7 @@ github_api_get_admins = function(org){
 
 #' List repository administrators
 #'
-#' \code{get_admins} creates a list of repository administrators.
+#' `get_admins` creates a list of repository administrators.
 #'
 #' @param org Character. Name of GitHub organization.
 #' @param verbose Logical. Display verbose output.
@@ -688,7 +688,7 @@ get_admins = function(org, verbose = FALSE) {
 
 #' List collaborators
 #'
-#' \code{get_collaborators} Returns a vector of collaborator user names. Users with Admin rights are by default excluded, but can be included manually.
+#' `get_collaborators` Returns a vector of collaborator user names. Users with Admin rights are by default excluded, but can be included manually.
 #'
 #' @param repo Character. Address of repository in "owner/name" format.
 #' @param include_admins Logical. If FALSE, user names of users with Admin rights are not included. Default is TRUE.
