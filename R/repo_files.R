@@ -174,7 +174,13 @@ put_file = function(repo, path, content, message, branch = "master") {
   if (is.character(content))
     content = charToRaw(content)
 
-  github_api_put_file(repo, path, content, message, branch)
+  res = purrr::safely(github_api_put_file)(repo, path, content, message, branch)
+
+  status_msg(
+    res,
+    glue::glue("Added {usethis::ui_value(format_repo(repo, branch, path))}."),
+    glue::glue("Failed to add {usethis::ui_value(format_repo(repo, branch, path))}.")
+  )
 }
 
 
@@ -218,28 +224,17 @@ add_files = function(repo, message, files, branch = "master", preserve_path = FA
     list(repo, message, files),
     function(repo, message, files) {
 
-      name = get_repo_name(repo)
-      owner = get_repo_owner(repo)
-
-      if (TRUE)
-        message("Adding files to ", repo, " ...")
-
       gh_paths = files
       if (!preserve_path)
         gh_paths = fs::path_file(files)
 
-      res = purrr::map2(
+      purrr::walk2(
         gh_paths, files,
         function(path, file, repo, message, branch) {
           content = paste(readLines(file), collapse = "\n")
           put_file(repo, path, content, message, branch)
         },
         repo = repo, message = message, branch = branch
-      )
-
-      check_result(
-        res, sprintf("Failed to add files to %s.", repo),
-        error_prefix = paste0(files,": ")
       )
     }
   )
