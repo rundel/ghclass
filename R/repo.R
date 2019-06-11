@@ -1,4 +1,8 @@
 github_api_get_collaborators = function(repo) {
+
+  .Deprecated(msg = "'github_api_get_collaborators' will be removed in the next version. Use 'github_api_get_collaborator' instead.",
+              new = "github_api_get_collaborator")
+
   safe_gh(
     "GET /repos/:owner/:repo/collaborators",
     owner = get_repo_owner(repo),
@@ -6,6 +10,18 @@ github_api_get_collaborators = function(repo) {
     .token = get_github_token(),
     .limit = get_github_api_limit()
   )
+}
+
+github_api_get_collaborator = function(repo) {
+
+  safe_gh(
+    "GET /repos/:owner/:repo/collaborators",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    .token = get_github_token(),
+    .limit = get_github_api_limit()
+  )
+
 }
 
 
@@ -21,7 +37,7 @@ github_api_get_collaborators = function(repo) {
 #' @template template-depr_fun
 #'
 #' @templateVar old get_repo_collaborators
-#' @templateVar new get_collaborators
+#' @templateVar new get_collaborator
 #' @template template-depr_pkg
 #'
 #' @examples
@@ -33,7 +49,7 @@ github_api_get_collaborators = function(repo) {
 get_repo_collaborators = function(repo) {
 
   .Deprecated(msg = "'get_repo_collaborators' will be removed in the next version. Use 'get_collaborators' instead.",
-              new = "get_collaborators")
+              new = "get_collaborator")
 
   users = purrr::map(
     repo,
@@ -94,7 +110,6 @@ check_repo = function(repo, redirect = F) {
   id = purrr::map_int(res, c("result", "id"), .default = NA)
   repo_new_name = purrr::map_chr(purrr::map(id, github_api_get_repo_id), c("result", "name"), .default = NA)
   repo_old_name = get_repo_name(repo)
-  org = get_repo_owner(repo)
 
   # Replacing with F if user-provided repo name is NOT current
   if(redirect == F){
@@ -107,8 +122,8 @@ check_repo = function(repo, redirect = F) {
                function(repo_new_name, repo_old_name)
 
                  if(repo_new_name != repo_old_name & !is.na(repo_new_name)){
-                   repo_old_name = paste(org, repo_old_name, sep = "/")
-                   repo_new_name = paste(org, repo_new_name, sep = "/")
+                   repo_old_name = paste(get_repo_owner(repo), repo_old_name, sep = "/")
+                   repo_new_name = paste(get_repo_owner(repo), repo_new_name, sep = "/")
                    message(paste("Repository", repo_old_name, "was previously renamed to", repo_new_name))
                  })
 
@@ -174,18 +189,18 @@ fix_repo_name = function(repo_name)
 }
 
 
-github_api_create_repo = function(org, name, private, auto_init, gitignore_template){
-  safe_gh("POST /orgs/:org/repos",
-          org = org,
+github_api_create_repo = function(owner, name, private, auto_init, gitignore_template){
+  safe_gh("POST /orgs/:owner/repos",
+          owner = owner,
           name = name, private = private,
           auto_init = auto_init,
           gitignore_template = gitignore_template,
           .token = get_github_token())
 }
 
-github_api_create_team_repo = function(org, name, private, auto_init, gitignore_template, team_id){
-  safe_gh("POST /orgs/:org/repos",
-          org = org,
+github_api_create_team_repo = function(owner, name, private, auto_init, gitignore_template, team_id){
+  safe_gh("POST /orgs/:owner/repos",
+          owner = owner,
           name = name, private = private,
           team_id = team_id,
           auto_init = auto_init,
@@ -202,10 +217,10 @@ github_api_add_user = function(owner, repo, username, permission){
           .token = get_github_token())
 }
 
-github_api_add_team = function(id, org, repo, permission){
-  safe_gh("PUT /teams/:id/repos/:org/:repo",
+github_api_add_team = function(id, owner, repo, permission){
+  safe_gh("PUT /teams/:id/repos/:owner/:repo",
           id = id,
-          org = org,
+          owner = owner,
           repo = repo,
           permission = permission,
           .token = get_github_token())
@@ -217,7 +232,7 @@ github_api_add_team = function(id, org, repo, permission){
 #' `create_individual_repo` creates repositories for each student for a given
 #' assignment.
 #'
-#' @param org Character. Name of the GitHub organization.
+#' @param owner Character. Name of the GitHub organization.
 #' @param user Character or data frame. Listing one or more users.
 #' @param prefix Character. Resulting repository name will start with this. character string.
 #' @param suffix Character. Resulting repository name will end with this character string.
@@ -235,22 +250,22 @@ github_api_add_team = function(id, org, repo, permission){
 #'
 #' @export
 #'
-create_individual_repo = function(org, user, prefix = "", suffix = "",
+create_individual_repo = function(owner, user, prefix = "", suffix = "",
                                   private = TRUE, verbose = TRUE,
                                   auto_init = FALSE, gitignore_template = "R") {
   if (prefix == "" & suffix == "")
     stop("Either a prefix or a suffix must be specified")
 
-  org_users = get_members(org)
-  org_repos = get_repos(org)
+  owner_users = get_members(owner)
+  owner_repos = get_repos(owner)
 
   purrr::walk(
     user,
     function(user) {
       repo_name = fix_repo_name(paste0(prefix, user, suffix))
-      repo = paste0(org, "/", repo_name)
+      repo = paste0(owner, "/", repo_name)
 
-      if (repo %in% org_repos) {
+      if (repo %in% owner_repos) {
         if (verbose)
           message("Skipping repo ", repo, ", already exists ...",)
 
@@ -261,7 +276,7 @@ create_individual_repo = function(org, user, prefix = "", suffix = "",
         message("Creating repo ", repo, " ...", sep="")
 
       try({
-        github_api_create_repo(org = org,
+        github_api_create_repo(owner = owner,
                                name = repo_name,
                                private = private,
                                auto_init = auto_init,
@@ -269,7 +284,7 @@ create_individual_repo = function(org, user, prefix = "", suffix = "",
       })
 
       try({
-        github_api_add_user(owner = org,
+        github_api_add_user(owner = owner,
                             repo = repo_name,
                             username = user,
                             permission = "push")
@@ -283,7 +298,7 @@ create_individual_repo = function(org, user, prefix = "", suffix = "",
 #'
 #' `create_team_repo` creates repos for team(s).
 #'
-#' @param org Character. Name of the GitHub organization.
+#' @param owner Character. Name of the GitHub organization.
 #' @param team Character or data frame. Vector of team names.
 #' @param prefix Character. Resulting repo name will start with this character string.
 #' @param suffix Character. Resulting repo name will end with this character string.
@@ -301,14 +316,14 @@ create_individual_repo = function(org, user, prefix = "", suffix = "",
 #'
 #' @export
 #'
-create_team_repo = function(org, team,  prefix = "", suffix = "",
+create_team_repo = function(owner, team,  prefix = "", suffix = "",
                             private = TRUE, verbose = TRUE,
                             auto_init = FALSE, gitignore_template = "R") {
-  org_teams = get_teams(org)
+  owner_teams = get_teams(owner)
 
   if (is.character(team)) {
     team = merge(
-      tibble::tibble(team = team), org_teams,
+      tibble::tibble(team = team), owner_teams,
       by = "team", all.x = TRUE
     )
   }
@@ -319,15 +334,15 @@ create_team_repo = function(org, team,  prefix = "", suffix = "",
   if (any(missing_ids))
     stop("Unable to locate team(s): ", paste(team[["team"]][missing_ids], collapse = ", "), call. = FALSE)
 
-  org_repos = get_repo(org)
+  owner_repos = get_repo(owner)
 
   purrr::pwalk(
     unique(team),
     function(team, id) {
       repo_name = fix_repo_name( paste0(prefix, team, suffix) )
-      repo = paste0(org, "/", repo_name)
+      repo = paste0(owner, "/", repo_name)
 
-      if (repo %in% org_repos) {
+      if (repo %in% owner_repos) {
         message("Skipping repo ", repo, ", already exists ...")
         return()
       }
@@ -337,7 +352,7 @@ create_team_repo = function(org, team,  prefix = "", suffix = "",
 
       # Create
       try({
-      res = github_api_create_team_repo(org = org,
+      res = github_api_create_team_repo(owner = owner,
                                         name = repo_name, private = private,
                                         team_id = id,
                                         auto_init = auto_init,
@@ -347,7 +362,7 @@ create_team_repo = function(org, team,  prefix = "", suffix = "",
       # Give time write access
       try({
       github_api_add_team(id = id,
-                          org = org,
+                          owner = owner,
                           repo = repo_name,
                           permission = "push")
       })
@@ -357,18 +372,18 @@ create_team_repo = function(org, team,  prefix = "", suffix = "",
   )
 }
 
-get_team_id_tbl = function(org, team) {
+get_team_id_tbl = function(owner, team) {
 
-  stopifnot(is.character(org))
-  stopifnot(length(org) == 1)
+  stopifnot(is.character(owner))
+  stopifnot(length(owner) == 1)
   stopifnot(is.character(team))
 
-  org_teams = get_teams(org)
+  owner_teams = get_teams(owner)
 
   team = unique(team)
 
   team_tbl = merge(
-    tibble::tibble(team = team), org_teams,
+    tibble::tibble(team = team), owner_teams,
     by = "team", all.x = TRUE
   )
 
@@ -377,7 +392,7 @@ get_team_id_tbl = function(org, team) {
     stop(
       "Unable to locate team(s): ",
       paste(team_tbl[["team"]][missing_ids], collapse = ", "),
-      " in ", org, ".",
+      " in ", owner, ".",
       call. = FALSE
     )
 
@@ -390,7 +405,7 @@ get_team_id_tbl = function(org, team) {
 #'
 #' @param repo Character. Address of repository in "owner/name" format.
 #' @param team Character or data frame. Vector of team names.
-#' @param permission Character. Permission to be granted to team for repo ("pull", "push", or "admin"), default is "pull".
+#' @param permission Character. Permission to be granted to team for repo ("push", "pull", or "admin"), defaults to "push".
 #' @param verbose Logical. Display verbose output.
 #'
 #' @examples
@@ -401,7 +416,7 @@ get_team_id_tbl = function(org, team) {
 #' @export
 #'
 add_team_to_repo = function(repo, team,
-                            permission = c("pull", "push", "admin"),
+                            permission = c("push", "pull", "admin"),
                             verbose = TRUE) {
 
   stopifnot(is.character(repo))
@@ -412,16 +427,16 @@ add_team_to_repo = function(repo, team,
   purrr::walk2(
     repo, team,
     function(repo, team) {
-      org = get_repo_owner(repo)
+      owner = get_repo_owner(repo)
       reponame = get_repo_name(repo)
 
-      team_id = get_team_id_tbl(org, team)
+      team_id = get_team_id_tbl(owner, team)
 
       if (verbose)
         message("Adding ", team, " to ", repo, " (", permission, ") ...")
 
       res = github_api_add_team(id = team_id[["id"]],
-                                org = org,
+                                owner = owner,
                                 repo = reponame,
                                 permission = permission)
 
@@ -654,13 +669,27 @@ style_repo = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = 
   )
 }
 
-github_api_get_admins = function(org){
-    safe_gh("GET /orgs/:org/members",
-            org = org,
+github_api_get_admins = function(owner){
+
+  .Deprecated(msg = "'github_api_get_admins' will be removed in the next version. Use 'github_api_get_admin' instead.",
+              new = "github_api_get_admin")
+
+    safe_gh("GET /orgs/:owner/members",
+            owner = owner,
             role = "admin",
             .token = get_github_token(),
             .limit = get_github_api_limit())
 }
+
+
+github_api_get_admin = function(owner){
+  safe_gh("GET /orgs/:owner/members",
+          owner = owner,
+          role = "admin",
+          .token = get_github_token(),
+          .limit = get_github_api_limit())
+}
+
 
 #' List repository administrators
 #'
@@ -668,6 +697,13 @@ github_api_get_admins = function(org){
 #'
 #' @param org Character. Name of GitHub organization.
 #' @param verbose Logical. Display verbose output.
+#'
+#' @templateVar fun get_admins
+#' @template template-depr_fun
+#'
+#' @templateVar old get_admins
+#' @templateVar new get_admin
+#' @template template-depr_pkg
 #'
 #' @examples
 #' \dontrun{
@@ -680,10 +716,41 @@ github_api_get_admins = function(org){
 #'
 get_admins = function(org, verbose = FALSE) {
 
+  .Deprecated(msg = "'get_admins' will be removed in the next version. Use 'get_admin' instead.",
+              new = "get_admin")
+
   purrr::map(
     org,
     function(org) {
       res = github_api_get_admins(org = org)
+
+      purrr::map_chr(res$result, "login")
+    }
+  )
+}
+
+#' List repository administrators
+#'
+#' `get_admin` creates a list of repository administrators.
+#'
+#' @param owner Character. Name of GitHub organization.
+#' @param verbose Logical. Display verbose output.
+#'
+#' @examples
+#' \dontrun{
+#' get_admin("Sta523-Fa17")
+#' }
+#'
+#' @return A list containing a character vector of repository administrators.
+#'
+#' @export
+#'
+get_admin = function(owner, verbose = FALSE) {
+
+  purrr::map(
+    owner,
+    function(owner) {
+      res = github_api_get_admin(owner = owner)
 
       purrr::map_chr(res$result, "login")
     }
@@ -701,6 +768,13 @@ get_admins = function(org, verbose = FALSE) {
 #'
 #' @return A list containing a character vector of user names.
 #'
+#' @templateVar fun get_collaborators
+#' @template template-depr_fun
+#'
+#' @templateVar old get_collaborators
+#' @templateVar new get_collaborator
+#' @template template-depr_pkg
+#'
 #' @examples
 #' \dontrun{
 #' get_collaborators("Sta523-Fa17")
@@ -709,6 +783,9 @@ get_admins = function(org, verbose = FALSE) {
 #' @export
 #'
 get_collaborators = function(repo, include_admins = TRUE, verbose = FALSE) {
+
+  .Deprecated(msg = "'get_collaborators' will be removed in the next version. Use 'get_collaborator' instead.",
+              new = "get_collaborator")
 
   stopifnot(!missing(repo))
 
@@ -724,6 +801,44 @@ get_collaborators = function(repo, include_admins = TRUE, verbose = FALSE) {
       check_result(res, sprintf("Unable to retrieve collaborators for %s.", repo), verbose)
 
       setdiff(purrr::map_chr(res$result, "login"), admins)
+    }
+  )
+}
+
+
+#' List collaborators
+#'
+#' `get_collaborator` Returns a vector of collaborator user names. Users with Admin rights are by default excluded, but can be included manually.
+#'
+#' @param repo Character. Address of repository in "owner/name" format.
+#' @param include_admin Logical. If FALSE, user names of users with Admin rights are not included, defaults to TRUE.
+#' @param verbose Logical. Display verbose output.
+#'
+#' @return A list containing a character vector of user names.
+#'
+#' @examples
+#' \dontrun{
+#' get_collaborators("Sta523-Fa17")
+#' }
+#'
+#' @export
+#'
+get_collaborator = function(repo, include_admin = TRUE, verbose = FALSE) {
+
+  stopifnot(!missing(repo))
+
+  admin = list(NULL)
+  if (!include_admin)
+    admin = get_admin(get_repo_owner(repo))
+
+  purrr::map2(
+    repo, admin,
+    function(repo, admin) {
+      res = github_api_get_collaborator(repo)
+
+      check_result(res, sprintf("Unable to retrieve collaborators for %s.", repo), verbose)
+
+      setdiff(purrr::map_chr(res$result, "login"), admin)
     }
   )
 }
