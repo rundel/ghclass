@@ -13,39 +13,52 @@ extract_content = function(file, include_details = TRUE) {
   content
 }
 
-#' @export
-get_readme = function(repo, branch="master")
-{
+github_api_get_readme = function(repo, branch) {
   stopifnot(length(repo) == 1)
-  stopifnot(length(file) == 1)
+  stopifnot(length(branch) == 1)
 
-  repo_name  = get_repo_name(repo)
-  repo_owner = get_repo_owner(repo)
+  name = get_repo_name(repo)
+  owner = get_repo_owner(repo)
 
-  file = purrr::possibly(gh::gh, NULL)(
+  gh::gh(
     "GET /repos/:owner/:repo/readme",
-    owner = repo_owner, repo = repo_name, ref = branch,
+    owner = owner, repo = name, ref = branch,
     .token=get_github_token(), .limit=get_github_api_limit()
   )
+}
+
+#' @export
+get_readme = function(repo, branch="master") {
+  stopifnot(length(repo) == 1)
+  stopifnot(length(branch) == 1)
+
+  file = purrr::possibly(github_api_get_readme, NULL)(repo, branch)
 
   extract_content(file)
 }
 
-#' @export
-get_file = function(repo, file, branch="master")
-{
+github_api_get_file = function(repo, file, branch) {
   stopifnot(length(repo) == 1)
   stopifnot(length(file) == 1)
+  stopifnot(length(branch) == 1)
 
-  repo_name  = get_repo_name(repo)
-  repo_owner = get_repo_owner(repo)
+  name = get_repo_name(repo)
+  owner = get_repo_owner(repo)
 
-  file = purrr::possibly(gh::gh, NULL)(
+  gh::gh(
     "GET /repos/:owner/:repo/contents/:path",
-    owner = repo_owner, repo = repo_name, path=file,
-    ref = branch,
+    owner = repo_owner, repo = repo_name, path=file, ref = branch,
     .token=get_github_token(), .limit=get_github_api_limit()
   )
+}
+
+#' @export
+get_file = function(repo, file, branch="master") {
+  stopifnot(length(repo) == 1)
+  stopifnot(length(file) == 1)
+  stopifnot(length(branch) == 1)
+
+  file = purrr::possibly(github_api_get_file, NULL)(repo, file, branch)
 
   extract_content(file)
 }
@@ -92,7 +105,11 @@ add_content = function(repo, file, content, after=NULL, message="Added content",
   )
 }
 
-
+github_api_code_search = function(q) {
+  gh("GET /search/code", q=q,
+     .token=get_github_token(),
+     .limit=get_github_api_limit())
+}
 
 find_file = function(repo, file)
 {
@@ -108,8 +125,7 @@ find_file = function(repo, file)
                " path:", fs::path_dir(file),
                " filename:", fs::path_file(file))
 
-        res = gh("GET /search/code", q=q,
-                 .token=get_github_token(), .limit=get_github_api_limit())
+        res = github_api_code_search(q)
 
         purrr::map_chr(res[["items"]], "path")
       }
@@ -133,18 +149,7 @@ file_exists = function(repo, file, branch = "master")
   )
 }
 
-
-
-#' @export
-put_file = function(repo, path, content, message, branch) {
-  stopifnot(length(repo)==1)
-  stopifnot(length(path)==1)
-  stopifnot(length(message)==1)
-  stopifnot(length(branch)==1)
-
-  if (is.character(content))
-    content = charToRaw(content)
-
+github_api_put_file = function(repo, path, content, message, branch) {
   args = list(
     endpoint = "PUT /repos/:owner/:repo/contents/:path",
     owner = get_repo_owner(repo), repo = get_repo_name(repo),
@@ -155,7 +160,21 @@ put_file = function(repo, path, content, message, branch) {
   )
   args[["sha"]] = attr(get_file(repo, path, branch), "sha")
 
-  do.call(safe_gh, args)
+  do.call(gh, args)
+}
+
+#' @export
+put_file = function(repo, path, content, message, branch = "master") {
+  stopifnot(length(repo)==1)
+  stopifnot(length(path)==1)
+  stopifnot(length(content)==1)
+  stopifnot(length(message)==1)
+  stopifnot(length(branch)==1)
+
+  if (is.character(content))
+    content = charToRaw(content)
+
+  github_api_put_file(repo, path, content, message, branch)
 }
 
 
