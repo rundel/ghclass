@@ -34,21 +34,6 @@
 #'
 NULL
 
-#' @export
-rename_local_repo = function(repo_dir, pattern, replacement) {
-
-  stopifnot(length(pattern) == length(replacement))
-
-  repos = repo_dir_helper(repo_dir)
-  cur_repos = repos
-
-  for(i in seq_along(pattern)) {
-    repos = sub(pattern[i],replacement[i], repos)
-  }
-
-  sub = repos != cur_repos
-  purrr::walk2(cur_repos[sub], repos[sub], fs::file_move)
-}
 
 # If we are given a single repo directory check if it is a repo or a directory of repos
 repo_dir_helper = function(repo_dir) {
@@ -60,6 +45,35 @@ repo_dir_helper = function(repo_dir) {
 
   fs::path_real(dir)
 }
+
+
+#' @export
+rename_local_repo = function(repo_dir, pattern, replacement) {
+  stopifnot(length(repo_dir) == 1)
+  stopifnot(length(pattern) == length(replacement))
+
+  repos = repo_dir_helper(repo_dir)
+  cur_repos = repos
+
+  for(i in seq_along(pattern)) {
+    repos = sub(pattern[i],replacement[i], repos)
+  }
+
+  sub = repos != cur_repos
+  purrr::walk2(
+    cur_repos[sub], repos[sub],
+    function(cur, new) {
+      res = purrr::safefly(fs::file_move)(cur, new)
+      status_msg(
+        res,
+        glue::glue("Renaming {usethis::ui_value(cur)} to {usethis::ui_value(to)}."),
+        glue::glue("Failed to rename {usethis::ui_value(cur)} to {usethis::ui_value(to)}.")
+      )
+    }
+  )
+}
+
+
 run_git = function(git = require_git(), cmd, args = character(), verbose=FALSE) {
   stopifnot(!missing(cmd))
 
@@ -73,8 +87,8 @@ run_git = function(git = require_git(), cmd, args = character(), verbose=FALSE) 
 
 #' @export
 clone_repo = function(repo, local_path="./", branch = "master",
-                      git = require_git(), options = "", absolute_path = TRUE,
-                      verbose = TRUE)
+                      git = require_git(), options = character(),
+                      absolute_path = TRUE, verbose = TRUE)
 {
   stopifnot(!missing(repo))
   stopifnot(file.exists(git))
