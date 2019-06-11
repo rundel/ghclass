@@ -60,8 +60,15 @@ repo_dir_helper = function(repo_dir) {
 
   fs::path_real(dir)
 }
+run_git = function(git = require_git(), cmd, args = character(), verbose=FALSE) {
+  stopifnot(!missing(cmd))
 
+  processx::run(
+    git, args  = c(cmd, args), error_on_status = TRUE, echo = verbose
+  )
 
+  invisible(NULL)
+}
 
 
 #' @export
