@@ -52,7 +52,7 @@ github_api_get_repo = function(repo) {
     "GET /repos/:owner/:repo",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
-    .token=get_github_token()
+    .token = get_github_token()
   )
 }
 
@@ -60,7 +60,7 @@ github_api_get_repo_id = function(id) {
   safe_gh(
     "GET /repositories/:id",
     id = id,
-    .token=get_github_token()
+    .token = get_github_token()
   )
 }
 
@@ -133,7 +133,7 @@ check_repos = function(repos)
 
   exists = function(owner, repo)
   {
-    gh("GET /repos/:owner/:repo", owner=owner, repo=repo, .token=get_github_token())
+    gh("GET /repos/:owner/:repo", owner = owner, repo = repo, .token = get_github_token())
     TRUE
   }
 
@@ -172,7 +172,7 @@ fix_repo_name = function(repo_name)
 github_api_create_repo = function(org, name, private, auto_init, gitignore_template){
   safe_gh("POST /orgs/:org/repos",
           org = org,
-          name = name, private=private,
+          name = name, private = private,
           auto_init = auto_init,
           gitignore_template = gitignore_template,
           .token = get_github_token())
@@ -185,7 +185,7 @@ github_api_create_team_repo = function(org, name, private, auto_init, gitignore_
           team_id = team_id,
           auto_init = auto_init,
           gitignore_template = gitignore_template,
-          .token=get_github_token())
+          .token = get_github_token())
 }
 
 github_api_add_user = function(owner, repo, username, permission){
@@ -203,7 +203,7 @@ github_api_add_team = function(id, org, repo, permission){
           org = org,
           repo = repo,
           permission = permission,
-          .token=get_github_token())
+          .token = get_github_token())
 }
 
 
@@ -230,9 +230,9 @@ github_api_add_team = function(id, org, repo, permission){
 #'
 #' @export
 #'
-create_individual_repo = function(org, user, prefix="", suffix="",
-                                  private=TRUE, verbose=TRUE,
-                                  auto_init=FALSE, gitignore_template="R") {
+create_individual_repo = function(org, user, prefix = "", suffix = "",
+                                  private = TRUE, verbose = TRUE,
+                                  auto_init = FALSE, gitignore_template = "R") {
   if (prefix == "" & suffix == "")
     stop("Either a prefix or a suffix must be specified")
 
@@ -296,9 +296,9 @@ create_individual_repo = function(org, user, prefix="", suffix="",
 #'
 #' @export
 #'
-create_team_repo = function(org, team,  prefix="", suffix="",
-                            private=TRUE, verbose=TRUE,
-                            auto_init=FALSE, gitignore_template="R") {
+create_team_repo = function(org, team,  prefix = "", suffix = "",
+                            private = TRUE, verbose = TRUE,
+                            auto_init = FALSE, gitignore_template = "R") {
   org_teams = get_teams(org)
 
   if (is.character(team)) {
@@ -312,7 +312,7 @@ create_team_repo = function(org, team,  prefix="", suffix="",
 
   missing_ids = is.na(team[["id"]])
   if (any(missing_ids))
-    stop("Unable to locate team(s): ", paste(team[["team"]][missing_ids], collapse=", "), call. = FALSE)
+    stop("Unable to locate team(s): ", paste(team[["team"]][missing_ids], collapse = ", "), call. = FALSE)
 
   org_repos = get_repo(org)
 
@@ -333,7 +333,7 @@ create_team_repo = function(org, team,  prefix="", suffix="",
       # Create
       try({
       res = github_api_create_team_repo(org = org,
-                                        name=repo_name, private=private,
+                                        name = repo_name, private = private,
                                         team_id = id,
                                         auto_init = auto_init,
                                         gitignore_template = gitignore_template)
@@ -371,7 +371,7 @@ get_team_id_tbl = function(org, team) {
   if (any(missing_ids))
     stop(
       "Unable to locate team(s): ",
-      paste(team_tbl[["team"]][missing_ids], collapse=", "),
+      paste(team_tbl[["team"]][missing_ids], collapse = ", "),
       " in ", org, ".",
       call. = FALSE
     )
@@ -397,7 +397,7 @@ get_team_id_tbl = function(org, team) {
 #'
 add_team_to_repo = function(repo, team,
                             permission = c("pull", "push", "admin"),
-                            verbose=TRUE) {
+                            verbose = TRUE) {
 
   stopifnot(is.character(repo))
   stopifnot(is.character(team))
@@ -582,9 +582,9 @@ create_pull_request = function(repo, title, base, head = "master", body = "", ve
 #'
 #' @export
 #'
-style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler", base="master",
+style_repo = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = "master",
                       create_pull_request = TRUE, tag_collaborators = TRUE,
-                      git = require_git(), verbose=TRUE) {
+                      git = require_git(), verbose = TRUE) {
   stopifnot(styler_available())
   stopifnot(length(repo) >= 1)
 
@@ -615,7 +615,7 @@ style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler", base="maste
       msg = c("Results of running styler:\n", utils::capture.output( styler::style_file(file_paths) ))
       writeLines(msg, "commit_msg")
 
-      system(paste0(git, " add ", paste0(file_paths, collapse=" ")),
+      system(paste0(git, " add ", paste0(file_paths, collapse = " ")),
              intern = FALSE, wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
       system(paste0(git, " commit -F commit_msg"),
@@ -633,15 +633,15 @@ style_repo = function(repo, files=c("*.R","*.Rmd"), branch="styler", base="maste
           "Click on the commit below to see details of recommended changes. It is not necessary that your ",
           "code cleanly pass these checks, but if there is a large number of significant changes suggested ",
           "you should review the style guide with an eye towards potentially improving your code formatting."
-        ), collapse="")
+        ), collapse = "")
 
         if (tag_collaborators)
-          msg = paste0(msg,"\n\n@", get_collaborators(repo)[[1]], collapse=", ")
+          msg = paste0(msg,"\n\n@", get_collaborators(repo)[[1]], collapse = ", ")
 
         create_pull_request(
-          repo, title="styler revisions",
+          repo, title = "styler revisions",
           base = base, head = branch,
-          body = paste0(msg, collapse="\n"),
+          body = paste0(msg, collapse = "\n"),
           verbose = verbose
         )
       }
