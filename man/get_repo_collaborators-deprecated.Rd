@@ -18,14 +18,13 @@ Character vector of collaborator usernames.
 }
 \section{\code{get_repo_collaborators}}{
 
-For \code{get_repo_collaborators}, use \code{\link{get_collaborators}}.
+For \code{get_repo_collaborators}, use \code{\link{get_collaborator}}.
 }
 
 \examples{
 \dontrun{
 get_repo_collaborators("Sta523-Fa17/hw1")
 }
-
 
 }
 \seealso{
