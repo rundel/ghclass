@@ -45,7 +45,6 @@ github_api_get_collaborator = function(repo) {
 #' get_repo_collaborators("Sta523-Fa17/hw1")
 #' }
 #'
-#'
 get_repo_collaborators = function(repo) {
 
   .Deprecated(msg = "'get_repo_collaborators' will be removed in the next version. Use 'get_collaborators' instead.",
@@ -144,7 +143,6 @@ check_repo = function(repo, redirect = F) {
 #' @templateVar new check_repo
 #' @template template-depr_pkg
 #'
-#' @export
 #'
 check_repos = function(repos)
 {
@@ -466,6 +464,7 @@ github_api_rename_repo = function(owner, repo, name){
 #' }
 #'
 #' @export
+#'
 rename_repo = function(repo, new_name) {
   purrr::walk2(
     repo, new_name,
@@ -669,13 +668,13 @@ style_repo = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = 
   )
 }
 
-github_api_get_admins = function(owner){
+github_api_get_admins = function(org){
 
   .Deprecated(msg = "'github_api_get_admins' will be removed in the next version. Use 'github_api_get_admin' instead.",
               new = "github_api_get_admin")
 
-    safe_gh("GET /orgs/:owner/members",
-            owner = owner,
+    safe_gh("GET /orgs/:org/members",
+            org = org,
             role = "admin",
             .token = get_github_token(),
             .limit = get_github_api_limit())
@@ -712,7 +711,6 @@ github_api_get_admin = function(owner){
 #'
 #' @return A list containing a character vector of repository administrators.
 #'
-#' @export
 #'
 get_admins = function(org, verbose = FALSE) {
 
@@ -780,8 +778,6 @@ get_admin = function(owner, verbose = FALSE) {
 #' get_collaborators("Sta523-Fa17")
 #' }
 #'
-#' @export
-#'
 get_collaborators = function(repo, include_admins = TRUE, verbose = FALSE) {
 
   .Deprecated(msg = "'get_collaborators' will be removed in the next version. Use 'get_collaborator' instead.",
@@ -806,7 +802,7 @@ get_collaborators = function(repo, include_admins = TRUE, verbose = FALSE) {
 }
 
 
-#' List collaborators
+#' List collaborator(s)
 #'
 #' `get_collaborator` Returns a vector of collaborator user names. Users with Admin rights are by default excluded, but can be included manually.
 #'

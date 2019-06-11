@@ -4,11 +4,12 @@
 \alias{create_team_repo}
 \title{Create team repositories}
 \usage{
-create_team_repo(org, team, prefix = "", suffix = "", private = TRUE,
-  verbose = TRUE, auto_init = FALSE, gitignore_template = "R")
+create_team_repo(owner, team, prefix = "", suffix = "",
+  private = TRUE, verbose = TRUE, auto_init = FALSE,
+  gitignore_template = "R")
 }
 \arguments{
-\item{org}{Character. Name of the GitHub organization.}
+\item{owner}{Character. Name of the GitHub organization.}
 
 \item{team}{Character or data frame. Vector of team names.}
 

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>List repository collaborators — get_repo_collaborators-deprecated • ghclass</title>
+<title>List repository administrators — get_admins-deprecated • ghclass</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="List repository collaborators — get_repo_collaborators-deprecated" />
+<meta property="og:title" content="List repository administrators — get_admins-deprecated" />
 
-<meta property="og:description" content="get_repo_collaborators returns collaborator usernames." />
+<meta property="og:description" content="get_admins creates a list of repository administrators." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -97,36 +97,40 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>List repository collaborators</h1>
+    <h1>List repository administrators</h1>
     
-    <div class="hidden name"><code>get_repo_collaborators-deprecated.Rd</code></div>
+    <div class="hidden name"><code>get_admins-deprecated.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p><code>get_repo_collaborators</code> returns collaborator usernames.</p>
+    <p><code>get_admins</code> creates a list of repository administrators.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>get_repo_collaborators</span>(<span class='no'>repo</span>)</pre>
+    <pre class="usage"><span class='fu'>get_admins</span>(<span class='no'>org</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>repo</th>
-      <td><p>Character. Address of repository in "owner/name" format.</p></td>
+      <th>org</th>
+      <td><p>Character. Name of GitHub organization.</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>Logical. Display verbose output.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Character vector of collaborator usernames.</p>
+    <p>A list containing a character vector of repository administrators.</p>
     
-    <h2 class="hasAnchor" id="get-repo-collaborators"><a class="anchor" href="#get-repo-collaborators"></a><code>get_repo_collaborators</code></h2>
+    <h2 class="hasAnchor" id="get-admins"><a class="anchor" href="#get-admins"></a><code>get_admins</code></h2>
 
     
-    <p>For <code>get_repo_collaborators</code>, use <code>get_collaborator</code>.</p>
+    <p>For <code>get_admins</code>, use <code>get_admin</code>.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -135,7 +139,7 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>get_repo_collaborators</span>(<span class='st'>"Sta523-Fa17/hw1"</span>)
+<span class='fu'>get_admins</span>(<span class='st'>"Sta523-Fa17"</span>)
 <span class='co'># }</span><div class='input'>
 </div></pre>
   </div>
@@ -146,7 +150,7 @@
       
       <li><a href="#value">Value</a></li>
 
-      <li><a href="#get-repo-collaborators"><code>get_repo_collaborators</code></a></li>
+      <li><a href="#get-admins"><code>get_admins</code></a></li>
 
       <li><a href="#see-also">See also</a></li>
       

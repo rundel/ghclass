@@ -4,7 +4,7 @@
 \alias{add_team_to_repo}
 \title{Add a team to a repository}
 \usage{
-add_team_to_repo(repo, team, permission = c("pull", "push", "admin"),
+add_team_to_repo(repo, team, permission = c("push", "pull", "admin"),
   verbose = TRUE)
 }
 \arguments{
@@ -12,7 +12,7 @@ add_team_to_repo(repo, team, permission = c("pull", "push", "admin"),
 
 \item{team}{Character or data frame. Vector of team names.}
 
-\item{permission}{Character. Permission to be granted to team for repo ("pull", "push", or "admin"), default is "pull".}
+\item{permission}{Character. Permission to be granted to team for repo ("push", "pull", or "admin"), defaults to "push".}
 
 \item{verbose}{Logical. Display verbose output.}
 }
