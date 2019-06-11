@@ -242,6 +242,69 @@ add_files = function(repo, message, files, branch = "master", preserve_path = FA
   )
 }
 
+#' Create file URL to pass to GitHub Commit API
+#'
+#' `create_file_commit_url` creates a file URL for a single file that can be passed to a `gh(METHOD URL)` query. The query is limited to 100 entries.
+#'
+#'
+create_file_commit_url = function(repo, file){
+
+  stopifnot(length(file) == 1)
+
+  owner = get_repo_owner(repo)
+  name = get_repo_name(repo)
+  paste0("https://api.github.com/repos/",
+         owner, "/",
+         name, "/commits?path=",
+         file,
+         "&page=1&per_page=100")
+}
+
+github_api_get_commit_url = function(repo, file){
+
+  safe_gh(paste0("GET ", create_file_commit_url(repo, fs::path_file(file))),
+          .token=get_github_token())
+
+}
+
+#' Check for modifications of file on GitHub
+#'
+#' `check_file_modification` checks whether a file on GitHub has previously been modified by a commit (not taking into account the initial commit).
+#'
+#' @param repo Character. Address of repository in "owner/name" format.
+#' @param file Character. Name of file.
+#' @param include_admin Logical. Should users with admin privileges be included in checking for previous file modifications.
+#'
+#' @return TRUE or FALSE
+#'
+check_file_modification = function(repo, file, include_admin){
+
+  res = github_api_get_commit_url(repo, file)
+
+  if(length(res$result) > 1)
+
+  user = unique(purrr::map_chr(res$result, c("author", "login")))
+
+  if((length(res$result) > 1)) {
+
+    if(!include_admin){
+      user = setdiff(user, unlist(get_admins(get_repo_owner(repo))))
+    }
+
+    if(!is.null(user)){
+      purrr::walk(user,
+                  function(user)
+                    message("Target file modified by user(s) ", user," since initial commit."))
+      message("Running this function will overwrite modifications.")
+      message("If you are certain you want to continue, re-run with overwrite = TRUE.")
+    }
+
+    !is.null(user)
+
+  }
+}
+
+
 
 #' Add files to a repo
 #'
@@ -253,6 +316,7 @@ add_files = function(repo, message, files, branch = "master", preserve_path = FA
 #' @param branch Character. Name of branch to use, defaults to "master".
 #' @param preserve_path Logical. Should the local relative path be preserved.
 #' @param overwrite Logical. Should existing file or files with same name be overwritten, defaults to FALSE.
+#' @param include_admin Logical. Should users with admin privileges be included in checking for previous file modifications, defaults to FALSE.
 #'
 #' @examples
 #' \dontrun{
@@ -265,7 +329,7 @@ add_files = function(repo, message, files, branch = "master", preserve_path = FA
 #'
 #' @export
 #'
-add_file = function(repo, message, file, branch = "master", preserve_path = FALSE, overwrite = F)
+add_file = function(repo, message, file, branch = "master", preserve_path = FALSE, overwrite = FALSE, include_admin = FALSE)
 {
   stopifnot(!missing(repo))
   stopifnot(!missing(message))
@@ -280,38 +344,31 @@ add_file = function(repo, message, file, branch = "master", preserve_path = FALS
     file = list(file)
 
   purrr::pwalk(
-    list(repo, message, file, branch),
-    function(repo, message, file, branch) {
+    list(repo, message, file),
+    function(repo, message, file){
 
       name = get_repo_name(repo)
       owner = get_repo_owner(repo)
 
-      gh_paths = file
-      if (!preserve_path)
-        gh_paths = fs::path_file(file)
+      gh_path = file
+      if(!preserve_path){
+        gh_path = fs::path_file(file)
+      }
+
+      if(file_exists(repo, gh_path, branch)){
+        message("File ", gh_path, " already exists on ", repo, " ...")
+
+        if(!overwrite){
+          purrr::map2(repo, gh_path,
+                      check_file_modification(repo, file = gh_path, include_admin = include_admin))
+        }
+      }
 
       if (TRUE)
         message("Adding file to ", repo, " ...")
 
-      if (overwrite == F){
-        purrr::map2(
-          repo, gh_paths,
-          function(repo, gh_paths){
-
-            if(file_exists(repo, gh_paths, branch)){
-              message("File ", gh_paths, " already exists on ", repo, " ...")
-
-              res = get_file(repo, gh_paths, branch = branch)
-
-
-
-            }
-          }
-        )
-      }
-
       res = purrr::map2(
-        gh_paths, file,
+        gh_path, file,
         function(path, file, repo, message, branch) {
           content = paste(readLines(file), collapse = "\n")
           put_file(repo, path, content, message, branch)
