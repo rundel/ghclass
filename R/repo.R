@@ -94,6 +94,7 @@ check_repo = function(repo, redirect = F) {
   id = purrr::map_int(res, c("result", "id"), .default = NA)
   repo_new_name = purrr::map_chr(purrr::map(id, github_api_get_repo_id), c("result", "name"), .default = NA)
   repo_old_name = get_repo_name(repo)
+  org = get_repo_owner(repo)
 
   # Replacing with F if user-provided repo name is NOT current
   if(redirect == F){
@@ -105,8 +106,12 @@ check_repo = function(repo, redirect = F) {
                repo_old_name,
                function(repo_new_name, repo_old_name)
 
-                 if(repo_new_name != repo_old_name & !is.na(repo_new_name))
-                   message(paste("Repository", repo_old_name, "was previously renamed to", repo_new_name)))
+                 if(repo_new_name != repo_old_name & !is.na(repo_new_name)){
+                   repo_old_name = paste(org, repo_old_name, sep = "/")
+                   repo_new_name = paste(org, repo_new_name, sep = "/")
+                   message(paste("Repository", repo_old_name, "was previously renamed to", repo_new_name))
+                 })
+
 
   # Output
   repo_exists
