@@ -125,6 +125,19 @@ check_user_exists = function(user)
 }
 
 
+
+github_api_invite_user = function(org, user) {
+  stopifnot(length(org) == 1)
+  stopifnot(length(user) == 1)
+
+  gh(
+    "PUT /orgs/:org/memberships/:username",
+    org=org, username=user, role="member",
+    .token=get_github_token()
+  )
+}
+
+
 #' Invite user(s)
 #'
 #' \code{invite_user} invites users to your organization
@@ -141,8 +154,7 @@ check_user_exists = function(user)
 #' @family github organization related functions
 #'
 #' @export
-invite_user = function(org, user, exclude_pending = FALSE)
-{
+invite_user = function(org, user, exclude_pending = FALSE) {
   stopifnot(length(org) == 1)
 
   user = tolower(user)
@@ -154,19 +166,14 @@ invite_user = function(org, user, exclude_pending = FALSE)
   purrr::walk(
     need_invite,
     function(user) {
+      res = purrr::safely(github_api_invite_user)(org, user)
 
-      if (TRUE)
-        message("Adding ", user, " to ", org, " ...")
-
-
-      res = safe_gh(
-        "PUT /orgs/:org/memberships/:username",
-        org=org, username=user, role="member",
-        .token=get_github_token()
+      status_msg(
+        res,
+        glue::glue("Adding user {usethis::ui_value(user)} to org {usethis::ui_value(org)}."),
+        glue::glue("Failed to add user {usethis::ui_value(user)} to org {usethis::ui_value(org)}."),
       )
-
-      fail = sprintf("Inviting %s to %s failed.", user, org)
-      check_result(res, fail)
     }
   )
 }
+
