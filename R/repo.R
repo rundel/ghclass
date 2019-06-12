@@ -96,8 +96,6 @@ check_repo = function(repo, redirect = F) {
 #'
 #' @return A character vector of repository names in the corrected format.
 #'
-#' @export
-#'
 fix_repo_name = function(repo_name)
 {
   repo_name = stringr::str_replace_all(repo_name, " ", "_")
@@ -148,7 +146,7 @@ github_api_add_team = function(id, owner, repo, permission){
 #' `create_individual_repo` creates repositories for each student for a given
 #' assignment.
 #'
-#' @param owner Character. Name of the GitHub organization.
+#' @param org Character. Name of the GitHub organization.
 #' @param user Character or data frame. Listing one or more users.
 #' @param prefix Character. Resulting repository name will start with this. character string.
 #' @param suffix Character. Resulting repository name will end with this character string.
@@ -166,22 +164,22 @@ github_api_add_team = function(id, owner, repo, permission){
 #'
 #' @export
 #'
-create_individual_repo = function(owner, user, prefix = "", suffix = "",
+create_individual_repo = function(org, user, prefix = "", suffix = "",
                                   private = TRUE, verbose = TRUE,
                                   auto_init = FALSE, gitignore_template = "R") {
   if (prefix == "" & suffix == "")
     stop("Either a prefix or a suffix must be specified")
 
-  owner_users = get_members(owner)
-  owner_repos = get_repos(owner)
+  org_users = get_members(org)
+  org_repos = get_repos(org)
 
   purrr::walk(
     user,
     function(user) {
       repo_name = fix_repo_name(paste0(prefix, user, suffix))
-      repo = paste0(owner, "/", repo_name)
+      repo = paste0(org, "/", repo_name)
 
-      if (repo %in% owner_repos) {
+      if (repo %in% org_repos) {
         if (verbose)
           message("Skipping repo ", repo, ", already exists ...",)
 
@@ -192,7 +190,7 @@ create_individual_repo = function(owner, user, prefix = "", suffix = "",
         message("Creating repo ", repo, " ...", sep="")
 
       try({
-        github_api_create_repo(owner = owner,
+        github_api_create_repo(owner = org,
                                name = repo_name,
                                private = private,
                                auto_init = auto_init,
@@ -200,7 +198,7 @@ create_individual_repo = function(owner, user, prefix = "", suffix = "",
       })
 
       try({
-        github_api_add_user(owner = owner,
+        github_api_add_user(owner = org,
                             repo = repo_name,
                             username = user,
                             permission = "push")
@@ -214,7 +212,7 @@ create_individual_repo = function(owner, user, prefix = "", suffix = "",
 #'
 #' `create_team_repo` creates repos for team(s).
 #'
-#' @param owner Character. Name of the GitHub organization.
+#' @param org Character. Name of the GitHub organization.
 #' @param team Character or data frame. Vector of team names.
 #' @param prefix Character. Resulting repo name will start with this character string.
 #' @param suffix Character. Resulting repo name will end with this character string.
@@ -232,14 +230,14 @@ create_individual_repo = function(owner, user, prefix = "", suffix = "",
 #'
 #' @export
 #'
-create_team_repo = function(owner, team,  prefix = "", suffix = "",
+create_team_repo = function(org, team,  prefix = "", suffix = "",
                             private = TRUE, verbose = TRUE,
                             auto_init = FALSE, gitignore_template = "R") {
-  owner_teams = get_teams(owner)
+  org_teams = get_teams(org)
 
   if (is.character(team)) {
     team = merge(
-      tibble::tibble(team = team), owner_teams,
+      tibble::tibble(team = team), org_teams,
       by = "team", all.x = TRUE
     )
   }
@@ -250,15 +248,15 @@ create_team_repo = function(owner, team,  prefix = "", suffix = "",
   if (any(missing_ids))
     stop("Unable to locate team(s): ", paste(team[["team"]][missing_ids], collapse = ", "), call. = FALSE)
 
-  owner_repos = get_repo(owner)
+  org_repos = get_repo(org)
 
   purrr::pwalk(
     unique(team),
     function(team, id) {
       repo_name = fix_repo_name( paste0(prefix, team, suffix) )
-      repo = paste0(owner, "/", repo_name)
+      repo = paste0(org, "/", repo_name)
 
-      if (repo %in% owner_repos) {
+      if (repo %in% org_repos) {
         message("Skipping repo ", repo, ", already exists ...")
         return()
       }
@@ -268,7 +266,7 @@ create_team_repo = function(owner, team,  prefix = "", suffix = "",
 
       # Create
       try({
-      res = github_api_create_team_repo(owner = owner,
+      res = github_api_create_team_repo(owner = org,
                                         name = repo_name, private = private,
                                         team_id = id,
                                         auto_init = auto_init,
@@ -278,7 +276,7 @@ create_team_repo = function(owner, team,  prefix = "", suffix = "",
       # Give time write access
       try({
       github_api_add_team(id = id,
-                          owner = owner,
+                          owner = org,
                           repo = repo_name,
                           permission = "push")
       })
@@ -599,7 +597,7 @@ github_api_get_admin = function(owner){
 #'
 #' `get_admin` creates a list of repository administrators.
 #'
-#' @param owner Character. Name of GitHub organization.
+#' @param org Character. Name of GitHub organization.
 #' @param verbose Logical. Display verbose output.
 #'
 #' @examples
@@ -611,12 +609,12 @@ github_api_get_admin = function(owner){
 #'
 #' @export
 #'
-get_admin = function(owner, verbose = FALSE) {
+get_admin = function(org, verbose = FALSE) {
 
   purrr::map(
-    owner,
-    function(owner) {
-      res = github_api_get_admin(owner = owner)
+    org,
+    function(org) {
+      res = github_api_get_admin(owner = org)
 
       purrr::map_chr(res$result, "login")
     }
