@@ -1,17 +1,3 @@
-github_api_get_collaborators = function(repo) {
-
-  .Deprecated(msg = "'github_api_get_collaborators' will be removed in the next version. Use 'github_api_get_collaborator' instead.",
-              new = "github_api_get_collaborator")
-
-  safe_gh(
-    "GET /repos/:owner/:repo/collaborators",
-    owner = get_repo_owner(repo),
-    repo = get_repo_name(repo),
-    .token = get_github_token(),
-    .limit = get_github_api_limit()
-  )
-}
-
 github_api_get_collaborator = function(repo) {
 
   safe_gh(
@@ -22,43 +8,6 @@ github_api_get_collaborator = function(repo) {
     .limit = get_github_api_limit()
   )
 
-}
-
-
-#' List repository collaborators
-#'
-#' `get_repo_collaborators` returns collaborator usernames.
-#'
-#' @param repo Character. Address of repository in "owner/name" format.
-#'
-#' @return Character vector of collaborator usernames.
-#'
-#' @templateVar fun get_repo_collaborators
-#' @template template-depr_fun
-#'
-#' @templateVar old get_repo_collaborators
-#' @templateVar new get_collaborator
-#' @template template-depr_pkg
-#'
-#' @examples
-#' \dontrun{
-#' get_repo_collaborators("Sta523-Fa17/hw1")
-#' }
-#'
-get_repo_collaborators = function(repo) {
-
-  .Deprecated(msg = "'get_repo_collaborators' will be removed in the next version. Use 'get_collaborators' instead.",
-              new = "get_collaborator")
-
-  users = purrr::map(
-    repo,
-    function(repo) {
-      res = github_api_get_collaborators(repo)
-      purrr::map_chr(res, "login")
-    }
-  )
-
-  unique(unlist(users))
 }
 
 
@@ -130,37 +79,6 @@ check_repo = function(repo, redirect = F) {
   # Output
   repo_exists
 }
-
-
-#' Check if repository exists
-#'
-#' @param repos Character. Address of repository in "owner/name" format.
-#'
-#' @templateVar fun check_repos
-#' @template template-depr_fun
-#'
-#' @templateVar old check_repos
-#' @templateVar new check_repo
-#' @template template-depr_pkg
-#'
-#'
-check_repos = function(repos)
-{
-  .Deprecated(msg = "'check_repos' will be removed in the next version. Use 'check_repo' instead.",
-              new = "check_repo")
-
-  exists = function(owner, repo)
-  {
-    gh("GET /repos/:owner/:repo", owner = owner, repo = repo, .token = get_github_token())
-    TRUE
-  }
-
-  purrr::map2_lgl(
-    get_repo_owner(repos), get_repo_name(repos),
-    purrr::possibly(exists, FALSE)
-  )
-}
-
 
 
 #' Fix repository names
@@ -579,9 +497,6 @@ create_pull_request = function(repo, title, base, head = "master", body = "", ve
 }
 
 
-
-
-
 #' Style repository
 #'
 #' `style_repo` implements "non-invasive pretty-printing of R source code" of .R or .Rmd files within a repository using the `styler` package and adhering to `tidyverse` formatting guidelines.
@@ -668,17 +583,6 @@ style_repo = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = 
   )
 }
 
-github_api_get_admins = function(org){
-
-  .Deprecated(msg = "'github_api_get_admins' will be removed in the next version. Use 'github_api_get_admin' instead.",
-              new = "github_api_get_admin")
-
-    safe_gh("GET /orgs/:org/members",
-            org = org,
-            role = "admin",
-            .token = get_github_token(),
-            .limit = get_github_api_limit())
-}
 
 
 github_api_get_admin = function(owner){
@@ -689,6 +593,166 @@ github_api_get_admin = function(owner){
           .limit = get_github_api_limit())
 }
 
+
+
+#' List repository administrators
+#'
+#' `get_admin` creates a list of repository administrators.
+#'
+#' @param owner Character. Name of GitHub organization.
+#' @param verbose Logical. Display verbose output.
+#'
+#' @examples
+#' \dontrun{
+#' get_admin("Sta523-Fa17")
+#' }
+#'
+#' @return A list containing a character vector of repository administrators.
+#'
+#' @export
+#'
+get_admin = function(owner, verbose = FALSE) {
+
+  purrr::map(
+    owner,
+    function(owner) {
+      res = github_api_get_admin(owner = owner)
+
+      purrr::map_chr(res$result, "login")
+    }
+  )
+}
+
+
+#' List collaborator(s)
+#'
+#' `get_collaborator` Returns a vector of collaborator user names. Users with Admin rights are by default excluded, but can be included manually.
+#'
+#' @param repo Character. Address of repository in "owner/name" format.
+#' @param include_admin Logical. If FALSE, user names of users with Admin rights are not included, defaults to TRUE.
+#' @param verbose Logical. Display verbose output.
+#'
+#' @return A list containing a character vector of user names.
+#'
+#' @examples
+#' \dontrun{
+#' get_collaborators("Sta523-Fa17")
+#' }
+#'
+#' @export
+#'
+get_collaborator = function(repo, include_admin = TRUE, verbose = FALSE) {
+
+  stopifnot(!missing(repo))
+
+  admin = list(NULL)
+  if (!include_admin)
+    admin = get_admin(get_repo_owner(repo))
+
+  purrr::map2(
+    repo, admin,
+    function(repo, admin) {
+      res = github_api_get_collaborator(repo)
+
+      check_result(res, sprintf("Unable to retrieve collaborators for %s.", repo), verbose)
+
+      setdiff(purrr::map_chr(res$result, "login"), admin)
+    }
+  )
+}
+
+################ Deprecated functions ################
+github_api_get_collaborators = function(repo) {
+
+  .Deprecated(msg = "'github_api_get_collaborators' will be removed in the next version. Use 'github_api_get_collaborator' instead.",
+              new = "github_api_get_collaborator")
+
+  safe_gh(
+    "GET /repos/:owner/:repo/collaborators",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    .token = get_github_token(),
+    .limit = get_github_api_limit()
+  )
+}
+
+#' List repository collaborators
+#'
+#' `get_repo_collaborators` returns collaborator usernames.
+#'
+#' @param repo Character. Address of repository in "owner/name" format.
+#'
+#' @return Character vector of collaborator usernames.
+#'
+#' @templateVar fun get_repo_collaborators
+#' @template template-depr_fun
+#'
+#' @templateVar old get_repo_collaborators
+#' @templateVar new get_collaborator
+#' @template template-depr_pkg
+#'
+#' @examples
+#' \dontrun{
+#' get_repo_collaborators("Sta523-Fa17/hw1")
+#' }
+#'
+get_repo_collaborators = function(repo) {
+
+  .Deprecated(msg = "'get_repo_collaborators' will be removed in the next version. Use 'get_collaborators' instead.",
+              new = "get_collaborator")
+
+  users = purrr::map(
+    repo,
+    function(repo) {
+      res = github_api_get_collaborators(repo)
+      purrr::map_chr(res, "login")
+    }
+  )
+
+  unique(unlist(users))
+}
+
+#' Check if repository exists
+#'
+#' @param repos Character. Address of repository in "owner/name" format.
+#'
+#' @templateVar fun check_repos
+#' @template template-depr_fun
+#'
+#' @templateVar old check_repos
+#' @templateVar new check_repo
+#' @template template-depr_pkg
+#'
+#'
+check_repos = function(repos)
+{
+  .Deprecated(msg = "'check_repos' will be removed in the next version. Use 'check_repo' instead.",
+              new = "check_repo")
+
+  exists = function(owner, repo)
+  {
+    gh("GET /repos/:owner/:repo", owner = owner, repo = repo, .token = get_github_token())
+    TRUE
+  }
+
+  purrr::map2_lgl(
+    get_repo_owner(repos), get_repo_name(repos),
+    purrr::possibly(exists, FALSE)
+  )
+}
+
+
+github_api_get_admins = function(org){
+
+  .Deprecated(msg = "'github_api_get_admins' will be removed in the next version. Use 'github_api_get_admin' instead.",
+              new = "github_api_get_admin")
+
+  safe_gh("GET /orgs/:org/members",
+          org = org,
+          role = "admin",
+          .token = get_github_token(),
+          .limit = get_github_api_limit())
+}
 
 #' List repository administrators
 #'
@@ -726,35 +790,6 @@ get_admins = function(org, verbose = FALSE) {
     }
   )
 }
-
-#' List repository administrators
-#'
-#' `get_admin` creates a list of repository administrators.
-#'
-#' @param owner Character. Name of GitHub organization.
-#' @param verbose Logical. Display verbose output.
-#'
-#' @examples
-#' \dontrun{
-#' get_admin("Sta523-Fa17")
-#' }
-#'
-#' @return A list containing a character vector of repository administrators.
-#'
-#' @export
-#'
-get_admin = function(owner, verbose = FALSE) {
-
-  purrr::map(
-    owner,
-    function(owner) {
-      res = github_api_get_admin(owner = owner)
-
-      purrr::map_chr(res$result, "login")
-    }
-  )
-}
-
 
 #' List collaborators
 #'
@@ -800,41 +835,47 @@ get_collaborators = function(repo, include_admins = TRUE, verbose = FALSE) {
     }
   )
 }
-
-
-#' List collaborator(s)
+#' List collaborators
 #'
-#' `get_collaborator` Returns a vector of collaborator user names. Users with Admin rights are by default excluded, but can be included manually.
+#' `get_collaborators` Returns a vector of collaborator user names. Users with Admin rights are by default excluded, but can be included manually.
 #'
 #' @param repo Character. Address of repository in "owner/name" format.
-#' @param include_admin Logical. If FALSE, user names of users with Admin rights are not included, defaults to TRUE.
+#' @param include_admins Logical. If FALSE, user names of users with Admin rights are not included. Default is TRUE.
 #' @param verbose Logical. Display verbose output.
 #'
 #' @return A list containing a character vector of user names.
+#'
+#' @templateVar fun get_collaborators
+#' @template template-depr_fun
+#'
+#' @templateVar old get_collaborators
+#' @templateVar new get_collaborator
+#' @template template-depr_pkg
 #'
 #' @examples
 #' \dontrun{
 #' get_collaborators("Sta523-Fa17")
 #' }
 #'
-#' @export
-#'
-get_collaborator = function(repo, include_admin = TRUE, verbose = FALSE) {
+get_collaborators = function(repo, include_admins = TRUE, verbose = FALSE) {
+
+  .Deprecated(msg = "'get_collaborators' will be removed in the next version. Use 'get_collaborator' instead.",
+              new = "get_collaborator")
 
   stopifnot(!missing(repo))
 
-  admin = list(NULL)
-  if (!include_admin)
-    admin = get_admin(get_repo_owner(repo))
+  admins = list(NULL)
+  if (!include_admins)
+    admins = get_admins(get_repo_owner(repo))
 
   purrr::map2(
-    repo, admin,
-    function(repo, admin) {
-      res = github_api_get_collaborator(repo)
+    repo, admins,
+    function(repo, admins) {
+      res = github_api_get_collaborators(repo)
 
       check_result(res, sprintf("Unable to retrieve collaborators for %s.", repo), verbose)
 
-      setdiff(purrr::map_chr(res$result, "login"), admin)
+      setdiff(purrr::map_chr(res$result, "login"), admins)
     }
   )
 }
