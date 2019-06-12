@@ -154,7 +154,7 @@ github_api_invite_user = function(org, user) {
 #' @family github organization related functions
 #'
 #' @export
-invite_user = function(org, user, exclude_pending = FALSE) {
+invite_user = function(org, user) {
   stopifnot(length(org) == 1)
 
   user = tolower(user)
