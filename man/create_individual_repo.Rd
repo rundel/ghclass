@@ -4,12 +4,12 @@
 \alias{create_individual_repo}
 \title{Create individual repositories}
 \usage{
-create_individual_repo(owner, user, prefix = "", suffix = "",
+create_individual_repo(org, user, prefix = "", suffix = "",
   private = TRUE, verbose = TRUE, auto_init = FALSE,
   gitignore_template = "R")
 }
 \arguments{
-\item{owner}{Character. Name of the GitHub organization.}
+\item{org}{Character. Name of the GitHub organization.}
 
 \item{user}{Character or data frame. Listing one or more users.}
 
