@@ -82,7 +82,7 @@ run_git = function(git = require_git(), cmd, args = character(), verbose=FALSE) 
   stopifnot(!missing(cmd))
 
   res = processx::run(
-    git, args  = c(cmd, args), error_on_status = FALSE, echo = verbose, echo_cmd = FALSE
+    git, args  = c(cmd, args), error_on_status = FALSE, echo = verbose, echo_cmd = verbose
   )
 
   err_msg = res[["stderr"]]
@@ -133,7 +133,8 @@ clone_repo = function(repo, local_path="./", branch = "master",
 
 #' @export
 add_repo = function(repo_dir, files = ".",
-                    git = require_git(), options = "", verbose = FALSE)
+                    git = require_git(), options = character(),
+                    verbose = FALSE)
 {
   stopifnot(all(fs::dir_exists(repo_dir)))
   stopifnot(fs::file_exists(git))
@@ -163,7 +164,8 @@ add_repo = function(repo_dir, files = ".",
 
 #' @export
 commit_repo = function(repo_dir, message,
-                       git = require_git(), options = "", verbose = FALSE)
+                       git = require_git(), options = character(),
+                       verbose = FALSE)
 {
   stopifnot(all(fs::dir_exists(repo_dir)))
   stopifnot(fs::file_exists(git))
@@ -173,22 +175,18 @@ commit_repo = function(repo_dir, message,
 
   purrr::walk2(
     repo_dir, message,
-    function(repo, message) {
-      cur_dir = getwd()
-      on.exit({
-        setwd(cur_dir)
-      })
-      setwd(repo)
+    function(dir, message) {
+      withr::local_dir(dir)
 
-      message = paste0("-m \"", message, "\"")
-      cmd = paste(git, "commit", message, options)
-      status = system(
-        cmd, intern = FALSE, wait = TRUE,
-        ignore.stdout = !verbose, ignore.stderr = !verbose
+      res = purrr::safely(run_git)(
+        git, "commit", c("-m", message, options), verbose = verbose
       )
-      if (status != 0)
-        warning("Commiting to ", repo, " failed.",
-                call. = FALSE, immediate. = TRUE, noBreaks. = TRUE)
+
+      status_msg(
+        res,
+        glue::glue("Committed {usethis::ui_value(dir)}."),
+        glue::glue("Failed to commit {usethis::ui_value(dir)}.")
+      )
     }
   )
 }
@@ -196,31 +194,28 @@ commit_repo = function(repo_dir, message,
 
 #' @export
 push_repo = function(repo_dir, remote = "origin", branch="master",
-                     git = require_git(), options = "", verbose = FALSE)
+                     git = require_git(), options = character(),
+                     verbose = FALSE)
 {
   stopifnot(all(fs::dir_exists(repo_dir)))
   stopifnot(fs::file_exists(git))
 
-  repo_dir = repo_dir_helper(repo_dir)
+  dir = repo_dir_helper(repo_dir)
 
-  purrr::walk2(
-    repo_dir,
-    remote,
-    function(repo, remote) {
-      cur_dir = getwd()
-      on.exit({
-        setwd(cur_dir)
-      })
-      setwd(repo)
+  purrr::pwalk(
+    list(dir, remote, branch),
+    function(dir, remote, branch) {
+      withr::local_dir(dir)
 
-      cmd = paste(git, "push", remote, options)
-      status = system(
-        cmd, intern = FALSE, wait = TRUE,
-        ignore.stdout = !verbose, ignore.stderr = !verbose
+      res = purrr::safely(run_git)(
+        git, "push", c(remote, branch, options), verbose = verbose
       )
-      if (status != 0)
-        warning("Push changes to ", repo, "  failed.",
-                call. = FALSE, immediate. = TRUE, noBreaks. = TRUE)
+
+      status_msg(
+        res,
+        glue::glue("Pushed {usethis::ui_value(dir)}."),
+        glue::glue("Failed to push {usethis::ui_value(dir)}.")
+      )
     }
   )
 }
@@ -229,30 +224,28 @@ push_repo = function(repo_dir, remote = "origin", branch="master",
 
 #' @export
 pull_repo = function(repo_dir, remote="origin", branch="master",
-                     git = require_git(), options = "", verbose = FALSE)
+                     git = require_git(), options = character(),
+                     verbose = FALSE)
 {
   stopifnot(all(fs::dir_exists(repo_dir)))
   stopifnot(fs::file_exists(git))
 
-  repo_dir = repo_dir_helper(repo_dir)
+  dir = repo_dir_helper(repo_dir)
 
   purrr::pwalk(
-    list(repo_dir, remote, branch),
-    function(repo, remote, branch) {
-      cur_dir = getwd()
-      on.exit({
-        setwd(cur_dir)
-      })
-      setwd(repo)
+    list(dir, remote, branch),
+    function(dir, remote, branch) {
+      withr::local_dir(dir)
 
-      cmd = paste(git, "pull", remote, branch, options)
-      status = system(
-        cmd, intern = FALSE, wait = TRUE,
-        ignore.stdout = !verbose, ignore.stderr = !verbose
+      res = purrr::safely(run_git)(
+        git, "pull", c(remote, branch, options), verbose = verbose
       )
-      if (status != 0)
-        warning("Pulling ", repo, " (", remote, "/", branch, ") failed.",
-                call. = FALSE, immediate. = TRUE, noBreaks. = TRUE)
+
+      status_msg(
+        res,
+        glue::glue("Pulled {usethis::ui_value(dir)}."),
+        glue::glue("Failed to pull {usethis::ui_value(dir)}.")
+      )
     }
   )
 }
