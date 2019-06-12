@@ -170,7 +170,7 @@ invite_user = function(org, user, exclude_pending = FALSE) {
 
       status_msg(
         res,
-        glue::glue("Adding user {usethis::ui_value(user)} to org {usethis::ui_value(org)}."),
+        glue::glue("Added user {usethis::ui_value(user)} to org {usethis::ui_value(org)}."),
         glue::glue("Failed to add user {usethis::ui_value(user)} to org {usethis::ui_value(org)}."),
       )
     }
