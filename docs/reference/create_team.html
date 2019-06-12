@@ -32,7 +32,7 @@
 
 <meta property="og:title" content="Create team(s) — create_team" />
 
-<meta property="og:description" content="create_team creates teams in your organization" />
+<meta property="og:description" content="create_team creates teams in your GitHub organization" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -104,11 +104,11 @@
 
     <div class="ref-description">
     
-    <p><code>create_team</code> creates teams in your organization</p>
+    <p><code>create_team</code> creates teams in your GitHub organization</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>create_team</span>(<span class='no'>org</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>(), <span class='kw'>privacy</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"closed"</span>, <span class='st'>"secret"</span>))</pre>
+    <pre class="usage"><span class='fu'>create_team</span>(<span class='no'>org</span>, <span class='no'>team</span>, <span class='kw'>privacy</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"closed"</span>, <span class='st'>"secret"</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -131,14 +131,10 @@ and members of a team), default is closed</p></td>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other github organization related functions: <code><a href='create_individual_repo.html'>create_individual_repo</a></code>,
-  <code><a href='create_team_repo.html'>create_team_repo</a></code>,
-  <code><a href='get_members.html'>get_members</a></code>,
-  <code><a href='get_pending_members.html'>get_pending_members</a></code>,
-  <code><a href='get_pending_team_members.html'>get_pending_team_members</a></code>,
-  <code><a href='get_repos.html'>get_repos</a></code>, <code><a href='get_team_members.html'>get_team_members</a></code>,
-  <code><a href='get_team_repos.html'>get_team_repos</a></code>, <code><a href='get_teams.html'>get_teams</a></code>,
-  <code><a href='invite_user.html'>invite_user</a></code></p></div>
+    <div class='dont-index'><p>Other github organization team related functions: <code>add_team_member</code>,
+  <code>get_pending_team_members</code>,
+  <code>get_team_members</code>, <code>get_teams</code>,
+  <code>rename_team</code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
