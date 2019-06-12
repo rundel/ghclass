@@ -47,7 +47,7 @@ get_file = function(repo, file, branch = "master")
 {
   stopifnot(length(repo) == 1)
   stopifnot(length(file) == 1)
-  stopifnot(file_exists(repo, file, branch))
+  stopifnot(length(branch) == 1)
 
   res = github_api_get_file(repo, file, branch)
 
@@ -97,7 +97,6 @@ add_content = function(repo, file, content, after=NULL, message="Added content",
   )
 }
 
-
 # Note: This function is currently not vectorized
 find_file = function(repo, file)
 {
@@ -122,7 +121,6 @@ find_file = function(repo, file)
     )
   )
 }
-
 
 file_exists = function(repo, file, branch = "master")
 {
@@ -247,22 +245,23 @@ add_files = function(repo, message, files, branch = "master", preserve_path = FA
 #' `create_file_commit_url` creates a file URL for a single file that can be passed to a `gh(METHOD URL)` query. The query is limited to 100 entries.
 #'
 #'
-create_file_commit_url = function(repo, file){
+create_file_commit_url = function(repo, gh_path){
 
-  stopifnot(length(file) == 1)
+  stopifnot(length(repo) == 1)
+  stopifnot(length(gh_path) == 1)
 
   owner = get_repo_owner(repo)
   name = get_repo_name(repo)
   paste0("https://api.github.com/repos/",
          owner, "/",
          name, "/commits?path=",
-         file,
+         gh_path,
          "&page=1&per_page=100")
 }
 
-github_api_get_commit_history = function(repo, file){
+github_api_get_commit_history = function(repo, gh_path){
 
-  safe_gh(paste0("GET ", create_file_commit_url(repo, fs::path_file(file))),
+  safe_gh(paste0("GET ", create_file_commit_url(repo, gh_path)),
           .token=get_github_token())
 
 }
@@ -277,15 +276,13 @@ github_api_get_commit_history = function(repo, file){
 #'
 #' @return TRUE or FALSE
 #'
-check_file_modification = function(repo, file, include_admin){
+check_file_modification = function(repo, gh_path, include_admin){
 
-  res = github_api_get_commit_history(repo, file)
+  res = github_api_get_commit_history(repo, gh_path)
 
-  if(length(res$result) > 1)
+  if(length(res$result) > 1){
 
-  user = unique(purrr::map_chr(res$result, c("author", "login")))
-
-  if((length(res$result) > 1)) {
+    user = unique(purrr::map_chr(res$result, c("author", "login")))
 
     if(!include_admin){
       user = setdiff(user, unlist(get_admins(get_repo_owner(repo))))
@@ -293,20 +290,23 @@ check_file_modification = function(repo, file, include_admin){
 
     if(!is.null(user)){
       purrr::walk(user,
-                  function(user)
-                    message("Target file modified by user(s) ", user," since initial commit."))
+                  function(user){
+                    message("File ", gh_path, " modified by since initial commit by student(s): ", user, ".")
+                    message("Running this function will overwrite modifications.")
+                    message("If you want to overwrite modifications, re-run with overwrite = T.")
+                    message("...")
+                  })
     }
-
-    !is.null(user)
-
   }
 }
 
 
 
+
+
 #' Add files to a repo
 #'
-#' `add_file`` uses the GitHub API to add/update files in an existing repo on GitHub.
+#' `add_file`` uses the GitHub API to add/update files in an existing repo on GitHub. Note that due to time delays in caching, files that have been added very recently might not yet be displayed as existing and might accidentally be overwritten.
 #'
 #' @param repo Character. Address of repository in "owner/name" format.
 #' @param message Character. Commit message.
@@ -327,7 +327,7 @@ check_file_modification = function(repo, file, include_admin){
 #'
 #' @export
 #'
-add_file = function(repo, message, file, branch = "master", preserve_path = FALSE, overwrite = FALSE, include_admin = FALSE){
+add_file = function(repo, file, message, branch = "master", preserve_path = FALSE, overwrite = FALSE, include_admin = FALSE){
 
   stopifnot(!missing(repo))
   stopifnot(!missing(message))
@@ -338,80 +338,49 @@ add_file = function(repo, message, file, branch = "master", preserve_path = FALS
     stop("Unable to locate the following file(s):\n", format_list(file[!file_status]),
          call. = FALSE)
 
-  if (is.character(file) & length(repo) != length(file))
+  if (is.character(file) & (length(file) > 1))
     file = list(file)
 
-  purrr::walk(
-    repo,
-    function(repo, message, file){
+  purrr::pwalk(list(repo, file, message, branch, include_admin),
 
-      name = get_repo_name(repo)
-      owner = get_repo_owner(repo)
+              function(repo, file, message, branch, include_admin){
 
-      purrr::walk(
-        file,
-        function(file){
+                purrr::walk(file,
+                            function(file){
+                              gh_path = file
+                              if(!preserve_path)
+                                gh_path = fs::path_file(file)
 
-          gh_path = file
-          if(!preserve_path){
-            gh_path = fs::path_file(file)
-          }
+                              if(!file_exists(repo, gh_path, branch) | overwrite){
 
+                                message("Adding file ", gh_path, " to ", repo, " ...")
+                                message("...")
 
-          # File does not yet exist on repo
-          if(!file_exists(repo, gh_path, branch)){
+                                content = paste(readLines(file), collapse = "\n")
+                                res = put_file(repo = repo,
+                                               path = gh_path,
+                                               content = content,
+                                               message = message,
+                                               branch = branch)
 
-            message("Adding file to ", repo, " ...")
+                                check_result(
+                                  res, sprintf("Failed to add file to %s.", repo),
+                                  error_prefix = paste0(file,": ")
+                                )
 
-            res = purrr::map2(
-              gh_path, file,
-              function(path, file, repo, message, branch) {
-                content = paste(readLines(file), collapse = "\n")
-                put_file(repo, path, content, message, branch)
-              },
-              repo = repo, message = message, branch = branch
-            )
+                              } else {
 
-            check_result(
-              res, sprintf("Failed to add file to %s.", repo),
-              error_prefix = paste0(file,": ")
-            )
+                                message("File ", gh_path, " not added to ", repo, " (already exists) ...")
+                                modified = check_file_modification(repo, gh_path, include_admin)
 
-          # File exists on repo
-          } else {
+                                if(is.null(modified)){
+                                  message("If you want to commit ", gh_path, " again, re-run with overwrite = T.")
+                                  message("...")
+                                }
+                              }
+                            })
 
-            message("File ", gh_path, " already exists on ", repo, " ...")
-
-            if(!overwrite){
-              purrr::walk(gh_path,
-                          function(gh_path){
-                            check_file_modification(repo,
-                                                    file = gh_path,
-                                                    include_admin = include_admin)
-                            message("Running this function will overwrite modifications.")
-                            stop("If you are certain you want to continue, re-run with overwrite = TRUE.")
-                          })
-
-            }
-          }
-        }
-      )
-    }
-  )
+               })
 }
-
-      # if(file_exists(repo, gh_path, branch)){
-      #   message("File ", gh_path, " already exists on ", repo, " ...")
-#
-#         if(!overwrite){
-#           purrr::map2(repo, gh_path,
-#                       check_file_modification(repo, file = gh_path, include_admin = include_admin))
-#         }
-
-      # if (TRUE)
-      #   message("Adding file to ", repo, " ...")
-
-
-
 
 
