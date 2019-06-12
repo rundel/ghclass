@@ -133,7 +133,7 @@ clone_repo = function(repo, local_path="./", branch = "master",
 
 #' @export
 add_repo = function(repo_dir, files = ".",
-                    git = require_git(), options = "", verbose = TRUE)
+                    git = require_git(), options = "", verbose = FALSE)
 {
   stopifnot(all(fs::dir_exists(repo_dir)))
   stopifnot(fs::file_exists(git))
@@ -142,22 +142,18 @@ add_repo = function(repo_dir, files = ".",
 
   purrr::walk(
     repo_dir,
-    function(repo) {
-      cur_dir = getwd()
-      on.exit({
-        setwd(cur_dir)
-      })
-      setwd(repo)
+    function(dir) {
+      withr::local_dir(dir)
 
-      files = paste(files, collapse=" ")
-      cmd = paste(git, "add", files, options)
-      status = system(
-        cmd, intern = FALSE, wait = TRUE,
-        ignore.stdout = !verbose, ignore.stderr = !verbose
+      res = purrr::safely(run_git)(
+        git, "add", c(files, options), verbose = verbose
       )
-      if (status != 0)
-        warning("Adding files to ", repo, " failed.",
-                call. = FALSE, immediate. = TRUE, noBreaks. = TRUE)
+
+      status_msg(
+        res,
+        glue::glue("Added {usethis::ui_value(files)} to {usethis::ui_value(dir)}."),
+        glue::glue("Failed to add {usethis::ui_value(files)} to {usethis::ui_value(dir)}.")
+      )
     }
   )
 }

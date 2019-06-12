@@ -4,10 +4,10 @@
 \alias{get_admin}
 \title{List repository administrators}
 \usage{
-get_admin(owner, verbose = FALSE)
+get_admin(org, verbose = FALSE)
 }
 \arguments{
-\item{owner}{Character. Name of GitHub organization.}
+\item{org}{Character. Name of GitHub organization.}
 
 \item{verbose}{Logical. Display verbose output.}
 }

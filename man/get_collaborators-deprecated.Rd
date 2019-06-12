@@ -6,8 +6,16 @@
 \title{List collaborators}
 \usage{
 get_collaborators(repo, include_admins = TRUE, verbose = FALSE)
+
+get_collaborators(repo, include_admins = TRUE, verbose = FALSE)
 }
 \arguments{
+\item{repo}{Character. Address of repository in "owner/name" format.}
+
+\item{include_admins}{Logical. If FALSE, user names of users with Admin rights are not included. Default is TRUE.}
+
+\item{verbose}{Logical. Display verbose output.}
+
 \item{repo}{Character. Address of repository in "owner/name" format.}
 
 \item{include_admins}{Logical. If FALSE, user names of users with Admin rights are not included. Default is TRUE.}
@@ -16,11 +24,18 @@ get_collaborators(repo, include_admins = TRUE, verbose = FALSE)
 }
 \value{
 A list containing a character vector of user names.
+
+A list containing a character vector of user names.
 }
 \description{
 \code{get_collaborators} Returns a vector of collaborator user names. Users with Admin rights are by default excluded, but can be included manually.
+
+\code{get_collaborators} Returns a vector of collaborator user names. Users with Admin rights are by default excluded, but can be included manually.
 }
 \section{\code{get_collaborators}}{
+
+For \code{get_collaborators}, use \code{\link{get_collaborator}}.
+
 
 For \code{get_collaborators}, use \code{\link{get_collaborator}}.
 }
@@ -30,8 +45,14 @@ For \code{get_collaborators}, use \code{\link{get_collaborator}}.
 get_collaborators("Sta523-Fa17")
 }
 
+\dontrun{
+get_collaborators("Sta523-Fa17")
+}
+
 }
 \seealso{
+\code{\link{ourPkg-deprecated}}
+
 \code{\link{ourPkg-deprecated}}
 }
 \keyword{internal}
