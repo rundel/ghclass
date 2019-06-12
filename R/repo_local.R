@@ -34,21 +34,6 @@
 #'
 NULL
 
-#' @export
-rename_local_repo = function(repo_dir, pattern, replacement) {
-
-  stopifnot(length(pattern) == length(replacement))
-
-  repos = repo_dir_helper(repo_dir)
-  cur_repos = repos
-
-  for(i in seq_along(pattern)) {
-    repos = sub(pattern[i],replacement[i], repos)
-  }
-
-  sub = repos != cur_repos
-  purrr::walk2(cur_repos[sub], repos[sub], fs::file_move)
-}
 
 # If we are given a single repo directory check if it is a repo or a directory of repos
 repo_dir_helper = function(repo_dir) {
@@ -62,45 +47,88 @@ repo_dir_helper = function(repo_dir) {
 }
 
 
+#' @export
+rename_local_repo = function(repo_dir, pattern, replacement) {
+  stopifnot(length(repo_dir) == 1)
+  stopifnot(length(pattern) == length(replacement))
+
+  repos = repo_dir_helper(repo_dir)
+  cur_repos = repos
+
+  for(i in seq_along(pattern)) {
+    repos = sub(pattern[i],replacement[i], repos)
+  }
+
+  sub = repos != cur_repos
+  purrr::walk2(
+    cur_repos[sub], repos[sub],
+    function(cur, new) {
+      res = purrr::safely(fs::file_move)(cur, new)
+      status_msg(
+        res,
+        glue::glue("Renaming {usethis::ui_value(cur)} to {usethis::ui_value(to)}."),
+        glue::glue("Failed to rename {usethis::ui_value(cur)} to {usethis::ui_value(to)}.")
+      )
+    }
+  )
+}
+
+censor_token = function(msg, replacement = "", prefix="", suffix="") {
+  pattern = paste0(prefix, get_github_token(), suffix)
+  sub(pattern, replacement, msg)
+}
+
+run_git = function(git = require_git(), cmd, args = character(), verbose=FALSE) {
+  stopifnot(!missing(cmd))
+
+  res = processx::run(
+    git, args  = c(cmd, args), error_on_status = FALSE, echo = verbose, echo_cmd = FALSE
+  )
+
+  err_msg = res[["stderr"]]
+  err_msg = sub("fatal: ", "", err_msg)
+  err_msg = sub("^\\s|\\s$", "", err_msg)
+  err_msg = censor_token(err_msg, suffix="@")
+
+  if (res[["status"]] != 0)
+    stop(err_msg)
+}
 
 
 #' @export
 clone_repo = function(repo, local_path="./", branch = "master",
-                      git = require_git(), options = "", absolute_path = TRUE,
-                      verbose = TRUE)
+                      git = require_git(), options = character(),
+                      absolute_path = TRUE, verbose = FALSE)
 {
   stopifnot(!missing(repo))
   stopifnot(file.exists(git))
 
+  local_path = fs::path_expand(local_path)
+
   dir.create(local_path, showWarnings = FALSE, recursive = TRUE)
 
-  res = purrr::map2_chr(
+  purrr::walk2(
     repo, branch,
     function(repo, branch) {
       dir = fs::path(local_path, get_repo_name(repo))
 
-      if (branch != "")
-        branch = paste("-b", branch)
+      if (!branch %in% c("", "master"))
+        options = c("-b", branch, options)
 
-      if (verbose)
-        message("Cloning ", repo, " to ", dir, " ...")
-
-      cmd = paste(git, "clone", branch, options, get_repo_url(repo), dir)
-      status = system(
-        cmd, intern = FALSE, wait = TRUE,
-        ignore.stdout = !verbose, ignore.stderr = !verbose
+      res = purrr::safely(run_git)(
+        git, "clone", c(options, get_repo_url(repo), dir), verbose = verbose
       )
-      if (status != 0)
-        warning("Cloning failed.", call. = FALSE, immediate. = TRUE, noBreaks. = TRUE)
 
-      if (absolute_path)
-        dir = fs::path_real(dir)
 
-      dir
+      fmt_repo = format_repo(repo, branch)
+
+      status_msg(
+        res,
+        glue::glue("Cloned {usethis::ui_value(fmt_repo)} to {usethis::ui_value(dir)}."),
+        glue::glue("Failed to clone {usethis::ui_value(fmt_repo)} to {usethis::ui_value(dir)}.")
+      )
     }
   )
-
-  invisible(res)
 }
 
 #' @export
