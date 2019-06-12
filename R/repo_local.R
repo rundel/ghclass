@@ -92,6 +92,8 @@ run_git = function(git = require_git(), cmd, args = character(), verbose=FALSE) 
 
   if (res[["status"]] != 0)
     stop(err_msg)
+
+  res
 }
 
 
