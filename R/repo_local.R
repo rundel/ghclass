@@ -78,11 +78,11 @@ censor_token = function(msg, replacement = "", prefix="", suffix="") {
   sub(pattern, replacement, msg)
 }
 
-run_git = function(git = require_git(), cmd, args = character(), verbose=FALSE) {
+run_git = function(git = require_git(), cmd, args = character(), verbose=FALSE, debug=FALSE) {
   stopifnot(!missing(cmd))
 
   res = processx::run(
-    git, args  = c(cmd, args), error_on_status = FALSE, echo = verbose, echo_cmd = verbose
+    git, args  = c(cmd, args), error_on_status = FALSE, echo = verbose, echo_cmd = debug
   )
 
   err_msg = res[["stderr"]]
