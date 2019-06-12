@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Check existance of github repo — check_repo • ghclass</title>
+<title>Check existence of GitHub repository — check_repo • ghclass</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Check existance of github repo — check_repo" />
+<meta property="og:title" content="Check existence of GitHub repository — check_repo" />
 
-<meta property="og:description" content="check_repo returns TRUE if the github repository exists" />
+<meta property="og:description" content="check_repo returns TRUE if the github repository exists. The function also returns a message if a repository was previously renamed." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -97,39 +97,47 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Check existance of github repo</h1>
+    <h1>Check existence of GitHub repository</h1>
     
     <div class="hidden name"><code>check_repo.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p><code>check_repo</code> returns TRUE if the github repository exists</p>
+    <p><code>check_repo</code> returns TRUE if the github repository exists. The function also returns a message if a repository was previously renamed.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>check_repo</span>(<span class='no'>repo</span>)</pre>
+    <pre class="usage"><span class='fu'>check_repo</span>(<span class='no'>repo</span>, <span class='kw'>redirect</span> <span class='kw'>=</span> <span class='no'>F</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>repo</th>
-      <td><p>github repository address in <code>owner/repo</code> format</p></td>
+      <td><p>Character. Address of repository in "owner/name" format. Can be a vector or list of repository addresses.</p></td>
+    </tr>
+    <tr>
+      <th>redirect</th>
+      <td><p>Logical. Specifies whether previous names of repositories should be considered. The default is FALSE, such that only current repository names will be considered as existing.</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A logical vector</p>
+<p>logical</p>
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other github repo related functions: <code><a href='get_watching.html'>get_watching</a></code>,
-  <code><a href='ignore_repo.html'>ignore_repo</a></code>, <code><a href='unwatch_repo.html'>unwatch_repo</a></code>,
-  <code><a href='watch_repo.html'>watch_repo</a></code></p></div>
+    <div class='dont-index'><p>Other github repo related functions: <code>get_watching</code>,
+  <code>ignore_repo</code>, <code>unwatch_repo</code>,
+  <code>watch_repo</code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>check_repo</span>(<span class='st'>"rundel/ghclass"</span>)
-<span class='fu'>check_repo</span>(<span class='st'>"rundel/ghclass_fake"</span>)
+<span class='fu'>check_repo</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"rundel/ghclass"</span>, <span class='st'>"rundel/ghclass_fake"</span>))
 <span class='co'># }</span><div class='input'>
 </div></pre>
   </div>
@@ -138,6 +146,8 @@
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#value">Value</a></li>
+
       <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
