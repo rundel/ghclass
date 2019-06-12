@@ -527,22 +527,22 @@ style_repo = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = 
     unlink(file.path(dir), recursive = TRUE)
   })
 
-  purrr::walk2(
-    repo, branch,
-    function(repo, branch) {
+  purrr::pwalk(
+    list(repo, base, branch),
+    function(repo, base, branch) {
       ## TODO add base to branch
-      create_branch(repo, branch)
-      path = clone_repo(repo, local_path = dir, branch = branch)
+      create_branch(repo, cur_branch = base, new_branch = branch)
+      clone_repo(repo, local_path = dir, branch = branch)
 
-      file_paths = unlist(purrr::map(files, ~ fs::dir_ls(path, recursive = TRUE, glob = .x)),
+      path = fs::path(dir, get_repo_name(repo))
+
+      withr::local_dir(path)
+
+      file_paths = unlist(purrr::map(files, ~ fs::dir_ls(path, recurse = TRUE, glob = .x)),
                           use.names = FALSE)
 
-      cur_dir = getwd()
-      setwd(path)
 
-      on.exit({
-        setwd(cur_dir)
-      })
+
 
       msg = c("Results of running styler:\n", utils::capture.output( styler::style_file(file_paths) ))
       writeLines(msg, "commit_msg")
@@ -560,15 +560,17 @@ style_repo = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = 
 
         msg = paste(c(
           "This pull request contains the results of running the automated R code formating tool styler ",
-          "on your repo. Styling is based on Hadley's [R style guide](http://adv-r.had.co.nz/Style.html)\n",
+          "on your repo. Styling is based on the tidyverse [R style guide](http://style.tidyverse.org)\n",
           "\n",
           "Click on the commit below to see details of recommended changes. It is not necessary that your ",
           "code cleanly pass these checks, but if there is a large number of significant changes suggested ",
           "you should review the style guide with an eye towards potentially improving your code formatting."
         ), collapse = "")
 
-        if (tag_collaborators)
-          msg = paste0(msg,"\n\n@", get_collaborators(repo)[[1]], collapse = ", ")
+        if (tag_collaborators) {
+          users = get_collaborator(repo)[[1]]
+          msg = paste0(msg,"\n\n", paste0("@", users, collapse = ", "))
+        }
 
         create_pull_request(
           repo, title = "styler revisions",
