@@ -79,7 +79,7 @@ set_github_token = function(token) {
 #'
 test_github_token = function(token = get_github_token()) {
 
-  res = safe_gh("/user", .token=token)
+  res = purrr::safely(gh)("/user", .token=token)
 
   status_msg(
     res,

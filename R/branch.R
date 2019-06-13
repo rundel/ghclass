@@ -10,17 +10,19 @@ github_api_create_branch = function(repo, cur_branch, new_branch) {
 }
 
 github_api_get_branch_ref = function(repo, branch="master") {
-  res = safe_gh("GET /repos/:owner/:repo/commits/:ref",
-                owner = get_repo_owner(repo),
-                repo = get_repo_name(repo),
-                ref = paste0("heads/", branch),
-                .token=get_github_token())
+  res = purrr::safely(gh)(
+    "GET /repos/:owner/:repo/commits/:ref",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    ref = paste0("heads/", branch),
+    .token=get_github_token()
+  )
 
   if (failed(res)) {
     usethis::ui_stop("Unable to locate branch {usethis::ui_value(format_repo(repo, branch))}.")
-  } else {
-    result(res)
   }
+
+  result(res)
 }
 
 
