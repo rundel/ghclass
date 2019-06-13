@@ -32,7 +32,8 @@
 
 <meta property="og:title" content="List collaborators — get_collaborators-deprecated" />
 
-<meta property="og:description" content="get_collaborators Returns a vector of collaborator user names. Users with Admin rights are by default excluded, but can be included manually." />
+<meta property="og:description" content="get_collaborators Returns a vector of collaborator user names. Users with Admin rights are by default excluded, but can be included manually.
+get_collaborators Returns a vector of collaborator user names. Users with Admin rights are by default excluded, but can be included manually." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -105,14 +106,29 @@
     <div class="ref-description">
     
     <p><code>get_collaborators</code> Returns a vector of collaborator user names. Users with Admin rights are by default excluded, but can be included manually.</p>
+<p><code>get_collaborators</code> Returns a vector of collaborator user names. Users with Admin rights are by default excluded, but can be included manually.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>get_collaborators</span>(<span class='no'>repo</span>, <span class='kw'>include_admins</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>get_collaborators</span>(<span class='no'>repo</span>, <span class='kw'>include_admins</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='fu'>get_collaborators</span>(<span class='no'>repo</span>, <span class='kw'>include_admins</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>repo</th>
+      <td><p>Character. Address of repository in "owner/name" format.</p></td>
+    </tr>
+    <tr>
+      <th>include_admins</th>
+      <td><p>Logical. If FALSE, user names of users with Admin rights are not included. Default is TRUE.</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>Logical. Display verbose output.</p></td>
+    </tr>
     <tr>
       <th>repo</th>
       <td><p>Character. Address of repository in "owner/name" format.</p></td>
@@ -130,19 +146,25 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list containing a character vector of user names.</p>
+<p>A list containing a character vector of user names.</p>
     
     <h2 class="hasAnchor" id="get-collaborators"><a class="anchor" href="#get-collaborators"></a><code>get_collaborators</code></h2>
 
     
     <p>For <code>get_collaborators</code>, use <code>get_collaborator</code>.</p>
+    <p>For <code>get_collaborators</code>, use <code>get_collaborator</code>.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code>ourPkg-deprecated</code></p></div>
+    <div class='dont-index'><p><code>ourPkg-deprecated</code></p>
+<p><code>ourPkg-deprecated</code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='fu'>get_collaborators</span>(<span class='st'>"Sta523-Fa17"</span>)
+<span class='co'># }</span><div class='input'>
+</div><span class='co'># NOT RUN {</span>
 <span class='fu'>get_collaborators</span>(<span class='st'>"Sta523-Fa17"</span>)
 <span class='co'># }</span><div class='input'>
 </div></pre>

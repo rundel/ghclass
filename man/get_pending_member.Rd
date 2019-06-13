@@ -4,10 +4,10 @@
 \alias{get_pending_member}
 \title{Get pending organization members}
 \usage{
-get_pending_member(owner, filter = NULL, exclude = FALSE)
+get_pending_member(org, filter = NULL, exclude = FALSE)
 }
 \arguments{
-\item{owner}{Character. Name of the GitHub organization.}
+\item{org}{Character. Name of the GitHub organization.}
 
 \item{filter}{Character. Regular expression pattern for matching (or excluding) repos.}
 

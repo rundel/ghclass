@@ -226,13 +226,6 @@ invite_user = function(org, user) {
 
 ################# Deprecated functions #################
 
-#' @templateVar fun github_api_get_repos
-#' @template template-depr_fun
-#'
-#' @templateVar old github_api_get_repos
-#' @templateVar new github_api_get_repo
-#' @template template-depr_pkg
-#'
 github_api_get_repos = function(org) {
 
   .Deprecated(msg = "'github_api_get_repos' will be removed in the next version. Use 'github_api_get_repo' instead.",
