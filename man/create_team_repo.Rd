@@ -35,9 +35,12 @@ create_team_repo("Sta523-Fa17", c("team01","team02"), prefix = "hw01-")
 }
 \seealso{
 Other github organization related functions: \code{\link{create_individual_repo}},
-  \code{\link{get_members}},
-  \code{\link{get_pending_members}},
-  \code{\link{get_repos}}, \code{\link{get_team_repos}},
+  \code{\link{get_members-deprecated}},
+  \code{\link{get_member}},
+  \code{\link{get_pending_members-deprecated}},
+  \code{\link{get_pending_member}},
+  \code{\link{get_repos-deprecated}},
+  \code{\link{get_repo}}, \code{\link{get_team_repos}},
   \code{\link{invite_user}}
 }
 \concept{github organization related functions}
