@@ -291,10 +291,9 @@ check_file_modification = function(repo, gh_path, include_admin){
     if(!is.null(user)){
       purrr::walk(user,
                   function(user){
-                    message("File ", gh_path, " modified by since initial commit by student(s): ", user, ".")
-                    message("Running this function will overwrite modifications.")
-                    message("If you want to overwrite modifications, re-run with overwrite = T.")
-                    message("...")
+                    usethis::ui_oops("Adding {usethis::ui_value(gh_path)} to {usethis::ui_value(repo)} overwrites modifications by student(s): {usethis::ui_value(user)}.")
+                    usethis::ui_info("If you want to overwrite modifications, re-run with overwrite = T.")
+                    message(" ")
                   })
     }
   }
@@ -353,8 +352,8 @@ add_file = function(repo, file, message, branch = "master", preserve_path = FALS
 
                               if(!file_exists(repo, gh_path, branch) | overwrite){
 
-                                message("Adding file ", gh_path, " to ", repo, " ...")
-                                message("...")
+                                usethis::ui_done("Adding file {usethis::ui_value(gh_path)} to {usethis::ui_value(repo)}.")
+                                message(" ")
 
                                 content = paste(readLines(file), collapse = "\n")
                                 res = put_file(repo = repo,
@@ -370,12 +369,12 @@ add_file = function(repo, file, message, branch = "master", preserve_path = FALS
 
                               } else {
 
-                                message("File ", gh_path, " not added to ", repo, " (already exists) ...")
-                                modified = check_file_modification(repo, gh_path, include_admin)
+                                usethis::ui_oops("{usethis::ui_value(gh_path)} not added to {usethis::ui_value(repo)} (already exists).")
 
-                                if(is.null(modified)){
-                                  message("If you want to commit ", gh_path, " again, re-run with overwrite = T.")
-                                  message("...")
+                                modified = check_file_modification(repo, gh_path, include_admin)
+                                if(length(modified) == 0){
+                                  usethis::ui_info("If you want to commit {usethis::ui_value(gh_path)} to {usethis::ui_value(repo)} again, re-run with overwrite = T.")
+                                  message(" ")
                                 }
                               }
                             })
