@@ -4,28 +4,39 @@
 \alias{invite_user}
 \title{Invite user(s)}
 \usage{
+<<<<<<< HEAD
 invite_user(org, user)
+=======
+invite_user(owner, user, exclude_pending = FALSE, verbose = TRUE)
+>>>>>>> addfiles_checkmodification
 }
 \arguments{
-\item{org}{character, name of the GitHub organization.}
+\item{owner}{Character. Name of the GitHub organization.}
 
-\item{user}{character or data frame, listing one or more users}
+\item{user}{Character, character vector, or list. Listing one or more user names.}
+
+\item{exclude_pending}{Logical. If \code{exclude_pending = TRUE}, pending members will not receive another invitation tp join the organization. The default is FALSE, such that pending members will receive another invitation email.}
+
+\item{verbose}{Logical. Display verbose output.}
 }
 \description{
-\code{invite_user} invites users to your organization
+\code{invite_user} invites user(s) to your organization.
 }
 \examples{
 \dontrun{
 users = c("Alice","Bob","Carol","Dave","Eve")
-invite_user("ghclass", users)
+invite_user("Sta523-Fa17", users)
 }
 
 }
 \seealso{
 Other github organization related functions: \code{\link{create_individual_repo}},
   \code{\link{create_team_repo}},
-  \code{\link{get_members}},
-  \code{\link{get_pending_members}},
-  \code{\link{get_repos}}, \code{\link{get_team_repos}}
+  \code{\link{get_members-deprecated}},
+  \code{\link{get_member}},
+  \code{\link{get_pending_members-deprecated}},
+  \code{\link{get_pending_member}},
+  \code{\link{get_repos-deprecated}},
+  \code{\link{get_repo}}, \code{\link{get_team_repos}}
 }
 \concept{github organization related functions}
