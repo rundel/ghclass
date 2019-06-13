@@ -2,12 +2,12 @@
 % Please edit documentation in R/org.R
 \name{get_member}
 \alias{get_member}
-\title{Get organization members}
+\title{Get organization member}
 \usage{
-get_member(owner, filter = NULL, exclude = FALSE)
+get_member(org, filter = NULL, exclude = FALSE)
 }
 \arguments{
-\item{owner}{Character. Name of the GitHub organization.}
+\item{org}{Character. Name of the GitHub organization.}
 
 \item{filter}{Character. Regular expression pattern for matching (or excluding) repositories.}
 

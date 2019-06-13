@@ -4,28 +4,20 @@
 \alias{invite_user}
 \title{Invite user(s)}
 \usage{
-<<<<<<< HEAD
 invite_user(org, user)
-=======
-invite_user(owner, user, exclude_pending = FALSE, verbose = TRUE)
->>>>>>> addfiles_checkmodification
 }
 \arguments{
-\item{owner}{Character. Name of the GitHub organization.}
+\item{org}{Character. Name of the GitHub organization.}
 
 \item{user}{Character, character vector, or list. Listing one or more user names.}
-
-\item{exclude_pending}{Logical. If \code{exclude_pending = TRUE}, pending members will not receive another invitation tp join the organization. The default is FALSE, such that pending members will receive another invitation email.}
-
-\item{verbose}{Logical. Display verbose output.}
 }
 \description{
 \code{invite_user} invites user(s) to your organization.
 }
 \examples{
 \dontrun{
-users = c("Alice","Bob","Carol","Dave","Eve")
-invite_user("Sta523-Fa17", users)
+user = c("Alice","Bob","Carol","Dave","Eve")
+invite_user("Sta523-Fa17", user)
 }
 
 }
