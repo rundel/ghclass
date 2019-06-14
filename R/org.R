@@ -231,8 +231,8 @@ github_api_get_repos = function(org) {
   .Deprecated(msg = "'github_api_get_repos' will be removed in the next version. Use 'github_api_get_repo' instead.",
               new = "github_api_get_repo")
 
-  stopifnot(length(org)==1)
-  gh("GET /orgs/:org/repos", org = org, .token=get_github_token(), .limit=get_github_api_limit())
+  stopifnot(length(org) == 1)
+  gh("GET /orgs/:org/repos", org = org, .token = get_github_token(), .limit = get_github_api_limit())
 }
 
 #' Get organization repos
