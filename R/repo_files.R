@@ -37,7 +37,9 @@ get_readme = function(repo, branch="master") {
   extract_content(file)
 }
 
+
 github_api_get_file = function(repo, file, branch) {
+
   stopifnot(length(repo) == 1)
   stopifnot(length(file) == 1)
   stopifnot(length(branch) == 1)
@@ -47,9 +49,10 @@ github_api_get_file = function(repo, file, branch) {
 
   gh::gh(
     "GET /repos/:owner/:repo/contents/:path",
-    owner = repo_owner, repo = repo_name, path=file, ref = branch,
+    owner = owner, repo = name, path=file, ref = branch,
     .token=get_github_token(), .limit=get_github_api_limit()
   )
+
 }
 
 #' @export
@@ -105,15 +108,19 @@ add_content = function(repo, file, content, after=NULL, message="Added content",
   )
 }
 
+
 github_api_code_search = function(q) {
   gh("GET /search/code", q=q,
      .token=get_github_token(),
      .limit=get_github_api_limit())
 }
 
+
+# Note: This function is currently not vectorized
 find_file = function(repo, file)
 {
   stopifnot(length(repo)==1)
+  stopifnot(length(file)==1)
   #TO DO: Fix since require_valid_repo is no longer vectorized
   #require_valid_repo(repo)
 
@@ -121,9 +128,9 @@ find_file = function(repo, file)
     purrr::map(
       file,
       function(file) {
-        q = paste0("repo:", repo,
-               " path:", fs::path_dir(file),
-               " filename:", fs::path_file(file))
+
+        q = paste0("repo:",repo,
+                   " filename:",fs::path_file(file))
 
         res = github_api_code_search(q)
 
@@ -132,7 +139,6 @@ find_file = function(repo, file)
     )
   )
 }
-
 
 file_exists = function(repo, file, branch = "master")
 {
@@ -195,10 +201,17 @@ put_file = function(repo, path, content, message, branch = "master") {
 #' @param branch name of branch to use, defaults to master.
 #' @param preserve_path should the local relative path be preserved.
 #'
+#' @templateVar fun add_files
+#' @template template-depr_fun
+#'
 #' @examples
 #' \dontrun{
 #' add_files("rundel/ghclass", "Update DESCRIPTION", "./DESCRIPTION")
 #' }
+#'
+#' @templateVar old add_files
+#' @templateVar new add_file
+#' @template template-depr_pkg
 #'
 #' @aliases grab_repos
 #'
@@ -208,6 +221,9 @@ put_file = function(repo, path, content, message, branch = "master") {
 #'
 add_files = function(repo, message, files, branch = "master", preserve_path = FALSE)
 {
+  .Deprecated(msg = "'add_files' will be removed in the next version. Use 'add_file' instead.",
+              new = "add_file")
+
   stopifnot(!missing(repo))
   stopifnot(!missing(message))
   stopifnot(!missing(files))
@@ -239,3 +255,147 @@ add_files = function(repo, message, files, branch = "master", preserve_path = FA
     }
   )
 }
+
+#' Create file URL to pass to GitHub Commit API
+#'
+#' `create_file_commit_url` creates a file URL for a single file that can be passed to a `gh(METHOD URL)` query. The query is limited to 100 entries.
+#'
+#'
+create_file_commit_url = function(repo, gh_path){
+
+  stopifnot(length(repo) == 1)
+  stopifnot(length(gh_path) == 1)
+
+  owner = get_repo_owner(repo)
+  name = get_repo_name(repo)
+  paste0("https://api.github.com/repos/",
+         owner, "/",
+         name, "/commits?path=",
+         gh_path,
+         "&page=1&per_page=100")
+}
+
+github_api_get_commit_history = function(repo, gh_path){
+
+  safe_gh(paste0("GET ", create_file_commit_url(repo, gh_path)),
+          .token=get_github_token())
+
+}
+
+#' Check for modifications of file on GitHub
+#'
+#' `check_file_modification` checks whether a file on GitHub has previously been modified by a commit (not taking into account the initial commit).
+#'
+#' @param repo Character. Address of repository in "owner/name" format.
+#' @param file Character. Name of file.
+#' @param include_admin Logical. Should users with admin privileges be included in checking for previous file modifications.
+#'
+#' @return TRUE or FALSE
+#'
+check_file_modification = function(repo, gh_path, include_admin){
+
+  res = github_api_get_commit_history(repo, gh_path)
+
+  if(length(res$result) > 1){
+
+    user = unique(purrr::map_chr(res$result, c("author", "login")))
+
+    if(!include_admin){
+      user = setdiff(user, unlist(get_admins(get_repo_owner(repo))))
+    }
+
+    if(!is.null(user)){
+      purrr::walk(user,
+                  function(user){
+                    usethis::ui_oops("Adding {usethis::ui_value(gh_path)} to {usethis::ui_value(repo)} overwrites modifications by student(s): {usethis::ui_value(user)}.")
+                    usethis::ui_info("If you want to overwrite modifications, re-run with overwrite = T.")
+                    message(" ")
+                  })
+    }
+  }
+}
+
+
+
+
+
+#' Add files to a repo
+#'
+#' `add_file` uses the GitHub API to add/update files in an existing repo on GitHub. Note that due to time delays in caching, files that have been added very recently might not yet be displayed as existing and might accidentally be overwritten.
+#'
+#' @param repo Character. Address of repository in "owner/name" format.
+#' @param message Character. Commit message.
+#' @param file Character. Local file paths of file or files to be added.
+#' @param branch Character. Name of branch to use, defaults to "master".
+#' @param preserve_path Logical. Should the local relative path be preserved.
+#' @param overwrite Logical. Should existing file or files with same name be overwritten, defaults to FALSE.
+#' @param include_admin Logical. Should users with admin privileges be included in checking for previous file modifications, defaults to FALSE.
+#'
+#' @examples
+#' \dontrun{
+#' add_file("rundel/ghclass", "Update DESCRIPTION", "./DESCRIPTION")
+#' }
+#'
+#' @aliases grab_repos
+#'
+#' @family local repo functions
+#'
+#' @export
+#'
+add_file = function(repo, file, message, branch = "master", preserve_path = FALSE, overwrite = FALSE, include_admin = FALSE){
+
+  stopifnot(!missing(repo))
+  stopifnot(!missing(message))
+  stopifnot(!missing(file))
+
+  file_status = fs::file_exists(file)
+  if (any(!file_status))
+    stop("Unable to locate the following file(s):\n", format_list(file[!file_status]),
+         call. = FALSE)
+
+  if (is.character(file) & (length(file) > 1))
+    file = list(file)
+
+  purrr::pwalk(list(repo, file, message, branch, include_admin),
+
+              function(repo, file, message, branch, include_admin){
+
+                purrr::walk(file,
+                            function(file){
+                              gh_path = file
+                              if(!preserve_path)
+                                gh_path = fs::path_file(file)
+
+                              if(!file_exists(repo, gh_path, branch) | overwrite){
+
+                                usethis::ui_done("Adding file {usethis::ui_value(gh_path)} to {usethis::ui_value(repo)}.")
+                                message(" ")
+
+                                content = paste(readLines(file), collapse = "\n")
+                                res = put_file(repo = repo,
+                                               path = gh_path,
+                                               content = content,
+                                               message = message,
+                                               branch = branch)
+
+                                check_result(
+                                  res, sprintf("Failed to add file to %s.", repo),
+                                  error_prefix = paste0(file,": ")
+                                )
+
+                              } else {
+
+                                usethis::ui_oops("{usethis::ui_value(gh_path)} not added to {usethis::ui_value(repo)} (already exists).")
+
+                                modified = check_file_modification(repo, gh_path, include_admin)
+                                if(length(modified) == 0){
+                                  usethis::ui_info("If you want to commit {usethis::ui_value(gh_path)} to {usethis::ui_value(repo)} again, re-run with overwrite = T.")
+                                  message(" ")
+                                }
+                              }
+                            })
+
+               })
+}
+
+

@@ -1,23 +1,46 @@
+#' Get repositories
+#'
+#' @templateVar fun github_api_get_repos
+#' @template template-depr_fun
+#'
+#' @templateVar old github_api_get_repos
+#' @templateVar new github_api_get_repo
+#' @template template-depr_pkg
+#'
 github_api_get_repos = function(org) {
+
+  .Deprecated(msg = "'github_api_get_repos' will be removed in the next version. Use 'github_api_get_repo' instead.",
+              new = "github_api_get_repo")
+
   stopifnot(length(org)==1)
   gh("GET /orgs/:org/repos", org = org, .token=get_github_token(), .limit=get_github_api_limit())
 }
 
-#' @export
-get_repo = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE) {
-  get_repos(org, filter, exclude, full_repo)
+
+github_api_get_repo = function(owner) {
+  stopifnot(length(owner) == 1)
+  safe_gh("GET /orgs/:owner/repos",
+          owner = owner,
+          .token = get_github_token(),
+          .limit = get_github_api_limit())
 }
+
 
 #' Get organization repos
 #'
-#' \code{get_repos} returns a (filtered) vector of repos belonging to a GitHub organization.
+#' `get_repos` returns a (filtered) vector of repos belonging to a GitHub organization.
 #'
-#' @param org character, name of the GitHub organization.
-#' @param filter character, regex pattern for matching (or excluding) repos.
-#' @param exclude logical, should entries matching the regex be excluded or included.
-#' @param full_repo logical, should the full repo name be returned (e.g. \code{org/repo} instead of just \code{repo})
+#' @param org Character. Name of the GitHub organization.
+#' @param filter Character. Regular expression pattern for matching (or excluding) repositories.
+#' @param exclude Logical. Should entries matching the regular expression in `filter` be excluded or included?
+#' @param full_repo Logical. Should the full repository name be returned (e.g. `org/repo` instead of just `repo`)?
 #'
-#' @aliases get_repo
+#' @templateVar fun get_repos
+#' @template template-depr_fun
+#'
+#' @templateVar old get_repos
+#' @templateVar new get_repo
+#' @template template-depr_pkg
 #'
 #' @examples
 #' \dontrun{
@@ -27,11 +50,14 @@ get_repo = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE) {
 #'
 #' @family github organization related functions
 #'
-#' @export
 #'
-get_repos = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE) {
-  stopifnot(length(org)==1)
-  stopifnot(length(filter)<=1)
+get_repos = function(org, filter = NULL, exclude = FALSE, full_repo = TRUE) {
+
+  .Deprecated(msg = "'get_repos' will be removed in the next version. Use 'get_repo' instead.",
+              new = "get_repo")
+
+  stopifnot(length(org) == 1)
+  stopifnot(length(filter) <= 1)
 
   res = purrr::map_chr(github_api_get_repos(org), "name")
   res = filter_results(res, filter, exclude)
@@ -43,19 +69,73 @@ get_repos = function(org, filter=NULL, exclude=FALSE, full_repo=TRUE) {
 }
 
 
+#' Get organization repository
+#'
+#' `get_repo` returns a (filtered) vector of repositories belonging to a GitHub organization.
+#'
+#' @param owner Character. Name of the GitHub organization.
+#' @param filter Character. Regular expression pattern for matching (or excluding) repositories.
+#' @param exclude Logical. Should entries matching the regular expression in `filter` be excluded or included?
+#' @param full_repo Logical. Should the full repository address be returned (e.g. `owner/name` instead of just `repo`)?
+#'
+#'
+#' @examples
+#' \dontrun{
+#' get_repo("ghclass")
+#' get_repo("ghclass", "hw1-")
+#' }
+#'
+#' @family github organization related functions
+#'
+#' @export
+#'
+get_repo = function(owner, filter = NULL, exclude = FALSE, full_repo = TRUE) {
+
+  stopifnot(length(owner) == 1)
+  stopifnot(length(filter) <= 1)
+
+  res = github_api_get_repo(owner)
+  res = purrr::map_chr(res$result, "name")
+  res = filter_results(res, filter, exclude)
+
+  if (full_repo & length(res) > 0)
+    res = paste0(owner,"/",res)
+
+  res
+}
+
 github_api_get_members = function(org) {
-  stopifnot(length(org)==1)
-  gh("GET /orgs/:org/members", org=org, .token=get_github_token(), .limit=get_github_api_limit())
+
+  .Deprecated(msg = "'github_api_get_members' will be removed in the next version. Use 'github_api_get_member' instead.",
+              new = "github_api_get_member")
+
+  stopifnot(length(org) == 1)
+  safe_gh("GET /orgs/:org/members", org = org, .token = get_github_token(), .limit = get_github_api_limit())
+}
+
+github_api_get_member = function(owner) {
+  stopifnot(length(owner) == 1)
+  safe_gh("GET /orgs/:owner/members",
+          owner = owner,
+          .token = get_github_token(),
+          .limit = get_github_api_limit())
 }
 
 
 #' Get organization members
 #'
-#' \code{get_members} returns a (filtered) vector of organization memebers.
+#' `get_members` returns a (filtered) vector of organization memebers.
 #'
 #' @param org character, name of the GitHub organization.
 #' @param filter character, regex pattern for matching (or excluding) repos.
 #' @param exclude logical, should entries matching the regex be excluded or included.
+#'
+#' @templateVar fun get_members
+#' @template template-depr_fun
+#'
+#' @templateVar old get_members
+#' @templateVar new get_member
+#' @template template-depr_pkg
 #'
 #' @examples
 #' \dontrun{
@@ -64,31 +144,82 @@ github_api_get_members = function(org) {
 #'
 #' @family github organization related functions
 #'
-#' @export
-#'
-get_members = function(org, filter=NULL, exclude=FALSE) {
-  stopifnot(length(org)==1)
-  stopifnot(length(filter)<=1)
+get_members = function(org, filter = NULL, exclude = FALSE) {
 
-  res = purrr::map_chr(github_api_get_members(org), "login")
+  .Deprecated(msg = "'get_members' will be removed in the next version. Use 'get_member' instead.",
+              new = "get_member")
 
-  filter_results(res, filter, exclude)
+  stopifnot(length(org) == 1)
+  stopifnot(length(filter) <= 1)
+
+  res = github_api_get_members(org)
+  members = purrr::map_chr(res$result, "login")
+
+  filter_results(members, filter, exclude)
 }
 
+
+#' Get organization members
+#'
+#' `get_member` returns a (filtered) vector of organization memebers.
+#'
+#' @param owner Character. Name of the GitHub organization.
+#' @param filter Character. Regular expression pattern for matching (or excluding) repositories.
+#' @param exclude Logical. Should entries matching the regular expression be excluded or included.
+#'
+#' @examples
+#' \dontrun{
+#' get_member("ghclass")
+#' }
+#'
+#' @family github organization related functions
+#'
+#' @export
+#'
+get_member = function(owner, filter = NULL, exclude = FALSE) {
+
+  stopifnot(length(owner) == 1)
+  stopifnot(length(filter) <= 1)
+
+  res = github_api_get_member(owner)
+  member = purrr::map_chr(res$result, "login")
+
+  filter_results(member, filter, exclude)
+}
 
 
 github_api_get_invitations = function(org) {
-  gh("GET /orgs/:org/invitations", org=org,
-     .token=get_github_token(), .limit=get_github_api_limit())
+
+  .Deprecated(msg = "'github_api_get_invitations' will be removed in the next version. Use 'github_api_get_invitation' instead.",
+              new = "github_api_get_invitation")
+
+  safe_gh("GET /orgs/:org/invitations", org = org,
+     .token = get_github_token(), .limit = get_github_api_limit())
 }
+
+github_api_get_invitation = function(owner){
+
+  safe_gh("GET /orgs/:owner/invitations",
+          owner = owner,
+          .token = get_github_token(),
+          .limit = get_github_api_limit())
+}
+
 
 #' Get pending organization members
 #'
-#' \code{get_pending_members} returns a (filtered) vector of pending organization memebers.
+#' `get_pending_members` returns a (filtered) vector of pending organization memebers.
 #'
 #' @param org character, name of the GitHub organization.
 #' @param filter character, regex pattern for matching (or excluding) repos.
 #' @param exclude logical, should entries matching the regex be excluded or included.
+#'
+#' @templateVar fun get_pending_members
+#' @template template-depr_fun
+#'
+#' @templateVar old get_pending_members
+#' @templateVar new get_pending_member
+#' @template template-depr_pkg
 #'
 #' @examples
 #' \dontrun{
@@ -97,31 +228,87 @@ github_api_get_invitations = function(org) {
 #'
 #' @family github organization related functions
 #'
-#' @export
-#'
-get_pending_members = function(org, filter=NULL, exclude=FALSE) {
-  stopifnot(length(org)==1)
-  stopifnot(length(filter)<=1)
+get_pending_members = function(org, filter = NULL, exclude = FALSE) {
+
+  .Deprecated(msg = "'get_pending_members' will be removed in the next version. Use 'get_pending_member' instead.",
+              new = "get_pending_member")
+
+  stopifnot(length(org) == 1)
+  stopifnot(length(filter) <= 1)
 
   res = github_api_get_invitations(org)
-  res = purrr::map(res, "login")
-  res = as.character(unlist(res))
+  invites = purrr::map_chr(res$result, "login")
 
-  filter_results(res, filter, exclude)
+  filter_results(invites, filter, exclude)
+}
+
+#' Get pending organization members
+#'
+#' `get_pending_member` returns a (filtered) vector of pending organization memebers.
+#'
+#' @param owner Character. Name of the GitHub organization.
+#' @param filter Character. Regular expression pattern for matching (or excluding) repos.
+#' @param exclude Logical. Should entries matching the regular expression be excluded or included.
+#'
+#' @examples
+#' \dontrun{
+#' get_pending_member("ghclass")
+#' }
+#'
+#' @family github organization related functions
+#'
+#' @export
+#'
+get_pending_member = function(owner, filter = NULL, exclude = FALSE) {
+
+  stopifnot(length(owner) == 1)
+  stopifnot(length(filter) <= 1)
+
+  res = github_api_get_invitation(owner)
+  invite = purrr::map_chr(res$result, "login")
+
+  filter_results(invite, filter, exclude)
+}
+
+github_api_get_user = function(user)
+{
+  safe_gh(
+    "/users/:username",
+    username = user,
+    .token = get_github_token()
+  )
+}
+
+#' Check if username(s) exists
+#'
+#' `check_user_exists` returns TRUE if the supplied username(s) exists on GitHub and FALSE otherwise.
+#'
+#' @param user Character. Username to be checked. Can be a vector or list of usernames.
+#'
+#' @return TRUE or FALSE
+#'
+#' @examples
+#' \dontrun{
+#' check_user_exists(c("rundel","hopefullydoesnotexist"))
+#' }
+#'
+#' @export
+#'
+check_user_exists = function(user)
+{
+  res = purrr::map(user, github_api_get_user)
+  purrr::map_lgl(res, succeeded)
 }
 
 
-
-
-#' @export
-check_user_exists = function(user)
-{
-  check_user = function(user) {
-    gh("/users/:username", username=user, .token=get_github_token())
-    TRUE
-  }
-
-  purrr::map_lgl(user, purrr::possibly(check_user, FALSE))
+github_api_create_invitation = function(owner, user){
+  safe_gh(
+    "PUT /orgs/:owner/memberships/:username",
+    owner = owner,
+    username = user,
+    role = "member",
+    .token = get_github_token()
+  )
 }
 
 
@@ -140,40 +327,63 @@ github_api_invite_user = function(org, user) {
 
 #' Invite user(s)
 #'
-#' \code{invite_user} invites users to your organization
+#' `invite_user` invites user(s) to your organization.
 #'
-#' @param org character, name of the GitHub organization.
-#' @param user character or data frame, listing one or more users
+#' @param owner Character. Name of the GitHub organization.
+#' @param user Character, character vector, or list. Listing one or more user names.
+#' @param exclude_pending Logical. If `exclude_pending = FALSE`, pending members will  receive another invitation to join the organization. The default is FALSE, such that pending members will receive another invitation email.
+#' @param verbose Logical. Display verbose output.
 #'
 #' @examples
 #' \dontrun{
-#' users = c("Alice","Bob","Carol","Dave","Eve")
-#' invite_user("ghclass", users)
+#' user = c("Alice","Bob","Carol","Dave","Eve")
+#' invite_user("Sta523-Fa17", user)
 #' }
 #'
 #' @family github organization related functions
 #'
 #' @export
 invite_user = function(org, user) {
+
   stopifnot(length(org) == 1)
 
   user = tolower(user)
-  members = tolower(get_members(org))
-  pending = tolower(get_pending_members(org))
+  member = tolower(get_member(org))
+  pending = tolower(get_pending_member(org))
 
-  need_invite = setdiff(user, c(members, pending))
+  need_invite = setdiff(user, c(member, pending))
+  already_member = intersect(user, member)
 
-  purrr::walk(
-    need_invite,
-    function(user) {
-      res = purrr::safely(github_api_invite_user)(org, user)
+  if(length(need_invite) > 0){
+    purrr::walk(
+      need_invite,
+      function(need_invite) {
+        res = purrr::safely(github_api_invite_user)(org, need_invite)
 
-      status_msg(
-        res,
-        glue::glue("Added user {usethis::ui_value(user)} to org {usethis::ui_value(org)}."),
-        glue::glue("Failed to add user {usethis::ui_value(user)} to org {usethis::ui_value(org)}."),
-      )
-    }
-  )
+        status_msg(
+          res,
+          usethis::ui_done("Added user {usethis::ui_value(user)} to org {usethis::ui_value(org)}."),
+          usethis::ui_oops("Failed to add user {usethis::ui_value(user)} to org {usethis::ui_value(org)}."),
+        )
+      }
+    )
+  }
+
+  if(length(already_member) > 0){
+    purrr::walk(
+      already_member,
+      function(already_member)
+        usethis::ui_oops("{usethis::ui_value(already_member)} already member of org {usethis::ui_value(org)}.")
+    )
+  }
+
+  if(length(pending) > 0){
+    purrr::walk(
+      pending,
+      function(pending)
+        usethis::ui_oops("{usethis::ui_value(pending)} pending member of org {usethis::ui_value(org)}.")
+    )
+  }
+
 }
 

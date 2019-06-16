@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create individual repositories — create_individual_repo • ghclass</title>
+<title>Check for modifications of file on GitHub — check_file_modification • ghclass</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,10 +30,9 @@
 
 
 
-<meta property="og:title" content="Create individual repositories — create_individual_repo" />
+<meta property="og:title" content="Check for modifications of file on GitHub — check_file_modification" />
 
-<meta property="og:description" content="create_individual_repo creates repositories for each student for a given
-assignment." />
+<meta property="og:description" content="check_file_modification checks whether a file on GitHub has previously been modified by a commit (not taking into account the initial commit)." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -98,86 +97,49 @@ assignment." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create individual repositories</h1>
+    <h1>Check for modifications of file on GitHub</h1>
     
-    <div class="hidden name"><code>create_individual_repo.Rd</code></div>
+    <div class="hidden name"><code>check_file_modification.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p><code>create_individual_repo</code> creates repositories for each student for a given
-assignment.</p>
+    <p><code>check_file_modification</code> checks whether a file on GitHub has previously been modified by a commit (not taking into account the initial commit).</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>create_individual_repo</span>(<span class='no'>org</span>, <span class='no'>user</span>, <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>private</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>auto_init</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>gitignore_template</span> <span class='kw'>=</span> <span class='st'>"R"</span>)</pre>
+    <pre class="usage"><span class='fu'>check_file_modification</span>(<span class='no'>repo</span>, <span class='no'>gh_path</span>, <span class='no'>include_admin</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>org</th>
-      <td><p>Character. Name of the GitHub organization.</p></td>
+      <th>repo</th>
+      <td><p>Character. Address of repository in "owner/name" format.</p></td>
     </tr>
     <tr>
-      <th>user</th>
-      <td><p>Character or data frame. Listing one or more users.</p></td>
+      <th>include_admin</th>
+      <td><p>Logical. Should users with admin privileges be included in checking for previous file modifications.</p></td>
     </tr>
     <tr>
-      <th>prefix</th>
-      <td><p>Character. Resulting repository name will start with this. character string.</p></td>
-    </tr>
-    <tr>
-      <th>suffix</th>
-      <td><p>Character. Resulting repository name will end with this character string.</p></td>
-    </tr>
-    <tr>
-      <th>private</th>
-      <td><p>Logical. Create private repositories.</p></td>
-    </tr>
-    <tr>
-      <th>verbose</th>
-      <td><p>Logical. Display verbose output.</p></td>
-    </tr>
-    <tr>
-      <th>auto_init</th>
-      <td><p>Logical. Initialize the repository with a README.md.</p></td>
-    </tr>
-    <tr>
-      <th>gitignore_template</th>
-      <td><p>Character. .gitignore template language.</p></td>
+      <th>file</th>
+      <td><p>Character. Name of file.</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <div class='dont-index'><p>Other github organization related functions: <code>create_team_repo</code>,
-  <code>get_members-deprecated</code>,
-  <code>get_member</code>,
-  <code>get_pending_members-deprecated</code>,
-  <code>get_pending_member</code>,
-  <code>get_repos-deprecated</code>,
-  <code>get_repo</code>, <code>get_team_repos</code>,
-  <code>invite_user</code></p></div>
+    <p>TRUE or FALSE</p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>create_individual_repo</span>(<span class='st'>"Sta523-Fa17"</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"user01"</span>,<span class='st'>"user02"</span>), <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>"hw01-"</span>)
-<span class='co'># }</span><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+      <li><a href="#value">Value</a></li>
+          </ul>
 
   </div>
 </div>
