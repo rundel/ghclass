@@ -23,12 +23,12 @@ github_api_get_readme = function(repo, branch) {
   gh::gh(
     "GET /repos/:owner/:repo/readme",
     owner = owner, repo = name, ref = branch,
-    .token=get_github_token(), .limit=get_github_api_limit()
+    .token = get_github_token(), .limit = get_github_api_limit()
   )
 }
 
 #' @export
-get_readme = function(repo, branch="master") {
+get_readme = function(repo, branch = "master") {
   stopifnot(length(repo) == 1)
   stopifnot(length(branch) == 1)
 
@@ -49,14 +49,14 @@ github_api_get_file = function(repo, file, branch) {
 
   gh::gh(
     "GET /repos/:owner/:repo/contents/:path",
-    owner = owner, repo = name, path=file, ref = branch,
-    .token=get_github_token(), .limit=get_github_api_limit()
+    owner = owner, repo = name, path = file, ref = branch,
+    .token = get_github_token(), .limit = get_github_api_limit()
   )
 
 }
 
 #' @export
-get_file = function(repo, file, branch="master") {
+get_file = function(repo, file, branch = "master") {
   stopifnot(length(repo) == 1)
   stopifnot(length(file) == 1)
   stopifnot(length(branch) == 1)
@@ -67,7 +67,7 @@ get_file = function(repo, file, branch="master") {
 }
 
 #' @export
-add_content = function(repo, file, content, after=NULL, message="Added content", branch="master") {
+add_content = function(repo, file, content, after = NULL, message = "Added content", branch = "master") {
   #TO DO: Fix since require_valid_repo is no longer vectorized
   #require_valid_repo(repo)
 
@@ -110,17 +110,17 @@ add_content = function(repo, file, content, after=NULL, message="Added content",
 
 
 github_api_code_search = function(q) {
-  gh("GET /search/code", q=q,
-     .token=get_github_token(),
-     .limit=get_github_api_limit())
+  gh("GET /search/code", q = q,
+     .token = get_github_token(),
+     .limit = get_github_api_limit())
 }
 
 
 # Note: This function is currently not vectorized
 find_file = function(repo, file)
 {
-  stopifnot(length(repo)==1)
-  stopifnot(length(file)==1)
+  stopifnot(length(repo) == 1)
+  stopifnot(length(file) == 1)
   #TO DO: Fix since require_valid_repo is no longer vectorized
   #require_valid_repo(repo)
 
@@ -171,11 +171,11 @@ github_api_put_file = function(repo, path, content, message, branch) {
 
 #' @export
 put_file = function(repo, path, content, message, branch = "master") {
-  stopifnot(length(repo)==1)
-  stopifnot(length(path)==1)
-  stopifnot(length(content)==1)
-  stopifnot(length(message)==1)
-  stopifnot(length(branch)==1)
+  stopifnot(length(repo) == 1)
+  stopifnot(length(path) == 1)
+  stopifnot(length(content) == 1)
+  stopifnot(length(message) == 1)
+  stopifnot(length(branch) == 1)
 
   if (is.character(content))
     content = charToRaw(content)
@@ -190,71 +190,6 @@ put_file = function(repo, path, content, message, branch = "master") {
 }
 
 
-
-#' Add files to a repo
-#'
-#' \code{add_files} uses the GitHub api to add/update files in an existing repo on GitHub.
-#'
-#' @param repo repo names in the form of \emph{owner/name}.
-#' @param message commit message.
-#' @param files local file paths of files to be added.
-#' @param branch name of branch to use, defaults to master.
-#' @param preserve_path should the local relative path be preserved.
-#'
-#' @templateVar fun add_files
-#' @template template-depr_fun
-#'
-#' @examples
-#' \dontrun{
-#' add_files("rundel/ghclass", "Update DESCRIPTION", "./DESCRIPTION")
-#' }
-#'
-#' @templateVar old add_files
-#' @templateVar new add_file
-#' @template template-depr_pkg
-#'
-#' @aliases grab_repos
-#'
-#' @family local repo functions
-#'
-#' @export
-#'
-add_files = function(repo, message, files, branch = "master", preserve_path = FALSE)
-{
-  .Deprecated(msg = "'add_files' will be removed in the next version. Use 'add_file' instead.",
-              new = "add_file")
-
-  stopifnot(!missing(repo))
-  stopifnot(!missing(message))
-  stopifnot(!missing(files))
-
-  file_status = fs::file_exists(files)
-  if (any(!file_status))
-    stop("Unable to locate the following files:\n", format_list(files[!file_status]),
-         call. = FALSE)
-
-  if (is.character(files) & length(repo) != length(files))
-    files = list(files)
-
-  purrr::pwalk(
-    list(repo, message, files),
-    function(repo, message, files) {
-
-      gh_paths = files
-      if (!preserve_path)
-        gh_paths = fs::path_file(files)
-
-      purrr::walk2(
-        gh_paths, files,
-        function(path, file, repo, message, branch) {
-          content = paste(readLines(file), collapse = "\n")
-          put_file(repo, path, content, message, branch)
-        },
-        repo = repo, message = message, branch = branch
-      )
-    }
-  )
-}
 
 #' Create file URL to pass to GitHub Commit API
 #'
@@ -399,3 +334,68 @@ add_file = function(repo, file, message, branch = "master", preserve_path = FALS
 }
 
 
+################# Deprecated functions ###################
+#' Add files to a repo
+#'
+#' \code{add_files} uses the GitHub api to add/update files in an existing repo on GitHub.
+#'
+#' @param repo repo names in the form of \emph{owner/name}.
+#' @param message commit message.
+#' @param files local file paths of files to be added.
+#' @param branch name of branch to use, defaults to master.
+#' @param preserve_path should the local relative path be preserved.
+#'
+#' @templateVar fun add_files
+#' @template template-depr_fun
+#'
+#' @examples
+#' \dontrun{
+#' add_files("rundel/ghclass", "Update DESCRIPTION", "./DESCRIPTION")
+#' }
+#'
+#' @templateVar old add_files
+#' @templateVar new add_file
+#' @template template-depr_pkg
+#'
+#' @aliases grab_repos
+#'
+#' @family local repo functions
+#'
+#' @export
+#'
+add_files = function(repo, message, files, branch = "master", preserve_path = FALSE)
+{
+  .Deprecated(msg = "'add_files' will be removed in the next version. Use 'add_file' instead.",
+              new = "add_file")
+
+  stopifnot(!missing(repo))
+  stopifnot(!missing(message))
+  stopifnot(!missing(files))
+
+  file_status = fs::file_exists(files)
+  if (any(!file_status))
+    stop("Unable to locate the following files:\n", format_list(files[!file_status]),
+         call. = FALSE)
+
+  if (is.character(files) & length(repo) != length(files))
+    files = list(files)
+
+  purrr::pwalk(
+    list(repo, message, files),
+    function(repo, message, files) {
+
+      gh_paths = files
+      if (!preserve_path)
+        gh_paths = fs::path_file(files)
+
+      purrr::walk2(
+        gh_paths, files,
+        function(path, file, repo, message, branch) {
+          content = paste(readLines(file), collapse = "\n")
+          put_file(repo, path, content, message, branch)
+        },
+        repo = repo, message = message, branch = branch
+      )
+    }
+  )
+}
