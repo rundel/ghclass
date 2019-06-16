@@ -32,7 +32,7 @@
 
 <meta property="og:title" content="Invite user(s) — invite_user" />
 
-<meta property="og:description" content="invite_user invites users to your organization" />
+<meta property="og:description" content="invite_user invites user(s) to your organization." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -104,22 +104,30 @@
 
     <div class="ref-description">
     
-    <p><code>invite_user</code> invites users to your organization</p>
+    <p><code>invite_user</code> invites user(s) to your organization.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>invite_user</span>(<span class='no'>org</span>, <span class='no'>user</span>, <span class='kw'>exclude_pending</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>invite_user</span>(<span class='no'>org</span>, <span class='no'>user</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>org</th>
-      <td><p>character, name of the GitHub organization.</p></td>
+      <th>user</th>
+      <td><p>Character, character vector, or list. Listing one or more user names.</p></td>
     </tr>
     <tr>
-      <th>user</th>
-      <td><p>character or data frame, listing one or more users</p></td>
+      <th>owner</th>
+      <td><p>Character. Name of the GitHub organization.</p></td>
+    </tr>
+    <tr>
+      <th>exclude_pending</th>
+      <td><p>Logical. If <code>exclude_pending = FALSE</code>, pending members will  receive another invitation to join the organization. The default is FALSE, such that pending members will receive another invitation email.</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>Logical. Display verbose output.</p></td>
     </tr>
     </table>
     
@@ -127,15 +135,18 @@
 
     <div class='dont-index'><p>Other github organization related functions: <code>create_individual_repo</code>,
   <code>create_team_repo</code>,
-  <code>get_members</code>,
-  <code>get_pending_members</code>,
-  <code>get_repos</code>, <code>get_team_repos</code></p></div>
+  <code>get_members-deprecated</code>,
+  <code>get_member</code>,
+  <code>get_pending_members-deprecated</code>,
+  <code>get_pending_member</code>,
+  <code>get_repos-deprecated</code>,
+  <code>get_repo</code>, <code>get_team_repos</code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='no'>users</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Alice"</span>,<span class='st'>"Bob"</span>,<span class='st'>"Carol"</span>,<span class='st'>"Dave"</span>,<span class='st'>"Eve"</span>)
-<span class='fu'>invite_user</span>(<span class='st'>"ghclass"</span>, <span class='no'>users</span>)
+<span class='no'>user</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Alice"</span>,<span class='st'>"Bob"</span>,<span class='st'>"Carol"</span>,<span class='st'>"Dave"</span>,<span class='st'>"Eve"</span>)
+<span class='fu'>invite_user</span>(<span class='st'>"Sta523-Fa17"</span>, <span class='no'>user</span>)
 <span class='co'># }</span><div class='input'>
 </div></pre>
   </div>

@@ -108,15 +108,14 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>create_team_repo</span>(<span class='no'>owner</span>, <span class='no'>team</span>, <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>private</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>auto_init</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>gitignore_template</span> <span class='kw'>=</span> <span class='st'>"R"</span>)</pre>
+    <pre class="usage"><span class='fu'>create_team_repo</span>(<span class='no'>org</span>, <span class='no'>team</span>, <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>private</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>auto_init</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>gitignore_template</span> <span class='kw'>=</span> <span class='st'>"R"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>owner</th>
+      <th>org</th>
       <td><p>Character. Name of the GitHub organization.</p></td>
     </tr>
     <tr>
@@ -152,9 +151,12 @@
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other github organization related functions: <code>create_individual_repo</code>,
-  <code>get_members</code>,
-  <code>get_pending_members</code>,
-  <code>get_repos</code>, <code>get_team_repos</code>,
+  <code>get_members-deprecated</code>,
+  <code>get_member</code>,
+  <code>get_pending_members-deprecated</code>,
+  <code>get_pending_member</code>,
+  <code>get_repos-deprecated</code>,
+  <code>get_repo</code>, <code>get_team_repos</code>,
   <code>invite_user</code></p></div>
     
 
