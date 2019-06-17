@@ -189,7 +189,8 @@ invite_user = function(org, user) {
   pending = tolower(get_pending_member(org))
 
   need_invite = setdiff(user, c(member, pending))
-  already_member = intersect(user, member)
+  is_member = intersect(user, member)
+  is_pending = intersect(user, pending)
 
   if(length(need_invite) > 0){
     purrr::walk(
@@ -206,22 +207,21 @@ invite_user = function(org, user) {
     )
   }
 
-  if(length(already_member) > 0){
+  if(length(is_member) > 0){
     purrr::walk(
-      already_member,
-      function(already_member)
-        usethis::ui_oops("{usethis::ui_value(already_member)} already member of org {usethis::ui_value(org)}.")
+      is_member,
+      function(is_member)
+        usethis::ui_oops("{usethis::ui_value(is_member)} already member of org {usethis::ui_value(org)}.")
     )
   }
 
-  if(length(pending) > 0){
+  if(length(is_pending) > 0){
     purrr::walk(
-      pending,
-      function(pending)
-        usethis::ui_oops("{usethis::ui_value(pending)} pending member of org {usethis::ui_value(org)}.")
+      is_pending,
+      function(is_pending)
+        usethis::ui_oops("{usethis::ui_value(is_pending)} pending member of org {usethis::ui_value(org)}.")
     )
   }
-
 }
 
 ################# Deprecated functions #################
