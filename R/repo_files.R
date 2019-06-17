@@ -110,7 +110,7 @@ add_content = function(repo, file, content, after = NULL, message = "Added conte
 
 
 github_api_code_search = function(q) {
-  gh("GET /search/code", q = q,
+  gh::gh("GET /search/code", q = q,
      .token = get_github_token(),
      .limit = get_github_api_limit())
 }
@@ -193,7 +193,7 @@ put_file = function(repo, path, content, message, branch = "master") {
 
 #' Create file URL to pass to GitHub Commit API
 #'
-#' `create_file_commit_url` creates a file URL for a single file that can be passed to a `gh(METHOD URL)` query. The query is limited to 100 entries.
+#' `create_file_commit_url` creates a file URL for a single file that can be passed to a `gh::gh(METHOD URL)` query. The query is limited to 100 entries.
 #'
 #'
 create_file_commit_url = function(repo, gh_path){
