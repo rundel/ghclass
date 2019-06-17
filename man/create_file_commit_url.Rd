@@ -7,5 +7,5 @@
 create_file_commit_url(repo, gh_path)
 }
 \description{
-\code{create_file_commit_url} creates a file URL for a single file that can be passed to a \code{gh(METHOD URL)} query. The query is limited to 100 entries.
+\code{create_file_commit_url} creates a file URL for a single file that can be passed to a \code{gh::gh(METHOD URL)} query. The query is limited to 100 entries.
 }
