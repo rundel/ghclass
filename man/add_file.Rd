@@ -5,15 +5,15 @@
 \alias{grab_repos}
 \title{Add files to a repo}
 \usage{
-add_file(repo, file, message, branch = "master", preserve_path = FALSE,
-  overwrite = FALSE, include_admin = FALSE)
+add_file(repo, file, message = NULL, branch = "master",
+  preserve_path = FALSE, overwrite = FALSE, include_admin = FALSE)
 }
 \arguments{
 \item{repo}{Character. Address of repository in "owner/name" format.}
 
-\item{file}{Character. Local file paths of file or files to be added.}
+\item{file}{Character. Local file path(s) of file or files to be added.}
 
-\item{message}{Character. Commit message.}
+\item{message}{Character. Commit message. If not provided, a custom character string will be created, in the form of "Added file(s): filename(s)". If this custom message character length exceeds 50, it will be shortened to "Added file(s)".}
 
 \item{branch}{Character. Name of branch to use, defaults to "master".}
 

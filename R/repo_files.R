@@ -259,7 +259,7 @@ check_file_modification = function(repo, gh_path, include_admin){
 #' `add_file` uses the GitHub API to add/update files in an existing repo on GitHub. Note that due to time delays in caching, files that have been added very recently might not yet be displayed as existing and might accidentally be overwritten.
 #'
 #' @param repo Character. Address of repository in "owner/name" format.
-#' @param message Character. Commit message.
+#' @param message Character. Commit message. If not provided, a custom character string will be created, in the form of "Added file(s): filename(s)". If this custom message character length exceeds 50, it will be shortened to "Added file(s)".
 #' @param file Character. Local file path(s) of file or files to be added.
 #' @param branch Character. Name of branch to use, defaults to "master".
 #' @param preserve_path Logical. Should the local relative path be preserved.
@@ -277,11 +277,27 @@ check_file_modification = function(repo, gh_path, include_admin){
 #'
 #' @export
 #'
-add_file = function(repo, file, message, branch = "master", preserve_path = FALSE, overwrite = FALSE, include_admin = FALSE){
+add_file = function(repo, file, message = NULL, branch = "master", preserve_path = FALSE, overwrite = FALSE, include_admin = FALSE){
 
   stopifnot(!missing(repo))
-  stopifnot(!missing(message))
   stopifnot(!missing(file))
+
+if (is.null(message)) {
+  if (length(file) == 1) {
+    message <- glue::glue("Added file: {file}")
+  }
+  if (length(file) == 2) {
+    file_collapsed <- glue::glue_collapse(file, sep = " and ")
+    message <- glue::glue("Added files: {file_collapsed}")
+  }
+  if (length(file) > 2) {
+    file_collapsed <- glue::glue_collapse(file, sep = ", ", last = ", and ")
+    message <- glue::glue("Added files: {file_collapsed}")
+  }
+  if (nchar(message) > 50) {
+    message <- "Added file(s)"
+  }
+}
 
   file_status = fs::file_exists(file)
   if (any(!file_status))
