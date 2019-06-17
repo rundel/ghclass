@@ -243,7 +243,7 @@ check_file_modification = function(repo, gh_path, include_admin){
       purrr::walk(user,
                   function(user){
                     usethis::ui_oops("Adding {usethis::ui_value(gh_path)} to {usethis::ui_value(repo)} overwrites modifications by student(s): {usethis::ui_value(user)}.")
-                    usethis::ui_info("If you want to overwrite modifications, re-run with overwrite = T.")
+                    usethis::ui_info("If you want to overwrite modifications, re-run with overwrite = TRUE.")
                     message(" ")
                   })
     }
@@ -340,7 +340,7 @@ if (is.null(message)) {
 
                                 modified = check_file_modification(repo, gh_path, include_admin)
                                 if(length(modified) == 0){
-                                  usethis::ui_info("If you want to commit {usethis::ui_value(gh_path)} to {usethis::ui_value(repo)} again, re-run with overwrite = T.")
+                                  usethis::ui_info("If you want to commit {usethis::ui_value(gh_path)} to {usethis::ui_value(repo)} again, re-run with overwrite = TRUE.")
                                   message(" ")
                                 }
                               }
