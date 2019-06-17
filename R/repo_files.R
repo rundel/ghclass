@@ -260,7 +260,7 @@ check_file_modification = function(repo, gh_path, include_admin){
 #'
 #' @param repo Character. Address of repository in "owner/name" format.
 #' @param message Character. Commit message.
-#' @param file Character. Local file paths of file or files to be added.
+#' @param file Character. Local file path(s) of file or files to be added.
 #' @param branch Character. Name of branch to use, defaults to "master".
 #' @param preserve_path Logical. Should the local relative path be preserved.
 #' @param overwrite Logical. Should existing file or files with same name be overwritten, defaults to FALSE.
