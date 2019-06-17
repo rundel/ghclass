@@ -1,6 +1,6 @@
 github_api_get_repo = function(owner) {
   stopifnot(length(owner) == 1)
-  safe_gh("GET /orgs/:owner/repos",
+  gh::gh("GET /orgs/:owner/repos",
           owner = owner,
           .token = get_github_token(),
           .limit = get_github_api_limit())
@@ -32,7 +32,7 @@ get_repo = function(org, filter = NULL, exclude = FALSE, full_repo = TRUE) {
   stopifnot(length(filter) <= 1)
 
   res = github_api_get_repo(org)
-  res = purrr::map_chr(res$result, "name")
+  res = purrr::map_chr(res, "name")
   res = filter_results(res, filter, exclude)
 
   if (full_repo & length(res) > 0)
