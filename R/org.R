@@ -152,8 +152,7 @@ check_user_exists = function(user)
 github_api_invite_user = function(org, user) {
   stopifnot(length(org) == 1)
   stopifnot(length(user) == 1)
-
-  gh(
+  gh::gh(
     "PUT /orgs/:org/memberships/:username",
     org = org,
     username = user,
@@ -200,8 +199,8 @@ invite_user = function(org, user) {
 
         status_msg(
           res,
-          usethis::ui_done("Added user {usethis::ui_value(user)} to org {usethis::ui_value(org)}."),
-          usethis::ui_oops("Failed to add user {usethis::ui_value(user)} to org {usethis::ui_value(org)}."),
+          usethis::ui_done("Added user {usethis::ui_value(need_invite)} to org {usethis::ui_value(org)}."),
+          usethis::ui_oops("Failed to add user {usethis::ui_value(need_invite)} to org {usethis::ui_value(org)}: does not exist."),
         )
       }
     )
@@ -219,7 +218,7 @@ invite_user = function(org, user) {
     purrr::walk(
       is_pending,
       function(is_pending)
-        usethis::ui_oops("{usethis::ui_value(is_pending)} pending member of org {usethis::ui_value(org)}.")
+        usethis::ui_oops("{usethis::ui_value(is_pending)} is a pending member of org {usethis::ui_value(org)}.")
     )
   }
 }
