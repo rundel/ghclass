@@ -116,7 +116,7 @@ github_api_code_search = function(query) {
 # Note: This function is currently not vectorized
 find_file = function(repo, file){
 
-  stopifnot(length(repo)==1)
+  stopifnot(length(repo) == 1)
   #TO DO: Fix since require_valid_repo is no longer vectorized
   #require_valid_repo(repo)
 
@@ -124,10 +124,10 @@ find_file = function(repo, file){
     purrr::map(
       file,
       function(file) {
-        query = paste0("repo:", repo,
-                      # " path:", fs::path_dir(file),
-                       " filename:", fs::path_file(file))
 
+        query = paste0(" path:", ifelse(!(fs::path_dir(file) == "."), fs::path_dir(file), "/"),
+                       " repo:", repo,
+                       " filename:", fs::path_file(file))
         res = github_api_code_search(query)
 
         if(res[["total_count"]] > 0){
