@@ -23,8 +23,11 @@ get_team_repos("ghclass",c("team01","team02"))
 \seealso{
 Other github organization related functions: \code{\link{create_individual_repo}},
   \code{\link{create_team_repo}},
-  \code{\link{get_members}},
-  \code{\link{get_pending_members}},
-  \code{\link{get_repos}}, \code{\link{invite_user}}
+  \code{\link{get_members-deprecated}},
+  \code{\link{get_member}},
+  \code{\link{get_pending_members-deprecated}},
+  \code{\link{get_pending_member}},
+  \code{\link{get_repos-deprecated}},
+  \code{\link{get_repo}}, \code{\link{invite_user}}
 }
 \concept{github organization related functions}
