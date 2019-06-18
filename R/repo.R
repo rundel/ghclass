@@ -10,16 +10,6 @@ github_api_get_collaborator = function(repo) {
 
 }
 
-
-github_api_get_repo = function(repo) {
-  safe_gh(
-    "GET /repos/:owner/:repo",
-    owner = get_repo_owner(repo),
-    repo = get_repo_name(repo),
-    .token = get_github_token()
-  )
-}
-
 github_api_get_repo_id = function(id) {
   safe_gh(
     "GET /repositories/:id",
