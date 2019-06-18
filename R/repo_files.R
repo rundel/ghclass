@@ -107,8 +107,8 @@ add_content = function(repo, file, content, after = NULL, message = "Added conte
   )
 }
 
-github_api_code_search = function(q) {
-  gh::gh("GET /search/code", q = q,
+github_api_code_search = function(query) {
+  gh::gh("GET /search/code", q = query,
      .token = get_github_token(),
      .limit = get_github_api_limit())
 }
@@ -124,13 +124,18 @@ find_file = function(repo, file){
     purrr::map(
       file,
       function(file) {
-        q = paste0("repo:", repo,
-               " path:", fs::path_dir(file),
-               " filename:", fs::path_file(file))
+        query = paste0("repo:", repo,
+                      # " path:", fs::path_dir(file),
+                       " filename:", fs::path_file(file))
 
-        res = github_api_code_search(q)
+        res = github_api_code_search(query)
 
-        purrr::map_chr(res[["items"]], "path")
+        if(res[["total_count"]] > 0){
+          purrr::map_chr(res[["items"]], "path")
+        } else {
+          usethis::ui_oops("Cannot find file {usethis::ui_value(file)} on {usethis::ui_value(repo)}.")
+        }
+
       }
     )
   )
