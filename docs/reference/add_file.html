@@ -108,8 +108,8 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>add_file</span>(<span class='no'>repo</span>, <span class='no'>file</span>, <span class='no'>message</span>, <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>, <span class='kw'>preserve_path</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>include_admin</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>add_file</span>(<span class='no'>repo</span>, <span class='no'>file</span>, <span class='kw'>message</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>,
+  <span class='kw'>preserve_path</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>include_admin</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -120,11 +120,11 @@
     </tr>
     <tr>
       <th>file</th>
-      <td><p>Character. Local file paths of file or files to be added.</p></td>
+      <td><p>Character. Local file path(s) of file or files to be added.</p></td>
     </tr>
     <tr>
       <th>message</th>
-      <td><p>Character. Commit message.</p></td>
+      <td><p>Character. Commit message. If not provided, a custom character string will be created, in the form of "Added file(s): filename(s)". If this custom message character length exceeds 50, it will be shortened to "Added file(s)".</p></td>
     </tr>
     <tr>
       <th>branch</th>

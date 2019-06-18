@@ -4,10 +4,10 @@
 \alias{get_repo}
 \title{Get organization repository}
 \usage{
-get_repo(owner, filter = NULL, exclude = FALSE, full_repo = TRUE)
+get_repo(org, filter = NULL, exclude = FALSE, full_repo = TRUE)
 }
 \arguments{
-\item{owner}{Character. Name of the GitHub organization.}
+\item{org}{Character. Name of the GitHub organization.}
 
 \item{filter}{Character. Regular expression pattern for matching (or excluding) repositories.}
 

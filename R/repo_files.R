@@ -37,7 +37,6 @@ get_readme = function(repo, branch = "master") {
   extract_content(file)
 }
 
-
 github_api_get_file = function(repo, file, branch) {
 
   stopifnot(length(repo) == 1)
@@ -108,19 +107,16 @@ add_content = function(repo, file, content, after = NULL, message = "Added conte
   )
 }
 
-
 github_api_code_search = function(q) {
   gh::gh("GET /search/code", q = q,
      .token = get_github_token(),
      .limit = get_github_api_limit())
 }
 
-
 # Note: This function is currently not vectorized
-find_file = function(repo, file)
-{
-  stopifnot(length(repo) == 1)
-  stopifnot(length(file) == 1)
+find_file = function(repo, file){
+
+  stopifnot(length(repo)==1)
   #TO DO: Fix since require_valid_repo is no longer vectorized
   #require_valid_repo(repo)
 
@@ -128,9 +124,9 @@ find_file = function(repo, file)
     purrr::map(
       file,
       function(file) {
-
-        q = paste0("repo:",repo,
-                   " filename:",fs::path_file(file))
+        q = paste0("repo:", repo,
+               " path:", fs::path_dir(file),
+               " filename:", fs::path_file(file))
 
         res = github_api_code_search(q)
 
@@ -139,6 +135,7 @@ find_file = function(repo, file)
     )
   )
 }
+
 
 file_exists = function(repo, file, branch = "master")
 {
@@ -188,7 +185,6 @@ put_file = function(repo, path, content, message, branch = "master") {
     glue::glue("Failed to add {usethis::ui_value(format_repo(repo, branch, path))}.")
   )
 }
-
 
 
 #' Create file URL to pass to GitHub Commit API
@@ -351,6 +347,7 @@ if (is.null(message)) {
 
 
 ################# Deprecated functions ###################
+
 #' Add files to a repo
 #'
 #' \code{add_files} uses the GitHub api to add/update files in an existing repo on GitHub.

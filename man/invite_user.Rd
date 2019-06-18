@@ -7,13 +7,9 @@
 invite_user(org, user)
 }
 \arguments{
+\item{org}{Character. Name of the GitHub organization.}
+
 \item{user}{Character, character vector, or list. Listing one or more user names.}
-
-\item{owner}{Character. Name of the GitHub organization.}
-
-\item{exclude_pending}{Logical. If \code{exclude_pending = FALSE}, pending members will  receive another invitation to join the organization. The default is FALSE, such that pending members will receive another invitation email.}
-
-\item{verbose}{Logical. Display verbose output.}
 }
 \description{
 \code{invite_user} invites user(s) to your organization.
