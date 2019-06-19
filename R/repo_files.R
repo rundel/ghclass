@@ -172,7 +172,7 @@ github_api_put_file = function(repo, path, content, message, branch) {
 }
 
 #' @export
-put_file = function(repo, path, content, message, branch = "master") {
+put_file = function(repo, path, content, message, branch = "master", verbose = F) {
   stopifnot(length(repo) == 1)
   stopifnot(length(path) == 1)
   stopifnot(length(content) == 1)
@@ -184,11 +184,16 @@ put_file = function(repo, path, content, message, branch = "master") {
 
   res = purrr::safely(github_api_put_file)(repo, path, content, message, branch)
 
-  status_msg(
-    res,
-    glue::glue("Added {usethis::ui_value(format_repo(repo, branch, path))}."),
-    glue::glue("Failed to add {usethis::ui_value(format_repo(repo, branch, path))}.")
-  )
+  if(verbose){
+    status_msg(
+      res,
+      glue::glue("Added {usethis::ui_value(path)} to {usethis::ui_value(repo)}."),
+      glue::glue("Failed to add {usethis::ui_value(path)} to {usethis::ui_value(repo)}.")
+    )
+  }
+
+  res
+
 }
 
 
@@ -237,7 +242,7 @@ check_file_modification = function(repo, gh_path, include_admin){
     user = unique(purrr::map_chr(res$result, c("author", "login")))
 
     if(!include_admin){
-      user = setdiff(user, unlist(get_admins(get_repo_owner(repo))))
+      user = setdiff(user, unlist(get_admin(get_repo_owner(repo))))
     }
 
     if(!is.null(user)){
@@ -283,22 +288,23 @@ add_file = function(repo, file, message = NULL, branch = "master", preserve_path
   stopifnot(!missing(repo))
   stopifnot(!missing(file))
 
-if (is.null(message)) {
-  if (length(file) == 1) {
-    message <- glue::glue("Added file: {file}")
+  # Format commit message
+  if (is.null(message)) {
+    if (length(file) == 1) {
+      message <- glue::glue("Added file: {file}")
+    }
+    if (length(file) == 2) {
+      file_collapsed <- glue::glue_collapse(file, sep = " and ")
+      message <- glue::glue("Added files: {file_collapsed}")
+    }
+    if (length(file) > 2) {
+      file_collapsed <- glue::glue_collapse(file, sep = ", ", last = ", and ")
+      message <- glue::glue("Added files: {file_collapsed}")
+    }
+    if (nchar(message) > 50) {
+      message <- "Added file(s)"
+    }
   }
-  if (length(file) == 2) {
-    file_collapsed <- glue::glue_collapse(file, sep = " and ")
-    message <- glue::glue("Added files: {file_collapsed}")
-  }
-  if (length(file) > 2) {
-    file_collapsed <- glue::glue_collapse(file, sep = ", ", last = ", and ")
-    message <- glue::glue("Added files: {file_collapsed}")
-  }
-  if (nchar(message) > 50) {
-    message <- "Added file(s)"
-  }
-}
 
   file_status = fs::file_exists(file)
   if (any(!file_status))
@@ -320,24 +326,17 @@ if (is.null(message)) {
 
                               if(!file_exists(repo, gh_path, branch) | overwrite){
 
-                                usethis::ui_done("Adding file {usethis::ui_value(gh_path)} to {usethis::ui_value(repo)}.")
-                                message(" ")
-
                                 content = paste(readLines(file), collapse = "\n")
                                 res = put_file(repo = repo,
                                                path = gh_path,
                                                content = content,
                                                message = message,
-                                               branch = branch)
-
-                                check_result(
-                                  res, sprintf("Failed to add file to %s.", repo),
-                                  error_prefix = paste0(file,": ")
-                                )
+                                               branch = branch,
+                                               verbose = T)
 
                               } else {
 
-                                usethis::ui_oops("{usethis::ui_value(gh_path)} not added to {usethis::ui_value(repo)} (already exists).")
+                                usethis::ui_oops("Failed to add {usethis::ui_value(gh_path)} to {usethis::ui_value(repo)}: already exists.")
 
                                 modified = check_file_modification(repo, gh_path, include_admin)
                                 if(length(modified) == 0){
