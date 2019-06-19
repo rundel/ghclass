@@ -684,7 +684,7 @@ github_api_get_collaborators = function(repo) {
 #'
 get_repo_collaborators = function(repo) {
 
-  .Deprecated(msg = "'get_repo_collaborators' will be removed in the next version. Use 'get_collaborators' instead.",
+  .Deprecated(msg = "'get_repo_collaborators' is deprecated and will be removed in the next version. Use 'get_collaborators' instead.",
               new = "get_collaborator")
 
   users = purrr::map(
@@ -712,7 +712,7 @@ get_repo_collaborators = function(repo) {
 #'
 check_repos = function(repos)
 {
-  .Deprecated(msg = "'check_repos' will be removed in the next version. Use 'check_repo' instead.",
+  .Deprecated(msg = "'check_repos' is deprecated and will be removed in the next version. Use 'check_repo' instead.",
               new = "check_repo")
 
   exists = function(owner, repo)
@@ -760,7 +760,7 @@ github_api_get_admins = function(org){
 #'
 get_admins = function(org, verbose = FALSE) {
 
-  .Deprecated(msg = "'get_admins' will be removed in the next version. Use 'get_admin' instead.",
+  .Deprecated(msg = "'get_admins' is deprecated and will be removed in the next version. Use 'get_admin' instead.",
               new = "get_admin")
 
   purrr::map(
@@ -797,7 +797,7 @@ get_admins = function(org, verbose = FALSE) {
 #'
 get_collaborators = function(repo, include_admins = TRUE, verbose = FALSE) {
 
-  .Deprecated(msg = "'get_collaborators' will be removed in the next version. Use 'get_collaborator' instead.",
+  .Deprecated(msg = "'get_collaborators' is deprecated and will be removed in the next version. Use 'get_collaborator' instead.",
               new = "get_collaborator")
 
   stopifnot(!missing(repo))
@@ -817,48 +817,3 @@ get_collaborators = function(repo, include_admins = TRUE, verbose = FALSE) {
     }
   )
 }
-#' List collaborators
-#'
-#' `get_collaborators` Returns a vector of collaborator user names. Users with Admin rights are by default excluded, but can be included manually.
-#'
-#' @param repo Character. Address of repository in "owner/name" format.
-#' @param include_admins Logical. If FALSE, user names of users with Admin rights are not included. Default is TRUE.
-#' @param verbose Logical. Display verbose output.
-#'
-#' @return A list containing a character vector of user names.
-#'
-#' @templateVar fun get_collaborators
-#' @template template-depr_fun
-#'
-#' @templateVar old get_collaborators
-#' @templateVar new get_collaborator
-#' @template template-depr_pkg
-#'
-#' @examples
-#' \dontrun{
-#' get_collaborators("Sta523-Fa17")
-#' }
-#'
-get_collaborators = function(repo, include_admins = TRUE, verbose = FALSE) {
-
-  .Deprecated(msg = "'get_collaborators' will be removed in the next version. Use 'get_collaborator' instead.",
-              new = "get_collaborator")
-
-  stopifnot(!missing(repo))
-
-  admins = list(NULL)
-  if (!include_admins)
-    admins = get_admins(get_repo_owner(repo))
-
-  purrr::map2(
-    repo, admins,
-    function(repo, admins) {
-      res = github_api_get_collaborators(repo)
-
-      check_result(res, sprintf("Unable to retrieve collaborators for %s.", repo), verbose)
-
-      setdiff(purrr::map_chr(res$result, "login"), admins)
-    }
-  )
-}
-
