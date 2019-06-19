@@ -350,7 +350,7 @@ add_file = function(repo, file, message = NULL, branch = "master", preserve_path
 }
 
 
-################# Deprecated functions ###################
+# Deprecated functions ---------------------------------------------------------
 
 #' Add files to a repo
 #'

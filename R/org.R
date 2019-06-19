@@ -222,7 +222,7 @@ invite_user = function(org, user) {
   }
 }
 
-################# Deprecated functions #################
+# Deprecated functions ---------------------------------------------------------
 
 github_api_get_repos = function(org) {
   stopifnot(length(org) == 1)
