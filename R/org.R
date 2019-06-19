@@ -256,7 +256,7 @@ github_api_get_repos = function(org) {
 #'
 get_repos = function(org, filter = NULL, exclude = FALSE, full_repo = TRUE) {
 
-  .Deprecated(msg = "'get_repos' will be removed in the next version. Use 'get_repo' instead.",
+  .Deprecated(msg = "'get_repos' is deprecated and will be removed in the next version. Use 'get_repo' instead.",
               new = "get_repo")
 
   stopifnot(length(org) == 1)
@@ -301,7 +301,7 @@ github_api_get_members = function(org) {
 #'
 get_members = function(org, filter = NULL, exclude = FALSE) {
 
-  .Deprecated(msg = "'get_members' will be removed in the next version. Use 'get_member' instead.",
+  .Deprecated(msg = "'get_members' is deprecated and will be removed in the next version. Use 'get_member' instead.",
               new = "get_member")
 
   stopifnot(length(org) == 1)
@@ -342,7 +342,7 @@ github_api_get_invitations = function(org) {
 #'
 get_pending_members = function(org, filter = NULL, exclude = FALSE) {
 
-  .Deprecated(msg = "'get_pending_members' will be removed in the next version. Use 'get_pending_member' instead.",
+  .Deprecated(msg = "'get_pending_members' is deprecated and will be removed in the next version. Use 'get_pending_member' instead.",
               new = "get_pending_member")
 
   stopifnot(length(org) == 1)
