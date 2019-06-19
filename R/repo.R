@@ -653,10 +653,6 @@ get_collaborator = function(repo, include_admin = TRUE, verbose = FALSE) {
 
 ################ Deprecated functions ################
 github_api_get_collaborators = function(repo) {
-
-  .Deprecated(msg = "'github_api_get_collaborators' will be removed in the next version. Use 'github_api_get_collaborator' instead.",
-              new = "github_api_get_collaborator")
-
   safe_gh(
     "GET /repos/:owner/:repo/collaborators",
     owner = get_repo_owner(repo),
@@ -733,10 +729,6 @@ check_repos = function(repos)
 
 
 github_api_get_admins = function(org){
-
-  .Deprecated(msg = "'github_api_get_admins' will be removed in the next version. Use 'github_api_get_admin' instead.",
-              new = "github_api_get_admin")
-
   safe_gh("GET /orgs/:org/members",
           org = org,
           role = "admin",

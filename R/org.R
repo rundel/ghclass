@@ -225,10 +225,6 @@ invite_user = function(org, user) {
 ################# Deprecated functions #################
 
 github_api_get_repos = function(org) {
-
-  .Deprecated(msg = "'github_api_get_repos' will be removed in the next version. Use 'github_api_get_repo' instead.",
-              new = "github_api_get_repo")
-
   stopifnot(length(org) == 1)
   gh("GET /orgs/:org/repos", org = org, .token = get_github_token(), .limit = get_github_api_limit())
 }
@@ -276,10 +272,6 @@ get_repos = function(org, filter = NULL, exclude = FALSE, full_repo = TRUE) {
 }
 
 github_api_get_members = function(org) {
-
-  .Deprecated(msg = "'github_api_get_members' will be removed in the next version. Use 'github_api_get_member' instead.",
-              new = "github_api_get_member")
-
   stopifnot(length(org) == 1)
   safe_gh("GET /orgs/:org/members", org = org, .token = get_github_token(), .limit = get_github_api_limit())
 }
@@ -322,10 +314,6 @@ get_members = function(org, filter = NULL, exclude = FALSE) {
 }
 
 github_api_get_invitations = function(org) {
-
-  .Deprecated(msg = "'github_api_get_invitations' will be removed in the next version. Use 'github_api_get_invitation' instead.",
-              new = "github_api_get_invitation")
-
   safe_gh("GET /orgs/:org/invitations", org = org,
           .token = get_github_token(), .limit = get_github_api_limit())
 }
