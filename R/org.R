@@ -178,7 +178,6 @@ github_api_invite_user = function(org, user) {
 #' @family github organization related functions
 #'
 #' @export
-
 invite_user = function(org, user) {
 
   stopifnot(length(org) == 1)
@@ -200,7 +199,7 @@ invite_user = function(org, user) {
         status_msg(
           res,
           usethis::ui_done("Added user {usethis::ui_value(need_invite)} to org {usethis::ui_value(org)}."),
-          usethis::ui_oops("Failed to add user {usethis::ui_value(need_invite)} to org {usethis::ui_value(org)}: does not exist."),
+          usethis::ui_oops("Failed to add user {usethis::ui_value(need_invite)} to org {usethis::ui_value(org)}: does not exist.")
         )
       }
     )

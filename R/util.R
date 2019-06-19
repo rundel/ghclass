@@ -143,15 +143,16 @@ error_msg = function(x) {
   error(x)[["message"]]
 }
 
+
 status_msg = function(x, success, fail, include_error_msg = TRUE) {
   if (succeeded(x) & !missing(success)) {
-    success
+    usethis::ui_done(success)
   }
 
   if (failed(x) & !missing(fail)) {
     if (include_error_msg){
       fail = c(fail, "[Error: {error_msg(x)}]")
-      fail
+      usethis::ui_oops(fail)
     }
   }
 }
