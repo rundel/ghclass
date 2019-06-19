@@ -350,7 +350,7 @@ add_file = function(repo, file, message = NULL, branch = "master", preserve_path
 }
 
 
-################# Deprecated functions ###################
+# Deprecated functions ---------------------------------------------------------
 
 #' Add files to a repo
 #'
@@ -382,7 +382,7 @@ add_file = function(repo, file, message = NULL, branch = "master", preserve_path
 #'
 add_files = function(repo, message, files, branch = "master", preserve_path = FALSE)
 {
-  .Deprecated(msg = "'add_files' will be removed in the next version. Use 'add_file' instead.",
+  .Deprecated(msg = "'add_files' is deprecated and will be removed in the next version. Use 'add_file' instead.",
               new = "add_file")
 
   stopifnot(!missing(repo))

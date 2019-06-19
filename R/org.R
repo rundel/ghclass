@@ -222,13 +222,9 @@ invite_user = function(org, user) {
   }
 }
 
-################# Deprecated functions #################
+# Deprecated functions ---------------------------------------------------------
 
 github_api_get_repos = function(org) {
-
-  .Deprecated(msg = "'github_api_get_repos' will be removed in the next version. Use 'github_api_get_repo' instead.",
-              new = "github_api_get_repo")
-
   stopifnot(length(org) == 1)
   gh("GET /orgs/:org/repos", org = org, .token = get_github_token(), .limit = get_github_api_limit())
 }
@@ -260,7 +256,7 @@ github_api_get_repos = function(org) {
 #'
 get_repos = function(org, filter = NULL, exclude = FALSE, full_repo = TRUE) {
 
-  .Deprecated(msg = "'get_repos' will be removed in the next version. Use 'get_repo' instead.",
+  .Deprecated(msg = "'get_repos' is deprecated and will be removed in the next version. Use 'get_repo' instead.",
               new = "get_repo")
 
   stopifnot(length(org) == 1)
@@ -276,10 +272,6 @@ get_repos = function(org, filter = NULL, exclude = FALSE, full_repo = TRUE) {
 }
 
 github_api_get_members = function(org) {
-
-  .Deprecated(msg = "'github_api_get_members' will be removed in the next version. Use 'github_api_get_member' instead.",
-              new = "github_api_get_member")
-
   stopifnot(length(org) == 1)
   safe_gh("GET /orgs/:org/members", org = org, .token = get_github_token(), .limit = get_github_api_limit())
 }
@@ -309,7 +301,7 @@ github_api_get_members = function(org) {
 #'
 get_members = function(org, filter = NULL, exclude = FALSE) {
 
-  .Deprecated(msg = "'get_members' will be removed in the next version. Use 'get_member' instead.",
+  .Deprecated(msg = "'get_members' is deprecated and will be removed in the next version. Use 'get_member' instead.",
               new = "get_member")
 
   stopifnot(length(org) == 1)
@@ -322,10 +314,6 @@ get_members = function(org, filter = NULL, exclude = FALSE) {
 }
 
 github_api_get_invitations = function(org) {
-
-  .Deprecated(msg = "'github_api_get_invitations' will be removed in the next version. Use 'github_api_get_invitation' instead.",
-              new = "github_api_get_invitation")
-
   safe_gh("GET /orgs/:org/invitations", org = org,
           .token = get_github_token(), .limit = get_github_api_limit())
 }
@@ -354,7 +342,7 @@ github_api_get_invitations = function(org) {
 #'
 get_pending_members = function(org, filter = NULL, exclude = FALSE) {
 
-  .Deprecated(msg = "'get_pending_members' will be removed in the next version. Use 'get_pending_member' instead.",
+  .Deprecated(msg = "'get_pending_members' is deprecated and will be removed in the next version. Use 'get_pending_member' instead.",
               new = "get_pending_member")
 
   stopifnot(length(org) == 1)
