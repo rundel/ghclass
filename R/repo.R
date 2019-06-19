@@ -651,7 +651,8 @@ get_collaborator = function(repo, include_admin = TRUE, verbose = FALSE) {
   )
 }
 
-################ Deprecated functions ################
+# Deprecated functions ---------------------------------------------------------
+
 github_api_get_collaborators = function(repo) {
   safe_gh(
     "GET /repos/:owner/:repo/collaborators",
