@@ -4,17 +4,17 @@
 \alias{check_repo}
 \title{Check existence of GitHub repository}
 \usage{
-check_repo(repo, redirect = F)
+check_repo(repo, strict = FALSE, verbose = TRUE)
 }
 \arguments{
-\item{repo}{Character. Address of repository in "owner/name" format. Can be a vector or list of repository addresses.}
+\item{repo}{Character. Address of repository in "owner/name" format.}
 
-\item{redirect}{Logical. Specifies whether previous names of repositories should be considered. The default is FALSE, such that only current repository names will be considered as existing.}
+\item{strict}{Logical. Specifies whether renamed repositories are allowed.}
+
+\item{verbose}{Logical. Specifies if details on renamed repositories should be printed.}
 }
 \value{
 A logical vector
-
-logical
 }
 \description{
 \code{check_repo} returns TRUE if the github repository exists. The function also returns a message if a repository was previously renamed.
