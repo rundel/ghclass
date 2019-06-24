@@ -66,6 +66,14 @@ github_api_create_repo = function(owner, name, private, auto_init, gitignore_tem
           .token = get_github_token())
 }
 
+github_api_add_user = function(owner, repo, username, permission){
+  gh::gh("PUT /repos/:owner/:repo/collaborators/:username",
+         owner = owner,
+         repo = repo,
+         username = username,
+         permission = permission,
+         .token = get_github_token())
+}
 
 
 
@@ -149,14 +157,7 @@ github_api_create_team_repo = function(owner, name, private, auto_init, gitignor
          .token = get_github_token())
 }
 
-github_api_add_user = function(owner, repo, username, permission){
-  gh::gh("PUT /repos/:owner/:repo/collaborators/:username",
-         owner = owner,
-         repo = repo,
-         username = username,
-         permission = permission,
-         .token = get_github_token())
-}
+
 
 github_api_add_team = function(id, owner, repo, permission){
   gh::gh("PUT /teams/:id/repos/:owner/:repo",
