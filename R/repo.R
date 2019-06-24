@@ -1,19 +1,21 @@
-github_api_get_collaborator = function(repo) {
+github_api_get_repo_by_id = function(id) {
+  stopifnot(length(id) == 1)
+  stopifnot(!is.na(id))
 
-  safe_gh(
-    "GET /repos/:owner/:repo/collaborators",
-    owner = get_repo_owner(repo),
-    repo = get_repo_name(repo),
-    .token = get_github_token(),
-    .limit = get_github_api_limit()
-  )
-
-}
-
-github_api_get_repo_id = function(id) {
-  safe_gh(
+  gh::gh(
     "GET /repositories/:id",
     id = id,
+    .token = get_github_token()
+  )
+}
+
+github_api_get_repo = function(repo) {
+  stopifnot(length(repo) == 1)
+
+  gh::gh(
+    "GET /repos/:owner/:repo",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
     .token = get_github_token()
   )
 }
@@ -22,8 +24,9 @@ github_api_get_repo_id = function(id) {
 #'
 #' `check_repo` returns TRUE if the github repository exists. The function also returns a message if a repository was previously renamed.
 #'
-#' @param repo Character. Address of repository in "owner/name" format. Can be a vector or list of repository addresses.
-#' @param redirect Logical. Specifies whether previous names of repositories should be considered. The default is FALSE, such that only current repository names will be considered as existing.
+#' @param repo Character. Address of repository in "owner/name" format.
+#' @param strict Logical. Specifies whether renamed repositories are allowed.
+#' @param verbose Logical. Specifies if details on renamed repositories should be printed.
 #'
 #' @examples
 #' \dontrun{
@@ -34,39 +37,27 @@ github_api_get_repo_id = function(id) {
 #'
 #' @family github repo related functions
 #'
-#' @return logical
-#'
 #' @export
 #'
-check_repo = function(repo, redirect = F) {
+check_repo = function(repo, strict = FALSE, verbose = TRUE) {
 
   # Checking if repo exists
-  res = purrr::map(repo, github_api_get_repo)
-  repo_exists = purrr::map_lgl(res, succeeded)
+  repo_details = purrr::map(repo, purrr::safely(github_api_get_repo))
+  repo_exists = purrr::map_lgl(repo_details, succeeded)
+  cur_names = purrr::map_chr(repo_details, c("result","full_name"), .default = NA)
 
-  # Checking whether user-provided repo name is current
-  id = purrr::map_int(res, c("result", "id"), .default = NA)
-  repo_new_name = purrr::map_chr(purrr::map(id, github_api_get_repo_id), c("result", "name"), .default = NA)
-  repo_old_name = get_repo_name(repo)
+  renamed = na_as_false(cur_names != repo)
 
-  # Replacing with F if user-provided repo name is NOT current
-  if(redirect == F){
-    repo_exists = ifelse(repo_exists & repo_new_name != repo_old_name, F, repo_exists)
+  if (verbose) {
+    purrr::walk2(
+      repo[renamed], cur_names[renamed],
+      ~ usethis::ui_info("Repo {usethis::ui_value(.x)} has been renamed to {usethis::ui_value(.y)}.")
+    )
   }
 
-  # Messaging
-  purrr::walk2(repo_new_name,
-               repo_old_name,
-               function(repo_new_name, repo_old_name)
+  if (strict)
+    repo_exists = repo_exists & !renamed
 
-                 if(repo_new_name != repo_old_name & !is.na(repo_new_name)){
-                   repo_old_name = paste(get_repo_owner(repo), repo_old_name, sep = "/")
-                   repo_new_name = paste(get_repo_owner(repo), repo_new_name, sep = "/")
-                   message(paste("Repository", repo_old_name, "was previously renamed to", repo_new_name))
-                 })
-
-
-  # Output
   repo_exists
 }
 
@@ -612,6 +603,19 @@ get_admin = function(org, verbose = FALSE) {
     }
   )
 }
+
+
+github_api_get_collaborator = function(repo) {
+  safe_gh(
+    "GET /repos/:owner/:repo/collaborators",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    .token = get_github_token(),
+    .limit = get_github_api_limit()
+  )
+
+}
+
 
 
 #' List collaborator(s)

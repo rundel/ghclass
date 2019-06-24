@@ -20,6 +20,11 @@ filter_results.data.frame = function(res, col, pattern = NULL, exclude = FALSE) 
   res
 }
 
+na_as_false = function(v) {
+  v[is.na(v)] = FALSE
+  v
+}
+
 require_git = function() {
   git = Sys.which("git")
 
