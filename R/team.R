@@ -21,10 +21,9 @@ github_api_get_teams = function(org) {
 #'
 #' @export
 #'
-
-#' @export
 get_teams = function(org, filter=NULL, exclude=FALSE) {
-  stopifnot(length(org)==1)
+  arg_is_chr_scalar(org)
+  arg_is_lgl_scalar(exclude)
   stopifnot(length(filter)<=1)
 
   res = github_api_get_teams(org)
@@ -51,14 +50,22 @@ get_specific_teams = function(org, teams, strict = TRUE) {
   sub = teams %in% org_teams[["team"]]
   if (sum(sub) != length(teams) & strict) {
     missing = paste(teams[!sub], collapse=", ")
-    usethis::ui_stop(paste(
-      "Unable to find team(s):", missing
-    ))
+    usethis::ui_stop( paste0(
+      "Team(s) {usethis::ui_value(missing)} do not exist ",
+      "in org {usethis::ui_value(org)}."
+    ) )
   }
 
   org_teams[org_teams$team %in% teams,]
 }
 
+
+github_api_get_team_repos = function(team_id) {
+  gh::gh(
+    "GET /teams/:id/repos", id=team_id,
+    .token=get_github_token(), .limit=get_github_api_limit()
+  )
+}
 
 #' Get teams' repos
 #'
@@ -76,32 +83,27 @@ get_specific_teams = function(org, teams, strict = TRUE) {
 #'
 #' @export
 #'
-get_team_repos = function(org, team = get_teams(org))
+get_team_repos = function(org, team)
 {
-  stopifnot(length(org) == 1)
+  arg_is_chr_scalar(org)
+  arg_is_chr(team)
 
-  if (is.character(team))
-    team = get_specific_teams(org, team)
+  team = get_specific_teams(org, team)
 
-  stopifnot(all(c("team","id") %in% names(team)))
-
-  purrr::pmap_df(
+  purrr::pmap_dfr(
     team,
     function(team, id) {
-      res = gh(
-        "GET /teams/:id/repos", id=id,
-        .token=get_github_token(), .limit=get_github_api_limit()
-      )
+      res = purrr::safely(github_api_get_team_repos)(id)
 
-      if (empty_result(res)) {
+      if (succeeded(res) & !empty_result(result(res))) {
         tibble::tibble(
-          team = character(),
-          repo = character()
+          team = team,
+          repo = purrr::map_chr(result(res), "full_name")
         )
       } else {
         tibble::tibble(
-          team = team,
-          repo = purrr::map_chr(res, "full_name")
+          team = character(),
+          repo = character()
         )
       }
     }
