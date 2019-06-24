@@ -1,14 +1,3 @@
-github_api_get_repo_by_id = function(id) {
-  stopifnot(length(id) == 1)
-  stopifnot(!is.na(id))
-
-  gh::gh(
-    "GET /repositories/:id",
-    id = id,
-    .token = get_github_token()
-  )
-}
-
 github_api_get_repo = function(repo) {
   stopifnot(length(repo) == 1)
 
