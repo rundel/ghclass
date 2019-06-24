@@ -30,6 +30,9 @@ github_api_get_repo = function(repo) {
 #'
 check_repo = function(repo, strict = FALSE, verbose = TRUE) {
 
+  arg_is_chr(repo)
+  arg_is_lgl_scalar(strict, verbose)
+
   # Checking if repo exists
   repo_details = purrr::map(repo, purrr::safely(github_api_get_repo))
   repo_exists = purrr::map_lgl(repo_details, succeeded)
@@ -55,7 +58,7 @@ check_repo = function(repo, strict = FALSE, verbose = TRUE) {
 
 
 github_api_create_repo = function(owner, name, private, auto_init, gitignore_template){
-  safe_gh("POST /orgs/:owner/repos",
+  gh::gh("POST /orgs/:owner/repos",
           owner = owner,
           name = name, private = private,
           auto_init = auto_init,
@@ -63,33 +66,7 @@ github_api_create_repo = function(owner, name, private, auto_init, gitignore_tem
           .token = get_github_token())
 }
 
-github_api_create_team_repo = function(owner, name, private, auto_init, gitignore_template, team_id){
-  safe_gh("POST /orgs/:owner/repos",
-          owner = owner,
-          name = name, private = private,
-          team_id = team_id,
-          auto_init = auto_init,
-          gitignore_template = gitignore_template,
-          .token = get_github_token())
-}
 
-github_api_add_user = function(owner, repo, username, permission){
-  safe_gh("PUT /repos/:owner/:repo/collaborators/:username",
-          owner = owner,
-          repo = repo,
-          username = username,
-          permission = permission,
-          .token = get_github_token())
-}
-
-github_api_add_team = function(id, owner, repo, permission){
-  safe_gh("PUT /teams/:id/repos/:owner/:repo",
-          id = id,
-          owner = owner,
-          repo = repo,
-          permission = permission,
-          .token = get_github_token())
-}
 
 
 #' Create individual repositories
@@ -99,10 +76,9 @@ github_api_add_team = function(id, owner, repo, permission){
 #'
 #' @param org Character. Name of the GitHub organization.
 #' @param user Character or data frame. Listing one or more users.
-#' @param prefix Character. Resulting repository name will start with this. character string.
+#' @param prefix Character. Resulting repository name will start with this character string.
 #' @param suffix Character. Resulting repository name will end with this character string.
 #' @param private Logical. Create private repositories.
-#' @param verbose Logical. Display verbose output.
 #' @param auto_init Logical. Initialize the repository with a README.md.
 #' @param gitignore_template Character. .gitignore template language.
 #'
@@ -116,46 +92,79 @@ github_api_add_team = function(id, owner, repo, permission){
 #' @export
 #'
 create_individual_repo = function(org, user, prefix = "", suffix = "",
-                                  private = TRUE, verbose = TRUE,
-                                  auto_init = FALSE, gitignore_template = "R") {
-  if (prefix == "" & suffix == "")
-    stop("Either a prefix or a suffix must be specified")
+                                  private = TRUE, auto_init = FALSE,
+                                  gitignore_template = "R") {
 
-  org_users = get_members(org)
+  arg_is_chr(user)
+  arg_is_chr_scalar(org, prefix, suffix, gitignore_template)
+  arg_is_lgl_scalar(private, auto_init)
+
+  if (prefix == "" & suffix == "")
+    usethis::ui_stop("Either a prefix or a suffix must be specified.")
+
   org_repos = get_repos(org)
 
-  purrr::walk(
-    user,
-    function(user) {
-      repo_name = fix_repo_name(paste0(prefix, user, suffix))
-      repo = paste0(org, "/", repo_name)
+  repo = fix_repo_name(paste0(prefix, user, suffix))
+  repo = paste0(org, "/", repo)
 
+  purrr::walk2(
+    user, repo,
+    function(user, repo) {
       if (repo %in% org_repos) {
-        if (verbose)
-          message("Skipping repo ", repo, ", already exists ...",)
-
+        usethis::ui_info("Skipping repo {usethis::ui_value(repo)}, it already exists.")
         return()
       }
 
-      if (verbose)
-        message("Creating repo ", repo, " ...", sep="")
-
-      try({
-        github_api_create_repo(owner = org,
-                               name = repo_name,
+      create_repo = function() {
+        github_api_create_repo(owner = get_repo_owner(repo),
+                               name = get_repo_name(repo),
                                private = private,
                                auto_init = auto_init,
                                gitignore_template = gitignore_template)
-      })
 
-      try({
-        github_api_add_user(owner = org,
-                            repo = repo_name,
+        github_api_add_user(owner = get_repo_owner(repo),
+                            repo = get_repo_name(repo),
                             username = user,
                             permission = "push")
-      })
+      }
+
+      status_msg(
+        purrr::safely(create_repo)(),
+        usethis::ui_done("Created repo {usethis::ui_value(repo)}."),
+        usethis::ui_oops("Failed to create repo {usethis::ui_value(repo)}.")
+      )
     }
   )
+}
+
+
+
+github_api_create_team_repo = function(owner, name, private, auto_init, gitignore_template, team_id){
+  gh::gh("POST /orgs/:owner/repos",
+         owner = owner,
+         name = name, private = private,
+         team_id = team_id,
+         auto_init = auto_init,
+         gitignore_template = gitignore_template,
+         .token = get_github_token())
+}
+
+github_api_add_user = function(owner, repo, username, permission){
+  gh::gh("PUT /repos/:owner/:repo/collaborators/:username",
+         owner = owner,
+         repo = repo,
+         username = username,
+         permission = permission,
+         .token = get_github_token())
+}
+
+github_api_add_team = function(id, owner, repo, permission){
+  gh::gh("PUT /teams/:id/repos/:owner/:repo",
+         id = id,
+         owner = owner,
+         repo = repo,
+         permission = permission,
+         .token = get_github_token())
 }
 
 

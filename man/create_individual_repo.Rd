@@ -5,21 +5,18 @@
 \title{Create individual repositories}
 \usage{
 create_individual_repo(org, user, prefix = "", suffix = "",
-  private = TRUE, verbose = TRUE, auto_init = FALSE,
-  gitignore_template = "R")
+  private = TRUE, auto_init = FALSE, gitignore_template = "R")
 }
 \arguments{
 \item{org}{Character. Name of the GitHub organization.}
 
 \item{user}{Character or data frame. Listing one or more users.}
 
-\item{prefix}{Character. Resulting repository name will start with this. character string.}
+\item{prefix}{Character. Resulting repository name will start with this character string.}
 
 \item{suffix}{Character. Resulting repository name will end with this character string.}
 
 \item{private}{Logical. Create private repositories.}
-
-\item{verbose}{Logical. Display verbose output.}
 
 \item{auto_init}{Logical. Initialize the repository with a README.md.}
 
