@@ -1,4 +1,4 @@
-github_api_get_repo = function(owner) {
+github_api_get_repos = function(owner) {
   stopifnot(length(owner) == 1)
   gh::gh("GET /orgs/:owner/repos",
           owner = owner,
@@ -31,7 +31,7 @@ get_repo = function(org, filter = NULL, exclude = FALSE, full_repo = TRUE) {
   stopifnot(length(org) == 1)
   stopifnot(length(filter) <= 1)
 
-  res = github_api_get_repo(org)
+  res = github_api_get_repos(org)
   res = purrr::map_chr(res, "name")
   res = filter_results(res, filter, exclude)
 
@@ -224,10 +224,6 @@ invite_user = function(org, user) {
 
 # Deprecated functions ---------------------------------------------------------
 
-github_api_get_repos = function(org) {
-  stopifnot(length(org) == 1)
-  gh("GET /orgs/:org/repos", org = org, .token = get_github_token(), .limit = get_github_api_limit())
-}
 
 #' Get organization repos
 #'
