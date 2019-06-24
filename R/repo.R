@@ -33,9 +33,11 @@ check_repo = function(repo, strict = FALSE, verbose = TRUE) {
   # Checking if repo exists
   repo_details = purrr::map(repo, purrr::safely(github_api_get_repo))
   repo_exists = purrr::map_lgl(repo_details, succeeded)
-  cur_names = purrr::map_chr(repo_details, c("result","full_name"), .default = NA)
 
-  renamed = na_as_false(cur_names != repo)
+  cur_names = purrr::map_chr(repo_details, c("result","full_name"), .default = NA)
+  cur_names = replace_nas(cur_names, repo)
+
+  renamed = cur_names != repo
 
   if (verbose) {
     purrr::walk2(
@@ -50,27 +52,6 @@ check_repo = function(repo, strict = FALSE, verbose = TRUE) {
   repo_exists
 }
 
-
-#' Fix repository names
-#'
-#' `fix_repo_name` replaces spaces in repository names with `_`. It also replaces non-alphanumeric characters and special characters other than `_`, `.`, or `-` with `-`.
-#'
-#' @param repo_name Character. Name of repository. Can be vector of list of characters.
-#'
-#' @examples
-#' \dontrun{
-#' fix_repo_name("base hw1")
-#' fix_repo_name(c("base hw1", "final*draft"))
-#' fix_repo_name(list("base hw1", "final*draft"))
-#' }
-#'
-#' @return A character vector of repository names in the corrected format.
-#'
-fix_repo_name = function(repo_name)
-{
-  repo_name = stringr::str_replace_all(repo_name, " ", "_")
-  stringr::str_replace_all(repo_name, "[^A-Za-z0-9_.-]+","-")
-}
 
 
 github_api_create_repo = function(owner, name, private, auto_init, gitignore_template){

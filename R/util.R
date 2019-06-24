@@ -20,9 +20,15 @@ filter_results.data.frame = function(res, col, pattern = NULL, exclude = FALSE) 
   res
 }
 
-na_as_false = function(v) {
-  v[is.na(v)] = FALSE
-  v
+fix_repo_name = function(repo_name) {
+  repo_name = stringr::str_replace_all(repo_name, " ", "_")
+  stringr::str_replace_all(repo_name, "[^A-Za-z0-9_.-]+","-")
+}
+
+
+replace_nas = function(cur, rep) {
+  cur[is.na(cur)] = rep[is.na(cur)]
+  cur
 }
 
 require_git = function() {
