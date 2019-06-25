@@ -165,7 +165,11 @@ github_api_put_file = function(repo, path, content, message, branch) {
     message = message, branch = branch,
     .token = get_github_token()
   )
-  args[["sha"]] = attr(get_file(repo, path, branch), "sha")
+
+  # To update an existing file we need its current SHA,
+  # if the file does not exist this will be NULL.
+  cur_file = get_file(repo, path, branch)
+  args[["sha"]] = attr(cur_file, "sha")
 
   do.call(gh::gh, args)
 }
