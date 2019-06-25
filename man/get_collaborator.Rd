@@ -4,24 +4,22 @@
 \alias{get_collaborator}
 \title{List collaborator(s)}
 \usage{
-get_collaborator(repo, include_admin = TRUE, verbose = FALSE)
+get_collaborator(repo, include_admin = TRUE)
 }
 \arguments{
-\item{repo}{Character. Address of repository in "owner/name" format.}
+\item{repo}{Character. Address of one or more repositories in \code{owner/name} format.}
 
-\item{include_admin}{Logical. If FALSE, user names of users with Admin rights are not included, defaults to TRUE.}
-
-\item{verbose}{Logical. Display verbose output.}
+\item{include_admin}{Logical. If \code{FALSE}, user names of users with Admin rights are not included, defaults to \code{TRUE}.}
 }
 \value{
-A list containing a character vector of user names.
+A tibble with two columns, \code{repo} and \code{username}.
 }
 \description{
-\code{get_collaborator} Returns a vector of collaborator user names. Users with Admin rights are by default excluded, but can be included manually.
+\code{get_collaborator} Returns a vector of collaborator user names. Users with admin rights are by default excluded.
 }
 \examples{
 \dontrun{
-get_collaborators("Sta523-Fa17")
+get_collaborators("ghclass-test/test2")
 }
 
 }

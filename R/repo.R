@@ -371,105 +371,99 @@ create_pull_request = function(repo, title, base, head = "master", body = "") {
 
 
 github_api_get_admin = function(owner){
-  safe_gh("GET /orgs/:owner/members",
+  gh::gh("GET /orgs/:owner/members",
           owner = owner,
           role = "admin",
           .token = get_github_token(),
           .limit = get_github_api_limit())
 }
 
-
-
 #' List repository administrators
 #'
-#' `get_admin` creates a list of repository administrators.
-#'
-#' @param org Character. Name of GitHub organization.
-#' @param verbose Logical. Display verbose output.
+#' @param org Character. Name of a GitHub organization.
 #'
 #' @examples
 #' \dontrun{
 #' get_admin("Sta523-Fa17")
 #' }
 #'
-#' @return A list containing a character vector of repository administrators.
+#' @return A character vector of repository administrators.
 #'
 #' @export
 #'
-get_admin = function(org, verbose = FALSE) {
+get_admin = function(org) {
+  arg_is_chr_scalar(org)
 
-  purrr::map(
-    org,
-    function(org) {
-      res = github_api_get_admin(owner = org)
+  res = purrr::safely(github_api_get_admin)(owner = org)
 
-      purrr::map_chr(res$result, "login")
-    }
-  )
+  if (failed(res))
+    usethis::ui_stop(glue::glue("Failed to retrieve admuns for org {usethis::ui_value(org)}."))
+  else
+    purrr::map_chr(result(res), "login")
 }
 
 
-github_api_get_collaborator = function(repo) {
-  safe_gh(
+
+
+github_api_get_collaborators = function(repo) {
+  gh::gh(
     "GET /repos/:owner/:repo/collaborators",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
     .token = get_github_token(),
     .limit = get_github_api_limit()
   )
-
 }
-
-
 
 #' List collaborator(s)
 #'
-#' `get_collaborator` Returns a vector of collaborator user names. Users with Admin rights are by default excluded, but can be included manually.
+#' `get_collaborator` Returns a vector of collaborator user names. Users with admin rights are by default excluded.
 #'
-#' @param repo Character. Address of repository in "owner/name" format.
-#' @param include_admin Logical. If FALSE, user names of users with Admin rights are not included, defaults to TRUE.
-#' @param verbose Logical. Display verbose output.
+#' @param repo Character. Address of one or more repositories in `owner/name` format.
+#' @param include_admin Logical. If `FALSE`, user names of users with Admin rights are not included, defaults to `TRUE`.
 #'
-#' @return A list containing a character vector of user names.
+#' @return A tibble with two columns, `repo` and `username`.
 #'
 #' @examples
 #' \dontrun{
-#' get_collaborators("Sta523-Fa17")
+#' get_collaborators("ghclass-test/test2")
 #' }
 #'
 #' @export
 #'
-get_collaborator = function(repo, include_admin = TRUE, verbose = FALSE) {
+get_collaborator = function(repo, include_admin = TRUE) {
 
-  stopifnot(!missing(repo))
+  arg_is_chr(repo)
 
-  admin = list(NULL)
+  org = unique(get_repo_owner(repo))
+  stopifnot(length(org) == 1)
+
+  admin = character()
   if (!include_admin)
-    admin = get_admin(get_repo_owner(repo))
+    admin = get_admin(org)
 
-  purrr::map2(
-    repo, admin,
-    function(repo, admin) {
-      res = github_api_get_collaborator(repo)
+  purrr::map_dfr(
+    repo,
+    function(repo) {
+      res = purrr::safely(github_api_get_collaborators)(repo)
+      status_msg(
+        res,
+        fail = usethis::ui_oops(glue::glue("Failed to retrieve collaborators for {usethis::ui_value(repo)}."))
+      )
 
-      check_result(res, sprintf("Unable to retrieve collaborators for %s.", repo), verbose)
+      d = tibble::tibble(
+        repo = repo,
+        username = purrr::map_chr(result(res), "login", .default = NA)
+      )
 
-      setdiff(purrr::map_chr(res$result, "login"), admin)
+      d[!d[["username"]] %in% admin, ]
     }
   )
 }
 
 # Deprecated functions ---------------------------------------------------------
 
-github_api_get_collaborators = function(repo) {
-  safe_gh(
-    "GET /repos/:owner/:repo/collaborators",
-    owner = get_repo_owner(repo),
-    repo = get_repo_name(repo),
-    .token = get_github_token(),
-    .limit = get_github_api_limit()
-  )
-}
+
 
 #' List repository collaborators
 #'

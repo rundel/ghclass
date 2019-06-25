@@ -4,18 +4,16 @@
 \alias{get_admin}
 \title{List repository administrators}
 \usage{
-get_admin(org, verbose = FALSE)
+get_admin(org)
 }
 \arguments{
-\item{org}{Character. Name of GitHub organization.}
-
-\item{verbose}{Logical. Display verbose output.}
+\item{org}{Character. Name of a GitHub organization.}
 }
 \value{
-A list containing a character vector of repository administrators.
+A character vector of repository administrators.
 }
 \description{
-\code{get_admin} creates a list of repository administrators.
+List repository administrators
 }
 \examples{
 \dontrun{
