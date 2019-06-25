@@ -17,7 +17,8 @@ check_repo(repo, strict = FALSE, verbose = TRUE)
 A logical vector
 }
 \description{
-\code{check_repo} returns TRUE if the github repository exists. The function also returns a message if a repository was previously renamed.
+\code{check_repo} returns TRUE if the github repository exists.
+The function also prints a message if a repository has been renamed.
 }
 \examples{
 \dontrun{

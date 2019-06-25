@@ -34,8 +34,7 @@ get_repos("ghclass", "hw1-")
 \seealso{
 \code{\link{ourPkg-deprecated}}
 
-Other github organization related functions: \code{\link{create_individual_repo}},
-  \code{\link{create_team_repo}},
+Other github organization related functions: \code{\link{create_repo}},
   \code{\link{get_members-deprecated}},
   \code{\link{get_member}},
   \code{\link{get_pending_members-deprecated}},
