@@ -59,6 +59,20 @@ get_specific_teams = function(org, teams, strict = TRUE) {
   org_teams[org_teams$team %in% teams,]
 }
 
+team_id_lookup = function(d, org_teams) {
+  d = merge(
+    org_teams, d,
+    by = "team", all.y = TRUE
+  )
+
+  missing_teams = d[["team"]][is.na(d[["id"]])]
+
+  # This should not ever happen, get_specific_team should handle this
+  stopifnot(length(missing_teams) == 0)
+
+  d
+}
+
 
 github_api_get_team_repos = function(team_id) {
   gh::gh(
@@ -285,23 +299,6 @@ github_api_rename_team = function(id, new_name) {
   )
 }
 
-team_id_lookup = function(d, org_teams, strict = TRUE) {
-  d = merge(
-    org_teams, d,
-    by = "team", all.y = TRUE
-  )
-
-  missing_teams = unique( d[["team"]][is.na(d[["id"]])] )
-
-  if (strict & length(missing_teams) > 0)
-      usethis::ui_stop( paste(
-        "Cannot find team(s) {usethis::ui_value(missing_teams)}",
-        "in org {usethis::ui_value(org)}."
-      ) )
-
-  d
-}
-
 
 #' Rename existing team(s)
 #'
@@ -327,7 +324,7 @@ rename_team = function(org, team, new_team) {
     new_team = new_team
   )
 
-  d = team_id_lookup(d, get_teams(org), strict = TRUE)
+  d = team_id_lookup(d, get_teams(org))
 
   purrr::pwalk(
     d,
@@ -387,7 +384,7 @@ add_team_member = function(org, user, team, create_missing_teams = TRUE) {
     org_teams = get_teams(org)
   }
 
-  d = team_id_lookup(d, org_teams, strict=TRUE)
+  d = team_id_lookup(d, org_teams)
 
   purrr::pwalk(
     d,
