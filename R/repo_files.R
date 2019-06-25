@@ -142,8 +142,7 @@ find_file = function(repo, file){
 }
 
 
-file_exists = function(repo, file, branch = "master")
-{
+file_exists = function(repo, file, branch = "master") {
   purrr::pmap_lgl(
     list(repo, file, branch),
     function(repo, file, branch) {
@@ -168,7 +167,7 @@ github_api_put_file = function(repo, path, content, message, branch) {
   )
   args[["sha"]] = attr(get_file(repo, path, branch), "sha")
 
-  do.call(gh, args)
+  do.call(gh::gh, args)
 }
 
 #' @export
