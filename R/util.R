@@ -45,37 +45,19 @@ require_git = function() {
 }
 
 
-safe_gh = purrr::safely(gh)
-
 styler_available = function() {
   "styler" %in% rownames(utils::installed.packages())
 }
 
 empty_result = function(res) {
-  length(res) == 1 & all(res == "")
-}
-
-listify_result = function(res) {
-  if (all(c("error","result") %in% names(res)))
-    list(res)
+  if (is_safely_result(res))
+    empty_result(result(res))
   else
-    res
+    length(res) == 1 & all(res == "")
 }
 
-# Check for errors that result from using purrr::safely
-check_errors = function(res) {
-  errs = purrr::map(res, "error")
-  purrr::map_lgl(errs, ~!is.null(.x))
-}
 
-# Collect errors that result from using purrr::safely
-get_errors = function(res) {
-  errs = purrr::map(res, "error")
-  errs = purrr::discard(errs, is.null)
-  errs = purrr::map_chr(errs, conditionMessage)
-  errs = sub("\n$", "", errs)
-  errs = sub("[[:space:]]*\n[[:space:]]*"," - ", errs)
-}
+
 
 format_list = function(lines, indent=2, indent_char=" ") {
   if (is.numeric(indent))
@@ -88,41 +70,14 @@ format_list = function(lines, indent=2, indent_char=" ") {
 is_safely_result = function(res) {
   if (!is.list(res))
     return(FALSE)
-  if (length(res) == 0)
-    return(FALSE)
-  if (!all(purrr::map_int(res, length) == 2))
-    return(FALSE)
 
-  names = purrr::map(res, names)
-  names = sort(unique(unlist(names)))
-  if (!all(c("error","result") == names))
+  if (!all(c("result", "error") == names(res)))
     return(FALSE)
 
   TRUE
 }
 
-# Expects one or more results from purrr::safely
-check_result = function(res, fail_msg, error_prefix = "") {
-  res = listify_result(res)
-  stopifnot(is_safely_result(res))
 
-  errs = check_errors(res)
-  if (length(error_prefix) == length(res))
-    error_prefix = error_prefix[errs]
-
-  if (any(errs)) {
-    if (TRUE)
-      fail_msg = paste0(
-        fail_msg,
-        "\n",
-        format_list(
-          paste0(error_prefix, get_errors(res))
-        )
-      )
-
-    warning(fail_msg, call. = FALSE, immediate. = TRUE)
-  }
-}
 
 flag_experimental = function() {
   calling_func = as.character(sys.calls()[[sys.nframe()-1]])[1]
@@ -154,6 +109,34 @@ failed = function(x) {
 
 error_msg = function(x) {
   error(x)[["message"]]
+}
+
+
+allow_error = function(res, message = NULL, class = NULL, result = "") {
+
+  stopifnot(!is.null(message) | !is.null(class))
+
+  if (succeeded(res))
+    return(res)
+
+  message_flag = TRUE
+  if (!is.null(message)) {
+    message_flag = grepl(message, error_msg(res))
+  }
+
+  class_flag = TRUE
+  if (!is.null(class)) {
+    class_flag = inherits(error(res), class)
+  }
+
+  if (message_flag & class_flag) {
+    list(
+      result = result,
+      error = NULL
+    )
+  } else {
+    res
+  }
 }
 
 
