@@ -78,11 +78,11 @@ censor_token = function(msg, replacement = "", prefix="", suffix="") {
   sub(pattern, replacement, msg)
 }
 
-run_git = function(git = require_git(), cmd, args = character(), verbose=FALSE, debug=FALSE) {
+run_git = function(git = require_git(), cmd, args = character(), verbose=FALSE) {
   stopifnot(!missing(cmd))
 
   res = processx::run(
-    git, args  = c(cmd, args), error_on_status = FALSE, echo = verbose, echo_cmd = debug
+    git, args  = c(cmd, args), error_on_status = FALSE, echo = verbose, echo_cmd = verbose
   )
 
   err_msg = res[["stderr"]]
@@ -109,7 +109,7 @@ clone_repo = function(repo, local_path="./", branch = "master",
 
   dir.create(local_path, showWarnings = FALSE, recursive = TRUE)
 
-  purrr::walk2(
+  dirs = purrr::map2_chr(
     repo, branch,
     function(repo, branch) {
       dir = fs::path(local_path, get_repo_name(repo))
@@ -121,16 +121,19 @@ clone_repo = function(repo, local_path="./", branch = "master",
         git, "clone", c(options, get_repo_url(repo), dir), verbose = verbose
       )
 
-
       fmt_repo = format_repo(repo, branch)
 
       status_msg(
         res,
-        glue::glue("Cloned {usethis::ui_value(fmt_repo)} to {usethis::ui_value(dir)}."),
-        glue::glue("Failed to clone {usethis::ui_value(fmt_repo)} to {usethis::ui_value(dir)}.")
+        glue::glue("Cloned {usethis::ui_value(fmt_repo)}."),
+        glue::glue("Failed to clone {usethis::ui_value(fmt_repo)}.")
       )
+
+      dir
     }
   )
+
+  invisible(dirs)
 }
 
 #' @export
@@ -217,6 +220,35 @@ push_repo = function(repo_dir, remote = "origin", branch="master",
         res,
         glue::glue("Pushed {usethis::ui_value(dir)}."),
         glue::glue("Failed to push {usethis::ui_value(dir)}.")
+      )
+    }
+  )
+}
+
+
+mirror_push_repo = function(repo_dir, remote,
+                     git = require_git(),
+                     options = character(),
+                     verbose = FALSE)
+{
+  stopifnot(all(fs::dir_exists(repo_dir)))
+  stopifnot(fs::file_exists(git))
+
+  purrr::walk2(
+    repo_dir, remote,
+    function(dir, remote) {
+      withr::local_dir(dir)
+
+      res = purrr::safely(run_git)(
+        git, "push", c("--mirror", get_repo_url(remote), options), verbose = verbose
+      )
+
+      cur_dir = fs::path_file(dir)
+
+      status_msg(
+        res,
+        glue::glue("Pushed (mirror) {usethis::ui_value(cur_dir)} to repo {usethis::ui_value(remote)}."),
+        glue::glue("Failed to push (mirror) {usethis::ui_value(cur_dir)} to repo {usethis::ui_value(remote)}.")
       )
     }
   )

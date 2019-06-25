@@ -12,11 +12,13 @@ rename_repo(repo, new_name)
 \item{new_name}{Character. New name of repository in the "name" format.}
 }
 \description{
-\code{rename_repo} renames repositories. Use with caution as repositories retain their unique identifier upon renaming and can be accessed under their old names due to GitHub re-directing.
+\code{rename_repo} renames repositories. Use with caution as repositories retain their
+unique identifier upon renaming and can be accessed under their old names due to
+GitHub re-directing.
 }
 \examples{
 \dontrun{
-rename_repo("Sta523-Fa17/hw1", "homework1")
+rename_repo("ghclass-test/hw1", "homework1")
 }
 
 }

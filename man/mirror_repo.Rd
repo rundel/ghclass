@@ -4,12 +4,12 @@
 \alias{mirror_repo}
 \title{Mirror repository}
 \usage{
-mirror_repo(source_repo, target_repo, verbose = TRUE)
+mirror_repo(source_repo, target_repo, verbose = FALSE)
 }
 \arguments{
 \item{source_repo}{Character. Address of repository in "owner/name" format.}
 
-\item{target_repo}{Character or vector of characters.  Address of repository in "owner/name" format.}
+\item{target_repo}{Character. One or more repository addresses in "owner/name" format.}
 
 \item{verbose}{Logical. Display verbose output.}
 }
@@ -18,8 +18,8 @@ mirror_repo(source_repo, target_repo, verbose = TRUE)
 }
 \examples{
 \dontrun{
-mirror_repo("Sta523/hw1_base", c("Sta523-Fa17/hw1-Team1", "Sta523-Fa17/hw1-Team2"))
-mirror_repo("Sta523/hw1_base", get_repos("Sta523-Fa17","hw1-"))
+mirror_repo("ghclass-test/hw1", c("ghclass-test/hw1-Team1", "ghclass-test/hw1-Team2"))
+mirror_repo("ghclass-test/hw1", get_repos("ghclass-test","hw1-"))
 }
 
 }
