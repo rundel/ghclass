@@ -123,8 +123,8 @@ create_repo = function(org, name,
 
       status_msg(
         purrr::safely(create_repo)(),
-        usethis::ui_done("Created repo {usethis::ui_value(repo)}."),
-        usethis::ui_oops("Failed to create repo {usethis::ui_value(repo)}.")
+        glue::glue("Created repo {usethis::ui_value(repo)}."),
+        glue::glue("Failed to create repo {usethis::ui_value(repo)}.")
       )
     }
   )
@@ -184,8 +184,8 @@ add_user_to_repo = function(repo, user,
 
       status_msg(
         res,
-        usethis::ui_done("Added user {usethis::ui_value(user)} to repo {usethis::ui_value(repo)}."),
-        usethis::ui_oops("Failed to add user {usethis::ui_value(user)} to repo {usethis::ui_value(repo)}.")
+        glue::glue("Added user {usethis::ui_value(user)} to repo {usethis::ui_value(repo)}."),
+        glue::glue("Failed to add user {usethis::ui_value(user)} to repo {usethis::ui_value(repo)}.")
       )
     }
   )
@@ -227,8 +227,8 @@ add_team_to_repo = function(repo, team,
 
       status_msg(
         res,
-        usethis::ui_done(glue::glue("Added team {usethis::ui_value(team)} to repo {usethis::ui_value(repo)}.")),
-        usethis::ui_oops(glue::glue("Failed to add team {usethis::ui_value(team)} to repo {usethis::ui_value(repo)}."))
+        glue::glue("Added team {usethis::ui_value(team)} to repo {usethis::ui_value(repo)}."),
+        glue::glue("Failed to add team {usethis::ui_value(team)} to repo {usethis::ui_value(repo)}.")
       )
     }
   )
@@ -272,8 +272,8 @@ rename_repo = function(repo, new_name) {
     function(repo, new_name) {
       status_msg(
         purrr::safely(github_api_rename_repo)(repo, new_name),
-        usethis::ui_done(glue::glue("Renamed repo {usethis::ui_value(repo)} to {usethis::ui_value(new_name)}.")),
-        usethis::ui_oops(glue::glue("Failed to rename repo {usethis::ui_value(repo)} to {usethis::ui_value(new_name)}."))
+        glue::glue("Renamed repo {usethis::ui_value(repo)} to {usethis::ui_value(new_name)}."),
+        glue::glue("Failed to rename repo {usethis::ui_value(repo)} to {usethis::ui_value(new_name)}.")
       )
     }
   )
@@ -360,8 +360,8 @@ create_pull_request = function(repo, title, base, head = "master", body = "") {
 
       status_msg(
         purrr::safely(github_api_rename_repo)(repo, new_name),
-        usethis::ui_done(glue::glue("Created pull request for {details}.")),
-        usethis::ui_oops(glue::glue("Failed create pull request for {details}."))
+        glue::glue("Created pull request for {details}."),
+        glue::glue("Failed create pull request for {details}.")
       )
     }
   )
@@ -448,7 +448,7 @@ get_collaborator = function(repo, include_admin = TRUE) {
       res = purrr::safely(github_api_get_collaborators)(repo)
       status_msg(
         res,
-        fail = usethis::ui_oops(glue::glue("Failed to retrieve collaborators for {usethis::ui_value(repo)}."))
+        fail = glue::glue("Failed to retrieve collaborators for {usethis::ui_value(repo)}.")
       )
 
       d = tibble::tibble(
