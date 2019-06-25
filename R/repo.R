@@ -451,10 +451,19 @@ get_collaborator = function(repo, include_admin = TRUE) {
         fail = glue::glue("Failed to retrieve collaborators for {usethis::ui_value(repo)}.")
       )
 
-      d = tibble::tibble(
-        repo = repo,
-        username = purrr::map_chr(result(res), "login", .default = NA)
-      )
+      collabs = result(res)
+
+      d = if (empty_result(collabs)) {
+        tibble::tibble(
+          repo = character(),
+          username = character()
+        )
+      } else {
+        tibble::tibble(
+          repo = repo,
+          username = purrr::map_chr(collabs, "login")
+        )
+      }
 
       d[!d[["username"]] %in% admin, ]
     }
