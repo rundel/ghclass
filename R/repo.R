@@ -320,7 +320,7 @@ mirror_repo = function(source_repo, target_repo, verbose=FALSE)
 
 
 github_api_create_pull = function(repo, base, head, title, body){
-  safe_gh(
+  gh::gh(
     "POST /repos/:owner/:repo/pulls",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
