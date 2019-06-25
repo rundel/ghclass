@@ -175,12 +175,10 @@ github_api_put_file = function(repo, path, content, message, branch) {
 }
 
 #' @export
-put_file = function(repo, path, content, message, branch = "master", verbose = F) {
-  stopifnot(length(repo) == 1)
-  stopifnot(length(path) == 1)
-  stopifnot(length(content) == 1)
-  stopifnot(length(message) == 1)
-  stopifnot(length(branch) == 1)
+put_file = function(repo, path, content, message, branch = "master", verbose = TRUE) {
+
+  arg_is_scalar(content)
+  args_is_chr_scalar(repo, path, message, branch)
 
   if (is.character(content))
     content = charToRaw(content)
@@ -196,7 +194,6 @@ put_file = function(repo, path, content, message, branch = "master", verbose = F
   }
 
   res
-
 }
 
 
