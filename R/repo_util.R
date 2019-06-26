@@ -22,25 +22,21 @@ require_valid_repo = function(repo)
     ) )
 }
 
-#' @export
 valid_repo = function(repo)
 {
   stringr::str_detect(repo, github_repo_pattern)
 }
 
-#' @export
 get_repo_name = function(repo)
 {
   stringr::str_match(repo, github_repo_pattern)[,3]
 }
 
-#' @export
 get_repo_owner = function(repo)
 {
   stringr::str_match(repo, github_repo_pattern)[,2]
 }
 
-#' @export
 get_repo_url = function(repo, type = c("https","ssh"), use_token = TRUE)
 {
   #TO DO: Fix since require_valid_repo is no longer vectorized
