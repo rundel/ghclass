@@ -13,7 +13,7 @@ protect_branch(repo, branch = "master")
 }
 \description{
 `protect_branch`` turns on protection for the specified branch. See
-\link{https://help.github.com/en/articles/about-protected-branches} for more details
+\url{https://help.github.com/en/articles/about-protected-branches} for more details
 on what this changes.
 }
 \seealso{

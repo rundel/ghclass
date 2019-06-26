@@ -87,7 +87,7 @@ github_api_protect_branch = function(repo, branch) {
 #' Protect branch
 #'
 #' `protect_branch`` turns on protection for the specified branch. See
-#' [https://help.github.com/en/articles/about-protected-branches] for more details
+#' <https://help.github.com/en/articles/about-protected-branches> for more details
 #' on what this changes.
 #'
 #' @param repo github repository address in `owner/repo` format
@@ -131,7 +131,7 @@ github_api_unprotect_branch = function(repo, branch) {
 #' Unprotect branch
 #'
 #' \code{unprotect_branch} removes protections from the specified branch. See
-#' [https://help.github.com/en/articles/about-protected-branches] for more details
+#' <https://help.github.com/en/articles/about-protected-branches> for more details
 #' on what this changes.
 #'
 #' @param repo github repository address in `owner/repo` format

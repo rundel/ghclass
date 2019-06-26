@@ -13,7 +13,7 @@ unprotect_branch(repo, branch = "master")
 }
 \description{
 \code{unprotect_branch} removes protections from the specified branch. See
-\link{https://help.github.com/en/articles/about-protected-branches} for more details
+\url{https://help.github.com/en/articles/about-protected-branches} for more details
 on what this changes.
 }
 \seealso{
