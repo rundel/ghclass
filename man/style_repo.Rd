@@ -21,6 +21,8 @@ style_repo(repo, files = c("*.R", "*.Rmd"), branch = "styler",
 
 \item{tag_collaborators}{Logical. If TRUE, a message with the repository collaborators is displayed.}
 
+\item{git}{Chacacter. Path to the git binary.}
+
 \item{verbose}{Logical. Display verbose output.}
 }
 \description{

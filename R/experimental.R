@@ -8,6 +8,7 @@
 #' @param base Character. Name of branch that contains the .R and/or .Rmd files to be reformatted.
 #' @param create_pull_request Logical. If TRUE, a pull request is created from branch to base.
 #' @param tag_collaborators Logical. If TRUE, a message with the repository collaborators is displayed.
+#' @param git Chacacter. Path to the git binary.
 #' @param verbose Logical. Display verbose output.
 #'
 #' @examples
