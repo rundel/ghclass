@@ -8,56 +8,106 @@
 \description{
 ghclass: A package for github based classroom and assignment management
 }
-\section{github repo functions}{
-
-
-\itemize{
-\item \code{One} -
-\item \code{Two} -
-}
-}
-
-\section{local repo functions}{
-
+\section{GitHub repositoryy functions}{
 
 \itemize{
-\item \code{\link{clone_repo}} - clone repos locally
-\item \code{\link{pull_repo}} - update local repos via pull
+\item \code{\link[=create_repo]{create_repo()}} -
+\item \code{\link[=add_team_to_repo]{add_team_to_repo()}} -
+\item \code{\link[=add_user_to_repo]{add_user_to_repo()}} -
+\item \code{\link[=mirror_repo]{mirror_repo()}} -
+\item \code{\link[=rename_repo]{rename_repo()}} -
 }
 }
 
-\section{github organization functions}{
-
+\section{Local git repository functions}{
 
 \itemize{
-\item \code{One} -
-\item \code{Two} -
+\item \code{\link[=clone_repo]{clone_repo()}} -
+\item \code{\link[=add_repo]{add_repo()}} -
+\item \code{\link[=commit_repo]{commit_repo()}} -
+\item \code{\link[=push_repo]{push_repo()}} -
+\item \code{\link[=pull_repo]{pull_repo()}} -
+\item \code{\link[=rename_local_repo]{rename_local_repo()}} -
 }
 }
 
-\section{wercker functions}{
-
+\section{Organization functions}{
 
 \itemize{
-\item \code{One} -
-\item \code{Two} -
+\item \code{\link[=get_repo]{get_repo()}} -
+\item \code{\link[=get_admin]{get_admin()}} -
+\item \code{\link[=get_collaborator]{get_collaborator()}} -
+\item \code{\link[=get_member]{get_member()}} -
+\item \code{\link[=get_pending_member]{get_pending_member()}} -
+\item \code{\link[=invite_user]{invite_user()}} -
 }
 }
 
-\section{authentication functions}{
+\section{Team functions}{
 
-
-GitHub
 \itemize{
-\item \code{\link{get_github_token}} - get github token
-\item \code{\link{set_github_token}} - set github token
-\item \code{\link{test_github_token}} - test github token
+\item \code{\link[=get_teams]{get_teams()}} -
+\item \code{\link[=create_team]{create_team()}} -
+\item \code{\link[=rename_team]{rename_team()}} -
+\item \code{\link[=add_team_member]{add_team_member()}} -
+\item \code{\link[=get_team_members]{get_team_members()}} -
+\item \code{\link[=get_pending_team_members]{get_pending_team_members()}} -
+\item \code{\link[=get_team_repos]{get_team_repos()}} -
 }
-Wercker
+}
+
+\section{GitHub authentication functions}{
+
 \itemize{
-\item \code{\link{get_wercker_token}} - get wercker token
-\item \code{\link{set_wercker_token}} - set wercker token
-\item \code{\link{test_wercker_token}} - test wercker token
+\item \code{\link[=get_github_token]{get_github_token()}} - get github token
+\item \code{\link[=set_github_token]{set_github_token()}} - set github token
+\item \code{\link[=test_github_token]{test_github_token()}} - test github token
+}
+}
+
+\section{Repository file functions}{
+
+\itemize{
+\item \code{\link[=add_file]{add_file()}} -
+\item \code{\link[=add_content]{add_content()}} -
+\item \code{\link[=get_file]{get_file()}} -
+\item \code{\link[=get_readme]{get_readme()}} -
+\item \code{\link[=put_file]{put_file()}} -
+}
+}
+
+\section{Branch functions}{
+
+\itemize{
+\item \code{\link[=create_branch]{create_branch()}} -
+\item \code{\link[=create_pull_request]{create_pull_request()}} -
+\item \code{\link[=protect_branch]{protect_branch()}} -
+\item \code{\link[=unprotect_branch]{unprotect_branch()}} -
+}
+}
+
+\section{Notification functions}{
+
+\itemize{
+\item \code{\link[=get_watching]{get_watching()}} -
+\item \code{\link[=ignore_repo]{ignore_repo()}} -
+\item \code{\link[=unwatch_repo]{unwatch_repo()}} -
+\item \code{\link[=watch_repo]{watch_repo()}} -
+}
+}
+
+\section{Utililty functions}{
+
+\itemize{
+\item \code{\link[=check_repo]{check_repo()}} -
+\item \code{\link[=check_user_exists]{check_user_exists()}} -
+}
+}
+
+\section{Experimental functions}{
+
+\itemize{
+\item \code{\link[=style_repo]{style_repo()}} - use \code{styler} on all R code within a repo and create a branch + pull request with the result
 }
 }
 
