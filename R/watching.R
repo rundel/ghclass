@@ -23,29 +23,24 @@ github_api_get_watching = function(){
 #' get_watching("Sta523-Fa15")
 #' }
 #'
-#' @family github repo related functions
+#' @family notification functions
 #'
 #' @export
+#'
 get_watching = function(filter = NULL, exclude = FALSE){
-
-  stopifnot(length(filter) <= 1)
+  arg_is_chr_scalar(filter, allow_null = TRUE)
+  arg_is_lgl_scalar(exclude)
 
   res = purrr::map_chr(github_api_get_watching(), "full_name")
   filter_results(res, filter, exclude)
-
 }
 
-# GitHub API call to unwatch a repo
+
 github_api_unwatch_repo = function(repo){
-
-  require_valid_repo(repo)
-
-  owner = get_repo_owner(repo)
-  name = get_repo_name(repo)
-
-  gh(
+  gh::gh(
     "DELETE /repos/:owner/:repo/subscription",
-    owner = owner, repo = name,
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
     .token = get_github_token()
   )
 
@@ -63,22 +58,22 @@ github_api_unwatch_repo = function(repo){
 #' unwatch_repo("Sta523-Fa15/hw1-Tim")
 #' }
 #'
-#' @family github repo related functions
+#' @family notification functions
 #'
 #' @export
+#'
 unwatch_repo = function(repo) {
+  arg_is_chr(repo)
 
   purrr::walk(
     repo,
     function(repo) {
       res = purrr::safely(github_api_unwatch_repo)(repo)
 
-      repo_fmt = usethis::ui_value(repo)
-
       status_msg(
         res,
-        glue::glue("Unwatched {repo_fmt}."),
-        glue::glue("Failed to unwatch {repo_fmt}.")
+        glue::glue("Unwatched {usethis::ui_value(repo)}."),
+        glue::glue("Failed to unwatch {usethis::ui_value(repo)}.")
       )
     }
   )
@@ -86,20 +81,18 @@ unwatch_repo = function(repo) {
 
 
 
-# GitHub API change a repo subscription
-github_api_set_subscription = function(repo, subscribed, ignored){
 
-  if (subscribed ==ignored)
+github_api_set_subscription = function(repo, subscribed, ignored){
+  arg_is_chr_scalar(repo)
+  arg_is_lgl_scalar(subscribed, ignored)
+
+  if (subscribed == ignored)
     usethis::ui_stop("{usethis::ui_code('subscribed != ignored')} must be true")
 
-  require_valid_repo(repo)
-
-  owner = get_repo_owner(repo)
-  name = get_repo_name(repo)
-
-  gh(
+  gh::gh(
     "PUT /repos/:owner/:repo/subscription",
-    owner = owner, repo = name,
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
     subscribed = subscribed,
     ignored = ignored,
     .token = get_github_token()
@@ -112,10 +105,12 @@ github_api_set_subscription = function(repo, subscribed, ignored){
 #'
 #' @param repo github repository address in `owner/repo` format
 #'
-#' @family github repo related functions
+#' @family notification functions
 #'
 #' @export
+#'
 watch_repo = function(repo) {
+  arg_is_chr(repo)
 
   purrr::walk(
     repo,
@@ -142,10 +137,12 @@ watch_repo = function(repo) {
 #'
 #' @param repo github repository address in `owner/repo` format
 #'
-#' @family github repo related functions
+#' @family notification functions
 #'
 #' @export
+#'
 ignore_repo = function(repo) {
+  arg_is_chr(repo)
 
   purrr::walk(
     repo,
