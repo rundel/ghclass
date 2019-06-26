@@ -1,5 +1,6 @@
 github_api_get_repos = function(owner) {
-  stopifnot(length(owner) == 1)
+  arg_is_chr_scalar(owner)
+
   gh::gh("GET /orgs/:owner/repos",
           owner = owner,
           .token = get_github_token(),
@@ -28,8 +29,8 @@ github_api_get_repos = function(owner) {
 #'
 get_repo = function(org, filter = NULL, exclude = FALSE, full_repo = TRUE) {
 
-  stopifnot(length(org) == 1)
-  stopifnot(length(filter) <= 1)
+  arg_is_chr_scalar(org)
+  arg_is_chr_scalar(filter, allow_null = TRUE)
 
   res = github_api_get_repos(org)
   res = purrr::map_chr(res, "name")
@@ -43,8 +44,9 @@ get_repo = function(org, filter = NULL, exclude = FALSE, full_repo = TRUE) {
 
 
 github_api_get_member = function(owner) {
-  stopifnot(length(owner) == 1)
-  safe_gh("GET /orgs/:owner/members",
+  arg_is_chr_scalar(owner)
+
+  gh::gh("GET /orgs/:owner/members",
           owner = owner,
           .token = get_github_token(),
           .limit = get_github_api_limit())
@@ -69,9 +71,8 @@ github_api_get_member = function(owner) {
 #' @export
 #'
 get_member = function(org, filter = NULL, exclude = FALSE) {
-
-  stopifnot(length(org) == 1)
-  stopifnot(length(filter) <= 1)
+  arg_is_chr_scalar(org)
+  arg_is_chr_scalar(filter, allow_null = TRUE)
 
   res = github_api_get_member(org)
   member = purrr::map_chr(res$result, "login")
@@ -82,11 +83,11 @@ get_member = function(org, filter = NULL, exclude = FALSE) {
 
 
 github_api_get_invitation = function(owner){
-
-  safe_gh("GET /orgs/:owner/invitations",
-          owner = owner,
-          .token = get_github_token(),
-          .limit = get_github_api_limit())
+  arg_is_chr_scalar(owner)
+  gh::gh("GET /orgs/:owner/invitations",
+         owner = owner,
+         .token = get_github_token(),
+         .limit = get_github_api_limit())
 }
 
 
@@ -108,9 +109,8 @@ github_api_get_invitation = function(owner){
 #' @export
 #'
 get_pending_member = function(org, filter = NULL, exclude = FALSE) {
-
-  stopifnot(length(org) == 1)
-  stopifnot(length(filter) <= 1)
+  arg_is_chr_scalar(org)
+  arg_is_chr_scalar(filter, allow_null = TRUE)
 
   res = github_api_get_invitation(org)
   invite = purrr::map_chr(res$result, "login")
@@ -118,9 +118,10 @@ get_pending_member = function(org, filter = NULL, exclude = FALSE) {
   filter_results(invite, filter, exclude)
 }
 
-github_api_get_user = function(user)
-{
-  safe_gh(
+github_api_get_user = function(user) {
+  arg_is_chr_scalar(user)
+
+  gh::gh(
     "/users/:username",
     username = user,
     .token = get_github_token()
@@ -142,16 +143,17 @@ github_api_get_user = function(user)
 #'
 #' @export
 #'
-check_user_exists = function(user)
-{
+check_user_exists = function(user) {
+  arg_is_chr(user)
+
   res = purrr::map(user, github_api_get_user)
   purrr::map_lgl(res, succeeded)
 }
 
 
 github_api_invite_user = function(org, user) {
-  stopifnot(length(org) == 1)
-  stopifnot(length(user) == 1)
+  arg_is_chr_scalar(org, user)
+
   gh::gh(
     "PUT /orgs/:org/memberships/:username",
     org = org,
@@ -179,8 +181,8 @@ github_api_invite_user = function(org, user) {
 #'
 #' @export
 invite_user = function(org, user) {
-
-  stopifnot(length(org) == 1)
+  arg_is_chr_scalar(org)
+  arg_is_chr(user)
 
   user = tolower(user)
   member = tolower(get_member(org))
@@ -221,4 +223,3 @@ invite_user = function(org, user) {
     )
   }
 }
-
