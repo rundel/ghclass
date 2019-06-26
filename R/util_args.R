@@ -16,7 +16,7 @@ arg_is_chr_scalar = function(..., allow_null = FALSE, allow_na = FALSE) {
   arg_is_scalar(..., allow_null = allow_null, allow_na = allow_na)
 }
 
-arg_is_lgl_scalar = function(..., allow_null = allow_null, allow_na = allow_na) {
+arg_is_lgl_scalar = function(..., allow_null = FALSE, allow_na = FALSE) {
   arg_is_lgl(...)
   arg_is_scalar(..., allow_null = allow_null, allow_na = allow_na)
 }
