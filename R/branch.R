@@ -58,7 +58,7 @@ create_branch = function(repo, cur_branch = "master", new_branch) {
 
 
 github_api_protect_branch = function(repo, branch) {
-  gh(
+  gh::gh(
     "PUT /repos/:owner/:repo/branches/:branch/protection",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
@@ -74,32 +74,22 @@ github_api_protect_branch = function(repo, branch) {
   )
 }
 
-github_api_unprotect_branch = function(repo, branch) {
-  gh(
-    "DELETE /repos/:owner/:repo/branches/:branch/protection",
-    owner = get_repo_owner(repo),
-    repo = get_repo_name(repo),
-    branch = branch,
-    .token = get_github_token()
-  )
-}
-
 
 #' Protect branch
 #'
-#' \code{protect_branch} turns on protection for the specified branch. See
+#' `protect_branch`` turns on protection for the specified branch. See
 #' [https://help.github.com/en/articles/about-protected-branches] for more details
 #' on what this changes.
 #'
 #' @param repo github repository address in `owner/repo` format
-#' @param cur_branch name of existing branch
-#' @param new_branch name of branch to create
+#' @param branch name of the branch to protect
 #'
 #' @family branch functions
 #'
 #' @export
 #'
 protect_branch = function(repo, branch = "master") {
+  arg_is_chr(repo, branch)
   flag_experimental()
 
   purrr::walk2(
@@ -117,6 +107,18 @@ protect_branch = function(repo, branch = "master") {
     }
   )
 }
+
+
+github_api_unprotect_branch = function(repo, branch) {
+  gh::gh(
+    "DELETE /repos/:owner/:repo/branches/:branch/protection",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    branch = branch,
+    .token = get_github_token()
+  )
+}
+
 
 #' Unprotect branch
 #'

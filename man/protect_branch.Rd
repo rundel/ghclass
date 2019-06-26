@@ -9,12 +9,10 @@ protect_branch(repo, branch = "master")
 \arguments{
 \item{repo}{github repository address in \code{owner/repo} format}
 
-\item{cur_branch}{name of existing branch}
-
-\item{new_branch}{name of branch to create}
+\item{branch}{name of the branch to protect}
 }
 \description{
-\code{protect_branch} turns on protection for the specified branch. See
+`protect_branch`` turns on protection for the specified branch. See
 \link{https://help.github.com/en/articles/about-protected-branches} for more details
 on what this changes.
 }
