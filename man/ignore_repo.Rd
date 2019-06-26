@@ -13,8 +13,7 @@ ignore_repo(repo)
 Ignores the provided GitHub repositories.
 }
 \seealso{
-Other github repo related functions: \code{\link{check_repo}},
-  \code{\link{get_watching}}, \code{\link{unwatch_repo}},
-  \code{\link{watch_repo}}
+Other notification functions: \code{\link{get_watching}},
+  \code{\link{unwatch_repo}}, \code{\link{watch_repo}}
 }
-\concept{github repo related functions}
+\concept{notification functions}

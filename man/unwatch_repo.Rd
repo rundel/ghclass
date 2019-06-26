@@ -20,8 +20,7 @@ unwatch_repo("Sta523-Fa15/hw1-Tim")
 
 }
 \seealso{
-Other github repo related functions: \code{\link{check_repo}},
-  \code{\link{get_watching}}, \code{\link{ignore_repo}},
-  \code{\link{watch_repo}}
+Other notification functions: \code{\link{get_watching}},
+  \code{\link{ignore_repo}}, \code{\link{watch_repo}}
 }
-\concept{github repo related functions}
+\concept{notification functions}

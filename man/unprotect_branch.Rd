@@ -4,14 +4,12 @@
 \alias{unprotect_branch}
 \title{Unprotect branch}
 \usage{
-unprotect_branch(repo, branch = "master", verbose = TRUE)
+unprotect_branch(repo, branch = "master")
 }
 \arguments{
 \item{repo}{github repository address in \code{owner/repo} format}
 
-\item{cur_branch}{name of existing branch}
-
-\item{new_branch}{name of branch to create}
+\item{branch}{name of the branch to unprotect}
 }
 \description{
 \code{unprotect_branch} removes protections from the specified branch. See

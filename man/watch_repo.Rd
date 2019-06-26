@@ -13,8 +13,7 @@ watch_repo(repo)
 Watches / subscribes to the provided GitHub repositories.
 }
 \seealso{
-Other github repo related functions: \code{\link{check_repo}},
-  \code{\link{get_watching}}, \code{\link{ignore_repo}},
-  \code{\link{unwatch_repo}}
+Other notification functions: \code{\link{get_watching}},
+  \code{\link{ignore_repo}}, \code{\link{unwatch_repo}}
 }
-\concept{github repo related functions}
+\concept{notification functions}
