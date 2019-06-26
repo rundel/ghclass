@@ -102,7 +102,7 @@ create_repo = function(org, name,
   if (prefix == "" & suffix == "")
     usethis::ui_stop("Either a prefix or a suffix must be specified.")
 
-  org_repos = get_repos(org)
+  org_repos = get_repo(org)
 
   repo = paste0(prefix, name, suffix)
   repo = fix_repo_name(repo)
@@ -115,14 +115,15 @@ create_repo = function(org, name,
         usethis::ui_info("Skipping repo {usethis::ui_value(repo)}, it already exists.")
         return()
       }
-      res = github_api_create_repo(owner = get_repo_owner(repo),
-                                   name = get_repo_name(repo),
-                                   private = private,
-                                   auto_init = auto_init,
-                                   gitignore_template = gitignore_template)
+      res = github_api_create_repo(
+        repo,
+        private = private,
+        auto_init = auto_init,
+        gitignore_template = gitignore_template
+      )
 
       status_msg(
-        purrr::safely(create_repo)(),
+        res,
         glue::glue("Created repo {usethis::ui_value(repo)}."),
         glue::glue("Failed to create repo {usethis::ui_value(repo)}.")
       )
