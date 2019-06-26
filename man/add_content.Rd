@@ -25,6 +25,7 @@ Modify a file within a repository
 }
 \seealso{
 Other file functions: \code{\link{add_file}},
+  \code{\link{get_file}}, \code{\link{get_readme}},
   \code{\link{put_file}}
 }
 \concept{file functions}

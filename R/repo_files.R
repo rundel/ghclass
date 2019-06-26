@@ -27,7 +27,15 @@ github_api_get_readme = function(repo, branch) {
   )
 }
 
+#' Low level function for retrieving the README of a GitHub Repository
+#'
+#' @param repo Character. Address of repository in `owner/name` format.
+#' @param branch Character. Name of branch to use, defaults to "master".
+#'
+#' @family file functions
+#'
 #' @export
+#'
 get_readme = function(repo, branch = "master") {
   stopifnot(length(repo) == 1)
   stopifnot(length(branch) == 1)
@@ -54,7 +62,17 @@ github_api_get_file = function(repo, file, branch) {
 
 }
 
+
+#' Low level function for retrieving a file from a GitHub Repository
+#'
+#' @param repo Character. Address of repository in `owner/name` format.
+#' @param file Characer. Path to the file within the repository.
+#' @param branch Character. Name of branch to use, defaults to "master".
+#'
+#' @family file functions
+#'
 #' @export
+#'
 get_file = function(repo, file, branch = "master") {
   stopifnot(length(repo) == 1)
   stopifnot(length(file) == 1)

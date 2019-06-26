@@ -31,6 +31,7 @@ add_file("rundel/ghclass", "Update DESCRIPTION", "./DESCRIPTION")
 }
 \seealso{
 Other file functions: \code{\link{add_content}},
+  \code{\link{get_file}}, \code{\link{get_readme}},
   \code{\link{put_file}}
 }
 \concept{file functions}

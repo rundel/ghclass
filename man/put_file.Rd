@@ -25,6 +25,7 @@ Low level function for adding a file to a Github repository
 }
 \seealso{
 Other file functions: \code{\link{add_content}},
-  \code{\link{add_file}}
+  \code{\link{add_file}}, \code{\link{get_file}},
+  \code{\link{get_readme}}
 }
 \concept{file functions}
