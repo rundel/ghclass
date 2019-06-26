@@ -172,7 +172,7 @@ add_user_to_repo = function(repo, user,
   purrr::walk2(
     repo, user,
     function(repo, user) {
-      res = purrr::safely(github_api_add_use)(
+      res = purrr::safely(github_api_add_user)(
         repo = repo,
         username = user,
         permission = permission
@@ -350,12 +350,11 @@ create_pull_request = function(repo, title, base, head = "master", body = "") {
 
       details = glue::glue(
         "{usethis::ui_value(repo)}",
-        "({usethis::ui_value(base)} ",
-        "{usethis::ui_value(head)})"
+        "({usethis::ui_value(base)} {usethis::ui_value(head)})"
       )
 
       status_msg(
-        purrr::safely(github_api_rename_repo)(repo, new_name),
+        res,
         glue::glue("Created pull request for {details}."),
         glue::glue("Failed create pull request for {details}.")
       )
