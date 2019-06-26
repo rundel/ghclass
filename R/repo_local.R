@@ -47,10 +47,21 @@ repo_dir_helper = function(repo_dir) {
 }
 
 
+#' Rename local directories using a vector of patterns and replacements
+#'
+#' This is particularly helpful when renaming student repos from their GitHub
+#' username to something more useful like `Last, First name` or `netid` so that
+#' folder ordering matches student ordering within your LMS.
+#'
+#' @param repo_dir Character. Vector of repo directories or a single directory containing one or more repos.
+#' @param pattern Character. One or more regexp patterns to match to directory names.
+#' @param replacement Character.  One or more text strings containing the replacement value for matched patterns.
+#'
 #' @export
+#'
 rename_local_repo = function(repo_dir, pattern, replacement) {
-  stopifnot(length(repo_dir) == 1)
-  stopifnot(length(pattern) == length(replacement))
+  arg_is_chr_scalar(repo_dir)
+  arg_is_chr(pattern, replacement)
 
   repos = repo_dir_helper(repo_dir)
   cur_repos = repos
