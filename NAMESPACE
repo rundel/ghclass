@@ -2,7 +2,6 @@
 
 export(add_content)
 export(add_file)
-export(add_files)
 export(add_repo)
 export(add_team_member)
 export(add_team_to_repo)

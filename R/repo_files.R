@@ -178,7 +178,12 @@ github_api_put_file = function(repo, path, content, message, branch) {
 put_file = function(repo, path, content, message, branch = "master", verbose = TRUE) {
 
   arg_is_scalar(content)
-  args_is_chr_scalar(repo, path, message, branch)
+  arg_is_chr_scalar(repo, path, branch)
+  arg_is_chr_scalar(message, allow_null = TRUE)
+
+  if (is.null(message))
+    message = glue::glue("Adding file: {path}")
+
 
   if (is.character(content))
     content = charToRaw(content)
@@ -188,8 +193,8 @@ put_file = function(repo, path, content, message, branch = "master", verbose = T
   if(verbose){
     status_msg(
       res,
-      glue::glue("Added {usethis::ui_value(path)} to {usethis::ui_value(repo)}."),
-      glue::glue("Failed to add {usethis::ui_value(path)} to {usethis::ui_value(repo)}.")
+      glue::glue("Added file {usethis::ui_value(path)} to repo {usethis::ui_value(repo)}."),
+      glue::glue("Failed to add file {usethis::ui_value(path)} to repo {usethis::ui_value(repo)}.")
     )
   }
 
@@ -197,63 +202,71 @@ put_file = function(repo, path, content, message, branch = "master", verbose = T
 }
 
 
-#' Create file URL to pass to GitHub Commit API
-#'
-#' `create_file_commit_url` creates a file URL for a single file that can be passed to a `gh::gh(METHOD URL)` query. The query is limited to 100 entries.
-#'
-#'
-create_file_commit_url = function(repo, gh_path){
+github_api_get_commits = function(repo, sha=NULL, path=NULL, author=NULL, since=NULL, until=NULL) {
+  args = list(
+    endpoint = "GET /repos/:owner/:repo/commits",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    .token = get_github_token()
+  )
 
-  stopifnot(length(repo) == 1)
-  stopifnot(length(gh_path) == 1)
+  args[["sha"]] = sha
+  args[["path"]] = path
+  args[["author"]] = author
+  args[["since"]] = since
+  args[["until"]] = until
 
-  owner = get_repo_owner(repo)
-  name = get_repo_name(repo)
-  paste0("https://api.github.com/repos/",
-         owner, "/",
-         name, "/commits?path=",
-         gh_path,
-         "&page=1&per_page=100")
+  do.call(gh::gh, args)
 }
 
-github_api_get_commit_history = function(repo, gh_path){
+get_committer = function(repo, sha=NULL, path=NULL, author=NULL, since=NULL, until=NULL) {
 
-  safe_gh(paste0("GET ", create_file_commit_url(repo, gh_path)),
-          .token=get_github_token())
+  arg_is_chr(repo)
+  arg_is_chr_scalar(repo, sha, path, author, since, until, allow_null=TRUE)
 
+  purrr::map_dfr(
+    repo,
+    function(repo) {
+      res = purrr::safely(github_api_get_commits)(
+        repo, sha, path, author, since, until
+      )
+
+      # API gives an error if the repo has 0 commits
+      res = allow_error(res, message = "Git Repository is empty")
+
+      status_msg(
+        res,
+        fail = glue::glue("Failed to retrieve commits from {usethis::ui_value(repo)}.")
+      )
+
+      commits = result(res)
+
+      if (empty_result(commits)) {
+        tibble::tibble(
+          repo = character(),
+          sha  = character(),
+          user = character(),
+          date = character(),
+          msg  = character()
+        )
+      } else {
+        tibble::tibble(
+          repo = repo,
+          sha  = purrr::map_chr(commits, "sha"),
+          user = purrr::map_chr(commits, c("author","login")),
+          date = purrr::map_chr(commits, c("commit","author","date")),
+          msg  = purrr::map_chr(commits, c("commit","message"))
+        )
+      }
+    }
+  )
 }
 
-#' Check for modifications of file on GitHub
-#'
-#' `check_file_modification` checks whether a file on GitHub has previously been modified by a commit (not taking into account the initial commit).
-#'
-#' @param repo Character. Address of repository in "owner/name" format.
-#' @param file Character. Name of file.
-#' @param include_admin Logical. Should users with admin privileges be included in checking for previous file modifications.
-#'
-#' @return TRUE or FALSE
-#'
-check_file_modification = function(repo, gh_path, include_admin){
 
-  res = github_api_get_commit_history(repo, gh_path)
-
-  if(length(res$result) > 1){
-
-    user = unique(purrr::map_chr(res$result, c("author", "login")))
-
-    if(!include_admin){
-      user = setdiff(user, unlist(get_admin(get_repo_owner(repo))))
-    }
-
-    if(!is.null(user)){
-      purrr::walk(user,
-                  function(user){
-                    usethis::ui_oops("Adding {usethis::ui_value(gh_path)} to {usethis::ui_value(repo)} overwrites modifications by student(s): {usethis::ui_value(user)}.")
-                    usethis::ui_info("If you want to overwrite modifications, re-run with overwrite = TRUE.")
-                    message(" ")
-                  })
-    }
-  }
+check_file_modification = function(repo, path, branch = "master"){
+  arg_is_chr_scalar(repo, branch, path)
+  commits = get_committer(repo, sha=branch, path=path)
+  nrow(commits) > 1
 }
 
 
@@ -270,7 +283,6 @@ check_file_modification = function(repo, gh_path, include_admin){
 #' @param branch Character. Name of branch to use, defaults to "master".
 #' @param preserve_path Logical. Should the local relative path be preserved.
 #' @param overwrite Logical. Should existing file or files with same name be overwritten, defaults to FALSE.
-#' @param include_admin Logical. Should users with admin privileges be included in checking for previous file modifications, defaults to FALSE.
 #'
 #' @examples
 #' \dontrun{
@@ -283,136 +295,48 @@ check_file_modification = function(repo, gh_path, include_admin){
 #'
 #' @export
 #'
-add_file = function(repo, file, message = NULL, branch = "master", preserve_path = FALSE, overwrite = FALSE, include_admin = FALSE){
+add_file = function(repo, file, message = NULL, branch = "master",
+                    preserve_path = FALSE, overwrite = FALSE) {
 
-  stopifnot(!missing(repo))
-  stopifnot(!missing(file))
-
-  # Format commit message
-  if (is.null(message)) {
-    if (length(file) == 1) {
-      message <- glue::glue("Added file: {file}")
-    }
-    if (length(file) == 2) {
-      file_collapsed <- glue::glue_collapse(file, sep = " and ")
-      message <- glue::glue("Added files: {file_collapsed}")
-    }
-    if (length(file) > 2) {
-      file_collapsed <- glue::glue_collapse(file, sep = ", ", last = ", and ")
-      message <- glue::glue("Added files: {file_collapsed}")
-    }
-    if (nchar(message) > 50) {
-      message <- "Added file(s)"
-    }
-  }
+  arg_is_chr(repo, file, branch)
+  arg_is_chr(message, allow_null = TRUE)
+  arg_is_lgl_scalar(preserve_path, overwrite)
 
   file_status = fs::file_exists(file)
   if (any(!file_status))
-    stop("Unable to locate the following file(s):\n", format_list(file[!file_status]),
-         call. = FALSE)
+    usethis::ui_stop("Unable to locate the following file(s): {usethis::ui_value(file)}")
+
+  if (is.null(message))
+    message = list(NULL)
 
   if (is.character(file) & (length(file) > 1))
     file = list(file)
 
-  purrr::pwalk(list(repo, file, message, branch, include_admin),
-
-              function(repo, file, message, branch, include_admin){
-
-                purrr::walk(file,
-                            function(file){
-                              gh_path = file
-                              if(!preserve_path)
-                                gh_path = fs::path_file(file)
-
-                              if(!file_exists(repo, gh_path, branch) | overwrite){
-
-                                content = paste(readLines(file), collapse = "\n")
-                                res = put_file(repo = repo,
-                                               path = gh_path,
-                                               content = content,
-                                               message = message,
-                                               branch = branch,
-                                               verbose = T)
-
-                              } else {
-
-                                usethis::ui_oops("Failed to add {usethis::ui_value(gh_path)} to {usethis::ui_value(repo)}: already exists.")
-
-                                modified = check_file_modification(repo, gh_path, include_admin)
-                                if(length(modified) == 0){
-                                  usethis::ui_info("If you want to commit {usethis::ui_value(gh_path)} to {usethis::ui_value(repo)} again, re-run with overwrite = TRUE.")
-                                  message(" ")
-                                }
-                              }
-                            })
-
-               })
-}
-
-
-# Deprecated functions ---------------------------------------------------------
-
-#' Add files to a repo
-#'
-#' \code{add_files} uses the GitHub api to add/update files in an existing repo on GitHub.
-#'
-#' @param repo repo names in the form of \emph{owner/name}.
-#' @param message commit message.
-#' @param files local file paths of files to be added.
-#' @param branch name of branch to use, defaults to master.
-#' @param preserve_path should the local relative path be preserved.
-#'
-#' @templateVar fun add_files
-#' @template template-depr_fun
-#'
-#' @examples
-#' \dontrun{
-#' add_files("rundel/ghclass", "Update DESCRIPTION", "./DESCRIPTION")
-#' }
-#'
-#' @templateVar old add_files
-#' @templateVar new add_file
-#' @template template-depr_pkg
-#'
-#' @aliases grab_repos
-#'
-#' @family local repo functions
-#'
-#' @export
-#'
-add_files = function(repo, message, files, branch = "master", preserve_path = FALSE)
-{
-  .Deprecated(msg = "'add_files' is deprecated and will be removed in the next version. Use 'add_file' instead.",
-              new = "add_file")
-
-  stopifnot(!missing(repo))
-  stopifnot(!missing(message))
-  stopifnot(!missing(files))
-
-  file_status = fs::file_exists(files)
-  if (any(!file_status))
-    stop("Unable to locate the following files:\n", format_list(files[!file_status]),
-         call. = FALSE)
-
-  if (is.character(files) & length(repo) != length(files))
-    files = list(files)
-
   purrr::pwalk(
-    list(repo, message, files),
-    function(repo, message, files) {
+    list(repo, file, message, branch),
+    function(repo, file, message, branch){
+      purrr::walk(
+        file,
+        function(file){
+          gh_path = file
+          if(!preserve_path)
+            gh_path = fs::path_file(file)
 
-      gh_paths = files
-      if (!preserve_path)
-        gh_paths = fs::path_file(files)
-
-      purrr::walk2(
-        gh_paths, files,
-        function(path, file, repo, message, branch) {
-          content = paste(readLines(file), collapse = "\n")
-          put_file(repo, path, content, message, branch)
-        },
-        repo = repo, message = message, branch = branch
-      )
-    }
-  )
+          if(!check_file_modification(repo, gh_path, branch) | overwrite){
+            put_file(
+              repo = repo,
+              path = gh_path,
+              content = paste(readLines(file), collapse = "\n"),
+              message = message,
+              branch = branch,
+              verbose = TRUE
+            )
+          } else {
+            usethis::ui_oops( paste(
+              'Failed to add file {usethis::ui_value(gh_path)} to repo {usethis::ui_value(repo)}, file already exists.',
+              'If you want to force add this file, re-run the command with {usethis::ui_code("overwrite = TRUE")}.'
+            ) )
+          }
+        })
+    })
 }
