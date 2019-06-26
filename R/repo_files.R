@@ -65,10 +65,22 @@ get_file = function(repo, file, branch = "master") {
   extract_content(file)
 }
 
+#' Modify a file within a repository
+#'
+#' @param repo Character. Address of repository in `owner/name`` format.
+#' @param file Character. File's path within the repository.
+#' @param content Character. Content to be added to the file.
+#' @param after Character. Regex pattern, if not `NULL` content will be inserted directly after the first match.
+#' @param message Character. Commit message.
+#' @param branch Character. Name of branch to use, defaults to "master".
+#'
+#' @family file functions
+#'
 #' @export
+#'
 add_content = function(repo, file, content, after = NULL, message = "Added content", branch = "master") {
-  #TO DO: Fix since require_valid_repo is no longer vectorized
-  #require_valid_repo(repo)
+  arg_is_chr(repo, file, content, message, branch)
+  arg_is_chr(after, allow_null = TRUE)
 
   purrr::pwalk(
     list(repo, file, content, after, message, branch),
@@ -113,12 +125,10 @@ github_api_code_search = function(query) {
      .limit = get_github_api_limit())
 }
 
-# Note: This function is currently not vectorized
-find_file = function(repo, file){
 
-  stopifnot(length(repo) == 1)
-  #TO DO: Fix since require_valid_repo is no longer vectorized
-  #require_valid_repo(repo)
+find_file = function(repo, file){
+  arg_is_chr_scalar(repo)
+  arg_is_chr(file)
 
   purrr::flatten_chr(
     purrr::map(
@@ -135,7 +145,6 @@ find_file = function(repo, file){
         } else {
           usethis::ui_oops("Cannot find file {usethis::ui_value(file)} on {usethis::ui_value(repo)}.")
         }
-
       }
     )
   )
@@ -174,16 +183,28 @@ github_api_put_file = function(repo, path, content, message, branch) {
   do.call(gh::gh, args)
 }
 
-#' @export
-put_file = function(repo, path, content, message, branch = "master", verbose = TRUE) {
 
-  arg_is_scalar(content)
+#' Low level function for adding a file to a Github repository
+#'
+#' @param repo Character. Address of repository in `owner/name` format.
+#' @param path Character. File path within the repository.
+#' @param content Character or raw. Content of the file.
+#' @param message Character. Commit message. If not provided, a custom character string will be created.
+#' @param branch Character. Name of branch to use, defaults to "master".
+#' @param verbose Logical. Should success / failure messages be printed
+#'
+#' @family file functions
+#'
+#' @export
+#'
+put_file = function(repo, path, content, message = NULL, branch = "master", verbose = TRUE) {
+
+  arg_is_scalar(content) # Could be character or raw
   arg_is_chr_scalar(repo, path, branch)
   arg_is_chr_scalar(message, allow_null = TRUE)
 
   if (is.null(message))
     message = glue::glue("Adding file: {path}")
-
 
   if (is.character(content))
     content = charToRaw(content)
@@ -289,9 +310,7 @@ check_file_modification = function(repo, path, branch = "master"){
 #' add_file("rundel/ghclass", "Update DESCRIPTION", "./DESCRIPTION")
 #' }
 #'
-#' @aliases grab_repos
-#'
-#' @family local repo functions
+#' @family file functions
 #'
 #' @export
 #'

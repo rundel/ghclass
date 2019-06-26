@@ -2,7 +2,6 @@
 % Please edit documentation in R/repo_files.R
 \name{add_file}
 \alias{add_file}
-\alias{grab_repos}
 \title{Add files to a repo}
 \usage{
 add_file(repo, file, message = NULL, branch = "master",
@@ -30,4 +29,8 @@ add_file("rundel/ghclass", "Update DESCRIPTION", "./DESCRIPTION")
 }
 
 }
-\concept{local repo functions}
+\seealso{
+Other file functions: \code{\link{add_content}},
+  \code{\link{put_file}}
+}
+\concept{file functions}
