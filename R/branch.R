@@ -1,5 +1,27 @@
+github_api_get_branch_ref = function(repo, branch="master") {
+  gh::gh(
+    "GET /repos/:owner/:repo/commits/:ref",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    ref = paste0("heads/", branch),
+    .token=get_github_token()
+  )
+
+}
+
+get_branch_ref = function(repo, branch) {
+  arg_is_chr_scalar(repo, branch)
+
+  res = purrr::safely(github_api_get_branch_ref)(repo, branch)
+
+  if (failed(res)) {
+    usethis::ui_stop("Unable to locate branch {usethis::ui_value(format_repo(repo, branch))}.")
+  }
+  result(res)
+}
+
 github_api_create_branch = function(repo, cur_branch, new_branch) {
-  head = github_api_get_branch_ref(repo, cur_branch)
+  head = get_branch_ref(repo, cur_branch)
 
   gh("POST /repos/:owner/:repo/git/refs",
      owner = get_repo_owner(repo),
@@ -9,21 +31,6 @@ github_api_create_branch = function(repo, cur_branch, new_branch) {
      .token=get_github_token())
 }
 
-github_api_get_branch_ref = function(repo, branch="master") {
-  res = purrr::safely(gh)(
-    "GET /repos/:owner/:repo/commits/:ref",
-    owner = get_repo_owner(repo),
-    repo = get_repo_name(repo),
-    ref = paste0("heads/", branch),
-    .token=get_github_token()
-  )
-
-  if (failed(res)) {
-    usethis::ui_stop("Unable to locate branch {usethis::ui_value(format_repo(repo, branch))}.")
-  }
-
-  result(res)
-}
 
 
 
@@ -40,6 +47,8 @@ github_api_get_branch_ref = function(repo, branch="master") {
 #' @export
 #'
 create_branch = function(repo, cur_branch = "master", new_branch) {
+  arg_is_chr(repo, cur_branch, new_branch)
+
   purrr::pwalk(
     list(repo, cur_branch, new_branch),
     function(repo, cur_branch, new_branch) {
