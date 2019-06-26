@@ -172,10 +172,6 @@ add_user_to_repo = function(repo, user,
   purrr::walk2(
     repo, user,
     function(repo, user) {
-
-      if (verbose)
-        message("Adding ", team, " to ", repo, " (", permission, ") ...")
-
       res = purrr::safely(github_api_add_use)(
         repo = repo,
         username = user,
