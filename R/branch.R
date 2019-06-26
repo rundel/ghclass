@@ -99,7 +99,6 @@ github_api_protect_branch = function(repo, branch) {
 #'
 protect_branch = function(repo, branch = "master") {
   arg_is_chr(repo, branch)
-  flag_experimental()
 
   purrr::walk2(
     repo, branch,
@@ -136,15 +135,14 @@ github_api_unprotect_branch = function(repo, branch) {
 #' on what this changes.
 #'
 #' @param repo github repository address in `owner/repo` format
-#' @param cur_branch name of existing branch
-#' @param new_branch name of branch to create
+#' @param branch name of the branch to unprotect
 #'
 #' @family branch functions
 #'
 #' @export
 #'
-unprotect_branch = function(repo, branch = "master", verbose = TRUE) {
-  flag_experimental()
+unprotect_branch = function(repo, branch = "master") {
+  arg_is_chr(repo, branch)
 
   purrr::walk2(
     repo, branch,
