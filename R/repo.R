@@ -77,6 +77,7 @@ github_api_repo_delete = function(repo) {
 repo_delete = function(repo, prompt = TRUE) {
 
   arg_is_chr(repo)
+  arg_is_lgl_scalar(prompt)
 
   if (prompt) {
     delete = usethis::ui_yeah( paste(
