@@ -56,6 +56,54 @@ check_repo = function(repo, strict = FALSE, verbose = TRUE) {
   repo_exists
 }
 
+github_api_repo_delete = function(repo) {
+  gh::gh("DELETE /repos/:owner/:repo",
+         owner = get_repo_owner(repo),
+         repo = get_repo_name(repo),
+         .token = get_github_token())
+}
+
+#' Delete repository
+#'
+#' `repo_delete` deletes an existing repository from GitHub.
+#'
+#' @param repo Character. Name of the GitHub repository in `owner/name` format.
+#' @param prompt Logical. Should the user be prompted before deleting repositories. Default `true`.
+#'
+#' @family github repository related functions
+#'
+#' @export
+#'
+repo_delete = function(repo, prompt = TRUE) {
+
+  arg_is_chr(repo)
+
+  if (prompt) {
+    delete = usethis::ui_yeah( paste(
+      "This command will delete the following repositories permanently:",
+      "{usethis::ui_value(repo)}."
+    ) )
+    if (!delete) {
+      return(invisible())
+    }
+  }
+
+  purrr::walk(
+    repo,
+    function(repo) {
+      res = purrr::safely(github_api_repo_delete)(repo)
+
+      status_msg(
+        res,
+        glue::glue("Deleted repo {usethis::ui_value(repo)}."),
+        glue::glue("Failed to delete repo {usethis::ui_value(repo)}.")
+      )
+    }
+  )
+}
+
+
+
 
 
 github_api_create_repo = function(repo, private, auto_init, gitignore_template){
@@ -115,7 +163,7 @@ create_repo = function(org, name,
         usethis::ui_info("Skipping repo {usethis::ui_value(repo)}, it already exists.")
         return()
       }
-      res = github_api_create_repo(
+      res = purrr::safely(github_api_create_repo)(
         repo,
         private = private,
         auto_init = auto_init,
@@ -324,45 +372,6 @@ github_api_create_pull = function(repo, base, head, title, body){
     base = base, head = head, title = title, body = body,
     .token = get_github_token())
 }
-
-#' Create pull request
-#'
-#' `create_pull_request` creates a pull request on GitHub from the `base` branch to the `head` branch.
-#'
-#' @param repo Character. Address of one or more repositories in "owner/name" format.
-#' @param title Character. Title of the pull request.
-#' @param base Character. The name of the branch where your changes are implemented. In creating a pull request from a
-#' fork then use `username:branch` as the format.
-#' @param head Character. The branch you want the changed pulled into.
-#' @param body Character. The text contents of the pull request.
-#'
-#' @export
-#'
-create_pull_request = function(repo, title, base, head = "master", body = "") {
-
-  arg_is_chr(repo, title, base, head, body)
-
-  purrr::pwalk(
-    list(repo, base, head, title, body),
-    function(repo, base, head, title, body) {
-      res = purrr::safely(github_api_create_pull)(
-        repo, base = base, head = head, title = title, body = body
-      )
-
-      details = glue::glue(
-        "{usethis::ui_value(repo)}",
-        "({usethis::ui_value(base)} {usethis::ui_value(head)})"
-      )
-
-      status_msg(
-        res,
-        glue::glue("Created pull request for {details}."),
-        glue::glue("Failed create pull request for {details}.")
-      )
-    }
-  )
-}
-
 
 
 
