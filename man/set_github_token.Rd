@@ -10,8 +10,9 @@ set_github_token(token)
 \item{token}{character, either the path of a file contained the token or the actual token.}
 }
 \description{
-\code{set_github_token} defines the user's github authentication token,
-this value is then accessed using \code{get_github_token}
+\code{set_github_token} defines the user's github authentication token by
+defining the \code{GITHUB_PAT} enivronmental variable. This value can then
+be subsequently accessed using \code{get_github_token}.
 }
 \examples{
 \dontrun{

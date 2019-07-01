@@ -3,13 +3,10 @@
 #' \code{get_github_token} obtains the user's github authentication token.
 #'
 #' This function looks for the token in the following places (in order):
-#' \enumerate{
-#'   \item Value of \code{GITHUB_PAT} environmental variable.
 #'
-#'   \item Value of \code{GITHUB_TOKEN} environmental variable.
-#'
-#'   \item Contents of \code{~/.github/token} file.
-#' }
+#' * Value of \code{GITHUB_PAT} environmental variable.
+#' * Value of \code{GITHUB_TOKEN} environmental variable.
+#' * Contents of \code{~/.github/token} file.
 #'
 #' @examples
 #' \dontrun{
@@ -23,11 +20,11 @@
 get_github_token = function() {
   token = usethis::github_token()
   if (token != "")
-    return(token)
+    return(invisible(token))
 
   if (file.exists("~/.github/token")) {
     set_github_token("~/.github/token")
-    return(get_github_token())
+    return(invisible(get_github_token()))
   }
 
   stop("Unable to locate github token, please use set_github_token",
@@ -37,8 +34,9 @@ get_github_token = function() {
 
 #' Set github token
 #'
-#' \code{set_github_token} defines the user's github authentication token,
-#' this value is then accessed using \code{get_github_token}
+#' `set_github_token` defines the user's github authentication token by
+#' defining the `GITHUB_PAT` enivronmental variable. This value can then
+#' be subsequently accessed using `get_github_token`.
 #'
 #' @param token character, either the path of a file contained the token or the actual token.
 #'
@@ -63,7 +61,8 @@ set_github_token = function(token) {
 
 #' Test github token
 #'
-#' \code{test_github_token} checks if a token is valid by attempting to authenticate with the GitHub api.
+#' test_github_token` checks if a token is valid by attempting to authenticate
+#' with the GitHub api.
 #'
 #' @param token github api personal access token
 #'

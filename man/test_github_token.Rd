@@ -10,7 +10,8 @@ test_github_token(token = get_github_token())
 \item{token}{github api personal access token}
 }
 \description{
-\code{test_github_token} checks if a token is valid by attempting to authenticate with the GitHub api.
+test_github_token` checks if a token is valid by attempting to authenticate
+with the GitHub api.
 }
 \examples{
 \dontrun{
