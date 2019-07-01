@@ -99,14 +99,14 @@ create_repo = function(org, name,
   arg_is_chr_scalar(org, prefix, suffix, gitignore_template)
   arg_is_lgl_scalar(private, auto_init)
 
-  if (prefix == "" & suffix == "")
-    usethis::ui_stop("Either a prefix or a suffix must be specified.")
-
   org_repos = get_repo(org)
 
   repo = paste0(prefix, name, suffix)
   repo = fix_repo_name(repo)
   repo = paste0(org, "/", repo)
+
+  if (length(repo) != length(unique(repo)))
+    usethis::ui_stop("Not all repo names are unique: {usethis::ui_value(repo).}")
 
   purrr::walk(
     repo,
