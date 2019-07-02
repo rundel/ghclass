@@ -33,8 +33,6 @@ create_repo("ghclass-test", c("user01","user02"), prefix = "hw01-")
 
 }
 \seealso{
-Other github organization related functions: \code{\link{get_member}},
-  \code{\link{get_pending_member}}, \code{\link{get_repo}},
-  \code{\link{get_team_repos}}, \code{\link{invite_user}}
+Other github repository related functions: \code{\link{repo_delete}}
 }
-\concept{github organization related functions}
+\concept{github repository related functions}

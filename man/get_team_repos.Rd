@@ -21,9 +21,8 @@ get_team_repos("ghclass",c("team01","team02"))
 
 }
 \seealso{
-Other github organization related functions: \code{\link{create_repo}},
-  \code{\link{get_member}},
+Other github organization related functions: \code{\link{get_member}},
   \code{\link{get_pending_member}}, \code{\link{get_repo}},
-  \code{\link{invite_user}}
+  \code{\link{invite_user}}, \code{\link{org_remove}}
 }
 \concept{github organization related functions}
