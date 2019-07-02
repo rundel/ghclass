@@ -26,6 +26,7 @@ rename_team("ghclass-test", "hw1-team01", "hw01-team01")
 Other github organization team related functions: \code{\link{add_team_member}},
   \code{\link{create_team}},
   \code{\link{get_pending_team_members}},
-  \code{\link{get_team_members}}, \code{\link{get_teams}}
+  \code{\link{get_team_members}}, \code{\link{get_teams}},
+  \code{\link{team_delete}}
 }
 \concept{github organization team related functions}
