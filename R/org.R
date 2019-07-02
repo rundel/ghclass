@@ -82,7 +82,7 @@ get_member = function(org, filter = NULL, exclude = FALSE) {
 
 
 
-github_api_get_invitation = function(owner){
+github_api_get_invitations = function(owner){
   arg_is_chr_scalar(owner)
   gh::gh("GET /orgs/:owner/invitations",
          owner = owner,
@@ -112,9 +112,14 @@ get_pending_member = function(org, filter = NULL, exclude = FALSE) {
   arg_is_chr_scalar(org)
   arg_is_chr_scalar(filter, allow_null = TRUE)
 
-  res = github_api_get_invitation(org)
-  invite = purrr::map_chr(res$result, "login")
+  res = purrr::safely(github_api_get_invitations)(org)
+  status_msg(
+    res,
+    fail = glue::glue("Failed to retrieve pending members for org {usethis::ui_value(org)}")
+  )
 
+  invite = purrr::map(result(res), "login")
+  invite = purrr::flatten_chr(invite)
   filter_results(invite, filter, exclude)
 }
 
