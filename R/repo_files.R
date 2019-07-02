@@ -144,7 +144,7 @@ github_api_code_search = function(query) {
 }
 
 
-find_file = function(repo, file){
+find_file = function(repo, file, verbose = T){
   arg_is_chr_scalar(repo)
   arg_is_chr(file)
 
@@ -160,7 +160,7 @@ find_file = function(repo, file){
 
         if(res[["total_count"]] > 0){
           purrr::map_chr(res[["items"]], "path")
-        } else {
+        } else if(verbose){
           usethis::ui_oops("Cannot find file {usethis::ui_value(file)} on {usethis::ui_value(repo)}.")
         }
       }
