@@ -189,44 +189,28 @@ invite_user = function(org, user) {
   arg_is_chr_scalar(org)
   arg_is_chr(user)
 
-  user = tolower(user)
+  user = unique(tolower(user))
   member = tolower(get_member(org))
   pending = tolower(get_pending_member(org))
 
-  need_invite = setdiff(user, c(member, pending))
-  is_member = intersect(user, member)
-  is_pending = intersect(user, pending)
-
-  if(length(need_invite) > 0){
-    purrr::walk(
-      need_invite,
-      function(need_invite) {
-        res = purrr::safely(github_api_invite_user)(org, need_invite)
+  purrr::walk(
+    user,
+    function(user) {
+      if (user %in% member) {
+        usethis::ui_info("User {usethis::ui_value(user)} already member of org {usethis::ui_value(org)}.")
+      } else if (user %in% pending) {
+        usethis::ui_info("User {usethis::ui_value(user)} is a pending member of org {usethis::ui_value(org)}.")
+      } else {
+        res = purrr::safely(github_api_invite_user)(org, user)
 
         status_msg(
           res,
-          usethis::ui_done("Added user {usethis::ui_value(need_invite)} to org {usethis::ui_value(org)}."),
-          usethis::ui_oops("Failed to add user {usethis::ui_value(need_invite)} to org {usethis::ui_value(org)}: does not exist.")
+          glue::glue("Invited user {usethis::ui_value(user)} to org {usethis::ui_value(org)}."),
+          glue::glue("Failed to invite user {usethis::ui_value(user)} to org {usethis::ui_value(org)}: does not exist.")
         )
       }
-    )
-  }
-
-  if(length(is_member) > 0){
-    purrr::walk(
-      is_member,
-      function(is_member)
-        usethis::ui_oops("{usethis::ui_value(is_member)} already member of org {usethis::ui_value(org)}.")
-    )
-  }
-
-  if(length(is_pending) > 0){
-    purrr::walk(
-      is_pending,
-      function(is_pending)
-        usethis::ui_oops("{usethis::ui_value(is_pending)} is a pending member of org {usethis::ui_value(org)}.")
-    )
-  }
+    }
+  )
 }
 
 
