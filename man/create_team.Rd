@@ -28,6 +28,6 @@ create_team("ghclass",c("team01","team01"))
 Other github organization team related functions: \code{\link{add_team_member}},
   \code{\link{get_pending_team_members}},
   \code{\link{get_team_members}}, \code{\link{get_teams}},
-  \code{\link{rename_team}}
+  \code{\link{rename_team}}, \code{\link{team_delete}}
 }
 \concept{github organization team related functions}

@@ -17,16 +17,11 @@ get_teams(org, filter = NULL, exclude = FALSE)
 \code{get_teams} returns a (filtered) data frame of teams in the organization with columns for
 their names (\code{name}) and their unique ids (\code{id}).
 }
-\examples{
-\dontrun{
-get_team_repos("ghclass",c("team01","team02"))
-}
-
-}
 \seealso{
 Other github organization team related functions: \code{\link{add_team_member}},
   \code{\link{create_team}},
   \code{\link{get_pending_team_members}},
-  \code{\link{get_team_members}}, \code{\link{rename_team}}
+  \code{\link{get_team_members}},
+  \code{\link{rename_team}}, \code{\link{team_delete}}
 }
 \concept{github organization team related functions}
