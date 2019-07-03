@@ -241,8 +241,8 @@ org_remove = function(org, user, prompt = TRUE) {
 
   if (prompt) {
     delete = usethis::ui_yeah( paste(
-      "This command will delete from org {usethis::ui_value(org)} the following users:",
-      "{usethis::ui_value(user)}."
+      "This command will delete the following users:",
+      "{usethis::ui_value(user)} from org {usethis::ui_value(org)}."
     ) )
     if (!delete) {
       return(invisible())
@@ -256,8 +256,8 @@ org_remove = function(org, user, prompt = TRUE) {
 
       status_msg(
         res,
-        glue::glue("Removed user {usethis::ui_value(repo)} from org {usethis::ui_value(org)}."),
-        glue::glue("Failed to remove user {usethis::ui_value(repo)} from org {usethis::ui_value(org)}.")
+        glue::glue("Removed user {usethis::ui_value(user)} from org {usethis::ui_value(org)}."),
+        glue::glue("Failed to remove user {usethis::ui_value(user)} from org {usethis::ui_value(org)}.")
       )
     }
   )
