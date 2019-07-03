@@ -24,6 +24,6 @@ github_set_token("0123456789ABCDEF0123456789ABCDEF01234567")
 \seealso{
 Other authentication: \code{\link{get_github_token}},
   \code{\link{github_reset_token}},
-  \code{\link{test_github_token}}, \code{\link{with_pat}}
+  \code{\link{github_test_token}}, \code{\link{with_pat}}
 }
 \concept{authentication}

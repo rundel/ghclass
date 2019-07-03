@@ -23,6 +23,6 @@ get_github_token() == token
 \seealso{
 Other authentication: \code{\link{get_github_token}},
   \code{\link{github_set_token}},
-  \code{\link{test_github_token}}, \code{\link{with_pat}}
+  \code{\link{github_test_token}}, \code{\link{with_pat}}
 }
 \concept{authentication}
