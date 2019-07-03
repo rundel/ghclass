@@ -19,7 +19,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' g = get_repo("Sta323-Sp18","hw3-")
+#' g = org_repos("Sta323-Sp18","hw3-")
 #' clone_repo(g, "hw3")
 #'
 #' pull_repo(g, "hw3")

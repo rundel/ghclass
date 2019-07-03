@@ -1,4 +1,4 @@
-github_api_get_member = function(org) {
+github_api_org_members = function(org) {
   arg_is_chr_scalar(org)
 
   gh::gh("GET /orgs/:org/members",
@@ -10,7 +10,7 @@ github_api_get_member = function(org) {
 
 #' Get organization member
 #'
-#' `get_member` returns a (filtered) vector of organization memebers.
+#' `org_members` returns a (filtered) vector of organization memebers.
 #'
 #' @param org Character. Name of the GitHub organization.
 #' @param filter Character. Regular expression pattern for matching (or excluding) repositories.
@@ -19,19 +19,19 @@ github_api_get_member = function(org) {
 #'
 #' @examples
 #' \dontrun{
-#' get_member("ghclass")
+#' org_members("ghclass")
 #' }
 #'
 #' @family github organization related functions
 #'
 #' @export
 #'
-get_member = function(org, filter = NULL, exclude = FALSE,
+org_members = function(org, filter = NULL, exclude = FALSE,
                       include_admins = TRUE) {
   arg_is_chr_scalar(org)
   arg_is_chr_scalar(filter, allow_null = TRUE)
 
-  res = purrr::safely(github_api_get_member)(org)
+  res = purrr::safely(github_api_org_members)(org)
   members = purrr::map_chr(result(res), "login")
 
   if (!include_admins)

@@ -148,7 +148,7 @@ create_repo = function(org, name,
   arg_is_chr_scalar(org, prefix, suffix, gitignore_template)
   arg_is_lgl_scalar(private, auto_init)
 
-  org_repos = get_repo(org)
+  org_repos = org_repos(org)
 
   repo = paste0(prefix, name, suffix)
   repo = paste0(org, "/", repo)
@@ -328,7 +328,8 @@ rename_repo = function(repo, new_name) {
 
 #' Mirror repository
 #'
-#' `mirror_repo` mirrors the content of one repository to another repository, or set of repositories. Use the `get_repos` function as a wrapper for the target_repo parameter to enable mirroring to multiple repositories.
+#' `mirror_repo` mirrors the content of one repository to another repository, or set of 
+#' repositories.
 #'
 #' @param source_repo Character. Address of repository in "owner/name" format.
 #' @param target_repo Character. One or more repository addresses in "owner/name" format.
@@ -337,7 +338,7 @@ rename_repo = function(repo, new_name) {
 #' @examples
 #' \dontrun{
 #' mirror_repo("ghclass-test/hw1", c("ghclass-test/hw1-Team1", "ghclass-test/hw1-Team2"))
-#' mirror_repo("ghclass-test/hw1", get_repos("ghclass-test","hw1-"))
+#' mirror_repo("ghclass-test/hw1", org_repos("ghclass-test","hw1-"))
 #' }
 #'
 #' @export

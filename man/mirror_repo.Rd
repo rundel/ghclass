@@ -14,12 +14,13 @@ mirror_repo(source_repo, target_repo, verbose = FALSE)
 \item{verbose}{Logical. Display verbose output.}
 }
 \description{
-\code{mirror_repo} mirrors the content of one repository to another repository, or set of repositories. Use the \code{get_repos} function as a wrapper for the target_repo parameter to enable mirroring to multiple repositories.
+\code{mirror_repo} mirrors the content of one repository to another repository, or set of
+repositories.
 }
 \examples{
 \dontrun{
 mirror_repo("ghclass-test/hw1", c("ghclass-test/hw1-Team1", "ghclass-test/hw1-Team2"))
-mirror_repo("ghclass-test/hw1", get_repos("ghclass-test","hw1-"))
+mirror_repo("ghclass-test/hw1", org_repos("ghclass-test","hw1-"))
 }
 
 }

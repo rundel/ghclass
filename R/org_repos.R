@@ -1,15 +1,17 @@
-github_api_get_repos = function(owner) {
+github_api_org_repos = function(owner) {
   arg_is_chr_scalar(owner)
 
-  gh::gh("GET /orgs/:owner/repos",
-         owner = owner,
-         .token = github_get_token(),
-         .limit = get_github_api_limit())
+  gh::gh(
+    "GET /orgs/:owner/repos",
+    owner = owner,
+    .token = github_get_token(),
+    .limit = get_github_api_limit()
+  )
 }
 
 #' Get organization repository
 #'
-#' `get_repo` returns a (filtered) vector of repositories belonging to a GitHub organization.
+#' `org_repos` returns a (filtered) vector of repositories belonging to a GitHub organization.
 #'
 #' @param org Character. Name of the GitHub organization.
 #' @param filter Character. Regular expression pattern for matching (or excluding) repositories.
@@ -19,21 +21,28 @@ github_api_get_repos = function(owner) {
 #'
 #' @examples
 #' \dontrun{
-#' get_repo("ghclass")
-#' get_repo("ghclass", "hw1-")
+#' org_repos("ghclass")
+#' org_repos("ghclass", "hw1-")
 #' }
 #'
 #' @family github organization related functions
 #'
 #' @export
 #'
-get_repo = function(org, filter = NULL, exclude = FALSE, full_repo = TRUE) {
+org_repos = function(org, filter = NULL, exclude = FALSE, full_repo = TRUE) {
 
   arg_is_chr_scalar(org)
   arg_is_chr_scalar(filter, allow_null = TRUE)
 
-  res = github_api_get_repos(org)
-  res = purrr::map_chr(res, "name")
+  res = purrr::safely(github_api_org_repos)(org)
+  status_msg(
+    res, fail = glue::glue("Failed to retrieve repos for org {usethis::ui_value(org)}.")
+  )
+
+  if (failed(res))
+    return(invisible(NULL))
+
+  res = purrr::map_chr(result(res), "name")
   res = filter_results(res, filter, exclude)
 
   if (full_repo & length(res) > 0)

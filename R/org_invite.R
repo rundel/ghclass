@@ -1,4 +1,4 @@
-github_api_invite_user = function(org, user) {
+github_api_org_invite = function(org, user) {
   arg_is_chr_scalar(org, user)
 
   gh::gh(
@@ -13,7 +13,7 @@ github_api_invite_user = function(org, user) {
 
 #' Invite user(s)
 #'
-#' `invite_user` invites user(s) to your organization.
+#' `org_invite` invites user(s) to your organization.
 #'
 #' @param org Character. Name of the GitHub organization.
 #' @param user Character, character vector, or list. Listing one or more user names.
@@ -21,19 +21,19 @@ github_api_invite_user = function(org, user) {
 #' @examples
 #' \dontrun{
 #' user = c("Alice","Bob","Carol","Dave","Eve")
-#' invite_user("Sta523-Fa17", user)
+#' org_invite("Sta523-Fa17", user)
 #' }
 #'
 #' @family github organization related functions
 #'
 #' @export
-invite_user = function(org, user) {
+org_invite = function(org, user) {
   arg_is_chr_scalar(org)
   arg_is_chr(user)
 
   user = unique(tolower(user))
-  member = tolower(get_member(org))
-  pending = tolower(get_pending_member(org))
+  member = tolower(org_members(org))
+  pending = tolower(org_pending_members(org))
 
   purrr::walk(
     user,
@@ -43,7 +43,7 @@ invite_user = function(org, user) {
       } else if (user %in% pending) {
         usethis::ui_info("User {usethis::ui_value(user)} is already a pending member of org {usethis::ui_value(org)}.")
       } else {
-        res = purrr::safely(github_api_invite_user)(org, user)
+        res = purrr::safely(github_api_org_invite)(org, user)
 
         status_msg(
           res,

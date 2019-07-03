@@ -145,7 +145,7 @@ organzation. This will send an email to each student inviting them to join the
 GitHub organization.
 
 ```r
-invite_user("Sta523-Fa17", roster$github)
+org_invite("Sta523-Fa17", roster$github)
 
 ## Adding Alice to Sta523-Fa17 ...
 ## Adding Bob to Sta523-Fa17 ...
@@ -176,7 +176,7 @@ team_invite("Sta523-Fa17", roster$github, roster$team)
 ```
 
 You can check which students are added to the organization using the
-`get_members` function, and pending invitations using the `get_pending_members`
+`org_memberss` function, and pending invitations using the `org_pending_memberss`
 function, respectively. Note that if students are first-time GitHub users, they will need to
 verify the email address associated with their GitHub account and accept the
 invitation before they show up as a member of the organization.
@@ -203,7 +203,7 @@ earlier. You can do this with the `mirror_repo` function.
 ```r
 mirror_repo(
   source_repo = "Sta523-Fa17/hw2",
-  target_repos = get_repos("Sta523-Fa17","hw2-")
+  target_repos = org_repos("Sta523-Fa17","hw2-")
 )
 
 ## Cloning source repo (Sta523-Fa17/hw2) ...
@@ -233,7 +233,7 @@ the following:
 * Make sure third party access is allowed for your github organization (See Settings / Third-party access then click on remote restrictions)
 
 ```r
-add_wercker(get_repos("Sta523-Fa17", "hw2-"), "Sta523-Fa17")
+add_wercker(org_repos("Sta523-Fa17", "hw2-"), "Sta523-Fa17")
 
 ## Creating wercker app for Sta523-Fa17/hw2-Team1 ...
 ## Creating wercker app for Sta523-Fa17/hw2-Team2 ...
@@ -251,7 +251,7 @@ if students have already started working on the repos.
 
 ```r
 add_files(
-  get_repos("Sta523-Fa17","hw2-"),
+  org_repos("Sta523-Fa17","hw2-"),
   message = "Remove wrong wercker badge",
   files = "~/Desktop/Sta523/Homework/hw2/repo/README.md"
 )
