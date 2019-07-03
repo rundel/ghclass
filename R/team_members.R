@@ -25,7 +25,7 @@ github_api_team_members = function(id) {
 #'
 #' @export
 #'
-team_members = function(org, team = get_teams(org)) {
+team_members = function(org, team = org_teams(org)) {
   arg_is_chr_scalar(org)
 
   if (is.character(team))

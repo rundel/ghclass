@@ -26,7 +26,7 @@ team_invite("ghclass-test", "rundel", c("hw1-team01","hw1-team02"))
 
 }
 \seealso{
-Other github organization team related functions: \code{\link{get_teams}},
+Other github organization team related functions: \code{\link{org_teams}},
   \code{\link{team_create}}, \code{\link{team_delete}},
   \code{\link{team_members}},
   \code{\link{team_pending_members}},

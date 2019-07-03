@@ -4,7 +4,7 @@
 \alias{team_members}
 \title{Get team members}
 \usage{
-team_members(org, team = get_teams(org))
+team_members(org, team = org_teams(org))
 }
 \arguments{
 \item{org}{character, name of the GitHub organization.}
@@ -21,7 +21,7 @@ team_members("ghclass-test",c("team01","team02"))
 
 }
 \seealso{
-Other github organization team related functions: \code{\link{get_teams}},
+Other github organization team related functions: \code{\link{org_teams}},
   \code{\link{team_create}}, \code{\link{team_delete}},
   \code{\link{team_invite}},
   \code{\link{team_pending_members}},

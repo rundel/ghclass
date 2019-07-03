@@ -33,12 +33,12 @@ team_invite = function(org, user, team, create_missing_teams = TRUE) {
 
   d = tibble::tibble(user, team)
 
-  org_teams = get_teams(org)
+  org_teams = org_teams(org)
   new_teams = setdiff(unique(team), org_teams[["team"]])
 
   if (length(new_teams) > 0 & create_missing_teams) {
     team_create(org, new_teams)
-    org_teams = get_teams(org)
+    org_teams = org_teams(org)
   }
 
   d = team_id_lookup(d, org_teams)

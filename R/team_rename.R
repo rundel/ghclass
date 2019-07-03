@@ -32,7 +32,7 @@ team_rename = function(org, team, new_team) {
     new_team = new_team
   )
 
-  d = team_id_lookup(d, get_teams(org))
+  d = team_id_lookup(d, org_teams(org))
 
   purrr::pwalk(
     d,

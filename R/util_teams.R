@@ -1,5 +1,5 @@
 get_specific_teams = function(org, teams, strict = TRUE) {
-  org_teams = get_teams(org)
+  org_teams = org_teams(org)
 
   sub = teams %in% org_teams[["team"]]
   if (sum(sub) != length(teams) & strict) {

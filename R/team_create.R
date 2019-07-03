@@ -29,7 +29,7 @@ team_create = function(org, team, privacy = c("closed","secret")) {
   team = unique(as.character(team))
   privacy = match.arg(privacy)
 
-  org_teams = get_teams(org)[["team"]]
+  org_teams = org_teams(org)[["team"]]
 
   new_teams = setdiff(team, org_teams)
   existing_teams = intersect(team, org_teams)

@@ -1,4 +1,4 @@
-github_api_get_teams = function(org) {
+github_api_org_teams = function(org) {
   gh::gh(
     "GET /orgs/:org/teams", org=org,
     .token = github_get_token(),
@@ -8,7 +8,7 @@ github_api_get_teams = function(org) {
 
 #' Get organization teams
 #'
-#' `get_teams` returns a (filtered) data frame of teams in the organization with columns for
+#' `org_teams` returns a (filtered) data frame of teams in the organization with columns for
 #' their names (`name`) and their unique ids (`id`).
 #'
 #' @param org character, name of the GitHub organization.
@@ -19,12 +19,12 @@ github_api_get_teams = function(org) {
 #'
 #' @export
 #'
-get_teams = function(org, filter=NULL, exclude=FALSE) {
+org_teams = function(org, filter=NULL, exclude=FALSE) {
   arg_is_chr_scalar(org)
   arg_is_lgl_scalar(exclude)
   stopifnot(length(filter)<=1)
 
-  res = github_api_get_teams(org)
+  res = github_api_org_teams(org)
 
   teams = if (empty_result(res)) {
     tibble::tibble(

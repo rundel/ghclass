@@ -23,7 +23,7 @@ github_api_team_pending_members = function(id) {
 #'
 #' @export
 #'
-team_pending_members = function(org, team = get_teams(org)) {
+team_pending_members = function(org, team = org_teams(org)) {
   arg_is_chr_scalar(org)
 
   if (is.character(team))
