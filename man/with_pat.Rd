@@ -25,7 +25,7 @@ if \code{NA} is used the \code{GITHUB_PAT} environment variable will be unset.
 }
 \seealso{
 Other authentication: \code{\link{get_github_token}},
-  \code{\link{reset_github_token}},
+  \code{\link{github_reset_token}},
   \code{\link{set_github_token}},
   \code{\link{test_github_token}}
 }
