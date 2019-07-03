@@ -1,4 +1,4 @@
-github_api_unprotect_branch = function(repo, branch) {
+github_api_branch_unprotect = function(repo, branch) {
   gh::gh(
     "DELETE /repos/:owner/:repo/branches/:branch/protection",
     owner = get_repo_owner(repo),
@@ -11,7 +11,7 @@ github_api_unprotect_branch = function(repo, branch) {
 
 #' Unprotect branch
 #'
-#' `unprotect_branch` removes protections from the specified branch. See
+#' `branch_unprotect` removes protections from the specified branch. See
 #' <https://help.github.com/en/articles/about-protected-branches> for more details
 #' on what this changes.
 #'
@@ -22,14 +22,14 @@ github_api_unprotect_branch = function(repo, branch) {
 #'
 #' @export
 #'
-unprotect_branch = function(repo, branch = "master") {
+branch_unprotect = function(repo, branch = "master") {
   arg_is_chr(repo, branch)
 
   purrr::walk2(
     repo, branch,
     function(repo, branch) {
 
-      res = purrr::safely(github_api_unprotect_branch)(repo, branch)
+      res = purrr::safely(github_api_branch_unprotect)(repo, branch)
 
       repo_fmt = usethis::ui_value(format_repo(repo, branch))
 

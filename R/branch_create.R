@@ -20,7 +20,7 @@ get_branch_ref = function(repo, branch) {
   result(res)
 }
 
-github_api_create_branch = function(repo, cur_branch, new_branch) {
+github_api_branch_create = function(repo, cur_branch, new_branch) {
   head = get_branch_ref(repo, cur_branch)
 
   gh::gh(
@@ -38,7 +38,7 @@ github_api_create_branch = function(repo, cur_branch, new_branch) {
 
 #' Create branch
 #'
-#' `create_branch` creates a new branch from an existing git repo.
+#' `branch_create` creates a new branch from an existing git repo.
 #'
 #' @param repo github repository address in `owner/repo` format
 #' @param cur_branch name of existing branch
@@ -48,13 +48,13 @@ github_api_create_branch = function(repo, cur_branch, new_branch) {
 #'
 #' @export
 #'
-create_branch = function(repo, cur_branch = "master", new_branch) {
+branch_create = function(repo, cur_branch = "master", new_branch) {
   arg_is_chr(repo, cur_branch, new_branch)
 
   purrr::pwalk(
     list(repo, cur_branch, new_branch),
     function(repo, cur_branch, new_branch) {
-      res = purrr::safely(github_api_create_branch)(repo, cur_branch, new_branch)
+      res = purrr::safely(github_api_branch_create)(repo, cur_branch, new_branch)
 
       repo_fmt = usethis::ui_value(format_repo(repo, cur_branch))
 

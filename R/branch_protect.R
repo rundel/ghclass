@@ -1,4 +1,4 @@
-github_api_protect_branch = function(repo, branch) {
+github_api_branch_protect = function(repo, branch) {
   gh::gh(
     "PUT /repos/:owner/:repo/branches/:branch/protection",
     owner = get_repo_owner(repo),
@@ -18,7 +18,7 @@ github_api_protect_branch = function(repo, branch) {
 
 #' Protect branch
 #'
-#' `protect_branch`` turns on protection for the specified branch. See
+#' `branch_protect`` turns on protection for the specified branch. See
 #' <https://help.github.com/en/articles/about-protected-branches> for more details
 #' on what this changes.
 #'
@@ -29,13 +29,13 @@ github_api_protect_branch = function(repo, branch) {
 #'
 #' @export
 #'
-protect_branch = function(repo, branch = "master") {
+branch_protect = function(repo, branch = "master") {
   arg_is_chr(repo, branch)
 
   purrr::walk2(
     repo, branch,
     function(repo, branch) {
-      res = purrr::safely(github_api_protect_branch)(repo, branch)
+      res = purrr::safely(github_api_branch_protect)(repo, branch)
 
       repo_fmt = usethis::ui_value(format_repo(repo, branch))
 
