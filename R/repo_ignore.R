@@ -8,7 +8,7 @@
 #'
 #' @export
 #'
-ignore_repo = function(repo) {
+repo_ignore = function(repo) {
   arg_is_chr(repo)
 
   purrr::walk(

@@ -25,7 +25,7 @@ github_api_set_subscription = function(repo, subscribed, ignored){
 #'
 #' @export
 #'
-watch_repo = function(repo) {
+repo_watch = function(repo) {
   arg_is_chr(repo)
 
   purrr::walk(

@@ -1,4 +1,4 @@
-github_api_unwatch_repo = function(repo){
+github_api_repo_unwatch = function(repo){
   gh::gh(
     "DELETE /repos/:owner/:repo/subscription",
     owner = get_repo_owner(repo),
@@ -16,21 +16,21 @@ github_api_unwatch_repo = function(repo){
 #'
 #' @examples
 #' \dontrun{
-#' unwatch_repo()
-#' unwatch_repo("Sta523-Fa15/hw1-Tim")
+#' repo_unwatch()
+#' repo_unwatch("Sta523-Fa15/hw1-Tim")
 #' }
 #'
 #' @family notification
 #'
 #' @export
 #'
-unwatch_repo = function(repo) {
+repo_unwatch = function(repo) {
   arg_is_chr(repo)
 
   purrr::walk(
     repo,
     function(repo) {
-      res = purrr::safely(github_api_unwatch_repo)(repo)
+      res = purrr::safely(github_api_repo_unwatch)(repo)
 
       status_msg(
         res,

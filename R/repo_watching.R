@@ -1,4 +1,4 @@
-github_api_get_watching = function() {
+github_api_repo_watching = function() {
   gh::gh(
     "GET /user/subscriptions",
     .token = github_get_token(),
@@ -18,18 +18,18 @@ github_api_get_watching = function() {
 #'
 #' @examples
 #' \dontrun{
-#' get_watching()
-#' get_watching("hw1")
+#' repo_watching()
+#' repo_watching("hw1")
 #' }
 #'
 #' @family notification
 #'
 #' @export
 #'
-get_watching = function(filter = NULL, exclude = FALSE){
+repo_watching = function(filter = NULL, exclude = FALSE){
   arg_is_chr_scalar(filter, allow_null = TRUE)
   arg_is_lgl_scalar(exclude)
 
-  res = purrr::map_chr(github_api_get_watching(), "full_name")
+  res = purrr::map_chr(github_api_repo_watching(), "full_name")
   filter_results(res, filter, exclude)
 }
