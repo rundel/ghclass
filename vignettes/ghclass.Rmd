@@ -166,7 +166,7 @@ create_team("Sta523-Fa17", teams)
 ```
 
 ```r
-add_team_member("Sta523-Fa17", roster$github, roster$team)
+team_invite("Sta523-Fa17", roster$github, roster$team)
 
 ## Adding Alice to team Team1 ...
 ## Adding Bob to team Team2 ...

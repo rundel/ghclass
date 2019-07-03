@@ -1,4 +1,4 @@
-github_api_add_team_member = function(team_id, username) {
+github_api_team_invite = function(team_id, username) {
   gh(
     "PUT /teams/:id/memberships/:username",
     id=team_id, username=username, role="member",
@@ -8,7 +8,7 @@ github_api_add_team_member = function(team_id, username) {
 
 #' Add Members to an Organizaton's Team(s)
 #'
-#' `add_team_member` add members to GitHub Organization Teams.
+#' `team_invite` add members to GitHub Organization Teams.
 #'
 #' @param org character, name of the GitHub organization
 #' @param user character, one or more usernames to invite
@@ -18,13 +18,13 @@ github_api_add_team_member = function(team_id, username) {
 #'
 #' @examples
 #' \dontrun{
-#' add_team_member("ghclass-test", "rundel", c("hw1-team01","hw1-team02"))
+#' team_invite("ghclass-test", "rundel", c("hw1-team01","hw1-team02"))
 #' }
 #'
 #' @family github organization team related functions
 #'
 #' @export
-add_team_member = function(org, user, team, create_missing_teams = TRUE) {
+team_invite = function(org, user, team, create_missing_teams = TRUE) {
   stopifnot(!missing(org))
 
   stopifnot(is.character(user) & length(user) >=1)
@@ -46,7 +46,7 @@ add_team_member = function(org, user, team, create_missing_teams = TRUE) {
   purrr::pwalk(
     d,
     function(user, team, id) {
-      res = purrr::safely(github_api_add_team_member)(id, user)
+      res = purrr::safely(github_api_team_invite)(id, user)
 
       status_msg(
         res,
