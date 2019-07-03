@@ -78,7 +78,7 @@ github_api_get_team_repos = function(team_id) {
 
 #' Get teams' repos
 #'
-#' \code{get_team_repos} returns a (filtered) data frame of teams and their repos.
+#' `get_team_repos` returns a (filtered) data frame of teams and their repos.
 #'
 #' @param org character, name of the GitHub organization.
 #' @param team character or data frame, listing one or more team
@@ -121,7 +121,7 @@ get_team_repos = function(org, team)
 
 #' Get team members
 #'
-#' \code{get_team_members} returns a data frame of teams and their members.
+#' `get_team_members` returns a data frame of teams and their members.
 #'
 #' @param org character, name of the GitHub organization.
 #' @param team character or data frame, listing one or more team
@@ -183,7 +183,7 @@ get_team_members = function(org, team = get_teams(org), get_pending = TRUE)
 
 #' Get pending team members
 #'
-#' \code{get_pending_team_members} returns a data frame of pending team members.
+#' `get_pending_team_members` returns a data frame of pending team members.
 #'
 #' @param org character, name of the GitHub organization.
 #' @param team character or data frame, listing one or more team
@@ -241,7 +241,7 @@ github_api_create_team = function(org, name, privacy) {
 
 #' Create team(s)
 #'
-#' \code{create_team} creates teams in your GitHub organization
+#' `create_team` creates teams in your GitHub organization
 #'
 #' @param org character, name of the GitHub organization
 #' @param team character, listing one or more teams
@@ -298,7 +298,7 @@ github_api_rename_team = function(id, new_name) {
 
 #' Rename existing team(s)
 #'
-#' \code{rename_team} renames an existing team within the given GitHub organization.
+#' `rename_team` renames an existing team within the given GitHub organization.
 #'
 #' @param org character, name of the GitHub organization
 #' @param team character, one or more existing team names
@@ -347,7 +347,7 @@ github_api_add_team_member = function(team_id, username) {
 
 #' Add Members to an Organizaton's Team(s)
 #'
-#' \code{add_team_member} add members to GitHub Organization Teams.
+#' `add_team_member` add members to GitHub Organization Teams.
 #'
 #' @param org character, name of the GitHub organization
 #' @param user character, one or more usernames to invite
