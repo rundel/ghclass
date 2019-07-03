@@ -1,4 +1,4 @@
-github_api_get_branch_ref = function(repo, branch="master") {
+github_api_branch_get_ref = function(repo, branch="master") {
   gh::gh(
     "GET /repos/:owner/:repo/commits/:ref",
     owner = get_repo_owner(repo),
@@ -12,7 +12,7 @@ github_api_get_branch_ref = function(repo, branch="master") {
 get_branch_ref = function(repo, branch) {
   arg_is_chr_scalar(repo, branch)
 
-  res = purrr::safely(github_api_get_branch_ref)(repo, branch)
+  res = purrr::safely(github_api_branch_get_ref)(repo, branch)
 
   if (failed(res)) {
     usethis::ui_stop("Unable to locate branch {usethis::ui_value(format_repo(repo, branch))}.")
