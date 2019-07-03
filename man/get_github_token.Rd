@@ -25,7 +25,7 @@ get_github_token()
 }
 \seealso{
 Other authentication: \code{\link{github_reset_token}},
-  \code{\link{set_github_token}},
+  \code{\link{github_set_token}},
   \code{\link{test_github_token}}, \code{\link{with_pat}}
 }
 \concept{authentication}

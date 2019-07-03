@@ -13,7 +13,7 @@ enivronmental variable.
 \examples{
 \dontrun{
 token = "0123456789ABCDEF0123456789ABCDEF01234567"
-set_github_token("0123456789ABCDEF0123456789ABCDEF01234567")
+github_set_token("0123456789ABCDEF0123456789ABCDEF01234567")
 get_github_token() == token
 github_reset_token()
 get_github_token() == token
@@ -22,7 +22,7 @@ get_github_token() == token
 }
 \seealso{
 Other authentication: \code{\link{get_github_token}},
-  \code{\link{set_github_token}},
+  \code{\link{github_set_token}},
   \code{\link{test_github_token}}, \code{\link{with_pat}}
 }
 \concept{authentication}

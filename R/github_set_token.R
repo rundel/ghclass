@@ -1,6 +1,6 @@
 #' Set github token
 #'
-#' `set_github_token` defines the user's github authentication token by
+#' `github_set_token` defines the user's github authentication token by
 #' defining the `GITHUB_PAT` enivronmental variable. This value can then
 #' be subsequently accessed using `get_github_token`.
 #'
@@ -8,15 +8,15 @@
 #'
 #' @examples
 #' \dontrun{
-#' set_github_token("~/.github/token")
-#' set_github_token("0123456789ABCDEF0123456789ABCDEF01234567")
+#' github_set_token("~/.github/token")
+#' github_set_token("0123456789ABCDEF0123456789ABCDEF01234567")
 #' }
 #'
 #' @family authentication
 #'
 #' @export
 
-set_github_token = function(token) {
+github_set_token = function(token) {
   token = as.character(token)
 
   if (file.exists(token))

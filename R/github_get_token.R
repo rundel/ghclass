@@ -23,10 +23,10 @@ get_github_token = function() {
     return(invisible(token))
 
   if (file.exists("~/.github/token")) {
-    set_github_token("~/.github/token")
+    github_set_token("~/.github/token")
     return(invisible(get_github_token()))
   }
 
-  stop("Unable to locate github token, please use set_github_token",
+  stop("Unable to locate github token, please use github_set_token",
        " or define the GITHUB_TOKEN environmental variable.")
 }

@@ -100,9 +100,9 @@ token in the browser after logging into Github (Settings > Developer Settings >
 Personal access tokens) or use
 [`usethis::browse_github_token`](https://usethis.r-lib.org/articles/articles/usethis-setup.html#get-and-store-a-github-personal-access-token).
 Copy your token to the clipboard and paste it as a character string into the
-`set_github_token` function.
+`github_set_token` function.
 
-Alternative token locations can be specified with `set_github_token` or
+Alternative token locations can be specified with `github_set_token` or
 `set_wercker_token`.
 
 ## Step-by-step guide

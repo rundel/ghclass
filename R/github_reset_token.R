@@ -6,7 +6,7 @@
 #' @examples
 #' \dontrun{
 #' token = "0123456789ABCDEF0123456789ABCDEF01234567"
-#' set_github_token("0123456789ABCDEF0123456789ABCDEF01234567")
+#' github_set_token("0123456789ABCDEF0123456789ABCDEF01234567")
 #' get_github_token() == token
 #' github_reset_token()
 #' get_github_token() == token
