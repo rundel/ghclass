@@ -151,7 +151,6 @@ create_repo = function(org, name,
   org_repos = get_repo(org)
 
   repo = paste0(prefix, name, suffix)
-  repo = fix_repo_name(repo)
   repo = paste0(org, "/", repo)
 
   if (length(repo) != length(unique(repo)))

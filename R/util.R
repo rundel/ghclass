@@ -20,10 +20,6 @@ filter_results.data.frame = function(res, col, pattern = NULL, exclude = FALSE) 
   res
 }
 
-fix_repo_name = function(repo_name) {
-  repo_name = stringr::str_replace_all(repo_name, " ", "_")
-  stringr::str_replace_all(repo_name, "[^A-Za-z0-9_.-]+","-")
-}
 
 
 
