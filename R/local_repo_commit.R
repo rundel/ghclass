@@ -1,6 +1,6 @@
 #' @rdname local_repo
 #' @export
-commit_repo = function(repo_dir, message,
+local_repo_commit = function(repo_dir, message,
                        git = require_git(), options = character(),
                        verbose = FALSE)
 {

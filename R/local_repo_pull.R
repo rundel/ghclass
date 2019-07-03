@@ -1,6 +1,6 @@
 #' @rdname local_repo
 #' @export
-pull_repo = function(repo_dir, remote="origin", branch="master",
+local_repo_pull = function(repo_dir, remote="origin", branch="master",
                      git = require_git(), options = character(),
                      verbose = FALSE)
 {

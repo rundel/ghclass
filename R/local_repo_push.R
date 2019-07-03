@@ -1,6 +1,6 @@
 #' @rdname local_repo
 #' @export
-push_repo = function(repo_dir, remote = "origin", branch="master",
+local_repo_push = function(repo_dir, remote = "origin", branch="master",
                      git = require_git(), options = character(),
                      verbose = FALSE)
 {

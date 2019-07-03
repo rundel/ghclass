@@ -350,12 +350,12 @@ mirror_repo = function(source_repo, target_repo, verbose=FALSE)
 
   withr::local_dir(tempdir())
 
-  dir = clone_repo(source_repo, getwd(), options = "--bare", verbose = verbose)
+  dir = local_repo_clone(source_repo, getwd(), options = "--bare", verbose = verbose)
 
   purrr::walk(
     target_repo,
     function(repo) {
-      mirror_push_repo(dir, repo, verbose = verbose)
+      local_repo_mirror_push(dir, repo, verbose = verbose)
     }
   )
 

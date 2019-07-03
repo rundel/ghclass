@@ -1,6 +1,6 @@
 #' @rdname local_repo
 #' @export
-clone_repo = function(repo, local_path="./", branch = "master",
+local_repo_clone = function(repo, local_path="./", branch = "master",
                       git = require_git(), options = character(),
                       absolute_path = TRUE, verbose = FALSE)
 {
@@ -36,4 +36,14 @@ clone_repo = function(repo, local_path="./", branch = "master",
   )
 
   invisible(dirs)
+}
+
+#' @rdname local_repo
+#' @export
+repo_clone = function(repo, local_path="./", branch = "master",
+                      git = require_git(), options = character(),
+                      absolute_path = TRUE, verbose = FALSE)
+{
+  local_repo_clone(repo, local_path, branch,
+                   git, options, absolute_path, verbose)
 }

@@ -1,4 +1,4 @@
-mirror_push_repo = function(repo_dir, remote,
+local_repo_mirror_push = function(repo_dir, remote,
                             git = require_git(),
                             options = character(),
                             verbose = FALSE)

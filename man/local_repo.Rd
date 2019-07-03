@@ -2,30 +2,34 @@
 % Please edit documentation in R/local_repo_add.R, R/local_repo_clone.R,
 %   R/local_repo_commit.R, R/local_repo_docs.R, R/local_repo_pull.R,
 %   R/local_repo_push.R
-\name{add_repo}
-\alias{add_repo}
-\alias{clone_repo}
-\alias{commit_repo}
+\name{local_repo_add}
+\alias{local_repo_add}
+\alias{local_repo_clone}
+\alias{repo_clone}
+\alias{local_repo_commit}
 \alias{local_repo}
-\alias{local_repo_rename}
-\alias{pull_repo}
-\alias{push_repo}
+\alias{local_repo_pull}
+\alias{local_repo_push}
 \title{Local repository tools}
 \usage{
-add_repo(repo_dir, files = ".", git = require_git(),
+local_repo_add(repo_dir, files = ".", git = require_git(),
   options = character(), verbose = FALSE)
 
-clone_repo(repo, local_path = "./", branch = "master",
+local_repo_clone(repo, local_path = "./", branch = "master",
   git = require_git(), options = character(), absolute_path = TRUE,
   verbose = FALSE)
 
-commit_repo(repo_dir, message, git = require_git(),
+repo_clone(repo, local_path = "./", branch = "master",
+  git = require_git(), options = character(), absolute_path = TRUE,
+  verbose = FALSE)
+
+local_repo_commit(repo_dir, message, git = require_git(),
   options = character(), verbose = FALSE)
 
-pull_repo(repo_dir, remote = "origin", branch = "master",
+local_repo_pull(repo_dir, remote = "origin", branch = "master",
   git = require_git(), options = character(), verbose = FALSE)
 
-push_repo(repo_dir, remote = "origin", branch = "master",
+local_repo_push(repo_dir, remote = "origin", branch = "master",
   git = require_git(), options = character(), verbose = FALSE)
 }
 \arguments{
@@ -45,24 +49,24 @@ find the git binary based on your `PATH``, it will throw an error if git cannot 
 \description{
 The functions provide tools for working with local git repositories, ghclass includes support for following git commands:
 \itemize{
-\item git clone = \code{clone_repo}
-\item git add = \code{add_repo}
-\item git commit = \code{commit_repo}
-\item git push = \code{push_repo}
-\item git pull = \code{pull_repo}
+\item git clone = \code{local_repo_clone}
+\item git add = \code{local_repo_add}
+\item git commit = \code{local_repo_commit}
+\item git push = \code{local_repo_push}
+\item git pull = \code{local_repo_pull}
 }
 }
 \examples{
 \dontrun{
 g = org_repos("Sta323-Sp18","hw3-")
-clone_repo(g, "hw3")
+local_repo_clone(g, "hw3")
 
-pull_repo(g, "hw3")
+local_repo_pull(g, "hw3")
 
 # After Modifying hw3.Rmd
-add_repo("hw3", "hw3.Rmd")
-commit_repo("hw3", "Revised homework")
-push_repo("hw3")
+local_repo_add("hw3", "hw3.Rmd")
+local_repo_commit("hw3", "Revised homework")
+local_repo_push("hw3")
 }
 
 }

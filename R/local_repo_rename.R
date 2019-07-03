@@ -10,7 +10,7 @@
 #'
 #' @export
 #'
-rename_local_repo = function(repo_dir, pattern, replacement) {
+local_repo_rename = function(repo_dir, pattern, replacement) {
   arg_is_chr_scalar(repo_dir)
   arg_is_chr(pattern, replacement)
 

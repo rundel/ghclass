@@ -1,6 +1,6 @@
 #' @rdname local_repo
 #' @export
-add_repo = function(repo_dir, files = ".",
+local_repo_add = function(repo_dir, files = ".",
                     git = require_git(), options = character(),
                     verbose = FALSE)
 {
