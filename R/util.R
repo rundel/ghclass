@@ -92,10 +92,12 @@ flag_experimental = function() {
 
 
 result = function(x) {
+  stopifnot("result" %in% names(x))
   x[["result"]]
 }
 
 error = function(x) {
+  stopifnot("error" %in% names(x))
   x[["error"]]
 }
 
