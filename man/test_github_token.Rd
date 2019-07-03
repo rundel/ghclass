@@ -22,6 +22,7 @@ test_github_token("bad_token")
 }
 \seealso{
 Other authentication functions: \code{\link{get_github_token}},
+  \code{\link{reset_github_token}},
   \code{\link{set_github_token}}
 }
 \concept{authentication functions}
