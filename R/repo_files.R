@@ -169,12 +169,12 @@ find_file = function(repo, file, verbose = TRUE){
 }
 
 
-file_exists = function(repo, file, branch = "master") {
+file_exists = function(repo, file, branch = "master", verbose = TRUE) {
   purrr::pmap_lgl(
     list(repo, file, branch),
     function(repo, file, branch) {
       if (branch == "master") {
-        (length(find_file(repo,file)) > 0)
+        (length(find_file(repo, file, verbose)) > 0)
       } else {
         # Only the master branch is indexed for search
         is.null(get_file(repo, file, branch))
