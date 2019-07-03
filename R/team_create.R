@@ -1,4 +1,4 @@
-github_api_create_team = function(org, name, privacy) {
+github_api_team_create = function(org, name, privacy) {
   gh::gh(
     "POST /orgs/:org/teams",
     org=org, name=name, privacy=privacy,
@@ -8,7 +8,7 @@ github_api_create_team = function(org, name, privacy) {
 
 #' Create team(s)
 #'
-#' `create_team` creates teams in your GitHub organization
+#' `team_create` creates teams in your GitHub organization
 #'
 #' @param org character, name of the GitHub organization
 #' @param team character, listing one or more teams
@@ -18,14 +18,14 @@ github_api_create_team = function(org, name, privacy) {
 #'
 #' @examples
 #' \dontrun{
-#' create_team("ghclass",c("team01","team01"))
+#' team_create("ghclass",c("team01","team01"))
 #' }
 #'
 #' @family github organization team related functions
 #'
 #' @export
 #'
-create_team = function(org, team, privacy = c("closed","secret")) {
+team_create = function(org, team, privacy = c("closed","secret")) {
   team = unique(as.character(team))
   privacy = match.arg(privacy)
 
@@ -40,7 +40,7 @@ create_team = function(org, team, privacy = c("closed","secret")) {
   purrr::walk(
     new_teams,
     function(team) {
-      res = purrr::safely(github_api_create_team)(
+      res = purrr::safely(github_api_team_create)(
         org=org, name=team, privacy=privacy
       )
 

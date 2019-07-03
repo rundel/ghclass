@@ -19,6 +19,6 @@ org_remove(org, user, prompt = TRUE)
 \seealso{
 Other github organization related functions: \code{\link{get_member}},
   \code{\link{get_pending_member}}, \code{\link{get_repo}},
-  \code{\link{get_team_repos}}, \code{\link{invite_user}}
+  \code{\link{invite_user}}, \code{\link{team_repos}}
 }
 \concept{github organization related functions}

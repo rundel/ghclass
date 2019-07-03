@@ -1,4 +1,4 @@
-github_api_get_team_repos = function(team_id) {
+github_api_team_repos = function(team_id) {
   gh::gh(
     "GET /teams/:id/repos",
     id=team_id,
@@ -9,21 +9,21 @@ github_api_get_team_repos = function(team_id) {
 
 #' Get teams' repos
 #'
-#' `get_team_repos` returns a (filtered) data frame of teams and their repos.
+#' `team_repos` returns a (filtered) data frame of teams and their repos.
 #'
 #' @param org character, name of the GitHub organization.
 #' @param team character or data frame, listing one or more team
 #'
 #' @examples
 #' \dontrun{
-#' get_team_repos("ghclass",c("team01","team02"))
+#' team_repos("ghclass",c("team01","team02"))
 #' }
 #'
 #' @family github organization related functions
 #'
 #' @export
 #'
-get_team_repos = function(org, team) {
+team_repos = function(org, team) {
   arg_is_chr_scalar(org)
   arg_is_chr(team)
 
@@ -32,7 +32,7 @@ get_team_repos = function(org, team) {
   purrr::pmap_dfr(
     team,
     function(team, id) {
-      res = purrr::safely(github_api_get_team_repos)(id)
+      res = purrr::safely(github_api_team_repos)(id)
 
       if (succeeded(res) & !empty_result(result(res))) {
         tibble::tibble(

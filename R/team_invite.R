@@ -37,7 +37,7 @@ team_invite = function(org, user, team, create_missing_teams = TRUE) {
   new_teams = setdiff(unique(team), org_teams[["team"]])
 
   if (length(new_teams) > 0 & create_missing_teams) {
-    create_team(org, new_teams)
+    team_create(org, new_teams)
     org_teams = get_teams(org)
   }
 

@@ -24,6 +24,6 @@ invite_user("Sta523-Fa17", user)
 \seealso{
 Other github organization related functions: \code{\link{get_member}},
   \code{\link{get_pending_member}}, \code{\link{get_repo}},
-  \code{\link{get_team_repos}}, \code{\link{org_remove}}
+  \code{\link{org_remove}}, \code{\link{team_repos}}
 }
 \concept{github organization related functions}

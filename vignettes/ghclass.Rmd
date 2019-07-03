@@ -154,11 +154,11 @@ invite_user("Sta523-Fa17", roster$github)
 ## Adding Eve to Sta523-Fa17 ...
 ```
 
-We use the variable `team` within the `roster` data frame to create a vector of unique team names, here called `teams`. We then use the `teams` vector to add students to their teams within the organization via the `create_team()` function.
+We use the variable `team` within the `roster` data frame to create a vector of unique team names, here called `teams`. We then use the `teams` vector to add students to their teams within the organization via the `team_create()` function.
 
 ```r
 teams <- unique(roster$team)
-create_team("Sta523-Fa17", teams)
+team_create("Sta523-Fa17", teams)
 
 ## Adding team Team1 to Sta523-Fa17 ...
 ## Adding team Team2 to Sta523-Fa17 ...

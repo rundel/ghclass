@@ -1,4 +1,4 @@
-github_api_get_team_members = function(id) {
+github_api_team_members = function(id) {
   gh::gh(
     "GET /teams/:id/members",
     id = id,
@@ -11,21 +11,21 @@ github_api_get_team_members = function(id) {
 
 #' Get team members
 #'
-#' `get_team_members` returns a data frame of teams and their members.
+#' `team_members` returns a data frame of teams and their members.
 #'
 #' @param org character, name of the GitHub organization.
 #' @param team character or data frame, listing one or more team
 #'
 #' @examples
 #' \dontrun{
-#' get_team_members("ghclass-test",c("team01","team02"))
+#' team_members("ghclass-test",c("team01","team02"))
 #' }
 #'
 #' @family github organization team related functions
 #'
 #' @export
 #'
-get_team_members = function(org, team = get_teams(org)) {
+team_members = function(org, team = get_teams(org)) {
   arg_is_chr_scalar(org)
 
   if (is.character(team))
@@ -36,7 +36,7 @@ get_team_members = function(org, team = get_teams(org)) {
   purrr::pmap_df(
     team,
     function(team, id) {
-      res = purrr::safely(github_api_get_team_members)(id)
+      res = purrr::safely(github_api_team_members)(id)
 
       status_msg(
         res,

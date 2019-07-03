@@ -1,4 +1,4 @@
-github_api_get_pending_team_members = function(id) {
+github_api_team_pending_members = function(id) {
   gh::gh(
     "GET /teams/:id/invitations",
     id = id,
@@ -9,21 +9,21 @@ github_api_get_pending_team_members = function(id) {
 
 #' Get pending team members
 #'
-#' `get_pending_team_members` returns a data frame of pending team members.
+#' `team_pending_members` returns a data frame of pending team members.
 #'
 #' @param org character, name of the GitHub organization.
 #' @param team character or data frame, listing one or more team
 #'
 #' @examples
 #' \dontrun{
-#' get_pending_team_members("ghclass",c("team01","team02"))
+#' team_pending_members("ghclass",c("team01","team02"))
 #' }
 #'
 #' @family github organization team related functions
 #'
 #' @export
 #'
-get_pending_team_members = function(org, team = get_teams(org)) {
+team_pending_members = function(org, team = get_teams(org)) {
   arg_is_chr_scalar(org)
 
   if (is.character(team))
@@ -34,7 +34,7 @@ get_pending_team_members = function(org, team = get_teams(org)) {
   purrr::pmap_df(
     team,
     function(team, id) {
-      res = purrr::safely(github_api_get_pending_team_members)(id)
+      res = purrr::safely(github_api_team_pending_members)(id)
 
       status_msg(
         res,

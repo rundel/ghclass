@@ -1,4 +1,4 @@
-github_api_rename_team = function(id, new_name) {
+github_api_team_rename = function(id, new_name) {
   gh::gh(
     "PATCH /teams/:team_id",
     team_id = id,
@@ -10,7 +10,7 @@ github_api_rename_team = function(id, new_name) {
 
 #' Rename existing team(s)
 #'
-#' `rename_team` renames an existing team within the given GitHub organization.
+#' `team_rename` renames an existing team within the given GitHub organization.
 #'
 #' @param org character, name of the GitHub organization
 #' @param team character, one or more existing team names
@@ -18,13 +18,13 @@ github_api_rename_team = function(id, new_name) {
 #'
 #' @examples
 #' \dontrun{
-#' rename_team("ghclass-test", "hw1-team01", "hw01-team01")
+#' team_rename("ghclass-test", "hw1-team01", "hw01-team01")
 #' }
 #'
 #' @family github organization team related functions
 #'
 #' @export
-rename_team = function(org, team, new_team) {
+team_rename = function(org, team, new_team) {
   arg_is_chr_scalar(org)
 
   d = tibble::tibble(
@@ -37,7 +37,7 @@ rename_team = function(org, team, new_team) {
   purrr::pwalk(
     d,
     function(team, id, new_team) {
-      res = purrr::safely(github_api_rename_team)(id, new_team)
+      res = purrr::safely(github_api_team_rename)(id, new_team)
 
       status_msg(
         res,
