@@ -92,10 +92,12 @@ flag_experimental = function() {
 
 
 result = function(x) {
+  stopifnot("result" %in% names(x))
   x[["result"]]
 }
 
 error = function(x) {
+  stopifnot("error" %in% names(x))
   x[["error"]]
 }
 
@@ -107,8 +109,12 @@ failed = function(x) {
   !is.null(error(x))
 }
 
-error_msg = function(x) {
-  error(x)[["message"]]
+error_msg = function(x, truncate = TRUE) {
+  msg = error(x)[["message"]]
+  if (truncate)
+    sub("\\n.*", "", msg)
+  else
+    msg
 }
 
 

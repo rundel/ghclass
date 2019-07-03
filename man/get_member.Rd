@@ -4,7 +4,8 @@
 \alias{get_member}
 \title{Get organization member}
 \usage{
-get_member(org, filter = NULL, exclude = FALSE)
+get_member(org, filter = NULL, exclude = FALSE,
+  include_admins = TRUE)
 }
 \arguments{
 \item{org}{Character. Name of the GitHub organization.}
@@ -12,6 +13,8 @@ get_member(org, filter = NULL, exclude = FALSE)
 \item{filter}{Character. Regular expression pattern for matching (or excluding) repositories.}
 
 \item{exclude}{Logical. Should entries matching the regular expression be excluded or included.}
+
+\item{include_admin}{Logical. Should admin users be included in the results.}
 }
 \description{
 \code{get_member} returns a (filtered) vector of organization memebers.

@@ -43,11 +43,11 @@ get_repo = function(org, filter = NULL, exclude = FALSE, full_repo = TRUE) {
 }
 
 
-github_api_get_member = function(owner) {
-  arg_is_chr_scalar(owner)
+github_api_get_member = function(org) {
+  arg_is_chr_scalar(org)
 
-  gh::gh("GET /orgs/:owner/members",
-          owner = owner,
+  gh::gh("GET /orgs/:org/members",
+          org = org,
           .token = get_github_token(),
           .limit = get_github_api_limit())
 }
@@ -60,6 +60,7 @@ github_api_get_member = function(owner) {
 #' @param org Character. Name of the GitHub organization.
 #' @param filter Character. Regular expression pattern for matching (or excluding) repositories.
 #' @param exclude Logical. Should entries matching the regular expression be excluded or included.
+#' @param include_admin Logical. Should admin users be included in the results.
 #'
 #' @examples
 #' \dontrun{
@@ -70,19 +71,23 @@ github_api_get_member = function(owner) {
 #'
 #' @export
 #'
-get_member = function(org, filter = NULL, exclude = FALSE) {
+get_member = function(org, filter = NULL, exclude = FALSE,
+                      include_admins = TRUE) {
   arg_is_chr_scalar(org)
   arg_is_chr_scalar(filter, allow_null = TRUE)
 
-  res = github_api_get_member(org)
-  member = purrr::map_chr(res$result, "login")
+  res = purrr::safely(github_api_get_member)(org)
+  members = purrr::map_chr(result(res), "login")
 
-  filter_results(member, filter, exclude)
+  if (!include_admins)
+    members = setdiff(members, get_admin(org))
+
+  filter_results(members, filter, exclude)
 }
 
 
 
-github_api_get_invitation = function(owner){
+github_api_get_invitations = function(owner){
   arg_is_chr_scalar(owner)
   gh::gh("GET /orgs/:owner/invitations",
          owner = owner,
@@ -112,9 +117,14 @@ get_pending_member = function(org, filter = NULL, exclude = FALSE) {
   arg_is_chr_scalar(org)
   arg_is_chr_scalar(filter, allow_null = TRUE)
 
-  res = github_api_get_invitation(org)
-  invite = purrr::map_chr(res$result, "login")
+  res = purrr::safely(github_api_get_invitations)(org)
+  status_msg(
+    res,
+    fail = glue::glue("Failed to retrieve pending members for org {usethis::ui_value(org)}")
+  )
 
+  invite = purrr::map(result(res), "login")
+  invite = purrr::flatten_chr(invite)
   filter_results(invite, filter, exclude)
 }
 
@@ -184,44 +194,28 @@ invite_user = function(org, user) {
   arg_is_chr_scalar(org)
   arg_is_chr(user)
 
-  user = tolower(user)
+  user = unique(tolower(user))
   member = tolower(get_member(org))
   pending = tolower(get_pending_member(org))
 
-  need_invite = setdiff(user, c(member, pending))
-  is_member = intersect(user, member)
-  is_pending = intersect(user, pending)
-
-  if(length(need_invite) > 0){
-    purrr::walk(
-      need_invite,
-      function(need_invite) {
-        res = purrr::safely(github_api_invite_user)(org, need_invite)
+  purrr::walk(
+    user,
+    function(user) {
+      if (user %in% member) {
+        usethis::ui_info("User {usethis::ui_value(user)} is already a member of org {usethis::ui_value(org)}.")
+      } else if (user %in% pending) {
+        usethis::ui_info("User {usethis::ui_value(user)} is already a pending member of org {usethis::ui_value(org)}.")
+      } else {
+        res = purrr::safely(github_api_invite_user)(org, user)
 
         status_msg(
           res,
-          usethis::ui_done("Added user {usethis::ui_value(need_invite)} to org {usethis::ui_value(org)}."),
-          usethis::ui_oops("Failed to add user {usethis::ui_value(need_invite)} to org {usethis::ui_value(org)}: does not exist.")
+          glue::glue("Invited user {usethis::ui_value(user)} to org {usethis::ui_value(org)}."),
+          glue::glue("Failed to invite user {usethis::ui_value(user)} to org {usethis::ui_value(org)}: does not exist.")
         )
       }
-    )
-  }
-
-  if(length(is_member) > 0){
-    purrr::walk(
-      is_member,
-      function(is_member)
-        usethis::ui_oops("{usethis::ui_value(is_member)} already member of org {usethis::ui_value(org)}.")
-    )
-  }
-
-  if(length(is_pending) > 0){
-    purrr::walk(
-      is_pending,
-      function(is_pending)
-        usethis::ui_oops("{usethis::ui_value(is_pending)} is a pending member of org {usethis::ui_value(org)}.")
-    )
-  }
+    }
+  )
 }
 
 
@@ -252,8 +246,8 @@ org_remove = function(org, user, prompt = TRUE) {
 
   if (prompt) {
     delete = usethis::ui_yeah( paste(
-      "This command will delete from org {usethis::ui_value(org)} the following users:",
-      "{usethis::ui_value(user)}."
+      "This command will delete the following users:",
+      "{usethis::ui_value(user)} from org {usethis::ui_value(org)}."
     ) )
     if (!delete) {
       return(invisible())
@@ -267,8 +261,8 @@ org_remove = function(org, user, prompt = TRUE) {
 
       status_msg(
         res,
-        glue::glue("Removed user {usethis::ui_value(repo)} from org {usethis::ui_value(org)}."),
-        glue::glue("Failed to remove user {usethis::ui_value(repo)} from org {usethis::ui_value(org)}.")
+        glue::glue("Removed user {usethis::ui_value(user)} from org {usethis::ui_value(org)}."),
+        glue::glue("Failed to remove user {usethis::ui_value(user)} from org {usethis::ui_value(org)}.")
       )
     }
   )
