@@ -101,7 +101,7 @@ reset_github_token = function() {
 #'
 test_github_token = function(token = get_github_token()) {
 
-  res = purrr::safely(gh)("/user", .token=token)
+  res = purrr::safely(gh::gh)("/user", .token=token)
 
   status_msg(
     res,
