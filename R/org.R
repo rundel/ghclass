@@ -43,11 +43,11 @@ get_repo = function(org, filter = NULL, exclude = FALSE, full_repo = TRUE) {
 }
 
 
-github_api_get_member = function(owner) {
-  arg_is_chr_scalar(owner)
+github_api_get_member = function(org) {
+  arg_is_chr_scalar(org)
 
-  gh::gh("GET /orgs/:owner/members",
-          owner = owner,
+  gh::gh("GET /orgs/:org/members",
+          org = org,
           .token = get_github_token(),
           .limit = get_github_api_limit())
 }
@@ -74,8 +74,8 @@ get_member = function(org, filter = NULL, exclude = FALSE) {
   arg_is_chr_scalar(org)
   arg_is_chr_scalar(filter, allow_null = TRUE)
 
-  res = github_api_get_member(org)
-  member = purrr::map_chr(res$result, "login")
+  res = purrr::safely(github_api_get_member)(org)
+  member = purrr::map_chr(result(res), "login")
 
   filter_results(member, filter, exclude)
 }
