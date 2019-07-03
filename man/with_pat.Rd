@@ -24,7 +24,7 @@ GitHub authentication. Based on the \code{withr} interface.
 if \code{NA} is used the \code{GITHUB_PAT} environment variable will be unset.
 }
 \seealso{
-Other authentication: \code{\link{get_github_token}},
+Other authentication: \code{\link{github_get_token}},
   \code{\link{github_reset_token}},
   \code{\link{github_set_token}},
   \code{\link{github_test_token}}

@@ -4,7 +4,7 @@ github_api_get_branch_ref = function(repo, branch="master") {
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
     ref = paste0("heads/", branch),
-    .token=get_github_token()
+    .token = github_get_token()
   )
 
 }
@@ -28,7 +28,7 @@ github_api_create_branch = function(repo, cur_branch, new_branch) {
      repo = get_repo_name(repo),
      ref = paste0("refs/heads/",new_branch),
      sha = head[["sha"]],
-     .token=get_github_token())
+     .token = github_get_token())
 }
 
 
@@ -79,7 +79,7 @@ github_api_protect_branch = function(repo, branch) {
       users = list(),
       teams = list()
     ),
-    .token = get_github_token()
+    .token = github_get_token()
   )
 }
 
@@ -123,7 +123,7 @@ github_api_unprotect_branch = function(repo, branch) {
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
     branch = branch,
-    .token = get_github_token()
+    .token = github_get_token()
   )
 }
 

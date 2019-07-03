@@ -4,7 +4,7 @@
 \alias{github_test_token}
 \title{Test github token}
 \usage{
-github_test_token(token = get_github_token())
+github_test_token(token = github_get_token())
 }
 \arguments{
 \item{token}{github api personal access token}
@@ -21,7 +21,7 @@ github_test_token("bad_token")
 
 }
 \seealso{
-Other authentication: \code{\link{get_github_token}},
+Other authentication: \code{\link{github_get_token}},
   \code{\link{github_reset_token}},
   \code{\link{github_set_token}}, \code{\link{with_pat}}
 }

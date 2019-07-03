@@ -85,7 +85,7 @@ rename_local_repo = function(repo_dir, pattern, replacement) {
 }
 
 censor_token = function(msg, replacement = "", prefix="", suffix="") {
-  pattern = paste0(prefix, get_github_token(), suffix)
+  pattern = paste0(prefix, github_get_token(), suffix)
   sub(pattern, replacement, msg)
 }
 

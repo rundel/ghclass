@@ -5,7 +5,7 @@ github_api_get_repo = function(repo) {
     "GET /repos/:owner/:repo",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
-    .token = get_github_token()
+    .token = github_get_token()
   )
 }
 
@@ -60,7 +60,7 @@ github_api_repo_delete = function(repo) {
   gh::gh("DELETE /repos/:owner/:repo",
          owner = get_repo_owner(repo),
          repo = get_repo_name(repo),
-         .token = get_github_token())
+         .token = github_get_token())
 }
 
 #' Delete repository
@@ -114,7 +114,7 @@ github_api_create_repo = function(repo, private, auto_init, gitignore_template){
          private = private,
          auto_init = auto_init,
          gitignore_template = gitignore_template,
-         .token = get_github_token())
+         .token = github_get_token())
 }
 
 #' Create repository
@@ -187,7 +187,7 @@ github_api_add_user = function(repo, username, permission){
          repo = get_repo_name(repo),
          username = username,
          permission = permission,
-         .token = get_github_token())
+         .token = github_get_token())
 }
 
 
@@ -245,7 +245,7 @@ github_api_add_team = function(repo, team_id, permission){
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
     permission = permission,
-    .token = get_github_token()
+    .token = github_get_token()
   )
 }
 
@@ -290,7 +290,7 @@ github_api_rename_repo = function(repo, new_name){
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
     name = new_name,
-    .token = get_github_token()
+    .token = github_get_token()
   )
 }
 
@@ -371,7 +371,7 @@ github_api_create_pull = function(repo, base, head, title, body){
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
     base = base, head = head, title = title, body = body,
-    .token = get_github_token())
+    .token = github_get_token())
 }
 
 
@@ -380,7 +380,7 @@ github_api_get_admin = function(owner){
   gh::gh("GET /orgs/:owner/members",
           owner = owner,
           role = "admin",
-          .token = get_github_token(),
+          .token = github_get_token(),
           .limit = get_github_api_limit())
 }
 
@@ -416,7 +416,7 @@ github_api_get_collaborators = function(repo) {
     "GET /repos/:owner/:repo/collaborators",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
-    .token = get_github_token(),
+    .token = github_get_token(),
     .limit = get_github_api_limit()
   )
 }

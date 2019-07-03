@@ -14,14 +14,14 @@ enivronmental variable.
 \dontrun{
 token = "0123456789ABCDEF0123456789ABCDEF01234567"
 github_set_token("0123456789ABCDEF0123456789ABCDEF01234567")
-get_github_token() == token
+github_get_token() == token
 github_reset_token()
-get_github_token() == token
+github_get_token() == token
 }
 
 }
 \seealso{
-Other authentication: \code{\link{get_github_token}},
+Other authentication: \code{\link{github_get_token}},
   \code{\link{github_set_token}},
   \code{\link{github_test_token}}, \code{\link{with_pat}}
 }

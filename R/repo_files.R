@@ -23,7 +23,7 @@ github_api_get_readme = function(repo, branch) {
   gh::gh(
     "GET /repos/:owner/:repo/readme",
     owner = owner, repo = name, ref = branch,
-    .token = get_github_token(), .limit = get_github_api_limit()
+    .token = github_get_token(), .limit = get_github_api_limit()
   )
 }
 
@@ -57,7 +57,7 @@ github_api_get_file = function(repo, file, branch) {
   gh::gh(
     "GET /repos/:owner/:repo/contents/:path",
     owner = owner, repo = name, path = file, ref = branch,
-    .token = get_github_token(), .limit = get_github_api_limit()
+    .token = github_get_token(), .limit = get_github_api_limit()
   )
 
 }
@@ -139,7 +139,7 @@ add_content = function(repo, file, content, after = NULL, message = "Added conte
 
 github_api_code_search = function(query) {
   gh::gh("GET /search/code", q = query,
-     .token = get_github_token(),
+     .token = github_get_token(),
      .limit = get_github_api_limit())
 }
 
@@ -190,7 +190,7 @@ github_api_put_file = function(repo, path, content, message, branch) {
     path = path,
     content = base64enc::base64encode(content),
     message = message, branch = branch,
-    .token = get_github_token()
+    .token = github_get_token()
   )
 
   # To update an existing file we need its current SHA,
@@ -246,7 +246,7 @@ github_api_get_commits = function(repo, sha=NULL, path=NULL, author=NULL, since=
     endpoint = "GET /repos/:owner/:repo/commits",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
-    .token = get_github_token()
+    .token = github_get_token()
   )
 
   args[["sha"]] = sha

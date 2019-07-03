@@ -1,6 +1,6 @@
 github_api_get_teams = function(org) {
   gh("GET /orgs/:org/teams", org=org,
-     .token=get_github_token(), .limit=get_github_api_limit())
+     .token = github_get_token(), .limit=get_github_api_limit())
 }
 
 #' Get organization teams
@@ -72,7 +72,7 @@ team_id_lookup = function(d, org_teams) {
 github_api_get_team_repos = function(team_id) {
   gh::gh(
     "GET /teams/:id/repos", id=team_id,
-    .token=get_github_token(), .limit=get_github_api_limit()
+    .token = github_get_token(), .limit=get_github_api_limit()
   )
 }
 
@@ -159,7 +159,7 @@ get_team_members = function(org, team = get_teams(org), get_pending = TRUE)
       res = gh(
         "GET /teams/:id/members",
         id=id, role = "all",
-        .token=get_github_token(), .limit=get_github_api_limit()
+        .token = github_get_token(), .limit=get_github_api_limit()
       )
 
       if (empty_result(res)) {
@@ -212,7 +212,7 @@ get_pending_team_members = function(org, team = get_teams(org))
       res = gh(
         "GET /teams/:id/invitations",
         id=id,
-        .token=get_github_token(), .limit=get_github_api_limit()
+        .token = github_get_token(), .limit=get_github_api_limit()
       )
 
       if (empty_result(res)) {
@@ -235,7 +235,7 @@ github_api_create_team = function(org, name, privacy) {
   gh(
     "POST /orgs/:org/teams",
     org=org, name=name, privacy=privacy,
-    .token=get_github_token()
+    .token = github_get_token()
   )
 }
 
@@ -291,7 +291,7 @@ github_api_rename_team = function(id, new_name) {
     "PATCH /teams/:team_id",
     team_id = id,
     name = new_name,
-    .token=get_github_token()
+    .token = github_get_token()
   )
 }
 
@@ -341,7 +341,7 @@ github_api_add_team_member = function(team_id, username) {
   gh(
     "PUT /teams/:id/memberships/:username",
     id=team_id, username=username, role="member",
-    .token=get_github_token()
+    .token = github_get_token()
   )
 }
 
@@ -402,7 +402,7 @@ add_team_member = function(org, user, team, create_missing_teams = TRUE) {
 github_api_team_delete = function(team_id) {
   gh::gh("DELETE /teams/:team_id",
          team_id = team_id,
-         .token = get_github_token())
+         .token = github_get_token())
 }
 
 #' Delete team

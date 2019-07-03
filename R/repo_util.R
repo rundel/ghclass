@@ -45,7 +45,7 @@ get_repo_url = function(repo, type = c("https","ssh"), use_token = TRUE)
 
   if (type == "https") {
     if (use_token)
-      paste0("https://", get_github_token(), "@github.com/",repo,".git")
+      paste0("https://", github_get_token(), "@github.com/",repo,".git")
     else
       paste0("https://github.com/",repo,".git")
   } else {

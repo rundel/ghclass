@@ -2,7 +2,7 @@
 github_api_get_watching = function(){
   gh(
     "GET /user/subscriptions",
-    .token = get_github_token(),
+    .token = github_get_token(),
     .limit = get_github_api_limit()
   )
 }
@@ -41,7 +41,7 @@ github_api_unwatch_repo = function(repo){
     "DELETE /repos/:owner/:repo/subscription",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
-    .token = get_github_token()
+    .token = github_get_token()
   )
 
 }
@@ -95,7 +95,7 @@ github_api_set_subscription = function(repo, subscribed, ignored){
     repo = get_repo_name(repo),
     subscribed = subscribed,
     ignored = ignored,
-    .token = get_github_token()
+    .token = github_get_token()
   )
 }
 

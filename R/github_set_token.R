@@ -2,7 +2,7 @@
 #'
 #' `github_set_token` defines the user's github authentication token by
 #' defining the `GITHUB_PAT` enivronmental variable. This value can then
-#' be subsequently accessed using `get_github_token`.
+#' be subsequently accessed using `github_get_token`.
 #'
 #' @param token character, either the path of a file contained the token or the actual token.
 #'

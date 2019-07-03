@@ -3,7 +3,7 @@ github_api_get_repos = function(owner) {
 
   gh::gh("GET /orgs/:owner/repos",
           owner = owner,
-          .token = get_github_token(),
+          .token = github_get_token(),
           .limit = get_github_api_limit())
 }
 
@@ -48,7 +48,7 @@ github_api_get_member = function(org) {
 
   gh::gh("GET /orgs/:org/members",
           org = org,
-          .token = get_github_token(),
+          .token = github_get_token(),
           .limit = get_github_api_limit())
 }
 
@@ -91,7 +91,7 @@ github_api_get_invitations = function(owner){
   arg_is_chr_scalar(owner)
   gh::gh("GET /orgs/:owner/invitations",
          owner = owner,
-         .token = get_github_token(),
+         .token = github_get_token(),
          .limit = get_github_api_limit())
 }
 
@@ -134,7 +134,7 @@ github_api_get_user = function(user) {
   gh::gh(
     "/users/:username",
     username = user,
-    .token = get_github_token()
+    .token = github_get_token()
   )
 }
 
@@ -169,7 +169,7 @@ github_api_invite_user = function(org, user) {
     org = org,
     username = user,
     role = "member",
-    .token = get_github_token()
+    .token = github_get_token()
   )
 }
 
@@ -223,7 +223,7 @@ github_api_org_remove = function(org, user) {
   gh::gh("DELETE /orgs/:org/members/:username",
          org = org,
          username = user,
-         .token = get_github_token())
+         .token = github_get_token())
 }
 
 #' Remove a member from an organization

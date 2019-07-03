@@ -15,7 +15,7 @@
 #'
 #' @export
 
-github_test_token = function(token = get_github_token()) {
+github_test_token = function(token = github_get_token()) {
   res = purrr::safely(gh::gh)("/user", .token=token)
 
   status_msg(

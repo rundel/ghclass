@@ -12,7 +12,7 @@ github_set_token(token)
 \description{
 \code{github_set_token} defines the user's github authentication token by
 defining the \code{GITHUB_PAT} enivronmental variable. This value can then
-be subsequently accessed using \code{get_github_token}.
+be subsequently accessed using \code{github_get_token}.
 }
 \examples{
 \dontrun{
@@ -22,7 +22,7 @@ github_set_token("0123456789ABCDEF0123456789ABCDEF01234567")
 
 }
 \seealso{
-Other authentication: \code{\link{get_github_token}},
+Other authentication: \code{\link{github_get_token}},
   \code{\link{github_reset_token}},
   \code{\link{github_test_token}}, \code{\link{with_pat}}
 }
