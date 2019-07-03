@@ -9,14 +9,14 @@
 \alias{pull_repo}
 \title{Local repository tools}
 \arguments{
-\item{repos}{GitHub repo names with the form \emph{owner/name}.}
+\item{repos}{GitHub repo names with the form \code{owner/name}.}
 
 \item{repo_dir}{Vector of repo directories or a single directory containing one or more repos.}
 
 \item{message}{commit message}
 
-\item{git}{Path to the local git binary. \code{require_git()} attempts to
-find the git binary based on your \code{PATH}, it will throw an error if git cannot be found.}
+\item{git}{Path to the local git binary. \code{\link[=require_git]{require_git()}} attempts to
+find the git binary based on your `PATH``, it will throw an error if git cannot be found.}
 
 \item{options}{Additional git binary options (e.g. \code{--all}).}
 
