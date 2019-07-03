@@ -25,3 +25,134 @@ org_accept_invite = function(org, user, pat) {
     }
   )
 }
+
+
+# Extracts base64 encoded content from files
+extract_content = function(file, include_details = TRUE) {
+  if (is.null(file))
+    return(NULL)
+
+  content = base64enc::base64decode(file[["content"]])
+  content = rawToChar(content)
+
+  if (include_details) {
+    file[["content"]] = NULL
+    attributes(content) = file
+  }
+
+  content
+}
+
+github_api_code_search = function(query) {
+  gh::gh("GET /search/code", q = query,
+         .token = github_get_token(),
+         .limit = get_github_api_limit())
+}
+
+
+find_file = function(repo, file, verbose = TRUE){
+  arg_is_chr_scalar(repo)
+  arg_is_chr(file)
+
+  purrr::flatten_chr(
+    purrr::map(
+      file,
+      function(file) {
+
+        query = paste0(" path:", ifelse(!(fs::path_dir(file) == "."), fs::path_dir(file), "/"),
+                       " repo:", repo,
+                       " filename:", fs::path_file(file))
+        res = github_api_code_search(query)
+
+        if(res[["total_count"]] > 0){
+          purrr::map_chr(res[["items"]], "path")
+        } else if (verbose){
+          usethis::ui_oops("Cannot find file {usethis::ui_value(file)} on {usethis::ui_value(repo)}.")
+        }
+      }
+    )
+  )
+}
+
+
+file_exists = function(repo, file, branch = "master", verbose = TRUE) {
+  purrr::pmap_lgl(
+    list(repo, file, branch),
+    function(repo, file, branch) {
+      if (branch == "master") {
+        (length(find_file(repo, file, verbose)) > 0)
+      } else {
+        # Only the master branch is indexed for search
+        is.null(get_file(repo, file, branch))
+      }
+    }
+  )
+}
+
+
+github_api_get_commits = function(repo, sha=NULL, path=NULL, author=NULL, since=NULL, until=NULL) {
+  args = list(
+    endpoint = "GET /repos/:owner/:repo/commits",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    .token = github_get_token()
+  )
+
+  args[["sha"]] = sha
+  args[["path"]] = path
+  args[["author"]] = author
+  args[["since"]] = since
+  args[["until"]] = until
+
+  do.call(gh::gh, args)
+}
+
+get_committer = function(repo, sha=NULL, path=NULL, author=NULL, since=NULL, until=NULL) {
+
+  arg_is_chr(repo)
+  arg_is_chr_scalar(repo, sha, path, author, since, until, allow_null=TRUE)
+
+  purrr::map_dfr(
+    repo,
+    function(repo) {
+      res = purrr::safely(github_api_get_commits)(
+        repo, sha, path, author, since, until
+      )
+
+      # API gives an error if the repo has 0 commits
+      res = allow_error(res, message = "Git Repository is empty")
+
+      status_msg(
+        res,
+        fail = glue::glue("Failed to retrieve commits from {usethis::ui_value(repo)}.")
+      )
+
+      commits = result(res)
+
+      if (empty_result(commits)) {
+        tibble::tibble(
+          repo = character(),
+          sha  = character(),
+          user = character(),
+          date = character(),
+          msg  = character()
+        )
+      } else {
+        tibble::tibble(
+          repo = repo,
+          sha  = purrr::map_chr(commits, "sha"),
+          user = purrr::map_chr(commits, c("author","login")),
+          date = purrr::map_chr(commits, c("commit","author","date")),
+          msg  = purrr::map_chr(commits, c("commit","message"))
+        )
+      }
+    }
+  )
+}
+
+
+check_file_modification = function(repo, path, branch = "master"){
+  arg_is_chr_scalar(repo, branch, path)
+  commits = get_committer(repo, sha=branch, path=path)
+  nrow(commits) > 1
+}
