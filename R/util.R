@@ -107,8 +107,12 @@ failed = function(x) {
   !is.null(error(x))
 }
 
-error_msg = function(x) {
-  error(x)[["message"]]
+error_msg = function(x, truncate = TRUE) {
+  msg = error(x)[["message"]]
+  if (truncate)
+    sub("\\n.*", "", msg)
+  else
+    msg
 }
 
 

@@ -197,9 +197,9 @@ invite_user = function(org, user) {
     user,
     function(user) {
       if (user %in% member) {
-        usethis::ui_info("User {usethis::ui_value(user)} already member of org {usethis::ui_value(org)}.")
+        usethis::ui_info("User {usethis::ui_value(user)} is already a member of org {usethis::ui_value(org)}.")
       } else if (user %in% pending) {
-        usethis::ui_info("User {usethis::ui_value(user)} is a pending member of org {usethis::ui_value(org)}.")
+        usethis::ui_info("User {usethis::ui_value(user)} is already a pending member of org {usethis::ui_value(org)}.")
       } else {
         res = purrr::safely(github_api_invite_user)(org, user)
 
