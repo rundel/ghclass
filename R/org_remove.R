@@ -18,10 +18,10 @@ github_api_org_remove = function(org, user) {
 
 #' @export
 #'
-org_remove = function(org, user, prompt = TRUE) {
+org_remove = function(org, user = NULL, prompt = TRUE) {
 
   arg_is_chr_scalar(org)
-  arg_is_chr(user)
+  arg_is_chr(user, allow_null = TRUE)
   arg_is_lgl_scalar(prompt)
 
   if (prompt) {

@@ -4,7 +4,7 @@
 \alias{org_remove}
 \title{Remove a member from an organization}
 \usage{
-org_remove(org, user, prompt = TRUE)
+org_remove(org, user = NULL, prompt = TRUE)
 }
 \arguments{
 \item{org}{Character. Name of the GitHub organization.}
