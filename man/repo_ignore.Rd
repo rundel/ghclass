@@ -2,6 +2,7 @@
 % Please edit documentation in R/repo_ignore.R
 \name{repo_ignore}
 \alias{repo_ignore}
+\alias{ignore_repo}
 \title{Ignore repository}
 \usage{
 repo_ignore(repo)
@@ -12,8 +13,3 @@ repo_ignore(repo)
 \description{
 Ignores the provided GitHub repositories.
 }
-\seealso{
-Other notification: \code{\link{repo_unwatch}},
-  \code{\link{repo_watching}}, \code{\link{repo_watch}}
-}
-\concept{notification}

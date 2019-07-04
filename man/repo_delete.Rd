@@ -14,7 +14,3 @@ repo_delete(repo, prompt = TRUE)
 \description{
 \code{repo_delete} deletes an existing repository from GitHub.
 }
-\seealso{
-Other github repository related functions: \code{\link{repo_create}}
-}
-\concept{github repository related functions}

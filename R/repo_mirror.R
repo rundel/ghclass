@@ -13,6 +13,8 @@
 #' repo_mirror("ghclass-test/hw1", org_repos("ghclass-test","hw1-"))
 #' }
 #'
+#' @aliases mirror_repo
+#'
 #' @export
 #'
 repo_mirror = function(source_repo, target_repo, verbose=FALSE) {

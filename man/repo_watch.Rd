@@ -2,6 +2,7 @@
 % Please edit documentation in R/repo_watch.R
 \name{repo_watch}
 \alias{repo_watch}
+\alias{watch_repo}
 \title{Watch repository}
 \usage{
 repo_watch(repo)
@@ -12,8 +13,3 @@ repo_watch(repo)
 \description{
 Watches / subscribes to the provided GitHub repositories.
 }
-\seealso{
-Other notification: \code{\link{repo_ignore}},
-  \code{\link{repo_unwatch}}, \code{\link{repo_watching}}
-}
-\concept{notification}

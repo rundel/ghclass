@@ -2,6 +2,7 @@
 % Please edit documentation in R/local_repo_rename.R
 \name{local_repo_rename}
 \alias{local_repo_rename}
+\alias{rename_local_repo}
 \title{Rename local directories using a vector of patterns and replacements}
 \usage{
 local_repo_rename(repo_dir, pattern, replacement)

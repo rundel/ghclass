@@ -20,7 +20,8 @@ github_api_get_invitations = function(owner){
 #' org_pending_members("ghclass")
 #' }
 #'
-#' @family github organization related functions
+
+#' @aliases get_pending_member get_pending_members
 #'
 #' @export
 #'

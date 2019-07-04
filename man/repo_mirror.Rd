@@ -2,6 +2,7 @@
 % Please edit documentation in R/repo_mirror.R
 \name{repo_mirror}
 \alias{repo_mirror}
+\alias{mirror_repo}
 \title{Mirror repository}
 \usage{
 repo_mirror(source_repo, target_repo, verbose = FALSE)

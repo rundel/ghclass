@@ -2,6 +2,8 @@
 % Please edit documentation in R/org_repos.R
 \name{org_repos}
 \alias{org_repos}
+\alias{get_repo}
+\alias{get_repos}
 \title{Get organization repository}
 \usage{
 org_repos(org, filter = NULL, exclude = FALSE, full_repo = TRUE)
@@ -25,10 +27,3 @@ org_repos("ghclass", "hw1-")
 }
 
 }
-\seealso{
-Other github organization related functions: \code{\link{org_invite}},
-  \code{\link{org_members}},
-  \code{\link{org_pending_members}},
-  \code{\link{team_repos}}
-}
-\concept{github organization related functions}

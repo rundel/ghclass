@@ -14,7 +14,8 @@
 #' repo_add_file("rundel/ghclass", "Update DESCRIPTION", "./DESCRIPTION")
 #' }
 #'
-#' @family file functions
+
+#' @aliases add_file
 #'
 #' @export
 #'

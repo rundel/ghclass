@@ -2,6 +2,7 @@
 % Please edit documentation in R/github_set_token.R
 \name{github_set_token}
 \alias{github_set_token}
+\alias{set_github_token}
 \title{Set github token}
 \usage{
 github_set_token(token)
@@ -21,9 +22,3 @@ github_set_token("0123456789ABCDEF0123456789ABCDEF01234567")
 }
 
 }
-\seealso{
-Other authentication: \code{\link{github_get_token}},
-  \code{\link{github_reset_token}},
-  \code{\link{github_test_token}}, \code{\link{with_pat}}
-}
-\concept{authentication}

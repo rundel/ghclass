@@ -3,6 +3,8 @@
 \name{repo_add_team}
 \alias{repo_add_team}
 \alias{repo_add_user}
+\alias{add_user_to_repo}
+\alias{add_team_to_repo}
 \title{Add a user or team to a repository}
 \usage{
 repo_add_team(repo, team, permission = c("push", "pull", "admin"))

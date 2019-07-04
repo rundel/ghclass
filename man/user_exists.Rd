@@ -2,6 +2,7 @@
 % Please edit documentation in R/user_exists.R
 \name{user_exists}
 \alias{user_exists}
+\alias{check_user_exists}
 \title{Check if username(s) exists}
 \usage{
 user_exists(user)

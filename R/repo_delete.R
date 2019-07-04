@@ -12,8 +12,7 @@ github_api_repo_delete = function(repo) {
 #' @param repo Character. Name of the GitHub repository in `owner/name` format.
 #' @param prompt Logical. Should the user be prompted before deleting repositories. Default `true`.
 #'
-#' @family github repository related functions
-#'
+
 #' @export
 #'
 repo_delete = function(repo, prompt = TRUE) {

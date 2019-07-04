@@ -7,7 +7,8 @@
 #' @param message Character. Commit message.
 #' @param branch Character. Name of branch to use, defaults to "master".
 #'
-#' @family file functions
+
+#' @aliases add_content
 #'
 #' @export
 #'

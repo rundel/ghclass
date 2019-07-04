@@ -19,7 +19,8 @@ github_api_team_pending_members = function(id) {
 #' team_pending_members("ghclass",c("team01","team02"))
 #' }
 #'
-#' @family github organization team related functions
+
+#' @aliases get_pending_team_members
 #'
 #' @export
 #'

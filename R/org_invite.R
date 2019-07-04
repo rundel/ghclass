@@ -24,7 +24,8 @@ github_api_org_invite = function(org, user) {
 #' org_invite("Sta523-Fa17", user)
 #' }
 #'
-#' @family github organization related functions
+
+#' @aliases invite_user
 #'
 #' @export
 org_invite = function(org, user) {

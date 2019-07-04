@@ -2,6 +2,7 @@
 % Please edit documentation in R/repo_rename.R
 \name{repo_rename}
 \alias{repo_rename}
+\alias{rename_repo}
 \title{Rename repository}
 \usage{
 repo_rename(repo, new_name)

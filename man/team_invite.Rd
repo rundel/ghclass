@@ -2,6 +2,7 @@
 % Please edit documentation in R/team_invite.R
 \name{team_invite}
 \alias{team_invite}
+\alias{add_team_member}
 \title{Add Members to an Organizaton's Team(s)}
 \usage{
 team_invite(org, user, team, create_missing_teams = TRUE)
@@ -25,11 +26,3 @@ team_invite("ghclass-test", "rundel", c("hw1-team01","hw1-team02"))
 }
 
 }
-\seealso{
-Other github organization team related functions: \code{\link{org_teams}},
-  \code{\link{team_create}}, \code{\link{team_delete}},
-  \code{\link{team_members}},
-  \code{\link{team_pending_members}},
-  \code{\link{team_rename}}
-}
-\concept{github organization team related functions}

@@ -2,6 +2,7 @@
 % Please edit documentation in R/github_test_token.R
 \name{github_test_token}
 \alias{github_test_token}
+\alias{test_github_token}
 \title{Test github token}
 \usage{
 github_test_token(token = github_get_token())
@@ -20,9 +21,3 @@ github_test_token("bad_token")
 }
 
 }
-\seealso{
-Other authentication: \code{\link{github_get_token}},
-  \code{\link{github_reset_token}},
-  \code{\link{github_set_token}}, \code{\link{with_pat}}
-}
-\concept{authentication}

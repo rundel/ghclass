@@ -16,11 +16,3 @@ team_delete(org, team, prompt = TRUE)
 \description{
 \code{team_delete} deletes an existing team from a GitHub organization.
 }
-\seealso{
-Other github organization team related functions: \code{\link{org_teams}},
-  \code{\link{team_create}}, \code{\link{team_invite}},
-  \code{\link{team_members}},
-  \code{\link{team_pending_members}},
-  \code{\link{team_rename}}
-}
-\concept{github organization team related functions}

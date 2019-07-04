@@ -11,7 +11,8 @@
 #' github_test_token("bad_token")
 #' }
 #'
-#' @family authentication
+
+#' @aliases test_github_token
 #'
 #' @export
 

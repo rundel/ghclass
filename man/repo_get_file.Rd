@@ -2,6 +2,7 @@
 % Please edit documentation in R/repo_get_file.R
 \name{repo_get_file}
 \alias{repo_get_file}
+\alias{get_file}
 \title{Low level function for retrieving a file from a GitHub Repository}
 \usage{
 repo_get_file(repo, file, branch = "master")
@@ -16,10 +17,3 @@ repo_get_file(repo, file, branch = "master")
 \description{
 Low level function for retrieving a file from a GitHub Repository
 }
-\seealso{
-Other file functions: \code{\link{repo_add_file}},
-  \code{\link{repo_get_readme}},
-  \code{\link{repo_modify_file}},
-  \code{\link{repo_put_file}}
-}
-\concept{file functions}

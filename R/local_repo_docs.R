@@ -5,27 +5,22 @@
 #'
 #' @description
 #' The functions provide tools for working with local git repositories, ghclass includes support for following git commands:
-#' * git clone = `local_repo_clone`
 #' * git add = `local_repo_add`
 #' * git commit = `local_repo_commit`
 #' * git push = `local_repo_push`
 #' * git pull = `local_repo_pull`
 #'
-#' @param repo GitHub repo names with the form `owner/name`.
 #' @param repo_dir Vector of repo directories or a single directory containing one or more repos.
-#' @param message commit message
-#' @param files files to be staged
+#' @param files Files to be staged
+#' @param message Commit message
+#' @param remote Repository remote to use.
+#' @param branch Repository branch to use.
 #' @param git Path to the local git binary. `require_git()` attempts to
 #' find the git binary based on your `PATH``, it will throw an error if git cannot be found.
 #' @param options Additional git binary options (e.g. `--all`).
 #' @param verbose Display verbose output.
 #'
-#' @aliases add_repo
-#' @aliases clone_repo
-#' @aliases commit_repo
-#' @aliases pull_repo
-#' @aliases push_repo
-#'
+#' @aliases add_repo clone_repo commit_repo pull_repo push_repo
 #'
 #' @examples
 #' \dontrun{

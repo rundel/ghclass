@@ -2,6 +2,7 @@
 % Please edit documentation in R/repo_unwatch.R
 \name{repo_unwatch}
 \alias{repo_unwatch}
+\alias{unwatch_repo}
 \title{Unwatch repository}
 \usage{
 repo_unwatch(repo)
@@ -19,8 +20,3 @@ repo_unwatch("Sta523-Fa15/hw1-Tim")
 }
 
 }
-\seealso{
-Other notification: \code{\link{repo_ignore}},
-  \code{\link{repo_watching}}, \code{\link{repo_watch}}
-}
-\concept{notification}

@@ -2,6 +2,7 @@
 % Please edit documentation in R/org_teams.R
 \name{org_teams}
 \alias{org_teams}
+\alias{get_teams}
 \title{Get organization teams}
 \usage{
 org_teams(org, filter = NULL, exclude = FALSE)
@@ -17,11 +18,3 @@ org_teams(org, filter = NULL, exclude = FALSE)
 \code{org_teams} returns a (filtered) data frame of teams in the organization with columns for
 their names (\code{name}) and their unique ids (\code{id}).
 }
-\seealso{
-Other github organization team related functions: \code{\link{team_create}},
-  \code{\link{team_delete}}, \code{\link{team_invite}},
-  \code{\link{team_members}},
-  \code{\link{team_pending_members}},
-  \code{\link{team_rename}}
-}
-\concept{github organization team related functions}

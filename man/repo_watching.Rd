@@ -2,6 +2,7 @@
 % Please edit documentation in R/repo_watching.R
 \name{repo_watching}
 \alias{repo_watching}
+\alias{get_watching}
 \title{Get watched repos}
 \usage{
 repo_watching(filter = NULL, exclude = FALSE)
@@ -24,8 +25,3 @@ repo_watching("hw1")
 }
 
 }
-\seealso{
-Other notification: \code{\link{repo_ignore}},
-  \code{\link{repo_unwatch}}, \code{\link{repo_watch}}
-}
-\concept{notification}

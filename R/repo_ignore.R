@@ -4,7 +4,8 @@
 #'
 #' @param repo github repository address in `owner/repo` format
 #'
-#' @family notification
+
+#' @aliases ignore_repo
 #'
 #' @export
 #'

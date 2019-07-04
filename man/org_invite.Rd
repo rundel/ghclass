@@ -2,6 +2,7 @@
 % Please edit documentation in R/org_invite.R
 \name{org_invite}
 \alias{org_invite}
+\alias{invite_user}
 \title{Invite user(s)}
 \usage{
 org_invite(org, user)
@@ -21,9 +22,3 @@ org_invite("Sta523-Fa17", user)
 }
 
 }
-\seealso{
-Other github organization related functions: \code{\link{org_members}},
-  \code{\link{org_pending_members}},
-  \code{\link{org_repos}}, \code{\link{team_repos}}
-}
-\concept{github organization related functions}

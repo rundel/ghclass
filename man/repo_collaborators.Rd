@@ -2,6 +2,8 @@
 % Please edit documentation in R/repo_collaborators.R
 \name{repo_collaborators}
 \alias{repo_collaborators}
+\alias{get_collaborator}
+\alias{get_collaborators}
 \title{List collaborator(s)}
 \usage{
 repo_collaborators(repo, include_admins = TRUE)

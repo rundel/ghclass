@@ -22,6 +22,8 @@ github_api_repo_rename = function(repo, new_name){
 #' repo_rename("ghclass-test/hw1", "homework1")
 #' }
 #'
+#' @aliases rename_repo
+#'
 #' @export
 #'
 repo_rename = function(repo, new_name) {

@@ -25,7 +25,8 @@ github_api_get_repo = function(repo) {
 #'
 #' @return A logical vector
 #'
-#' @family github repo related functions
+
+#' @aliases check_repo check_repos
 #'
 #' @export
 #'

@@ -15,7 +15,8 @@ github_api_org_teams = function(org) {
 #' @param filter character, regex pattern for matching (or excluding) repos.
 #' @param exclude logical, should entries matching the regex be excluded or included.
 #'
-#' @family github organization team related functions
+
+#' @aliases get_teams
 #'
 #' @export
 #'

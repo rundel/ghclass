@@ -2,6 +2,8 @@
 % Please edit documentation in R/org_pending_members.R
 \name{org_pending_members}
 \alias{org_pending_members}
+\alias{get_pending_member}
+\alias{get_pending_members}
 \title{Get pending organization members}
 \usage{
 org_pending_members(org, filter = NULL, exclude = FALSE)
@@ -22,9 +24,3 @@ org_pending_members("ghclass")
 }
 
 }
-\seealso{
-Other github organization related functions: \code{\link{org_invite}},
-  \code{\link{org_members}}, \code{\link{org_repos}},
-  \code{\link{team_repos}}
-}
-\concept{github organization related functions}

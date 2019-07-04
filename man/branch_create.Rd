@@ -17,8 +17,3 @@ branch_create(repo, cur_branch = "master", new_branch)
 \description{
 \code{branch_create} creates a new branch from an existing git repo.
 }
-\seealso{
-Other branch functions: \code{\link{branch_protect}},
-  \code{\link{branch_unprotect}}
-}
-\concept{branch functions}

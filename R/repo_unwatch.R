@@ -20,7 +20,8 @@ github_api_repo_unwatch = function(repo){
 #' repo_unwatch("Sta523-Fa15/hw1-Tim")
 #' }
 #'
-#' @family notification
+
+#' @aliases unwatch_repo
 #'
 #' @export
 #'

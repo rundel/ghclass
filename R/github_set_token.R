@@ -12,7 +12,7 @@
 #' github_set_token("0123456789ABCDEF0123456789ABCDEF01234567")
 #' }
 #'
-#' @family authentication
+#' @aliases set_github_token
 #'
 #' @export
 

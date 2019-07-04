@@ -2,6 +2,8 @@
 % Please edit documentation in R/org_members.R
 \name{org_members}
 \alias{org_members}
+\alias{get_member}
+\alias{get_members}
 \title{Get organization member}
 \usage{
 org_members(org, filter = NULL, exclude = FALSE,
@@ -25,9 +27,3 @@ org_members("ghclass")
 }
 
 }
-\seealso{
-Other github organization related functions: \code{\link{org_invite}},
-  \code{\link{org_pending_members}},
-  \code{\link{org_repos}}, \code{\link{team_repos}}
-}
-\concept{github organization related functions}

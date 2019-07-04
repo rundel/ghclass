@@ -26,7 +26,8 @@ github_api_repo_put_file = function(repo, path, content, message, branch) {
 #' @param branch Character. Name of branch to use, defaults to "master".
 #' @param verbose Logical. Should success / failure messages be printed
 #'
-#' @family file functions
+
+#' @aliases put_file
 #'
 #' @export
 #'

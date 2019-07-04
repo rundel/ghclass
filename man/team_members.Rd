@@ -2,6 +2,7 @@
 % Please edit documentation in R/team_members.R
 \name{team_members}
 \alias{team_members}
+\alias{get_team_members}
 \title{Get team members}
 \usage{
 team_members(org, team = org_teams(org))
@@ -20,11 +21,3 @@ team_members("ghclass-test",c("team01","team02"))
 }
 
 }
-\seealso{
-Other github organization team related functions: \code{\link{org_teams}},
-  \code{\link{team_create}}, \code{\link{team_delete}},
-  \code{\link{team_invite}},
-  \code{\link{team_pending_members}},
-  \code{\link{team_rename}}
-}
-\concept{github organization team related functions}

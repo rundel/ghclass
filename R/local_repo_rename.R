@@ -8,6 +8,8 @@
 #' @param pattern Character. One or more regexp patterns to match to directory names.
 #' @param replacement Character.  One or more text strings containing the replacement value for matched patterns.
 #'
+#' @aliases rename_local_repo
+#'
 #' @export
 #'
 local_repo_rename = function(repo_dir, pattern, replacement) {

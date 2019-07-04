@@ -2,6 +2,7 @@
 % Please edit documentation in R/team_repos.R
 \name{team_repos}
 \alias{team_repos}
+\alias{get_team_repos}
 \title{Get teams' repos}
 \usage{
 team_repos(org, team)
@@ -20,10 +21,3 @@ team_repos("ghclass",c("team01","team02"))
 }
 
 }
-\seealso{
-Other github organization related functions: \code{\link{org_invite}},
-  \code{\link{org_members}},
-  \code{\link{org_pending_members}},
-  \code{\link{org_repos}}
-}
-\concept{github organization related functions}

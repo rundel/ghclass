@@ -22,6 +22,9 @@ github_api_repo_collaboratorss = function(repo) {
 #' repo_collaboratorss("ghclass-test/test2")
 #' }
 #'
+#' @aliases get_collaborator get_collaborators
+
+#'
 #' @export
 #'
 repo_collaborators = function(repo, include_admins = TRUE) {

@@ -2,6 +2,7 @@
 % Please edit documentation in R/org_admins.R
 \name{org_admins}
 \alias{org_admins}
+\alias{get_admin}
 \title{List repository administrators}
 \usage{
 org_admins(org)

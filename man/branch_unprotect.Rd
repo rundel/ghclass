@@ -17,8 +17,3 @@ branch_unprotect(repo, branch = "master")
 \url{https://help.github.com/en/articles/about-protected-branches} for more details
 on what this changes.
 }
-\seealso{
-Other branch functions: \code{\link{branch_create}},
-  \code{\link{branch_protect}}
-}
-\concept{branch functions}

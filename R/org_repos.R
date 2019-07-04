@@ -25,7 +25,8 @@ github_api_org_repos = function(owner) {
 #' org_repos("ghclass", "hw1-")
 #' }
 #'
-#' @family github organization related functions
+
+#' @aliases get_repo get_repos
 #'
 #' @export
 #'

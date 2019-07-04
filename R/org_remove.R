@@ -15,6 +15,7 @@ github_api_org_remove = function(org, user) {
 #' @param user Character. Name of one or more GitHub users.
 #' @param prompt Logical. Should the user be prompted before deleting repositories. Default `true`.
 #'
+
 #' @export
 #'
 org_remove = function(org, user, prompt = TRUE) {

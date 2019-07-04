@@ -12,8 +12,7 @@
 #' github_get_token() == token
 #' }
 #'
-#' @family authentication
-#'
+
 #' @export
 
 github_reset_token = function() {

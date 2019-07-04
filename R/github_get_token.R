@@ -13,7 +13,8 @@
 #' github_get_token()
 #' }
 #'
-#' @family authentication
+
+#' @aliases get_github_token
 #'
 #' @export
 

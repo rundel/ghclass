@@ -22,7 +22,8 @@ github_api_repo_watching = function() {
 #' repo_watching("hw1")
 #' }
 #'
-#' @family notification
+
+#' @aliases get_watching
 #'
 #' @export
 #'

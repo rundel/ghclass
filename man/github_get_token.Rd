@@ -2,6 +2,7 @@
 % Please edit documentation in R/github_get_token.R
 \name{github_get_token}
 \alias{github_get_token}
+\alias{get_github_token}
 \title{Get github token}
 \usage{
 github_get_token()
@@ -23,9 +24,3 @@ github_get_token()
 }
 
 }
-\seealso{
-Other authentication: \code{\link{github_reset_token}},
-  \code{\link{github_set_token}},
-  \code{\link{github_test_token}}, \code{\link{with_pat}}
-}
-\concept{authentication}

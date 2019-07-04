@@ -2,6 +2,7 @@
 % Please edit documentation in R/team_create.R
 \name{team_create}
 \alias{team_create}
+\alias{create_team}
 \title{Create team(s)}
 \usage{
 team_create(org, team, privacy = c("closed", "secret"))
@@ -24,11 +25,3 @@ team_create("ghclass",c("team01","team01"))
 }
 
 }
-\seealso{
-Other github organization team related functions: \code{\link{org_teams}},
-  \code{\link{team_delete}}, \code{\link{team_invite}},
-  \code{\link{team_members}},
-  \code{\link{team_pending_members}},
-  \code{\link{team_rename}}
-}
-\concept{github organization team related functions}

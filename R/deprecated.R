@@ -41,6 +41,12 @@ get_repo = function(...) {
 }
 
 #' @export
+get_repos = function(...) {
+  .Deprecated("org_repos")
+  org_repos(...)
+}
+
+#' @export
 get_teams = function(...) {
   .Deprecated("org_teams")
   org_teams(...)
@@ -65,10 +71,23 @@ get_member = function(...) {
 }
 
 #' @export
+get_members = function(...) {
+  .Deprecated("org_members")
+  org_members(...)
+}
+
+#' @export
 get_pending_member = function(...) {
   .Deprecated("org_pending_members")
   org_pending_members(...)
 }
+
+#' @export
+get_pending_members = function(...) {
+  .Deprecated("org_pending_members")
+  org_pending_members(...)
+}
+
 
 #' @export
 create_team = function(...) {
@@ -138,6 +157,12 @@ mirror_repo = function(...) {
 
 #' @export
 get_collaborator = function(...) {
+  .Deprecated("repo_collaborators")
+  repo_collaborators(...)
+}
+
+#' @export
+get_collaborators = function(...) {
   .Deprecated("repo_collaborators")
   repo_collaborators(...)
 }
@@ -237,6 +262,13 @@ check_repo = function(...) {
   .Deprecated("repo_exists")
   repo_exists(...)
 }
+
+#' @export
+check_repos = function(...) {
+  .Deprecated("repo_exists")
+  repo_exists(...)
+}
+
 
 #' @export
 check_user_exists = function(...) {

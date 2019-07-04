@@ -2,6 +2,7 @@
 % Please edit documentation in R/repo_put_file.R
 \name{repo_put_file}
 \alias{repo_put_file}
+\alias{put_file}
 \title{Low level function for adding a file to a Github repository}
 \usage{
 repo_put_file(repo, path, content, message = NULL, branch = "master",
@@ -23,10 +24,3 @@ repo_put_file(repo, path, content, message = NULL, branch = "master",
 \description{
 Low level function for adding a file to a Github repository
 }
-\seealso{
-Other file functions: \code{\link{repo_add_file}},
-  \code{\link{repo_get_file}},
-  \code{\link{repo_get_readme}},
-  \code{\link{repo_modify_file}}
-}
-\concept{file functions}

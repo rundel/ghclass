@@ -21,6 +21,8 @@ github_api_get_user = function(user) {
 #' user_exists(c("rundel","hopefullydoesnotexist"))
 #' }
 #'
+#' @aliases check_user_exists
+#'
 #' @export
 #'
 user_exists = function(user) {

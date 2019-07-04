@@ -26,7 +26,8 @@ github_api_repo_create = function(repo, private, auto_init, gitignore_template){
 #' repo_create("ghclass-test", c("user01","user02"), prefix = "hw01-")
 #' }
 #'
-#' @family github repository related functions
+
+#' @aliases create_repo
 #'
 #' @export
 #'

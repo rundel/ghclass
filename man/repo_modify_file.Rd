@@ -2,6 +2,7 @@
 % Please edit documentation in R/repo_modify_file.R
 \name{repo_modify_file}
 \alias{repo_modify_file}
+\alias{add_content}
 \title{Modify a file within a repository}
 \usage{
 repo_modify_file(repo, file, content, after = NULL,
@@ -23,10 +24,3 @@ repo_modify_file(repo, file, content, after = NULL,
 \description{
 Modify a file within a repository
 }
-\seealso{
-Other file functions: \code{\link{repo_add_file}},
-  \code{\link{repo_get_file}},
-  \code{\link{repo_get_readme}},
-  \code{\link{repo_put_file}}
-}
-\concept{file functions}

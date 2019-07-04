@@ -21,7 +21,7 @@ github_api_team_rename = function(id, new_name) {
 #' team_rename("ghclass-test", "hw1-team01", "hw01-team01")
 #' }
 #'
-#' @family github organization team related functions
+#' @aliases rename_team
 #'
 #' @export
 team_rename = function(org, team, new_team) {

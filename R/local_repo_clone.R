@@ -1,8 +1,28 @@
-#' @rdname local_repo
+#' @title Local repository tools
+#'
+#' @description Clones repositories from GitHub to a local directory.
+#'
+#' @param repo GitHub repo names with the form `owner/name`.
+#' @param local_path Local directory to store cloned repos.
+#' @param branch Repository branch to use.
+#' @param git Path to the local git binary. `require_git()` attempts to
+#' find the git binary based on your `PATH``, it will throw an error if git cannot be found.
+#' @param options Additional git binary options (e.g. `--all`).
+#' @param verbose Display verbose output.
+#'
+#' @aliases repo_clone
+#'
+#' @examples
+#' \dontrun{
+#' g = org_repos("Sta323-Sp18","hw3-")
+#' local_repo_clone(g, "hw3")
+#' }
+#'
+
 #' @export
 local_repo_clone = function(repo, local_path="./", branch = "master",
                       git = require_git(), options = character(),
-                      absolute_path = TRUE, verbose = FALSE)
+                      verbose = FALSE)
 {
   stopifnot(!missing(repo))
   stopifnot(file.exists(git))
@@ -38,12 +58,8 @@ local_repo_clone = function(repo, local_path="./", branch = "master",
   invisible(dirs)
 }
 
-#' @rdname local_repo
 #' @export
-repo_clone = function(repo, local_path="./", branch = "master",
-                      git = require_git(), options = character(),
-                      absolute_path = TRUE, verbose = FALSE)
+repo_clone = function(...)
 {
-  local_repo_clone(repo, local_path, branch,
-                   git, options, absolute_path, verbose)
+  local_repo_clone(...)
 }

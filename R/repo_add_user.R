@@ -26,6 +26,8 @@ github_api_add_user = function(repo, username, permission){
 #'
 #' @rdname repo_add_member
 #'
+#' @aliases add_user_to_repo add_team_to_repo
+#'
 #' @export
 repo_add_user = function(repo, user,
                             permission = c("push", "pull", "admin")) {

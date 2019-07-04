@@ -9,8 +9,7 @@
 #'
 #' @details if `NA` is used the `GITHUB_PAT` environment variable will be unset.
 #'
-#' @family authentication
-#'
+
 #' @export
 #'
 with_pat = function(new, code) {

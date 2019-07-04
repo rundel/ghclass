@@ -20,7 +20,8 @@ github_api_repo_get_file = function(repo, file, branch) {
 #' @param file Characer. Path to the file within the repository.
 #' @param branch Character. Name of branch to use, defaults to "master".
 #'
-#' @family file functions
+
+#' @aliases get_file
 #'
 #' @export
 #'
