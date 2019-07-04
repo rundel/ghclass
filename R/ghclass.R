@@ -72,12 +72,6 @@
 #' * [repo_exists()] - (previously [check_repo()])
 #' * [user_exists()] - (previously [check_user_exists()])
 #'
-#'
-#' @section Experimental functions:
-#'
-#' * [repo_style()] - (previously [style_repo()]) - use `styler` on all R code within a repo and create a branch + pull request with the result
-#'
-#'
 #' @import gh
 #'
 #' @docType package
