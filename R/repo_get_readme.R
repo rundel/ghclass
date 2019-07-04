@@ -1,4 +1,4 @@
-github_api_get_readme = function(repo, branch) {
+github_api_repo_get_readme = function(repo, branch) {
   arg_is_chr_scalar(repo, branch)
 
   gh::gh(
@@ -20,11 +20,11 @@ github_api_get_readme = function(repo, branch) {
 #'
 #' @export
 #'
-get_readme = function(repo, branch = "master") {
+repo_get_readme = function(repo, branch = "master") {
   stopifnot(length(repo) == 1)
   stopifnot(length(branch) == 1)
 
-  file = purrr::possibly(github_api_get_readme, NULL)(repo, branch)
+  file = purrr::possibly(github_api_repo_get_readme, NULL)(repo, branch)
 
   extract_content(file)
 }
