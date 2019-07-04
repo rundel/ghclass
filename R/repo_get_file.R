@@ -1,16 +1,14 @@
-github_api_get_file = function(repo, file, branch) {
-
-  stopifnot(length(repo) == 1)
-  stopifnot(length(file) == 1)
-  stopifnot(length(branch) == 1)
-
-  name = get_repo_name(repo)
-  owner = get_repo_owner(repo)
+github_api_repo_get_file = function(repo, file, branch) {
+  arg_is_chr_scalar(repo, file, branch)
 
   gh::gh(
     "GET /repos/:owner/:repo/contents/:path",
-    owner = owner, repo = name, path = file, ref = branch,
-    .token = github_get_token(), .limit = get_github_api_limit()
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    path = file,
+    ref = branch,
+    .token = github_get_token(),
+    .limit = get_github_api_limit()
   )
 
 }
@@ -26,12 +24,12 @@ github_api_get_file = function(repo, file, branch) {
 #'
 #' @export
 #'
-get_file = function(repo, file, branch = "master") {
+repo_get_file = function(repo, file, branch = "master") {
   stopifnot(length(repo) == 1)
   stopifnot(length(file) == 1)
   stopifnot(length(branch) == 1)
 
-  file = purrr::possibly(github_api_get_file, NULL)(repo, file, branch)
+  file = purrr::possibly(github_api_repo_get_file, NULL)(repo, file, branch)
 
   extract_content(file)
 }

@@ -1,6 +1,6 @@
 #' Add files to a repo
 #'
-#' `add_file` uses the GitHub API to add/update files in an existing repo on GitHub. Note that due to time delays in caching, files that have been added very recently might not yet be displayed as existing and might accidentally be overwritten.
+#' `repo_add_file` uses the GitHub API to add/update files in an existing repo on GitHub. Note that due to time delays in caching, files that have been added very recently might not yet be displayed as existing and might accidentally be overwritten.
 #'
 #' @param repo Character. Address of repository in "owner/name" format.
 #' @param message Character. Commit message. If not provided, a custom character string will be created, in the form of "Added file(s): filename(s)". If this custom message character length exceeds 50, it will be shortened to "Added file(s)".
@@ -11,14 +11,14 @@
 #'
 #' @examples
 #' \dontrun{
-#' add_file("rundel/ghclass", "Update DESCRIPTION", "./DESCRIPTION")
+#' repo_add_file("rundel/ghclass", "Update DESCRIPTION", "./DESCRIPTION")
 #' }
 #'
 #' @family file functions
 #'
 #' @export
 #'
-add_file = function(repo, file, message = NULL, branch = "master",
+repo_add_file = function(repo, file, message = NULL, branch = "master",
                     preserve_path = FALSE, overwrite = FALSE) {
 
   arg_is_chr(repo, file, branch)
@@ -46,7 +46,7 @@ add_file = function(repo, file, message = NULL, branch = "master",
             gh_path = fs::path_file(file)
 
           if(!check_file_modification(repo, gh_path, branch) | overwrite){
-            put_file(
+            repo_put_file(
               repo = repo,
               path = gh_path,
               content = paste(readLines(file), collapse = "\n"),

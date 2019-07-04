@@ -1,4 +1,4 @@
-github_api_put_file = function(repo, path, content, message, branch) {
+github_api_repo_put_file = function(repo, path, content, message, branch) {
   args = list(
     endpoint = "PUT /repos/:owner/:repo/contents/:path",
     owner = get_repo_owner(repo), repo = get_repo_name(repo),
@@ -10,7 +10,7 @@ github_api_put_file = function(repo, path, content, message, branch) {
 
   # To update an existing file we need its current SHA,
   # if the file does not exist this will be NULL.
-  cur_file = get_file(repo, path, branch)
+  cur_file = repo_get_file(repo, path, branch)
   args[["sha"]] = attr(cur_file, "sha")
 
   do.call(gh::gh, args)
@@ -30,7 +30,7 @@ github_api_put_file = function(repo, path, content, message, branch) {
 #'
 #' @export
 #'
-put_file = function(repo, path, content, message = NULL, branch = "master", verbose = TRUE) {
+repo_put_file = function(repo, path, content, message = NULL, branch = "master", verbose = TRUE) {
 
   arg_is_scalar(content) # Could be character or raw
   arg_is_chr_scalar(repo, path, branch)
@@ -42,7 +42,7 @@ put_file = function(repo, path, content, message = NULL, branch = "master", verb
   if (is.character(content))
     content = charToRaw(content)
 
-  res = purrr::safely(github_api_put_file)(repo, path, content, message, branch)
+  res = purrr::safely(github_api_repo_put_file)(repo, path, content, message, branch)
 
   if(verbose){
     status_msg(

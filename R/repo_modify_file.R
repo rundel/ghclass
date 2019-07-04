@@ -11,7 +11,7 @@
 #'
 #' @export
 #'
-add_content = function(repo, file, content, after = NULL, message = "Added content", branch = "master") {
+repo_modify_file = function(repo, file, content, after = NULL, message = "Added content", branch = "master") {
   arg_is_chr(repo, file, content, message, branch)
   arg_is_chr(after, allow_null = TRUE)
 
@@ -19,7 +19,7 @@ add_content = function(repo, file, content, after = NULL, message = "Added conte
     list(repo, file, content, after, message, branch),
     function(repo, file, content, after, message, branch) {
 
-      cur_content = get_file(repo, file, branch)
+      cur_content = repo_get_file(repo, file, branch)
 
       if (is.null(cur_content)) {
         usethis::ui_oops(
@@ -45,7 +45,7 @@ add_content = function(repo, file, content, after = NULL, message = "Added conte
           )
         }
 
-        put_file(repo, file, content, message, branch)
+        repo_put_file(repo, file, content, message, branch)
         usethis::ui_done("Added content to {usethis::ui_value(format_repo(repo, branch, file))}.")
       }
     }

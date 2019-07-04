@@ -250,7 +250,7 @@ files with the same name in the repo, so you should be careful not to do this
 if students have already started working on the repos.
 
 ```r
-add_files(
+repo_add_files(
   org_repos("Sta523-Fa17","hw2-"),
   message = "Remove wrong wercker badge",
   files = "~/Desktop/Sta523/Homework/hw2/repo/README.md"

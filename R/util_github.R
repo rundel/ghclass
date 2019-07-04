@@ -83,7 +83,7 @@ file_exists = function(repo, file, branch = "master", verbose = TRUE) {
         (length(find_file(repo, file, verbose)) > 0)
       } else {
         # Only the master branch is indexed for search
-        is.null(get_file(repo, file, branch))
+        is.null(repo_get_file(repo, file, branch))
       }
     }
   )

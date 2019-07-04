@@ -15,8 +15,9 @@ get_readme(repo, branch = "master")
 Low level function for retrieving the README of a GitHub Repository
 }
 \seealso{
-Other file functions: \code{\link{add_content}},
-  \code{\link{add_file}}, \code{\link{get_file}},
-  \code{\link{put_file}}
+Other file functions: \code{\link{repo_add_file}},
+  \code{\link{repo_get_file}},
+  \code{\link{repo_modify_file}},
+  \code{\link{repo_put_file}}
 }
 \concept{file functions}
