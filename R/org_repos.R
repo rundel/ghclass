@@ -43,7 +43,8 @@ org_repos = function(org, filter = NULL, exclude = FALSE, full_repo = TRUE) {
   if (failed(res))
     return(invisible(NULL))
 
-  res = purrr::map_chr(result(res), "name")
+  res = purrr::map(result(res), "name")
+  res = purrr::flatten_chr(res)
   res = filter_results(res, filter, exclude)
 
   if (full_repo & length(res) > 0)
