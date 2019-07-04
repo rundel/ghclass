@@ -2,6 +2,7 @@
 % Please edit documentation in R/branch_protect.R
 \name{branch_protect}
 \alias{branch_protect}
+\alias{protect_branch}
 \title{Protect branch}
 \usage{
 branch_protect(repo, branch = "master")

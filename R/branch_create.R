@@ -46,6 +46,8 @@ github_api_branch_create = function(repo, cur_branch, new_branch) {
 #'
 #' @family branch functions
 #'
+#' @aliases create_branch
+#'
 #' @export
 #'
 branch_create = function(repo, cur_branch = "master", new_branch) {

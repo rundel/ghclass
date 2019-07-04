@@ -27,6 +27,8 @@ github_api_branch_protect = function(repo, branch) {
 #'
 #' @family branch functions
 #'
+#' @aliases protect_branch
+#'
 #' @export
 #'
 branch_protect = function(repo, branch = "master") {
