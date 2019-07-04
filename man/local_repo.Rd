@@ -8,6 +8,7 @@
 \alias{repo_clone}
 \alias{local_repo_commit}
 \alias{local_repo}
+\alias{add_repo}
 \alias{local_repo_pull}
 \alias{local_repo_push}
 \title{Local repository tools}

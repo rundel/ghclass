@@ -100,10 +100,3 @@ Notification functions:
 }
 }
 
-\section{Experimental functions}{
-
-\itemize{
-\item \code{\link[=repo_style]{repo_style()}} - (previously \code{\link[=style_repo]{style_repo()}}) - use \code{styler} on all R code within a repo and create a branch + pull request with the result
-}
-}
-

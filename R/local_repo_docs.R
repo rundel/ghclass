@@ -20,6 +20,13 @@
 #' @param options Additional git binary options (e.g. `--all`).
 #' @param verbose Display verbose output.
 #'
+#' @aliases add_repo
+#' @aliases clone_repo
+#' @aliases commit_repo
+#' @aliases pull_repo
+#' @aliases push_repo
+#'
+#'
 #' @examples
 #' \dontrun{
 #' g = org_repos("Sta323-Sp18","hw3-")
