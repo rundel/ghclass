@@ -15,7 +15,7 @@ github_api_repo_delete = function(repo) {
 
 #' @export
 #'
-repo_delete = function(repo = NULL, prompt = TRUE) {
+repo_delete = function(repo, prompt = TRUE) {
 
   arg_is_chr(repo, allow_null = TRUE)
   arg_is_lgl_scalar(prompt)

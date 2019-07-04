@@ -14,7 +14,7 @@ github_api_team_delete = function(team_id) {
 #'
 #' @export
 #'
-team_delete = function(org, team = NULL, prompt = TRUE) {
+team_delete = function(org, team, prompt = TRUE) {
 
   arg_is_chr_scalar(org)
   arg_is_chr(team, allow_null = TRUE)

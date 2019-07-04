@@ -4,7 +4,7 @@
 \alias{repo_delete}
 \title{Delete repository}
 \usage{
-repo_delete(repo = NULL, prompt = TRUE)
+repo_delete(repo, prompt = TRUE)
 }
 \arguments{
 \item{repo}{Character. Name of the GitHub repository in \code{owner/name} format.}
