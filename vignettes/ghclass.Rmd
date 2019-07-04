@@ -198,10 +198,10 @@ create_team_repo("Sta523-Fa17", teams, prefix="hw2-")
 If you want to place starter docs into the assignment repos that you just
 created, you should first create a repo in this organization containing these
 starter docs and then mirrow the contents of that repo to the repos you created
-earlier. You can do this with the `mirror_repo` function.
+earlier. You can do this with the `repo_mirror` function.
 
 ```r
-mirror_repo(
+repo_mirror(
   source_repo = "Sta523-Fa17/hw2",
   target_repos = org_repos("Sta523-Fa17","hw2-")
 )

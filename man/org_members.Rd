@@ -14,7 +14,7 @@ org_members(org, filter = NULL, exclude = FALSE,
 
 \item{exclude}{Logical. Should entries matching the regular expression be excluded or included.}
 
-\item{include_admin}{Logical. Should admin users be included in the results.}
+\item{include_admins}{Logical. Should admin users be included in the results.}
 }
 \description{
 \code{org_members} returns a (filtered) vector of organization memebers.

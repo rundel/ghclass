@@ -17,8 +17,8 @@ repo_get_file(repo, file, branch = "master")
 Low level function for retrieving a file from a GitHub Repository
 }
 \seealso{
-Other file functions: \code{\link{get_readme}},
-  \code{\link{repo_add_file}},
+Other file functions: \code{\link{repo_add_file}},
+  \code{\link{repo_get_readme}},
   \code{\link{repo_modify_file}},
   \code{\link{repo_put_file}}
 }

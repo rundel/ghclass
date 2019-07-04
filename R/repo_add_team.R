@@ -9,9 +9,9 @@ github_api_add_team = function(repo, team_id, permission){
   )
 }
 
-#' @rdname add_owner_to_repo
+#' @rdname repo_add_member
 #' @export
-add_team_to_repo = function(repo, team,
+repo_add_team = function(repo, team,
                             permission = c("push", "pull", "admin")) {
 
   permission = match.arg(permission)

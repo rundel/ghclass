@@ -24,8 +24,9 @@ repo_put_file(repo, path, content, message = NULL, branch = "master",
 Low level function for adding a file to a Github repository
 }
 \seealso{
-Other file functions: \code{\link{get_readme}},
-  \code{\link{repo_add_file}}, \code{\link{repo_get_file}},
+Other file functions: \code{\link{repo_add_file}},
+  \code{\link{repo_get_file}},
+  \code{\link{repo_get_readme}},
   \code{\link{repo_modify_file}}
 }
 \concept{file functions}

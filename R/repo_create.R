@@ -1,4 +1,4 @@
-github_api_create_repo = function(repo, private, auto_init, gitignore_template){
+github_api_repo_create = function(repo, private, auto_init, gitignore_template){
   gh::gh("POST /orgs/:owner/repos",
          owner = get_repo_owner(repo),
          name = get_repo_name(repo),
@@ -10,7 +10,7 @@ github_api_create_repo = function(repo, private, auto_init, gitignore_template){
 
 #' Create repository
 #'
-#' `create_repo` creates either individual or team repositories for a given
+#' `repo_create` creates either individual or team repositories for a given
 #' assignment.
 #'
 #' @param org Character. Name of the GitHub organization.
@@ -23,14 +23,14 @@ github_api_create_repo = function(repo, private, auto_init, gitignore_template){
 #'
 #' @examples
 #' \dontrun{
-#' create_repo("ghclass-test", c("user01","user02"), prefix = "hw01-")
+#' repo_create("ghclass-test", c("user01","user02"), prefix = "hw01-")
 #' }
 #'
 #' @family github repository related functions
 #'
 #' @export
 #'
-create_repo = function(org, name,
+repo_create = function(org, name,
                        prefix = "", suffix = "",
                        private = TRUE, auto_init = FALSE,
                        gitignore_template = "R") {
@@ -54,7 +54,7 @@ create_repo = function(org, name,
         usethis::ui_info("Skipping repo {usethis::ui_value(repo)}, it already exists.")
         return()
       }
-      res = purrr::safely(github_api_create_repo)(
+      res = purrr::safely(github_api_repo_create)(
         repo,
         private = private,
         auto_init = auto_init,

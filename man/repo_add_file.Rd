@@ -30,8 +30,8 @@ repo_add_file("rundel/ghclass", "Update DESCRIPTION", "./DESCRIPTION")
 
 }
 \seealso{
-Other file functions: \code{\link{get_readme}},
-  \code{\link{repo_get_file}},
+Other file functions: \code{\link{repo_get_file}},
+  \code{\link{repo_get_readme}},
   \code{\link{repo_modify_file}},
   \code{\link{repo_put_file}}
 }

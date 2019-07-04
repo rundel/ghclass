@@ -11,7 +11,7 @@ github_api_get_repo = function(repo) {
 
 #' Check existence of GitHub repository
 #'
-#' `check_repo` returns TRUE if the github repository exists.
+#' `repo_exists` returns TRUE if the github repository exists.
 #' The function also prints a message if a repository has been renamed.
 #'
 #' @param repo Character. Address of repository in "owner/name" format.
@@ -20,7 +20,7 @@ github_api_get_repo = function(repo) {
 #'
 #' @examples
 #' \dontrun{
-#' check_repo(c("rundel/ghclass", "rundel/ghclass_fake"))
+#' repo_exists(c("rundel/ghclass", "rundel/ghclass_fake"))
 #' }
 #'
 #' @return A logical vector
@@ -29,7 +29,7 @@ github_api_get_repo = function(repo) {
 #'
 #' @export
 #'
-check_repo = function(repo, strict = FALSE, verbose = TRUE) {
+repo_exists = function(repo, strict = FALSE, verbose = TRUE) {
 
   arg_is_chr(repo)
   arg_is_lgl_scalar(strict, verbose)

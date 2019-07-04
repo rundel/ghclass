@@ -117,7 +117,7 @@ style_repo = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = 
         ), collapse = "")
 
         if (tag_collaborators) {
-          users = get_collaborator(repo, include_admin = FALSE)[["username"]]
+          users = repo_collaborators(repo, include_admins = FALSE)[["username"]]
           if (length(users) > 0)
             msg = paste0(msg,"\n\n", paste0("@", users, collapse = ", "))
         }

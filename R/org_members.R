@@ -15,7 +15,7 @@ github_api_org_members = function(org) {
 #' @param org Character. Name of the GitHub organization.
 #' @param filter Character. Regular expression pattern for matching (or excluding) repositories.
 #' @param exclude Logical. Should entries matching the regular expression be excluded or included.
-#' @param include_admin Logical. Should admin users be included in the results.
+#' @param include_admins Logical. Should admin users be included in the results.
 #'
 #' @examples
 #' \dontrun{
@@ -35,7 +35,7 @@ org_members = function(org, filter = NULL, exclude = FALSE,
   members = purrr::map_chr(result(res), "login")
 
   if (!include_admins)
-    members = setdiff(members, get_admin(org))
+    members = setdiff(members, org_admins(org))
 
   filter_results(members, filter, exclude)
 }

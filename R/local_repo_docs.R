@@ -11,10 +11,11 @@
 #' * git push = `local_repo_push`
 #' * git pull = `local_repo_pull`
 #'
-#' @param repos GitHub repo names with the form `owner/name`.
+#' @param repo GitHub repo names with the form `owner/name`.
 #' @param repo_dir Vector of repo directories or a single directory containing one or more repos.
 #' @param message commit message
-#' @param git Path to the local git binary. [require_git()] attempts to
+#' @param files files to be staged
+#' @param git Path to the local git binary. `require_git()` attempts to
 #' find the git binary based on your `PATH``, it will throw an error if git cannot be found.
 #' @param options Additional git binary options (e.g. `--all`).
 #' @param verbose Display verbose output.

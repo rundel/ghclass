@@ -35,16 +35,18 @@ local_repo_push(repo_dir, remote = "origin", branch = "master",
 \arguments{
 \item{repo_dir}{Vector of repo directories or a single directory containing one or more repos.}
 
-\item{git}{Path to the local git binary. \code{\link[=require_git]{require_git()}} attempts to
+\item{files}{files to be staged}
+
+\item{git}{Path to the local git binary. \code{require_git()} attempts to
 find the git binary based on your `PATH``, it will throw an error if git cannot be found.}
 
 \item{options}{Additional git binary options (e.g. \code{--all}).}
 
 \item{verbose}{Display verbose output.}
 
-\item{message}{commit message}
+\item{repo}{GitHub repo names with the form \code{owner/name}.}
 
-\item{repos}{GitHub repo names with the form \code{owner/name}.}
+\item{message}{commit message}
 }
 \description{
 The functions provide tools for working with local git repositories, ghclass includes support for following git commands:

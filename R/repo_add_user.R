@@ -21,16 +21,13 @@ github_api_add_user = function(repo, username, permission){
 #'
 #' @examples
 #' \dontrun{
-#' add_user_to_repo("ghclass-test/hw1-user01", c("user01", "user02"))
+#' repo_add_user("ghclass-test/hw1-user01", c("user01", "user02"))
 #' }
 #'
-#' @aliases add_team_to_repo
-#' @aliases add_user_to_repo
-#'
-#' @rdname add_owner_to_repo
+#' @rdname repo_add_member
 #'
 #' @export
-add_user_to_repo = function(repo, user,
+repo_add_user = function(repo, user,
                             permission = c("push", "pull", "admin")) {
 
   permission = match.arg(permission)

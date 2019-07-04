@@ -1,4 +1,4 @@
-github_api_get_admin = function(owner){
+github_api_org_admins = function(owner){
   gh::gh("GET /orgs/:owner/members",
          owner = owner,
          role = "admin",
@@ -12,17 +12,17 @@ github_api_get_admin = function(owner){
 #'
 #' @examples
 #' \dontrun{
-#' get_admin("Sta523-Fa17")
+#' org_admins("Sta523-Fa17")
 #' }
 #'
 #' @return A character vector of repository administrators.
 #'
 #' @export
 #'
-get_admin = function(org) {
+org_admins = function(org) {
   arg_is_chr_scalar(org)
 
-  res = purrr::safely(github_api_get_admin)(owner = org)
+  res = purrr::safely(github_api_org_admins)(owner = org)
 
   if (failed(res))
     usethis::ui_stop(glue::glue("Failed to retrieve admuns for org {usethis::ui_value(org)}."))
