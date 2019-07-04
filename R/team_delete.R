@@ -12,13 +12,12 @@ github_api_team_delete = function(team_id) {
 #' @param team Character. Name of the GitHub team within that organization.
 #' @param prompt Logical. Should the user be prompted before deleting repositories. Default `true`.
 #'
-
 #' @export
 #'
-team_delete = function(org, team, prompt = TRUE) {
+team_delete = function(org, team = NULL, prompt = TRUE) {
 
   arg_is_chr_scalar(org)
-  arg_is_chr(team)
+  arg_is_chr(team, allow_null = TRUE)
   arg_is_lgl_scalar(prompt)
 
   if (prompt) {

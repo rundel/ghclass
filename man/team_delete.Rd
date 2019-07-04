@@ -4,7 +4,7 @@
 \alias{team_delete}
 \title{Delete team}
 \usage{
-team_delete(org, team, prompt = TRUE)
+team_delete(org, team = NULL, prompt = TRUE)
 }
 \arguments{
 \item{org}{Character. Name of the GitHub organization.}
