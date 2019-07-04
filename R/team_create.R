@@ -12,6 +12,8 @@ github_api_team_create = function(org, name, privacy) {
 #'
 #' @param org character, name of the GitHub organization
 #' @param team character, listing one or more teams
+#' @param prefix Character. Common team name prefix
+#' @param suffix Character. Common team name suffix
 #' @param privacy character, level of privacy of teams, closed (visible to all
 #' members of the organization) or secret (only visible to organization owners
 #' and members of a team), default is closed
@@ -26,9 +28,16 @@ github_api_team_create = function(org, name, privacy) {
 #'
 #' @export
 #'
-team_create = function(org, team, privacy = c("closed","secret")) {
+team_create = function(org, team,
+                       prefix = "", suffix = "",
+                       privacy = c("secret","closed")) {
+  arg_is_chr_scalar(org, prefix, suffix)
+  arg_is_chr(team)
+
   team = unique(as.character(team))
   privacy = match.arg(privacy)
+
+  team = paste0(prefix, team, suffix)
 
   org_teams = org_teams(org)[["team"]]
 

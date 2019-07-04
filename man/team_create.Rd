@@ -5,12 +5,17 @@
 \alias{create_team}
 \title{Create team(s)}
 \usage{
-team_create(org, team, privacy = c("closed", "secret"))
+team_create(org, team, prefix = "", suffix = "",
+  privacy = c("secret", "closed"))
 }
 \arguments{
 \item{org}{character, name of the GitHub organization}
 
 \item{team}{character, listing one or more teams}
+
+\item{prefix}{Character. Common team name prefix}
+
+\item{suffix}{Character. Common team name suffix}
 
 \item{privacy}{character, level of privacy of teams, closed (visible to all
 members of the organization) or secret (only visible to organization owners
