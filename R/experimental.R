@@ -1,3 +1,11 @@
+github_api_create_pull = function(repo, base, head, title, body){
+  gh::gh(
+    "POST /repos/:owner/:repo/pulls",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    base = base, head = head, title = title, body = body,
+    .token = github_get_token())
+}
 
 #' Create pull request
 #'
