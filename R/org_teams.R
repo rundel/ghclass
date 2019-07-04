@@ -22,8 +22,9 @@ github_api_org_teams = function(org) {
 #'
 org_teams = function(org, filter=NULL, exclude=FALSE) {
   arg_is_chr_scalar(org)
+  arg_is_chr_scalar(filter, allow_null = TRUE)
   arg_is_lgl_scalar(exclude)
-  stopifnot(length(filter)<=1)
+
 
   res = github_api_org_teams(org)
 

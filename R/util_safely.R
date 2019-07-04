@@ -1,8 +1,9 @@
 empty_result = function(res) {
-  if (is_safely_result(res))
+  if (is_safely_result(res)){
     empty_result(result(res))
-  else
+  } else {
     length(res) == 1 & all(res == "")
+  }
 }
 
 
@@ -10,7 +11,7 @@ is_safely_result = function(res) {
   if (!is.list(res))
     return(FALSE)
 
-  if (!all(c("result", "error") == names(res)))
+  if (!all(c("result", "error") %in% names(res)))
     return(FALSE)
 
   TRUE
