@@ -26,11 +26,10 @@ github_api_team_invite = function(team_id, username) {
 #'
 #' @export
 team_invite = function(org, user, team, create_missing_teams = TRUE) {
-  stopifnot(!missing(org))
 
-  stopifnot(is.character(user) & length(user) >=1)
-  stopifnot(is.character(team) & length(team) >=1)
-  stopifnot(length(create_missing_teams) == 1)
+  arg_is_chr_scalar(org)
+  arg_is_chr(user, team)
+  arg_is_lgl_scalar(create_missing_teams)
 
   d = tibble::tibble(user, team)
 
