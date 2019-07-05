@@ -46,8 +46,13 @@ repo_modify_file = function(repo, file, content, after = NULL, message = "Added 
           )
         }
 
-        repo_put_file(repo, file, content, message, branch)
-        usethis::ui_done("Added content to {usethis::ui_value(format_repo(repo, branch, file))}.")
+        res = repo_put_file(repo, file, content, message, branch, verbose = FALSE)
+
+        status_msg(
+          res,
+          glue::glue("Modified file {usethis::ui_value(format_repo(repo, branch, file))}."),
+          glue::glue("Failed to modify file {usethis::ui_value(format_repo(repo, branch, file))}."),
+        )
       }
     }
   )
