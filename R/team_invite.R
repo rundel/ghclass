@@ -31,21 +31,25 @@ team_invite = function(org, user, team, create_missing_teams = TRUE) {
   arg_is_chr(user, team)
   arg_is_lgl_scalar(create_missing_teams)
 
-  d = tibble::tibble(user, team)
+  d = tibble::tibble(
+    team = team,
+    user = user
+  )
 
-  org_teams = org_teams(org)
-  new_teams = setdiff(unique(team), org_teams[["team"]])
+  teams = team_id_lookup(d, org)
+
+  new_teams = d[["team"]][ is.na(d[["id"]]) ]
 
   if (length(new_teams) > 0 & create_missing_teams) {
     team_create(org, new_teams)
-    org_teams = org_teams(org)
+    teams = team_id_lookup(d, org)
   }
 
-  d = team_id_lookup(d, org_teams)
-
   purrr::pwalk(
-    d,
-    function(user, team, id) {
+    teams,
+    function(team, id, user) {
+      if (missing_team(id)) return()
+
       res = purrr::safely(github_api_team_invite)(id, user)
 
       status_msg(

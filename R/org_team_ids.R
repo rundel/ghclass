@@ -1,23 +1,17 @@
-github_api_org_teams = function(org) {
-  gh::gh(
-    "GET /orgs/:org/teams", org=org,
-    .token = github_get_token(),
-    .limit=get_github_api_limit()
-  )
-}
-
-#' Get organization teams
+#' Get organization teams and their ids
 #'
-#' `org_teams` returns a (filtered) data frame of teams in the organization with columns for
+#' `org_team_ids` returns a (filtered) data frame of teams in the organization with columns for
 #' their names (`name`) and their unique ids (`id`).
 #'
 #' @param org character, name of the GitHub organization.
 #' @param filter character, regex pattern for matching (or excluding) repos.
 #' @param exclude logical, should entries matching the regex be excluded or included.
 #'
+#' @aliases get_teams
+#'
 #' @export
 #'
-org_teams = function(org, filter=NULL, exclude=FALSE) {
+org_team_ids = function(org, filter=NULL, exclude=FALSE) {
   arg_is_chr_scalar(org)
   arg_is_chr_scalar(filter, allow_null = TRUE)
   arg_is_lgl_scalar(exclude)
@@ -30,11 +24,15 @@ org_teams = function(org, filter=NULL, exclude=FALSE) {
   )
 
   if (failed(res) | empty_result(res)) {
-    character()
+    tibble::tibble(
+      team = character(),
+      id   =  integer()
+    )
   } else {
-    teams = purrr::map_chr(result(res), "name")
-    filter_results(teams, filter, exclude)
+    d = purrr::map_dfr(
+      result(res),
+      ~ list(team = .x[["name"]], id = .x[["id"]])
+    )
+    filter_results(d, "team", filter, exclude)
   }
 }
-
-

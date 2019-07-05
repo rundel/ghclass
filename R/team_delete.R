@@ -30,7 +30,7 @@ team_delete = function(org, team, prompt = TRUE) {
     }
   }
 
-  team = get_specific_teams(org, team)
+  team = team_id_lookup(team, org)
 
   purrr::pwalk(
     team,

@@ -16,7 +16,8 @@
 #'
 #' General functions,
 #' * [org_repos()]           - (previously [get_repo()])
-#' * [org_teams()]           - (previously [get_teams()])
+#' * [org_teams()]           -
+#' * [org_team_ids()]        - (previously [get_teams()])
 #' * [org_admins()]          - (previously [get_admin()])
 #' * [org_invite()]          - (previously [invite_user()])
 #' * [org_members()]         - (previously [get_member()])

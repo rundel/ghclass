@@ -48,8 +48,8 @@ get_repos = function(...) {
 
 #' @export
 get_teams = function(...) {
-  .Deprecated("org_teams")
-  org_teams(...)
+  .Deprecated("org_team_ids")
+  org_team_ids(...)
 }
 
 #' @export

@@ -39,7 +39,7 @@ team_create = function(org, team,
 
   team = paste0(prefix, team, suffix)
 
-  org_teams = org_teams(org)[["team"]]
+  org_teams = org_teams(org)
 
   new_teams = setdiff(team, org_teams)
   existing_teams = intersect(team, org_teams)

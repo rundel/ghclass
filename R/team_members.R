@@ -28,11 +28,9 @@ github_api_team_members = function(id) {
 #'
 team_members = function(org, team = org_teams(org)) {
   arg_is_chr_scalar(org)
+  arg_is_chr(team)
 
-  if (is.character(team))
-    team = get_specific_teams(org, team)
-
-  stopifnot(all(c("team","id") %in% names(team)))
+  team = team_id_lookup(team, org)
 
   purrr::pmap_df(
     team,
@@ -44,15 +42,15 @@ team_members = function(org, team = org_teams(org)) {
         fail = glue::glue("Failed to retrieve team members for {usethis::ui_value(team)}.")
       )
 
-      if (empty_result(res)) {
+      if (failed(res) | empty_result(res)) {
         tibble::tibble(
           team = character(),
-          github = character()
+          user = character()
         )
       } else {
         tibble::tibble(
           team = team,
-          github = purrr::map_chr(result(res), "login"),
+          user = purrr::map_chr(result(res), "login"),
         )
       }
     }

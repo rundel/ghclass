@@ -32,11 +32,14 @@ team_rename = function(org, team, new_team) {
     new_team = new_team
   )
 
-  d = team_id_lookup(d, org_teams(org))
+  d = team_id_lookup(d, org)
 
   purrr::pwalk(
     d,
     function(team, id, new_team) {
+
+      if (missing_team(id)) return()
+
       res = purrr::safely(github_api_team_rename)(id, new_team)
 
       status_msg(

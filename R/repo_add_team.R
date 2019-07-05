@@ -21,12 +21,14 @@ repo_add_team = function(repo, team, permission = c("push", "pull", "admin")) {
 
   org = unique(get_repo_owner(repo))
 
-  d = tibble::tibble(repo, team)
-  d = team_id_lookup(d, get_specific_teams(org, team))
+  d = tibble::tibble(team, repo)
+  d = team_id_lookup(d, org)
 
   purrr::pwalk(
     d,
-    function(repo, team, id) {
+    function(team, id, repo) {
+      if (missing_team(id)) return()
+
       res = purrr::safely(github_api_add_team)(
         repo = repo,
         team_id = id,

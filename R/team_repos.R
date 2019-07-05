@@ -28,7 +28,7 @@ team_repos = function(org, team) {
   arg_is_chr_scalar(org)
   arg_is_chr(team)
 
-  team = get_specific_teams(org, team)
+  team = team_id_lookup(team, org)
 
   purrr::pmap_dfr(
     team,
