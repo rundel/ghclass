@@ -38,7 +38,7 @@ team_rename = function(org, team, new_team) {
     d,
     function(team, id, new_team) {
 
-      if (missing_team(id)) return()
+      if (missing_team(id, org)) return()
 
       res = purrr::safely(github_api_team_rename)(id, new_team)
 

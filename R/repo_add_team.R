@@ -27,7 +27,7 @@ repo_add_team = function(repo, team, permission = c("push", "pull", "admin")) {
   purrr::pwalk(
     d,
     function(team, id, repo) {
-      if (missing_team(id)) return()
+      if (missing_team(id, org)) return()
 
       res = purrr::safely(github_api_add_team)(
         repo = repo,
