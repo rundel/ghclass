@@ -4,3 +4,4 @@ secret/
 .RData
 inst/doc
 .httr-oauth
+.DS_Store

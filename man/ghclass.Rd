@@ -27,7 +27,8 @@ ghclass: A package for github based classroom and assignment management
 General functions,
 \itemize{
 \item \code{\link[=org_repos]{org_repos()}}           - (previously \code{\link[=get_repo]{get_repo()}})
-\item \code{\link[=org_teams]{org_teams()}}           - (previously \code{\link[=get_teams]{get_teams()}})
+\item \code{\link[=org_teams]{org_teams()}}           -
+\item \code{\link[=org_team_ids]{org_team_ids()}}        - (previously \code{\link[=get_teams]{get_teams()}})
 \item \code{\link[=org_admins]{org_admins()}}          - (previously \code{\link[=get_admin]{get_admin()}})
 \item \code{\link[=org_invite]{org_invite()}}          - (previously \code{\link[=invite_user]{invite_user()}})
 \item \code{\link[=org_members]{org_members()}}         - (previously \code{\link[=get_member]{get_member()}})
