@@ -23,9 +23,11 @@ repo_create(org, name, prefix = "", suffix = "", private = TRUE,
 
 \item{gitignore_template}{Character. .gitignore template language.}
 }
+\value{
+A character vector of created repository addresses.
+}
 \description{
-\code{repo_create} creates either individual or team repositories for a given
-assignment.
+\code{repo_create} creates either individual or team repositories.
 }
 \examples{
 \dontrun{

@@ -71,6 +71,13 @@ allow_error = function(res, message = NULL, class = NULL, result = "") {
   }
 }
 
+ternary = function(check, success, fail) {
+  if (check)
+    success
+  else
+    fail
+}
+
 
 status_msg = function(x, success, fail, include_error_msg = TRUE) {
   if (succeeded(x) & !missing(success)) {
