@@ -11,11 +11,13 @@ github_api_add_team = function(repo, team_id, permission){
 
 #' @rdname repo_add_member
 #' @export
-repo_add_team = function(repo, team,
-                            permission = c("push", "pull", "admin")) {
+repo_add_team = function(repo, team, permission = c("push", "pull", "admin")) {
 
   permission = match.arg(permission)
   arg_is_chr(repo, team)
+
+  repo = unique(repo)
+  team = unique(team)
 
   org = unique(get_repo_owner(repo))
 
