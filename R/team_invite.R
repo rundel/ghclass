@@ -38,7 +38,7 @@ team_invite = function(org, user, team, create_missing_teams = TRUE) {
 
   teams = team_id_lookup(d, org)
 
-  new_teams = d[["team"]][ is.na(d[["id"]]) ]
+  new_teams = teams[["team"]][ is.na(teams[["id"]]) ]
 
   if (length(new_teams) > 0 & create_missing_teams) {
     team_create(org, new_teams)
@@ -48,7 +48,7 @@ team_invite = function(org, user, team, create_missing_teams = TRUE) {
   purrr::pwalk(
     teams,
     function(team, id, user) {
-      if (missing_team(id)) return()
+      if (missing_team(id, org)) return()
 
       res = purrr::safely(github_api_team_invite)(id, user)
 
