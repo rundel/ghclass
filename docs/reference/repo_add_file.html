@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Style repository — style_repo • ghclass</title>
+<title>Add files to a repo — repo_add_file • ghclass</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Style repository — style_repo" />
+<meta property="og:title" content="Add files to a repo — repo_add_file" />
 
-<meta property="og:description" content="style_repo implements &quot;non-invasive pretty-printing of R source code&quot; of .R or .Rmd files within a repository using the styler package and adhering to tidyverse formatting guidelines." />
+<meta property="og:description" content="repo_add_file uses the GitHub API to add/update files in an existing repo on GitHub. Note that due to time delays in caching, files that have been added very recently might not yet be displayed as existing and might accidentally be overwritten." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -97,20 +97,19 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Style repository</h1>
+    <h1>Add files to a repo</h1>
     
-    <div class="hidden name"><code>style_repo.Rd</code></div>
+    <div class="hidden name"><code>repo_add_file.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p><code>style_repo</code> implements "non-invasive pretty-printing of R source code" of .R or .Rmd files within a repository using the <code>styler</code> package and adhering to <code>tidyverse</code> formatting guidelines.</p>
+    <p><code>repo_add_file</code> uses the GitHub API to add/update files in an existing repo on GitHub. Note that due to time delays in caching, files that have been added very recently might not yet be displayed as existing and might accidentally be overwritten.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>style_repo</span>(<span class='no'>repo</span>, <span class='kw'>files</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"*.R"</span>, <span class='st'>"*.Rmd"</span>), <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"styler"</span>,
-  <span class='kw'>base</span> <span class='kw'>=</span> <span class='st'>"master"</span>, <span class='kw'>create_pull_request</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>tag_collaborators</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>git</span> <span class='kw'>=</span> <span class='fu'>require_git</span>(), <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>repo_add_file</span>(<span class='no'>repo</span>, <span class='no'>file</span>, <span class='kw'>message</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>,
+  <span class='kw'>preserve_path</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -120,39 +119,31 @@
       <td><p>Character. Address of repository in "owner/name" format.</p></td>
     </tr>
     <tr>
-      <th>files</th>
-      <td><p>Character or vector of characters. Names of .R and/or .Rmd files that styler should be applied to.</p></td>
+      <th>file</th>
+      <td><p>Character. Local file path(s) of file or files to be added.</p></td>
+    </tr>
+    <tr>
+      <th>message</th>
+      <td><p>Character. Commit message. If not provided, a custom character string will be created, in the form of "Added file(s): filename(s)". If this custom message character length exceeds 50, it will be shortened to "Added file(s)".</p></td>
     </tr>
     <tr>
       <th>branch</th>
-      <td><p>Character. Name of new branch to be created. Default is "styler".</p></td>
+      <td><p>Character. Name of branch to use, defaults to "master".</p></td>
     </tr>
     <tr>
-      <th>base</th>
-      <td><p>Character. Name of branch that contains the .R and/or .Rmd files to be reformatted.</p></td>
+      <th>preserve_path</th>
+      <td><p>Logical. Should the local relative path be preserved.</p></td>
     </tr>
     <tr>
-      <th>create_pull_request</th>
-      <td><p>Logical. If TRUE, a pull request is created from branch to base.</p></td>
-    </tr>
-    <tr>
-      <th>tag_collaborators</th>
-      <td><p>Logical. If TRUE, a message with the repository collaborators is displayed.</p></td>
-    </tr>
-    <tr>
-      <th>git</th>
-      <td><p>Chacacter. Path to the git binary.</p></td>
-    </tr>
-    <tr>
-      <th>verbose</th>
-      <td><p>Logical. Display verbose output.</p></td>
+      <th>overwrite</th>
+      <td><p>Logical. Should existing file or files with same name be overwritten, defaults to FALSE.</p></td>
     </tr>
     </table>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>style_repo</span>(<span class='st'>"Sta523-Fa17/base_hw1"</span>, <span class='kw'>files</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"hw1_sample.Rmd"</span>))
+<span class='fu'>repo_add_file</span>(<span class='st'>"rundel/ghclass"</span>, <span class='st'>"Update DESCRIPTION"</span>, <span class='st'>"./DESCRIPTION"</span>)
 <span class='co'># }</span><div class='input'>
 </div></pre>
   </div>
