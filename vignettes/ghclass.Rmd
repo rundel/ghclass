@@ -1,6 +1,6 @@
 ---
 title: "Course management with ghclass"
-author: "Mine Çetinkaya-Rundel and Colin Rundel"
+author: "Mine Çetinkaya-Rundel, Colin Rundel, Therese Anders"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
