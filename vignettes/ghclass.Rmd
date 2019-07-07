@@ -100,9 +100,9 @@ token in the browser after logging into Github (Settings > Developer Settings >
 Personal access tokens) or use
 [`usethis::browse_github_token`](https://usethis.r-lib.org/articles/articles/usethis-setup.html#get-and-store-a-github-personal-access-token).
 Copy your token to the clipboard and paste it as a character string into the
-`set_github_token` function.
+`github_set_token` function.
 
-Alternative token locations can be specified with `set_github_token` or
+Alternative token locations can be specified with `github_set_token` or
 `set_wercker_token`.
 
 ## Step-by-step guide
@@ -145,7 +145,7 @@ organzation. This will send an email to each student inviting them to join the
 GitHub organization.
 
 ```r
-invite_user("Sta523-Fa17", roster$github)
+org_invite("Sta523-Fa17", roster$github)
 
 ## Adding Alice to Sta523-Fa17 ...
 ## Adding Bob to Sta523-Fa17 ...
@@ -154,11 +154,11 @@ invite_user("Sta523-Fa17", roster$github)
 ## Adding Eve to Sta523-Fa17 ...
 ```
 
-We use the variable `team` within the `roster` data frame to create a vector of unique team names, here called `teams`. We then use the `teams` vector to add students to their teams within the organization via the `create_team()` function.
+We use the variable `team` within the `roster` data frame to create a vector of unique team names, here called `teams`. We then use the `teams` vector to add students to their teams within the organization via the `team_create()` function.
 
 ```r
 teams <- unique(roster$team)
-create_team("Sta523-Fa17", teams)
+team_create("Sta523-Fa17", teams)
 
 ## Adding team Team1 to Sta523-Fa17 ...
 ## Adding team Team2 to Sta523-Fa17 ...
@@ -166,7 +166,7 @@ create_team("Sta523-Fa17", teams)
 ```
 
 ```r
-add_team_member("Sta523-Fa17", roster$github, roster$team)
+team_invite("Sta523-Fa17", roster$github, roster$team)
 
 ## Adding Alice to team Team1 ...
 ## Adding Bob to team Team2 ...
@@ -176,7 +176,7 @@ add_team_member("Sta523-Fa17", roster$github, roster$team)
 ```
 
 You can check which students are added to the organization using the
-`get_members` function, and pending invitations using the `get_pending_members`
+`org_memberss` function, and pending invitations using the `org_pending_memberss`
 function, respectively. Note that if students are first-time GitHub users, they will need to
 verify the email address associated with their GitHub account and accept the
 invitation before they show up as a member of the organization.
@@ -198,12 +198,12 @@ create_team_repo("Sta523-Fa17", teams, prefix="hw2-")
 If you want to place starter docs into the assignment repos that you just
 created, you should first create a repo in this organization containing these
 starter docs and then mirrow the contents of that repo to the repos you created
-earlier. You can do this with the `mirror_repo` function.
+earlier. You can do this with the `repo_mirror` function.
 
 ```r
-mirror_repo(
+repo_mirror(
   source_repo = "Sta523-Fa17/hw2",
-  target_repos = get_repos("Sta523-Fa17","hw2-")
+  target_repos = org_repos("Sta523-Fa17","hw2-")
 )
 
 ## Cloning source repo (Sta523-Fa17/hw2) ...
@@ -233,7 +233,7 @@ the following:
 * Make sure third party access is allowed for your github organization (See Settings / Third-party access then click on remote restrictions)
 
 ```r
-add_wercker(get_repos("Sta523-Fa17", "hw2-"), "Sta523-Fa17")
+add_wercker(org_repos("Sta523-Fa17", "hw2-"), "Sta523-Fa17")
 
 ## Creating wercker app for Sta523-Fa17/hw2-Team1 ...
 ## Creating wercker app for Sta523-Fa17/hw2-Team2 ...
@@ -250,8 +250,8 @@ files with the same name in the repo, so you should be careful not to do this
 if students have already started working on the repos.
 
 ```r
-add_files(
-  get_repos("Sta523-Fa17","hw2-"),
+repo_add_files(
+  org_repos("Sta523-Fa17","hw2-"),
   message = "Remove wrong wercker badge",
   files = "~/Desktop/Sta523/Homework/hw2/repo/README.md"
 )

@@ -1,3 +1,48 @@
+github_api_create_pull = function(repo, base, head, title, body){
+  gh::gh(
+    "POST /repos/:owner/:repo/pulls",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    base = base, head = head, title = title, body = body,
+    .token = github_get_token())
+}
+
+#' Create pull request
+#'
+#' `create_pull_request` creates a pull request on GitHub from the `base` branch to the `head` branch.
+#'
+#' @param repo Character. Address of one or more repositories in "owner/name" format.
+#' @param title Character. Title of the pull request.
+#' @param base Character. The name of the branch where your changes are implemented. In creating a pull request from a
+#' fork then use `username:branch` as the format.
+#' @param head Character. The branch you want the changed pulled into.
+#' @param body Character. The text contents of the pull request.
+#'
+create_pull_request = function(repo, title, base, head = "master", body = "") {
+
+  arg_is_chr(repo, title, base, head, body)
+
+  purrr::pwalk(
+    list(repo, base, head, title, body),
+    function(repo, base, head, title, body) {
+      res = purrr::safely(github_api_create_pull)(
+        repo, base = base, head = head, title = title, body = body
+      )
+
+      details = glue::glue(
+        "{usethis::ui_value(repo)}",
+        "({usethis::ui_value(base)} {usethis::ui_value(head)})"
+      )
+
+      status_msg(
+        res,
+        glue::glue("Created pull request for {details}."),
+        glue::glue("Failed create pull request for {details}.")
+      )
+    }
+  )
+}
+
 #' Style repository
 #'
 #' `style_repo` implements "non-invasive pretty-printing of R source code" of .R or .Rmd files within a repository using the `styler` package and adhering to `tidyverse` formatting guidelines.
@@ -35,8 +80,8 @@ style_repo = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = 
     list(repo, base, branch),
     function(repo, base, branch) {
       ## TODO add base to branch
-      create_branch(repo, cur_branch = base, new_branch = branch)
-      clone_repo(repo, local_path = dir, branch = branch)
+      branch_create(repo, cur_branch = base, new_branch = branch)
+      local_repo_clone(repo, local_path = dir, branch = branch)
 
       path = fs::path(dir, get_repo_name(repo))
 
@@ -72,8 +117,9 @@ style_repo = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = 
         ), collapse = "")
 
         if (tag_collaborators) {
-          users = get_collaborator(repo)[[1]]
-          msg = paste0(msg,"\n\n", paste0("@", users, collapse = ", "))
+          users = repo_collaborators(repo, include_admins = FALSE)[["username"]]
+          if (length(users) > 0)
+            msg = paste0(msg,"\n\n", paste0("@", users, collapse = ", "))
         }
 
         create_pull_request(

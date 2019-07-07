@@ -8,106 +8,95 @@
 \description{
 ghclass: A package for github based classroom and assignment management
 }
-\section{GitHub repositoryy functions}{
-
-\itemize{
-\item \code{\link[=create_repo]{create_repo()}} -
-\item \code{\link[=add_team_to_repo]{add_team_to_repo()}} -
-\item \code{\link[=add_user_to_repo]{add_user_to_repo()}} -
-\item \code{\link[=mirror_repo]{mirror_repo()}} -
-\item \code{\link[=rename_repo]{rename_repo()}} -
-}
-}
-
 \section{Local git repository functions}{
 
 \itemize{
-\item \code{\link[=clone_repo]{clone_repo()}} -
-\item \code{\link[=add_repo]{add_repo()}} -
-\item \code{\link[=commit_repo]{commit_repo()}} -
-\item \code{\link[=push_repo]{push_repo()}} -
-\item \code{\link[=pull_repo]{pull_repo()}} -
-\item \code{\link[=rename_local_repo]{rename_local_repo()}} -
+\item \code{\link[=local_repo_clone]{local_repo_clone()}} or
+\code{\link[=repo_clone]{repo_clone()}}        - (previously \code{\link[=clone_repo]{clone_repo()}}) -
+\item \code{\link[=local_repo_add]{local_repo_add()}}    - (previously \code{\link[=add_repo]{add_repo()}}) -
+\item \code{\link[=local_repo_commit]{local_repo_commit()}} - (previously \code{\link[=commit_repo]{commit_repo()}}) -
+\item \code{\link[=local_repo_push]{local_repo_push()}}   - (previously \code{\link[=push_repo]{push_repo()}}) -
+\item \code{\link[=local_repo_pull]{local_repo_pull()}}   - (previously \code{\link[=pull_repo]{pull_repo()}}) -
+\item \code{\link[=local_repo_rename]{local_repo_rename()}} - (previously \code{\link[=rename_local_repo]{rename_local_repo()}}) -
 }
 }
 
 \section{Organization functions}{
 
+
+General functions,
 \itemize{
-\item \code{\link[=get_repo]{get_repo()}} -
-\item \code{\link[=get_admin]{get_admin()}} -
-\item \code{\link[=get_collaborator]{get_collaborator()}} -
-\item \code{\link[=get_member]{get_member()}} -
-\item \code{\link[=get_pending_member]{get_pending_member()}} -
-\item \code{\link[=invite_user]{invite_user()}} -
+\item \code{\link[=org_repos]{org_repos()}}           - (previously \code{\link[=get_repo]{get_repo()}})
+\item \code{\link[=org_teams]{org_teams()}}           - (previously \code{\link[=get_teams]{get_teams()}})
+\item \code{\link[=org_admins]{org_admins()}}          - (previously \code{\link[=get_admin]{get_admin()}})
+\item \code{\link[=org_invite]{org_invite()}}          - (previously \code{\link[=invite_user]{invite_user()}})
+\item \code{\link[=org_members]{org_members()}}         - (previously \code{\link[=get_member]{get_member()}})
+\item \code{\link[=org_pending_members]{org_pending_members()}} - (previously \code{\link[=get_pending_member]{get_pending_member()}})
+}
+
+Team related functions,
+\itemize{
+\item \code{\link[=team_create]{team_create()}}          - (previously \code{\link[=create_team]{create_team()}})
+\item \code{\link[=team_rename]{team_rename()}}          - (previously \code{\link[=rename_team]{rename_team()}})
+\item \code{\link[=team_invite]{team_invite()}}          - (previously \code{\link[=add_team_member]{add_team_member()}})
+\item \code{\link[=team_members]{team_members()}}         - (previously \code{\link[=get_team_members]{get_team_members()}})
+\item \code{\link[=team_pending_members]{team_pending_members()}} - (previously \code{\link[=get_pending_team_members]{get_pending_team_members()}})
+\item \code{\link[=team_repos]{team_repos()}}           - (previously \code{\link[=get_team_repos]{get_team_repos()}})
 }
 }
 
-\section{Team functions}{
+\section{GitHub repository functions}{
 
+
+General functions,
 \itemize{
-\item \code{\link[=get_teams]{get_teams()}} -
-\item \code{\link[=create_team]{create_team()}} -
-\item \code{\link[=rename_team]{rename_team()}} -
-\item \code{\link[=add_team_member]{add_team_member()}} -
-\item \code{\link[=get_team_members]{get_team_members()}} -
-\item \code{\link[=get_pending_team_members]{get_pending_team_members()}} -
-\item \code{\link[=get_team_repos]{get_team_repos()}} -
+\item \code{\link[=repo_create]{repo_create()}}        - (previously \code{\link[=create_repo]{create_repo()}})
+\item \code{\link[=repo_rename]{repo_rename()}}        - (previously \code{\link[=rename_repo]{rename_repo()}})
+\item \code{\link[=repo_add_team]{repo_add_team()}}      - (previously \code{\link[=add_team_to_repo]{add_team_to_repo()}})
+\item \code{\link[=repo_add_user]{repo_add_user()}}      - (previously \code{\link[=add_user_to_repo]{add_user_to_repo()}})
+\item \code{\link[=repo_mirror]{repo_mirror()}}        - (previously \code{\link[=mirror_repo]{mirror_repo()}})
+\item \code{\link[=repo_collaborators]{repo_collaborators()}} - (previously \code{\link[=get_collaborator]{get_collaborator()}})
+}
+
+File manipulation functions,
+\itemize{
+\item \code{\link[=repo_add_file]{repo_add_file()}}    - (previously \code{\link[=add_file]{add_file()}})
+\item \code{\link[=repo_modify_file]{repo_modify_file()}} - (previously \code{\link[=add_content]{add_content()}})
+\item \code{\link[=repo_put_file]{repo_put_file()}}    - (previously \code{\link[=put_file]{put_file()}})
+\item \code{\link[=repo_get_file]{repo_get_file()}}    - (previously \code{\link[=get_file]{get_file()}})
+\item \code{\link[=repo_get_readme]{repo_get_readme()}}  - (previously \code{\link[=get_readme]{get_readme()}})
+}
+
+Branch functions,
+\itemize{
+\item \code{\link[=branch_create]{branch_create()}}    - (previously \code{\link[=create_branch]{create_branch()}})
+\item \code{\link[=branch_protect]{branch_protect()}}   - (previously \code{\link[=protect_branch]{protect_branch()}})
+\item \code{\link[=branch_unprotect]{branch_unprotect()}} - (previously \code{\link[=unprotect_branch]{unprotect_branch()}})
+}
+
+Notification functions:
+\itemize{
+\item \code{\link[=repo_watching]{repo_watching()}} - (previously \code{\link[=get_watching]{get_watching()}} -)
+\item \code{\link[=repo_ignore]{repo_ignore()}}   - (previously \code{\link[=ignore_repo]{ignore_repo()}} -)
+\item \code{\link[=repo_unwatch]{repo_unwatch()}}  - (previously \code{\link[=unwatch_repo]{unwatch_repo()}} -)
+\item \code{\link[=repo_watch]{repo_watch()}}    - (previously \code{\link[=watch_repo]{watch_repo()}})
 }
 }
 
 \section{GitHub authentication functions}{
 
 \itemize{
-\item \code{\link[=get_github_token]{get_github_token()}} - get github token
-\item \code{\link[=set_github_token]{set_github_token()}} - set github token
-\item \code{\link[=test_github_token]{test_github_token()}} - test github token
+\item \code{\link[=github_get_token]{github_get_token()}}  - (previously \code{\link[=get_github_token]{get_github_token()}})
+\item \code{\link[=github_set_token]{github_set_token()}}  - (previously \code{\link[=set_github_token]{set_github_token()}})
+\item \code{\link[=github_test_token]{github_test_token()}} - (previously \code{\link[=test_github_token]{test_github_token()}})
 }
 }
 
-\section{Repository file functions}{
-
-\itemize{
-\item \code{\link[=add_file]{add_file()}} -
-\item \code{\link[=add_content]{add_content()}} -
-\item \code{\link[=get_file]{get_file()}} -
-\item \code{\link[=get_readme]{get_readme()}} -
-\item \code{\link[=put_file]{put_file()}} -
-}
-}
-
-\section{Branch functions}{
+\section{Utility functions}{
 
 \itemize{
-\item \code{\link[=create_branch]{create_branch()}} -
-\item \code{\link[=create_pull_request]{create_pull_request()}} -
-\item \code{\link[=protect_branch]{protect_branch()}} -
-\item \code{\link[=unprotect_branch]{unprotect_branch()}} -
-}
-}
-
-\section{Notification functions}{
-
-\itemize{
-\item \code{\link[=get_watching]{get_watching()}} -
-\item \code{\link[=ignore_repo]{ignore_repo()}} -
-\item \code{\link[=unwatch_repo]{unwatch_repo()}} -
-\item \code{\link[=watch_repo]{watch_repo()}} -
-}
-}
-
-\section{Utililty functions}{
-
-\itemize{
-\item \code{\link[=check_repo]{check_repo()}} -
-\item \code{\link[=check_user_exists]{check_user_exists()}} -
-}
-}
-
-\section{Experimental functions}{
-
-\itemize{
-\item \code{\link[=style_repo]{style_repo()}} - use \code{styler} on all R code within a repo and create a branch + pull request with the result
+\item \code{\link[=repo_exists]{repo_exists()}} - (previously \code{\link[=check_repo]{check_repo()}})
+\item \code{\link[=user_exists]{user_exists()}} - (previously \code{\link[=check_user_exists]{check_user_exists()}})
 }
 }
 
