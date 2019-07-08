@@ -41,13 +41,15 @@ repo_create = function(org, name,
   arg_is_chr_scalar(org, prefix, suffix, gitignore_template)
   arg_is_lgl_scalar(private, auto_init)
 
+  name = unique(name)
+
   org_repos = org_repos(org)
 
   repo = paste0(prefix, name, suffix)
   repo = paste0(org, "/", repo)
 
   if (length(repo) != length(unique(repo)))
-    usethis::ui_stop("Not all repo names are unique: {usethis::ui_value(repo).}")
+    usethis::ui_stop("Not all repo names are unique: {usethis::ui_value(repo)}.")
 
   res = purrr::map(
     repo,
