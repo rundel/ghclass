@@ -4,3 +4,4 @@ docs/
 ^\.httr-oauth$
 man-roxygen/
 credentials/
+^LICENSE\.md$
