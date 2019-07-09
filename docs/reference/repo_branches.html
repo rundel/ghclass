@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create pull request — create_pull_request • ghclass</title>
+<title>Get repository branches — repo_branches • ghclass</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Create pull request — create_pull_request" />
+<meta property="og:title" content="Get repository branches — repo_branches" />
 
-<meta property="og:description" content="create_pull_request creates a pull request on GitHub from the base branch to the head branch." />
+<meta property="og:description" content="repo_branches returns a (filtered) vector of branches for the current repository." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -97,48 +97,33 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create pull request</h1>
+    <h1>Get repository branches</h1>
     
-    <div class="hidden name"><code>create_pull_request.Rd</code></div>
+    <div class="hidden name"><code>repo_branches.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p><code>create_pull_request</code> creates a pull request on GitHub from the <code>base</code> branch to the <code>head</code> branch.</p>
+    <p><code>repo_branches</code> returns a (filtered) vector of branches for the current repository.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>create_pull_request</span>(<span class='no'>repo</span>, <span class='no'>title</span>, <span class='no'>base</span>, <span class='kw'>head</span> <span class='kw'>=</span> <span class='st'>"master"</span>, <span class='kw'>body</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>draft</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>repo_branches</span>(<span class='no'>repo</span>, <span class='kw'>filter</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>repo</th>
-      <td><p>Character. Address of one or more repositories in "owner/name" format.</p></td>
+      <td><p>character, a single GitHub repository address in <code>owner/repo</code> format</p></td>
     </tr>
     <tr>
-      <th>title</th>
-      <td><p>Character. Title of the pull request.</p></td>
+      <th>filter</th>
+      <td><p>character, a regex pattern for matching (or excluding) branches.</p></td>
     </tr>
     <tr>
-      <th>base</th>
-      <td><p>Character. The name of the branch where your changes are implemented. In creating a pull request from a
-fork then use <code>username:branch</code> as the format.</p></td>
-    </tr>
-    <tr>
-      <th>head</th>
-      <td><p>Character. The branch you want the changed pulled into.</p></td>
-    </tr>
-    <tr>
-      <th>body</th>
-      <td><p>Character. The text contents of the pull request.</p></td>
-    </tr>
-    <tr>
-      <th>draft</th>
-      <td><p>Logical. Should the pull request be created as a draft pull request (these cannot be merged
-until allowed by the author).</p></td>
+      <th>exclude</th>
+      <td><p>logical, should entries matching the regex be excluded or included.</p></td>
     </tr>
     </table>
     

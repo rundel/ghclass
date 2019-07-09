@@ -108,27 +108,36 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>repo_modify_file</span>(<span class='no'>repo</span>, <span class='no'>file</span>, <span class='no'>content</span>, <span class='kw'>after</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>message</span> <span class='kw'>=</span> <span class='st'>"Added content"</span>, <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>)</pre>
+    <pre class="usage"><span class='fu'>repo_modify_file</span>(<span class='no'>repo</span>, <span class='no'>file</span>, <span class='no'>pattern</span>, <span class='no'>content</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"replace"</span>,
+  <span class='st'>"before"</span>, <span class='st'>"after"</span>), <span class='kw'>all</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>message</span> <span class='kw'>=</span> <span class='st'>"Modified content"</span>,
+  <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>repo</th>
-      <td><p>Character. Address of repository in `owner/name`` format.</p></td>
+      <td><p>Character. Address of repository in <code>owner/name</code> format.</p></td>
     </tr>
     <tr>
       <th>file</th>
       <td><p>Character. File's path within the repository.</p></td>
     </tr>
     <tr>
+      <th>pattern</th>
+      <td><p>Character. Regex pattern.</p></td>
+    </tr>
+    <tr>
       <th>content</th>
       <td><p>Character. Content to be added to the file.</p></td>
     </tr>
     <tr>
-      <th>after</th>
-      <td><p>Character. Regex pattern, if not <code>NULL</code> content will be inserted directly after the first match.</p></td>
+      <th>method</th>
+      <td><p>Character. Should the content be <code>insert</code>ed after the match or should it <code>replace</code> the matched string.</p></td>
+    </tr>
+    <tr>
+      <th>all</th>
+      <td><p>Character. Should all instances of the pattern be modified (<code>TRUE</code>) or just the first (<code>FALSE</code>).</p></td>
     </tr>
     <tr>
       <th>message</th>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create pull request — create_pull_request • ghclass</title>
+<title>Create a team or individual assignment — org_create_assignment • ghclass</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Create pull request — create_pull_request" />
+<meta property="og:title" content="Create a team or individual assignment — org_create_assignment" />
 
-<meta property="og:description" content="create_pull_request creates a pull request on GitHub from the base branch to the head branch." />
+<meta property="og:description" content="This is a higher level function that combines the following steps:" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -97,50 +97,52 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create pull request</h1>
+    <h1>Create a team or individual assignment</h1>
     
-    <div class="hidden name"><code>create_pull_request.Rd</code></div>
+    <div class="hidden name"><code>org_create_assignment.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p><code>create_pull_request</code> creates a pull request on GitHub from the <code>base</code> branch to the <code>head</code> branch.</p>
+    <p>This is a higher level function that combines the following steps:</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>create_pull_request</span>(<span class='no'>repo</span>, <span class='no'>title</span>, <span class='no'>base</span>, <span class='kw'>head</span> <span class='kw'>=</span> <span class='st'>"master"</span>, <span class='kw'>body</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>draft</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>org_create_assignment</span>(<span class='no'>org</span>, <span class='no'>repo</span>, <span class='no'>user</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>source_repo</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
+      <th>org</th>
+      <td><p>Character. Name of the GitHub organization.</p></td>
+    </tr>
+    <tr>
       <th>repo</th>
-      <td><p>Character. Address of one or more repositories in "owner/name" format.</p></td>
+      <td><p>Character. Name of the repo(s) for the assignment.</p></td>
     </tr>
     <tr>
-      <th>title</th>
-      <td><p>Character. Title of the pull request.</p></td>
+      <th>user</th>
+      <td><p>Character. GitHub username(s).</p></td>
     </tr>
     <tr>
-      <th>base</th>
-      <td><p>Character. The name of the branch where your changes are implemented. In creating a pull request from a
-fork then use <code>username:branch</code> as the format.</p></td>
+      <th>team</th>
+      <td><p>Character. Team names, if `NULL`` an individual assignment will be created.</p></td>
     </tr>
     <tr>
-      <th>head</th>
-      <td><p>Character. The branch you want the changed pulled into.</p></td>
-    </tr>
-    <tr>
-      <th>body</th>
-      <td><p>Character. The text contents of the pull request.</p></td>
-    </tr>
-    <tr>
-      <th>draft</th>
-      <td><p>Logical. Should the pull request be created as a draft pull request (these cannot be merged
-until allowed by the author).</p></td>
+      <th>source_repo</th>
+      <td><p>Character. Address of the repository to use as a template for all created repos.</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <ol>
+<li><p>Create repos</p></li>
+<li><p>Create teams and invite students if necessary</p></li>
+<li><p>Add teams or individuals to the repositories</p></li>
+<li><p>Mirror a template repository to assignment repositories</p></li>
+</ol>
     
 
   </div>
@@ -148,7 +150,9 @@ until allowed by the author).</p></td>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#details">Details</a></li>
+          </ul>
 
   </div>
 </div>

@@ -64,7 +64,7 @@
       <h1>Course management with ghclass</h1>
                         <h4 class="author">Mine Çetinkaya-Rundel, Colin Rundel, Therese Anders</h4>
             
-            <h4 class="date">2019-07-07</h4>
+            <h4 class="date">2019-07-09</h4>
       
       
       <div class="hidden name"><code>ghclass.Rmd</code></div>
@@ -125,17 +125,17 @@
 <a href="#adding-students-to-the-organization" class="anchor"></a>Adding students to the organization</h3>
 <p>Next, collect your students’ GitHub user names. You can do this with a Google form and then read the spreadsheet containing their responses into R using the <strong>googlesheets</strong> package. The resulting data frame should include two columns: one called <code>github</code> which contains students’ GitHub user names and another column called <code>team</code> that contains the team name for each student.</p>
 <p>For example, your roster file might look something like the following:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>roster =<span class="st"> </span>readr<span class="op">::</span><span class="kw"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span>( <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"roster.csv"</span>, <span class="dt">package =</span> <span class="st">"ghclass"</span>) )</span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>roster =<span class="st"> </span>readr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/readr/topics/read_delim">read_csv</a></span>( <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"roster.csv"</span>, <span class="dt">package =</span> <span class="st">"ghclass"</span>) )</span>
 <span id="cb2-2"><a href="#cb2-2"></a>roster</span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="co">#&gt; # A tibble: 6 x 4</span></span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="co">#&gt;   github          hw01        hw02        hw03       </span></span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="co">#&gt;   &lt;chr&gt;           &lt;chr&gt;       &lt;chr&gt;       &lt;chr&gt;      </span></span>
-<span id="cb2-6"><a href="#cb2-6"></a><span class="co">#&gt; 1 ghclass-anya    hw01-team01 hw02-team01 hw03-team01</span></span>
-<span id="cb2-7"><a href="#cb2-7"></a><span class="co">#&gt; 2 ghclass-bruno   hw01-team02 hw02-team02 hw03-team02</span></span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#&gt; 3 ghclass-celine  hw01-team03 hw02-team03 hw03-team03</span></span>
-<span id="cb2-9"><a href="#cb2-9"></a><span class="co">#&gt; 4 ghclass-diego   hw01-team01 hw02-team03 hw03-team02</span></span>
-<span id="cb2-10"><a href="#cb2-10"></a><span class="co">#&gt; 5 ghclass-elijah  hw01-team02 hw02-team01 hw03-team03</span></span>
-<span id="cb2-11"><a href="#cb2-11"></a><span class="co">#&gt; 6 ghclass-francis hw01-team03 hw02-team02 hw03-team01</span></span></code></pre></div>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="co">#&gt; # A tibble: 6 x 5</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co">#&gt;   email              github          hw01        hw02        hw03       </span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">#&gt;   &lt;chr&gt;              &lt;chr&gt;           &lt;chr&gt;       &lt;chr&gt;       &lt;chr&gt;      </span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">#&gt; 1 anya@school.edu    ghclass-anya    hw01-team01 hw02-team01 hw03-team01</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">#&gt; 2 bruno@school.edu   ghclass-bruno   hw01-team02 hw02-team02 hw03-team02</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#&gt; 3 celine@school.edu  ghclass-celine  hw01-team03 hw02-team03 hw03-team03</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co">#&gt; 4 diego@school.edu   ghclass-diego   hw01-team01 hw02-team03 hw03-team02</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="co">#&gt; 5 elijah@school.edu  ghclass-elijah  hw01-team02 hw02-team01 hw03-team03</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="co">#&gt; 6 francis@school.edu ghclass-francis hw01-team03 hw02-team02 hw03-team01</span></span></code></pre></div>
 <p>Using the <code>roster</code> data frame, we can then invite the students to the class’ organzation. This will send an email to each student inviting them to join the GitHub organization.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw"><a href="../reference/org_invite.html">org_invite</a></span>(<span class="st">"ghclass-vignette"</span>, roster<span class="op">$</span>github)</span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="co">#&gt; ✔ Invited user 'ghclass-anya' to org 'ghclass-vignette'.</span></span>
@@ -319,12 +319,13 @@
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw"><a href="../reference/repo_modify_file.html">repo_modify_file</a></span>(</span>
 <span id="cb20-2"><a href="#cb20-2"></a>  <span class="kw"><a href="../reference/org_repos.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>,<span class="st">"hw01-"</span>),</span>
 <span id="cb20-3"><a href="#cb20-3"></a>  <span class="dt">file =</span> <span class="st">"README.md"</span>,</span>
-<span id="cb20-4"><a href="#cb20-4"></a>  <span class="dt">content =</span> <span class="st">"Due: Tomorrow</span><span class="ch">\n</span><span class="st">"</span>,</span>
-<span id="cb20-5"><a href="#cb20-5"></a>  <span class="dt">after =</span> <span class="st">"## Homework 01</span><span class="ch">\n</span><span class="st">"</span></span>
-<span id="cb20-6"><a href="#cb20-6"></a>)</span>
-<span id="cb20-7"><a href="#cb20-7"></a><span class="co">#&gt; ✔ Modified file 'ghclass-vignette/hw01-team01/README.md'.</span></span>
-<span id="cb20-8"><a href="#cb20-8"></a><span class="co">#&gt; ✔ Modified file 'ghclass-vignette/hw01-team02/README.md'.</span></span>
-<span id="cb20-9"><a href="#cb20-9"></a><span class="co">#&gt; ✔ Modified file 'ghclass-vignette/hw01-team03/README.md'.</span></span></code></pre></div>
+<span id="cb20-4"><a href="#cb20-4"></a>  <span class="dt">pattern =</span> <span class="st">"## Homework 01</span><span class="ch">\n</span><span class="st">"</span>,</span>
+<span id="cb20-5"><a href="#cb20-5"></a>  <span class="dt">content =</span> <span class="st">"Due: Tomorrow</span><span class="ch">\n</span><span class="st">"</span>,</span>
+<span id="cb20-6"><a href="#cb20-6"></a>  <span class="dt">method =</span> <span class="st">"after"</span></span>
+<span id="cb20-7"><a href="#cb20-7"></a>)</span>
+<span id="cb20-8"><a href="#cb20-8"></a><span class="co">#&gt; ✔ Modified file 'ghclass-vignette/hw01-team01/README.md'.</span></span>
+<span id="cb20-9"><a href="#cb20-9"></a><span class="co">#&gt; ✔ Modified file 'ghclass-vignette/hw01-team02/README.md'.</span></span>
+<span id="cb20-10"><a href="#cb20-10"></a><span class="co">#&gt; ✔ Modified file 'ghclass-vignette/hw01-team03/README.md'.</span></span></code></pre></div>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cat">cat</a></span>( <span class="kw"><a href="../reference/repo_get_readme.html">repo_get_readme</a></span>(<span class="st">"ghclass-vignette/hw01-team01"</span>) )</span>
 <span id="cb21-2"><a href="#cb21-2"></a><span class="co">#&gt; ## Homework 01</span></span>
 <span id="cb21-3"><a href="#cb21-3"></a><span class="co">#&gt; Due: Tomorrow</span></span>
