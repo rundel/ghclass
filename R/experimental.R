@@ -7,7 +7,10 @@ github_api_create_pull_request = function(repo, base, head, title, body){
     head = head,
     title = title,
     body = body,
-    .token = github_get_token())
+    #draft = draft,
+    .token = github_get_token(),
+    #.headers = c(Accept = "application/vnd.github.shadow-cat-preview+json")
+  )
 }
 
 #' Create pull request
@@ -32,10 +35,9 @@ create_pull_request = function(repo, title, base, head = "master", body = "") {
         repo, base = base, head = head, title = title, body = body
       )
 
-      details = glue::glue(
-        "{usethis::ui_value(repo)}",
-        "({usethis::ui_value(base)} {usethis::ui_value(head)})"
-      )
+      details = usethis::ui_value( glue::glue(
+        "{repo} ({base} <= {head})"
+      ) )
 
       status_msg(
         res,
