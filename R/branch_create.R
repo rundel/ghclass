@@ -55,14 +55,28 @@ branch_create = function(repo, cur_branch = "master", new_branch) {
   purrr::pwalk(
     list(repo, cur_branch, new_branch),
     function(repo, cur_branch, new_branch) {
-      res = purrr::safely(github_api_branch_create)(repo, cur_branch, new_branch)
 
-      repo_fmt = usethis::ui_value(format_repo(repo, cur_branch))
+      cur_repo_fmt = usethis::ui_value(format_repo(repo, cur_branch))
+      new_repo_fmt = usethis::ui_value(format_repo(repo, new_branch))
+
+      branches = repo_branches(repo)
+
+      if (!cur_branch %in% branches) {
+        usethis::ui_oops("Failed to create branch, {cur_repo_fmt} does not exist.")
+        return(NULL)
+      }
+
+      if (new_branch %in% branches) {
+        usethis::ui_oops("Skipping creation of branch {new_repo_fmt}, it already exists.")
+        return(NULL)
+      }
+
+      res = purrr::safely(github_api_branch_create)(repo, cur_branch, new_branch)
 
       status_msg(
         res,
-        glue::glue("Created branch {usethis::ui_value(new_branch)} from {repo_fmt}."),
-        glue::glue("Failed to create branch {usethis::ui_value(new_branch)} from {repo_fmt}.")
+        glue::glue("Created branch {usethis::ui_value(new_branch)} from {cur_repo_fmt}."),
+        glue::glue("Failed to create branch {usethis::ui_value(new_branch)} from {cur_repo_fmt}.")
       )
     }
   )
