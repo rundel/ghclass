@@ -174,12 +174,6 @@ add_file = function(...) {
 }
 
 #' @export
-add_content = function(...) {
-  .Deprecated("repo_modify_file")
-  repo_modify_file(...)
-}
-
-#' @export
 put_file = function(...) {
   .Deprecated("repo_put_file")
   repo_put_file(...)

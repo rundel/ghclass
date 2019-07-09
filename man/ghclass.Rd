@@ -62,7 +62,7 @@ General functions,
 File manipulation functions,
 \itemize{
 \item \code{\link[=repo_add_file]{repo_add_file()}}    - (previously \code{\link[=add_file]{add_file()}})
-\item \code{\link[=repo_modify_file]{repo_modify_file()}} - (previously \code{\link[=add_content]{add_content()}})
+\item \code{\link[=repo_modify_file]{repo_modify_file()}} -
 \item \code{\link[=repo_put_file]{repo_put_file()}}    - (previously \code{\link[=put_file]{put_file()}})
 \item \code{\link[=repo_get_file]{repo_get_file()}}    - (previously \code{\link[=get_file]{get_file()}})
 \item \code{\link[=repo_get_readme]{repo_get_readme()}}  - (previously \code{\link[=get_readme]{get_readme()}})

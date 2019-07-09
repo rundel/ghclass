@@ -5,17 +5,22 @@
 \alias{add_content}
 \title{Modify a file within a repository}
 \usage{
-repo_modify_file(repo, file, content, after = NULL,
-  message = "Added content", branch = "master")
+repo_modify_file(repo, file, pattern, content, method = c("replace",
+  "before", "after"), all = FALSE, message = "Modified content",
+  branch = "master")
 }
 \arguments{
-\item{repo}{Character. Address of repository in `owner/name`` format.}
+\item{repo}{Character. Address of repository in \code{owner/name} format.}
 
 \item{file}{Character. File's path within the repository.}
 
+\item{pattern}{Character. Regex pattern.}
+
 \item{content}{Character. Content to be added to the file.}
 
-\item{after}{Character. Regex pattern, if not \code{NULL} content will be inserted directly after the first match.}
+\item{method}{Character. Should the content be \code{insert}ed after the match or should it \code{replace} the matched string.}
+
+\item{all}{Character. Should all instances of the pattern be modified (\code{TRUE}) or just the first (\code{FALSE}).}
 
 \item{message}{Character. Commit message.}
 

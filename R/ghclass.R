@@ -44,7 +44,7 @@
 #'
 #' File manipulation functions,
 #' * [repo_add_file()]    - (previously [add_file()])
-#' * [repo_modify_file()] - (previously [add_content()])
+#' * [repo_modify_file()] -
 #' * [repo_put_file()]    - (previously [put_file()])
 #' * [repo_get_file()]    - (previously [get_file()])
 #' * [repo_get_readme()]  - (previously [get_readme()])
