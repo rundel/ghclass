@@ -57,7 +57,6 @@ create_pull_request = function(repo, title, base, head = "master", body = "") {
 #' @param create_pull_request Logical. If TRUE, a pull request is created from branch to base.
 #' @param tag_collaborators Logical. If TRUE, a message with the repository collaborators is displayed.
 #' @param git Chacacter. Path to the git binary.
-#' @param verbose Logical. Display verbose output.
 #'
 #' @examples
 #' \dontrun{
@@ -68,7 +67,7 @@ create_pull_request = function(repo, title, base, head = "master", body = "") {
 #'
 repo_style = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = "master",
                       create_pull_request = TRUE, tag_collaborators = TRUE,
-                      git = require_git(), verbose = TRUE) {
+                      git = require_git()) {
   stopifnot(styler_available())
   stopifnot(length(repo) >= 1)
 
@@ -93,7 +92,10 @@ repo_style = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = 
       file_paths = unlist(purrr::map(files, ~ fs::dir_ls(path, recurse = TRUE, glob = .x)),
                           use.names = FALSE)
 
-
+      if (length(file_paths) == 0) {
+        usethis::ui_oops("Found no files with the glob {usethis::ui_value(files)} in repo {usethis::ui_value(repo)}")
+        return(NULL)
+      }
 
 
       msg = c("Results of running styler:\n", utils::capture.output( styler::style_file(file_paths) ))
@@ -128,8 +130,7 @@ repo_style = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = 
         create_pull_request(
           repo, title = "styler revisions",
           base = base, head = branch,
-          body = paste0(msg, collapse = "\n"),
-          verbose = verbose
+          body = paste0(msg, collapse = "\n")
         )
       }
     }
