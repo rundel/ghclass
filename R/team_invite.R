@@ -1,7 +1,9 @@
 github_api_team_invite = function(team_id, username) {
   gh(
     "PUT /teams/:id/memberships/:username",
-    id=team_id, username=username, role="member",
+    id = team_id,
+    username = username,
+    role = "member",
     .token = github_get_token()
   )
 }
