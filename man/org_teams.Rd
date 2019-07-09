@@ -9,11 +9,10 @@ org_teams(org, filter = NULL, exclude = FALSE)
 \arguments{
 \item{org}{character, name of the GitHub organization.}
 
-\item{filter}{character, regex pattern for matching (or excluding) repos.}
+\item{filter}{character, regex pattern for matching (or excluding) teams}
 
 \item{exclude}{logical, should entries matching the regex be excluded or included.}
 }
 \description{
-\code{org_teams} returns a (filtered) data frame of teams in the organization with columns for
-their names (\code{name}) and their unique ids (\code{id}).
+\code{org_teams} returns a (filtered) vector of teams in the organization.
 }
