@@ -6,7 +6,7 @@
 \usage{
 repo_style(repo, files = c("*.R", "*.Rmd"), branch = "styler",
   base = "master", create_pull_request = TRUE,
-  tag_collaborators = TRUE, git = require_git(), verbose = TRUE)
+  tag_collaborators = TRUE, git = require_git())
 }
 \arguments{
 \item{repo}{Character. Address of repository in "owner/name" format.}
@@ -22,8 +22,6 @@ repo_style(repo, files = c("*.R", "*.Rmd"), branch = "styler",
 \item{tag_collaborators}{Logical. If TRUE, a message with the repository collaborators is displayed.}
 
 \item{git}{Chacacter. Path to the git binary.}
-
-\item{verbose}{Logical. Display verbose output.}
 }
 \description{
 \code{style_repo} implements "non-invasive pretty-printing of R source code" of .R or .Rmd files within a repository using the \code{styler} package and adhering to \code{tidyverse} formatting guidelines.
