@@ -316,8 +316,9 @@ We can also use the function `repo_modify_file` to make changes to existing file
 repo_modify_file(
   org_repos("ghclass-vignette","hw01-"),
   file = "README.md",
+  pattern = "## Homework 01\n",
   content = "Due: Tomorrow\n",
-  after = "## Homework 01\n"
+  method = "after"
 )
 ```
 
