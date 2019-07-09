@@ -1,9 +1,12 @@
-github_api_create_pull = function(repo, base, head, title, body){
+github_api_create_pull_request = function(repo, base, head, title, body){
   gh::gh(
     "POST /repos/:owner/:repo/pulls",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
-    base = base, head = head, title = title, body = body,
+    base = base,
+    head = head,
+    title = title,
+    body = body,
     .token = github_get_token())
 }
 
@@ -25,7 +28,7 @@ create_pull_request = function(repo, title, base, head = "master", body = "") {
   purrr::pwalk(
     list(repo, base, head, title, body),
     function(repo, base, head, title, body) {
-      res = purrr::safely(github_api_create_pull)(
+      res = purrr::safely(github_api_create_pull_request)(
         repo, base = base, head = head, title = title, body = body
       )
 
@@ -63,7 +66,7 @@ create_pull_request = function(repo, title, base, head = "master", body = "") {
 #'
 #' @export
 #'
-style_repo = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = "master",
+repo_style = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = "master",
                       create_pull_request = TRUE, tag_collaborators = TRUE,
                       git = require_git(), verbose = TRUE) {
   stopifnot(styler_available())
