@@ -1,4 +1,4 @@
-github_api_create_pull_request = function(repo, base, head, title, body){
+github_api_create_pull_request = function(repo, base, head, title, body, draft = TRUE){
   gh::gh(
     "POST /repos/:owner/:repo/pulls",
     owner = get_repo_owner(repo),
@@ -7,9 +7,9 @@ github_api_create_pull_request = function(repo, base, head, title, body){
     head = head,
     title = title,
     body = body,
-    #draft = draft,
+    draft = draft,
     .token = github_get_token(),
-    #.headers = c(Accept = "application/vnd.github.shadow-cat-preview+json")
+    .send_headers = c(Accept = "application/vnd.github.shadow-cat-preview+json")
   )
 }
 
@@ -23,16 +23,19 @@ github_api_create_pull_request = function(repo, base, head, title, body){
 #' fork then use `username:branch` as the format.
 #' @param head Character. The branch you want the changed pulled into.
 #' @param body Character. The text contents of the pull request.
+#' @param draft Logical. Should the pull request be created as a draft pull request (these cannot be merged
+#'   until allowed by the author).
 #'
-create_pull_request = function(repo, title, base, head = "master", body = "") {
+create_pull_request = function(repo, title, base, head = "master", body = "", draft = TRUE) {
 
   arg_is_chr(repo, title, base, head, body)
+  arg_is_lgl(draft)
 
   purrr::pwalk(
-    list(repo, base, head, title, body),
-    function(repo, base, head, title, body) {
+    list(repo, base, head, title, body, draft),
+    function(repo, base, head, title, body, draft) {
       res = purrr::safely(github_api_create_pull_request)(
-        repo, base = base, head = head, title = title, body = body
+        repo, base = base, head = head, title = title, body = body, draft = draft
       )
 
       details = usethis::ui_value( glue::glue(
@@ -56,6 +59,8 @@ create_pull_request = function(repo, title, base, head = "master", body = "") {
 #' @param files Character or vector of characters. Names of .R and/or .Rmd files that styler should be applied to.
 #' @param branch Character. Name of new branch to be created. Default is "styler".
 #' @param base Character. Name of branch that contains the .R and/or .Rmd files to be reformatted.
+#' @param draft Logical. Should the pull request be created as a draft pull request? (Draft PRs cannot be merged
+#'   until allowed by the author)
 #' @param create_pull_request Logical. If TRUE, a pull request is created from branch to base.
 #' @param tag_collaborators Logical. If TRUE, a message with the repository collaborators is displayed.
 #' @param git Chacacter. Path to the git binary.
@@ -68,21 +73,23 @@ create_pull_request = function(repo, title, base, head = "master", body = "") {
 #' @export
 #'
 repo_style = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = "master",
-                      create_pull_request = TRUE, tag_collaborators = TRUE,
+                      draft = TRUE, create_pull_request = TRUE, tag_collaborators = TRUE,
                       git = require_git()) {
   stopifnot(styler_available())
-  stopifnot(length(repo) >= 1)
+
+  arg_is_chr(repo, files, branch, base)
+  arg_is_lgl(draft)
+  arg_is_lgl_scalar(create_pull_request, tag_collaborators)
+  arg_is_chr_scalar(git)
 
   dir = file.path(tempdir(),"styler")
   dir.create(dir, showWarnings = FALSE, recursive = TRUE)
 
-  on.exit({
-    unlink(file.path(dir), recursive = TRUE)
-  })
+  withr::local_dir(dir)
 
   purrr::pwalk(
-    list(repo, base, branch),
-    function(repo, base, branch) {
+    list(repo, base, branch, draft),
+    function(repo, base, branch, draft) {
       ## TODO add base to branch
       branch_create(repo, cur_branch = base, new_branch = branch)
       local_repo_clone(repo, local_path = dir, branch = branch)
@@ -116,7 +123,7 @@ repo_style = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = 
 
         msg = paste(c(
           "This pull request contains the results of running the automated R code formating tool styler ",
-          "on your repo. Styling is based on the tidyverse [R style guide](http://style.tidyverse.org)\n",
+          "on your repo. Styling is based on the [tidyverse R style guide](http://style.tidyverse.org).\n",
           "\n",
           "Click on the commit below to see details of recommended changes. It is not necessary that your ",
           "code cleanly pass these checks, but if there is a large number of significant changes suggested ",
@@ -132,7 +139,8 @@ repo_style = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = 
         create_pull_request(
           repo, title = "styler revisions",
           base = base, head = branch,
-          body = paste0(msg, collapse = "\n")
+          body = paste0(msg, collapse = "\n"),
+          draft = draft
         )
       }
     }

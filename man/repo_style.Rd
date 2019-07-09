@@ -5,7 +5,7 @@
 \title{Style repository}
 \usage{
 repo_style(repo, files = c("*.R", "*.Rmd"), branch = "styler",
-  base = "master", create_pull_request = TRUE,
+  base = "master", draft = TRUE, create_pull_request = TRUE,
   tag_collaborators = TRUE, git = require_git())
 }
 \arguments{
@@ -16,6 +16,9 @@ repo_style(repo, files = c("*.R", "*.Rmd"), branch = "styler",
 \item{branch}{Character. Name of new branch to be created. Default is "styler".}
 
 \item{base}{Character. Name of branch that contains the .R and/or .Rmd files to be reformatted.}
+
+\item{draft}{Logical. Should the pull request be created as a draft pull request? (Draft PRs cannot be merged
+until allowed by the author)}
 
 \item{create_pull_request}{Logical. If TRUE, a pull request is created from branch to base.}
 

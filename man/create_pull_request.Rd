@@ -4,7 +4,8 @@
 \alias{create_pull_request}
 \title{Create pull request}
 \usage{
-create_pull_request(repo, title, base, head = "master", body = "")
+create_pull_request(repo, title, base, head = "master", body = "",
+  draft = TRUE)
 }
 \arguments{
 \item{repo}{Character. Address of one or more repositories in "owner/name" format.}
@@ -17,6 +18,9 @@ fork then use \code{username:branch} as the format.}
 \item{head}{Character. The branch you want the changed pulled into.}
 
 \item{body}{Character. The text contents of the pull request.}
+
+\item{draft}{Logical. Should the pull request be created as a draft pull request (these cannot be merged
+until allowed by the author).}
 }
 \description{
 \code{create_pull_request} creates a pull request on GitHub from the \code{base} branch to the \code{head} branch.
