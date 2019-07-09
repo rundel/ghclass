@@ -91,8 +91,13 @@ repo_style = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = 
     list(repo, base, branch, draft),
     function(repo, base, branch, draft) {
       ## TODO add base to branch
-      branch_create(repo, cur_branch = base, new_branch = branch)
-      local_repo_clone(repo, local_path = dir, branch = branch)
+      res = branch_create(repo, cur_branch = base, new_branch = branch)
+      if (failed(res))
+        return()
+
+      res = local_repo_clone(repo, local_path = dir, branch = branch)
+      if (failed(res))
+        return()
 
       path = fs::path(dir, get_repo_name(repo))
 
@@ -103,7 +108,7 @@ repo_style = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = 
 
       if (length(file_paths) == 0) {
         usethis::ui_oops("Found no files with the glob {usethis::ui_value(files)} in repo {usethis::ui_value(repo)}")
-        return(NULL)
+        return()
       }
 
 
