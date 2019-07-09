@@ -83,6 +83,8 @@ repo_style = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = 
   arg_is_chr_scalar(git)
 
   dir = file.path(tempdir(),"styler")
+  unlink(dir, recursive = TRUE)
+
   dir.create(dir, showWarnings = FALSE, recursive = TRUE)
 
   withr::local_dir(dir)
@@ -91,13 +93,8 @@ repo_style = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = 
     list(repo, base, branch, draft),
     function(repo, base, branch, draft) {
       ## TODO add base to branch
-      res = branch_create(repo, cur_branch = base, new_branch = branch)
-      if (failed(res))
-        return()
-
-      res = local_repo_clone(repo, local_path = dir, branch = branch)
-      if (failed(res))
-        return()
+      branch_create(repo, cur_branch = base, new_branch = branch)
+      local_repo_clone(repo, local_path = dir, branch = branch)
 
       path = fs::path(dir, get_repo_name(repo))
 
