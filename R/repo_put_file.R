@@ -33,7 +33,6 @@ github_api_repo_put_file = function(repo, path, content, message, branch) {
 #'
 repo_put_file = function(repo, path, content, message = NULL, branch = "master", verbose = TRUE) {
 
-  arg_is_scalar(content) # Could be character or raw
   arg_is_chr_scalar(repo, path, branch)
   arg_is_chr_scalar(message, allow_null = TRUE)
 

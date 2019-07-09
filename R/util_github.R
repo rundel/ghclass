@@ -33,7 +33,7 @@ extract_content = function(file, include_details = TRUE) {
     return(NULL)
 
   content = base64enc::base64decode(file[["content"]])
-  content = rawToChar(content)
+  content = purrr::possibly(rawToChar, content)(content)
 
   if (include_details) {
     file[["content"]] = NULL

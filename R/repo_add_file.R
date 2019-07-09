@@ -1,3 +1,12 @@
+read_bin_file = function(x) {
+  f = file(x, "rb")
+  size = file.size(x)
+  raw = readBin(f, "raw", size)
+  close(f)
+
+  raw
+}
+
 #' Add files to a repo
 #'
 #' `repo_add_file` uses the GitHub API to add/update files in an existing repo on GitHub. Note that due to time delays in caching, files that have been added very recently might not yet be displayed as existing and might accidentally be overwritten.
@@ -50,7 +59,7 @@ repo_add_file = function(repo, file, message = NULL, branch = "master",
             repo_put_file(
               repo = repo,
               path = gh_path,
-              content = paste(readLines(file), collapse = "\n"),
+              content = read_bin_file(file),
               message = message,
               branch = branch,
               verbose = TRUE
