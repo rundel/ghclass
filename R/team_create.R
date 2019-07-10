@@ -56,8 +56,8 @@ team_create = function(org, team,
 
       status_msg(
         res,
-        glue::glue("Added team {usethis::ui_value(team)} to org {usethis::ui_value(org)}."),
-        glue::glue("Failed to add team {usethis::ui_value(team)} to org {usethis::ui_value(org)}."),
+        glue::glue("Created team {usethis::ui_value(team)} in org {usethis::ui_value(org)}."),
+        glue::glue("Failed to create team {usethis::ui_value(team)} in org {usethis::ui_value(org)}."),
       )
     }
   )
