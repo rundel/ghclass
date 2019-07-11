@@ -21,7 +21,11 @@ github_api_add_user = function(repo, username, permission){
 #'
 #' @examples
 #' \dontrun{
-#' repo_add_user("ghclass-test/hw1-user01", c("user01", "user02"))
+#' repo_add_user("ghclass-test/hw1-team1", c("user01", "user02"))
+#'
+#' ## Adding users to their individual repositories
+#' user = c("user01", "user02")
+#' repo_add_user(paste0("ghclass-test/hw2-", user), user)
 #' }
 #'
 #' @rdname repo_add_member
