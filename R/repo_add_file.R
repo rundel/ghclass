@@ -47,8 +47,8 @@ repo_add_file = function(repo, file, message = NULL, folder = NULL, branch = "ma
     file = list(file)
 
   purrr::pwalk(
-    list(repo, file, message, branch),
-    function(repo, file, message, branch){
+    list(repo, file),
+    function(repo, file){
       purrr::walk(
         file,
         function(file){
