@@ -5,8 +5,8 @@
 \alias{add_file}
 \title{Add files to a repo}
 \usage{
-repo_add_file(repo, file, message = NULL, branch = "master",
-  preserve_path = FALSE, overwrite = FALSE)
+repo_add_file(repo, file, message = NULL, folder = NULL,
+  branch = "master", preserve_path = FALSE, overwrite = FALSE)
 }
 \arguments{
 \item{repo}{Character. Address of repository in "owner/name" format.}
@@ -14,6 +14,8 @@ repo_add_file(repo, file, message = NULL, branch = "master",
 \item{file}{Character. Local file path(s) of file or files to be added.}
 
 \item{message}{Character. Commit message. If not provided, a custom character string will be created, in the form of "Added file(s): filename(s)". If this custom message character length exceeds 50, it will be shortened to "Added file(s)".}
+
+\item{folder}{Character. Name of folder on repository to save the file(s) to. Will be newly created if it does not  exist.}
 
 \item{branch}{Character. Name of branch to use, defaults to "master".}
 
