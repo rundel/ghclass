@@ -28,7 +28,7 @@ repo_add_file(repo, file, message = NULL, folder = NULL,
 }
 \examples{
 \dontrun{
-repo_add_file("rundel/ghclass", "Update DESCRIPTION", "./DESCRIPTION")
+repo_add_file("rundel/ghclass", "./DESCRIPTION", "Update DESCRIPTION")
 }
 
 }
