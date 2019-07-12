@@ -15,7 +15,7 @@ repo_add_file(repo, file, message = NULL, folder = NULL,
 
 \item{message}{Character. Commit message. If not provided, a custom character string will be created, in the form of "Added file(s): filename(s)". If this custom message character length exceeds 50, it will be shortened to "Added file(s)".}
 
-\item{folder}{Character. Name of folder on repository to save the file(s) to. Will be newly created if it does not  exist.}
+\item{folder}{Character. Name of folder on repository to save the file(s) to. If the folder does not exist in the repository, it will be created.}
 
 \item{branch}{Character. Name of branch to use, defaults to "master".}
 
