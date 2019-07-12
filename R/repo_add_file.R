@@ -40,8 +40,8 @@ repo_add_file = function(repo, file, message = NULL, folder = NULL, branch = "ma
   if (any(!file_status))
     usethis::ui_stop("Unable to locate the following file(s): {usethis::ui_value(file)}")
 
-  if (is.null(message))
-    message = list(NULL)
+  # if (is.null(message))
+  #   message = list(NULL)
 
   if (is.character(file) & (length(file) > 1))
     file = list(file)
