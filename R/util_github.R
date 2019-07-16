@@ -153,6 +153,6 @@ get_committer = function(repo, sha=NULL, path=NULL, author=NULL, since=NULL, unt
 
 check_file_modification = function(repo, path, branch = "master"){
   arg_is_chr_scalar(repo, branch, path)
-  commits = get_committer(repo, sha=branch, path=path)
+  commits = get_committer(repo, sha = branch, path = path)
   nrow(commits) > 1
 }

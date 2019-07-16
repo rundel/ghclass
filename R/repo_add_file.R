@@ -55,8 +55,9 @@ repo_add_file = function(repo, file, message = NULL, folder = NULL, branch = "ma
           if(!is.null(folder))
             gh_path = sub(fs::path_file(file), paste(folder, fs::path_file(file), sep = "/"), gh_path)
 
+          # Does file exist?
+          if (!file_exists(repo = repo, file = gh_path, branch = branch, verbose = F) | overwrite) {
 
-          if(!check_file_modification(repo, gh_path, branch) | overwrite){
             repo_put_file(
               repo = repo,
               path = gh_path,
@@ -64,7 +65,8 @@ repo_add_file = function(repo, file, message = NULL, folder = NULL, branch = "ma
               message = message,
               branch = branch,
               verbose = TRUE
-            )
+              )
+
           } else {
             usethis::ui_oops( paste(
               'Failed to add file {usethis::ui_value(gh_path)} to repo {usethis::ui_value(repo)}, file already exists.',
