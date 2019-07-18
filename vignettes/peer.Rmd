@@ -48,20 +48,20 @@ library(ghclass)
 devtools::load_all()
 # 1) Set up vector of student user names, HW identifier prefix, and organization name
 user = c("thereseanders", "thereanders", "tnaanders")
-prefix = "hw-new2-"
+prefix = "hw-new3-"
 org = "ghclass-test"
 dblind = TRUE
 
 # 2) Create student- and assignment-specific repositories
-create_repo(org, user, prefix = prefix)
+repo_create(org, user, prefix = prefix)
 
 # 3) Add students to their individual repos
-add_user_to_repo(glue::glue("{org}/{prefix}{user}"), user)
+repo_add_user(glue::glue("{org}/{prefix}{user}"), user)
 
 # 4) Place homework files in repositories
 task <- "/Users/thereseanders/Documents/RStudio/introggplot2/hw2/hw2_task.Rmd"
 data <- "/Users/thereseanders/Documents/RStudio/introggplot2/hw2/iris_data.csv"
-repo_add_file(get_repo(org, filter = prefix),
+repo_add_file(org_repos(org, filter = prefix),
               file = c(task, data),
               message = "Adding task and data for homework 2.")
 ```
@@ -142,8 +142,7 @@ rscores = peer_score(
   prefix = prefix,
   write_csv = F
 )
-rscores %>%
-  dplyr::arrange(user_random)
+rscores
 ```
 
 
@@ -203,8 +202,7 @@ ascores = peer_score(
   prefix = prefix,
   write_csv = F
 )
-ascores %>%
-  dplyr::arrange(user_random)
+ascores
 ```
 
 
@@ -224,9 +222,7 @@ Writing a meaningful review with constructive comments is a learning process and
 On the one hand, more reviewers means more feedback and less weight to outlier reviews for grading, so more is better, right? On the other hand, more reviewers also means more student hours spent on giving feedback and not working on their final projects, learning new skills, or recharging. Plus, how much different will the feedback from each additional reviewer be after two or three reviews? Thus, we recommend to assign between two and three reviewers per assignment to balance the benefits of having multiple reviews and the demand on students' time/diminishing returns.
 
 ### Timing
-Instructors should carefully consider the timing of deadlines for a) the assignment, b) the completion of the review, and c) the completion of the author rating of reviewers' feedback. Consider the following example. Your course is scheduled on Mondays and Wednesday, and you prefer to give students time over the weekend to complete assignments.
-
-
+Instructors should carefully consider the timing of deadlines for a) the assignment, b) the completion of the review, and c) the completion of the author rating of reviewers' feedback. 
 
 
 ## API rate limits

@@ -39,13 +39,15 @@ peer_roster = function(m,
   # Randomizing user names to avoid clustering
   user_random = paste0("a", sample(1:length(user), length(user)))
   df_sort = data.frame(user = user,
-                       user_random = as.character(user_random))[order(as.numeric(sub("[aA-zZ]+", "", user_random))), ]
+                       user_random = as.character(user_random))[order(as.numeric(sub("[aA-zZ]+", "", user_random))),]
 
   res_df = setNames(data.frame(df_sort,
                                do.call(
                                  cbind, purrr::map(res, ~ as.character(df_sort$user_random)[.x])
                                )),
                     c("user", "user_random", purrr::map_chr(1:m, ~ paste0("r", .x))))
+
+  res_df = res_df[order(res_df$user_random),]
 
   if (write_csv) {
     fname = glue::glue("roster_seed{seed}.csv")
@@ -73,8 +75,10 @@ remove_author_rmd = function(input) {
 }
 
 # Reads roster file
-peer_read_roster = function(roster, fname_append = NULL, prefix = NULL, suffix = NULL) {
-
+peer_read_roster = function(roster,
+                            fname_append = NULL,
+                            prefix = NULL,
+                            suffix = NULL) {
   res = purrr::safely(fs::file_exists)(roster)
 
   if (is.null(res$result) & is.data.frame(roster)) {
@@ -113,7 +117,6 @@ peer_check_roster = function(roster) {
 
 
 peer_get_reviewer = function(author, roster, anonym = FALSE) {
-
   m = seq_len(length(names(roster)[grepl("^r[0-9]+$", names(roster))]))
   reviewer_random = as.character(roster[roster$user == author, paste0("r", m)])
   reviewer = roster$user[purrr::map_int(reviewer_random, ~ which(roster$user_random == .x))]
@@ -177,10 +180,10 @@ peer_assign = function(org,
                  content = purrr::map(file,
                                       function(file) {
                                         check = file_exists(repo = repo1, file = file)
-                                        if(check){
-                                          res = purrr::safely(get_file)(repo = repo1,
-                                                                        file = file,
-                                                                        branch = branch)
+                                        if (check) {
+                                          res = purrr::safely(repo_get_file)(repo = repo1,
+                                                                             file = file,
+                                                                             branch = branch)
                                           if (succeeded(res)) {
                                             return(res$result)
                                           }
@@ -201,7 +204,7 @@ peer_assign = function(org,
                                               if (!file_exists(repo2, path, verbose = FALSE) |
                                                   overwrite == TRUE) {
                                                 if (!is.null(content)) {
-                                                  put_file(
+                                                  repo_put_file(
                                                     repo = repo2,
                                                     path = path,
                                                     content = content,
@@ -469,7 +472,6 @@ peer_add_file = function(org,
 
   purrr::walk2(author, author_random,
                function(author, author_random) {
-
                  reviewer = peer_get_reviewer(author, rdf, anonym = FALSE)
                  reviewer_no = paste0("r", seq_len(length(reviewer)))
 
@@ -547,10 +549,12 @@ peer_score = function(org,
   }
 
   # Read and check roster file
-  temp = peer_read_roster(roster,
-                          fname_append = glue::glue("{from}scores"),
-                          prefix = prefix,
-                          suffix = suffix)
+  temp = peer_read_roster(
+    roster,
+    fname_append = glue::glue("{from}scores"),
+    prefix = prefix,
+    suffix = suffix
+  )
   rdf = temp$rdf
   peer_check_roster(rdf)
 
@@ -559,7 +563,6 @@ peer_score = function(org,
 
   out = purrr::map2_dfr(author, author_random,
                         function(author, author_random) {
-
                           # Grab reviewers
                           reviewer = peer_get_reviewer(author, rdf, anonym = FALSE)
                           reviewer_random = peer_get_reviewer(author, rdf, anonym = TRUE)
@@ -586,12 +589,11 @@ peer_score = function(org,
                                               }
                                             }
 
-                                            feedback = purrr::safely(get_file)(repo, ghpath)
+                                            feedback = purrr::safely(repo_get_file)(repo, ghpath)
                                             if (succeeded(feedback)) {
-
                                               tc = textConnection(feedback$result)
                                               scores = rmarkdown::yaml_front_matter(tc)$params
-                                              scores[scores == "NA"] <- NA
+                                              scores[scores == "NA"] = NA
 
                                               setNames(c(user, r_no, scores),
                                                        c("user", "r_no", paste0(tag, 1:length(scores))))
@@ -605,12 +607,13 @@ peer_score = function(org,
 
                         }) %>%
     # Getting data frame in right format
-    tidyr::gather(q_name, q_value, -user, -r_no) %>%
+    tidyr::gather(q_name, q_value,-user,-r_no) %>%
     tidyr::unite("new", c("r_no", "q_name")) %>%
     tidyr::spread(new, q_value) %>%
     merge(rdf, all.y = T)
 
   out = out[, union(names(rdf), names(out))]
+  out = out[order(out$user_random),]
 
   if (write_csv) {
     readr::write_csv(out, temp$fname)
@@ -653,7 +656,6 @@ peer_return = function(org,
                        message = "Returning review",
                        branch = "master",
                        overwrite = FALSE) {
-
   arg_is_chr(org, file, prefix, suffix, branch)
   arg_is_chr(message, allow_null = TRUE)
   arg_is_lgl_scalar(overwrite)
@@ -665,8 +667,7 @@ peer_return = function(org,
   author_random = as.list(as.character(rdf$user_random))
 
   purrr::walk2(author, author_random,
-               function(author, author_random){
-
+               function(author, author_random) {
                  repo_a = glue::glue("{org}/{prefix}{author}{suffix}")
                  ghpath_r = glue::glue("{author_random}/{file}")
 
@@ -676,46 +677,45 @@ peer_return = function(org,
                  repo_r = glue::glue("{org}/{prefix}{reviewer}{suffix}")
 
                  purrr::pwalk(list(reviewer, reviewer_no, repo_r),
-                             function(reviewer, reviewer_no, repo_r){
+                              function(reviewer, reviewer_no, repo_r) {
+                                if (!dblind) {
+                                  ghpath_a = glue::glue("{reviewer}/{file}")
+                                } else {
+                                  ghpath_a = glue::glue("{reviewer_no}/{file}")
+                                }
 
-                               if (!dblind) {
-                                 ghpath_a = glue::glue("{reviewer}/{file}")
-                               } else {
-                                 ghpath_a = glue::glue("{reviewer_no}/{file}")
-                               }
+                                content = purrr::map(ghpath_r,
+                                                     function(ghpath_r) {
+                                                       if (file_exists(repo = repo_r, file = ghpath_r)) {
+                                                         res = purrr::safely(repo_get_file)(repo = repo_r,
+                                                                                            file = ghpath_r,
+                                                                                            branch = branch)
+                                                         if (succeeded(res)) {
+                                                           res$result
+                                                         }
+                                                       }
+                                                     })
 
-                               content = purrr::map(ghpath_r,
-                                                    function(ghpath_r) {
-                                                      if (file_exists(repo = repo_r, file = ghpath_r)) {
-                                                        res = purrr::safely(get_file)(repo = repo_r,
-                                                                                      file = ghpath_r,
-                                                                                      branch = branch)
-                                                        if (succeeded(res)) {
-                                                          res$result
-                                                        }
-                                                      }
-                                                    })
-
-                               purrr::walk2(content, ghpath_a,
-                                            function(content, ghpath_a){
-                                              if (!file_exists(repo_a, ghpath_a, verbose = FALSE) |
-                                                  overwrite == TRUE) {
-                                                if (!is.null(content)) {
-                                                  put_file(
-                                                    repo = repo_a,
-                                                    path = ghpath_a,
-                                                    content = content,
-                                                    message = message,
-                                                    branch = branch,
-                                                    verbose = TRUE
-                                                  )
-                                                }
-                                              } else {
-                                                usethis::ui_oops(
-                                                  "Failed to add {usethis::ui_value(ghpath_a)} to {usethis::ui_value(repo_a)}: already exists."
-                                                )
-                                              }
-                                            })
-                             })
-                 })
+                                purrr::walk2(content, ghpath_a,
+                                             function(content, ghpath_a) {
+                                               if (!file_exists(repo_a, ghpath_a, verbose = FALSE) |
+                                                   overwrite == TRUE) {
+                                                 if (!is.null(content)) {
+                                                   repo_put_file(
+                                                     repo = repo_a,
+                                                     path = ghpath_a,
+                                                     content = content,
+                                                     message = message,
+                                                     branch = branch,
+                                                     verbose = TRUE
+                                                   )
+                                                 }
+                                               } else {
+                                                 usethis::ui_oops(
+                                                   "Failed to add {usethis::ui_value(ghpath_a)} to {usethis::ui_value(repo_a)}: already exists."
+                                                 )
+                                               }
+                                             })
+                              })
+               })
 }
