@@ -75,7 +75,7 @@ find_file = function(repo, file, verbose = TRUE){
 }
 
 
-file_exists = function(repo, file, branch = "master", verbose = TRUE) {
+file_exists_ever = function(repo, file, branch = "master", verbose = TRUE) {
   purrr::pmap_lgl(
     list(repo, file, branch),
     function(repo, file, branch) {
@@ -89,6 +89,20 @@ file_exists = function(repo, file, branch = "master", verbose = TRUE) {
   )
 }
 
+
+file_exists = function(repo, file, branch = "master", verbose = FALSE){
+  purrr::pmap_lgl(
+    list(repo, file, branch),
+    function(repo, file, branch) {
+      everexist = check_file_modification(repo = repo, path = file, branch = branch)
+      if (everexist) {
+        file_exists(repo = repo, file = file, branch = branch, verbose = verbose)
+      } else {
+        everexist
+      }
+    }
+  )
+}
 
 github_api_get_commits = function(repo, sha=NULL, path=NULL, author=NULL, since=NULL, until=NULL) {
   args = list(
