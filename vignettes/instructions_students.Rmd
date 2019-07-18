@@ -1,0 +1,43 @@
+---
+title: "Instructions for students"
+author: "Therese Anders"
+date: "`r Sys.Date()`"
+output: github_document
+params:
+  class: Class name
+  org: GitHub organization
+---
+
+Welcome to ``r params$class``! This class uses GitHub for assignments and collaboration and you will have opportunities to give and receive feedback on your peers' work. Please read the instructions below.
+
+## Creating a GitHub account
+If you do not have one already, please create a free [GitHub account](https://github.com). When you created the account, please enter your user name on the list provided by the instructor of this course.
+
+## Accept invitation to class organization
+Your instructor will add you to the ``r params$org`` organization on Github. Once you are added, you will receive an invitation to join to the email address you specified when creating your GitHub account. Please accept the invitation to join the ``r params$org`` organization.
+
+## Assignment
+Your instructor will create a personal repository for your assignment. It might be called something like ``r paste0(params$org, "/hw1-username")``. Once the instructor placed all relevant files into this repository, please complete the assignment by the posted deadline. 
+
+<span style="color:red">**Important!**</span>
+
+- <span style="color:red">Save in repository:</span> Please save your work only in the assignment-specific repository created for you by the instructor. The files will automatically be moved to your peer reviewers. If you save files outside this repository, your work may not be submitted for review/grading.
+- <span style="color:red">Don't change file names:</span> Unless otherwise instructed, please do not change the file names of files in your repository. 
+
+## Review
+Once the assignment is complete, the review process will begin. Your instructor will place individual folders with your peers' assignments, review instructions, and a feedback form into your repository. There is a separate folder for each author your are assigned to review (for example `a1` and `a2`). Please complete the review by the posted deadline.
+
+### Reviewing assignment
+When reviewing your peers' assignments, please give them helpful comments directly in their assignment file that allow them to improve their code.
+
+### Filling out the feedback form
+The feedback form is a RMarkdown (`.Rmd`) document that contains questions for you to answer for each of your classmates' assignments you reviewer. It also contains a header, a so-called [YAML](https://bookdown.org/yihui/rmarkdown/html-document.html). You will see empty parameters (or placeholders) in the `params` section of the YAML for you to enter the scores you give the author of the assignment for each question.
+
+## Receiving your feedback
+Once the review process is complete, your instructor will pass the feedback that peers gave on your assignment back to you. Each reviewer's feedback is in a separate folder, for example called `r1` for reviewer 1's feeback and `r2` for reviewer 2's feedback. The folder will contain their written feedback and comments on your assignment, if applicable. Please read their commments carefully and make necessary changes to your assignment. 
+
+## Rating feedback
+The folder will also contain a RMarkdown (`.Rmd`) document that collects your feedback on each of the reviews. Your are asked to complete this short questionnaire for each of your reviewers. Again, please enter your score for each category in the YAML header of the form.
+
+
+

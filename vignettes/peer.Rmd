@@ -1,0 +1,233 @@
+---
+title: "Peer review with `ghclass`"
+author: "Therese Anders and Mine Çetinkaya-Rundel"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Course management with ghclass}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style type="text/css">
+
+h1.title {
+  font-size: 38px;
+  color: Black;
+}
+h1 { /* Header 1 */
+  font-size: 26px;
+  color: Black;
+}
+h2 { /* Header 2 */
+    font-size: 20px;
+  color: DarkBlue;
+}
+h3 { /* Header 3 */
+  font-size: 14px;
+  color: Black;
+}
+</style>
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This vignette introduces the peer review functionality included in `ghclass`. It includes a step-by-step guide to the peer review process. 
+
+For more information on the pedagogy of peer review in undergraduate courses, see the [accompanying paper](https://github.com/thereseanders/cprpaper/blob/master/cetinkayarundelanders_cpr.pdf) by the package authors.
+
+# Step-by-step guide to peer review
+
+Below, we set up a set of repositories for a fictional assignment "hw2" for three students using the `create_repo()` function. For a more detailed description of how to set up student repositories in a GitHub Organization, please see the `ghclass` vignette.
+```{r}
+library(ghclass)
+devtools::load_all()
+# 1) Set up vector of student user names, HW identifier prefix, and organization name
+user = c("thereseanders", "thereanders", "tnaanders")
+prefix = "hw-new2-"
+org = "ghclass-test"
+dblind = TRUE
+
+# 2) Create student- and assignment-specific repositories
+create_repo(org, user, prefix = prefix)
+
+# 3) Add students to their individual repos
+add_user_to_repo(glue::glue("{org}/{prefix}{user}"), user)
+
+# 4) Place homework files in repositories
+task <- "/Users/thereseanders/Documents/RStudio/introggplot2/hw2/hw2_task.Rmd"
+data <- "/Users/thereseanders/Documents/RStudio/introggplot2/hw2/iris_data.csv"
+repo_add_file(get_repo(org, filter = prefix),
+              file = c(task, data),
+              message = "Adding task and data for homework 2.")
+```
+
+## After assignment is completed
+
+### Creating a roster of author-reviewer assignments
+
+Given a vector of GitHub user names, the `peer_roster()` function creates data frame of random assignments of author files to reviewers. The parameter `m` specifies the number of reviewers per assignment. Instructors should choose the number of reviewers per assignment carefully, as each additional review will significantly increase the time investment for students.
+
+The function automatically randomizes the order in which students are assigned to review their peers' work. A seed is set to make the assignment of authors to reviewers reproducible. If the function default of `write_csv = TRUE` is selected, the function writes the roster to a .csv file. We recommend for instructors to set `write_csv = TRUE`, because the seed that was used to create the roster is automatically incorporated into the file name of the output.
+
+The roster file should be read as follows. 
+
+- `user` lists students' GitHub user names
+- `user_random` randomizes the order of user names and gives each user an anonymous ID, in the pattern `a*`.
+- The `r*` column(s) specify the randomized user ID of the student(s) that should review the user's assignment.
+
+```{r}
+roster_test = peer_roster(2, user, write_csv = F, seed = 678)
+roster_test
+```
+
+### Moving author files to reviewers
+The `peer_assign()` function distributes review assignment to reviewers. It grabs designated files in the author's repository and clones them into a new folder on reviewers' repositories, based on the roster created in the previous step. The newly created folder names are based on anonymous reviewer IDs created via `peer_roster()` in the previous step.
+
+To ensure that the process of moving files from authors' to reviewers' repositores runs smoothly and author anonymity is maintained, students should be instructed to 
+
+1. not change file names, and to
+2. not add identifying information such as name, student ID, or email addresses to their assignments.
+```{r}
+peer_assign(org = org,
+            roster = roster_test,
+            file = c("hw2_task.Rmd", "iris_data.csv"),
+            prefix = prefix
+            )
+```
+
+
+### Creating feedback form for reviewers
+
+Instructors can use the `peer_create_rform()` function to create a blank feedback form and save it as an RMarkdown (`.Rmd`) file. This form should subsequently be customized by adding the questions to be answered by reviewers. Instructors can specify the number of questions to be included in the blank form. The function automatically creates parameters `q*_score` for each question in the YAML header of the RMarkdown document. These YAML parameters are later used to extract and save student scores. 
+
+By default, the files contain an `author` field in the YAML header to prompt reviewers to identify themselves. Keeping reviewers non-anonymous (as opposed to authors) is likely to discourage overly harsh or rude reviews. If reviewers should instead stay anonymous as well, setting `author = FALSE` will remove this field.
+```{r}
+peer_create_rform(2,
+                  file = "/Users/thereseanders/Documents/RStudio/introggplot2/hw2/rfeedback_blank.Rmd")
+```
+
+### Distributing feedback forms to reviewers
+The `peer_add_file()` function can be used to place the customized review forms into reviewers' repositories, based on the review roster. The feedback forms are saved in the folder containing the respective author's assignment files.
+
+To specify that feedback forms should be placed in reviewers repositories, the `to = "r"` argument should be specified. 
+```{r}
+peer_add_file(
+        org = "ghclass-test",
+        roster = roster_test,
+        to = "r",
+        file = "/Users/thereseanders/Documents/RStudio/introggplot2/hw2/rfeedback_blank.Rmd",
+        prefix = prefix
+)
+```
+
+### Instructions for students
+1) Pull changes to get author files to the local version of the repository.
+
+## After review process is completed
+
+### Collect scores given by reviewers
+`peer_score()` collects the scores given by reviewers to authors. In this step, we want to collect the scores given **from reviewers** to authors, thus we specify `r from = "r"`. For the purpose of demonstration, below, we save the output in an object. In practice, we recommend setting `write_csv = TRUE` to save the output as a `.csv` file.
+```{r}
+rscores = peer_score(
+  org = "ghclass-test",
+  roster = roster_test,
+  from = "r",
+  file = "rfeedback_blank.Rmd",
+  dblind = dblind,
+  prefix = prefix,
+  write_csv = F
+)
+rscores %>%
+  dplyr::arrange(user_random)
+```
+
+
+### [Optional] Strip individual scores given by reviewers
+If desired, the scores that reviewers entered into the YAML header of the reviewer feedback forms can be removed before distributing reviews back to the authors. If this is the case, authors can engage with the substantive feedback on their assignments, but do not see the scores given by the reviewers for each question.
+
+### Move reviewer feedback to author repositories
+Only select files will be moved and saved in a new folder in authors' repositories. 
+```{r}
+peer_return(org = org,
+            roster = roster_test,
+            file = c("hw2_task.Rmd", "rfeedback_blank.Rmd"),
+            prefix = prefix,
+            dblind = dblind)
+```
+
+
+
+
+### [Recommended] Create rating form for authors
+The `peer_create_aform()` can be used to create a author blank RMarkdown form used to collect authors' feedback on the reviews. By default, three rating categories are included in the file: 
+
+1. `helpfulness`: The reviewer's feedback was constructive and helpful.
+2. `accuracy`: The reviewer's assessment accurately describes the quality of my work.
+3. `fairness`: The reviewer's assessment was fair.
+
+The rating categories can be adjusted via the `category` parameter.
+```{r}
+peer_create_aform(file = "/Users/thereseanders/Documents/RStudio/introggplot2/hw2/afeedback_blank.Rmd", category = c("accuracy", "fairness"))
+```
+
+### [Recommended] Distribute author rating forms 
+```{r}
+peer_add_file(
+        org = "ghclass-test",
+        roster = roster_test,
+        to = "a",
+        file = "/Users/thereseanders/Documents/RStudio/introggplot2/hw2/afeedback_blank.Rmd",
+        prefix = prefix,
+        dblind = dblind,
+        overwrite = T
+)
+```
+
+
+## After author rating of reviews is completed
+
+### [Recommended] Collect scores given by authors
+Again, we can use `peer_score()` to collect the ratings given by authors to reviewers. This time, we want to collect the scores given **from authors** to reviewers, thus we specify `r from = "a"`. For the purpose of demonstration, below, we save the output in an object. In practice, we recommend setting `write_csv = TRUE` to save the output as a `.csv` file.
+```{r}
+ascores = peer_score(
+  org = "ghclass-test",
+  roster = roster_test,
+  from = "a",
+  file = "afeedback_blank.Rmd",
+  dblind = dblind,
+  prefix = prefix,
+  write_csv = F
+)
+ascores %>%
+  dplyr::arrange(user_random)
+```
+
+
+# Issues and recommendations
+
+## Student work load and timing
+Peer review is great! It gives students a chance to learn from each other, get meaningful, substantive feedback on their code, and reduces the overhead of grading in introductory data science classes. However, asking students to review each others' work also increases their workload. Thus, instructors should carefully consider
+
+1. The amount of peer-reviewed homework assignments in each course
+2. The number of reviewers per assignment
+3. The timing of deadlines for the assignment and reviews
+
+### Number of homework assignments
+Writing a meaningful review with constructive comments is a learning process and it takes time! Thus, when implementing peer review in a course, instructors should consider reducing either the number or the scope of assignments to give students sufficient time to complete and engage with reviews. 
+
+### Number of reviewers
+On the one hand, more reviewers means more feedback and less weight to outlier reviews for grading, so more is better, right? On the other hand, more reviewers also means more student hours spent on giving feedback and not working on their final projects, learning new skills, or recharging. Plus, how much different will the feedback from each additional reviewer be after two or three reviews? Thus, we recommend to assign between two and three reviewers per assignment to balance the benefits of having multiple reviews and the demand on students' time/diminishing returns.
+
+### Timing
+Instructors should carefully consider the timing of deadlines for a) the assignment, b) the completion of the review, and c) the completion of the author rating of reviewers' feedback. Consider the following example. Your course is scheduled on Mondays and Wednesday, and you prefer to give students time over the weekend to complete assignments.
+
+
+
+
+## API rate limits
+
