@@ -75,28 +75,28 @@ find_file = function(repo, file, verbose = TRUE){
 }
 
 
-file_exists_current = function(repo, file, branch = "master", verbose = TRUE) {
+file_exists_current = function(repo, path, branch = "master", verbose = TRUE) {
   purrr::pmap_lgl(
-    list(repo, file, branch),
-    function(repo, file, branch) {
+    list(repo, path, branch),
+    function(repo, path, branch) {
       if (branch == "master") {
-        (length(find_file(repo, file, verbose)) > 0)
+        (length(find_file(repo, path, verbose)) > 0)
       } else {
         # Only the master branch is indexed for search
-        is.null(repo_get_file(repo, file, branch))
+        is.null(repo_get_file(repo, path, branch))
       }
     }
   )
 }
 
 
-file_exists = function(repo, file, branch = "master", verbose = FALSE){
+file_exists = function(repo, path, branch = "master", verbose = FALSE){
   purrr::pmap_lgl(
-    list(repo, file, branch),
-    function(repo, file, branch) {
-      everexist = check_file_modification(repo = repo, path = file, branch = branch)
+    list(repo, path, branch),
+    function(repo, path, branch) {
+      everexist = check_file_everexist(repo, path, branch)
       if (everexist) {
-        file_exists_current(repo = repo, file = file, branch = branch, verbose = verbose)
+        file_exists_current(repo, path, branch, verbose)
       } else {
         everexist
       }
@@ -169,4 +169,10 @@ check_file_modification = function(repo, path, branch = "master"){
   arg_is_chr_scalar(repo, branch, path)
   commits = get_committer(repo, sha = branch, path = path)
   nrow(commits) > 1
+}
+
+check_file_everexist = function(repo, path, branch = "master"){
+  arg_is_chr_scalar(repo, branch, path)
+  commits = get_committer(repo, sha = branch, path = path)
+  nrow(commits) > 0
 }

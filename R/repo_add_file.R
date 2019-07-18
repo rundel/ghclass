@@ -56,7 +56,7 @@ repo_add_file = function(repo, file, message = NULL, folder = NULL, branch = "ma
           if(!is.null(folder))
             gh_path = sub(fs::path_file(file), paste(folder, fs::path_file(file), sep = "/"), gh_path)
 
-          if (!file_exists(repo = repo, file = gh_path, branch = branch, verbose = F) | overwrite) {
+          if (!file_exists(repo, gh_path, branch, verbose = F) | overwrite) {
 
             repo_put_file(
               repo = repo,
@@ -68,9 +68,13 @@ repo_add_file = function(repo, file, message = NULL, folder = NULL, branch = "ma
               )
 
           } else {
+
             usethis::ui_oops( paste(
-              'Failed to add file {usethis::ui_value(gh_path)} to repo {usethis::ui_value(repo)}, file already exists.',
-              'If you want to force add this file, re-run the command with {usethis::ui_code("overwrite = TRUE")}.'
+              'Failed to add file {usethis::ui_value(gh_path)} to repo {usethis::ui_value(repo)}:  already exists.\n',
+              if (check_file_modification(repo, gh_path, branch)) {
+                'File has been modified after initial commit.\n'
+              },
+              'If you want to force-add this file, re-run the command with {usethis::ui_code("overwrite = TRUE")}.'
             ) )
           }
         })
