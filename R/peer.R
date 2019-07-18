@@ -179,14 +179,12 @@ peer_assign = function(org,
                  # First, get file content(s)
                  content = purrr::map(file,
                                       function(file) {
-                                        check = file_exists(repo = repo1, file = file)
-                                        if (check) {
-                                          res = purrr::safely(repo_get_file)(repo = repo1,
-                                                                             file = file,
-                                                                             branch = branch)
-                                          if (succeeded(res)) {
-                                            return(res$result)
-                                          }
+                                        res = purrr::safely(repo_get_file)(repo = repo1,
+                                                                           file = file,
+                                                                           branch = branch)
+
+                                        if (succeeded(res)) {
+                                          res$result
                                         }
                                       })
 
@@ -689,13 +687,11 @@ peer_return = function(org,
 
                                 content = purrr::map(ghpath_r,
                                                      function(ghpath_r) {
-                                                       if (file_exists(repo = repo_r, file = ghpath_r)) {
-                                                         res = purrr::safely(repo_get_file)(repo = repo_r,
-                                                                                            file = ghpath_r,
-                                                                                            branch = branch)
-                                                         if (succeeded(res)) {
-                                                           res$result
-                                                         }
+                                                       res = purrr::safely(repo_get_file)(repo = repo_r,
+                                                                                          file = ghpath_r,
+                                                                                          branch = branch)
+                                                       if (succeeded(res)) {
+                                                         res$result
                                                        }
                                                      })
 
