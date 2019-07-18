@@ -339,6 +339,9 @@ peer_create_aform = function(category = c("helpfulness", "accuracy", "fairness")
                              output = "github_document",
                              write_rmd = TRUE,
                              overwrite = FALSE) {
+  arg_is_chr(category)
+  stopifnot(all(category %in% c("helpfulness", "accuracy", "fairness")))
+
   stopifnot(!is.null(file))
   if (grepl("\\s+", file)) {
     file = stringr::str_replace_all(file, "\\s", "_")
