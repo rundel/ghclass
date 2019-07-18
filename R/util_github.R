@@ -75,7 +75,7 @@ find_file = function(repo, file, verbose = TRUE){
 }
 
 
-file_exists_ever = function(repo, file, branch = "master", verbose = TRUE) {
+file_exists_current = function(repo, file, branch = "master", verbose = TRUE) {
   purrr::pmap_lgl(
     list(repo, file, branch),
     function(repo, file, branch) {
@@ -96,7 +96,7 @@ file_exists = function(repo, file, branch = "master", verbose = FALSE){
     function(repo, file, branch) {
       everexist = check_file_modification(repo = repo, path = file, branch = branch)
       if (everexist) {
-        file_exists(repo = repo, file = file, branch = branch, verbose = verbose)
+        file_exists_current(repo = repo, file = file, branch = branch, verbose = verbose)
       } else {
         everexist
       }
