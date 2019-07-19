@@ -1,3 +1,13 @@
+github_api_repo_get_tree = function(repo, sha = "master") {
+  gh::gh(
+    "GET /repos/:owner/:repo/git/trees/:sha?recursive=1",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    sha = sha,
+    .token = github_get_token()
+  )
+}
+
 github_api_org_accept_invite = function(org, token) {
   arg_is_chr_scalar(org, token)
 
