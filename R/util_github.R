@@ -1,3 +1,31 @@
+github_api_repo_get_tree = function(repo, sha = "master") {
+  gh::gh(
+    "GET /repos/:owner/:repo/git/trees/:sha?recursive=1",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    sha = sha,
+    .token = github_get_token()
+  )
+}
+
+repo_files = function(repo, branch = "master") {
+  purrr::map2_dfr(
+    repo, branch,
+    function(repo, branch) {
+      print("here")
+      res = purrr::safely(github_api_repo_get_tree)(repo, branch)
+
+      if (failed(res)) {
+        r = usethis::ui_value(format_repo(repo, branch))
+        usethis::ui_oops("Failed to retrieve files for repo {r}")
+        return(NULL)
+      }
+
+      purrr::map_dfr(result(res)[["tree"]], ~c(repo = repo, .))
+    }
+  )
+}
+
 github_api_org_accept_invite = function(org, token) {
   arg_is_chr_scalar(org, token)
 

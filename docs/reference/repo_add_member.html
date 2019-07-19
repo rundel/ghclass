@@ -139,7 +139,11 @@ Note that permissions will overwrite existing access privileges.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>repo_add_user</span>(<span class='st'>"ghclass-test/hw1-user01"</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"user01"</span>, <span class='st'>"user02"</span>))
+<span class='fu'>repo_add_user</span>(<span class='st'>"ghclass-test/hw1-team1"</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"user01"</span>, <span class='st'>"user02"</span>))
+
+<span class='co'>## Adding users to their individual repositories</span>
+<span class='no'>user</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"user01"</span>, <span class='st'>"user02"</span>)
+<span class='fu'>repo_add_user</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste0</a></span>(<span class='st'>"ghclass-test/hw2-"</span>, <span class='no'>user</span>), <span class='no'>user</span>)
 <span class='co'># }</span><div class='input'>
 </div></pre>
   </div>
