@@ -132,6 +132,7 @@ get_committer = function(repo, sha=NULL, path=NULL, author=NULL, since=NULL, unt
       if (empty_result(commits)) {
         tibble::tibble(
           repo = character(),
+          path = character(),
           sha  = character(),
           user = character(),
           date = character(),
@@ -140,6 +141,7 @@ get_committer = function(repo, sha=NULL, path=NULL, author=NULL, since=NULL, unt
       } else {
         tibble::tibble(
           repo = repo,
+          path = ifelse(is.null(path), character(), path),
           sha  = purrr::map_chr(commits, "sha"),
           user = purrr::map_chr(commits, c("author","login")),
           date = purrr::map_chr(commits, c("commit","author","date")),

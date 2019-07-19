@@ -116,15 +116,22 @@ peer_check_roster = function(roster) {
 
 
 
-peer_get_reviewer = function(author, roster, anonym = FALSE) {
+peer_get_reviewer = function(author,
+                             roster,
+                             out = c("reviewer",
+                                     "reviewer_random",
+                                     "reviewer_no")) {
   m = seq_len(length(names(roster)[grepl("^r[0-9]+$", names(roster))]))
   reviewer_random = as.character(roster[roster$user == author, paste0("r", m)])
   reviewer = roster$user[purrr::map_int(reviewer_random, ~ which(roster$user_random == .x))]
+  reviewer_no = names(roster)[purrr::map_int(reviewer_random, ~ which(roster[roster$user == author, ] == .x))]
 
-  if (!anonym) {
+  if (out == "reviewer") {
     reviewer
-  } else {
+  } else if (out == "reviewer_random") {
     reviewer_random
+  } else if (out == "reviewer_no") {
+    reviewer_no
   }
 }
 
@@ -189,7 +196,7 @@ peer_assign = function(org,
                                       })
 
                  # Grab reviewers
-                 reviewer = peer_get_reviewer(author, rdf, anonym = FALSE)
+                 reviewer = peer_get_reviewer(author, rdf, "reviewer")
 
                  # Create folder paths (from perspective of reviewers)
                  path = as.list(glue::glue("{author_random}/{file}"))
@@ -473,8 +480,8 @@ peer_add_file = function(org,
 
   purrr::walk2(author, author_random,
                function(author, author_random) {
-                 reviewer = peer_get_reviewer(author, rdf, anonym = FALSE)
-                 reviewer_no = paste0("r", seq_len(length(reviewer)))
+                 reviewer = peer_get_reviewer(author, rdf, "reviewer")
+                 reviewer_no = peer_get_reviewer(author, rdf, "reviewer_no")
 
                  purrr::walk2(reviewer, reviewer_no,
                               function(reviewer, reviewer_no) {
@@ -565,9 +572,9 @@ peer_score = function(org,
   out = purrr::map2_dfr(author, author_random,
                         function(author, author_random) {
                           # Grab reviewers
-                          reviewer = peer_get_reviewer(author, rdf, anonym = FALSE)
-                          reviewer_random = peer_get_reviewer(author, rdf, anonym = TRUE)
-                          reviewer_no = paste0("r", seq_len(length(reviewer)))
+                          reviewer = peer_get_reviewer(author, rdf, "reviewer")
+                          reviewer_random = peer_get_reviewer(author, rdf, "reviewer_random")
+                          reviewer_no = peer_get_reviewer(author, rdf, "reviewer_no")
 
                           purrr::pmap_dfr(list(reviewer, reviewer_no),
                                           function(reviewer,
@@ -582,7 +589,7 @@ peer_score = function(org,
                                               repo = glue::glue("{org}/{prefix}{author}{suffix}")
                                               tag = "c"
                                               user = reviewer
-                                              r_no = paste0("r", which(peer_get_reviewer(user, rdf) == author))
+                                              r_no = paste0("r", which(peer_get_reviewer(user, rdf, "reviewer") == author))
                                               if (dblind) {
                                                 ghpath = glue::glue("{reviewer_no}/{file}")
                                               } else {
@@ -673,8 +680,8 @@ peer_return = function(org,
                  ghpath_r = glue::glue("{author_random}/{file}")
 
                  # reviewer-specific elements
-                 reviewer = peer_get_reviewer(author, rdf, anonym = FALSE)
-                 reviewer_no = paste0("r", seq_len(length(reviewer)))
+                 reviewer = peer_get_reviewer(author, rdf, "reviewer")
+                 reviewer_no = peer_get_reviewer(author, rdf, "reviewer_no")
                  repo_r = glue::glue("{org}/{prefix}{reviewer}{suffix}")
 
                  purrr::pwalk(list(reviewer, reviewer_no, repo_r),
@@ -718,3 +725,120 @@ peer_return = function(org,
                               })
                })
 }
+
+
+peer_roster_expand = function(org,
+                              roster,
+                              prefix = "",
+                              suffix = "") {
+  rdf = peer_read_roster(roster)$rdf
+  peer_check_roster(rdf)
+
+  author = as.list(as.character(rdf$user))
+  author_random = as.list(as.character(rdf$user_random))
+
+  out = suppressWarnings(purrr::map2_dfr(author, author_random,
+                                         function(author, author_random) {
+                                           tibble::tibble(
+                                             author = author,
+                                             author_random = author_random,
+                                             repo_a = glue::glue("{org}/{prefix}{author}{suffix}"),
+                                             reviewer = peer_get_reviewer(author, rdf, "reviewer"),
+                                             reviewer_random = peer_get_reviewer(author, rdf, "reviewer_random"),
+                                             reviewer_no = peer_get_reviewer(author, rdf, "reviewer_no"),
+                                             repo_r = glue::glue("{org}/{prefix}{reviewer}{suffix}"),
+                                             reviewer_no_scorea = names(rdf)[purrr::map_int(reviewer_random, ~
+                                                                                              which(rdf[rdf$user_random == .x, ] == author_random))]
+                                           )
+                                         }))
+
+  out
+
+}
+
+#' `peer_put_original` places original file in reviewer repository (to create a difference). This function should be called before placing reviewer files into authors' repositories, in order for reviewers' changes to show up as differences.
+peer_put_original = function(org,
+                             roster,
+                             file,
+                             prefix = "",
+                             suffix = "",
+                             dblind = FALSE) {
+  rdf = peer_roster_expand(org, roster, prefix, suffix)
+
+  file_og = purrr::map(unique(rdf$repo_a),
+                       function(.x) {
+                         res = purrr::safely(repo_get_file)(.x, file)
+                         if (succeeded(res)) {
+                           res$result
+                         }
+                       })
+
+  if (!dblind) {
+    ghpath_a = glue::glue("{rdf$reviewer}/{file}")
+  } else {
+    ghpath_a = glue::glue("{rdf$reviewer_no}/{file}")
+  }
+
+  purrr::walk2(rdf$repo_a, ghpath_a,
+               function(.x, .y) {
+                 repo_put_file(.x,
+                               .y,
+                               content = file_og[[which(unique(rdf$repo_a) == .x)]])
+               })
+}
+
+peer_put_original(org = "ghclass-test",
+                  roster = roster_test,
+                  prefix = "hw2-",
+                  suffix = "",
+                  dblind = T,
+                  file = "hw2_task.Rmd")
+# Should check whether file exists
+# peer_return(org = "ghclass-test",
+#             roster = roster_test,
+#             prefix = "hw2-",
+#             suffix = "",
+#             dblind = T,
+#             file = "hw2_task.Rmd",
+#             overwrite = T)
+#
+# org = "ghclass-test"
+# roster = roster_test
+# prefix = "hw2-"
+# suffix = ""
+# dblind = T
+# file = "hw2_task.Rmd"
+#
+# peer_create_issue = function(org,
+#                              roster,
+#                              file,
+#                              prefix = "",
+#                              suffix = "",
+#                              dblind = FALSE) {
+#   # First, get latest commits on repo
+#   rdf = peer_roster_expand(org, roster, prefix, suffix)
+#
+#   if (!dblind) {
+#     ghpath_a = glue::glue("{rdf$reviewer}/{file}")
+#   } else {
+#     ghpath_a = glue::glue("{rdf$reviewer_no}/{file}")
+#   }
+#
+#   last_commits = purrr::map2_dfr(rdf$repo_a, ghpath_a,
+#                                  function(.x, .y) {
+#                                    sub = get_committer(repo = .x, path = .y)
+#                                    sub = sub[order(sub$date, decreasing = T),]
+#                                    sub = sub[1, ]
+#                                  })
+#
+#   test = last_commit$sha[1]
+#
+#
+#
+#
+#
+#
+#
+#
+#
+# }
