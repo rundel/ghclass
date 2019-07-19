@@ -39,7 +39,7 @@ repo_add_file = function(repo, file, message = NULL, folder = NULL, branch = "ma
 
   file_status = fs::file_exists(file)
   if (any(!file_status))
-    usethis::ui_stop("Unable to locate the following file(s): {usethis::ui_value(file)}")
+    usethis::ui_stop("Unable to locate the following file(s): {usethis::ui_value(file[!file_status])}")
 
   if (is.character(file) & (length(file) > 1))
     file = list(file)
@@ -56,7 +56,7 @@ repo_add_file = function(repo, file, message = NULL, folder = NULL, branch = "ma
           if(!is.null(folder))
             gh_path = sub(fs::path_file(file), paste(folder, fs::path_file(file), sep = "/"), gh_path)
 
-          if (!file_exists(repo, gh_path, branch, verbose = F) | overwrite) {
+          if (!file_exists(repo, gh_path, branch) | overwrite) {
 
             repo_put_file(
               repo = repo,
