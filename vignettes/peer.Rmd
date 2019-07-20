@@ -48,7 +48,7 @@ library(ghclass)
 devtools::load_all()
 # 1) Set up vector of student user names, HW identifier prefix, and organization name
 user = c("thereseanders", "thereanders", "tnaanders")
-prefix = "hw-new3-"
+prefix = "homework2-"
 org = "ghclass-test"
 dblind = TRUE
 
@@ -77,8 +77,8 @@ The function automatically randomizes the order in which students are assigned t
 The roster file should be read as follows. 
 
 - `user` lists students' GitHub user names
-- `user_random` randomizes the order of user names and gives each user an anonymous ID, in the pattern `a*`.
-- The `r*` column(s) specify the randomized user ID of the student(s) that should review the user's assignment.
+- `user_random` randomizes the order of user names and gives each user an anonymous ID, in the pattern `aut*`.
+- The `rev*` column(s) specify the randomized user ID of the student(s) that should review the user's assignment.
 
 We recommend for instructors to create a new roster file (with a new random seed) for each assignment to prevent the same pairings of students reviewing each others work over and over throughout the course.
 ```{r}
@@ -109,7 +109,7 @@ Instructors can use the `peer_create_rform()` function to create a blank feedbac
 By default, the files contain an `author` field in the YAML header to prompt reviewers to identify themselves. Keeping reviewers non-anonymous (as opposed to authors) is likely to discourage overly harsh or rude reviews. If reviewers should instead stay anonymous as well, setting `author = FALSE` will remove this field.
 ```{r}
 peer_create_rform(2,
-                  file = "/Users/thereseanders/Documents/RStudio/introggplot2/hw2/rfeedback_blank.Rmd")
+                  file = "/Users/thereseanders/Documents/RStudio/introggplot2/hw2/rev_to_aut_feedback_blank.Rmd")
 ```
 
 ### Distributing feedback forms to reviewers
@@ -120,7 +120,7 @@ To specify that feedback forms should be placed in reviewers repositories, the `
 peer_add_file(
         org = "ghclass-test",
         roster = roster_test,
-        to = "r",
+        to = "rev",
         file = "/Users/thereseanders/Documents/RStudio/introggplot2/hw2/rfeedback_blank.Rmd",
         prefix = prefix
 )
@@ -137,7 +137,7 @@ peer_add_file(
 rscores = peer_score(
   org = "ghclass-test",
   roster = roster_test,
-  from = "r",
+  from = "rev",
   file = "rfeedback_blank.Rmd",
   dblind = dblind,
   prefix = prefix,
@@ -151,6 +151,17 @@ rscores
 If desired, the scores that reviewers entered into the YAML header of the reviewer feedback forms can be removed before distributing reviews back to the authors. If this is the case, authors can engage with the substantive feedback on their assignments, but do not see the scores given by the reviewers for each question.
 
 ### Move reviewer feedback to author repositories
+First, to later highlight the changes reviewers suggested for authors' assignments, we place the original assignment file into reviewer-specific folders on authors' repositories. 
+```{r}
+peer_put_original(org = org,
+                  roster = roster_test,
+                  file = "hw2_task.Rmd",
+                  prefix = prefix,
+                  dblind = dblind)
+```
+
+
+
 Only select files will be moved and saved in a new folder in authors' repositories. 
 ```{r}
 peer_return(org = org,
@@ -172,7 +183,8 @@ The `peer_create_aform()` can be used to create a author blank RMarkdown form us
 
 The rating categories can be adjusted via the `category` parameter.
 ```{r}
-peer_create_aform(file = "/Users/thereseanders/Documents/RStudio/introggplot2/hw2/afeedback_blank.Rmd", category = c("accuracy", "fairness"))
+peer_create_aform(file = "/Users/thereseanders/Documents/RStudio/introggplot2/hw2/aut_to_rev_feedback_blank.Rmd", 
+                  category = c("accuracy", "fairness"))
 ```
 
 ### [Recommended] Distribute author rating forms 
@@ -180,7 +192,7 @@ peer_create_aform(file = "/Users/thereseanders/Documents/RStudio/introggplot2/hw
 peer_add_file(
         org = "ghclass-test",
         roster = roster_test,
-        to = "a",
+        to = "aut",
         file = "/Users/thereseanders/Documents/RStudio/introggplot2/hw2/afeedback_blank.Rmd",
         prefix = prefix,
         dblind = dblind,

@@ -1,3 +1,31 @@
+github_api_repo_get_tree = function(repo, sha = "master") {
+  gh::gh(
+    "GET /repos/:owner/:repo/git/trees/:sha?recursive=1",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    sha = sha,
+    .token = github_get_token()
+  )
+}
+
+repo_files = function(repo, branch = "master") {
+  purrr::map2_dfr(
+    repo, branch,
+    function(repo, branch) {
+      print("here")
+      res = purrr::safely(github_api_repo_get_tree)(repo, branch)
+
+      if (failed(res)) {
+        r = usethis::ui_value(format_repo(repo, branch))
+        usethis::ui_oops("Failed to retrieve files for repo {r}")
+        return(NULL)
+      }
+
+      purrr::map_dfr(result(res)[["tree"]], ~c(repo = repo, .))
+    }
+  )
+}
+
 github_api_org_accept_invite = function(org, token) {
   arg_is_chr_scalar(org, token)
 
@@ -107,10 +135,11 @@ github_api_get_commits = function(repo, sha=NULL, path=NULL, author=NULL, since=
   do.call(gh::gh, args)
 }
 
-get_committer = function(repo, sha=NULL, path=NULL, author=NULL, since=NULL, until=NULL) {
+
+get_commits = function(repo, sha = NULL, path = NULL, author = NULL, since = NULL, until = NULL) {
 
   arg_is_chr(repo)
-  arg_is_chr_scalar(repo, sha, path, author, since, until, allow_null=TRUE)
+  arg_is_chr_scalar(repo, sha, path, author, since, until, allow_null = TRUE)
 
   purrr::map_dfr(
     repo,
@@ -141,7 +170,7 @@ get_committer = function(repo, sha=NULL, path=NULL, author=NULL, since=NULL, unt
       } else {
         tibble::tibble(
           repo = repo,
-          path = ifelse(is.null(path), character(), path),
+          path = ifelse(!is.null(path), path, character()),
           sha  = purrr::map_chr(commits, "sha"),
           user = purrr::map_chr(commits, c("author","login")),
           date = purrr::map_chr(commits, c("commit","author","date")),
@@ -152,9 +181,8 @@ get_committer = function(repo, sha=NULL, path=NULL, author=NULL, since=NULL, unt
   )
 }
 
-
 check_file_modification = function(repo, path, branch = "master"){
   arg_is_chr_scalar(repo, branch, path)
-  commits = get_committer(repo, sha=branch, path=path)
+  commits = get_commits(repo, sha = branch, path = path)
   nrow(commits) > 1
 }
