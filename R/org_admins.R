@@ -27,7 +27,7 @@ org_admins = function(org) {
   res = purrr::safely(github_api_org_admins)(owner = org)
 
   if (failed(res))
-    usethis::ui_stop(glue::glue("Failed to retrieve admuns for org {usethis::ui_value(org)}."))
+    usethis::ui_stop(glue::glue("Failed to retrieve admins for org {usethis::ui_value(org)}."))
   else
     purrr::map_chr(result(res), "login")
 }
