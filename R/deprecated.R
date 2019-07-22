@@ -270,4 +270,8 @@ check_user_exists = function(...) {
   user_exists(...)
 }
 
-
+#' @export
+get_committer = function(...) {
+  .Deprecated("get_commits")
+  get_commits(...)
+}

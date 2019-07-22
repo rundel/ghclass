@@ -12,7 +12,6 @@ repo_files = function(repo, branch = "master") {
   purrr::map2_dfr(
     repo, branch,
     function(repo, branch) {
-      print("here")
       res = purrr::safely(github_api_repo_get_tree)(repo, branch)
 
       if (failed(res)) {
@@ -135,10 +134,11 @@ github_api_get_commits = function(repo, sha=NULL, path=NULL, author=NULL, since=
   do.call(gh::gh, args)
 }
 
-get_committer = function(repo, sha=NULL, path=NULL, author=NULL, since=NULL, until=NULL) {
+
+get_commits = function(repo, sha = NULL, path = NULL, author = NULL, since = NULL, until = NULL) {
 
   arg_is_chr(repo)
-  arg_is_chr_scalar(repo, sha, path, author, since, until, allow_null=TRUE)
+  arg_is_chr_scalar(repo, sha, path, author, since, until, allow_null = TRUE)
 
   purrr::map_dfr(
     repo,
@@ -160,6 +160,7 @@ get_committer = function(repo, sha=NULL, path=NULL, author=NULL, since=NULL, unt
       if (empty_result(commits)) {
         tibble::tibble(
           repo = character(),
+          path = character(),
           sha  = character(),
           user = character(),
           date = character(),
@@ -168,6 +169,7 @@ get_committer = function(repo, sha=NULL, path=NULL, author=NULL, since=NULL, unt
       } else {
         tibble::tibble(
           repo = repo,
+          path = ifelse(!is.null(path), path, character()),
           sha  = purrr::map_chr(commits, "sha"),
           user = purrr::map_chr(commits, c("author","login")),
           date = purrr::map_chr(commits, c("commit","author","date")),
@@ -178,9 +180,8 @@ get_committer = function(repo, sha=NULL, path=NULL, author=NULL, since=NULL, unt
   )
 }
 
-
 check_file_modification = function(repo, path, branch = "master"){
   arg_is_chr_scalar(repo, branch, path)
-  commits = get_committer(repo, sha=branch, path=path)
+  commits = get_commits(repo, sha = branch, path = path)
   nrow(commits) > 1
 }
