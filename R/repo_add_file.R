@@ -31,10 +31,10 @@ read_bin_file = function(x) {
 #' @export
 #'
 repo_add_file = function(repo, file, message = NULL, folder = NULL, branch = "master",
-                    preserve_path = FALSE, overwrite = FALSE) {
+                         preserve_path = FALSE, overwrite = FALSE) {
 
   arg_is_chr(repo, file, branch)
-  arg_is_chr(folder, message, allow_null = TRUE)
+  arg_is_chr_scalar(folder, message, allow_null = TRUE)
   arg_is_lgl_scalar(preserve_path, overwrite)
 
   file_status = fs::file_exists(file)
@@ -45,19 +45,20 @@ repo_add_file = function(repo, file, message = NULL, folder = NULL, branch = "ma
     file = list(file)
 
   purrr::pwalk(
-    list(repo, file),
-    function(repo, file){
+    list(repo, file, branch),
+    function(repo, file, branch) {
       purrr::walk(
         file,
         function(file){
           gh_path = file
+
           if (!preserve_path)
             gh_path = fs::path_file(file)
+
           if(!is.null(folder))
-            gh_path = sub(fs::path_file(file), paste(folder, fs::path_file(file), sep = "/"), gh_path)
+            gh_path = fs::path(folder, gh_path)
 
           if (!file_exists(repo, gh_path, branch) | overwrite) {
-
             repo_put_file(
               repo = repo,
               path = gh_path,
@@ -65,8 +66,7 @@ repo_add_file = function(repo, file, message = NULL, folder = NULL, branch = "ma
               message = message,
               branch = branch,
               verbose = TRUE
-              )
-
+            )
           } else {
 
             usethis::ui_oops( paste(
