@@ -35,6 +35,12 @@ team_delete = function(org, team, prompt = TRUE) {
   purrr::pwalk(
     team,
     function(team, id) {
+
+      if (is.na(id)) {
+        usethis::ui_oops("Team {usethis::ui_value(team)} does not exist in org {usethis::ui_value(org)}.")
+        return()
+      }
+
       res = purrr::safely(github_api_team_delete)(id)
 
       status_msg(
