@@ -23,7 +23,7 @@ github_api_label_create = function(repo, name, color, description) {
   )
 }
 
-peer_create_label = function(repo, verbose = FALSE) {
+peer_label = function(repo, verbose = FALSE) {
 
   arg_is_chr(repo)
 
@@ -48,4 +48,14 @@ peer_create_label = function(repo, verbose = FALSE) {
                    )
                  }
                })
+}
+
+
+create_lastcommiturl = function(repo, path) {
+  purrr::map2_chr(repo, path,
+                  function(.x, .y) {
+                    sub = get_commits(repo = .x, path = .y)
+                    sub = sub[order(sub$date, decreasing = TRUE),]
+                    glue::glue("https://github.com/{.x}/commit/{sub[1, 'sha']}")
+                  })
 }

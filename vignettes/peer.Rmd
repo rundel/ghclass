@@ -150,29 +150,6 @@ rscores
 ### [Optional] Strip individual scores given by reviewers
 If desired, the scores that reviewers entered into the YAML header of the reviewer feedback forms can be removed before distributing reviews back to the authors. If this is the case, authors can engage with the substantive feedback on their assignments, but do not see the scores given by the reviewers for each question.
 
-### Move reviewer feedback to author repositories
-First, to later highlight the changes reviewers suggested for authors' assignments, we place the original assignment file into reviewer-specific folders on authors' repositories. 
-```{r}
-peer_put_original(org = org,
-                  roster = roster_test,
-                  file = "hw2_task.Rmd",
-                  prefix = prefix,
-                  dblind = dblind)
-```
-
-
-
-Only select files will be moved and saved in a new folder in authors' repositories. 
-```{r}
-peer_return(org = org,
-            roster = roster_test,
-            file = c("hw2_task.Rmd", "rfeedback_blank.Rmd"),
-            prefix = prefix,
-            dblind = dblind)
-```
-
-
-
 
 ### [Recommended] Create rating form for authors
 The `peer_create_aform()` can be used to create a author blank RMarkdown form used to collect authors' feedback on the reviews. By default, three rating categories are included in the file: 
@@ -199,6 +176,35 @@ peer_add_file(
         overwrite = T
 )
 ```
+
+
+### Move reviewer feedback to author repositories
+First, to later highlight the changes reviewers suggested for authors' assignments, we place the original assignment file into reviewer-specific folders on authors' repositories. 
+```{r}
+peer_put_original(org = org,
+                  roster = roster_test,
+                  file = "hw2_task.Rmd",
+                  prefix = prefix,
+                  dblind = dblind)
+```
+
+
+
+Only select files will be moved and saved in a new folder in authors' repositories. 
+```{r}
+peer_return(org = org,
+            roster = roster_test,
+            path = c("hw2_task.Rmd", "rfeedback_blank.Rmd"),
+            prefix = prefix,
+            dblind = dblind)
+```
+
+
+## New return version
+
+Students will receive an email to the address registered for their GitHub user name alerting them that a new issue has been created in their repository.
+
+
 
 
 ## After author rating of reviews is completed
