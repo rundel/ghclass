@@ -24,7 +24,6 @@ github_api_label_create = function(repo, name, color, description) {
 }
 
 peer_label = function(repo, verbose = FALSE) {
-
   arg_is_chr(repo)
 
   name = c(":pencil: Give feedback", ":mag: View feedback")
@@ -52,10 +51,35 @@ peer_label = function(repo, verbose = FALSE) {
 
 
 create_lastcommiturl = function(repo, path) {
-  purrr::map2_chr(repo, path,
-                  function(.x, .y) {
-                    sub = get_commits(repo = .x, path = .y)
-                    sub = sub[order(sub$date, decreasing = TRUE),]
-                    glue::glue("https://github.com/{.x}/commit/{sub[1, 'sha']}")
-                  })
+  out = purrr::map2_dfc(repo, path,
+                        function(.x, .y) {
+                          sub = get_commits(repo = .x, path = .y)
+                          sub = sub[order(sub$date, decreasing = TRUE), ]
+                          paste0("https://github.com/", .x, "/commit/", sub[1, 'sha'])
+                        })
+  setNames(out, paste0("diff", seq_len(length(out))))
+}
+
+expand_diff = function(out, path, .x) {
+  diff_txt = purrr::map_chr(seq_len(length(path)),
+                            function(.y) {
+                              glue::glue(
+                                "- [ ] Review [changes to your assignment]({out[out$reviewer == .x, paste0('diff', .y)]})."
+                              )
+                            })
+  paste(diff_txt, collapse = "\n")
+}
+
+check_rfeed = function(out, .x) {
+  test = out[out$reviewer == .x, 'rfeed']
+  if (!is.na(test)) {
+    glue::glue("- [ ] Read [feedback]({test}).")
+  }
+}
+
+check_afeed = function(out, .x) {
+  test = out[out$reviewer == .x, 'afeed']
+  if (!is.na(test)) {
+    glue::glue("- [ ] Fill out [review form]({test}) on the feedback.")
+  }
 }
