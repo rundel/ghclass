@@ -96,7 +96,7 @@ To ensure that the process of moving files from authors' to reviewers' repositor
 ```{r}
 peer_assign(org = org,
             roster = roster_test,
-            file = c("hw2_task.Rmd", "iris_data.csv"),
+            path = c("hw2_task.Rmd", "iris_data.csv"),
             prefix = prefix
             )
 ```

@@ -12,7 +12,7 @@ repo_files = function(repo, branch = "master") {
   purrr::map2_dfr(
     repo, branch,
     function(repo, branch) {
-      print("here")
+
       res = purrr::safely(github_api_repo_get_tree)(repo, branch)
 
       if (failed(res)) {
