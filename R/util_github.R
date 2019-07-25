@@ -103,20 +103,13 @@ find_file = function(repo, file, verbose = TRUE){
 }
 
 
-file_exists = function(repo, file, branch = "master", verbose = TRUE) {
-  purrr::pmap_lgl(
-    list(repo, file, branch),
-    function(repo, file, branch) {
-      if (branch == "master") {
-        (length(find_file(repo, file, verbose)) > 0)
-      } else {
-        # Only the master branch is indexed for search
-        is.null(repo_get_file(repo, file, branch))
-      }
-    }
-  )
-}
+file_exists = function(repo, path, branch = "master"){
 
+  files = repo_files(repo, branch)
+
+  purrr::map_lgl(path, ~.x %in% files[["path"]])
+
+}
 
 github_api_get_commits = function(repo, sha=NULL, path=NULL, author=NULL, since=NULL, until=NULL) {
   args = list(

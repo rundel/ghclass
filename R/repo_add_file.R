@@ -15,7 +15,7 @@ read_bin_file = function(x) {
 #' @param repo Character. Address of repository in "owner/name" format.
 #' @param file Character. Local file path(s) of file or files to be added.
 #' @param message Character. Commit message. If not provided, a custom character string will be created, in the form of "Added file(s): filename(s)". If this custom message character length exceeds 50, it will be shortened to "Added file(s)".
-#' @param folder Character. Name of folder on repository to save the file(s) to. If the folder does not exist in the repository, it will be created.
+#' @param repo_folder Character. Name of folder on repository to save the file(s) to. If the folder does not exist on the repository, it will be created.
 #' @param branch Character. Name of branch to use, defaults to "master".
 #' @param preserve_path Logical. Should the local relative path be preserved.
 #' @param overwrite Logical. Should existing file or files with same name be overwritten, defaults to FALSE.
@@ -30,11 +30,11 @@ read_bin_file = function(x) {
 #'
 #' @export
 #'
-repo_add_file = function(repo, file, message = NULL, folder = NULL, branch = "master",
-                    preserve_path = FALSE, overwrite = FALSE) {
+repo_add_file = function(repo, file, message = NULL, repo_folder = NULL, branch = "master",
+                         preserve_path = FALSE, overwrite = FALSE) {
 
   arg_is_chr(repo, file, branch)
-  arg_is_chr(folder, message, allow_null = TRUE)
+  arg_is_chr_scalar(repo_folder, message, allow_null = TRUE)
   arg_is_lgl_scalar(preserve_path, overwrite)
 
   file_status = fs::file_exists(file)
@@ -45,12 +45,13 @@ repo_add_file = function(repo, file, message = NULL, folder = NULL, branch = "ma
     file = list(file)
 
   purrr::pwalk(
-    list(repo, file),
-    function(repo, file){
+    list(repo, file, branch),
+    function(repo, file, branch) {
       purrr::walk(
         file,
         function(file){
           gh_path = file
+
           if (!preserve_path)
             gh_path = fs::path_file(file)
           if(!is.null(folder))
@@ -58,6 +59,10 @@ repo_add_file = function(repo, file, message = NULL, folder = NULL, branch = "ma
 
           if (!file_exists(repo, gh_path, branch) | overwrite) {
 
+          if(!is.null(repo_folder))
+            gh_path = fs::path(repo_folder, gh_path)
+
+          if (!file_exists(repo, gh_path, branch) | overwrite) {
             repo_put_file(
               repo = repo,
               path = gh_path,
