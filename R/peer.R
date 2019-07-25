@@ -742,6 +742,7 @@ repo_mirror_file = function(source_repo,
                             branch = "master",
                             overwrite = FALSE,
                             verbose = TRUE) {
+
   arg_is_chr(path)
   arg_is_chr_scalar(source_repo, target_repo)
   arg_is_chr_scalar(source_folder, target_folder, message, allow_null = TRUE)
@@ -884,9 +885,7 @@ peer_return = function(org,
     afeedback = afeedback,
     dblind = dblind
   )
-
 }
-
 
 #' @param rfeedback Character. File name of reviewer feedback form.
 #' @param afeedback Character. File name of author feedback form.
