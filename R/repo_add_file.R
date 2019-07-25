@@ -54,10 +54,6 @@ repo_add_file = function(repo, file, message = NULL, repo_folder = NULL, branch 
 
           if (!preserve_path)
             gh_path = fs::path_file(file)
-          if(!is.null(folder))
-            gh_path = sub(fs::path_file(file), paste(folder, fs::path_file(file), sep = "/"), gh_path)
-
-          if (!file_exists(repo, gh_path, branch) | overwrite) {
 
           if(!is.null(repo_folder))
             gh_path = fs::path(repo_folder, gh_path)
@@ -70,8 +66,7 @@ repo_add_file = function(repo, file, message = NULL, repo_folder = NULL, branch 
               message = message,
               branch = branch,
               verbose = TRUE
-              )
-
+            )
           } else {
 
             usethis::ui_oops( paste(
