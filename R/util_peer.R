@@ -23,12 +23,12 @@ github_api_label_create = function(repo, name, color, description) {
   )
 }
 
-peer_label = function(repo, verbose = FALSE) {
+peer_create_label = function(repo, verbose = FALSE) {
   arg_is_chr(repo)
 
-  name = c(":pencil: Give feedback", ":mag: View feedback")
+  name = c(":pencil: Complete review", ":mag: Inspect review")
   color = c("ff004d", "ffb400")
-  desc = c("Please provide feedback", "Please view and rate feedback")
+  desc = c("Please complete review", "Please inspect and rate review")
 
   purrr::pwalk(list(name, color, desc),
                function(name, color, desc) {
@@ -50,6 +50,23 @@ peer_label = function(repo, verbose = FALSE) {
 }
 
 
+peer_apply_label = function(org, filter = NULL, exclude = FALSE) {
+
+  arg_is_chr_scalar(org)
+  arg_is_chr_scalar(filter, allow_null = TRUE)
+  arg_is_lgl(exclude)
+
+  repos = org_repos(org = org,
+                    filter = filter,
+                    exclude = exclude,
+                    full_repo = TRUE)
+
+  usethis::ui_info("This might take a moment...")
+  purrr::walk(repos, ~ peer_create_label(.))
+  usethis::ui_done("Applied peer review labels to all repositories in {usethis::ui_value(org)}.")
+
+}
+
 create_lastcommiturl = function(repo, path) {
   out = purrr::map2_dfc(repo, path,
                         function(.x, .y) {
@@ -60,26 +77,3 @@ create_lastcommiturl = function(repo, path) {
   setNames(out, paste0("diff", seq_len(length(out))))
 }
 
-expand_diff = function(out, path, .x) {
-  diff_txt = purrr::map_chr(seq_len(length(path)),
-                            function(.y) {
-                              glue::glue(
-                                "- [ ] Review [changes to your assignment]({out[out$reviewer == .x, paste0('diff', .y)]})."
-                              )
-                            })
-  paste(diff_txt, collapse = "\n")
-}
-
-check_rfeed = function(out, .x) {
-  test = out[out$reviewer == .x, 'rfeed']
-  if (!is.na(test)) {
-    glue::glue("- [ ] Read [feedback]({test}).")
-  }
-}
-
-check_afeed = function(out, .x) {
-  test = out[out$reviewer == .x, 'afeed']
-  if (!is.na(test)) {
-    glue::glue("- [ ] Fill out [review form]({test}) on the feedback.")
-  }
-}
