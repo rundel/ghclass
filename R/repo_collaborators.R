@@ -1,4 +1,4 @@
-github_api_repo_collaboratorss = function(repo) {
+github_api_repo_collaborators = function(repo) {
   gh::gh(
     "GET /repos/:owner/:repo/collaborators",
     owner = get_repo_owner(repo),
