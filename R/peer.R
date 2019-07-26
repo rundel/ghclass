@@ -1011,3 +1011,125 @@ check_afeed = function(out, .x) {
     glue::glue("- [ ] Fill out [rating form]({test}).")
   }
 }
+
+
+## Trees API
+github_api_branch_get = function(repo, branch = "master") {
+  gh::gh(
+    "GET /repos/:owner/:repo/branches/:branch",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    branch = branch,
+    .token = github_get_token()
+  )
+}
+
+keep_blobs = function(x, path = NULL) {
+  arg_is_chr(path, allow_null = TRUE)
+
+  if (!is.null(path)) {
+    purrr::keep(x, purrr::map(x, "path") %in% path)
+  } else {
+    purrr::keep(x,
+                purrr::map(x, "type") == "blob" &
+                  purrr::map(x, "path") != ".gitignore")
+  }
+}
+
+github_api_get_blob = function(repo, file_sha) {
+  gh::gh(
+    "GET /repos/:owner/:repo/git/blobs/:file_sha",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    file_sha = file_sha
+  )
+}
+
+github_api_post_blob = function(repo, content) {
+  gh::gh(
+    "POST /repos/:owner/:repo/git/blobs",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    content = content[['content']],
+    encoding = content[['encoding']]
+  )
+}
+
+github_api_post_commit = function(repo, tree, message = "Creating new tree") {
+  gh::gh(
+    "POST /repos/:owner/:repo/git/commits",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    message = message,
+    tree = tree
+  )
+}
+
+github_api_post_tree = function(repo, tree) {
+  gh::gh(
+    "POST /repos/:owner/:repo/git/trees",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    tree = tree
+  )
+}
+
+github_api_patch_ref = function(repo, sha, branch = "master", force = TRUE) {
+  gh::gh(
+    "PATCH /repos/:owner/:repo/git/:ref",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    ref = glue::glue("refs/heads/{branch}"),
+    sha = sha,
+    force = force
+  )
+}
+
+repo_move_file = function(org,
+                          source_repo,
+                          target_repo,
+                          path = NULL,
+                          folder = NULL,
+                          branch = "master",
+                          message = "Adding new files") {
+
+  arg_is_chr_scalar(org, branch)
+  arg_is_chr_scalar(folder, message, allow_null = TRUE)
+  arg_is_chr(source_repo, target_repo)
+  arg_is_chr(path, allow_null = TRUE)
+
+  files = repo_files(source_repo, branch)
+
+  if (!is.null(folder)) {
+    tree_sha = files$sha[files$path == folder]
+  } else {
+    res = purrr::safely(github_api_branch_get)(source_repo, branch)
+    status_msg(res,
+               fail = "Failed to retrieve branch {usethis::ui_value(branch)} for repository {usethis::ui_value(source_repo_repo)}.")
+    tree_sha = res$result$commit$commit$tree$sha
+  }
+
+  tree_all = github_api_repo_get_tree(source_repo, sha = tree_sha)
+
+  tree = keep_blobs(tree_all$tree, path)
+
+  tree_content = purrr::map(tree,
+                            function(x) {
+                              content = github_api_get_blob(source_repo, x['sha'])
+                              github_api_post_blob(target_repo, content)
+                              list(
+                                path = x[['path']],
+                                mode = x[['mode']],
+                                type = x[['type']],
+                                sha = x[['sha']]
+                              )
+                            })
+
+  new_tree = github_api_post_tree(target_repo, tree_content)
+
+  # Leaving parent blank
+  new_commit = github_api_post_commit(target_repo, new_tree$sha)
+
+  out = github_api_patch_ref(target_repo, new_commit$sha, branch = branch, force = TRUE)
+
+}
