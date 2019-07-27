@@ -1,4 +1,4 @@
-github_api_issue_create = function(repo, title, body, assignee, label) {
+github_api_issue_create = function(repo, title, body, assignee, labels) {
   gh::gh(
     "POST /repos/:owner/:repo/issues",
     owner = get_repo_owner(repo),
@@ -6,7 +6,7 @@ github_api_issue_create = function(repo, title, body, assignee, label) {
     title = title,
     body = body,
     assignee = assignee,
-    label = label,
+    labels = labels,
     .token = github_get_token()
   )
 }
@@ -50,16 +50,19 @@ peer_create_label = function(repo, verbose = FALSE) {
 }
 
 
-peer_apply_label = function(org, filter = NULL, exclude = FALSE) {
-
+peer_apply_label = function(org,
+                            filter = NULL,
+                            exclude = FALSE) {
   arg_is_chr_scalar(org)
   arg_is_chr_scalar(filter, allow_null = TRUE)
   arg_is_lgl(exclude)
 
-  repos = org_repos(org = org,
-                    filter = filter,
-                    exclude = exclude,
-                    full_repo = TRUE)
+  repos = org_repos(
+    org = org,
+    filter = filter,
+    exclude = exclude,
+    full_repo = TRUE
+  )
 
   usethis::ui_info("This might take a moment...")
   purrr::walk(repos, ~ peer_create_label(.))
@@ -67,13 +70,37 @@ peer_apply_label = function(org, filter = NULL, exclude = FALSE) {
 
 }
 
-create_lastcommiturl = function(repo, path) {
-  out = purrr::map2_dfc(repo, path,
-                        function(.x, .y) {
-                          sub = get_commits(repo = .x, path = .y)
-                          sub = sub[order(sub$date, decreasing = TRUE), ]
-                          paste0("https://github.com/", .x, "/commit/", sub[1, 'sha'])
-                        })
-  setNames(out, paste0("diff", seq_len(length(out))))
+get_lastcommit_sha = function(repo, path = NULL) {
+
+  arg_is_chr_scalar(repo)
+  arg_is_chr(path, allow_null = TRUE)
+
+  if (!is.null(path)) {
+    purrr::map_dfr(path,
+                   function(.x) {
+                     sub = get_commits(repo = repo, path = .x)
+                     sub = sub[order(sub$date, decreasing = TRUE),]
+                     tibble::tibble(
+                       sha = as.character(sub[1, 'sha']),
+                       path = .x
+                     )
+                   })
+  } else {
+    purrr::map_chr(repo,
+                   function(.x) {
+                     sub = get_commits(repo = repo)
+                     sub = sub[order(sub$date, decreasing = TRUE),]
+                     as.character(sub[1, 'sha'])
+                   })
+  }
 }
 
+create_diff_url = function(repo, path) {
+  out = purrr::map2_dfc(repo, path,
+                  function(.x, .y) {
+                    sha = get_lastcommit_sha(.x, .y)
+                    paste0("https://github.com/", .x, "/commit/", sha$sha)
+                  }
+                  )
+  setNames(out, paste0("diff", seq_len(length(out))))
+}

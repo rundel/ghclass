@@ -25,9 +25,9 @@ g = function(j, n) {
 #' @export
 #'
 peer_create_roster = function(m,
-                       user,
-                       seed = 12345,
-                       write_csv = TRUE) {
+                              user,
+                              seed = 12345,
+                              write_csv = TRUE) {
   stopifnot(is.numeric(m))
   stopifnot(is.numeric(seed))
   arg_is_chr(user)
@@ -40,7 +40,7 @@ peer_create_roster = function(m,
   # Randomizing user names to avoid clustering
   user_random = paste0("aut", sample(1:length(user), length(user)))
   df_sort = data.frame(user = user,
-                       user_random = as.character(user_random))[order(as.numeric(sub("[aA-zZ]+", "", user_random))),]
+                       user_random = as.character(user_random))[order(as.numeric(sub("[aA-zZ]+", "", user_random))), ]
 
   res_df = setNames(data.frame(df_sort,
                                do.call(
@@ -48,7 +48,7 @@ peer_create_roster = function(m,
                                )),
                     c("user", "user_random", purrr::map_chr(1:m, ~ paste0("rev", .x))))
 
-  res_df = res_df[order(res_df$user_random),]
+  res_df = res_df[order(res_df$user_random), ]
 
   if (write_csv) {
     fname = glue::glue("roster_seed{seed}.csv")
@@ -125,7 +125,7 @@ peer_get_reviewer = function(author,
   m = seq_len(length(names(roster)[grepl("^rev[0-9]+$", names(roster))]))
   reviewer_random = as.character(roster[roster$user == author, paste0("rev", m)])
   reviewer = roster$user[purrr::map_int(reviewer_random, ~ which(roster$user_random == .x))]
-  reviewer_no = names(roster)[purrr::map_int(reviewer_random, ~ which(roster[roster$user == author, ] == .x))]
+  reviewer_no = names(roster)[purrr::map_int(reviewer_random, ~ which(roster[roster$user == author,] == .x))]
 
   if (out == "reviewer") {
     reviewer
@@ -253,12 +253,12 @@ peer_assign = function(org,
 #' @export
 #'
 peer_create_form_review = function(n,
-                             title = "Reviewer feedback form",
-                             filename = "rfeedback_blank",
-                             output = "github_document",
-                             write_rmd = TRUE,
-                             overwrite = FALSE,
-                             dblind = FALSE) {
+                                   title = "Reviewer feedback form",
+                                   filename = "rfeedback_blank",
+                                   output = "github_document",
+                                   write_rmd = TRUE,
+                                   overwrite = FALSE,
+                                   dblind = FALSE) {
   stopifnot(!is.null(filename))
   if (grepl("\\s+", filename)) {
     filename = stringr::str_replace_all(filename, "\\s", "_")
@@ -340,11 +340,11 @@ peer_create_form_review = function(n,
 #' @export
 #'
 peer_create_form_rating = function(category = c("helpfulness", "accuracy", "fairness"),
-                             title = "Author feedback form",
-                             filename = "afeedback_blank",
-                             output = "github_document",
-                             write_rmd = TRUE,
-                             overwrite = FALSE) {
+                                   title = "Author feedback form",
+                                   filename = "afeedback_blank",
+                                   output = "github_document",
+                                   write_rmd = TRUE,
+                                   overwrite = FALSE) {
   arg_is_chr(category)
   stopifnot(all(category %in% c("helpfulness", "accuracy", "fairness")))
 
@@ -434,13 +434,66 @@ peer_create_form_rating = function(category = c("helpfulness", "accuracy", "fair
   }
 }
 
-#' Add files to repositories based on roster
+
+
+#' Add local files to author-specific folders on reviewers' review repositories
 #'
-#' `peer_add_file()` is the peer review version of `repo_add_file()`. It takes a local file and adds it to author- or reviewer-specific folders in students' repositories based on the peer review roster. The function's main purpose is to distribute feedback forms into the folders containing copies of authors' or reviewers' files.
+#' `peer_add_file_rev()` takes a local file and adds it to author-specific folders on reviewers' repositories. The function's main purpose is to distribute review forms into the folders containing copies of authors' files.
 #'
 #' @param org Character. Name of the GitHub organization.
 #' @param roster Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column `user` with GitHub user names of authors, a column `user_random` with randomized tokens for user names, and one or more `rev*` columns that specify review assignments as values of the vector `user_random`. See `peer_create_form_review`.
-#' @param to Character. Specifies whether the file is to be added to reviewers' (`r`) or authors' (`a`) folders. If `to = "rev"`, the function places the file into each of the folders containing the anonymized author id on reviewers' repositores. If `to = "aut"`, the function places the file into each of the folders containing the reviewers' files on authors' repositories.
+#' @param local_path Character. File name of file to be added.
+#' @param prefix Character. Common repository name prefix.
+#' @param suffix Character. Common repository name suffix.
+#' @param message Character. Commit message.
+#' @param branch Character. Name of branch the file should be committed to, defaults to `master`.
+#' @param overwrite Logical. Whether existing files in reviewers' repositories should be overwritten, defaults to `FALSE`.
+#'
+#' @example
+#' \dontrun{
+#' peer_add_file_rev(org = "ghclass-test",
+#' roster = "hw2_roster_seed12345.csv",
+#' local_path = "rfeedback_hw2_blank.Rmd",
+#' prefix = revprefix)
+#' }
+#'
+#' @export
+peer_add_file_rev = function(org,
+                             roster,
+                             local_path,
+                             prefix = "",
+                             suffix = "",
+                             message = NULL,
+                             branch = "master",
+                             overwrite = FALSE) {
+  arg_is_chr_scalar(org, prefix, suffix)
+  arg_is_chr_scalar(message, allow_null = TRUE)
+  arg_is_chr(local_path)
+  arg_is_lgl(dblind, overwrite)
+
+  rdf = peer_expand_roster(org, roster, prefix, suffix)
+
+  # repo_add_file does modification check
+  purrr::walk(seq_len(nrow(rdf)),
+              function(x) {
+                repo_add_file(
+                  repo = as.character(rdf[x, 'repo_r']),
+                  file = local_path,
+                  repo_folder = as.character(rdf[x, 'author_random']),
+                  preserve_path = FALSE,
+                  overwrite = overwrite
+                )
+
+              })
+}
+
+
+#' Add local files to reviewer-specific folders on authors' repositories
+#'
+#' `peer_add_file_aut()` takes a local file and adds it to reviewer-specific folders on authors' repositories. The function's main purpose is to distribute rating forms into the folders containing copies of reviewers' files.
+#'
+#' @param org Character. Name of the GitHub organization.
+#' @param roster Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column `user` with GitHub user names of authors, a column `user_random` with randomized tokens for user names, and one or more `rev*` columns that specify review assignments as values of the vector `user_random`. See `peer_create_form_review`.
 #' @param local_path Character. File name of file to be added.
 #' @param dblind Logical. Specifies whether review is conducted double-blind (i.e. neither reviewer nor author can identify each other), or single-blind (i.e. authors remain anonymous but reviewer identities are revealed). If `dblind = TRUE`, reviewer folders are identified by the reviewer's ID. If `dblind = FALSE`, reviewer folders are identified by the original user names. Defaults to `FALSE`.
 #' @param prefix Character. Common repository name prefix.
@@ -451,75 +504,140 @@ peer_create_form_rating = function(category = c("helpfulness", "accuracy", "fair
 #'
 #' @example
 #' \dontrun{
-#' peer_add_file(org = "ghclass-test",
+#' peer_add_file_aut(org = "ghclass-test",
 #' roster = "hw2_roster_seed12345.csv",
-#' to = "rev",
-#' local_path = "rfeedback_hw2_blank.Rmd",
-#' prefix = "hw2-",
-#' dblind = TRUE)
+#' local_path = "afeedback_hw2_blank.Rmd",
+#' prefix = prefix)
 #' }
 #'
 #' @export
-peer_add_file = function(org,
-                         roster,
-                         to = c("rev", "aut"),
-                         local_path,
-                         dblind = FALSE,
-                         prefix = "",
-                         suffix = "",
-                         message = NULL,
-                         branch = "master",
-                         overwrite = FALSE) {
-  arg_is_chr_scalar(to)
-  stopifnot(to %in% c("rev", "aut"))
+peer_add_file_aut = function(org,
+                             roster,
+                             local_path,
+                             dblind = FALSE,
+                             prefix = "",
+                             suffix = "",
+                             message = NULL,
+                             branch = "master",
+                             overwrite = FALSE) {
+  arg_is_chr_scalar(org, prefix, suffix)
+  arg_is_chr_scalar(message, allow_null = TRUE)
+  arg_is_chr(local_path)
+  arg_is_lgl(dblind, overwrite)
 
-  rdf = peer_read_roster(roster)$rdf
-  peer_check_roster(rdf)
+  rdf = peer_expand_roster(org, roster, prefix, suffix)
 
-  author = as.list(as.character(rdf$user))
-  author_random = as.list(as.character(rdf$user_random))
+  # repo_add_file does modification check
+  purrr::walk(seq_len(nrow(rdf)),
+              function(x) {
+                if (!dblind) {
+                  folder = as.character(rdf[x, 'reviewer'])
+                } else {
+                  folder = as.character(rdf[x, 'reviewer_no'])
+                }
 
-  purrr::walk2(author, author_random,
-               function(author, author_random) {
-                 reviewer = peer_get_reviewer(author, rdf, "reviewer")
-                 reviewer_no = peer_get_reviewer(author, rdf, "reviewer_no")
+                repo_add_file(
+                  repo = as.character(rdf[x, 'repo_a']),
+                  file = local_path,
+                  repo_folder = folder,
+                  preserve_path = FALSE,
+                  overwrite = overwrite
+                )
 
-                 purrr::walk2(reviewer, reviewer_no,
-                              function(reviewer, reviewer_no) {
-                                if (to == "rev") {
-                                  repo = as.character(glue::glue("{org}/{prefix}{reviewer}{suffix}"))
-                                  folder = author_random
-                                } else {
-                                  repo = as.character(glue::glue("{org}/{prefix}{author}{suffix}"))
-                                  if (!dblind) {
-                                    folder = reviewer
-                                  } else {
-                                    folder = reviewer_no
-                                  }
-                                }
-
-                                # repo_add_file does modification check
-                                repo_add_file(
-                                  repo = repo,
-                                  file = filename,
-                                  repo_folder = folder,
-                                  preserve_path = FALSE,
-                                  overwrite = overwrite
-                                )
-                              })
-               })
+              })
 }
 
 
 
 
-#' Collect scores from reviewer feedback forms
+
+#' Collect scores from review forms
 #'
-#' The `peer_score()` function collects score information from the YAML of a feedback form within a student's repository. It outputs a new .csv file, with rows specifying individual question scores for each student.
+#' The `peer_score_review()` function collects score information from the YAML of a review form within reviewers' review repositories. It outputs a new .csv file, with rows specifying individual question scores for each student.
 #'
 #' @param org Character. Name of the GitHub organization.
 #' @param roster Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column `user` with GitHub user names of authors, a column `user_random` with randomized tokens for user names, and one or more `rev*` columns that specify review assignments as values of the vector `user_random`. See `peer_create_form_review`.
-#' @param from Character. Specifies whether scores are to be collected from reviewer (`r`) or author (`a`) repositories.
+#' @param path Character. File name of feedback form (must be .Rmd document).
+#' @param prefix Character. Common repository name prefix.
+#' @param suffix Character. Common repository name suffix.
+#' @param write_csv Logical. Whether the roster data frame should be saved to a `.csv` file in the current working directory, defaults to TRUE.
+#'
+#' @example
+#' \dontrun{
+#' peer_score_review(
+#' org = "ghclass-test",
+#' roster = "hw2_roster_seed12345.csv",
+#' path = "rfeedback_blank.Rmd",
+#' prefix = revprefix)
+#' }
+#'
+#' @export
+#'
+peer_score_review = function(org,
+                             roster,
+                             path,
+                             prefix = "",
+                             suffix = "",
+                             write_csv = TRUE) {
+  # Checks
+  arg_is_chr_scalar(org, prefix, suffix, path)
+  arg_is_lgl(dblind, write_csv)
+
+  # Check that feedback form is .Rmd
+  if (!grepl("\\.[rR]md$", path)) {
+    usethis::ui_stop("{usethis::ui_field('path')} must be a {usethis::ui_path('.Rmd')} file.")
+  }
+
+  rdf = peer_expand_roster(org, roster, prefix, suffix)
+
+  out = purrr::map_dfr(seq_len(nrow(rdf)),
+                       function(x) {
+                         repo = as.character(rdf[x, 'repo_r'])
+                         ghpath = glue::glue("{as.character(rdf[x, 'author_random'])}/{path}")
+                         r_no = as.character(rdf[x, 'reviewer_no'])
+
+                         feedback = purrr::safely(repo_get_file)(repo = repo,
+                                                                 file = ghpath)
+
+                         if (succeeded(feedback)) {
+                           tc = textConnection(feedback$result)
+                           scores = rmarkdown::yaml_front_matter(tc)$params
+                           scores[scores == "NA"] = NA
+
+                           setNames(c(as.character(rdf[x, 'author']), r_no, scores),
+                                    c("user", "r_no", paste0("q", 1:length(scores))))
+
+                         } else {
+                           usethis::ui_oops(
+                             "Cannot locate file {usethis::ui_value(ghpath)} on repo {usethis::ui_value(repo)}."
+                           )
+                         }
+                       }) %>%
+    # Getting data frame in right format
+    tidyr::gather(q_name, q_value,-user,-r_no) %>%
+    tidyr::unite("new", c("r_no", "q_name")) %>%
+    tidyr::spread(new, q_value) %>%
+    merge(roster, all.y = T)
+
+  out = out[, union(names(roster), names(out))]
+  out = out[order(out$user_random), ]
+
+  if (write_csv) {
+    fname = glue::glue("{revscores}_{fs::path_file(roster)}")
+    readr::write_csv(out, fname)
+    usethis::ui_done("Saved file {usethis::ui_value(fname)} to working directory.")
+  } else {
+    out
+  }
+}
+
+
+#' Collect scores from rating forms
+#'
+#' The `peer_score_rating()` function collects score information from the YAML of a rating form within authors' repositories. It outputs a new .csv file, with rows specifying individual question scores for each student.
+#'
+#' @param org Character. Name of the GitHub organization.
+#' @param roster Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column `user` with GitHub user names of authors, a column `user_random` with randomized tokens for user names, and one or more `rev*` columns that specify review assignments as values of the vector `user_random`. See `peer_create_form_review`.
 #' @param path Character. File name of feedback form (must be .Rmd document).
 #' @param dblind Logical. Specifies whether review is conducted double-blind (i.e. neither reviewer nor author can identify each other), or single-blind (i.e. authors remain anonymous but reviewer identities are revealed). If `dblind = TRUE`, reviewer folders are identified by the anonymized user IDs in the roster's `user_random` column. If `dblind = FALSE`, reviewer folders are identified by the original user names. Defaults to `FALSE`.
 #' @param prefix Character. Common repository name prefix.
@@ -528,110 +646,78 @@ peer_add_file = function(org,
 #'
 #' @example
 #' \dontrun{
-#' peer_score(
+#' peer_score_rating(
 #' org = "ghclass-test",
 #' roster = "hw2_roster_seed12345.csv",
-#' from = "aut",
 #' path = "afeedback_blank.Rmd",
-#' dblind = T,
-#' prefix = "hw2-)
+#' dblind = TRUE,
+#' prefix = prefix)
 #' }
 #'
 #' @export
 #'
-peer_score = function(org,
-                      roster,
-                      from = c("rev", "aut"),
-                      path,
-                      dblind = FALSE,
-                      prefix = "",
-                      suffix = "",
-                      write_csv = TRUE) {
+peer_score_rating = function(org,
+                             roster,
+                             path,
+                             dblind = FALSE,
+                             prefix = "",
+                             suffix = "",
+                             write_csv = TRUE) {
   # Checks
   arg_is_chr_scalar(org, prefix, suffix, path)
-  arg_is_chr_scalar(from)
-  stopifnot(from %in% c("rev", "aut"))
+  arg_is_lgl(dblind, write_csv)
 
   # Check that feedback form is .Rmd
   if (!grepl("\\.[rR]md$", path)) {
     usethis::ui_stop("{usethis::ui_field('path')} must be a {usethis::ui_path('.Rmd')} file.")
   }
 
-  # Read and check roster file
-  temp = peer_read_roster(
-    roster,
-    fname_append = glue::glue("{from}scores"),
-    prefix = prefix,
-    suffix = suffix
-  )
-  rdf = temp$rdf
-  peer_check_roster(rdf)
+  rdf = peer_expand_roster(org, roster, prefix, suffix)
 
-  author = as.list(as.character(rdf$user))
-  author_random = as.list(as.character(rdf$user_random))
+  out = purrr::map_dfr(seq_len(nrow(rdf)),
+                       function(x) {
+                         repo = as.character(rdf[x, 'repo_a'])
+                         if (dblind) {
+                           ghpath = glue::glue("{as.character(rdf[x, 'reviewer_no'])}/{path}")
+                         } else {
+                           ghpath = glue::glue("{as.character(rdf[x, 'reviewer'])}/{path}")
+                         }
+                         r_no = as.character(rdf[x, 'reviewer_no_scorea'])
 
-  out = purrr::map2_dfr(author, author_random,
-                        function(author, author_random) {
-                          # Grab reviewers
-                          reviewer = peer_get_reviewer(author, rdf, "reviewer")
-                          reviewer_random = peer_get_reviewer(author, rdf, "reviewer_random")
-                          reviewer_no = peer_get_reviewer(author, rdf, "reviewer_no")
+                         feedback = purrr::safely(repo_get_file)(repo = repo,
+                                                                 file = ghpath)
 
-                          purrr::pmap_dfr(list(reviewer, reviewer_no),
-                                          function(reviewer,
-                                                   reviewer_no) {
-                                            if (from == "rev") {
-                                              repo = glue::glue("{org}/{prefix}{reviewer}{suffix}")
-                                              ghpath = glue::glue("{author_random}/{path}")
-                                              tag = "q"
-                                              user = author
-                                              r_no = reviewer_no
-                                            } else {
-                                              repo = glue::glue("{org}/{prefix}{author}{suffix}")
-                                              tag = "c"
-                                              user = reviewer
-                                              r_no = paste0("rev", which(peer_get_reviewer(user, rdf, "reviewer") == author))
-                                              if (dblind) {
-                                                ghpath = glue::glue("{reviewer_no}/{path}")
-                                              } else {
-                                                ghpath = glue::glue("{reviewer}/{path}")
-                                              }
-                                            }
+                         if (succeeded(feedback)) {
+                           tc = textConnection(feedback$result)
+                           scores = rmarkdown::yaml_front_matter(tc)$params
+                           scores[scores == "NA"] = NA
 
-                                            feedback = purrr::safely(repo_get_file)(repo, ghpath)
-                                            if (succeeded(feedback)) {
-                                              tc = textConnection(feedback$result)
-                                              scores = rmarkdown::yaml_front_matter(tc)$params
-                                              scores[scores == "NA"] = NA
+                           setNames(c(as.character(rdf[x, 'reviewer']), r_no, scores),
+                                    c("user", "r_no", paste0("c", 1:length(scores))))
 
-                                              setNames(c(user, r_no, scores),
-                                                       c("user", "r_no", paste0(tag, 1:length(scores))))
-
-                                            } else {
-                                              usethis::ui_oops(
-                                                "Cannot locate file {usethis::ui_value(ghpath)} on repo {usethis::ui_value(repo)}."
-                                              )
-                                            }
-                                          })
-
-                        }) %>%
+                         } else {
+                           usethis::ui_oops(
+                             "Cannot locate file {usethis::ui_value(ghpath)} on repo {usethis::ui_value(repo)}."
+                           )
+                         }
+                       }) %>%
     # Getting data frame in right format
     tidyr::gather(q_name, q_value,-user,-r_no) %>%
     tidyr::unite("new", c("r_no", "q_name")) %>%
     tidyr::spread(new, q_value) %>%
-    merge(rdf, all.y = T)
+    merge(roster, all.y = T)
 
-  out = out[, union(names(rdf), names(out))]
-  out = out[order(out$user_random),]
+  out = out[, union(names(roster), names(out))]
+  out = out[order(out$user_random), ]
 
   if (write_csv) {
-    readr::write_csv(out, temp$fname)
+    fname = glue::glue("{autscores}_{fs::path_file(roster)}")
+    readr::write_csv(out, fname)
     usethis::ui_done("Saved file {usethis::ui_value(fname)} to working directory.")
   } else {
     out
   }
 }
-
 
 
 
@@ -656,67 +742,12 @@ peer_expand_roster = function(org,
                                              reviewer_no = peer_get_reviewer(author, rdf, "reviewer_no"),
                                              repo_r = glue::glue("{org}/{prefix}{reviewer}{suffix}"),
                                              reviewer_no_scorea = names(rdf)[purrr::map_int(reviewer_random, ~
-                                                                                              which(rdf[rdf$user_random == .x, ] == author_random))]
+                                                                                              which(rdf[rdf$user_random == .x,] == author_random))]
                                            )
                                          }))
 
   out
 
-}
-
-
-
-
-peer_issue_body_toaut = function(sub,
-                                 path,
-                                 rfeedback,
-                                 afeedback,
-                                 dblind) {
-  repo_a = unique(sub[['repo_a']])
-  url_start = glue::glue("https://github.com/{repo_a}/blob/master/")
-
-
-  fdf = repo_files(repo_a)
-
-  if (!dblind) {
-    rev = sub[['reviewer']]
-  } else {
-    rev = sub[['reviewer_no']]
-  }
-
-  #https://github.com/ghclass-test/homework2-thereanders/blob/master/rev1/rfeedback_blank.Rmd
-
-  out = purrr::map_dfr(rev,
-                       function(.x) {
-                         atemp = fdf[['path']][grepl(.x, fdf[['path']]) &
-                                                 grepl(afeedback, fdf[['path']])]
-                         rtemp = fdf[['path']][grepl(.x, fdf[['path']]) &
-                                                 grepl(rfeedback, fdf[['path']])]
-
-                         tibble::tibble(
-                           reviewer_no = .x,
-                           diff = create_lastcommiturl(repo_a, glue::glue("{.x}/{path}")),
-                           afeed = paste0(url_start, atemp),
-                           rfeed = paste0(url_start, rtemp)
-                         )
-                       })
-
-
-  glue::glue(
-    "The feedback from your peers has been added to your repository.\n\n",
-    "To finish the assignment, for each of the reviewers, please complete the following:\n\n",
-    paste(purrr::map_chr(rev,
-                         function(.x) {
-                           glue::glue(
-                             "**For {.x}**\n",
-                             "- [ ] Review [changes to your assignment]({out$diff[out$reviewer_no == .x]}) suggested by {.x}.\n",
-                             "- [ ] Read [feedback]({out$afeed[out$reviewer_no == .x]}) from {.x}.\n",
-                             "- [ ] Fill out [review form]({out$rfeed[out$reviewer_no == .x]}) on the feedback from {.x}.\n\n"
-                           )
-
-                         }),
-          collapse = "\n")
-  )
 }
 
 
@@ -858,8 +889,6 @@ peer_return = function(org,
                   overwrite = overwrite
                 )
 
-                # print(glue::glue("Done with placing originals for  row {.x}"))
-
                 # 2) move files from reviewer
                 repo_mirror_file(
                   source_repo = repo_r,
@@ -872,12 +901,10 @@ peer_return = function(org,
                   overwrite = TRUE,
                   verbose = TRUE
                 )
-
-                # print(glue::glue("Done with mirroring for row {.x}"))
               })
 
   # 3) Create issue
-  peer_create_issue_2a(
+  peer_create_issue_rating(
     rdf = rdf,
     path = path,
     rfeedback = rfeedback,
@@ -889,23 +916,23 @@ peer_return = function(org,
 #' @param rfeedback Character. File name of reviewer feedback form.
 #' @param afeedback Character. File name of author feedback form.
 #'
-peer_create_issue_2a = function(rdf,
-                                path,
-                                rfeedback,
-                                afeedback,
-                                title = "Reviewer feedback",
-                                label = "test",
-                                dblind = FALSE) {
+peer_create_issue_rating = function(rdf,
+                                    path,
+                                    rfeedback,
+                                    afeedback,
+                                    title = "Reviewer feedback",
+                                    label = "test",
+                                    dblind = FALSE) {
   purrr::walk(unique(rdf[['author']]),
               function(.x) {
-                sub = rdf[rdf[['author']] == .x,]
+                sub = rdf[rdf[['author']] == .x, ]
 
                 res = purrr::safely(github_api_issue_create)(
                   repo = unique(sub[['repo_a']]),
                   title = title,
-                  body = peer_issue_body_2a(sub, path, rfeedback, afeedback, dblind),
+                  body = peer_issue_body_rating(sub, path, rfeedback, afeedback, dblind),
                   assignee = .x,
-                  label = label
+                  labels = list(":pencil: Complete review")
                 )
 
                 status_msg(res,
@@ -918,11 +945,11 @@ peer_create_issue_2a = function(rdf,
 
 #' @param path Character. File name of file for which the difference should be created.
 #'
-peer_issue_body_2a = function(sub,
-                              path,
-                              rfeedback = NULL,
-                              afeedback = NULL,
-                              dblind) {
+peer_issue_body_rating = function(sub,
+                                  path,
+                                  rfeedback = NULL,
+                                  afeedback = NULL,
+                                  dblind) {
   arg_is_chr(path)
   arg_is_chr_scalar(rfeedback, afeedback, allow_null = T)
 
@@ -965,7 +992,8 @@ peer_issue_body_2a = function(sub,
                                character()
                              )
                            ),
-                           create_lastcommiturl(repo_a, glue::glue("{.x}/{path}"))
+                           create_diff_url(repo_a, path)
+                           #get_lastcommiturl(repo_a, glue::glue("{.x}/{path}"))
                          )
                        })
 
@@ -1010,126 +1038,4 @@ check_afeed = function(out, .x) {
   if (!is.na(test)) {
     glue::glue("- [ ] Fill out [rating form]({test}).")
   }
-}
-
-
-## Trees API
-github_api_branch_get = function(repo, branch = "master") {
-  gh::gh(
-    "GET /repos/:owner/:repo/branches/:branch",
-    owner = get_repo_owner(repo),
-    repo = get_repo_name(repo),
-    branch = branch,
-    .token = github_get_token()
-  )
-}
-
-keep_blobs = function(x, path = NULL) {
-  arg_is_chr(path, allow_null = TRUE)
-
-  if (!is.null(path)) {
-    purrr::keep(x, purrr::map(x, "path") %in% path)
-  } else {
-    purrr::keep(x,
-                purrr::map(x, "type") == "blob" &
-                  purrr::map(x, "path") != ".gitignore")
-  }
-}
-
-github_api_get_blob = function(repo, file_sha) {
-  gh::gh(
-    "GET /repos/:owner/:repo/git/blobs/:file_sha",
-    owner = get_repo_owner(repo),
-    repo = get_repo_name(repo),
-    file_sha = file_sha
-  )
-}
-
-github_api_post_blob = function(repo, content) {
-  gh::gh(
-    "POST /repos/:owner/:repo/git/blobs",
-    owner = get_repo_owner(repo),
-    repo = get_repo_name(repo),
-    content = content[['content']],
-    encoding = content[['encoding']]
-  )
-}
-
-github_api_post_commit = function(repo, tree, message = "Creating new tree") {
-  gh::gh(
-    "POST /repos/:owner/:repo/git/commits",
-    owner = get_repo_owner(repo),
-    repo = get_repo_name(repo),
-    message = message,
-    tree = tree
-  )
-}
-
-github_api_post_tree = function(repo, tree) {
-  gh::gh(
-    "POST /repos/:owner/:repo/git/trees",
-    owner = get_repo_owner(repo),
-    repo = get_repo_name(repo),
-    tree = tree
-  )
-}
-
-github_api_patch_ref = function(repo, sha, branch = "master", force = TRUE) {
-  gh::gh(
-    "PATCH /repos/:owner/:repo/git/:ref",
-    owner = get_repo_owner(repo),
-    repo = get_repo_name(repo),
-    ref = glue::glue("refs/heads/{branch}"),
-    sha = sha,
-    force = force
-  )
-}
-
-repo_move_file = function(org,
-                          source_repo,
-                          target_repo,
-                          path = NULL,
-                          folder = NULL,
-                          branch = "master",
-                          message = "Adding new files") {
-
-  arg_is_chr_scalar(org, branch)
-  arg_is_chr_scalar(folder, message, allow_null = TRUE)
-  arg_is_chr(source_repo, target_repo)
-  arg_is_chr(path, allow_null = TRUE)
-
-  files = repo_files(source_repo, branch)
-
-  if (!is.null(folder)) {
-    tree_sha = files$sha[files$path == folder]
-  } else {
-    res = purrr::safely(github_api_branch_get)(source_repo, branch)
-    status_msg(res,
-               fail = "Failed to retrieve branch {usethis::ui_value(branch)} for repository {usethis::ui_value(source_repo_repo)}.")
-    tree_sha = res$result$commit$commit$tree$sha
-  }
-
-  tree_all = github_api_repo_get_tree(source_repo, sha = tree_sha)
-
-  tree = keep_blobs(tree_all$tree, path)
-
-  tree_content = purrr::map(tree,
-                            function(x) {
-                              content = github_api_get_blob(source_repo, x['sha'])
-                              github_api_post_blob(target_repo, content)
-                              list(
-                                path = x[['path']],
-                                mode = x[['mode']],
-                                type = x[['type']],
-                                sha = x[['sha']]
-                              )
-                            })
-
-  new_tree = github_api_post_tree(target_repo, tree_content)
-
-  # Leaving parent blank
-  new_commit = github_api_post_commit(target_repo, new_tree$sha)
-
-  out = github_api_patch_ref(target_repo, new_commit$sha, branch = branch, force = TRUE)
-
 }
