@@ -16,6 +16,11 @@ local_repo_rename = function(repo_dir, pattern, replacement) {
   arg_is_chr_scalar(repo_dir)
   arg_is_chr(pattern, replacement)
 
+  # If there isn't a regex group, add one for the whole pattern
+  if (!any(grepl(pattern = "\\(.*\\)", x = pattern))) {
+    pattern = paste0("(", pattern, ")")
+  }
+
   repos = repo_dir_helper(repo_dir)
   cur_repos = repos
 
@@ -28,6 +33,12 @@ local_repo_rename = function(repo_dir, pattern, replacement) {
     cur_repos[sub], repos[sub],
     function(cur, new) {
       res = purrr::safely(fs::file_move)(cur, new)
+
+      pattern = glue::glue(".*?({repo_dir})")
+
+      cur = sub(pattern, replacement = "\\1", x = cur)
+      new = sub(pattern, replacement = "\\1", x = new)
+
       status_msg(
         res,
         glue::glue("Renaming {usethis::ui_value(cur)} to {usethis::ui_value(new)}."),
