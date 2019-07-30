@@ -75,26 +75,44 @@ remove_author_rmd = function(input) {
   )
 }
 
+format_prefix = function(prefix = "") {
+
+  if (prefix != "") {
+    if (!grepl("[\\w\\d]*[_-]$", prefix)) {
+      prefix = paste0(prefix, "-")
+    }
+  }
+}
+
+
+format_suffix = function(suffix = "") {
+
+  if (suffix != "") {
+    if (!grepl("^[_-][\\w\\d]*", suffix)) {
+      suffix = paste0("-", suffix)
+    }
+  }
+}
+
+
+
 # Reads roster file
 peer_read_roster = function(roster,
-                            fname_append = NULL,
                             prefix = NULL,
                             suffix = NULL) {
   res = purrr::safely(fs::file_exists)(roster)
 
   if (is.null(res$result) & is.data.frame(roster)) {
     rdf = tibble::as_tibble(purrr::modify_if(roster, is.factor, as.character))
-    fname = glue::glue("{prefix}{fname_append}{suffix}")
   } else if (is.null(res$result) & !is.data.frame(roster)) {
     usethis::ui_stop("{usethis::ui_field('roster')} must be a data.frame or .csv file.")
   } else if (!res$result) {
     usethis::ui_stop("Cannot locate file: {usethis::ui_value(roster)}")
   } else if (res$result) {
     rdf = suppressMessages(readr::read_csv(roster))
-    fname = glue::glue("{fname_append}_{fs::path_file(roster)}")
   }
 
-  list("rdf" = rdf, "fname" = fname)
+  rdf
 
 }
 
@@ -170,12 +188,14 @@ peer_assign = function(org,
                        message = "Assigning review",
                        branch = "master",
                        overwrite = FALSE) {
+
   arg_is_chr(org, path, prefix, suffix, branch)
   arg_is_chr(message, allow_null = TRUE)
   arg_is_lgl_scalar(overwrite)
 
-  rdf = peer_read_roster(roster)$rdf
-  peer_check_roster(rdf)
+  rdf = peer_expand_roster(org, roster, prefix, suffix)
+  # rdf = peer_read_roster(roster)$rdf
+  # peer_check_roster(rdf)
 
   author = as.list(as.character(rdf$user))
   author_random = as.list(as.character(rdf$user_random))
@@ -725,7 +745,7 @@ peer_expand_roster = function(org,
                               roster,
                               prefix = "",
                               suffix = "") {
-  rdf = peer_read_roster(roster)$rdf
+  rdf = peer_read_roster(roster)
   peer_check_roster(rdf)
 
   author = as.list(as.character(rdf$user))
@@ -1010,7 +1030,7 @@ peer_issue_body_rating = function(sub,
 
   glue::glue(
     'The feedback from your peers has been added to your repository.\n\n',
-    'To finish the assignment, please complete the following for each of the reviewers:\n\n',
+    'To finish the assignment, please complete the following tasks for each of the reviewers:\n\n',
     paste(rev_txt, collapse = "\n\n")
   )
 
