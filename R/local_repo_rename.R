@@ -30,8 +30,8 @@ local_repo_rename = function(repo_dir, pattern, replacement) {
       res = purrr::safely(fs::file_move)(cur, new)
       status_msg(
         res,
-        glue::glue("Renaming {usethis::ui_value(cur)} to {usethis::ui_value(to)}."),
-        glue::glue("Failed to rename {usethis::ui_value(cur)} to {usethis::ui_value(to)}.")
+        glue::glue("Renaming {usethis::ui_value(cur)} to {usethis::ui_value(new)}."),
+        glue::glue("Failed to rename {usethis::ui_value(cur)} to {usethis::ui_value(new)}.")
       )
     }
   )
