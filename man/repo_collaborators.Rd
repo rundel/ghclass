@@ -21,7 +21,7 @@ A tibble with two columns, \code{repo} and \code{username}.
 }
 \examples{
 \dontrun{
-repo_collaboratorss("ghclass-test/test2")
+repo_collaborators("ghclass-test/test2")
 }
 
 }
