@@ -19,7 +19,7 @@ github_api_repo_collaborators = function(repo) {
 #'
 #' @examples
 #' \dontrun{
-#' repo_collaboratorss("ghclass-test/test2")
+#' repo_collaborators("ghclass-test/test2")
 #' }
 #'
 #' @aliases get_collaborator get_collaborators
@@ -41,7 +41,7 @@ repo_collaborators = function(repo, include_admins = TRUE) {
   purrr::map_dfr(
     repo,
     function(repo) {
-      res = purrr::safely(github_api_repo_collaboratorss)(repo)
+      res = purrr::safely(github_api_repo_collaborators)(repo)
       status_msg(
         res,
         fail = glue::glue("Failed to retrieve collaborators for {usethis::ui_value(repo)}.")
