@@ -194,8 +194,6 @@ peer_assign = function(org,
   arg_is_lgl_scalar(overwrite)
 
   rdf = peer_expand_roster(org, roster, prefix, suffix)
-  # rdf = peer_read_roster(roster)$rdf
-  # peer_check_roster(rdf)
 
   author = as.list(as.character(rdf$user))
   author_random = as.list(as.character(rdf$user_random))
@@ -744,7 +742,12 @@ peer_score_rating = function(org,
 peer_expand_roster = function(org,
                               roster,
                               prefix = "",
-                              suffix = "") {
+                              suffix = "",
+                              prefix_rev = "",
+                              suffix_rev = "") {
+
+  arg_is_chr_scalar(prefix, suffix, prefix_rev, suffix_rev)
+
   rdf = peer_read_roster(roster)
   peer_check_roster(rdf)
 
@@ -761,6 +764,7 @@ peer_expand_roster = function(org,
                                              reviewer_random = peer_get_reviewer(author, rdf, "reviewer_random"),
                                              reviewer_no = peer_get_reviewer(author, rdf, "reviewer_no"),
                                              repo_r = glue::glue("{org}/{prefix}{reviewer}{suffix}"),
+                                             repo_rev_r = glue::glue("{org}/{prefix_rev}{reviewer}{suffix_rev}"),
                                              reviewer_no_scorea = names(rdf)[purrr::map_int(reviewer_random, ~
                                                                                               which(rdf[rdf$user_random == .x,] == author_random))]
                                            )
@@ -876,15 +880,17 @@ peer_return = function(org,
                        dblind = FALSE,
                        prefix = "",
                        suffix = "",
+                       prefix_rev = "",
+                       suffix_rev = "",
                        message = NULL,
                        branch = "master",
                        overwrite = FALSE) {
   arg_is_chr(path)
-  arg_is_chr_scalar(org, prefix, suffix, branch)
+  arg_is_chr_scalar(org, prefix, suffix, prefix_rev, suffix_rev, branch)
   arg_is_chr(message, rfeedback, afeedback, allow_null = TRUE)
   arg_is_lgl_scalar(overwrite)
 
-  rdf = peer_expand_roster(org, roster, prefix, suffix)
+  rdf = peer_expand_roster(org, roster, prefix, suffix, prefix_rev, suffix_rev)
 
   if (!dblind) {
     rev = rdf[['reviewer']]
@@ -893,16 +899,16 @@ peer_return = function(org,
   }
 
   purrr::walk(seq_len(nrow(rdf)),
-              function(.x) {
-                repo_a = rdf[['repo_a']][.x]
-                repo_r = rdf[['repo_r']][.x]
+              function(x) {
+                repo_a = rdf[['repo_a']][x]
+                repo_r = rdf[['repo_rev_r']][x]
 
                 # 1) place original content
                 # FIX THIS!! Something is going on w messaging and/or putting files
                 repo_mirror_file(
                   source_repo = repo_a,
                   target_repo = repo_a,
-                  target_folder = rev[.x],
+                  target_folder = rev[x],
                   path = path,
                   message = "Placing original file",
                   branch = branch,
@@ -913,8 +919,8 @@ peer_return = function(org,
                 repo_mirror_file(
                   source_repo = repo_r,
                   target_repo = repo_a,
-                  source_folder = rdf[['author_random']][.x],
-                  target_folder = rev[.x],
+                  source_folder = rdf[['author_random']][x],
+                  target_folder = rev[x],
                   path = c(path, rfeedback),
                   message = "Adding reviewer feedback",
                   branch = branch,
@@ -944,20 +950,20 @@ peer_create_issue_rating = function(rdf,
                                     label = "test",
                                     dblind = FALSE) {
   purrr::walk(unique(rdf[['author']]),
-              function(.x) {
-                sub = rdf[rdf[['author']] == .x, ]
+              function(x) {
+                sub = rdf[rdf[['author']] == x, ]
 
                 res = purrr::safely(github_api_issue_create)(
                   repo = unique(sub[['repo_a']]),
                   title = title,
                   body = peer_issue_body_rating(sub, path, rfeedback, afeedback, dblind),
-                  assignee = .x,
-                  labels = list(":pencil: Complete review")
+                  assignee = x,
+                  labels = list(":mag: Inspect review")
                 )
 
                 status_msg(res,
-                           glue::glue("Posted issue for {.x}"),
-                           glue::glue("Cannot post issue for {.x}"))
+                           glue::glue("Posted issue for {x}"),
+                           glue::glue("Cannot post issue for {x}"))
 
               })
 }
@@ -987,20 +993,20 @@ peer_issue_body_rating = function(sub,
   #https://github.com/ghclass-test/homework2-thereanders/blob/master/rev1/rfeedback_blank.Rmd
 
   out = purrr::map_dfr(rev_sub,
-                       function(.x) {
+                       function(y) {
                          if (!is.null(afeedback)) {
-                           atemp = fdf[['path']][grepl(.x, fdf[['path']]) &
+                           atemp = fdf[['path']][grepl(y, fdf[['path']]) &
                                                    grepl(afeedback, fdf[['path']])]
                          }
 
                          if (!is.null(rfeedback)) {
-                           rtemp = fdf[['path']][grepl(.x, fdf[['path']]) &
+                           rtemp = fdf[['path']][grepl(y, fdf[['path']]) &
                                                    grepl(rfeedback, fdf[['path']])]
                          }
 
                          cbind(
                            tibble::tibble(
-                             reviewer = .x,
+                             reviewer = y,
                              afeed = ifelse(
                                !is.null(afeedback),
                                paste0(url_start, atemp),
@@ -1012,18 +1018,18 @@ peer_issue_body_rating = function(sub,
                                character()
                              )
                            ),
-                           create_diff_url(repo_a, path)
+                           suppressWarnings(create_diff_url(repo_a, glue::glue("{y}/{path}")))
                            #get_lastcommiturl(repo_a, glue::glue("{.x}/{path}"))
                          )
                        })
 
   rev_txt = purrr::map_chr(rev_sub,
-                           function(.x) {
+                           function(y) {
                              paste(
-                               glue::glue("**For {.x}**"),
-                               expand_diff(out, path, .x),
-                               check_rfeed(out, .x),
-                               check_afeed(out, .x),
+                               glue::glue("**For {y}**"),
+                               expand_diff(out, path, y),
+                               check_rfeed(out, y),
+                               check_afeed(out, y),
                                sep = "\n"
                              )
                            })

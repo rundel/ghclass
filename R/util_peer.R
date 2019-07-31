@@ -77,12 +77,12 @@ get_lastcommit_sha = function(repo, path = NULL) {
 
   if (!is.null(path)) {
     purrr::map_dfr(path,
-                   function(.x) {
-                     sub = get_commits(repo = repo, path = .x)
+                   function(path) {
+                     sub = get_commits(repo = repo, path = path)
                      sub = sub[order(sub$date, decreasing = TRUE),]
                      tibble::tibble(
                        sha = as.character(sub[1, 'sha']),
-                       path = .x
+                       path = path
                      )
                    })
   } else {
@@ -97,9 +97,9 @@ get_lastcommit_sha = function(repo, path = NULL) {
 
 create_diff_url = function(repo, path) {
   out = purrr::map2_dfc(repo, path,
-                  function(.x, .y) {
-                    sha = get_lastcommit_sha(.x, .y)
-                    paste0("https://github.com/", .x, "/commit/", sha$sha)
+                  function(x, y) {
+                    sha = get_lastcommit_sha(x, y)
+                    paste0("https://github.com/", x, "/commit/", sha$sha)
                   }
                   )
   setNames(out, paste0("diff", seq_len(length(out))))

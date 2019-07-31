@@ -191,101 +191,288 @@ repo_move_file = function(source_repo,
 #top = sub("\n", "", processx::run("pwd")$stdout)
 # path = c("hw2_task.Rmd", "iris_data.csv")
 # local_wd = "/Users/thereseanders/Documents/RStudio/test"
-# local_path = "/Users/thereseanders/Documents/RStudio/test"
+#
 # temp_folder = "backup"
 # source_folder = "rev1"
 # target_folder = "foo"
 # repo_reviewer = "ghclass-test/hw2demo-review-thereanders"
+path = c("hw2_task.Rmd")
 
-peer_assign_clone = function(repo, path = NULL, local_path, source_folder, temp_folder = "backup") {
+prefix = "hw2demo-"
+prefix_rev = "hw2demo-review-"
+local_path = "/Users/thereseanders/Documents/RStudio/test"
+roster = roster_test
 
-  arg_is_chr(repo, local_path)
+peer_assign_clone = function(org,
+                             roster,
+                             path = NULL,
+                             local_path,
+                             prefix = "",
+                             suffix = "",
+                             prefix_rev = "",
+                             suffix_rev = "",
+                             temp_folder = "assign") {
+  arg_is_chr(local_path)
   arg_is_chr(path, allow_null = TRUE)
+  arg_is_chr_scalar(prefix, suffix, prefix_rev, suffix_rev, temp_folder)
 
-  # Temporary working directory
+  rdf = peer_expand_roster(org, roster, prefix, suffix, prefix_rev, suffix_rev)
+
+  # 1) Temporary working directory & creating temp folder & change wd
   setwd(local_path)
-  processx_pwd()
-
-
-  ### The process below moves the commit history
-  ## Needs to be cleaned up, streamlined, vectorized
-  ## How to add all author folders into a new reviewer-specific repo (w/o commit history?)
-  # Step 1: Create new folder
   folder = processx_run("mkdir", c(temp_folder), wd = local_wd)
   processx_check(folder)
-
-  # Step 2: Change wd to new folder
   temp_wd = fs::path(local_path, temp_folder)
   setwd(temp_wd)
-  processx_pwd()
 
-  # Step 3: Clone repo
-  res = purrr::safely(org_repo_clone)(repo, temp_wd, verbose = FALSE)
-  status_msg(res,
-             fail = glue::glue("Failed to clone {usethis::ui_value(repo)}."))
+  repo_a = unique(rdf[['repo_a']])
+  purrr::walk(repo_a,
+              function(x) {
+                # 2) Clone all author repos
+                res = purrr::safely(org_repo_clone)(x, temp_wd, verbose = FALSE)
+                status_msg(res,
+                           fail = glue::glue("Failed to clone {usethis::ui_value(x)}."))
 
+                # 3) Remove remote
+                setwd(fs::path(temp_wd, get_repo_name(x)))
+                rmremote = processx_run("git", c("remote", "rm", "origin"))
+                processx_check(rmremote)
 
-  # Step 4: Set wd to local repo
-  repo_wd = fs::path(local_path, temp_folder, get_repo_name(repo))
-  setwd(repo_wd)
+                # 4) Make new folder & move files into it
+                folder = unique(rdf$author_random[rdf$repo_a == x])
 
+                # Create subfolder, filter for subfolder
+                if (!is.null(path)) {
+                  system(glue::glue("mkdir {folder} && mv {path} {folder}"))
+                  processx_run("git", c("add", "."))
+                  processx_run("git", c("commit", "-m'Moving files to author folder'"))
+                  filter = processx_run("git",
+                                        c(
+                                          "filter-branch",
+                                          "--subdirectory-filter",
+                                          folder,
+                                          "--",
+                                          "--all"
+                                        ))
+                }
 
-  # Step 5: Remove remote
-  processx_run("git", c("status"))
-  processx_run("git", c("remote", "-v"))
-  rmremote = processx_run("git", c("remote", "rm", "origin"))
-  processx_check(rmremote)
-  processx_run("git", c("remote", "-v"))
-  processx_run("git", c("status"))
-  getwd()
+                # Suppress warnings - this moves all files in repo
+                system(glue::glue("mkdir {folder} && mv * {folder}"))
+                getwd()
 
-  # Step 6: Filter specific folder
-  filter = processx_run("git", c("filter-branch", "--subdirectory-filter", "rev1", "--", "--all"))
-  processx_check(filter)
+                # 5) Add to git repo
+                addfiles = processx_run("git", c("add", "."))
+                processx_check(addfiles)
 
-  # Step 7: Create new folder & move files into it
-  system("mkdir foo && mv * foo")
-  getwd()
+                # 6) commit
+                commit = processx_run("git", c("commit", "-m'Add files to folder'"))
+                processx_check(commit)
 
-  # Step 8: Add to git repo
-  addfiles = processx_run("git", c("add", "."))
-  processx_check(addfiles)
+                ### grab destination reviewer repos
+                repo_rev_r = unique(rdf$repo_rev_r[rdf$repo_a == x])
+                purrr::walk(repo_rev_r,
+                            function(y) {
+                              # 7) clone reviewer repos
+                              res_rev = purrr::safely(org_repo_clone)(y, temp_wd, verbose = FALSE)
+                              status_msg(res_rev,
+                                         fail = glue::glue("Failed to clone {usethis::ui_value(y)}."))
+                              repo_rev_wd = fs::path(temp_wd, get_repo_name(y))
+                              setwd(repo_rev_wd)
 
-  # Step 9: commit
-  commit = processx_run("git", c("commit", "-m'Add files to folder'"))
-  processx_check(commit)
+                              # 8) add remote
+                              remoteadd = processx_run("git",
+                                                       c(
+                                                         "remote",
+                                                         "add",
+                                                         "modified-source",
+                                                         glue::glue("../../{temp_folder}/{get_repo_name(x)}")
+                                                       ))
 
-  # Step 10: Clone reviewer repo
-  res_reviewer = purrr::safely(org_repo_clone)(repo_reviewer, temp_wd, verbose = FALSE)
-  status_msg(res,
-             fail = glue::glue("Failed to clone {usethis::ui_value(res_reviewer)}."))
-  reviewer_repo_wd = fs::path(temp_wd, get_repo_name(repo_reviewer))
+                              # 9) pull remote
+                              remotepull = processx_run("git",
+                                                        c(
+                                                          "pull",
+                                                          "modified-source",
+                                                          "master",
+                                                          "--allow-unrelated-histories"
+                                                        ))
 
-  # Step 11: Set wd to reviewer repo
-  setwd(reviewer_repo_wd)
+                              # 10) remove remote
+                              rmremote2 = processx_run("git", c("remote", "rm", "modified-source"))
+                              processx_check(rmremote2)
 
-  # Step 12: Add remote
-  remoteadd = processx_run("git", c("remote", "add", "modified-source", glue::glue("../../backup/{get_repo_name(repo)}")))
-  processx_run("git", c("remote", "-v"))
+                              # 11) Remove git history
+                              getwd()
+                              rmhist = processx_run("rm", c("-rf", ".git"))
+                              newinit = processx_run("git", c("init"))
+                              newadd = processx_run("git", c("add", "."))
+                              newcommit = processx_run("git", c("commit", "-m'Adding author files'"))
 
-  # Step 13: pull remote
-  remotepull = processx_run("git", c("pull", "modified-source", "master", "--allow-unrelated-histories"))
-  processx_check(remotepull)
+                              # 12) Add remote
+                              newremoteadd = processx_run("git", c(
+                                "remote",
+                                "add",
+                                "origin",
+                                glue::glue(
+                                  "https://github.com/{get_repo_owner(y)}/{get_repo_name(y)}"
+                                )
+                              ))
 
-  # Step 14: remove remote
-  rmremote2 = processx_run("git", c("remote", "rm", "modified-source"))
-  processx_check(rmremote2)
+                              # 13) Pull upstream changes
+                              pulltarget = processx_run("git",
+                                                        c(
+                                                          "pull",
+                                                          "origin",
+                                                          "master",
+                                                          "--allow-unrelated-histories"
+                                                        ))
 
-  # Step 15: push changes
-  getwd()
-  processx_run("git", c("status"))
-  pushtarget = processx_run("git", c("push"))
-  processx_check(pushtarget)
+                              # 14) push changes
+                              getwd()
+                              processx_run("git", c("status"))
+                              pushtarget = processx_run("git", c("push", "-u", "origin", "master"))
+                            })
+              })
 }
+
+# peer_return_clone = function(org,
+#                              roster,
+#                              path = NULL,
+#                              local_path,
+#                              prefix = "",
+#                              suffix = "",
+#                              prefix_rev = "",
+#                              suffix_rev = "",
+#                              temp_folder = "return",
+#                              dblind = FALSE) {
+#   arg_is_chr(local_path)
+#   arg_is_chr(path, allow_null = TRUE)
+#   arg_is_chr_scalar(prefix, suffix, prefix_rev, suffix_rev, temp_folder)
+#
+#   rdf = peer_expand_roster(org, roster, prefix, suffix, prefix_rev, suffix_rev)
+#
+#   # 1) Temporary working directory & creating temp folder & change wd
+#   setwd(local_path)
+#   folder = processx_run("mkdir", c(temp_folder), wd = local_wd)
+#   processx_check(folder)
+#   temp_wd = fs::path(local_path, temp_folder)
+#   setwd(temp_wd)
+#
+#
+#   purrr::walk2(rdf$repo_rev_r, rdf$repo_a,
+#                function(r, a) {
+#
+#                  # 2) Clone review repos
+#                  res = purrr::safely(org_repo_clone)(r, temp_wd, verbose = FALSE)
+#                  status_msg(res,
+#                             fail = glue::glue("Failed to clone {usethis::ui_value(r)}."))
+#
+#                  # 3) Remove remote
+#                  setwd(fs::path(temp_wd, get_repo_name(r)))
+#                  rmremote = processx_run("git", c("remote", "rm", "origin"))
+#                  processx_check(rmremote)
+#
+#                  # 4) Make new folder, filter & move files into it
+#                  if (!dblind) {
+#                    target_folder = rdf$reviewer[rdf$repo_rev_r == r]
+#                  } else {
+#                    target_folder = rdf$reviewer_no[rdf$repo_rev_r == r & rdf$repo_a == a]
+#                  }
+#
+#                  filter = processx_run("git",
+#                                        c(
+#                                          "filter-branch",
+#                                          "--subdirectory-filter",
+#                                          rdf$author_random[rdf$repo_rev_r == r & rdf$repo_a == a],
+#                                          "--",
+#                                          "--all"
+#                                        ))
+#
+#                  getwd()
+#                  system(glue::glue("mkdir {target_folder} && mv * {target_folder}"))
+#
+#                  # 5) Add to git repo
+#                  addfiles = processx_run("git", c("add", "."))
+#                  processx_check(addfiles)
+#
+#                  # 6) commit
+#                  commit = processx_run("git", c("commit", "-m'Add files to folder'"))
+#                  processx_check(commit)
+#
+#                  # # 7) Remove git history
+#                  getwd()
+#                  rmhist = processx_run("rm", c("-rf", ".git"))
+#                  newinit = processx_run("git", c("init"))
+#                  newadd = processx_run("git", c("add", "."))
+#                  newcommit = processx_run("git", c("commit", "-m'Adding Reviewer files'"))
+#
+#                  # 8) grab author repo
+#                  res_aut = purrr::safely(org_repo_clone)(a, temp_wd, verbose = FALSE)
+#                  status_msg(res_aut,
+#                             fail = glue::glue("Failed to clone {usethis::ui_value(a)}."))
+#                  repo_aut_wd = fs::path(temp_wd, get_repo_name(a))
+#                  setwd(repo_aut_wd)
+#
+#                  ## Copy original file
+#                  system(glue::glue("mkdir {target_folder} && cp {path} {target_folder}"))
+#                  processx_run("git", c("add", "."))
+#                  commit = processx_run("git", c("commit", "-m'Place original file'"))
+#
+#                  # 9) add remote
+#                  remoteadd = processx_run("git",
+#                                           c(
+#                                             "remote",
+#                                             "add",
+#                                             "modified-source",
+#                                             glue::glue("../../{temp_folder}/{get_repo_name(r)}")
+#                                           ))
+#                  processx_run("git", c("remote", "-v"))
+#
+#                  # 10) pull remote
+#                  remotepull = processx_run("git",
+#                                            c(
+#                                              "pull",
+#                                              "modified-source",
+#                                              "master",
+#                                              "--allow-unrelated-histories"
+#                                            ))
+#
+#                  # 11) remove remote
+#                  rmremote2 = processx_run("git", c("remote", "rm", "modified-source"))
+#                  processx_check(rmremote2)
+#
+#
+#
+#                  # 12) Add remote
+#                  # newremoteadd = processx_run("git", c(
+#                  #   "remote",
+#                  #   "add",
+#                  #   "origin",
+#                  #   glue::glue(
+#                  #     "https://github.com/{get_repo_owner(a)}/{get_repo_name(a)}"
+#                  #   )
+#                  # ))
+#
+#
+#                  # 13) Pull upstream changes
+#                  pulltarget = processx_run("git",
+#                                            c(
+#                                              "pull",
+#                                              "origin",
+#                                              "master",
+#                                              "--allow-unrelated-histories"
+#                                            ))
+#
+#                  # 14) push changes
+#                  getwd()
+#                  processx_run("git", c("status"))
+#                  pushtarget = processx_run("git", c("push", "-u", "origin", "master"))
+#                })
+#
+# }
 
 
 org_repo_clone = function(repo, local_wd, verbose = FALSE) {
-
   arg_is_chr_scalar(repo, local_wd)
 
   res = processx::run(
@@ -315,8 +502,10 @@ processx_check = function(res) {
     usethis::ui_oops("Command did not run")
 }
 
-processx_run = function(cmd, args, wd = NULL, verbose = TRUE) {
-
+processx_run = function(cmd,
+                        args,
+                        wd = NULL,
+                        verbose = TRUE) {
   if (!is.null(wd)) {
     processx::run(
       cmd,
