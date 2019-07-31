@@ -60,37 +60,19 @@ peer_create_roster = function(m,
 }
 
 
-# The following two functions (peer_anonymize_file and remove_author_rmd) are prob not needed any longer if we decide not to include author as a YAML parameter
-
-# If we keep this function, it should just strip the author field from YAML
-peer_anonymize_file = function(path) {
-  remove_author_rmd(path)
-}
-
-remove_author_rmd = function(input) {
-  sub(
-    '\\nauthor: \\"[aA-zZ]+ ([aA-zZ]+[ \\.]+)?[aA-zZ]+\"',
-    '\\nauthor: \\"Student x"',
-    input
-  )
-}
-
-format_prefix = function(prefix = "") {
-
-  if (prefix != "") {
-    if (!grepl("[\\w\\d]*[_-]$", prefix)) {
-      prefix = paste0(prefix, "-")
-    }
+format_prefix = function(x) {
+  if (x != "" & !grepl("[\\w\\d]*[_-]$", x)) {
+    paste0(x, "-")
+  } else {
+    x
   }
 }
 
-
-format_suffix = function(suffix = "") {
-
-  if (suffix != "") {
-    if (!grepl("^[_-][\\w\\d]*", suffix)) {
-      suffix = paste0("-", suffix)
-    }
+format_suffix = function(x) {
+  if (x != "" & !grepl("^[_-][\\w\\d]*", x)) {
+    paste0("-", x)
+  } else {
+    x
   }
 }
 
@@ -182,69 +164,103 @@ peer_get_reviewer = function(author,
 #'
 peer_assign = function(org,
                        roster,
-                       path,
+                       path = NULL,
                        prefix = "",
                        suffix = "",
+                       prefix_rev = "",
+                       suffix_rev = "",
                        message = "Assigning review",
                        branch = "master",
                        overwrite = FALSE) {
 
-  arg_is_chr(org, path, prefix, suffix, branch)
-  arg_is_chr(message, allow_null = TRUE)
+  arg_is_chr(org, prefix, suffix, prefix_rev, suffix_rev, branch)
+  arg_is_chr(path, message, allow_null = TRUE)
   arg_is_lgl_scalar(overwrite)
 
-  rdf = peer_expand_roster(org, roster, prefix, suffix)
+  prefix = format_prefix(prefix)
+  prefix_rev = format_prefix(prefix_rev)
+  suffix = format_suffix(suffix)
+  suffix_rev = format_suffix(suffix_rev)
 
-  author = as.list(as.character(rdf$user))
-  author_random = as.list(as.character(rdf$user_random))
+  rdf = peer_expand_roster(org, roster, prefix, suffix, prefix_rev, suffix_rev)
 
-  purrr::walk2(author, author_random,
-               function(author, author_random) {
-                 repo1 = glue::glue("{org}/{prefix}{author}{suffix}")
+  author = unique(rdf$author)
 
-                 # First, get file content(s)
-                 content = purrr::map(path,
-                                      function(path) {
-                                        res = purrr::safely(repo_get_file)(repo = repo1,
-                                                                           file = path,
-                                                                           branch = branch)
+  purrr::walk(author,
+              function(x) {
 
-                                        if (succeeded(res)) {
-                                          res$result
-                                        }
-                                      })
+                sub = rdf[rdf$author == x,]
 
-                 # Grab reviewers
-                 reviewer = peer_get_reviewer(author, rdf, "reviewer")
+                # Get files
+                if (is.null(path)) {
 
-                 # Create folder paths (from perspective of reviewers)
-                 path = as.list(glue::glue("{author_random}/{path}"))
+                  files = repo_files()
 
-                 purrr::walk(reviewer,
-                             function(reviewer) {
-                               repo2 = glue::glue("{org}/{prefix}{reviewer}{suffix}")
-                               purrr::walk2(path, content,
-                                            function(path, content) {
-                                              if (!file_exists(repo2, path) |
-                                                  overwrite == TRUE) {
-                                                if (!is.null(content)) {
-                                                  repo_put_file(
-                                                    repo = repo2,
-                                                    path = path,
-                                                    content = content,
-                                                    message = message,
-                                                    branch = branch,
-                                                    verbose = TRUE
-                                                  )
-                                                }
-                                              } else {
-                                                usethis::ui_oops(
-                                                  "Failed to add {usethis::ui_value(path)} to {usethis::ui_value(repo2)}: already exists."
-                                                )
-                                              }
-                                            })
-                             })
-               })
+
+                }
+
+                content = purrr::map(path,
+                                     function(y) {
+                                       res = purrr::safely(repo_get_file)(repo = unique(sub$repo_a),
+                                                                          file = y,
+                                                                          branch = branch)
+                                       if (succeeded(res))
+                                         res$result
+                                     })
+
+
+              })
+
+  # author = as.list(as.character(rdf$user))
+  # author_random = as.list(as.character(rdf$user_random))
+  #
+  # purrr::walk2(author, author_random,
+  #              function(author, author_random) {
+  #                repo1 = glue::glue("{org}/{prefix}{author}{suffix}")
+  #
+  #                # First, get file content(s)
+  #                content = purrr::map(path,
+  #                                     function(path) {
+  #                                       res = purrr::safely(repo_get_file)(repo = repo1,
+  #                                                                          file = path,
+  #                                                                          branch = branch)
+  #
+  #                                       if (succeeded(res)) {
+  #                                         res$result
+  #                                       }
+  #                                     })
+  #
+  #                # Grab reviewers
+  #                reviewer = peer_get_reviewer(author, rdf, "reviewer")
+  #
+  #                # Create folder paths (from perspective of reviewers)
+  #                path = as.list(glue::glue("{author_random}/{path}"))
+  #
+  #                purrr::walk(reviewer,
+  #                            function(reviewer) {
+  #                              repo2 = glue::glue("{org}/{prefix}{reviewer}{suffix}")
+  #                              purrr::walk2(path, content,
+  #                                           function(path, content) {
+  #                                             if (!file_exists(repo2, path) |
+  #                                                 overwrite == TRUE) {
+  #                                               if (!is.null(content)) {
+  #                                                 repo_put_file(
+  #                                                   repo = repo2,
+  #                                                   path = path,
+  #                                                   content = content,
+  #                                                   message = message,
+  #                                                   branch = branch,
+  #                                                   verbose = TRUE
+  #                                                 )
+  #                                               }
+  #                                             } else {
+  #                                               usethis::ui_oops(
+  #                                                 "Failed to add {usethis::ui_value(path)} to {usethis::ui_value(repo2)}: already exists."
+  #                                               )
+  #                                             }
+  #                                           })
+  #                            })
+  #              })
 }
 
 
@@ -857,6 +873,8 @@ repo_mirror_file = function(source_repo,
 #' @param dblind Logical. Specifies whether review is conducted double-blind (i.e. neither reviewer nor author can identify each other), or single-blind (i.e. authors remain anonymous but reviewer identities are revealed). If `dblind = TRUE`, reviewer folders are identified by the anonymized user IDs in the roster's `user_random` column. If `dblind = FALSE`, reviewer folders are identified by the original user names. Defaults to `FALSE`.
 #' @param prefix Character. Common repository name prefix.
 #' @param suffix Character. Common repository name suffix.
+#' @param prefix_rev Character. Common repository name prefix for review repositories.
+#' @param suffix_rev Character. Common repository name suffix for review repositories.
 #' @param message Character. Commit message, defaults to "Assigning review."
 #' @param branch Character. Name of branch the file should be committed to, defaults to `master`.
 #' @param overwrite Logical. Whether existing files in reviewers' repositories should be overwritten, defaults to `FALSE`.
@@ -889,6 +907,11 @@ peer_return = function(org,
   arg_is_chr_scalar(org, prefix, suffix, prefix_rev, suffix_rev, branch)
   arg_is_chr(message, rfeedback, afeedback, allow_null = TRUE)
   arg_is_lgl_scalar(overwrite)
+
+  prefix = format_prefix(prefix)
+  suffix = format_suffix(suffix)
+  prefix_rev = format_prefix(prefix_rev)
+  suffix_rev = format_suffix(suffix_rev)
 
   rdf = peer_expand_roster(org, roster, prefix, suffix, prefix_rev, suffix_rev)
 

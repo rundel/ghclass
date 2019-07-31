@@ -1,3 +1,19 @@
+# The following two functions (peer_anonymize_file and remove_author_rmd) are prob not needed any longer if we decide not to include author as a YAML parameter
+
+# If we keep this function, it should just strip the author field from YAML
+peer_anonymize_file = function(path) {
+  remove_author_rmd(path)
+}
+
+remove_author_rmd = function(input) {
+  sub(
+    '\\nauthor: \\"[aA-zZ]+ ([aA-zZ]+[ \\.]+)?[aA-zZ]+\"',
+    '\\nauthor: \\"Student x"',
+    input
+  )
+}
+
+
 ## Trees API
 github_api_branch_get = function(repo, branch = "master") {
   gh::gh(
@@ -184,24 +200,6 @@ repo_move_file = function(source_repo,
 }
 
 # https://github.community/t5/How-to-use-Git-and-GitHub/Adding-a-folder-from-one-repo-to-another/td-p/5425
-
-
-# repo = "ghclass-test/hw2demo-tnaanders"
-# out = org_repo_clone(repo)
-#top = sub("\n", "", processx::run("pwd")$stdout)
-# path = c("hw2_task.Rmd", "iris_data.csv")
-# local_wd = "/Users/thereseanders/Documents/RStudio/test"
-#
-# temp_folder = "backup"
-# source_folder = "rev1"
-# target_folder = "foo"
-# repo_reviewer = "ghclass-test/hw2demo-review-thereanders"
-path = c("hw2_task.Rmd")
-
-prefix = "hw2demo-"
-prefix_rev = "hw2demo-review-"
-local_path = "/Users/thereseanders/Documents/RStudio/test"
-roster = roster_test
 
 peer_assign_clone = function(org,
                              roster,
