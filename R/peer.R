@@ -38,14 +38,21 @@ peer_create_roster = function(m,
   res = purrr::map(j, ~ g(.x, length(user)))
 
   # Randomizing user names to avoid clustering
+  # if length(user) == 2, will always res = c(2, 1)
+  set.seed(seed)
   user_random = paste0("aut", sample(1:length(user), length(user)))
+
   df_sort = data.frame(user = user,
                        user_random = as.character(user_random))[order(as.numeric(sub("[aA-zZ]+", "", user_random))), ]
 
   res_df = setNames(data.frame(df_sort,
-                               do.call(
-                                 cbind, purrr::map(res, ~ as.character(df_sort$user_random)[.x])
-                               )),
+                               if (length(user) > 2) {
+                                 purrr::map(res,
+                                            ~ tibble::tibble(user_random = as.character(df_sort$user_random)[.x]))
+                               } else {
+                                 rev(user_random)
+                               }
+                               ),
                     c("user", "user_random", purrr::map_chr(1:m, ~ paste0("rev", .x))))
 
   res_df = res_df[order(res_df$user_random), ]
@@ -62,39 +69,45 @@ peer_create_roster = function(m,
 #' Initiate peer review repositories
 #'
 #' `peer_init()` initiates peer review repositories. It creates a review repository for each user, adds users to their respective repositories, and applies peer review labels to all repositories (i.e. assignment and review repositories).
+#'
+#' @param org Character. Name of GitHub Organization.
+#' @param roster Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column `user` with GitHub user names of authors, a column `user_random` with randomized tokens for user names, and one or more `rev*` columns that specify review assignments as values of the vector `user_random`. See `peer_create_feedback`.
+#' @param prefix Character. Common repository name prefix.
+#' @param suffix Character. Common repository name suffix.
+#'
+#' @export
 peer_init = function(org,
                      roster,
                      prefix = "",
                      suffix = "") {
 
-  arg_is_lgl_scalar(org, prefix, suffix)
+  arg_is_chr_scalar(org, prefix, suffix)
+
+  prefix_rev = format_rev(prefix, suffix)$prefix_rev
+  suffix_rev = format_rev(prefix, suffix)$suffix_rev
+
+  repo_create(org, user, prefix = prefix_rev, suffix = suffix_rev)
+  repo_add_user(glue::glue("{org}/{prefix_rev}{user}{suffix_rev}"), user)
+
+  peer_apply_label(org = org)
 
 }
 
-
-
-
-
-format_prefix = function(x) {
-  if (x != "" & !grepl("[\\w\\d]*[_-]$", x)) {
-    paste0(x, "-")
+format_rev = function(prefix, suffix) {
+  tag = "review"
+  if (prefix != "" & suffix == "") {
+    list(prefix_rev = paste0(prefix, tag, "-"),
+         suffix_rev = suffix)
   } else {
-    x
+    list(prefix_rev = prefix,
+         suffix_rev = paste0(suffix, "-", tag))
   }
 }
-
-format_suffix = function(x) {
-  if (x != "" & !grepl("^[_-][\\w\\d]*", x)) {
-    paste0("-", x)
-  } else {
-    x
-  }
-}
-
 
 
 # Reads roster file
 peer_read_roster = function(roster) {
+
   res = purrr::safely(fs::file_exists)(roster)
 
   if (is.null(res$result) & is.data.frame(roster)) {
@@ -134,7 +147,8 @@ peer_expand_roster = function(org,
                               suffix = "",
                               prefix_rev = "",
                               suffix_rev = "") {
-  arg_is_chr_scalar(prefix, suffix, prefix_rev, suffix_rev)
+
+  arg_is_chr_scalar(org, prefix, suffix, prefix_rev, suffix_rev)
 
   rdf = peer_read_roster(roster)
   peer_check_roster(rdf)
@@ -159,7 +173,6 @@ peer_expand_roster = function(org,
                        })
   out
 }
-
 
 
 peer_get_reviewer = function(author,
@@ -202,7 +215,6 @@ peer_get_reviewer = function(author,
 #' roster = "hw2_roster_seed12345.csv",
 #' path = c("task.Rmd", "iris_data.csv"),
 #' prefix = "hw2-"
-#' prefix_rev = "hw2-review-"
 #' )
 #' }
 #'
@@ -213,19 +225,17 @@ peer_assign = function(org,
                        path = NULL,
                        prefix = "",
                        suffix = "",
-                       prefix_rev = "",
-                       suffix_rev = "",
+                       rfeedback = NULL,
                        message = "Assigning review",
                        branch = "master",
                        overwrite = FALSE) {
-  arg_is_chr(org, prefix, suffix, prefix_rev, suffix_rev, branch)
-  arg_is_chr(path, message, allow_null = TRUE)
+
+  arg_is_chr(org, prefix, suffix, branch)
+  arg_is_chr(rfeedback, path, message, allow_null = TRUE)
   arg_is_lgl_scalar(overwrite)
 
-  prefix = format_prefix(prefix)
-  prefix_rev = format_prefix(prefix_rev)
-  suffix = format_suffix(suffix)
-  suffix_rev = format_suffix(suffix_rev)
+  prefix_rev = format_rev(prefix, suffix)$prefix_rev
+  suffix_rev = format_rev(prefix, suffix)$suffix_rev
 
   rdf = peer_expand_roster(org, roster, prefix, suffix, prefix_rev, suffix_rev)
 
@@ -357,8 +367,6 @@ peer_issue_body_review = function(sub,
     paste(rev_txt, collapse = "\n\n")
   )
 }
-
-
 
 
 #' Create reviewer feedback form
@@ -571,8 +579,8 @@ peer_create_form_rating = function(category = c("helpfulness", "accuracy", "fair
 #' @param org Character. Name of the GitHub organization.
 #' @param roster Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column `user` with GitHub user names of authors, a column `user_random` with randomized tokens for user names, and one or more `rev*` columns that specify review assignments as values of the vector `user_random`. See `peer_create_form_review`.
 #' @param local_path Character. File name of file to be added.
-#' @param prefix_rev Character. Common repository name prefix for review repositories.
-#' @param suffix_rev Character. Common repository name suffix for review repositories.
+#' @param prefix Character. Common repository name prefix.
+#' @param suffix Character. Common repository name suffix.
 #' @param message Character. Commit message.
 #' @param branch Character. Name of branch the file should be committed to, defaults to `master`.
 #' @param overwrite Logical. Whether existing files in reviewers' repositories should be overwritten, defaults to `FALSE`.
@@ -582,7 +590,7 @@ peer_create_form_rating = function(category = c("helpfulness", "accuracy", "fair
 #' peer_add_file_rev(org = "ghclass-test",
 #' roster = "hw2_roster_seed12345.csv",
 #' local_path = "rfeedback_hw2_blank.Rmd",
-#' prefix = prefix_rev)
+#' prefix = prefix)
 #' }
 #'
 #' @export
@@ -594,23 +602,25 @@ peer_add_file_rev = function(org,
                              message = NULL,
                              branch = "master",
                              overwrite = FALSE) {
+
   arg_is_chr_scalar(org, prefix, suffix)
-  arg_is_chr_scalar(message, allow_null = TRUE)
+  arg_is_chr_scalar(message, branch, allow_null = TRUE)
   arg_is_chr(local_path)
   arg_is_lgl(dblind, overwrite)
 
-  prefix = format_prefix(prefix)
-  suffix = format_suffix(suffix)
+  prefix_rev = format_rev(prefix, suffix)$prefix_rev
+  suffix_rev = format_rev(prefix, suffix)$suffix_rev
 
-  rdf = peer_expand_roster(org, roster, prefix, suffix)
+  rdf = peer_expand_roster(org, roster, prefix, suffix, prefix_rev, suffix_rev)
 
-  # repo_add_file does modification check
   purrr::walk(seq_len(nrow(rdf)),
               function(x) {
                 repo_add_file(
-                  repo = as.character(rdf[x, 'repo_r']),
+                  repo = as.character(rdf[x, 'repo_r_rev']),
                   file = local_path,
+                  message = message,
                   repo_folder = as.character(rdf[x, 'author_random']),
+                  branch = branch,
                   preserve_path = FALSE,
                   overwrite = overwrite
                 )
@@ -651,15 +661,16 @@ peer_add_file_aut = function(org,
                              message = NULL,
                              branch = "master",
                              overwrite = FALSE) {
+
   arg_is_chr_scalar(org, prefix, suffix)
   arg_is_chr_scalar(message, allow_null = TRUE)
   arg_is_chr(local_path)
   arg_is_lgl(dblind, overwrite)
 
-  prefix = format_prefix(prefix)
-  suffix = format_suffix(suffix)
+  prefix_rev = format_rev(prefix, suffix)$prefix_rev
+  suffix_rev = format_rev(prefix, suffix)$suffix_rev
 
-  rdf = peer_expand_roster(org, roster, prefix, suffix)
+  rdf = peer_expand_roster(org, roster, prefix, suffix, prefix_rev, suffix_rev)
 
   # repo_add_file does modification check
   purrr::walk(seq_len(nrow(rdf)),
@@ -691,7 +702,7 @@ peer_add_file_aut = function(org,
 #'
 #' @param org Character. Name of the GitHub organization.
 #' @param roster Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column `user` with GitHub user names of authors, a column `user_random` with randomized tokens for user names, and one or more `rev*` columns that specify review assignments as values of the vector `user_random`. See `peer_create_form_review`.
-#' @param path Character. File name of feedback form (must be .Rmd document).
+#' @param rfeedback Character. File name of reviewer feedback form (must be .Rmd document).
 #' @param prefix Character. Common repository name prefix.
 #' @param suffix Character. Common repository name suffix.
 #' @param write_csv Logical. Whether the roster data frame should be saved to a `.csv` file in the current working directory, defaults to TRUE.
@@ -701,7 +712,7 @@ peer_add_file_aut = function(org,
 #' peer_score_review(
 #' org = "ghclass-test",
 #' roster = "hw2_roster_seed12345.csv",
-#' path = "rfeedback_blank.Rmd",
+#' rfeedback = "rfeedback_blank.Rmd",
 #' prefix = revprefix)
 #' }
 #'
@@ -709,28 +720,28 @@ peer_add_file_aut = function(org,
 #'
 peer_score_review = function(org,
                              roster,
-                             path,
+                             rfeedback,
                              prefix = "",
                              suffix = "",
                              write_csv = TRUE) {
   # Checks
-  arg_is_chr_scalar(org, prefix, suffix, path)
+  arg_is_chr_scalar(org, prefix, suffix, rfeedback)
   arg_is_lgl(dblind, write_csv)
 
-  prefix = format_prefix(prefix)
-  suffix = format_suffix(suffix)
-
   # Check that feedback form is .Rmd
-  if (!grepl("\\.[rR]md$", path)) {
-    usethis::ui_stop("{usethis::ui_field('path')} must be a {usethis::ui_path('.Rmd')} file.")
+  if (!grepl("\\.[rR]md$", rfeedback)) {
+    usethis::ui_stop("{usethis::ui_field('rfeedback')} must be a {usethis::ui_path('.Rmd')} file.")
   }
 
-  rdf = peer_expand_roster(org, roster, prefix, suffix)
+  prefix_rev = format_rev(prefix, suffix)$prefix_rev
+  suffix_rev = format_rev(prefix, suffix)$suffix_rev
+
+  rdf = peer_expand_roster(org, roster, prefix, suffix, prefix_rev, suffix_rev)
 
   out = purrr::map_dfr(seq_len(nrow(rdf)),
                        function(x) {
-                         repo = as.character(rdf[x, 'repo_r'])
-                         ghpath = glue::glue("{as.character(rdf[x, 'author_random'])}/{path}")
+                         repo = as.character(rdf[x, 'repo_r_rev'])
+                         ghpath = glue::glue("{as.character(rdf[x, 'author_random'])}/{rfeedback}")
                          r_no = as.character(rdf[x, 'reviewer_no'])
 
                          feedback = purrr::safely(repo_get_file)(repo = repo,
@@ -775,7 +786,7 @@ peer_score_review = function(org,
 #'
 #' @param org Character. Name of the GitHub organization.
 #' @param roster Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column `user` with GitHub user names of authors, a column `user_random` with randomized tokens for user names, and one or more `rev*` columns that specify review assignments as values of the vector `user_random`. See `peer_create_form_review`.
-#' @param path Character. File name of feedback form (must be .Rmd document).
+#' @param afeedback Character. File name of rating feedback form (must be .Rmd document).
 #' @param dblind Logical. Specifies whether review is conducted double-blind (i.e. neither reviewer nor author can identify each other), or single-blind (i.e. authors remain anonymous but reviewer identities are revealed). If `dblind = TRUE`, reviewer folders are identified by the anonymized user IDs in the roster's `user_random` column. If `dblind = FALSE`, reviewer folders are identified by the original user names. Defaults to `FALSE`.
 #' @param prefix Character. Common repository name prefix.
 #' @param suffix Character. Common repository name suffix.
@@ -786,7 +797,7 @@ peer_score_review = function(org,
 #' peer_score_rating(
 #' org = "ghclass-test",
 #' roster = "hw2_roster_seed12345.csv",
-#' path = "afeedback_blank.Rmd",
+#' afeedback = "afeedback_blank.Rmd",
 #' dblind = TRUE,
 #' prefix = prefix)
 #' }
@@ -795,32 +806,32 @@ peer_score_review = function(org,
 #'
 peer_score_rating = function(org,
                              roster,
-                             path,
+                             afeedback,
                              dblind = FALSE,
                              prefix = "",
                              suffix = "",
                              write_csv = TRUE) {
   # Checks
-  arg_is_chr_scalar(org, prefix, suffix, path)
+  arg_is_chr_scalar(org, prefix, suffix, afeedback)
   arg_is_lgl(dblind, write_csv)
 
-  prefix = format_prefix(prefix)
-  suffix = format_suffix(suffix)
-
   # Check that feedback form is .Rmd
-  if (!grepl("\\.[rR]md$", path)) {
-    usethis::ui_stop("{usethis::ui_field('path')} must be a {usethis::ui_path('.Rmd')} file.")
+  if (!grepl("\\.[rR]md$", afeedback)) {
+    usethis::ui_stop("{usethis::ui_field('afeedback')} must be a {usethis::ui_path('.Rmd')} file.")
   }
 
-  rdf = peer_expand_roster(org, roster, prefix, suffix)
+  prefix_rev = format_rev(prefix, suffix)$prefix_rev
+  suffix_rev = format_rev(prefix, suffix)$suffix_rev
+
+  rdf = peer_expand_roster(org, roster, prefix, suffix, prefix_rev, suffix_rev)
 
   out = purrr::map_dfr(seq_len(nrow(rdf)),
                        function(x) {
                          repo = as.character(rdf[x, 'repo_a'])
                          if (dblind) {
-                           ghpath = glue::glue("{as.character(rdf[x, 'reviewer_no'])}/{path}")
+                           ghpath = glue::glue("{as.character(rdf[x, 'reviewer_no'])}/{afeedback}")
                          } else {
-                           ghpath = glue::glue("{as.character(rdf[x, 'reviewer'])}/{path}")
+                           ghpath = glue::glue("{as.character(rdf[x, 'reviewer'])}/{afeedback}")
                          }
                          r_no = as.character(rdf[x, 'reviewer_no_scorea'])
 
@@ -868,8 +879,6 @@ peer_score_rating = function(org,
 #' @param dblind Logical. Specifies whether review is conducted double-blind (i.e. neither reviewer nor author can identify each other), or single-blind (i.e. authors remain anonymous but reviewer identities are revealed). If `dblind = TRUE`, reviewer folders are identified by the anonymized user IDs in the roster's `user_random` column. If `dblind = FALSE`, reviewer folders are identified by the original user names. Defaults to `FALSE`.
 #' @param prefix Character. Common repository name prefix.
 #' @param suffix Character. Common repository name suffix.
-#' @param prefix_rev Character. Common repository name prefix for review repositories.
-#' @param suffix_rev Character. Common repository name suffix for review repositories.
 #' @param message Character. Commit message, defaults to "Assigning review."
 #' @param branch Character. Name of branch the file should be committed to, defaults to `master`.
 #' @param overwrite Logical. Whether existing files in reviewers' repositories should be overwritten, defaults to `FALSE`.
@@ -879,8 +888,7 @@ peer_score_rating = function(org,
 #' peer_return(org = "ghclass-test,
 #' roster = "hw2_roster_seed12345.csv",
 #' path = c("hw2_task.Rmd", "rfeedback_blank.Rmd"),
-#' prefix = "hw2-",
-#' prefix_rev = "hw2-review-")
+#' prefix = "hw2-")
 #' }
 #'
 #' @export
@@ -893,20 +901,16 @@ peer_return = function(org,
                        dblind = FALSE,
                        prefix = "",
                        suffix = "",
-                       prefix_rev = "",
-                       suffix_rev = "",
                        message = NULL,
                        branch = "master",
                        overwrite = FALSE) {
   arg_is_chr(path)
-  arg_is_chr_scalar(org, prefix, suffix, prefix_rev, suffix_rev, branch)
+  arg_is_chr_scalar(org, prefix, suffix, branch)
   arg_is_chr(message, rfeedback, afeedback, allow_null = TRUE)
   arg_is_lgl_scalar(overwrite)
 
-  prefix = format_prefix(prefix)
-  suffix = format_suffix(suffix)
-  prefix_rev = format_prefix(prefix_rev)
-  suffix_rev = format_suffix(suffix_rev)
+  prefix_rev = format_rev(prefix, suffix)$prefix_rev
+  suffix_rev = format_rev(prefix, suffix)$suffix_rev
 
   rdf = peer_expand_roster(org, roster, prefix, suffix, prefix_rev, suffix_rev)
 
@@ -939,7 +943,7 @@ peer_return = function(org,
                   target_repo = repo_a,
                   source_folder = rdf[['author_random']][x],
                   target_folder = rev[x],
-                  path = c(path, rfeedback),
+                  path = unique(c(path, rfeedback)),
                   message = "Adding reviewer feedback",
                   branch = branch,
                   overwrite = TRUE,
@@ -965,6 +969,7 @@ peer_create_issue_rating = function(rdf,
                                     title = "Reviewer feedback",
                                     label = "test",
                                     dblind = FALSE) {
+
   purrr::walk(unique(rdf[['author']]),
               function(x) {
                 sub = rdf[rdf[['author']] == x, ]
@@ -990,6 +995,7 @@ peer_issue_body_rating = function(sub,
                                   rfeedback = NULL,
                                   afeedback = NULL,
                                   dblind) {
+
   arg_is_chr(path)
   arg_is_chr_scalar(rfeedback, afeedback, allow_null = T)
 

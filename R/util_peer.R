@@ -64,7 +64,7 @@ peer_apply_label = function(org,
     full_repo = TRUE
   )
 
-  usethis::ui_info("This might take a moment...")
+  usethis::ui_info("Applying labels: This might take a moment...")
   purrr::walk(repos, ~ peer_create_label(.))
   usethis::ui_done("Applied peer review labels to all repositories in {usethis::ui_value(org)}.")
 
