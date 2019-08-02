@@ -7,7 +7,19 @@ Authors@R: c(person("Colin", "Rundel", email = "rundel@gmail.com", role = c("aut
            )
 Description: Tools for managing classes with github.
 Depends: R (>= 3.4.0)
-Imports: gh, usethis, withr, fs, stringr, purrr, yaml, base64enc, tibble, glue, processx
+Imports: 
+    gh,
+    usethis,
+    withr,
+    fs,
+    stringr,
+    purrr,
+    yaml,
+    base64enc,
+    tibble,
+    glue,
+    processx,
+    magrittr
 Suggests: styler, knitr, rmarkdown
 License: GPL-3
 Encoding: UTF-8

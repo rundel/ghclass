@@ -5,3 +5,4 @@ secret/
 inst/doc
 .httr-oauth
 .DS_Store
+R/peer_experimental.R
