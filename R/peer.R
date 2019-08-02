@@ -694,8 +694,6 @@ peer_add_file_aut = function(org,
 
 
 
-
-
 #' Collect scores from review forms
 #'
 #' The `peer_score_review()` function collects score information from the YAML of a review form within reviewers' review repositories. It outputs a new .csv file, with rows specifying individual question scores for each student.

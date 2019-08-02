@@ -36,21 +36,20 @@ knitr::opts_chunk$set(
 )
 ```
 
-This vignette introduces the peer review functionality included in `ghclass`. It includes a step-by-step guide to the peer review process. 
+This vignette introduces the peer review functionality of `ghclass` and provides a step-by-step guide. 
 
-For more information on the pedagogy of peer review in undergraduate courses, see the [accompanying paper](https://github.com/thereseanders/cprpaper/blob/master/cetinkayarundelanders_cpr.pdf) by the package authors.
+For more information on the pedagogy of peer review in undergraduate courses, see the draft of the [accompanying paper](https://github.com/thereseanders/cprpaper/blob/master/cetinkayarundelanders_cpr.pdf) by the package authors.
 
-# Step-by-step guide to peer review
-
-Below, we set up a set of repositories for a fictional assignment "hw2" for three students using the `create_repo()` function. For a more detailed description of how to set up student repositories in a GitHub Organization, please see the `ghclass` vignette.
+# Before peer review
+Below, we set up a set of repositories for a fictional assignment "hw2" for four students using the `create_repo()` function. For a more detailed description of how to set up student repositories in a GitHub Organization, please see the `ghclass` vignette.
 ```{r}
 library(ghclass)
 devtools::load_all()
 # 1) Set up vector of student user names, HW identifier prefix, and organization name
-user = c("thereseanders", "thereanders", "tnaanders")
-prefix = "homework2-"
-org = "ghclass-test"
-dblind = TRUE
+user = c("anya", "bruno", "cecile", "diego")
+prefix = "hw2-"
+org = "ghclass-demo"
+
 
 # 2) Create student- and assignment-specific repositories
 repo_create(org, user, prefix = prefix)
@@ -66,9 +65,13 @@ repo_add_file(org_repos(org, filter = prefix),
               message = "Adding task and data for homework 2.")
 ```
 
-## After assignment is completed
+# Step-by-step guide to peer review
+```{r}
+dblind = TRUE
+```
 
-### Creating a roster of author-reviewer assignments
+
+## Creating a roster of author-reviewer assignments
 
 Given a vector of GitHub user names, the `peer_roster()` function creates data frame of random assignments of author files to reviewers. The parameter `m` specifies the number of reviewers per assignment. Instructors should choose the number of reviewers per assignment carefully, as each additional review will significantly increase the time investment for students.
 
@@ -86,7 +89,13 @@ roster_test = peer_roster(2, user, write_csv = F, seed = 678)
 roster_test
 ```
 
-### Moving author files to reviewers
+### Initiating peer review process
+```{r}
+peer_init()
+```
+
+
+## Moving author files to reviewers
 The `peer_assign()` function distributes review assignment to reviewers. It grabs designated files in the author's repository and clones them into a new folder on reviewers' repositories, based on the roster created in the previous step. The newly created folder names are based on anonymous reviewer IDs created via `peer_roster()` in the previous step.
 
 To ensure that the process of moving files from authors' to reviewers' repositores runs smoothly and author anonymity is maintained, students should be instructed to 
@@ -102,7 +111,7 @@ peer_assign(org = org,
 ```
 
 
-### Creating feedback form for reviewers
+## Creating feedback form for reviewers
 
 Instructors can use the `peer_create_rform()` function to create a blank feedback form and save it as an RMarkdown (`.Rmd`) file. This form should subsequently be customized by adding the questions to be answered by reviewers. Instructors can specify the number of questions to be included in the blank form. The function automatically creates parameters `q*_score` for each question in the YAML header of the RMarkdown document. These YAML parameters are later used to extract and save student scores. 
 
@@ -112,7 +121,7 @@ peer_create_rform(2,
                   file = "/Users/thereseanders/Documents/RStudio/introggplot2/hw2/rev_to_aut_feedback_blank.Rmd")
 ```
 
-### Distributing feedback forms to reviewers
+## Distributing feedback forms to reviewers
 The `peer_add_file()` function can be used to place the customized review forms into reviewers' repositories, based on the review roster. The feedback forms are saved in the folder containing the respective author's assignment files.
 
 To specify that feedback forms should be placed in reviewers repositories, the `to = "r"` argument should be specified. 
@@ -126,7 +135,7 @@ peer_add_file(
 )
 ```
 
-### Instructions for students
+## Instructions for students
 1) Pull changes to get author files to the local version of the repository.
 
 ## After review process is completed
