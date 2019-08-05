@@ -17,6 +17,18 @@ github_api_repo_put_file = function(repo, path, content, message, branch) {
 }
 
 
+github_api_repo_put_file_exists = function(repo, path, content, message, branch, sha) {
+  gh::gh(
+    endpoint = "PUT /repos/:owner/:repo/contents/:path",
+    owner = get_repo_owner(repo), repo = get_repo_name(repo),
+    path = path,
+    content = base64enc::base64encode(content),
+    message = message, branch = branch,
+    sha = sha,
+    .token = github_get_token()
+  )
+}
+
 #' Low level function for adding a file to a Github repository
 #'
 #' @param repo Character. Address of repository in `owner/name` format.

@@ -302,8 +302,7 @@ peer_assign = function(org,
 
 peer_create_issue_review = function(rdf,
                                     form_review,
-                                    title = "Author files",
-                                    label) {
+                                    title = "Author files") {
   purrr::walk(unique(rdf[['reviewer']]),
               function(x) {
                 sub = rdf[rdf[['reviewer']] == x,]
@@ -311,7 +310,7 @@ peer_create_issue_review = function(rdf,
                 res = purrr::safely(github_api_issue_create)(
                   repo = unique(sub[['repo_r_rev']]),
                   title = title,
-                  body = peer_issue_body_review(sub, path, form_review),
+                  body = peer_issue_body_review(sub, form_review),
                   assignee = x,
                   labels = list(":pencil: Complete review")
                 )

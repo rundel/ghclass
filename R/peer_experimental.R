@@ -200,16 +200,16 @@ repo_move_file = function(source_repo,
 }
 
 # https://github.community/t5/How-to-use-Git-and-GitHub/Adding-a-folder-from-one-repo-to-another/td-p/5425
+# Not yet vectorized over path, need to specify path
 
 peer_assign_clone = function(org,
                              roster,
-                             path = NULL,
+                             path,
                              local_path,
                              prefix = "",
                              suffix = "",
                              temp_folder = "assign") {
-  arg_is_chr(local_path)
-  arg_is_chr(path, allow_null = TRUE)
+  arg_is_chr(local_path, path)
   arg_is_chr_scalar(prefix, suffix, prefix_rev, suffix_rev, temp_folder)
 
   prefix_rev = format_rev(prefix, suffix)$prefix_rev
@@ -219,7 +219,7 @@ peer_assign_clone = function(org,
 
   # 1) Temporary working directory & creating temp folder & change wd
   setwd(local_path)
-  folder = processx_run("mkdir", c(temp_folder), wd = local_wd)
+  folder = processx_run("mkdir", c(temp_folder), wd = local_path)
   processx_check(folder)
   temp_wd = fs::path(local_path, temp_folder)
   setwd(temp_wd)
@@ -268,8 +268,8 @@ peer_assign_clone = function(org,
                 processx_check(commit)
 
                 ### grab destination reviewer repos
-                repo_rev_r = unique(rdf$repo_rev_r[rdf$repo_a == x])
-                purrr::walk(repo_rev_r,
+                repo_r_rev = unique(rdf$repo_r_rev[rdf$repo_a == x])
+                purrr::walk(repo_r_rev,
                             function(y) {
                               # 7) clone reviewer repos
                               res_rev = purrr::safely(org_repo_clone)(y, temp_wd, verbose = FALSE)
@@ -336,15 +336,14 @@ peer_assign_clone = function(org,
 
 peer_return_clone = function(org,
                              roster,
-                             path = NULL,
+                             path,
                              local_path,
                              prefix = "",
                              suffix = "",
                              temp_folder = "return",
                              dblind = FALSE) {
 
-  arg_is_chr(local_path)
-  arg_is_chr(path, allow_null = TRUE)
+  arg_is_chr(path, local_path)
   arg_is_chr_scalar(prefix, suffix, prefix_rev, suffix_rev, temp_folder)
 
   prefix_rev = format_rev(prefix, suffix)$prefix_rev
@@ -354,12 +353,12 @@ peer_return_clone = function(org,
 
   # 1) Temporary working directory & creating temp folder & change wd
   setwd(local_path)
-  folder = processx_run("mkdir", c(temp_folder), wd = local_wd)
+  folder = processx_run("mkdir", c(temp_folder), wd = local_path)
   processx_check(folder)
   temp_wd = fs::path(local_path, temp_folder)
   setwd(temp_wd)
 
-  purrr::walk2(rdf$repo_rev_r, rdf$repo_a,
+  purrr::walk2(rdf[['repo_r_rev']], rdf[['repo_a']],
                function(r, a) {
 
                  # 2) Clone review repos
@@ -374,16 +373,16 @@ peer_return_clone = function(org,
 
                  # 4) Make new folder, filter & move files into it
                  if (!dblind) {
-                   target_folder = rdf$reviewer[rdf$repo_rev_r == r]
+                   target_folder = rdf$reviewer[rdf$repo_r_rev == r]
                  } else {
-                   target_folder = rdf$reviewer_no[rdf$repo_rev_r == r & rdf$repo_a == a]
+                   target_folder = rdf$reviewer_no[rdf$repo_r_rev == r & rdf$repo_a == a]
                  }
 
                  filter = processx_run("git",
                                        c(
                                          "filter-branch",
                                          "--subdirectory-filter",
-                                         rdf$author_random[rdf$repo_rev_r == r & rdf$repo_a == a],
+                                         rdf$author_random[rdf$repo_r_rev == r & rdf$repo_a == a],
                                          "--",
                                          "--all"
                                        ))
