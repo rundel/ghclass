@@ -126,11 +126,10 @@ The `peer_add_file()` function can be used to place the customized review forms 
 
 To specify that feedback forms should be placed in reviewers repositories, the `to = "r"` argument should be specified. 
 ```{r}
-peer_add_file(
+peer_add_file_rev(
         org = "ghclass-test",
         roster = roster_test,
-        to = "rev",
-        file = "/Users/thereseanders/Documents/RStudio/introggplot2/hw2/rfeedback_blank.Rmd",
+        local_path = "/Users/thereseanders/Documents/RStudio/introggplot2/hw2/hw2_review.Rmd",
         prefix = prefix
 )
 ```
@@ -143,12 +142,10 @@ peer_add_file(
 ### Collect scores given by reviewers
 `peer_score()` collects the scores given by reviewers to authors. In this step, we want to collect the scores given **from reviewers** to authors, thus we specify `r from = "r"`. For the purpose of demonstration, below, we save the output in an object. In practice, we recommend setting `write_csv = TRUE` to save the output as a `.csv` file.
 ```{r}
-rscores = peer_score(
+rscores = peer_score_review(
   org = "ghclass-test",
   roster = roster_test,
-  from = "rev",
-  file = "rfeedback_blank.Rmd",
-  dblind = dblind,
+  form_review = "hw2_review.Rmd",
   prefix = prefix,
   write_csv = F
 )
@@ -173,47 +170,35 @@ peer_create_aform(file = "/Users/thereseanders/Documents/RStudio/introggplot2/hw
                   category = c("accuracy", "fairness"))
 ```
 
-### [Recommended] Distribute author rating forms 
+
+### [Recommended] Distribute author rating forms
+Instructors may customize the rating forms before distributing them to the authors.
 ```{r}
-peer_add_file(
+peer_add_file_aut(
         org = "ghclass-test",
         roster = roster_test,
-        to = "aut",
-        file = "/Users/thereseanders/Documents/RStudio/introggplot2/hw2/afeedback_blank.Rmd",
+        local_path = "/Users/thereseanders/Documents/RStudio/introggplot2/hw2/hw2_rating.Rmd",
         prefix = prefix,
-        dblind = dblind,
-        overwrite = T
+        dblind = dblind
 )
 ```
 
 
 ### Move reviewer feedback to author repositories
-First, to later highlight the changes reviewers suggested for authors' assignments, we place the original assignment file into reviewer-specific folders on authors' repositories. 
-```{r}
-peer_put_original(org = org,
-                  roster = roster_test,
-                  file = "hw2_task.Rmd",
-                  prefix = prefix,
-                  dblind = dblind)
-```
-
-
-
-Only select files will be moved and saved in a new folder in authors' repositories. 
-```{r}
-peer_return(org = org,
-            roster = roster_test,
-            path = c("hw2_task.Rmd", "rfeedback_blank.Rmd"),
-            prefix = prefix,
-            dblind = dblind)
-```
-
-
-## New return version
+The function `peer_return()` places the author's original file in review-specific folder on authors' repositories and then copies reviewer files into that folder. The function also opens an issue to alert authors that the review process is complete. The issue contains a link to the commit that illustrates the difference between their assignment and reviewers' suggestions, the written feedback from reviewers, and if applicable, the form requesting their rating on the reviewers' feedback.
 
 Students will receive an email to the address registered for their GitHub user name alerting them that a new issue has been created in their repository.
 
-
+Only select files will be moved and saved in a new folder in authors' repositories and should be specified by the instructor via the `path` parameter. Please not that the `peer_return()` function is relatively costly in terms of calls to the API. Instructors are advised to select only the most relevant files in this step, for example the review feedback form and comments made by the reviewer on authors' original files.
+```{r}
+peer_return(org = org,
+            roster = roster_test,
+            path = c("hw2_task.Rmd"),
+            form_review = "hw2_review.Rmd",
+            form_rating = "hw2_rating.Rmd",
+            prefix = prefix,
+            dblind = dblind)
+```
 
 
 ## After author rating of reviews is completed
@@ -221,11 +206,10 @@ Students will receive an email to the address registered for their GitHub user n
 ### [Recommended] Collect scores given by authors
 Again, we can use `peer_score()` to collect the ratings given by authors to reviewers. This time, we want to collect the scores given **from authors** to reviewers, thus we specify `r from = "a"`. For the purpose of demonstration, below, we save the output in an object. In practice, we recommend setting `write_csv = TRUE` to save the output as a `.csv` file.
 ```{r}
-ascores = peer_score(
+ascores = peer_score_rating(
   org = "ghclass-test",
   roster = roster_test,
-  from = "a",
-  file = "afeedback_blank.Rmd",
+  form_rating = "afeedback_blank.Rmd",
   dblind = dblind,
   prefix = prefix,
   write_csv = F
