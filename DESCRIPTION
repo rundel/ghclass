@@ -19,7 +19,8 @@ Imports:
     tibble,
     glue,
     processx,
-    magrittr
+    magrittr,
+    here
 Suggests: styler, knitr, rmarkdown
 License: GPL-3
 Encoding: UTF-8

@@ -4,15 +4,18 @@
 \alias{peer_assign}
 \title{Assign file to reviewers}
 \usage{
-peer_assign(org, roster, file, prefix = "", suffix = "",
-  message = "Assigning review", branch = "master", overwrite = FALSE)
+peer_assign(org, roster, path = NULL, form_review = NULL,
+  prefix = "", suffix = "", message = "Assigning review",
+  branch = "master", overwrite = FALSE)
 }
 \arguments{
 \item{org}{Character. Name of GitHub Organization.}
 
-\item{roster}{Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column \code{user} with GitHub user names of authors, a column \code{user_random} with randomized tokens for user names, and one or more \code{r*} columns that specify review assignments as values of the vector \code{user_random}. See \code{peer_create_feedback}.}
+\item{roster}{Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column \code{user} with GitHub user names of authors, a column \code{user_random} with randomized tokens for user names, and one or more \code{rev*} columns that specify review assignments as values of the vector \code{user_random}.}
 
-\item{file}{Character. File name or vector of file names to be included.}
+\item{path}{Character. File name or vector of file names to be included. If \code{NULL}, all files not contained in folders, except \code{.gitignore}, will be moved to the reviewers' repositories.}
+
+\item{form_review}{Character. File name of customized review feedback form. If \code{NULL}, no link will be created in the issue informing reviewers that the review files are available.}
 
 \item{prefix}{Character. Common repository name prefix.}
 
@@ -25,5 +28,5 @@ peer_assign(org, roster, file, prefix = "", suffix = "",
 \item{overwrite}{Logical. Whether existing files in reviewers' repositories should be overwritten, defaults to \code{FALSE}.}
 }
 \description{
-\code{peer_assign} adds files from authors' repositories to reviewers' repositories.
+\code{peer_assign} adds files from authors' repositories to review repositories. It also creates an issue in the reviewers' repositories informing them that the review files are available and creating links to the relevant documents.
 }

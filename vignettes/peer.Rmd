@@ -230,11 +230,7 @@ Peer review is great! It gives students a chance to learn from each other, get m
 Writing a meaningful review with constructive comments is a learning process and it takes time! Thus, when implementing peer review in a course, instructors should consider reducing either the number or the scope of assignments to give students sufficient time to complete and engage with reviews. 
 
 ### Number of reviewers
-<<<<<<< HEAD
 On one hand, more reviewers means more feedback and less weight to outlier reviews for grading, so more is better, right? On the other hand, more reviewers also means more student hours spent on giving feedback and not working on their final projects, learning new skills, or recharging. Plus, how much different will the feedback from each additional reviewer be after two or three reviews? Thus, we recommend to assign a maximum of two or three reviewers per assignment to balance the benefits of having multiple reviews and the demand on students' time/diminishing returns.
-=======
-On one hand, more reviewers means more feedback and less weight to outlier reviews for grading, so more is better, right? On the other hand, more reviewers also means more student hours spent on giving feedback and not working on their final projects, learning new skills, or recharging. Plus, how much different will the feedback from each additional reviewer be after two or three reviews? Thus, we recommend to assign between two and three reviewers per assignment to balance the benefits of having multiple reviews and the demand on students' time/diminishing returns.
->>>>>>> 39d84f75f251da5e535fc3c7d86aff814fadb861
 
 ### Timing
 Instructors should carefully consider the timing of deadlines for a) the assignment, b) the completion of the review, and c) the completion of the author rating of reviewers' feedback, if applicable. 

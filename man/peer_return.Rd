@@ -4,16 +4,20 @@
 \alias{peer_return}
 \title{Return peer feedback to authors}
 \usage{
-peer_return(org, roster, file, dblind = FALSE, prefix = "",
-  suffix = "", message = "Returning review", branch = "master",
-  overwrite = FALSE)
+peer_return(org, roster, path, form_review = NULL, form_rating = NULL,
+  dblind = FALSE, prefix = "", suffix = "", message = NULL,
+  branch = "master", overwrite = FALSE)
 }
 \arguments{
 \item{org}{Character. Name of GitHub Organization.}
 
-\item{roster}{Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column \code{user} with GitHub user names of authors, a column \code{user_random} with randomized tokens for user names, and one or more \code{r*} columns that specify review assignments as values of the vector \code{user_random}. See \code{peer_create_feedback}.}
+\item{roster}{Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column \code{user} with GitHub user names of authors, a column \code{user_random} with randomized tokens for user names, and one or more \code{rev*} columns that specify review assignments as values of the vector \code{user_random}.}
 
-\item{file}{Character. File name or vector of file names to be included.}
+\item{path}{Character. File name or vector of file names to be included.}
+
+\item{form_review}{Character. File name of reviewer feedback form (must be .Rmd document). If \code{NULL}, no link to the form will be created in the issue filed for authors.}
+
+\item{form_rating}{Character. File name of rating feedback form (must be .Rmd document). If \code{NULL}, no link to the form will be created in the issue filed for authors.}
 
 \item{dblind}{Logical. Specifies whether review is conducted double-blind (i.e. neither reviewer nor author can identify each other), or single-blind (i.e. authors remain anonymous but reviewer identities are revealed). If \code{dblind = TRUE}, reviewer folders are identified by the anonymized user IDs in the roster's \code{user_random} column. If \code{dblind = FALSE}, reviewer folders are identified by the original user names. Defaults to \code{FALSE}.}
 
