@@ -17,30 +17,6 @@ github_api_repo_put_file = function(repo, path, content, message, branch) {
 }
 
 
-github_api_repo_put_file_exists = function(repo, path, content, message, branch, sha) {
-  gh::gh(
-    endpoint = "PUT /repos/:owner/:repo/contents/:path",
-    owner = get_repo_owner(repo), repo = get_repo_name(repo),
-    path = path,
-    content = base64enc::base64encode(content),
-    message = message, branch = branch,
-    sha = sha,
-    .token = github_get_token()
-  )
-}
-
-github_api_repo_put_file_notexists = function(repo, path, content, message, branch, sha) {
-  gh::gh(
-    endpoint = "PUT /repos/:owner/:repo/contents/:path",
-    owner = get_repo_owner(repo), repo = get_repo_name(repo),
-    path = path,
-    content = base64enc::base64encode(content),
-    message = message, branch = branch,
-    sha = sha,
-    .token = github_get_token()
-  )
-}
-
 #' Low level function for adding a file to a Github repository
 #'
 #' @param repo Character. Address of repository in `owner/name` format.
@@ -80,10 +56,31 @@ repo_put_file = function(repo, path, content, message = NULL, branch = "master",
 }
 
 
-repo_put_file_exists = function(repo, path, content, message = NULL, branch = "master", verbose = TRUE, sha = NULL) {
 
+
+peer_github_api_repo_put_file = function(repo, path, content, message, branch, sha) {
+
+  args = list(
+    endpoint = "PUT /repos/:owner/:repo/contents/:path",
+    owner = get_repo_owner(repo), repo = get_repo_name(repo),
+    path = path,
+    content = base64enc::base64encode(content),
+    message = message, branch = branch,
+    .token = github_get_token()
+  )
+
+  if (!is.null(sha)) {
+    args[["sha"]] = sha
+  }
+
+  do.call(gh::gh, args)
+}
+
+
+
+peer_repo_put_file = function(repo, path, content, message = NULL, branch = "master", sha, verbose = TRUE) {
   arg_is_chr_scalar(repo, path, branch)
-  arg_is_chr_scalar(sha, message, allow_null = TRUE)
+  arg_is_chr_scalar(message, allow_null = TRUE)
 
   if (is.null(message))
     message = glue::glue("Adding file: {path}")
@@ -91,12 +88,7 @@ repo_put_file_exists = function(repo, path, content, message = NULL, branch = "m
   if (is.character(content))
     content = charToRaw(content)
 
-  if (!is.null(sha)) {
-    res = purrr::safely(github_api_repo_put_file_exists)(repo, path, content, message, branch, sha)
-  } else {
-    res = purrr::safely(github_api_repo_put_file_notexists)(repo, path, content, message, branch)
-  }
-
+  res = purrr::safely(peer_github_api_repo_put_file)(repo, path, content, message, branch, sha)
 
   if(verbose){
     status_msg(
@@ -108,4 +100,3 @@ repo_put_file_exists = function(repo, path, content, message = NULL, branch = "m
 
   res
 }
-

@@ -32,7 +32,7 @@ h3 { /* Header 3 */
 }
 </style>
 
-Welcome to ``r params$class``! This course uses GitHub to turn in and view feedback on your assignments. You will have the opportunity to give and receive feedback on your peers' work. Please read the instructions below.
+Welcome to ``r params$course``! This course uses GitHub to turn in and view feedback on your assignments. You will have the opportunity to give and receive feedback on your peers' work. Please read the instructions below.
 
 ## Creating a GitHub account
 If you do not have one already, please create a free [GitHub account](https://github.com). When you created the account, please enter your user name on the list provided by the instructor of this course.
@@ -58,24 +58,57 @@ Once the assignment is complete, the review process begins. Your instructor will
 You instructor will open an issue in this new repository with a check list of tasks to complete. You will go through the following steps:
 
 1. Clone the review repository to a local repository
-2. Review and give comments in the assignment of each of your peers
+2. Review and give comments on the assignment of each of your peers
 3. Fill out review form
 4. Push the changes to your remote repository before the posted deadline
 
 ### Review assignment
 When reviewing your peers' work, please give them helpful comments and suggestions directly in their assignment file.
 
-### Fill out the review form
-The review form is a RMarkdown (`.Rmd`) document that contains questions for you to answer for each of your classmates' assignments you reviewer. It also contains a header, a so-called [YAML](https://bookdown.org/yihui/rmarkdown/html-document.html). You will see empty parameters (or placeholders) in the `params` section of the YAML for you to enter the scores you give the author of the assignment for each question.
+### Fill out review form
+The review form is a RMarkdown (`.Rmd`) document that contains questions for you to answer for each of your classmates' assignments you reviewer. It also contains a co-called [YAML header](https://bookdown.org/yihui/rmarkdown/html-document.html). The YAML header might look like this:
+
+```
+---
+title: "Reviewer feedback form"
+output: github_document
+params:
+  q1_score: NA
+  q2_score: NA
+---
+```
+You will see empty parameters (or placeholders) in the `params` section of the YAML, here they are called `q1_score` and `q2_score`. Please replace the NA for each of the paramters with the number of points you  given the author for each question. A completed YAML header will look like this:
+```
+---
+title: "Reviewer feedback form"
+output: github_document
+params:
+  q1_score: 3
+  q2_score: 0
+---
+```
 
 ## Engage with feedback feedback
 Once the review process is complete, your instructor will pass the feedback that your peers gave on your assignment back to you. Each reviewer's feedback is contained in a separate folder, for example called `rev1` for reviewer 1's feeback, `rev2` for reviewer 2's feedback, and so on. Please read their commments carefully and make necessary changes to your assignment. 
 
-1. Pull the changes on your remote assignment repository into your local clone of the assignment repository.
+1. Pull the changes on your remote assignment repository into your local copy of the assignment repository
+2. Review changes suggested by the reviewers on your assignment and make necessary changes. 
+3. If instructed by the instructor, fill out the rating form on the feedback you received
+4. Push the changes to your remote repository before the posted deadline
 
+You instructor will open an issue in your assignment repository with a check list of tasks to complete. 
 
-### Rate feedback
-The folder will also contain a RMarkdown (`.Rmd`) document that collects your feedback on each of the reviews. Your are asked to complete this short questionnaire for each of your reviewers. Again, please enter your score for each category in the YAML header of the form.
-
+### Fill out rating form
+The reviewer folders that were created contain a RMarkdown document with a short questionnaire asking you to rate the feedback you received from your peers. Again, please enter your score for each category in the YAML header of the form, replacing the NAs. A completed form might look like this.
+```
+---
+title: "Author feedback form"
+output: github_document
+params:
+  helpfulness: 3
+  accuracy: 2
+  fairness: 4
+---
+```
 
 

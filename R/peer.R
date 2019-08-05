@@ -43,7 +43,7 @@ peer_create_roster = function(m,
   user_random = paste0("aut", sample(1:length(user), length(user)))
 
   df_sort = data.frame(user = user,
-                       user_random = as.character(user_random))[order(as.numeric(sub("[aA-zZ]+", "", user_random))), ]
+                       user_random = as.character(user_random))[order(as.numeric(sub("[aA-zZ]+", "", user_random))),]
 
   res_df = setNames(data.frame(df_sort,
                                if (length(user) > 2) {
@@ -54,7 +54,7 @@ peer_create_roster = function(m,
                                }),
                     c("user", "user_random", purrr::map_chr(1:m, ~ paste0("rev", .x))))
 
-  res_df = res_df[order(res_df$user_random), ]
+  res_df = res_df[order(res_df$user_random),]
 
   if (write_csv) {
     fname = glue::glue("roster_seed{seed}.csv")
@@ -164,7 +164,7 @@ peer_expand_roster = function(org,
                              "{org}/{prefix_rev}{reviewer}{suffix_rev}"
                            )),
                            reviewer_no_scorea = names(rdf)[purrr::map_int(reviewer_random, ~
-                                                                            which(rdf[rdf$user_random == .x,] == author_random))]
+                                                                            which(rdf[rdf$user_random == .x, ] == author_random))]
                          )
                        })
   out
@@ -179,7 +179,7 @@ peer_get_reviewer = function(author,
   m = seq_len(length(names(roster)[grepl("^rev[0-9]+$", names(roster))]))
   reviewer_random = as.character(roster[roster$user == author, paste0("rev", m)])
   reviewer = roster$user[purrr::map_int(reviewer_random, ~ which(roster$user_random == .x))]
-  reviewer_no = names(roster)[purrr::map_int(reviewer_random, ~ which(roster[roster$user == author,] == .x))]
+  reviewer_no = names(roster)[purrr::map_int(reviewer_random, ~ which(roster[roster$user == author, ] == .x))]
 
   if (out == "reviewer") {
     reviewer
@@ -238,7 +238,7 @@ peer_assign = function(org,
 
   purrr::walk(unique(rdf$author),
               function(x) {
-                sub = rdf[rdf$author == x,]
+                sub = rdf[rdf$author == x, ]
                 repo_a = unique(sub$repo_a)
                 repo_r = unique(sub$repo_r_rev)
 
@@ -300,7 +300,7 @@ peer_create_issue_review = function(rdf,
                                     title = "Author files") {
   purrr::walk(unique(rdf[['reviewer']]),
               function(x) {
-                sub = rdf[rdf[['reviewer']] == x,]
+                sub = rdf[rdf[['reviewer']] == x, ]
 
                 res = purrr::safely(github_api_issue_create)(
                   repo = unique(sub[['repo_r_rev']]),
@@ -605,26 +605,64 @@ peer_add_file_rev = function(org,
   arg_is_chr_scalar(org, prefix, suffix)
   arg_is_chr_scalar(message, branch, allow_null = TRUE)
   arg_is_chr(local_path)
-  arg_is_lgl(dblind, overwrite)
+  arg_is_lgl(overwrite)
 
   prefix_rev = format_rev(prefix, suffix)$prefix_rev
   suffix_rev = format_rev(prefix, suffix)$suffix_rev
 
   rdf = peer_expand_roster(org, roster, prefix, suffix, prefix_rev, suffix_rev)
 
-  purrr::walk(seq_len(nrow(rdf)),
+  file_status = fs::file_exists(local_path)
+  if (any(!file_status))
+    usethis::ui_stop("Unable to locate the following file(s): {usethis::ui_value(file[!file_status])}")
+
+  rev = unique(rdf[['repo_r_rev']])
+
+  purrr::walk(rev,
               function(x) {
-                repo_add_file(
-                  repo = as.character(rdf[x, 'repo_r_rev']),
-                  file = local_path,
-                  message = message,
-                  repo_folder = as.character(rdf[x, 'author_random']),
-                  branch = branch,
-                  preserve_path = FALSE,
-                  overwrite = overwrite
-                )
+                repo_files = repo_files(x, branch = branch)
+                aut = rdf[['author_random']][rdf[['repo_r_rev']] == x]
+
+                input = purrr::cross2(aut, local_path)
+
+                purrr::walk(input,
+                            function(y) {
+
+                              gh_path = glue::glue("{y[[1]]}/{fs::path_file(y[[2]])}")
+
+                              if (!(gh_path %in% repo_files)) {
+                                repo_put_file_notexists(
+                                  repo = target_repo,
+                                  path = target_path,
+                                  content = res[['result']],
+                                  message = message,
+                                  branch = branch,
+                                  verbose = verbose,
+                                )
+
+                              }
+
+                              #gh_path = fs::path_file(y)
+
+                            })
+
+
 
               })
+
+  # purrr::walk(seq_len(nrow(rdf)),
+  #             function(x) {
+  #               repo_add_file(
+  #                 repo = as.character(rdf[x, 'repo_r_rev']),
+  #                 file = local_path,
+  #                 message = message,
+  #                 repo_folder = as.character(rdf[x, 'author_random']),
+  #                 branch = branch,
+  #                 preserve_path = FALSE,
+  #                 overwrite = overwrite
+  #               )
+  #
+  #             })
 }
 
 
@@ -758,13 +796,13 @@ peer_score_review = function(org,
                          }
                        }) %>%
     # Getting data frame in right format
-    tidyr::gather(q_name, q_value,-user,-r_no) %>%
+    tidyr::gather(q_name, q_value, -user, -r_no) %>%
     tidyr::unite("new", c("r_no", "q_name")) %>%
     tidyr::spread(new, q_value) %>%
     merge(roster, all.y = T)
 
   out = out[, union(names(roster), names(out))]
-  out = out[order(out$user_random), ]
+  out = out[order(out$user_random),]
 
   if (write_csv) {
     fname = glue::glue("{revscores}_{fs::path_file(roster)}")
@@ -849,13 +887,13 @@ peer_score_rating = function(org,
                          }
                        }) %>%
     # Getting data frame in right format
-    tidyr::gather(q_name, q_value,-user,-r_no) %>%
+    tidyr::gather(q_name, q_value, -user, -r_no) %>%
     tidyr::unite("new", c("r_no", "q_name")) %>%
     tidyr::spread(new, q_value) %>%
     merge(roster, all.y = T)
 
   out = out[, union(names(roster), names(out))]
-  out = out[order(out$user_random), ]
+  out = out[order(out$user_random),]
 
   if (write_csv) {
     fname = glue::glue("{autscores}_{fs::path_file(roster)}")
@@ -970,7 +1008,7 @@ peer_create_issue_rating = function(rdf,
                                     dblind = FALSE) {
   purrr::walk(unique(rdf[['author']]),
               function(x) {
-                sub = rdf[rdf[['author']] == x, ]
+                sub = rdf[rdf[['author']] == x,]
 
                 res = purrr::safely(github_api_issue_create)(
                   repo = unique(sub[['repo_a']]),
@@ -1138,25 +1176,24 @@ repo_mirror_file = function(source_repo,
                   res = purrr::safely(repo_get_file)(source_repo, source_path)
 
                   if (succeeded(res)) {
-                    if (!(target_path %in% target_files[['path']])) {
-                      repo_put_file_notexists(
+
+                    if (!(target_path %in% target_files[['path']]) |
+                        overwrite) {
+
+                      if ((target_path %in% target_files[['path']]) & overwrite) {
+                        sha = target_files[['sha']][target_files[['path']] == target_path]
+                      } else {
+                        sha = NULL
+                      }
+
+                      peer_repo_put_file(
                         repo = target_repo,
                         path = target_path,
                         content = res[['result']],
                         message = message,
                         branch = branch,
-                        verbose = verbose,
-                      )
-                    } else if (overwrite) {
-                      sha = source_files[['sha']][source_files[['path']] == p]
-                      repo_put_file_exists(
-                        repo = target_repo,
-                        path = target_path,
-                        content = res[['result']],
-                        message = message,
-                        branch = branch,
-                        verbose = verbose,
-                        sha = sha
+                        sha = sha,
+                        verbose = verbose
                       )
                     } else {
                       usethis::ui_oops(
@@ -1175,3 +1212,4 @@ repo_mirror_file = function(source_repo,
                 }
               })
 }
+
