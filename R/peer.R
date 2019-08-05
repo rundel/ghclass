@@ -51,8 +51,7 @@ peer_create_roster = function(m,
                                             ~ tibble::tibble(user_random = as.character(df_sort$user_random)[.x]))
                                } else {
                                  rev(user_random)
-                               }
-                               ),
+                               }),
                     c("user", "user_random", purrr::map_chr(1:m, ~ paste0("rev", .x))))
 
   res_df = res_df[order(res_df$user_random), ]
@@ -80,7 +79,6 @@ peer_init = function(org,
                      roster,
                      prefix = "",
                      suffix = "") {
-
   arg_is_chr_scalar(org, prefix, suffix)
 
   prefix_rev = format_rev(prefix, suffix)$prefix_rev
@@ -107,7 +105,6 @@ format_rev = function(prefix, suffix) {
 
 # Reads roster file
 peer_read_roster = function(roster) {
-
   res = purrr::safely(fs::file_exists)(roster)
 
   if (is.null(res$result) & is.data.frame(roster)) {
@@ -147,7 +144,6 @@ peer_expand_roster = function(org,
                               suffix = "",
                               prefix_rev = "",
                               suffix_rev = "") {
-
   arg_is_chr_scalar(org, prefix, suffix, prefix_rev, suffix_rev)
 
   rdf = peer_read_roster(roster)
@@ -231,7 +227,6 @@ peer_assign = function(org,
                        message = "Assigning review",
                        branch = "master",
                        overwrite = FALSE) {
-
   arg_is_chr(org, prefix, suffix, branch)
   arg_is_chr(form_review, path, message, allow_null = TRUE)
   arg_is_lgl_scalar(overwrite)
@@ -344,7 +339,11 @@ peer_issue_body_review = function(sub,
 
                          tibble::tibble(
                            author_random = y,
-                           rfeed = ifelse(!is.null(form_review), paste0(url_start_blob, rtemp), character()),
+                           rfeed = ifelse(
+                             !is.null(form_review),
+                             paste0(url_start_blob, rtemp),
+                             character()
+                           ),
                            url = paste0(url_start_blob, y)
                          )
                        })
@@ -603,7 +602,6 @@ peer_add_file_rev = function(org,
                              message = NULL,
                              branch = "master",
                              overwrite = FALSE) {
-
   arg_is_chr_scalar(org, prefix, suffix)
   arg_is_chr_scalar(message, branch, allow_null = TRUE)
   arg_is_chr(local_path)
@@ -662,7 +660,6 @@ peer_add_file_aut = function(org,
                              message = NULL,
                              branch = "master",
                              overwrite = FALSE) {
-
   arg_is_chr_scalar(org, prefix, suffix)
   arg_is_chr_scalar(message, allow_null = TRUE)
   arg_is_chr(local_path)
@@ -929,7 +926,6 @@ peer_return = function(org,
                 repo_r = rdf[['repo_r_rev']][x]
 
                 # 1) place original content
-
                 repo_mirror_file(
                   source_repo = repo_a,
                   target_repo = repo_a,
@@ -972,7 +968,6 @@ peer_create_issue_rating = function(rdf,
                                     title = "Reviewer feedback",
                                     label = "test",
                                     dblind = FALSE) {
-
   purrr::walk(unique(rdf[['author']]),
               function(x) {
                 sub = rdf[rdf[['author']] == x, ]
@@ -998,7 +993,6 @@ peer_issue_body_rating = function(sub,
                                   form_review = NULL,
                                   form_rating = NULL,
                                   dblind) {
-
   arg_is_chr(path)
   arg_is_chr_scalar(form_review, form_rating, allow_null = T)
 
@@ -1093,4 +1087,91 @@ check_afeed_rating = function(out, x) {
   if (!is.na(test)) {
     glue::glue("- [ ] Fill out [rating form]({test}).")
   }
+}
+
+
+format_folder = function(folder, path) {
+  if (!is.null(folder)) {
+    glue::glue("{folder}/{path}")
+  } else {
+    path
+  }
+}
+
+
+#' Mirror file(s) between repos
+#'
+#' `repo_mirror_file` mirrors select file(s) between repositories.
+#'
+#' @param source_repo Character. Address of repository in "owner/name" format.
+#' @param target_repo Character. Address of repository in "owner/name" format.
+#' @param path Character or character vector. Name(s) of file(s) to be moved.
+#' @param source_folder Character. Name of folder containing file on `source_repo`.
+#' @param target_folder Character. Name of folder containing file on `target_repo`.
+#' @param message Character. Commit message.
+#' @param branch Character. Name of branch to use, defaults to "master".
+#' @param overwrite Logical. Should existing file or files with same name be overwritten, defaults to FALSE.
+#'
+repo_mirror_file = function(source_repo,
+                            target_repo,
+                            path = NULL,
+                            source_folder = NULL,
+                            target_folder = NULL,
+                            message = NULL,
+                            branch = "master",
+                            overwrite = FALSE,
+                            verbose = TRUE) {
+  arg_is_chr(path)
+  arg_is_chr_scalar(source_repo, target_repo)
+  arg_is_chr_scalar(source_folder, target_folder, message, allow_null = TRUE)
+  arg_is_lgl_scalar(overwrite)
+
+  source_files = repo_files(source_repo, branch)
+  target_files = repo_files(target_repo, branch)
+
+  purrr::walk(path,
+              function(p) {
+                source_path = format_folder(source_folder, p)
+                target_path = format_folder(target_folder, p)
+
+                if (source_path %in% source_files[['path']]) {
+                  res = purrr::safely(repo_get_file)(source_repo, source_path)
+
+                  if (succeeded(res)) {
+                    if (!(target_path %in% target_files[['path']])) {
+                      repo_put_file_notexists(
+                        repo = target_repo,
+                        path = target_path,
+                        content = res[['result']],
+                        message = message,
+                        branch = branch,
+                        verbose = verbose,
+                      )
+                    } else if (overwrite) {
+                      sha = source_files[['sha']][source_files[['path']] == p]
+                      repo_put_file_exists(
+                        repo = target_repo,
+                        path = target_path,
+                        content = res[['result']],
+                        message = message,
+                        branch = branch,
+                        verbose = verbose,
+                        sha = sha
+                      )
+                    } else {
+                      usethis::ui_oops(
+                        paste(
+                          'Failed to add {usethis::ui_value(target_path)} to {usethis::ui_value(target_repo)}: already exists.',
+                          'If you want to force add this file, re-run the command with {usethis::ui_code("overwrite = TRUE")}.'
+                        )
+                      )
+                    }
+
+                  } else {
+                    usethis::ui_oops(
+                      "Failed to locate {usethis::ui_value(source_path)} on {usethis::ui_value(source_repo)}"
+                    )
+                  }
+                }
+              })
 }
