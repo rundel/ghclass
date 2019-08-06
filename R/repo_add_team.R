@@ -1,4 +1,4 @@
-github_api_add_team = function(repo, team_id, permission){
+github_api_team_add = function(repo, team_id, permission){
   gh::gh(
     "PUT /teams/:team_id/repos/:owner/:repo",
     team_id = team_id,
@@ -29,7 +29,7 @@ repo_add_team = function(repo, team, permission = c("push", "pull", "admin")) {
     function(team, id, repo) {
       if (missing_team(id, org)) return()
 
-      res = purrr::safely(github_api_add_team)(
+      res = purrr::safely(github_api_team_add)(
         repo = repo,
         team_id = id,
         permission = permission

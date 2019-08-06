@@ -1,4 +1,4 @@
-github_api_create_pull_request = function(repo, base, head, title, body, draft = TRUE){
+github_api_pr_create = function(repo, base, head, title, body, draft = TRUE){
   gh::gh(
     "POST /repos/:owner/:repo/pulls",
     owner = get_repo_owner(repo),
@@ -34,7 +34,7 @@ create_pull_request = function(repo, title, base, head = "master", body = "", dr
   purrr::pwalk(
     list(repo, base, head, title, body, draft),
     function(repo, base, head, title, body, draft) {
-      res = purrr::safely(github_api_create_pull_request)(
+      res = purrr::safely(github_api_pr_create)(
         repo, base = base, head = head, title = title, body = body, draft = draft
       )
 
