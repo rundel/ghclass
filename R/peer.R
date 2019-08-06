@@ -108,7 +108,7 @@ format_rev = function(prefix, suffix) {
 #'
 #' @param org Character. Name of GitHub Organization.
 #' @param roster Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column `user` with GitHub user names of authors, a column `user_random` with randomized tokens for user names, and one or more `rev*` columns that specify review assignments as values of the vector `user_random`.
-#' @param path Character. File name or vector of file names to be included. If `NULL`, all files not contained in folders, except `.gitignore`, will be moved to the reviewers' repositories.
+#' @param path Character. File name or vector of file names to be included. If `NULL`, all files not contained in folders, except `.gitignore` and `.Rproj`, will be moved to the reviewers' repositories.
 #' @param form_review Character. File name of customized review feedback form. If `NULL`, no link will be created in the issue informing reviewers that the review files are available.
 #' @param prefix Character. Common repository name prefix.
 #' @param suffix Character. Common repository name suffix.
