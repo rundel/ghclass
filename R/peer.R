@@ -40,7 +40,7 @@ peer_create_roster = function(m,
   user_random = paste0("aut", sample(1:length(user), length(user)))
 
   df_sort = data.frame(user = user,
-                       user_random = as.character(user_random))[order(as.numeric(sub("[aA-zZ]+", "", user_random))),]
+                       user_random = as.character(user_random))[order(as.numeric(sub("[aA-zZ]+", "", user_random))), ]
 
   res_df = setNames(data.frame(df_sort,
                                if (length(user) > 2) {
@@ -51,7 +51,7 @@ peer_create_roster = function(m,
                                }),
                     c("user", "user_random", purrr::map_chr(1:m, ~ paste0("rev", .x))))
 
-  res_df = res_df[order(res_df$user_random),]
+  res_df = res_df[order(res_df$user_random), ]
 
   if (write_csv) {
     fname = glue::glue("roster_seed{seed}.csv")
@@ -149,7 +149,7 @@ peer_assign = function(org,
 
   purrr::walk(unique(rdf$author),
               function(x) {
-                sub = rdf[rdf$author == x, ]
+                sub = rdf[rdf$author == x,]
                 repo_a = unique(sub$repo_a)
                 repo_r = unique(sub$repo_r_rev)
 
@@ -455,42 +455,26 @@ peer_add_file_rev = function(org,
 
   file_status = fs::file_exists(local_path)
   if (any(!file_status))
-    usethis::ui_stop("Unable to locate the following file(s): {usethis::ui_value(local_path[!file_status])}")
+    usethis::ui_stop(
+      "Unable to locate the following file(s): {usethis::ui_value(local_path[!file_status])}"
+    )
 
   rev = unique(rdf[['repo_r_rev']])
 
   purrr::walk(rev,
               function(x) {
-
                 repo_files = repo_files(x, branch = branch)
                 aut = rdf[['author_random']][rdf[['repo_r_rev']] == x]
 
-                input = purrr::cross2(aut, local_path)
-
-                purrr::walk(input,
-                            function(y) {
-
-                              gh_path = glue::glue("{y[[1]]}/{fs::path_file(y[[2]])}")
-
-                              if (!(gh_path %in% repo_files[['path']]) | overwrite) {
-
-                                if ((gh_path %in% repo_files[['path']]) & overwrite) {
-                                  sha = repo_files[['sha']][repo_files[['path']] == gh_path]
-                                } else {
-                                  sha = NULL
-                                }
-
-                                out = peer_repo_put_file(
-                                  repo = x,
-                                  path = gh_path,
-                                  content = read_bin_file(y[[2]]),
-                                  message = message,
-                                  branch = branch,
-                                  verbose = verbose,
-                                  sha = sha
-                                )
-                              }
-                            })
+                peer_place_file(
+                  repo_files = repo_files,
+                  target_repo = x,
+                  input = purrr::cross2(aut, local_path),
+                  message = message,
+                  branch = branch,
+                  verbose = verbose,
+                  overwrite = overwrite
+                )
               })
 }
 
@@ -508,6 +492,7 @@ peer_add_file_rev = function(org,
 #' @param message Character. Commit message.
 #' @param branch Character. Name of branch the file should be committed to, defaults to `master`.
 #' @param overwrite Logical. Whether existing files in reviewers' repositories should be overwritten, defaults to `FALSE`.
+#' @param verbose Logical. Should success / failure messages be printed.
 #'
 #' @example
 #' \dontrun{
@@ -526,34 +511,44 @@ peer_add_file_aut = function(org,
                              suffix = "",
                              message = NULL,
                              branch = "master",
-                             overwrite = FALSE) {
+                             overwrite = FALSE,
+                             verbose = TRUE) {
   arg_is_chr_scalar(org, prefix, suffix)
   arg_is_chr_scalar(message, allow_null = TRUE)
   arg_is_chr(local_path)
-  arg_is_lgl(dblind, overwrite)
+  arg_is_lgl(dblind, overwrite, verbose)
 
   prefix_rev = format_rev(prefix, suffix)$prefix_rev
   suffix_rev = format_rev(prefix, suffix)$suffix_rev
 
   rdf = peer_expand_roster(org, roster, prefix, suffix, prefix_rev, suffix_rev)
 
-  # repo_add_file does modification check
-  purrr::walk(seq_len(nrow(rdf)),
+  file_status = fs::file_exists(local_path)
+  if (any(!file_status))
+    usethis::ui_stop(
+      "Unable to locate the following file(s): {usethis::ui_value(local_path[!file_status])}"
+    )
+
+  aut = unique(rdf[['repo_a']])
+
+  purrr::walk(aut,
               function(x) {
+                repo_files = repo_files(x)
                 if (!dblind) {
-                  folder = as.character(rdf[x, 'reviewer'])
+                  rev = rdf[['reviewer']][rdf[['repo_a']] == x]
                 } else {
-                  folder = as.character(rdf[x, 'reviewer_no'])
+                  rev = rdf[['reviewer_no']][rdf[['repo_a']] == x]
                 }
 
-                repo_add_file(
-                  repo = as.character(rdf[x, 'repo_a']),
-                  file = local_path,
-                  repo_folder = folder,
-                  preserve_path = FALSE,
+                peer_place_file(
+                  repo_files = repo_files,
+                  target_repo = x,
+                  input = purrr::cross2(rev, local_path),
+                  message = message,
+                  branch = branch,
+                  verbose = verbose,
                   overwrite = overwrite
                 )
-
               })
 }
 
@@ -625,13 +620,13 @@ peer_score_review = function(org,
                          }
                        }) %>%
     # Getting data frame in right format
-    tidyr::gather(q_name, q_value, -user, -r_no) %>%
+    tidyr::gather(q_name, q_value,-user,-r_no) %>%
     tidyr::unite("new", c("r_no", "q_name")) %>%
     tidyr::spread(new, q_value) %>%
     merge(roster, all.y = T)
 
   out = out[, union(names(roster), names(out))]
-  out = out[order(out$user_random),]
+  out = out[order(out$user_random), ]
 
   if (write_csv) {
     fname = glue::glue("{revscores}_{fs::path_file(roster)}")
@@ -716,13 +711,13 @@ peer_score_rating = function(org,
                          }
                        }) %>%
     # Getting data frame in right format
-    tidyr::gather(q_name, q_value, -user, -r_no) %>%
+    tidyr::gather(q_name, q_value,-user,-r_no) %>%
     tidyr::unite("new", c("r_no", "q_name")) %>%
     tidyr::spread(new, q_value) %>%
     merge(roster, all.y = T)
 
   out = out[, union(names(roster), names(out))]
-  out = out[order(out$user_random),]
+  out = out[order(out$user_random), ]
 
   if (write_csv) {
     fname = glue::glue("{autscores}_{fs::path_file(roster)}")
@@ -855,7 +850,12 @@ repo_mirror_file = function(source_repo,
                             verbose = TRUE) {
   arg_is_chr(path)
   arg_is_chr_scalar(source_repo, target_repo)
-  arg_is_chr_scalar(source_folder, target_folder, source_files, target_files, message, allow_null = TRUE)
+  arg_is_chr_scalar(source_folder,
+                    target_folder,
+                    source_files,
+                    target_files,
+                    message,
+                    allow_null = TRUE)
   arg_is_lgl_scalar(overwrite)
 
   if (is.null(source_files))
@@ -865,7 +865,6 @@ repo_mirror_file = function(source_repo,
 
   purrr::walk(path,
               function(p) {
-
                 source_path = format_folder(source_folder, p)
                 target_path = format_folder(target_folder, p)
 
@@ -873,10 +872,8 @@ repo_mirror_file = function(source_repo,
                   res = purrr::safely(repo_get_file)(source_repo, source_path)
 
                   if (succeeded(res)) {
-
                     if (!(target_path %in% target_files[['path']]) |
                         overwrite) {
-
                       if ((target_path %in% target_files[['path']]) & overwrite) {
                         sha = target_files[['sha']][target_files[['path']] == target_path]
                       } else {
@@ -909,4 +906,3 @@ repo_mirror_file = function(source_repo,
                 }
               })
 }
-

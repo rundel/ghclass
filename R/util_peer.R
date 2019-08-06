@@ -408,3 +408,40 @@ create_diff_url = function(repo, path) {
                   )
   setNames(out, paste0("diff", seq_len(length(out))))
 }
+
+
+
+peer_place_file = function(repo_files, target_repo, input, message, branch, verbose, overwrite) {
+
+  purrr::walk(input,
+              function(y) {
+
+                gh_path = glue::glue("{y[[1]]}/{fs::path_file(y[[2]])}")
+
+                if (!(gh_path %in% repo_files[['path']]) | overwrite) {
+
+                  if ((gh_path %in% repo_files[['path']]) & overwrite) {
+                    sha = repo_files[['sha']][repo_files[['path']] == gh_path]
+                  } else {
+                    sha = NULL
+                  }
+
+                  peer_repo_put_file(
+                    repo = target_repo,
+                    path = gh_path,
+                    content = read_bin_file(y[[2]]),
+                    message = message,
+                    branch = branch,
+                    verbose = verbose,
+                    sha = sha
+                  )
+                } else {
+                  usethis::ui_oops(
+                    paste(
+                      'Failed to add {usethis::ui_value(gh_path)} to {usethis::ui_value(target_repo)}: already exists.',
+                      'If you want to force add this file, re-run the command with {usethis::ui_code("overwrite = TRUE")}.'
+                    )
+                  )
+                }
+              })
+}
