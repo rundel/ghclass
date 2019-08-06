@@ -201,8 +201,8 @@ team_create("ghclass-vignette", team= c("team01", "team02","team03"), prefix="hw
 Once the teams are created we can then add the students to these teams.
 
 ```{r}
-team_invite("ghclass-vignette", roster$github, roster$hw01)
-team_invite("ghclass-vignette", roster$github, roster$hw02)
+team_invite(org = "ghclass-vignette", user = roster$github, team = roster$hw01)
+team_invite(org = "ghclass-vignette", user = roster$github, team = roster$hw02)
 ```
 
 Also if we happen to try to invite students to a team that does not exist yet, then helpfully `team_invite` will create the team for you and then invite the students. This behavior is governed by the `create_missing_teams` parameter, which is `TRUE` by default.
