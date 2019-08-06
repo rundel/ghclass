@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Local repository tools — local_repo • ghclass</title>
+<title>Local repository tools — local_repo_add • ghclass</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,14 +30,13 @@
 
 
 
-<meta property="og:title" content="Local repository tools — local_repo" />
+<meta property="og:title" content="Local repository tools — local_repo_add" />
 
 <meta property="og:description" content="The functions provide tools for working with local git repositories, ghclass includes support for following git commands:
-git clone = clone_repo
-git add = add_repo
-git commit = commit_repo
-git push = push_repo
-git pull = pull_repo
+git add = local_repo_add
+git commit = local_repo_commit
+git push = local_repo_push
+git pull = local_repo_pull
 " />
 <meta name="twitter:card" content="summary" />
 
@@ -111,35 +110,41 @@ git pull = pull_repo
     <div class="ref-description">
     
     <p>The functions provide tools for working with local git repositories, ghclass includes support for following git commands:</p><ul>
-<li><p>git clone = <code>clone_repo</code></p></li>
-<li><p>git add = <code>add_repo</code></p></li>
-<li><p>git commit = <code>commit_repo</code></p></li>
-<li><p>git push = <code>push_repo</code></p></li>
-<li><p>git pull = <code>pull_repo</code></p></li>
+<li><p>git add = <code>local_repo_add</code></p></li>
+<li><p>git commit = <code>local_repo_commit</code></p></li>
+<li><p>git push = <code>local_repo_push</code></p></li>
+<li><p>git pull = <code>local_repo_pull</code></p></li>
 </ul>
     
     </div>
 
+    <pre class="usage"><span class='fu'>local_repo_add</span>(<span class='no'>repo_dir</span>, <span class='kw'>files</span> <span class='kw'>=</span> <span class='st'>"."</span>, <span class='kw'>git</span> <span class='kw'>=</span> <span class='fu'>require_git</span>(),
+  <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>(), <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='fu'>local_repo_commit</span>(<span class='no'>repo_dir</span>, <span class='no'>message</span>, <span class='kw'>git</span> <span class='kw'>=</span> <span class='fu'>require_git</span>(),
+  <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>(), <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='fu'>local_repo_pull</span>(<span class='no'>repo_dir</span>, <span class='kw'>remote</span> <span class='kw'>=</span> <span class='st'>"origin"</span>, <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>,
+  <span class='kw'>git</span> <span class='kw'>=</span> <span class='fu'>require_git</span>(), <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>(), <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='fu'>local_repo_push</span>(<span class='no'>repo_dir</span>, <span class='kw'>remote</span> <span class='kw'>=</span> <span class='st'>"origin"</span>, <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>,
+  <span class='kw'>git</span> <span class='kw'>=</span> <span class='fu'>require_git</span>(), <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>(), <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>repos</th>
-      <td><p>GitHub repo names with the form <em>owner/name</em>.</p></td>
-    </tr>
-    <tr>
       <th>repo_dir</th>
       <td><p>Vector of repo directories or a single directory containing one or more repos.</p></td>
     </tr>
     <tr>
-      <th>message</th>
-      <td><p>commit message</p></td>
+      <th>files</th>
+      <td><p>Files to be staged</p></td>
     </tr>
     <tr>
       <th>git</th>
       <td><p>Path to the local git binary. <code>require_git()</code> attempts to
-find the git binary based on your <code>PATH</code>, it will throw an error if git cannot be found.</p></td>
+find the git binary based on your `PATH``, it will throw an error if git cannot be found.</p></td>
     </tr>
     <tr>
       <th>options</th>
@@ -149,20 +154,32 @@ find the git binary based on your <code>PATH</code>, it will throw an error if g
       <th>verbose</th>
       <td><p>Display verbose output.</p></td>
     </tr>
+    <tr>
+      <th>message</th>
+      <td><p>Commit message</p></td>
+    </tr>
+    <tr>
+      <th>remote</th>
+      <td><p>Repository remote to use.</p></td>
+    </tr>
+    <tr>
+      <th>branch</th>
+      <td><p>Repository branch to use.</p></td>
+    </tr>
     </table>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='no'>g</span> <span class='kw'>=</span> <span class='fu'>get_repo</span>(<span class='st'>"Sta323-Sp18"</span>,<span class='st'>"hw3-"</span>)
-<span class='fu'>clone_repo</span>(<span class='no'>g</span>, <span class='st'>"hw3"</span>)
+<span class='no'>g</span> <span class='kw'>=</span> <span class='fu'><a href='org_repos.html'>org_repos</a></span>(<span class='st'>"Sta323-Sp18"</span>,<span class='st'>"hw3-"</span>)
+<span class='fu'><a href='local_repo_clone.html'>local_repo_clone</a></span>(<span class='no'>g</span>, <span class='st'>"hw3"</span>)
 
-<span class='fu'>pull_repo</span>(<span class='no'>g</span>, <span class='st'>"hw3"</span>)
+<span class='fu'>local_repo_pull</span>(<span class='no'>g</span>, <span class='st'>"hw3"</span>)
 
 <span class='co'># After Modifying hw3.Rmd</span>
-<span class='fu'>add_repo</span>(<span class='st'>"hw3"</span>, <span class='st'>"hw3.Rmd"</span>)
-<span class='fu'>commit_repo</span>(<span class='st'>"hw3"</span>, <span class='st'>"Revised homework"</span>)
-<span class='fu'>push_repo</span>(<span class='st'>"hw3"</span>)
+<span class='fu'>local_repo_add</span>(<span class='st'>"hw3"</span>, <span class='st'>"hw3.Rmd"</span>)
+<span class='fu'>local_repo_commit</span>(<span class='st'>"hw3"</span>, <span class='st'>"Revised homework"</span>)
+<span class='fu'>local_repo_push</span>(<span class='st'>"hw3"</span>)
 <span class='co'># }</span><div class='input'>
 </div></pre>
   </div>

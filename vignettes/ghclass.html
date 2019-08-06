@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Mine Çetinkaya-Rundel, Colin Rundel, Therese Anders" />
+
+<meta name="date" content="2019-07-07" />
+
+<title>Course management with ghclass</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Course management with ghclass</h1>
+<h4 class="author">Mine Çetinkaya-Rundel, Colin Rundel, Therese Anders</h4>
+<h4 class="date">2019-07-07</h4>
+
+
+
+<div id="who-is-this-package-for" class="section level2">
+<h2>Who is this package for?</h2>
+<p>This package is for everyone! But really, if you’re an instructor who uses GitHub for your class management, e.g. students submit assignments via GitHub repos, this package is definitely for you! The package also assumes that you’re an R user, and you probably teach R as well, though that’s not a requirement since this package is all about setting up repositories with the right permissions, not what your students put in those repositories. (If you’re a Python user, see <a href="https://ubc-mds.github.io/2017-08-24-teaching-with-github/">this post</a> for a Python based alternative.)</p>
+</div>
+<div id="what-is-this-vignette-about" class="section level2">
+<h2>What is this vignette about?</h2>
+<p>This vignette is about the nitty-gritty of setting your class up in GitHub with ghclass. For a higher level discussion of why and how to use Git/GitHub in data science education, see <a href="https://peerj.com/preprints/3181/">this paper</a> by the package authors.</p>
+</div>
+<div id="structuring-your-class-on-github" class="section level2">
+<h2>Structuring your class on GitHub</h2>
+<p>The general framework is outlined below. This is not the only way to structure a class on GitHub, but it’s a good way, and one that ghclass is optimized to work with.</p>
+<p>We outline steps for achieving this structure in the next section. This section is meant to give a high level view of what your course looks like on GitHub.</p>
+<ul>
+<li><p>One organization per class: If you teach at a university, this means one semester of a given course. If you teach workshops, this would be one workshop. The instructor and any additional instructional staff, e.g. teaching assistants, are owners. Going forward we will refer to this group of people as “instructors”. The students are members.</p></li>
+<li><p>One repo per student (or team) per assignment: The instructors have admin access to repos, i.e. they can read, clone, push, and add collaborators to assignment repositories as well as delete them. The students have write access to repo, which means that they can read, clone, and push to this repository but they cannot delete them and they cannot add others to them. This can help with minimizing accidents that cannot be undone and makes sure students cannot peek into each others’ repositories unless you explicitly allow them to do so.</p></li>
+</ul>
+<p>If you have a teamwork component to your course, you can also set up teams on GitHub and give them access to repositories for team assignments.</p>
+<p>Suppose you have 40 students in your class, and they are in 10 teams of 4 students each. Suppose also that students turn in the following throughout a semester:</p>
+<ul>
+<li>Individual: 10 homework assignments + 2 exams</li>
+<li>Teamwork: 8 lab assignments + 1 project</li>
+</ul>
+<p>Then, throughout the semester you will need to create total of 570 repositories.</p>
+<p>That is a lot of repos to create and set permissions to manually! It’s also a lot of repos to clone when it comes time to grading. ghclass addresses this problem, and more! It does not, however, address the problem that that’s a lot of grading. Sorry, you’re on your own there!</p>
+<p>That being said, ghclass does also facilitate setting up continuous integration for students’ assignment repos, which means that some of the checking and feedback giving can be done automatically each time they push to the repo without intervention from the instructors.</p>
+</div>
+<div id="authentication" class="section level2">
+<h2>Authentication</h2>
+<p>This package uses tokens for authentication with <a href="https://github.com/settings/tokens">github</a>, these values can be supplied via environmental variables <code>GITHUB_PAT</code> or <code>GITHUB_TOKEN</code> or saved as text in <code>~/.github/token</code>.</p>
+<p>If this is your first time setting up a personal access token (PAT), generate a token in the browser after logging into Github (Settings &gt; Developer Settings &gt; Personal access tokens) or use <a href="https://usethis.r-lib.org/articles/articles/usethis-setup.html#get-and-store-a-github-personal-access-token"><code>usethis::browse_github_token</code></a>.</p>
+<p>You can test that your token is working correctly using the <code>github_test_token()</code> function.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">github_test_token</span>()</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="co">#&gt; ✔ Your github token is functioning correctly.</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">github_test_token</span>(<span class="st">&quot;bad token&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co">#&gt; ✖ Your github token failed to authenticate.</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co">#&gt;   [Error: GitHub API error (401): 401 Unauthorized]</span></span></code></pre></div>
+</div>
+<div id="step-by-step-guide" class="section level2">
+<h2>Step-by-step guide</h2>
+<p>Start with creating an organization on GitHub for the course. We recommend using the course number, semester/quarter, and year in the organization name, e.g. for a course numbered Sta 199 in Spring 18, you can use something like <code>Sta199-Sp18</code>. The exact format is not critical, but being consistent is helpful so that you can keep track of all of your different courses.</p>
+<p>Once you have created the course organization you can then go <a href="https://education.github.com/discount_requests/new">here</a> to apply for GitHub Education discount. This discount will allow you and your organizations to have unlimited private repositories. Once you have been approved as an educator you should be able to see a list of your organizations on the <a href="https://education.github.com/benefits">GitHub Education benefits page</a>. Upgrading your organizations should now just be a matter of clicking the upgrade button and answering a couple of quick questions.</p>
+<p>All of this is an optional step, but one that many will want to do. GitHub charges for private repositories unless they are used for teaching purposes. Approval is usually pretty quick, but you don’t want to do this the night before classes begin. Give yourself at least a week to be safe.</p>
+<div id="adding-students-to-the-organization" class="section level3">
+<h3>Adding students to the organization</h3>
+<p>Next, collect your students’ GitHub user names. You can do this with a Google form and then read the spreadsheet containing their responses into R using the <strong>googlesheets</strong> package. The resulting data frame should include two columns: one called <code>github</code> which contains students’ GitHub user names and another column called <code>team</code> that contains the team name for each student.</p>
+<p>For example, your roster file might look something like the following:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>roster =<span class="st"> </span>readr<span class="op">::</span><span class="kw">read_csv</span>( <span class="kw">system.file</span>(<span class="st">&quot;roster.csv&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;ghclass&quot;</span>) )</span>
+<span id="cb2-2"><a href="#cb2-2"></a>roster</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="co">#&gt; # A tibble: 6 x 4</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co">#&gt;   github          hw01        hw02        hw03       </span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">#&gt;   &lt;chr&gt;           &lt;chr&gt;       &lt;chr&gt;       &lt;chr&gt;      </span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">#&gt; 1 ghclass-anya    hw01-team01 hw02-team01 hw03-team01</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">#&gt; 2 ghclass-bruno   hw01-team02 hw02-team02 hw03-team02</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#&gt; 3 ghclass-celine  hw01-team03 hw02-team03 hw03-team03</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co">#&gt; 4 ghclass-diego   hw01-team01 hw02-team03 hw03-team02</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="co">#&gt; 5 ghclass-elijah  hw01-team02 hw02-team01 hw03-team03</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="co">#&gt; 6 ghclass-francis hw01-team03 hw02-team02 hw03-team01</span></span></code></pre></div>
+<p>Using the <code>roster</code> data frame, we can then invite the students to the class’ organzation. This will send an email to each student inviting them to join the GitHub organization.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">org_invite</span>(<span class="st">&quot;ghclass-vignette&quot;</span>, roster<span class="op">$</span>github)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#&gt; ✔ Invited user &#39;ghclass-anya&#39; to org &#39;ghclass-vignette&#39;.</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#&gt; ✔ Invited user &#39;ghclass-bruno&#39; to org &#39;ghclass-vignette&#39;.</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt; ✔ Invited user &#39;ghclass-celine&#39; to org &#39;ghclass-vignette&#39;.</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt; ✔ Invited user &#39;ghclass-diego&#39; to org &#39;ghclass-vignette&#39;.</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co">#&gt; ✔ Invited user &#39;ghclass-elijah&#39; to org &#39;ghclass-vignette&#39;.</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co">#&gt; ✔ Invited user &#39;ghclass-francis&#39; to org &#39;ghclass-vignette&#39;.</span></span></code></pre></div>
+<p>We now need to wait for the students to accept these invitations before the will have access to the organization. We can check the status of these acceptances using the <code>org_members()</code> and <code>org_pending_members()</code> to see which students have accepting and have not accepted the invitation.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">org_members</span>(<span class="st">&quot;ghclass-vignette&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&gt; [1] &quot;rundel&quot;</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="kw">org_members</span>(<span class="st">&quot;ghclass-vignette&quot;</span>, <span class="dt">include_admins =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt; character(0)</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="kw">org_pending_members</span>(<span class="st">&quot;ghclass-vignette&quot;</span>)</span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co">#&gt; [1] &quot;ghclass-anya&quot;    &quot;ghclass-bruno&quot;   &quot;ghclass-diego&quot;   &quot;ghclass-elijah&quot; </span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co">#&gt; [5] &quot;ghclass-francis&quot; &quot;ghclass-celine&quot;</span></span></code></pre></div>
+<p>If we give things a bit of time, some of the students will have accepted the invitation.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">org_members</span>(<span class="st">&quot;ghclass-vignette&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co">#&gt; [1] &quot;ghclass-anya&quot;    &quot;ghclass-celine&quot;  &quot;ghclass-francis&quot; &quot;rundel&quot;</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="kw">org_pending_members</span>(<span class="st">&quot;ghclass-vignette&quot;</span>)</span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co">#&gt; [1] &quot;ghclass-bruno&quot;  &quot;ghclass-diego&quot;  &quot;ghclass-elijah&quot;</span></span></code></pre></div>
+<p>We can now see that Anya, Celine, and Francis have accepted the invite and we are still waitin on Bruno, Diego, and Elijah. Gentle prodding and reminder emails are often necessary to get all of the students into the organization.</p>
+</div>
+<div id="creating-teams" class="section level3">
+<h3>Creating teams</h3>
+<p>We will now create teams which will be used for the first two homework assignments in the class. We can either use the <code>hw01</code> and <code>hw02</code> columns from the <code>roster</code> data frame directly or we can vectorize the process and add either a common prefix or suffix.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">team_create</span>(<span class="st">&quot;ghclass-vignette&quot;</span>, roster<span class="op">$</span>hw01)</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co">#&gt; ✔ Added team &#39;hw01-team01&#39; to org &#39;ghclass-vignette&#39;.</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="co">#&gt; ✔ Added team &#39;hw01-team02&#39; to org &#39;ghclass-vignette&#39;.</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#&gt; ✔ Added team &#39;hw01-team03&#39; to org &#39;ghclass-vignette&#39;.</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">team_create</span>(<span class="st">&quot;ghclass-vignette&quot;</span>, <span class="dt">team=</span> <span class="kw">c</span>(<span class="st">&quot;team01&quot;</span>, <span class="st">&quot;team02&quot;</span>,<span class="st">&quot;team03&quot;</span>), <span class="dt">prefix=</span><span class="st">&quot;hw02-&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="co">#&gt; ✔ Added team &#39;hw02-team01&#39; to org &#39;ghclass-vignette&#39;.</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="co">#&gt; ✔ Added team &#39;hw02-team02&#39; to org &#39;ghclass-vignette&#39;.</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co">#&gt; ✔ Added team &#39;hw02-team03&#39; to org &#39;ghclass-vignette&#39;.</span></span></code></pre></div>
+<p>Once the teams are created we can then add the students to these teams.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">team_invite</span>(<span class="st">&quot;ghclass-vignette&quot;</span>, roster<span class="op">$</span>github, roster<span class="op">$</span>hw01)</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="co">#&gt; ✔ Added &#39;ghclass-anya&#39; to team &#39;hw01-team01&#39;.</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="co">#&gt; ✔ Added &#39;ghclass-diego&#39; to team &#39;hw01-team01&#39;.</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co">#&gt; ✔ Added &#39;ghclass-bruno&#39; to team &#39;hw01-team02&#39;.</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="co">#&gt; ✔ Added &#39;ghclass-elijah&#39; to team &#39;hw01-team02&#39;.</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co">#&gt; ✔ Added &#39;ghclass-celine&#39; to team &#39;hw01-team03&#39;.</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="co">#&gt; ✔ Added &#39;ghclass-francis&#39; to team &#39;hw01-team03&#39;.</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="kw">team_invite</span>(<span class="st">&quot;ghclass-vignette&quot;</span>, roster<span class="op">$</span>github, roster<span class="op">$</span>hw02)</span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="co">#&gt; ✔ Added &#39;ghclass-anya&#39; to team &#39;hw02-team01&#39;.</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="co">#&gt; ✔ Added &#39;ghclass-elijah&#39; to team &#39;hw02-team01&#39;.</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="co">#&gt; ✔ Added &#39;ghclass-bruno&#39; to team &#39;hw02-team02&#39;.</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a><span class="co">#&gt; ✔ Added &#39;ghclass-francis&#39; to team &#39;hw02-team02&#39;.</span></span>
+<span id="cb8-13"><a href="#cb8-13"></a><span class="co">#&gt; ✔ Added &#39;ghclass-celine&#39; to team &#39;hw02-team03&#39;.</span></span>
+<span id="cb8-14"><a href="#cb8-14"></a><span class="co">#&gt; ✔ Added &#39;ghclass-diego&#39; to team &#39;hw02-team03&#39;.</span></span></code></pre></div>
+<p>Also if we happen to try to invite students to a team that does not exist yet, then helpfully <code>team_invite</code> will create the team for you and then invite the students. This behavior is governed by the <code>create_missing_teams</code> parameter, which is <code>TRUE</code> by default.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">team_invite</span>(<span class="st">&quot;ghclass-vignette&quot;</span>, roster<span class="op">$</span>github, roster<span class="op">$</span>hw03)</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="co">#&gt; ✔ Added team &#39;hw03-team01&#39; to org &#39;ghclass-vignette&#39;.</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="co">#&gt; ✔ Added team &#39;hw03-team02&#39; to org &#39;ghclass-vignette&#39;.</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co">#&gt; ✔ Added team &#39;hw03-team03&#39; to org &#39;ghclass-vignette&#39;.</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="co">#&gt; ✔ Added &#39;ghclass-anya&#39; to team &#39;hw03-team01&#39;.</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co">#&gt; ✔ Added &#39;ghclass-francis&#39; to team &#39;hw03-team01&#39;.</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co">#&gt; ✔ Added &#39;ghclass-bruno&#39; to team &#39;hw03-team02&#39;.</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="co">#&gt; ✔ Added &#39;ghclass-diego&#39; to team &#39;hw03-team02&#39;.</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="co">#&gt; ✔ Added &#39;ghclass-celine&#39; to team &#39;hw03-team03&#39;.</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="co">#&gt; ✔ Added &#39;ghclass-elijah&#39; to team &#39;hw03-team03&#39;.</span></span></code></pre></div>
+</div>
+<div id="creating-a-team-assignment" class="section level3">
+<h3>Creating a team assignment</h3>
+<p>Now that we have teams within our organization we can now create repos for each team and each assignment as well as add each team to these repositories (which gives then read and write access).</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>r =<span class="st"> </span><span class="kw">repo_create</span>(<span class="st">&quot;ghclass-vignette&quot;</span>, <span class="dt">name =</span> <span class="kw">c</span>(<span class="st">&quot;team01&quot;</span>, <span class="st">&quot;team02&quot;</span>,<span class="st">&quot;team03&quot;</span>), <span class="dt">prefix=</span><span class="st">&quot;hw01-&quot;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="co">#&gt; ✔ Created repo &#39;ghclass-vignette/hw01-team01&#39;.</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="co">#&gt; ✔ Created repo &#39;ghclass-vignette/hw01-team02&#39;.</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt; ✔ Created repo &#39;ghclass-vignette/hw01-team03&#39;.</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="kw">repo_add_team</span>(r, roster<span class="op">$</span>hw01)</span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="co">#&gt; ✔ Added team &#39;hw01-team01&#39; to repo &#39;ghclass-vignette/hw01-team01&#39;.</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co">#&gt; ✔ Added team &#39;hw01-team02&#39; to repo &#39;ghclass-vignette/hw01-team02&#39;.</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="co">#&gt; ✔ Added team &#39;hw01-team03&#39; to repo &#39;ghclass-vignette/hw01-team03&#39;.</span></span></code></pre></div>
+<p>In the above example we are counting on the fact that the team and repository names are identical, if this were not the case we could do something like the following:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>teams =<span class="st"> </span><span class="kw">org_teams</span>(<span class="st">&quot;ghclass-vignette&quot;</span>, <span class="dt">filter=</span><span class="st">&quot;hw01-&quot;</span>, <span class="dt">exclude =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb11-2"><a href="#cb11-2"></a></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="kw">repo_create</span>(<span class="st">&quot;ghclass-vignette&quot;</span>, teams)</span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="co">#&gt; ✔ Created repo &#39;ghclass-vignette/hw02-team01&#39;.</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="co">#&gt; ✔ Created repo &#39;ghclass-vignette/hw02-team02&#39;.</span></span>
+<span id="cb11-6"><a href="#cb11-6"></a><span class="co">#&gt; ✔ Created repo &#39;ghclass-vignette/hw02-team03&#39;.</span></span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co">#&gt; ✔ Created repo &#39;ghclass-vignette/hw03-team01&#39;.</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="co">#&gt; ✔ Created repo &#39;ghclass-vignette/hw03-team02&#39;.</span></span>
+<span id="cb11-9"><a href="#cb11-9"></a><span class="co">#&gt; ✔ Created repo &#39;ghclass-vignette/hw03-team03&#39;.</span></span>
+<span id="cb11-10"><a href="#cb11-10"></a></span>
+<span id="cb11-11"><a href="#cb11-11"></a><span class="kw">repo_add_team</span>(<span class="kw">org_repos</span>(<span class="st">&quot;ghclass-vignette&quot;</span>,<span class="st">&quot;hw02-&quot;</span>), roster<span class="op">$</span>hw02)</span>
+<span id="cb11-12"><a href="#cb11-12"></a><span class="co">#&gt; ✔ Added team &#39;hw02-team01&#39; to repo &#39;ghclass-vignette/hw02-team01&#39;.</span></span>
+<span id="cb11-13"><a href="#cb11-13"></a><span class="co">#&gt; ✔ Added team &#39;hw02-team02&#39; to repo &#39;ghclass-vignette/hw02-team02&#39;.</span></span>
+<span id="cb11-14"><a href="#cb11-14"></a><span class="co">#&gt; ✔ Added team &#39;hw02-team03&#39; to repo &#39;ghclass-vignette/hw02-team03&#39;.</span></span>
+<span id="cb11-15"><a href="#cb11-15"></a></span>
+<span id="cb11-16"><a href="#cb11-16"></a><span class="kw">repo_add_team</span>(<span class="kw">org_repos</span>(<span class="st">&quot;ghclass-vignette&quot;</span>,<span class="st">&quot;hw03-&quot;</span>), roster<span class="op">$</span>hw03)</span>
+<span id="cb11-17"><a href="#cb11-17"></a><span class="co">#&gt; ✔ Added team &#39;hw03-team01&#39; to repo &#39;ghclass-vignette/hw03-team01&#39;.</span></span>
+<span id="cb11-18"><a href="#cb11-18"></a><span class="co">#&gt; ✔ Added team &#39;hw03-team02&#39; to repo &#39;ghclass-vignette/hw03-team02&#39;.</span></span>
+<span id="cb11-19"><a href="#cb11-19"></a><span class="co">#&gt; ✔ Added team &#39;hw03-team03&#39; to repo &#39;ghclass-vignette/hw03-team03&#39;.</span></span></code></pre></div>
+<p>We can check on all of the existing teams and repos using the <code>org_teams</code> and <code>org_repos</code> functions respectively.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">org_teams</span>(<span class="st">&quot;ghclass-vignette&quot;</span>)</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="co">#&gt; [1] &quot;hw01-team01&quot; &quot;hw01-team02&quot; &quot;hw01-team03&quot; &quot;hw02-team01&quot; &quot;hw02-team02&quot;</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="co">#&gt; [6] &quot;hw02-team03&quot; &quot;hw03-team01&quot; &quot;hw03-team02&quot; &quot;hw03-team03&quot;</span></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="kw">org_repos</span>(<span class="st">&quot;ghclass-vignette&quot;</span>)</span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="co">#&gt; [1] &quot;ghclass-vignette/hw01-team01&quot; &quot;ghclass-vignette/hw01-team02&quot;</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="co">#&gt; [3] &quot;ghclass-vignette/hw01-team03&quot; &quot;ghclass-vignette/hw02-team01&quot;</span></span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="co">#&gt; [5] &quot;ghclass-vignette/hw02-team02&quot; &quot;ghclass-vignette/hw02-team03&quot;</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a><span class="co">#&gt; [7] &quot;ghclass-vignette/hw03-team01&quot; &quot;ghclass-vignette/hw03-team02&quot;</span></span>
+<span id="cb12-9"><a href="#cb12-9"></a><span class="co">#&gt; [9] &quot;ghclass-vignette/hw03-team03&quot;</span></span></code></pre></div>
+<p>If we want to place starter docs / code into our assignment repos we can do this by either adding the files directly or mirroring (copying) and existing repository on top of our assignment repo. Generally we have found it to be a good idea to create a public template repository for each assignment which is then used to populate each team individual repository. In this case we will borrow assignments from a class we’ve previously taught.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">repo_mirror</span>(</span>
+<span id="cb13-2"><a href="#cb13-2"></a>  <span class="dt">source_repo =</span> <span class="st">&quot;Sta323-Sp19/hw1&quot;</span>,</span>
+<span id="cb13-3"><a href="#cb13-3"></a>  <span class="dt">target_repo =</span> <span class="kw">org_repos</span>(<span class="st">&quot;ghclass-vignette&quot;</span>,<span class="st">&quot;hw01-&quot;</span>)</span>
+<span id="cb13-4"><a href="#cb13-4"></a>)</span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="co">#&gt; ✔ Cloned &#39;Sta323-Sp19/hw1&#39;.</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="co">#&gt; ✔ Pushed (mirror) &#39;hw1&#39; to repo &#39;ghclass-vignette/hw01-team01&#39;.</span></span>
+<span id="cb13-7"><a href="#cb13-7"></a><span class="co">#&gt; ✔ Pushed (mirror) &#39;hw1&#39; to repo &#39;ghclass-vignette/hw01-team02&#39;.</span></span>
+<span id="cb13-8"><a href="#cb13-8"></a><span class="co">#&gt; ✔ Pushed (mirror) &#39;hw1&#39; to repo &#39;ghclass-vignette/hw01-team03&#39;.</span></span>
+<span id="cb13-9"><a href="#cb13-9"></a><span class="co">#&gt; ✔ Removed local copy of &#39;Sta323-Sp19/hw1&#39;</span></span></code></pre></div>
+</div>
+<div id="creating-an-individual-assignment" class="section level3">
+<h3>Creating an individual assignment</h3>
+<p>The process for creating an individual assignment is very similar to that for creating a team assignment, we will need to create repositories for each student and then add them individually to those repos.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>students =<span class="st"> </span><span class="kw">org_members</span>(<span class="st">&quot;ghclass-vignette&quot;</span>, <span class="dt">include_admins =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="kw">repo_create</span>(<span class="st">&quot;ghclass-vignette&quot;</span>, students, <span class="dt">prefix=</span><span class="st">&quot;hw04-&quot;</span>)</span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="co">#&gt; ✔ Created repo &#39;ghclass-vignette/hw04-ghclass-anya&#39;.</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="co">#&gt; ✔ Created repo &#39;ghclass-vignette/hw04-ghclass-bruno&#39;.</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="co">#&gt; ✔ Created repo &#39;ghclass-vignette/hw04-ghclass-celine&#39;.</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="co">#&gt; ✔ Created repo &#39;ghclass-vignette/hw04-ghclass-diego&#39;.</span></span>
+<span id="cb14-7"><a href="#cb14-7"></a><span class="co">#&gt; ✔ Created repo &#39;ghclass-vignette/hw04-ghclass-elijah&#39;.</span></span>
+<span id="cb14-8"><a href="#cb14-8"></a><span class="co">#&gt; ✔ Created repo &#39;ghclass-vignette/hw04-ghclass-francis&#39;.</span></span></code></pre></div>
+<p>Adding students individually to repos is done using the <code>repo_add_user</code> instead of the <code>repo_add_team</code> function.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">repo_add_user</span>(<span class="kw">org_repos</span>(<span class="st">&quot;ghclass-vignette&quot;</span>, <span class="st">&quot;hw04-&quot;</span>), students)</span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="co">#&gt; ✔ Added user &#39;ghclass-anya&#39; to repo &#39;ghclass-vignette/hw04-ghclass-anya&#39;.</span></span>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="co">#&gt; ✔ Added user &#39;ghclass-bruno&#39; to repo &#39;ghclass-vignette/hw04-ghclass-bruno&#39;.</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a><span class="co">#&gt; ✔ Added user &#39;ghclass-celine&#39; to repo &#39;ghclass-vignette/hw04-ghclass-celine&#39;.</span></span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="co">#&gt; ✔ Added user &#39;ghclass-diego&#39; to repo &#39;ghclass-vignette/hw04-ghclass-diego&#39;.</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a><span class="co">#&gt; ✔ Added user &#39;ghclass-elijah&#39; to repo &#39;ghclass-vignette/hw04-ghclass-elijah&#39;.</span></span>
+<span id="cb15-7"><a href="#cb15-7"></a><span class="co">#&gt; ✔ Added user &#39;ghclass-francis&#39; to repo &#39;ghclass-vignette/hw04-ghclass-francis&#39;.</span></span></code></pre></div>
+<p>And once again we can provide template code and documentation using the <code>repo_mirror</code> function.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">repo_mirror</span>(</span>
+<span id="cb16-2"><a href="#cb16-2"></a>  <span class="dt">source_repo =</span> <span class="st">&quot;Sta323-Sp19/hw4&quot;</span>,</span>
+<span id="cb16-3"><a href="#cb16-3"></a>  <span class="dt">target_repo =</span> <span class="kw">org_repos</span>(<span class="st">&quot;ghclass-vignette&quot;</span>,<span class="st">&quot;hw04-&quot;</span>)</span>
+<span id="cb16-4"><a href="#cb16-4"></a>)</span>
+<span id="cb16-5"><a href="#cb16-5"></a><span class="co">#&gt; ✔ Cloned &#39;Sta323-Sp19/hw4&#39;.</span></span>
+<span id="cb16-6"><a href="#cb16-6"></a><span class="co">#&gt; ✔ Pushed (mirror) &#39;hw4&#39; to repo &#39;ghclass-vignette/hw04-ghclass-anya&#39;.</span></span>
+<span id="cb16-7"><a href="#cb16-7"></a><span class="co">#&gt; ✔ Pushed (mirror) &#39;hw4&#39; to repo &#39;ghclass-vignette/hw04-ghclass-bruno&#39;.</span></span>
+<span id="cb16-8"><a href="#cb16-8"></a><span class="co">#&gt; ✔ Pushed (mirror) &#39;hw4&#39; to repo &#39;ghclass-vignette/hw04-ghclass-celine&#39;.</span></span>
+<span id="cb16-9"><a href="#cb16-9"></a><span class="co">#&gt; ✔ Pushed (mirror) &#39;hw4&#39; to repo &#39;ghclass-vignette/hw04-ghclass-diego&#39;.</span></span>
+<span id="cb16-10"><a href="#cb16-10"></a><span class="co">#&gt; ✔ Pushed (mirror) &#39;hw4&#39; to repo &#39;ghclass-vignette/hw04-ghclass-elijah&#39;.</span></span>
+<span id="cb16-11"><a href="#cb16-11"></a><span class="co">#&gt; ✔ Pushed (mirror) &#39;hw4&#39; to repo &#39;ghclass-vignette/hw04-ghclass-francis&#39;.</span></span>
+<span id="cb16-12"><a href="#cb16-12"></a><span class="co">#&gt; ✔ Removed local copy of &#39;Sta323-Sp19/hw4&#39;</span></span></code></pre></div>
+</div>
+<div id="modifying-repos" class="section level3">
+<h3>Modifying Repos</h3>
+<p>Mirroring repos is somewhat heavy handed, since it forces the target repo to be identical to the source repo. In some cases we only want to add or modify a single file in the repository.</p>
+<p>You can modify repos after they have been created. This will overwrite existing files with the same name in the repo, so you should be careful not to do this if students have already started working on the repos.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>file =<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;README.md&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;ghclass&quot;</span>)</span>
+<span id="cb17-2"><a href="#cb17-2"></a>file</span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="co">#&gt; [1] &quot;/usr/local/lib/R/3.6/site-library/ghclass/README.md&quot;</span></span>
+<span id="cb17-4"><a href="#cb17-4"></a></span>
+<span id="cb17-5"><a href="#cb17-5"></a><span class="kw">repo_add_file</span>(</span>
+<span id="cb17-6"><a href="#cb17-6"></a>  <span class="kw">org_repos</span>(<span class="st">&quot;ghclass-vignette&quot;</span>,<span class="st">&quot;hw01-&quot;</span>),</span>
+<span id="cb17-7"><a href="#cb17-7"></a>  <span class="dt">message =</span> <span class="st">&quot;Replace README.md with the correct version&quot;</span>,</span>
+<span id="cb17-8"><a href="#cb17-8"></a>  <span class="dt">file =</span> file</span>
+<span id="cb17-9"><a href="#cb17-9"></a>)</span>
+<span id="cb17-10"><a href="#cb17-10"></a><span class="co">#&gt; ✖ Failed to add file &#39;README.md&#39; to repo &#39;ghclass-vignette/hw01-team01&#39;, file already exists. If you want to force add this file, re-run the command with `overwrite = TRUE`.</span></span>
+<span id="cb17-11"><a href="#cb17-11"></a><span class="co">#&gt; ✖ Failed to add file &#39;README.md&#39; to repo &#39;ghclass-vignette/hw01-team02&#39;, file already exists. If you want to force add this file, re-run the command with `overwrite = TRUE`.</span></span>
+<span id="cb17-12"><a href="#cb17-12"></a><span class="co">#&gt; ✖ Failed to add file &#39;README.md&#39; to repo &#39;ghclass-vignette/hw01-team03&#39;, file already exists. If you want to force add this file, re-run the command with `overwrite = TRUE`.</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="kw">repo_add_file</span>(</span>
+<span id="cb18-2"><a href="#cb18-2"></a>  <span class="kw">org_repos</span>(<span class="st">&quot;ghclass-vignette&quot;</span>,<span class="st">&quot;hw01-&quot;</span>),</span>
+<span id="cb18-3"><a href="#cb18-3"></a>  <span class="dt">message =</span> <span class="st">&quot;Replace README.md with the correct version&quot;</span>,</span>
+<span id="cb18-4"><a href="#cb18-4"></a>  <span class="dt">file =</span> file,</span>
+<span id="cb18-5"><a href="#cb18-5"></a>  <span class="dt">overwrite =</span> <span class="ot">TRUE</span></span>
+<span id="cb18-6"><a href="#cb18-6"></a>)</span>
+<span id="cb18-7"><a href="#cb18-7"></a><span class="co">#&gt; ✔ Added file &#39;README.md&#39; to repo &#39;ghclass-vignette/hw01-team01&#39;.</span></span>
+<span id="cb18-8"><a href="#cb18-8"></a><span class="co">#&gt; ✔ Added file &#39;README.md&#39; to repo &#39;ghclass-vignette/hw01-team02&#39;.</span></span>
+<span id="cb18-9"><a href="#cb18-9"></a><span class="co">#&gt; ✔ Added file &#39;README.md&#39; to repo &#39;ghclass-vignette/hw01-team03&#39;.</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw">cat</span>( <span class="kw">repo_get_readme</span>(<span class="st">&quot;ghclass-vignette/hw01-team01&quot;</span>) )</span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="co">#&gt; ## Homework 01</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="co">#&gt; </span></span>
+<span id="cb19-4"><a href="#cb19-4"></a><span class="co">#&gt; This is the corrected version of the HW01 Readme</span></span></code></pre></div>
+<p>We can also use the function <code>repo_modify_file</code> to make changes to existing files,</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw">repo_modify_file</span>(</span>
+<span id="cb20-2"><a href="#cb20-2"></a>  <span class="kw">org_repos</span>(<span class="st">&quot;ghclass-vignette&quot;</span>,<span class="st">&quot;hw01-&quot;</span>),</span>
+<span id="cb20-3"><a href="#cb20-3"></a>  <span class="dt">file =</span> <span class="st">&quot;README.md&quot;</span>,</span>
+<span id="cb20-4"><a href="#cb20-4"></a>  <span class="dt">content =</span> <span class="st">&quot;Due: Tomorrow</span><span class="ch">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb20-5"><a href="#cb20-5"></a>  <span class="dt">after =</span> <span class="st">&quot;## Homework 01</span><span class="ch">\n</span><span class="st">&quot;</span></span>
+<span id="cb20-6"><a href="#cb20-6"></a>)</span>
+<span id="cb20-7"><a href="#cb20-7"></a><span class="co">#&gt; ✔ Modified file &#39;ghclass-vignette/hw01-team01/README.md&#39;.</span></span>
+<span id="cb20-8"><a href="#cb20-8"></a><span class="co">#&gt; ✔ Modified file &#39;ghclass-vignette/hw01-team02/README.md&#39;.</span></span>
+<span id="cb20-9"><a href="#cb20-9"></a><span class="co">#&gt; ✔ Modified file &#39;ghclass-vignette/hw01-team03/README.md&#39;.</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="kw">cat</span>( <span class="kw">repo_get_readme</span>(<span class="st">&quot;ghclass-vignette/hw01-team01&quot;</span>) )</span>
+<span id="cb21-2"><a href="#cb21-2"></a><span class="co">#&gt; ## Homework 01</span></span>
+<span id="cb21-3"><a href="#cb21-3"></a><span class="co">#&gt; Due: Tomorrow</span></span>
+<span id="cb21-4"><a href="#cb21-4"></a><span class="co">#&gt; </span></span>
+<span id="cb21-5"><a href="#cb21-5"></a><span class="co">#&gt; This is the corrected version of the HW01 Readme</span></span></code></pre></div>
+</div>
+<div id="collecting-student-work" class="section level3">
+<h3>Collecting Student Work</h3>
+<p>Eventually the students will be finished with the work and of the assignment deadline will have passed. ghclass makes it easy to collect all of the student work off of GitHub and make it accessible on your local computer for grading.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw">local_repo_clone</span>(</span>
+<span id="cb22-2"><a href="#cb22-2"></a>  <span class="dt">repo =</span> <span class="kw">org_repos</span>(<span class="st">&quot;ghclass-vignette&quot;</span>, <span class="st">&quot;hw01-&quot;</span>),</span>
+<span id="cb22-3"><a href="#cb22-3"></a>  <span class="dt">local_path =</span> <span class="st">&quot;hw01&quot;</span></span>
+<span id="cb22-4"><a href="#cb22-4"></a>)</span>
+<span id="cb22-5"><a href="#cb22-5"></a><span class="co">#&gt; ✔ Cloned &#39;ghclass-vignette/hw01-team01&#39;.</span></span>
+<span id="cb22-6"><a href="#cb22-6"></a><span class="co">#&gt; ✔ Cloned &#39;ghclass-vignette/hw01-team02&#39;.</span></span>
+<span id="cb22-7"><a href="#cb22-7"></a><span class="co">#&gt; ✔ Cloned &#39;ghclass-vignette/hw01-team03&#39;.</span></span>
+<span id="cb22-8"><a href="#cb22-8"></a></span>
+<span id="cb22-9"><a href="#cb22-9"></a>fs<span class="op">::</span><span class="kw">dir_tree</span>(<span class="st">&quot;hw01/.&quot;</span>)</span>
+<span id="cb22-10"><a href="#cb22-10"></a><span class="co">#&gt; hw01/.</span></span>
+<span id="cb22-11"><a href="#cb22-11"></a><span class="co">#&gt; ├── hw01-team01</span></span>
+<span id="cb22-12"><a href="#cb22-12"></a><span class="co">#&gt; │   ├── README.md</span></span>
+<span id="cb22-13"><a href="#cb22-13"></a><span class="co">#&gt; │   ├── fizzbuzz.png</span></span>
+<span id="cb22-14"><a href="#cb22-14"></a><span class="co">#&gt; │   ├── hw1.Rmd</span></span>
+<span id="cb22-15"><a href="#cb22-15"></a><span class="co">#&gt; │   ├── hw1.Rproj</span></span>
+<span id="cb22-16"><a href="#cb22-16"></a><span class="co">#&gt; │   ├── hw1_whitelist.R</span></span>
+<span id="cb22-17"><a href="#cb22-17"></a><span class="co">#&gt; │   └── wercker.yml</span></span>
+<span id="cb22-18"><a href="#cb22-18"></a><span class="co">#&gt; ├── hw01-team02</span></span>
+<span id="cb22-19"><a href="#cb22-19"></a><span class="co">#&gt; │   ├── README.md</span></span>
+<span id="cb22-20"><a href="#cb22-20"></a><span class="co">#&gt; │   ├── fizzbuzz.png</span></span>
+<span id="cb22-21"><a href="#cb22-21"></a><span class="co">#&gt; │   ├── hw1.Rmd</span></span>
+<span id="cb22-22"><a href="#cb22-22"></a><span class="co">#&gt; │   ├── hw1.Rproj</span></span>
+<span id="cb22-23"><a href="#cb22-23"></a><span class="co">#&gt; │   ├── hw1_whitelist.R</span></span>
+<span id="cb22-24"><a href="#cb22-24"></a><span class="co">#&gt; │   └── wercker.yml</span></span>
+<span id="cb22-25"><a href="#cb22-25"></a><span class="co">#&gt; └── hw01-team03</span></span>
+<span id="cb22-26"><a href="#cb22-26"></a><span class="co">#&gt;     ├── README.md</span></span>
+<span id="cb22-27"><a href="#cb22-27"></a><span class="co">#&gt;     ├── fizzbuzz.png</span></span>
+<span id="cb22-28"><a href="#cb22-28"></a><span class="co">#&gt;     ├── hw1.Rmd</span></span>
+<span id="cb22-29"><a href="#cb22-29"></a><span class="co">#&gt;     ├── hw1.Rproj</span></span>
+<span id="cb22-30"><a href="#cb22-30"></a><span class="co">#&gt;     ├── hw1_whitelist.R</span></span>
+<span id="cb22-31"><a href="#cb22-31"></a><span class="co">#&gt;     └── wercker.yml</span></span></code></pre></div>
+</div>
+</div>
+<div id="other-suggestions" class="section level2">
+<h2>Other Suggestions</h2>
+<div id="managing-repository-permissions" class="section level3">
+<h3>Managing repository permissions</h3>
+<p>Individual-level permissions can be set via the “People” tab on the organization page. We recommend the course instructor to be the owner of the organization and teaching assistants to receive admin privileges. Students should receive member privileges.</p>
+<p>Github allows further permissions for accessing and changing repositories to be set for each individual member or at the organization-level (under Settings &gt; Member Privileges). We suggest the organization-level settings below.</p>
+<p><em>Member repository permissions</em></p>
+<ul>
+<li>Base permissions: None</li>
+<li>Repository creation: Disabled</li>
+<li>Repository forking: Disabled</li>
+</ul>
+<p><em>Admin repository permissions</em></p>
+<ul>
+<li>Repository visibility change: Disabled</li>
+<li>Repository deletion and transfer: Disabled</li>
+<li>Issue deletion: Disabled</li>
+</ul>
+<p><em>Member team permissions</em></p>
+<ul>
+<li>Allow members to create teams: Disabled</li>
+</ul>
+</div>
+</div>
+<div id="faq" class="section level2">
+<h2>FAQ</h2>
+<ol style="list-style-type: decimal">
+<li>Do I really need private repositories for my students’ assignments? I don’t care if they see each others’ work.</li>
+</ol>
+<p>You might not care, but the law might. For example, in the United States, FERPA regulations stipulate that student information should be kept private. If you use public repositories, anyone can find out who is enrolled in your course. Additionally, you will likely be using GitHub issues for providing feedback on the students’ work, and potentially even mention their grade in a given assignment. This information should not be publicly available to anyone.</p>
+<p>Also, your students may not want their coursework to be publicly available. They are bound to make mistakes as they learn and it should be up to them whether they want those to be a piece of their public profile on GitHub.</p>
+<ol start="2" style="list-style-type: decimal">
+<li>Why not use <a href="https://classroom.github.com/">GitHub Classroom</a>?</li>
+</ol>
+<p>At some level this is a matter of preference, but there are a few functionalities here that are not present in GitHub Classroom:</p>
+<ul>
+<li>Pre-defined teams – as opposed to relying on students to pick their team when creating their assignment repo.</li>
+<li>Command-line interface – if you like writing R code to solve your problems this may be a better fit for you as it provides a greater level of control and more flexibility.</li>
+<li>Actually you don’t have to choose between ghclass and <a href="https://classroom.github.com/">GitHub Classroom</a>, your workflow might involve using both.</li>
+</ul>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

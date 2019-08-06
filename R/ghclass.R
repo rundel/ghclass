@@ -1,51 +1,82 @@
 #' ghclass: A package for github based classroom and assignment management
 #'
-#' @section github repo functions:
+
+#' @section Local git repository functions:
 #'
-#' \itemize{
-#'   \item \code{One} -
-#'   \item \code{Two} -
-#' }
-#'
-#' @section local repo functions:
-#'
-#' \itemize{
-#'   \item \code{\link{clone_repo}} - clone repos locally
-#'   \item \code{\link{pull_repo}} - update local repos via pull
-#' }
+#' * [local_repo_clone()] or
+#'   [repo_clone()]        - (previously [clone_repo()]) -
+#' * [local_repo_add()]    - (previously [add_repo()]) -
+#' * [local_repo_commit()] - (previously [commit_repo()]) -
+#' * [local_repo_push()]   - (previously [push_repo()]) -
+#' * [local_repo_pull()]   - (previously [pull_repo()]) -
+#' * [local_repo_rename()] - (previously [rename_local_repo()]) -
 #'
 #'
-#' @section github organization functions:
+#' @section Organization functions:
 #'
-#' \itemize{
-#'   \item \code{One} -
-#'   \item \code{Two} -
-#' }
+#' General functions,
+#' * [org_repos()]           - (previously [get_repo()])
+#' * [org_teams()]           -
+#' * [org_team_ids()]        - (previously [get_teams()])
+#' * [org_admins()]          - (previously [get_admin()])
+#' * [org_invite()]          - (previously [invite_user()])
+#' * [org_members()]         - (previously [get_member()])
+#' * [org_pending_members()] - (previously [get_pending_member()])
 #'
-#' @section wercker functions:
+#' Team related functions,
+#' * [team_create()]          - (previously [create_team()])
+#' * [team_rename()]          - (previously [rename_team()])
+#' * [team_invite()]          - (previously [add_team_member()])
+#' * [team_members()]         - (previously [get_team_members()])
+#' * [team_pending_members()] - (previously [get_pending_team_members()])
+#' * [team_repos()]           - (previously [get_team_repos()])
 #'
-#' \itemize{
-#'   \item \code{One} -
-#'   \item \code{Two} -
-#' }
 #'
-#' @section authentication functions:
+#' @section GitHub repository functions:
 #'
-#' GitHub
-#' \itemize{
-#'   \item \code{\link{get_github_token}} - get github token
-#'   \item \code{\link{set_github_token}} - set github token
-#'   \item \code{\link{test_github_token}} - test github token
-#' }
-#' Wercker
-#' \itemize{
-#'   \item \code{\link{get_wercker_token}} - get wercker token
-#'   \item \code{\link{set_wercker_token}} - set wercker token
-#'   \item \code{\link{test_wercker_token}} - test wercker token
-#' }
+#' General functions,
+#' * [repo_create()]        - (previously [create_repo()])
+#' * [repo_rename()]        - (previously [rename_repo()])
+#' * [repo_add_team()]      - (previously [add_team_to_repo()])
+#' * [repo_add_user()]      - (previously [add_user_to_repo()])
+#' * [repo_mirror()]        - (previously [mirror_repo()])
+#' * [repo_collaborators()] - (previously [get_collaborator()])
+#'
+#' File manipulation functions,
+#' * [repo_add_file()]    - (previously [add_file()])
+#' * [repo_modify_file()] -
+#' * [repo_put_file()]    - (previously [put_file()])
+#' * [repo_get_file()]    - (previously [get_file()])
+#' * [repo_get_readme()]  - (previously [get_readme()])
+#'
+#' Branch functions,
+#' * [branch_create()]    - (previously [create_branch()])
+#' * [branch_protect()]   - (previously [protect_branch()])
+#' * [branch_unprotect()] - (previously [unprotect_branch()])
+#'
+#' Notification functions:
+#' * [repo_watching()] - (previously [get_watching()] -)
+#' * [repo_ignore()]   - (previously [ignore_repo()] -)
+#' * [repo_unwatch()]  - (previously [unwatch_repo()] -)
+#' * [repo_watch()]    - (previously [watch_repo()])
+#'
+#'
+#' @section GitHub authentication functions:
+#'
+#' * [github_get_token()]  - (previously [get_github_token()])
+#' * [github_set_token()]  - (previously [set_github_token()])
+#' * [github_test_token()] - (previously [test_github_token()])
+#'
+#'
+#' @section Utility functions:
+#'
+#' * [repo_exists()] - (previously [check_repo()])
+#' * [user_exists()] - (previously [check_user_exists()])
 #'
 #' @import gh
 #'
 #' @docType package
 #' @name ghclass
 NULL
+
+

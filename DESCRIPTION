@@ -2,10 +2,12 @@ Package: ghclass
 Title: Tools for managing classes with github
 Version: 0.1.0
 Authors@R: c(person("Colin", "Rundel", email = "rundel@gmail.com", role = c("aut", "cre")),
-             person("Mine", "Cetinkaya-Rundel", email = "mine@rstudio.com", role = c("aut")))
+             person("Mine", "Cetinkaya-Rundel", email = "mine@rstudio.com", role = c("aut")),
+             person("Therese", "Anders", email = "tanders@usc.edu", role = c("ctb"))
+           )
 Description: Tools for managing classes with github.
-Depends: R (>= 3.4.0), gh
-Imports: usethis, fs, stringr, purrr, yaml, base64enc, httr, jsonlite, tibble, glue, processx
+Depends: R (>= 3.4.0)
+Imports: gh, usethis, withr, fs, stringr, purrr, yaml, base64enc, tibble, glue, processx
 Suggests: styler, knitr, rmarkdown
 License: GPL-3
 Encoding: UTF-8
