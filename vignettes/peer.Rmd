@@ -1,10 +1,10 @@
 ---
 title: "Peer review with `ghclass`"
+output: rmarkdown::html_vignette
 author: "Therese Anders and Mine Çetinkaya-Rundel"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Course management with ghclass}
+  %\VignetteIndexEntry{Peer review with ghclass}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

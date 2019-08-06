@@ -1,10 +1,10 @@
 ---
 title: "Instructions for students"
 output: rmarkdown::html_vignette
-author:
-date:
+author: "Therese Anders and Mine Çetinkaya-Rundel"
+date: "`r Sys.Date()`"
 vignette: >
-  %\VignetteIndexEntry{Course management with ghclass}
+  %\VignetteIndexEntry{Instructions for students}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 params:
