@@ -158,6 +158,7 @@ peer_assign = function(org,
                   files_a = repo_files(repo = repo_a, branch = branch)
                   path = files_a$path[(files_a$type == "blob") &
                                         (!grepl("/", files_a$path)) &
+                                        (!grepl("\\.Rproj$", files_a$path)) &
                                         (files_a$path != ".gitignore")]
                 }
 
