@@ -12,7 +12,7 @@ peer_create_form_rating(category = c("helpfulness", "accuracy",
 \arguments{
 \item{category}{Character. Categories to be included in the feedback form, defaults to \code{c("helpfulness", "accuracy", "fairness")}.}
 
-\item{title}{Character. Title of form, defaults to "Author feedback form."}
+\item{title}{Character. Title of form, defaults to "Author feedback form".}
 
 \item{fname}{Character. File name of RMarkdown document to be written to memory, defaults to \code{feedback_blank_rating}.}
 
@@ -23,5 +23,5 @@ peer_create_form_rating(category = c("helpfulness", "accuracy",
 \item{overwrite}{Logical. Should existing file or files with same name be overwritten, defaults to \code{FALSE}.}
 }
 \description{
-\code{peer_create_form_rating} creates a short feedback form for authors to rate the feedback they got from reviewers.
+\code{peer_create_form_rating} creates a short feedback form for authors to rate the feedback they got from reviewers. The rating categories are based on Reily, K. and P. Ludford Finnerty,  and L. Terveen (2009): Two Peers Are Better Than One: Aggregating Peer Reviews for Computing Assignments is Surprisingly Accurate. In \emph{Proceedings of the ACM 2009 International Conference on Supporting Group Work}. GROUP’09, May 10–13, 2009, Sanibel Island, Florida, USA.
 }

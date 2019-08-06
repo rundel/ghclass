@@ -13,7 +13,7 @@ peer_assign(org, roster, path = NULL, form_review = NULL,
 
 \item{roster}{Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column \code{user} with GitHub user names of authors, a column \code{user_random} with randomized tokens for user names, and one or more \code{rev*} columns that specify review assignments as values of the vector \code{user_random}.}
 
-\item{path}{Character. File name or vector of file names to be included. If \code{NULL}, all files not contained in folders, except \code{.gitignore}, will be moved to the reviewers' repositories.}
+\item{path}{Character. File name or vector of file names to be included. If \code{NULL}, all files not contained in folders, except \code{.gitignore}, \code{.Rhistory}, and \code{.Rproj}, will be moved to the reviewers' repositories.}
 
 \item{form_review}{Character. File name of customized review feedback form. If \code{NULL}, no link will be created in the issue informing reviewers that the review files are available.}
 
@@ -28,5 +28,5 @@ peer_assign(org, roster, path = NULL, form_review = NULL,
 \item{overwrite}{Logical. Whether existing files in reviewers' repositories should be overwritten, defaults to \code{FALSE}.}
 }
 \description{
-\code{peer_assign} adds files from authors' repositories to review repositories. It also creates an issue in the reviewers' repositories informing them that the review files are available and creating links to the relevant documents.
+\code{peer_assign} adds files from authors' repositories to review repositories. It also creates an issue in the reviewers' repositories informing them that the review files are available and with links to the relevant documents.
 }

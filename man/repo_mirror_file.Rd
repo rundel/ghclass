@@ -5,8 +5,9 @@
 \title{Mirror file(s) between repos}
 \usage{
 repo_mirror_file(source_repo, target_repo, path = NULL,
-  source_folder = NULL, target_folder = NULL, message = NULL,
-  branch = "master", overwrite = FALSE, verbose = TRUE)
+  source_folder = NULL, target_folder = NULL, source_files = NULL,
+  target_files = NULL, message = NULL, branch = "master",
+  overwrite = FALSE, verbose = TRUE)
 }
 \arguments{
 \item{source_repo}{Character. Address of repository in "owner/name" format.}
@@ -24,6 +25,8 @@ repo_mirror_file(source_repo, target_repo, path = NULL,
 \item{branch}{Character. Name of branch to use, defaults to "master".}
 
 \item{overwrite}{Logical. Should existing file or files with same name be overwritten, defaults to FALSE.}
+
+\item{verbose}{Logical. Should success / failure messages be printed.}
 }
 \description{
 \code{repo_mirror_file} mirrors select file(s) between repositories.

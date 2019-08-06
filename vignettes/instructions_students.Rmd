@@ -45,7 +45,7 @@ Please enter your GitHub username to the list provided by your instructor.
 Your instructor will add you to the ``r params$org`` organization on Github. You will receive an invitation to join to the email address you specified when creating your GitHub account. Please accept the invitation to join the ``r params$org`` organization.
 
 ## Assignment
-Your instructor will create a personal repository on the ``r params$org`` organization and place the assignment files into this repository. The repository might be called something like ``r paste0(params$org, "/hw1-username")``. 
+Your instructor will create a private repository on the ``r params$org`` organization and place the assignment files into this repository. The repository might be called something like ``r paste0(params$org, "/hw1-username")``. 
 
 To start the assignment, please complete the following steps:
 

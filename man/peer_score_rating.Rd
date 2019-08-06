@@ -4,7 +4,7 @@
 \alias{peer_score_rating}
 \title{Collect scores from rating forms}
 \usage{
-peer_score_rating(org, roster, form_rating, dblind = FALSE,
+peer_score_rating(org, roster, form_rating, double_blind = FALSE,
   prefix = "", suffix = "", write_csv = TRUE)
 }
 \arguments{
@@ -14,7 +14,7 @@ peer_score_rating(org, roster, form_rating, dblind = FALSE,
 
 \item{form_rating}{Character. File name of rating feedback form (must be .Rmd document).}
 
-\item{dblind}{Logical. Specifies whether review is conducted double-blind (i.e. neither reviewer nor author can identify each other), or single-blind (i.e. authors remain anonymous but reviewer identities are revealed). If \code{dblind = TRUE}, reviewer folders are identified by the anonymized user IDs in the roster's \code{user_random} column. If \code{dblind = FALSE}, reviewer folders are identified by the original user names. Defaults to \code{FALSE}.}
+\item{double_blind}{Logical. Specifies whether review is conducted double-blind (i.e. neither reviewer nor author can identify each other), or single-blind (i.e. authors remain anonymous but reviewer identities are revealed). If \code{double_blind = TRUE}, reviewer folders are identified by the anonymized user IDs in the roster's \code{user_random} column. If \code{double_blind = FALSE}, reviewer folders are identified by the original user names. Defaults to \code{FALSE}.}
 
 \item{prefix}{Character. Common repository name prefix.}
 

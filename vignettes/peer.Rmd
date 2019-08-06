@@ -43,19 +43,19 @@ The peer review process is initiated after a regular assignment has been distrib
 ```{r, eval = F}
 library(ghclass)
 devtools::load_all()
-# 1) Set up vector of student user names, HW identifier prefix, and organization name
+# 1. Set up vector of student user names, HW identifier prefix, and organization name
 user = c("anya", "bruno", "cecile", "diego")
 prefix = "hw2-"
 org = "ghclass-demo"
 
 
-# 2) Create student- and assignment-specific repositories
+# 2. Create student- and assignment-specific repositories
 repo_create(org, user, prefix = prefix)
 
-# 3) Add students to their individual repos
+# 3. Add students to their individual repos
 repo_add_user(glue::glue("{org}/{prefix}{user}"), user)
 
-# 4) Place homework files in repositories
+# 4. Place homework files in repositories
 task <- "/Users/thereseanders/Documents/RStudio/introggplot2/hw2/hw2_task.Rmd"
 data <- "/Users/thereseanders/Documents/RStudio/introggplot2/hw2/iris_data.csv"
 repo_add_file(org_repos(org, filter = prefix),
@@ -70,10 +70,15 @@ The peer review process with `ghclass` has three stages.
 2. **Assign review**: Create and customize review forms, distribute review forms and authors' assignments to reviewers, students complete review.
 3. **Return review & rating**: Create rating form, return review to authors, optional: students rate reviews.
 
+```{r, out.width = "500px", echo = FALSE}
+knitr::include_graphics("sequence.png")
+```
+
+
 ## Initiation
 
 ### Create a roster of author-reviewer assignments
-The `peer_create_roster()` function generates data frame of random author-reviewer assignments. The parameter `m` specifies the number of reviewers per assignment. Instructors should choose the number of reviewers per assignment carefully, as each additional review will significantly increase the time investment for students and the calls that have to be made to the API in the review process.
+The `peer_create_roster()` function generates data frame of random author-reviewer assignments. The parameter `n_rev` specifies the number of reviewers per assignment. Instructors should choose the number of reviewers per assignment carefully, as each additional review will significantly increase the time investment for students and the calls that have to be made to the API in the review process.
 
 The function automatically randomizes the order in which students are assigned to review their peers' work. A seed is set to make the assignment of authors to reviewers reproducible. If the function default of `write_csv = TRUE` is selected, the function writes the roster to a .csv file. We recommend for instructors to set `write_csv = TRUE` and the seed that was used to create the roster is automatically incorporated into the file name of the output. This ensures reproducibility of the random assignment.
 
@@ -102,10 +107,10 @@ peer_init(org = org,
 ### Create and customize feedback form for reviewers
 Instructors can use the `peer_create_form_review()` function to create a blank feedback form and save it as an RMarkdown (`.Rmd`) file. Instructors can specify the number of questions to be included in the blank form. The function automatically creates `q*_score` parameters for each question in the YAML header of the RMarkdown document. Students are extracted to use these `q*_score` fields in the YAML to record the scores they give authors for their assignement. These YAML parameters are later used to extract and save student scores. 
 
-By default, the files contain an `author` field in the YAML header to prompt reviewers to identify themselves. Keeping reviewers non-anonymous (as opposed to authors) is likely to discourage overly harsh or rude reviews. If reviewers should instead stay anonymous, setting `dblind = TRUE` will remove this field.
+By default, the files contain an `author` field in the YAML header to prompt reviewers to identify themselves. Keeping reviewers non-anonymous (as opposed to authors) is likely to discourage overly harsh or rude reviews. If reviewers should instead stay anonymous, setting `double_blind = TRUE` will remove this field.
 ```{r, eval = F}
 peer_create_form_review(2,
-                        dblind = dblind,
+                        double_blind = double_blind,
                         fname = "feedback_blank_review")
 ```
 The blank form is saved in the working directory, unless otherwise specified. The instructor will then customize the questions to be answered by reviewers. 
@@ -133,7 +138,7 @@ peer_assign(
 )
 ```
 
-To ensure that the process of moving files from authors' to reviewers' repositores runs smoothly and author anonymity is maintained, students should be asked to not change file names, and to not add identifying information such as name, student ID, or email addresses to their assignments.
+To ensure that the process of moving files from authors' to reviewers' repositores runs smoothly and author anonymity is maintained, students should be asked to not change file names and to not add identifying information such as name, student ID, or email addresses to their assignments.
 
 ## Return review & rating
 
@@ -150,11 +155,13 @@ peer_score_review(
 ```
 
 ### [Recommended] Create rating form for authors
-The `peer_create_form_rating()` can be used to create a author blank RMarkdown form used to collect authors' feedback on the reviews. By default, three rating categories are included in the file: 
+The `peer_create_form_rating()` can be used to create a blank RMarkdown form used to collect authors' feedback on the reviews. By default, three rating categories[^1] are included in the file:
 
 1. `helpfulness`: The reviewer's feedback was constructive and helpful.
 2. `accuracy`: The reviewer's assessment accurately describes the quality of my work.
 3. `fairness`: The reviewer's assessment was fair.
+
+[^1]: The rating categories are based on Reily, K. and P. Ludford Finnerty,  and L. Terveen (2009): Two Peers Are Better Than One: Aggregating Peer Reviews for Computing Assignments is Surprisingly Accurate. In *Proceedings of the ACM 2009 International Conference on Supporting Group Work*. GROUP’09, May 10–13, 2009, Sanibel Island, Florida, USA.
 
 The rating categories can be adjusted via the `category` parameter. By default, the resulting `.Rmd` file is saved in the working directory. Customization of this form is possible, but not necessary.
 ```{r, eval = F}
@@ -163,23 +170,23 @@ peer_create_form_rating(fname = "hw2_rating",
 ```
 
 ### Double blind vs. single blind review
-The `dblind` parameter is used to determine whether authors know who reviewed their assignments (`dblind = FALSE`), or whether the entire review process is anonymous (`dblind = TRUE`). The default is for authors to know who reviewed their assignments. Keeping reviewers non-anonymous is likely to discourage overly harsh or rude reviews. Authors will always remain anonymous to reviewers.
+The `double_blind` parameter is used to determine whether authors know who reviewed their assignments (`double_blind = FALSE`), or whether the entire review process is anonymous (`double_blind = TRUE`). The default is for authors to know who reviewed their assignments. Keeping reviewers non-anonymous is likely to discourage overly harsh or rude reviews. Authors will always remain anonymous to reviewers.
 
-This parameter should be set once for each assignment and then passed to each of the functions in the return review process. `dblind` determines the naming of folders on authors repositories. Changing from a setting of double blind to single blind review, or vice versa, in the middle of the return review process will prevent `peer_add_file_aut()`, `peer_return()` and `peer_score_rating()` to locate the correct files on reviewers' and authors' repositories.
+This parameter should be set once for each assignment and then passed to each of the functions in the return review process. `double_blind` determines the naming of folders on authors repositories. Changing from a setting of double blind to single blind review, or vice versa, in the middle of the return review process will prevent `peer_add_file_aut()`, `peer_return()` and `peer_score_rating()` to locate the correct files on reviewers' and authors' repositories.
 ```{r, eval = F}
-dblind = TRUE
+double_blind = TRUE
 ```
 
 
 ### [Recommended] Distribute author rating forms
-If instructors wish to ask authors for a rating of the reviews, they may use the `peer_add_file_aut` to create reviewer-specific folders on author repositories and place the rating form into these repositories. If `dblind = TRUE`, folder names will be based on reviewers' user names. If `dblind = FALSE`, folder names will be based on the random reviewer IDs contained in the roster. 
+If instructors wish to ask authors for a rating of the reviews, they may use the `peer_add_file_aut` to create reviewer-specific folders on author repositories and place the rating form into these repositories. If `double_blind = TRUE`, folder names will be based on reviewers' user names. If `double_blind = FALSE`, folder names will be based on the random reviewer IDs contained in the roster. 
 ```{r, eval = F}
 peer_add_file_aut(
         org = org,
         roster = roster_test,
         prefix = prefix,
         local_path = "/Users/thereseanders/Documents/RStudio/introggplot2/hw2/hw2_rating.Rmd",
-        dblind = dblind
+        double_blind = double_blind
 )
 ```
 
@@ -202,7 +209,7 @@ peer_return(
   path = c("hw2_task.Rmd"),
   form_review = "hw2_review.Rmd",
   form_rating = "hw2_rating.Rmd",
-  dblind = dblind
+  double_blind = double_blind
 )
 ```
 
@@ -214,7 +221,7 @@ peer_score_rating(
   roster = roster_test,
   prefix = prefix,
   form_rating = "hw2_rating.Rmd",
-  dblind = dblind
+  double_blind = double_blind
 )
 ```
 

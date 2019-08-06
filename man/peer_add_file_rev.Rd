@@ -5,7 +5,8 @@
 \title{Add local files to author-specific folders on reviewers' review repositories}
 \usage{
 peer_add_file_rev(org, roster, local_path, prefix = "", suffix = "",
-  message = NULL, branch = "master", overwrite = FALSE)
+  message = NULL, branch = "master", overwrite = FALSE,
+  verbose = TRUE)
 }
 \arguments{
 \item{org}{Character. Name of the GitHub organization.}
@@ -23,6 +24,8 @@ peer_add_file_rev(org, roster, local_path, prefix = "", suffix = "",
 \item{branch}{Character. Name of branch the file should be committed to, defaults to \code{master}.}
 
 \item{overwrite}{Logical. Whether existing files in reviewers' repositories should be overwritten, defaults to \code{FALSE}.}
+
+\item{verbose}{Logical. Should success / failure messages be printed.}
 }
 \description{
 \code{peer_add_file_rev()} takes a local file and adds it to author-specific folders on reviewers' repositories. The function's main purpose is to distribute review forms into the correct author-specific folders on reviewers' repositories.

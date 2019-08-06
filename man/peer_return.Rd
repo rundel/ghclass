@@ -5,7 +5,7 @@
 \title{Return peer feedback to authors}
 \usage{
 peer_return(org, roster, path, form_review = NULL, form_rating = NULL,
-  dblind = FALSE, prefix = "", suffix = "", message = NULL,
+  double_blind = FALSE, prefix = "", suffix = "", message = NULL,
   branch = "master", overwrite = FALSE)
 }
 \arguments{
@@ -19,7 +19,7 @@ peer_return(org, roster, path, form_review = NULL, form_rating = NULL,
 
 \item{form_rating}{Character. File name of rating feedback form (must be .Rmd document). If \code{NULL}, no link to the form will be created in the issue filed for authors.}
 
-\item{dblind}{Logical. Specifies whether review is conducted double-blind (i.e. neither reviewer nor author can identify each other), or single-blind (i.e. authors remain anonymous but reviewer identities are revealed). If \code{dblind = TRUE}, reviewer folders are identified by the anonymized user IDs in the roster's \code{user_random} column. If \code{dblind = FALSE}, reviewer folders are identified by the original user names. Defaults to \code{FALSE}.}
+\item{double_blind}{Logical. Specifies whether review is conducted double-blind (i.e. neither reviewer nor author can identify each other), or single-blind (i.e. authors remain anonymous but reviewer identities are revealed). If \code{double_blind = TRUE}, reviewer folders are identified by the anonymized user IDs in the roster's \code{user_random} column. If \code{double_blind = FALSE}, reviewer folders are identified by the original user names. Defaults to \code{FALSE}.}
 
 \item{prefix}{Character. Common repository name prefix.}
 

@@ -241,7 +241,7 @@ peer_create_issue_rating = function(rdf,
                                     form_rating,
                                     title = "Reviewer feedback",
                                     label = "test",
-                                    dblind = FALSE) {
+                                    double_blind = FALSE) {
   purrr::walk(unique(rdf[['author']]),
               function(x) {
                 sub = rdf[rdf[['author']] == x,]
@@ -249,7 +249,7 @@ peer_create_issue_rating = function(rdf,
                 res = purrr::safely(github_api_issue_create)(
                   repo = unique(sub[['repo_a']]),
                   title = title,
-                  body = peer_issue_body_rating(sub, path, form_review, form_rating, dblind),
+                  body = peer_issue_body_rating(sub, path, form_review, form_rating, double_blind),
                   assignee = x,
                   labels = list(":mag: Inspect review")
                 )
@@ -266,7 +266,7 @@ peer_issue_body_rating = function(sub,
                                   path,
                                   form_review = NULL,
                                   form_rating = NULL,
-                                  dblind) {
+                                  double_blind) {
   arg_is_chr(path)
   arg_is_chr_scalar(form_review, form_rating, allow_null = T)
 
@@ -275,7 +275,7 @@ peer_issue_body_rating = function(sub,
 
   fdf = repo_files(repo_a)
 
-  if (!dblind) {
+  if (!double_blind) {
     rev_sub = sub[['reviewer']]
   } else {
     rev_sub = sub[['reviewer_no']]

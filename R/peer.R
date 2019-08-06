@@ -1,5 +1,5 @@
 # Helper function for Latin square
-g = function(j, n) {
+latin_square = function(j, n) {
   i <- seq_len(n)
   (((i - 1) + (j - 1)) %% n) + 1
 }
@@ -10,7 +10,7 @@ g = function(j, n) {
 #' `peer_create_roster` creates data frame of random assignments of author files to reviewers. By default, the output is saved to a `.csv` file in the current working directory that incorporates the current date and random seed as part of the file name.
 #'
 #' @param user Character. A vector of GitHub user names.
-#' @param m Numeric. Number of reviews per user. Must be larger than zero and smaller than the number of users.
+#' @param n_rev Numeric. Number of reviews per user. Must be larger than zero and smaller than the number of users.
 #' @param seed Numeric. Random seed for assignment, defaults to `12345`.
 #' @param write_csv Logical. Whether the roster data frame should be saved to a `.csv` file in the current working directory, defaults to TRUE.
 #'
@@ -21,18 +21,18 @@ g = function(j, n) {
 #'
 #' @export
 #'
-peer_create_roster = function(m,
+peer_create_roster = function(n_rev,
                               user,
                               seed = 12345,
                               write_csv = TRUE) {
-  stopifnot(is.numeric(m))
+  stopifnot(is.numeric(n_rev))
   stopifnot(is.numeric(seed))
   arg_is_chr(user)
-  stopifnot(length(user) > 1, m > 0, m < length(user))
+  stopifnot(length(user) > 1, n_rev > 0, n_rev < length(user))
 
   set.seed(seed)
-  j = sample(2:length(user), m)
-  res = purrr::map(j, ~ g(.x, length(user)))
+  j = sample(2:length(user), n_rev)
+  res = purrr::map(j, ~ latin_square(.x, length(user)))
 
   # Randomizing user names to avoid clustering
   # if length(user) == 2, will always res = c(2, 1)
@@ -40,7 +40,7 @@ peer_create_roster = function(m,
   user_random = paste0("aut", sample(1:length(user), length(user)))
 
   df_sort = data.frame(user = user,
-                       user_random = as.character(user_random))[order(as.numeric(sub("[aA-zZ]+", "", user_random))), ]
+                       user_random = as.character(user_random))[order(as.numeric(sub("[aA-zZ]+", "", user_random))),]
 
   res_df = setNames(data.frame(df_sort,
                                if (length(user) > 2) {
@@ -49,9 +49,9 @@ peer_create_roster = function(m,
                                } else {
                                  rev(user_random)
                                }),
-                    c("user", "user_random", purrr::map_chr(1:m, ~ paste0("rev", .x))))
+                    c("user", "user_random", purrr::map_chr(1:n_rev, ~ paste0("rev", .x))))
 
-  res_df = res_df[order(res_df$user_random), ]
+  res_df = res_df[order(res_df$user_random),]
 
   if (write_csv) {
     fname = glue::glue("roster_seed{seed}.csv")
@@ -104,11 +104,11 @@ format_rev = function(prefix, suffix) {
 
 #' Assign file to reviewers
 #'
-#' `peer_assign` adds files from authors' repositories to review repositories. It also creates an issue in the reviewers' repositories informing them that the review files are available and creating links to the relevant documents.
+#' `peer_assign` adds files from authors' repositories to review repositories. It also creates an issue in the reviewers' repositories informing them that the review files are available and with links to the relevant documents.
 #'
 #' @param org Character. Name of GitHub Organization.
 #' @param roster Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column `user` with GitHub user names of authors, a column `user_random` with randomized tokens for user names, and one or more `rev*` columns that specify review assignments as values of the vector `user_random`.
-#' @param path Character. File name or vector of file names to be included. If `NULL`, all files not contained in folders, except `.gitignore` and `.Rproj`, will be moved to the reviewers' repositories.
+#' @param path Character. File name or vector of file names to be included. If `NULL`, all files not contained in folders, except `.gitignore`, `.Rhistory`, and `.Rproj`, will be moved to the reviewers' repositories.
 #' @param form_review Character. File name of customized review feedback form. If `NULL`, no link will be created in the issue informing reviewers that the review files are available.
 #' @param prefix Character. Common repository name prefix.
 #' @param suffix Character. Common repository name suffix.
@@ -149,7 +149,7 @@ peer_assign = function(org,
 
   purrr::walk(unique(rdf$author),
               function(x) {
-                sub = rdf[rdf$author == x,]
+                sub = rdf[rdf$author == x, ]
                 repo_a = unique(sub$repo_a)
                 repo_r = unique(sub$repo_r_rev)
 
@@ -159,7 +159,8 @@ peer_assign = function(org,
                   path = files_a$path[(files_a$type == "blob") &
                                         (!grepl("/", files_a$path)) &
                                         (!grepl("\\.Rproj$", files_a$path)) &
-                                        (files_a$path != ".gitignore")]
+                                        !(files_a$path %in% c(".gitignore",
+                                                              ".Rhistory"))]
                 }
 
                 content = purrr::map(path,
@@ -213,13 +214,13 @@ peer_assign = function(org,
 #'
 #' `peer_create_form_review` creates blank feedback forms for reviewers based on the user-specified number of questions.
 #'
-#' @param n Numerical. Number of score fields to be included in .Rmd YAML.
+#' @param n Numerical. Number of score fields to be included in the YAML of the .Rmd file.
 #' @param title Character. Title of form, defaults to "Reviewer feedback form."
 #' @param fname Character. File name of RMarkdown document to be written to memory, defaults to `feedback_blank_review`.
 #' @param output Character. Output parameter for `.Rmd` file, defaults to `github_document`.
 #' @param write_rmd Logical. Whether the feedback form should be saved to a `.Rmd` file in the current working directory, defaults to `TRUE`.
 #' @param overwrite Logical. Should existing file or files with same name be overwritten, defaults to `FALSE`.
-#' @param dblind Logical. If `dblind = TRUE`, the YAML will contain an `author` field, defaults to `FALSE`.
+#' @param double_blind Logical. If `double_blind = TRUE`, the YAML will contain an `author` field, defaults to `FALSE`.
 #'
 #' @example
 #' \dontrun{
@@ -234,7 +235,7 @@ peer_create_form_review = function(n,
                                    output = "github_document",
                                    write_rmd = TRUE,
                                    overwrite = FALSE,
-                                   dblind = FALSE) {
+                                   double_blind = FALSE) {
   stopifnot(!is.null(fname))
   if (grepl("\\s+", fname)) {
     fname = stringr::str_replace_all(fname, "\\s", "_")
@@ -244,7 +245,7 @@ peer_create_form_review = function(n,
   }
 
   # YAML
-  yaml_txt = sprintf(if (!dblind) {
+  yaml_txt = sprintf(if (!double_blind) {
     "---\ntitle: \"%s\"\nauthor: NA\noutput: %s\nparams:\n%s\n---\n\n\n"
   } else {
     "---\ntitle: \"%s\"\noutput: %s\nparams:\n%s\n---\n\n\n"
@@ -266,7 +267,10 @@ peer_create_form_review = function(n,
     paste0(purrr::map(
       1:n,
       ~ paste0(
-        sprintf("%1$i. Place Question %1$i text here. [max. xxx points]\n\n", .x),
+        sprintf(
+          "#### %1$i. Place Question %1$i text here. [max. xxx points]\n\n",
+          .x
+        ),
         resp,
         collapse = "\n\n"
       )
@@ -299,10 +303,10 @@ peer_create_form_review = function(n,
 
 #' Create author rating form
 #'
-#' `peer_create_form_rating` creates a short feedback form for authors to rate the feedback they got from reviewers.
+#' `peer_create_form_rating` creates a short feedback form for authors to rate the feedback they got from reviewers. The rating categories are based on Reily, K. and P. Ludford Finnerty,  and L. Terveen (2009): Two Peers Are Better Than One: Aggregating Peer Reviews for Computing Assignments is Surprisingly Accurate. In *Proceedings of the ACM 2009 International Conference on Supporting Group Work*. GROUP’09, May 10–13, 2009, Sanibel Island, Florida, USA.
 #'
 #' @param category Character. Categories to be included in the feedback form, defaults to `c("helpfulness", "accuracy", "fairness")`.
-#' @param title Character. Title of form, defaults to "Author feedback form."
+#' @param title Character. Title of form, defaults to "Author feedback form".
 #' @param fname Character. File name of RMarkdown document to be written to memory, defaults to `feedback_blank_rating`.
 #' @param output Character. Output parameter for `.Rmd` file, defaults to `github_document`.
 #' @param write_rmd Logical. Whether the feedback form should be saved to a `.Rmd` file in the current working directory, defaults to TRUE.
@@ -487,7 +491,7 @@ peer_add_file_rev = function(org,
 #' @param org Character. Name of the GitHub organization.
 #' @param roster Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column `user` with GitHub user names of authors, a column `user_random` with randomized tokens for user names, and one or more `rev*` columns that specify review assignments as values of the vector `user_random`.
 #' @param local_path Character. File name of file to be added.
-#' @param dblind Logical. Specifies whether review is conducted double-blind (i.e. neither reviewer nor author can identify each other), or single-blind (i.e. authors remain anonymous but reviewer identities are revealed). If `dblind = TRUE`, reviewer folders are identified by the reviewer's ID. If `dblind = FALSE`, reviewer folders are identified by the original user names. Defaults to `FALSE`.
+#' @param double_blind Logical. Specifies whether review is conducted double-blind (i.e. neither reviewer nor author can identify each other), or single-blind (i.e. authors remain anonymous but reviewer identities are revealed). If `double_blind = TRUE`, reviewer folders are identified by the reviewer's ID. If `double_blind = FALSE`, reviewer folders are identified by the original user names. Defaults to `FALSE`.
 #' @param prefix Character. Common repository name prefix.
 #' @param suffix Character. Common repository name suffix.
 #' @param message Character. Commit message.
@@ -507,7 +511,7 @@ peer_add_file_rev = function(org,
 peer_add_file_aut = function(org,
                              roster,
                              local_path,
-                             dblind = FALSE,
+                             double_blind = FALSE,
                              prefix = "",
                              suffix = "",
                              message = NULL,
@@ -517,7 +521,7 @@ peer_add_file_aut = function(org,
   arg_is_chr_scalar(org, prefix, suffix)
   arg_is_chr_scalar(message, allow_null = TRUE)
   arg_is_chr(local_path)
-  arg_is_lgl(dblind, overwrite, verbose)
+  arg_is_lgl(double_blind, overwrite, verbose)
 
   prefix_rev = format_rev(prefix, suffix)$prefix_rev
   suffix_rev = format_rev(prefix, suffix)$suffix_rev
@@ -535,7 +539,7 @@ peer_add_file_aut = function(org,
   purrr::walk(aut,
               function(x) {
                 repo_files = repo_files(x)
-                if (!dblind) {
+                if (!double_blind) {
                   rev = rdf[['reviewer']][rdf[['repo_a']] == x]
                 } else {
                   rev = rdf[['reviewer_no']][rdf[['repo_a']] == x]
@@ -585,7 +589,7 @@ peer_score_review = function(org,
                              write_csv = TRUE) {
   # Checks
   arg_is_chr_scalar(org, prefix, suffix, form_review)
-  arg_is_lgl(dblind, write_csv)
+  arg_is_lgl(double_blind, write_csv)
 
   # Check that feedback form is .Rmd
   if (!grepl("\\.[rR]md$", form_review)) {
@@ -597,37 +601,37 @@ peer_score_review = function(org,
 
   rdf = peer_expand_roster(org, roster, prefix, suffix, prefix_rev, suffix_rev)
 
-  out = purrr::map_dfr(seq_len(nrow(rdf)),
-                       function(x) {
-                         repo = as.character(rdf[x, 'repo_r_rev'])
-                         ghpath = glue::glue("{as.character(rdf[x, 'author_random'])}/{form_review}")
-                         r_no = as.character(rdf[x, 'reviewer_no'])
+  out_temp = purrr::map_dfr(seq_len(nrow(rdf)),
+                            function(x) {
+                              repo = as.character(rdf[x, 'repo_r_rev'])
+                              ghpath = glue::glue("{as.character(rdf[x, 'author_random'])}/{form_review}")
+                              r_no = as.character(rdf[x, 'reviewer_no'])
 
-                         feedback = purrr::safely(repo_get_file)(repo = repo,
-                                                                 file = ghpath)
+                              feedback = purrr::safely(repo_get_file)(repo = repo,
+                                                                      file = ghpath)
 
-                         if (succeeded(feedback)) {
-                           tc = textConnection(feedback$result)
-                           scores = rmarkdown::yaml_front_matter(tc)$params
-                           scores[scores == "NA"] = NA
+                              if (succeeded(feedback)) {
+                                tc = textConnection(feedback$result)
+                                scores = rmarkdown::yaml_front_matter(tc)$params
+                                scores[scores == "NA"] = NA
 
-                           setNames(c(as.character(rdf[x, 'author']), r_no, scores),
-                                    c("user", "r_no", paste0("q", 1:length(scores))))
+                                setNames(c(as.character(rdf[x, 'author']), r_no, scores),
+                                         c("user", "r_no", paste0("q", 1:length(scores))))
 
-                         } else {
-                           usethis::ui_oops(
-                             "Cannot locate file {usethis::ui_value(ghpath)} on repo {usethis::ui_value(repo)}."
-                           )
-                         }
-                       }) %>%
-    # Getting data frame in right format
-    tidyr::gather(q_name, q_value,-user,-r_no) %>%
-    tidyr::unite("new", c("r_no", "q_name")) %>%
-    tidyr::spread(new, q_value) %>%
-    merge(roster, all.y = T)
+                              } else {
+                                usethis::ui_oops(
+                                  "Cannot locate file {usethis::ui_value(ghpath)} on repo {usethis::ui_value(repo)}."
+                                )
+                              }
+                            })
+
+  out_temp = tidyr::gather(out_temp, q_name, q_value, -user, -r_no)
+  out_temp = tidyr::unite(out_temp, "new", c("r_no", "q_name"))
+  out_temp = tidyr::spread(out_temp, new, q_value)
+  out = merge(out_temp, roster, all.y = T)
 
   out = out[, union(names(roster), names(out))]
-  out = out[order(out$user_random), ]
+  out = out[order(out$user_random),]
 
   if (write_csv) {
     fname = glue::glue("{revscores}_{fs::path_file(roster)}")
@@ -646,7 +650,7 @@ peer_score_review = function(org,
 #' @param org Character. Name of the GitHub organization.
 #' @param roster Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column `user` with GitHub user names of authors, a column `user_random` with randomized tokens for user names, and one or more `rev*` columns that specify review assignments as values of the vector `user_random`.
 #' @param form_rating Character. File name of rating feedback form (must be .Rmd document).
-#' @param dblind Logical. Specifies whether review is conducted double-blind (i.e. neither reviewer nor author can identify each other), or single-blind (i.e. authors remain anonymous but reviewer identities are revealed). If `dblind = TRUE`, reviewer folders are identified by the anonymized user IDs in the roster's `user_random` column. If `dblind = FALSE`, reviewer folders are identified by the original user names. Defaults to `FALSE`.
+#' @param double_blind Logical. Specifies whether review is conducted double-blind (i.e. neither reviewer nor author can identify each other), or single-blind (i.e. authors remain anonymous but reviewer identities are revealed). If `double_blind = TRUE`, reviewer folders are identified by the anonymized user IDs in the roster's `user_random` column. If `double_blind = FALSE`, reviewer folders are identified by the original user names. Defaults to `FALSE`.
 #' @param prefix Character. Common repository name prefix.
 #' @param suffix Character. Common repository name suffix.
 #' @param write_csv Logical. Whether the roster data frame should be saved to a `.csv` file in the current working directory, defaults to TRUE.
@@ -657,7 +661,7 @@ peer_score_review = function(org,
 #' org = "ghclass-test",
 #' roster = "hw2_roster_seed12345.csv",
 #' form_rating = "hw2_rating.Rmd",
-#' dblind = TRUE,
+#' double_blind = TRUE,
 #' prefix = prefix)
 #' }
 #'
@@ -666,13 +670,13 @@ peer_score_review = function(org,
 peer_score_rating = function(org,
                              roster,
                              form_rating,
-                             dblind = FALSE,
+                             double_blind = FALSE,
                              prefix = "",
                              suffix = "",
                              write_csv = TRUE) {
   # Checks
   arg_is_chr_scalar(org, prefix, suffix, form_rating)
-  arg_is_lgl(dblind, write_csv)
+  arg_is_lgl(double_blind, write_csv)
 
   # Check that feedback form is .Rmd
   if (!grepl("\\.[rR]md$", form_rating)) {
@@ -687,7 +691,7 @@ peer_score_rating = function(org,
   out = purrr::map_dfr(seq_len(nrow(rdf)),
                        function(x) {
                          repo = as.character(rdf[x, 'repo_a'])
-                         if (dblind) {
+                         if (double_blind) {
                            ghpath = glue::glue("{as.character(rdf[x, 'reviewer_no'])}/{form_rating}")
                          } else {
                            ghpath = glue::glue("{as.character(rdf[x, 'reviewer'])}/{form_rating}")
@@ -712,13 +716,13 @@ peer_score_rating = function(org,
                          }
                        }) %>%
     # Getting data frame in right format
-    tidyr::gather(q_name, q_value,-user,-r_no) %>%
+    tidyr::gather(q_name, q_value, -user, -r_no) %>%
     tidyr::unite("new", c("r_no", "q_name")) %>%
     tidyr::spread(new, q_value) %>%
     merge(roster, all.y = T)
 
   out = out[, union(names(roster), names(out))]
-  out = out[order(out$user_random), ]
+  out = out[order(out$user_random),]
 
   if (write_csv) {
     fname = glue::glue("{autscores}_{fs::path_file(roster)}")
@@ -737,7 +741,7 @@ peer_score_rating = function(org,
 #' @param path Character. File name or vector of file names to be included.
 #' @param form_review Character. File name of reviewer feedback form (must be .Rmd document). If `NULL`, no link to the form will be created in the issue filed for authors.
 #' @param form_rating Character. File name of rating feedback form (must be .Rmd document). If `NULL`, no link to the form will be created in the issue filed for authors.
-#' @param dblind Logical. Specifies whether review is conducted double-blind (i.e. neither reviewer nor author can identify each other), or single-blind (i.e. authors remain anonymous but reviewer identities are revealed). If `dblind = TRUE`, reviewer folders are identified by the anonymized user IDs in the roster's `user_random` column. If `dblind = FALSE`, reviewer folders are identified by the original user names. Defaults to `FALSE`.
+#' @param double_blind Logical. Specifies whether review is conducted double-blind (i.e. neither reviewer nor author can identify each other), or single-blind (i.e. authors remain anonymous but reviewer identities are revealed). If `double_blind = TRUE`, reviewer folders are identified by the anonymized user IDs in the roster's `user_random` column. If `double_blind = FALSE`, reviewer folders are identified by the original user names. Defaults to `FALSE`.
 #' @param prefix Character. Common repository name prefix.
 #' @param suffix Character. Common repository name suffix.
 #' @param message Character. Commit message, defaults to "Assigning review."
@@ -761,7 +765,7 @@ peer_return = function(org,
                        path,
                        form_review = NULL,
                        form_rating = NULL,
-                       dblind = FALSE,
+                       double_blind = FALSE,
                        prefix = "",
                        suffix = "",
                        message = NULL,
@@ -777,7 +781,7 @@ peer_return = function(org,
 
   rdf = peer_expand_roster(org, roster, prefix, suffix, prefix_rev, suffix_rev)
 
-  if (!dblind) {
+  if (!double_blind) {
     rev = rdf[['reviewer']]
   } else {
     rev = rdf[['reviewer_no']]
@@ -819,7 +823,7 @@ peer_return = function(org,
     path = path,
     form_review = form_review,
     form_rating = form_rating,
-    dblind = dblind
+    double_blind = double_blind
   )
 }
 

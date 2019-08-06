@@ -4,9 +4,9 @@
 \alias{peer_add_file_aut}
 \title{Add local files to reviewer-specific folders on authors' repositories}
 \usage{
-peer_add_file_aut(org, roster, local_path, dblind = FALSE, prefix = "",
-  suffix = "", message = NULL, branch = "master",
-  overwrite = FALSE)
+peer_add_file_aut(org, roster, local_path, double_blind = FALSE,
+  prefix = "", suffix = "", message = NULL, branch = "master",
+  overwrite = FALSE, verbose = TRUE)
 }
 \arguments{
 \item{org}{Character. Name of the GitHub organization.}
@@ -15,7 +15,7 @@ peer_add_file_aut(org, roster, local_path, dblind = FALSE, prefix = "",
 
 \item{local_path}{Character. File name of file to be added.}
 
-\item{dblind}{Logical. Specifies whether review is conducted double-blind (i.e. neither reviewer nor author can identify each other), or single-blind (i.e. authors remain anonymous but reviewer identities are revealed). If \code{dblind = TRUE}, reviewer folders are identified by the reviewer's ID. If \code{dblind = FALSE}, reviewer folders are identified by the original user names. Defaults to \code{FALSE}.}
+\item{double_blind}{Logical. Specifies whether review is conducted double-blind (i.e. neither reviewer nor author can identify each other), or single-blind (i.e. authors remain anonymous but reviewer identities are revealed). If \code{double_blind = TRUE}, reviewer folders are identified by the reviewer's ID. If \code{double_blind = FALSE}, reviewer folders are identified by the original user names. Defaults to \code{FALSE}.}
 
 \item{prefix}{Character. Common repository name prefix.}
 
@@ -26,6 +26,8 @@ peer_add_file_aut(org, roster, local_path, dblind = FALSE, prefix = "",
 \item{branch}{Character. Name of branch the file should be committed to, defaults to \code{master}.}
 
 \item{overwrite}{Logical. Whether existing files in reviewers' repositories should be overwritten, defaults to \code{FALSE}.}
+
+\item{verbose}{Logical. Should success / failure messages be printed.}
 }
 \description{
 \code{peer_add_file_aut()} takes a local file and adds it to reviewer-specific folders on authors' repositories. The function's main purpose is to distribute rating forms into the reviewer-specific folders on authors' repositories.

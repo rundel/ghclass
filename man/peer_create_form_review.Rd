@@ -6,10 +6,10 @@
 \usage{
 peer_create_form_review(n, title = "Reviewer feedback form",
   fname = "feedback_blank_review", output = "github_document",
-  write_rmd = TRUE, overwrite = FALSE, dblind = FALSE)
+  write_rmd = TRUE, overwrite = FALSE, double_blind = FALSE)
 }
 \arguments{
-\item{n}{Numerical. Number of score fields to be included in .Rmd YAML.}
+\item{n}{Numerical. Number of score fields to be included in the YAML of the .Rmd file.}
 
 \item{title}{Character. Title of form, defaults to "Reviewer feedback form."}
 
@@ -21,7 +21,7 @@ peer_create_form_review(n, title = "Reviewer feedback form",
 
 \item{overwrite}{Logical. Should existing file or files with same name be overwritten, defaults to \code{FALSE}.}
 
-\item{dblind}{Logical. If \code{dblind = TRUE}, the YAML will contain an \code{author} field, defaults to \code{FALSE}.}
+\item{double_blind}{Logical. If \code{double_blind = TRUE}, the YAML will contain an \code{author} field, defaults to \code{FALSE}.}
 }
 \description{
 \code{peer_create_form_review} creates blank feedback forms for reviewers based on the user-specified number of questions.
