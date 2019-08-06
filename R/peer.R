@@ -1,6 +1,3 @@
-## !!! Remember to run usethis::use_pipe() before PR !!!
-# Also, remember to change parameter to repo_folder inside call to repo_put_file()
-
 # Helper function for Latin square
 g = function(j, n) {
   i <- seq_len(n)
@@ -103,92 +100,6 @@ format_rev = function(prefix, suffix) {
 }
 
 
-# Reads roster file
-peer_read_roster = function(roster) {
-  res = purrr::safely(fs::file_exists)(roster)
-
-  if (is.null(res$result) & is.data.frame(roster)) {
-    rdf = tibble::as_tibble(purrr::modify_if(roster, is.factor, as.character))
-  } else if (is.null(res$result) & !is.data.frame(roster)) {
-    usethis::ui_stop("{usethis::ui_field('roster')} must be a data.frame or .csv file.")
-  } else if (!res$result) {
-    usethis::ui_stop("Cannot locate file: {usethis::ui_value(roster)}")
-  } else if (res$result) {
-    rdf = suppressMessages(readr::read_csv(roster))
-  }
-
-  rdf
-
-}
-
-# Checks whether necessary column names are present
-peer_check_roster = function(roster) {
-  val = c("user", "user_random")
-  purrr::walk(val,
-              function(val) {
-                if (!(val %in% names(roster))) {
-                  usethis::ui_oops("{usethis::ui_field('roster')} must contain column {usethis::ui_value(val)}")
-                }
-              })
-
-  if (!(any(grepl("^rev[0-9]+$", names(roster))))) {
-    usethis::ui_oops(
-      "{usethis::ui_field('roster')} must contain at least one column {usethis::ui_field('rev*')}"
-    )
-  }
-}
-
-peer_expand_roster = function(org,
-                              roster,
-                              prefix = "",
-                              suffix = "",
-                              prefix_rev = "",
-                              suffix_rev = "") {
-  arg_is_chr_scalar(org, prefix, suffix, prefix_rev, suffix_rev)
-
-  rdf = peer_read_roster(roster)
-  peer_check_roster(rdf)
-
-  out = purrr::map_dfr(rdf[['user']],
-
-                       function(y) {
-                         tibble::tibble(
-                           author = y,
-                           author_random = as.character(rdf[rdf$user == y, 'user_random']),
-                           repo_a = as.character(glue::glue("{org}/{prefix}{y}{suffix}")),
-                           reviewer = peer_get_reviewer(y, rdf, "reviewer"),
-                           reviewer_random = peer_get_reviewer(y, rdf, "reviewer_random"),
-                           reviewer_no = peer_get_reviewer(y, rdf, "reviewer_no"),
-                           repo_r = as.character(glue::glue("{org}/{prefix}{reviewer}{suffix}")),
-                           repo_r_rev = as.character(glue::glue(
-                             "{org}/{prefix_rev}{reviewer}{suffix_rev}"
-                           )),
-                           reviewer_no_scorea = names(rdf)[purrr::map_int(reviewer_random, ~
-                                                                            which(rdf[rdf$user_random == .x, ] == author_random))]
-                         )
-                       })
-  out
-}
-
-
-peer_get_reviewer = function(author,
-                             roster,
-                             out = c("reviewer",
-                                     "reviewer_random",
-                                     "reviewer_no")) {
-  m = seq_len(length(names(roster)[grepl("^rev[0-9]+$", names(roster))]))
-  reviewer_random = as.character(roster[roster$user == author, paste0("rev", m)])
-  reviewer = roster$user[purrr::map_int(reviewer_random, ~ which(roster$user_random == .x))]
-  reviewer_no = names(roster)[purrr::map_int(reviewer_random, ~ which(roster[roster$user == author, ] == .x))]
-
-  if (out == "reviewer") {
-    reviewer
-  } else if (out == "reviewer_random") {
-    reviewer_random
-  } else if (out == "reviewer_no") {
-    reviewer_no
-  }
-}
 
 
 #' Assign file to reviewers
@@ -295,78 +206,6 @@ peer_assign = function(org,
 }
 
 
-peer_create_issue_review = function(rdf,
-                                    form_review,
-                                    title = "Author files") {
-  purrr::walk(unique(rdf[['reviewer']]),
-              function(x) {
-                sub = rdf[rdf[['reviewer']] == x, ]
-
-                res = purrr::safely(github_api_issue_create)(
-                  repo = unique(sub[['repo_r_rev']]),
-                  title = title,
-                  body = peer_issue_body_review(sub, form_review),
-                  assignee = x,
-                  labels = list(":pencil: Complete review")
-                )
-
-                status_msg(res,
-                           glue::glue("Posted issue for {x}"),
-                           glue::glue("Cannot post issue for {x}"))
-
-              })
-}
-
-
-peer_issue_body_review = function(sub,
-                                  path,
-                                  form_review = NULL) {
-  arg_is_chr(path, allow_null = TRUE)
-  arg_is_chr_scalar(form_review, allow_null = T)
-
-  repo_r_rev = unique(sub[['repo_r_rev']])
-  url_start_blob = glue::glue("https://github.com/{repo_r_rev}/blob/master/")
-  url_start_tree = glue::glue("https://github.com/{repo_r_rev}/tree/master/")
-
-  fdf = repo_files(repo_r_rev)
-
-  out = purrr::map_dfr(sub[['author_random']],
-                       function(y) {
-                         if (!is.null(form_review)) {
-                           rtemp = fdf[['path']][grepl(y, fdf[['path']]) &
-                                                   grepl(form_review, fdf[['path']])]
-                         }
-
-                         tibble::tibble(
-                           author_random = y,
-                           rfeed = ifelse(
-                             !is.null(form_review),
-                             paste0(url_start_blob, rtemp),
-                             character()
-                           ),
-                           url = paste0(url_start_blob, y)
-                         )
-                       })
-
-  rev_txt = purrr::map_chr(sub[['author_random']],
-                           function(y) {
-                             paste(
-                               glue::glue("**For {y}**"),
-                               glue::glue(
-                                 "- [ ] Review [assignment]({out$url[out$author_random == y]})."
-                               ),
-                               # Get author folder url
-                               check_rfeed_review(out, y),
-                               sep = "\n"
-                             )
-                           })
-
-  glue::glue(
-    "Your peers' assignments have been added your repository for review.\n\n",
-    'Please complete the following tasks for each of the authors:\n\n',
-    paste(rev_txt, collapse = "\n\n")
-  )
-}
 
 
 #' Create reviewer feedback form
@@ -584,6 +423,7 @@ peer_create_form_rating = function(category = c("helpfulness", "accuracy", "fair
 #' @param message Character. Commit message.
 #' @param branch Character. Name of branch the file should be committed to, defaults to `master`.
 #' @param overwrite Logical. Whether existing files in reviewers' repositories should be overwritten, defaults to `FALSE`.
+#' @param verbose Logical. Should success / failure messages be printed.
 #'
 #' @example
 #' \dontrun{
@@ -601,11 +441,12 @@ peer_add_file_rev = function(org,
                              suffix = "",
                              message = NULL,
                              branch = "master",
-                             overwrite = FALSE) {
+                             overwrite = FALSE,
+                             verbose = TRUE) {
   arg_is_chr_scalar(org, prefix, suffix)
   arg_is_chr_scalar(message, branch, allow_null = TRUE)
   arg_is_chr(local_path)
-  arg_is_lgl(overwrite)
+  arg_is_lgl(overwrite, verbose)
 
   prefix_rev = format_rev(prefix, suffix)$prefix_rev
   suffix_rev = format_rev(prefix, suffix)$suffix_rev
@@ -614,12 +455,13 @@ peer_add_file_rev = function(org,
 
   file_status = fs::file_exists(local_path)
   if (any(!file_status))
-    usethis::ui_stop("Unable to locate the following file(s): {usethis::ui_value(file[!file_status])}")
+    usethis::ui_stop("Unable to locate the following file(s): {usethis::ui_value(local_path[!file_status])}")
 
   rev = unique(rdf[['repo_r_rev']])
 
   purrr::walk(rev,
               function(x) {
+
                 repo_files = repo_files(x, branch = branch)
                 aut = rdf[['author_random']][rdf[['repo_r_rev']] == x]
 
@@ -630,39 +472,26 @@ peer_add_file_rev = function(org,
 
                               gh_path = glue::glue("{y[[1]]}/{fs::path_file(y[[2]])}")
 
-                              if (!(gh_path %in% repo_files)) {
-                                repo_put_file_notexists(
-                                  repo = target_repo,
-                                  path = target_path,
-                                  content = res[['result']],
+                              if (!(gh_path %in% repo_files[['path']]) | overwrite) {
+
+                                if ((gh_path %in% repo_files[['path']]) & overwrite) {
+                                  sha = repo_files[['sha']][repo_files[['path']] == gh_path]
+                                } else {
+                                  sha = NULL
+                                }
+
+                                out = peer_repo_put_file(
+                                  repo = x,
+                                  path = gh_path,
+                                  content = read_bin_file(y[[2]]),
                                   message = message,
                                   branch = branch,
                                   verbose = verbose,
+                                  sha = sha
                                 )
-
                               }
-
-                              #gh_path = fs::path_file(y)
-
                             })
-
-
-
               })
-
-  # purrr::walk(seq_len(nrow(rdf)),
-  #             function(x) {
-  #               repo_add_file(
-  #                 repo = as.character(rdf[x, 'repo_r_rev']),
-  #                 file = local_path,
-  #                 message = message,
-  #                 repo_folder = as.character(rdf[x, 'author_random']),
-  #                 branch = branch,
-  #                 preserve_path = FALSE,
-  #                 overwrite = overwrite
-  #               )
-  #
-  #             })
 }
 
 
@@ -999,144 +828,6 @@ peer_return = function(org,
 }
 
 
-peer_create_issue_rating = function(rdf,
-                                    path,
-                                    form_review,
-                                    form_rating,
-                                    title = "Reviewer feedback",
-                                    label = "test",
-                                    dblind = FALSE) {
-  purrr::walk(unique(rdf[['author']]),
-              function(x) {
-                sub = rdf[rdf[['author']] == x,]
-
-                res = purrr::safely(github_api_issue_create)(
-                  repo = unique(sub[['repo_a']]),
-                  title = title,
-                  body = peer_issue_body_rating(sub, path, form_review, form_rating, dblind),
-                  assignee = x,
-                  labels = list(":mag: Inspect review")
-                )
-
-                status_msg(res,
-                           glue::glue("Posted issue for {x}"),
-                           glue::glue("Cannot post issue for {x}"))
-
-              })
-}
-
-
-peer_issue_body_rating = function(sub,
-                                  path,
-                                  form_review = NULL,
-                                  form_rating = NULL,
-                                  dblind) {
-  arg_is_chr(path)
-  arg_is_chr_scalar(form_review, form_rating, allow_null = T)
-
-  repo_a = unique(sub[['repo_a']])
-  url_start = glue::glue("https://github.com/{repo_a}/blob/master/")
-
-  fdf = repo_files(repo_a)
-
-  if (!dblind) {
-    rev_sub = sub[['reviewer']]
-  } else {
-    rev_sub = sub[['reviewer_no']]
-  }
-
-  #https://github.com/ghclass-test/homework2-thereanders/blob/master/rev1/rfeedback_blank.Rmd
-
-  out = purrr::map_dfr(rev_sub,
-                       function(y) {
-                         if (!is.null(form_rating)) {
-                           atemp = fdf[['path']][grepl(y, fdf[['path']]) &
-                                                   grepl(form_rating, fdf[['path']])]
-                         }
-
-                         if (!is.null(form_review)) {
-                           rtemp = fdf[['path']][grepl(y, fdf[['path']]) &
-                                                   grepl(form_review, fdf[['path']])]
-                         }
-
-                         cbind(
-                           tibble::tibble(
-                             reviewer = y,
-                             afeed = ifelse(
-                               !is.null(form_rating),
-                               paste0(url_start, atemp),
-                               character()
-                             ),
-                             rfeed = ifelse(
-                               !is.null(form_review),
-                               paste0(url_start, rtemp),
-                               character()
-                             )
-                           ),
-                           create_diff_url(repo_a, as.character(glue::glue("{y}/{path}")))
-                         )
-                       })
-
-  rev_txt = purrr::map_chr(rev_sub,
-                           function(y) {
-                             paste(
-                               glue::glue("**For {y}**"),
-                               expand_diff(out, path, y),
-                               check_rfeed_rating(out, y),
-                               check_afeed_rating(out, y),
-                               sep = "\n"
-                             )
-                           })
-
-  glue::glue(
-    'The feedback from your peers has been added to your repository.\n\n',
-    'To finish the assignment, please complete the following tasks for each of the reviewers:\n\n',
-    paste(rev_txt, collapse = "\n\n")
-  )
-
-}
-
-expand_diff = function(out, path, .x) {
-  diff_txt = purrr::map_chr(seq_len(length(path)),
-                            function(.y) {
-                              glue::glue(
-                                "- [ ] Review changes suggested for [{path[.y]}]({out[out$reviewer == .x, paste0('diff', .y)]})."
-                              )
-                            })
-  paste(diff_txt, collapse = "\n")
-}
-
-check_rfeed_rating = function(out, x) {
-  test = out[out$reviewer == x, 'rfeed']
-  if (!is.na(test)) {
-    glue::glue("- [ ] Read [review]({test}).")
-  }
-}
-
-check_rfeed_review = function(out, x) {
-  test = out[out$author_random == x, 'rfeed']
-  if (!is.na(test)) {
-    glue::glue("- [ ] Fill out [review form]({test}).")
-  }
-}
-
-check_afeed_rating = function(out, x) {
-  test = out[out$reviewer == x, 'afeed']
-  if (!is.na(test)) {
-    glue::glue("- [ ] Fill out [rating form]({test}).")
-  }
-}
-
-
-format_folder = function(folder, path) {
-  if (!is.null(folder)) {
-    glue::glue("{folder}/{path}")
-  } else {
-    path
-  }
-}
-
-
 #' Mirror file(s) between repos
 #'
 #' `repo_mirror_file` mirrors select file(s) between repositories.
@@ -1149,26 +840,32 @@ format_folder = function(folder, path) {
 #' @param message Character. Commit message.
 #' @param branch Character. Name of branch to use, defaults to "master".
 #' @param overwrite Logical. Should existing file or files with same name be overwritten, defaults to FALSE.
+#' @param verbose Logical. Should success / failure messages be printed.
 #'
 repo_mirror_file = function(source_repo,
                             target_repo,
                             path = NULL,
                             source_folder = NULL,
                             target_folder = NULL,
+                            source_files = NULL,
+                            target_files = NULL,
                             message = NULL,
                             branch = "master",
                             overwrite = FALSE,
                             verbose = TRUE) {
   arg_is_chr(path)
   arg_is_chr_scalar(source_repo, target_repo)
-  arg_is_chr_scalar(source_folder, target_folder, message, allow_null = TRUE)
+  arg_is_chr_scalar(source_folder, target_folder, source_files, target_files, message, allow_null = TRUE)
   arg_is_lgl_scalar(overwrite)
 
-  source_files = repo_files(source_repo, branch)
-  target_files = repo_files(target_repo, branch)
+  if (is.null(source_files))
+    source_files = repo_files(source_repo, branch)
+  if (is.null(target_files))
+    target_files = repo_files(target_repo, branch)
 
   purrr::walk(path,
               function(p) {
+
                 source_path = format_folder(source_folder, p)
                 target_path = format_folder(target_folder, p)
 
