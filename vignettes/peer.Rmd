@@ -83,7 +83,7 @@ The roster file should be read as follows.
 - `user_random` randomizes the order of user names and gives each user an anonymous ID, in the pattern `aut*`.
 - The `rev*` column(s) specify the randomized user ID of the student(s) that are assigned to review the user's assignment.
 
-We recommend for instructors to create a new roster file (with a new random seed) for each assignment to prevent the same pairings of students reviewing each others work over and over throughout the course.
+We recommend for instructors to create a new roster file (with a new random seed) for each assignment to prevent the same pairings of students reviewing each others work over and over throughout the course. For the purpose of demonstration, below we save the roster in a data frame called `roster_test`.
 ```{r, eval = F}
 roster_test = peer_create_roster(2, user, write_csv = F, seed = 678)
 roster_test
