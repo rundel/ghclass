@@ -1,4 +1,4 @@
-missing_team = function(id, org) {
+missing_team = function(team, id, org) {
   if (is.na(id)) {
     usethis::ui_oops("Failed to find team {usethis::ui_value(team)} in org {usethis::ui_value(org)}.")
     TRUE
