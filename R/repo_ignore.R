@@ -15,7 +15,7 @@ repo_ignore = function(repo) {
   purrr::walk(
     repo,
     function(repo, notifications) {
-      res = purrr::safely(github_api_set_subscription)(
+      res = purrr::safely(github_api_repo_subscribe)(
         repo,
         subscribed = FALSE,
         ignored = TRUE
