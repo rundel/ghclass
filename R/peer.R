@@ -285,7 +285,7 @@ peer_create_form_review = function(n,
   if (write_rmd) {
     fname = paste0(fname, ".Rmd")
     if (!(fs::file_exists(fname)) | overwrite) {
-      cat(doc_txt, fname = fname)
+      cat(doc_txt, file = fname)
       usethis::ui_done("Saved file {usethis::ui_value(fname)}")
     } else {
       usethis::ui_oops(
@@ -399,7 +399,7 @@ peer_create_form_rating = function(category = c("helpfulness", "accuracy", "fair
   if (write_rmd) {
     fname = paste0(fname, ".Rmd")
     if (!(fs::file_exists(fname)) | overwrite) {
-      cat(doc_txt, fname = fname)
+      cat(doc_txt, file = fname)
       usethis::ui_done("Saved file {usethis::ui_value(fname)}")
     } else {
       usethis::ui_oops(
