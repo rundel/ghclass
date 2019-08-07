@@ -3,7 +3,7 @@ github_api_team_repos = function(team_id) {
     "GET /teams/:id/repos",
     id=team_id,
     .token = github_get_token(),
-    .limit = get_github_api_limit()
+    .limit = github_get_api_limit()
   )
 }
 

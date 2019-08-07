@@ -73,7 +73,7 @@ extract_content = function(file, include_details = TRUE) {
 github_api_code_search = function(query) {
   gh::gh("GET /search/code", q = query,
          .token = github_get_token(),
-         .limit = get_github_api_limit())
+         .limit = github_get_api_limit())
 }
 
 

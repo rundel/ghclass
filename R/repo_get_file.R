@@ -8,7 +8,7 @@ github_api_repo_get_file = function(repo, file, branch) {
     path = file,
     ref = branch,
     .token = github_get_token(),
-    .limit = get_github_api_limit()
+    .limit = github_get_api_limit()
   )
 
 }

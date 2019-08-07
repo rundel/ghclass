@@ -4,7 +4,7 @@ github_api_team_members = function(id) {
     id = id,
     role = "all",
     .token = github_get_token(),
-    .limit = get_github_api_limit()
+    .limit = github_get_api_limit()
   )
 }
 

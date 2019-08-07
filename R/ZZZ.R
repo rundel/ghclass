@@ -1,8 +1,8 @@
-get_github_api_limit = function() {
+github_get_api_limit = function() {
   #FIXME
   1000L
 }
 
-set_github_api_limit = function(limit) {
+github_set_api_limit = function(limit) {
   #FIXME
 }

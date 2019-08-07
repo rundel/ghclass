@@ -4,7 +4,7 @@ github_api_org_members = function(org) {
   gh::gh("GET /orgs/:org/members",
          org = org,
          .token = github_get_token(),
-         .limit = get_github_api_limit())
+         .limit = github_get_api_limit())
 }
 
 

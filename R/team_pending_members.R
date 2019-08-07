@@ -3,7 +3,7 @@ github_api_team_pending_members = function(id) {
     "GET /teams/:id/invitations",
     id = id,
     .token = github_get_token(),
-    .limit = get_github_api_limit()
+    .limit = github_get_api_limit()
   )
 }
 

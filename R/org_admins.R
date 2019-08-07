@@ -3,7 +3,7 @@ github_api_org_admins = function(owner){
          owner = owner,
          role = "admin",
          .token = github_get_token(),
-         .limit = get_github_api_limit())
+         .limit = github_get_api_limit())
 }
 
 #' List repository administrators

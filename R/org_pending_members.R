@@ -3,7 +3,7 @@ github_api_org_pending = function(owner){
   gh::gh("GET /orgs/:owner/invitations",
          owner = owner,
          .token = github_get_token(),
-         .limit = get_github_api_limit())
+         .limit = github_get_api_limit())
 }
 
 
