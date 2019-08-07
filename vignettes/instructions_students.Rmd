@@ -57,16 +57,17 @@ To start the assignment, please complete the following steps:
 
 - <span style="color:#C70039">Save in repository:</span> Please save your work only in the assignment-specific repository created by the instructor. The files will automatically be moved to your peer reviewers once the assignment is complete. If you save files outside this repository, your work may not be submitted for review and grading.
 - <span style="color:#C70039">Don't change file names:</span> Please do not change the names of files in your repository. 
-- <span style="color:#C70039">Don't push .Rproj file:</span> Never push the .Rproj to your remote repository. Make sure `.Rproj.user` is added to the `.gitignore` file on your local repository before pushing to the remote.
 
 ## Review
 Once the assignment is complete, the review process begins. Your instructor will create a second repository for you, named something like ``r paste0(params$org, "/hw1-review-username")``. 
+
 ```{r, out.width = "650px", echo = FALSE}
 knitr::include_graphics("screen_repos.jpeg")
 ```
 
 
 The new repository contains folders for each of your peers' assignments you are asked to review. Each folder also contains a review form for you to fill out. 
+
 ```{r, out.width = "650px", echo = FALSE}
 knitr::include_graphics("screen_review.jpg")
 ```
@@ -107,6 +108,7 @@ params:
 
 ## Engage with feedback
 When review process is complete, your instructor will pass your peers' feedback back to your assignment repository. Each reviewer's feedback will be saved in a separate folder, for example called `rev1` for reviewer 1's feeback, `rev2` for reviewer 2's feedback, and so on. 
+
 ```{r, out.width = "650px", echo = FALSE}
 knitr::include_graphics("screen_rating.jpeg")
 ```
@@ -115,14 +117,14 @@ knitr::include_graphics("screen_rating.jpeg")
 To finish the assignment, please complete the following steps:
 
 1. Pull the changes on your remote assignment repository into the local copy of your assignment repository
-2. Review changes and make necessary adjustments to your assignment
+2. Review the changes the reviewer made directly in your assignment
 3. Fill out the rating form for the feedback you received from your peers
 4. Push everything to your remote repository before the posted deadline
 
 You instructor will open an issue in your assignment repository with a check list of tasks to complete. 
 
 ### Fill out rating form
-The reviewer folders that are created on you assignment repository contain a RMarkdown document with a short questionnaire asking you to rate the feedback you received from your peers. Please enter your score for each category in the YAML header of the form, replacing the `NA`s. A completed form might look like this.
+The reviewer folders that are created on your assignment repository contain a RMarkdown document with a short questionnaire asking you to rate the feedback you received from your peers. Please enter your score for each category in the YAML header of the form, replacing the `NA`s. A completed form might look like this.
 ```
 ---
 title: "Author feedback form"
