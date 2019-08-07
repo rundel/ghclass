@@ -42,7 +42,7 @@ This vignette introduces the peer review functionality of `ghclass` and provides
 The peer review process is initiated after a regular assignment has been distributed to students. Below, we run through a quick example of how to set up a fictional assignment "hw2" for four students using the `create_repo()` function. For a more detailed description of how to set up student repositories in a GitHub Organization,  see the `ghclass` vignette.
 ```{r, eval = F}
 library(ghclass)
-devtools::load_all()
+
 # 1. Set up vector of student user names, HW identifier prefix, and organization name
 user = c("anya", "bruno", "cecile", "diego")
 prefix = "hw2-"
