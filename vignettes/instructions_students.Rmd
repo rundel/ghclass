@@ -8,8 +8,8 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 params:
-  course: Course name
-  org: GitHub organization
+  course: "Peer review 101, Fall"
+  org: ghclass-test
 ---
 
 <style type="text/css">
