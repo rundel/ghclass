@@ -21,14 +21,14 @@
 #' * [org_admins()]          - (previously [get_admin()])
 #' * [org_invite()]          - (previously [invite_user()])
 #' * [org_members()]         - (previously [get_member()])
-#' * [org_pending_members()] - (previously [get_pending_member()])
+#' * [org_pending()]         - (previously [get_pending_member()])
 #'
 #' Team related functions,
 #' * [team_create()]          - (previously [create_team()])
 #' * [team_rename()]          - (previously [rename_team()])
 #' * [team_invite()]          - (previously [add_team_member()])
 #' * [team_members()]         - (previously [get_team_members()])
-#' * [team_pending_members()] - (previously [get_pending_team_members()])
+#' * [team_pending()]         - (previously [get_pending_team_members()])
 #' * [team_repos()]           - (previously [get_team_repos()])
 #'
 #'

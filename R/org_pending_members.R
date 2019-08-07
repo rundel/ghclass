@@ -9,7 +9,7 @@ github_api_org_pending = function(owner){
 
 #' Get pending organization members
 #'
-#' `org_pending_members` returns a (filtered) vector of pending organization memebers.
+#' `org_pending` returns a (filtered) vector of pending organization memebers.
 #'
 #' @param org Character. Name of the GitHub organization.
 #' @param filter Character. Regular expression pattern for matching (or excluding) repos.
@@ -17,15 +17,15 @@ github_api_org_pending = function(owner){
 #'
 #' @examples
 #' \dontrun{
-#' org_pending_members("ghclass")
+#' org_pending("ghclass")
 #' }
 #'
-
-#' @aliases get_pending_member get_pending_members
+#' @aliases get_pending_member
+#' @aliases org_pending_members
 #'
 #' @export
 #'
-org_pending_members = function(org, filter = NULL, exclude = FALSE) {
+org_pending = function(org, filter = NULL, exclude = FALSE) {
   arg_is_chr_scalar(org)
   arg_is_chr_scalar(filter, allow_null = TRUE)
 
@@ -38,4 +38,10 @@ org_pending_members = function(org, filter = NULL, exclude = FALSE) {
   invite = purrr::map(result(res), "login")
   invite = purrr::flatten_chr(invite)
   filter_results(invite, filter, exclude)
+}
+
+#' @export
+#'
+org_pending_members = function(org, filter = NULL, exclude = FALSE) {
+  org_pending(org, filter, exclude)
 }

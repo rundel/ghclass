@@ -34,7 +34,7 @@ org_invite = function(org, user) {
 
   user = unique(tolower(user))
   member = tolower(org_members(org))
-  pending = tolower(org_pending_members(org))
+  pending = tolower(org_pending(org))
 
   purrr::walk(
     user,
