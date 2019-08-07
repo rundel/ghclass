@@ -1,4 +1,4 @@
-github_api_get_user = function(user) {
+github_api_user = function(user) {
   arg_is_chr_scalar(user)
 
   gh::gh(
@@ -28,6 +28,6 @@ github_api_get_user = function(user) {
 user_exists = function(user) {
   arg_is_chr(user)
 
-  res = purrr::map(user, github_api_get_user)
+  res = purrr::map(user, github_api_user)
   purrr::map_lgl(res, succeeded)
 }

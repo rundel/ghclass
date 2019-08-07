@@ -1,5 +1,5 @@
-github_api_get_repo = function(repo) {
-  stopifnot(length(repo) == 1)
+github_api_repo = function(repo) {
+  arg_is_chr_scalar(repo)
 
   gh::gh(
     "GET /repos/:owner/:repo",
@@ -36,7 +36,7 @@ repo_exists = function(repo, strict = FALSE, verbose = TRUE) {
   arg_is_lgl_scalar(strict, verbose)
 
   # Checking if repo exists
-  repo_details = purrr::map(repo, purrr::safely(github_api_get_repo))
+  repo_details = purrr::map(repo, purrr::safely(github_api_repo))
   repo_exists = purrr::map_lgl(repo_details, succeeded)
 
   cur_names = purrr::map_chr(repo_details, c("result","full_name"), .default = NA)
