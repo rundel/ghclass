@@ -1,5 +1,5 @@
 # Reads roster file
-peer_read_roster = function(roster) {
+peer_roster_read = function(roster) {
   res = purrr::safely(fs::file_exists)(roster)
 
   if (is.null(res$result) & is.data.frame(roster)) {
@@ -33,19 +33,19 @@ peer_check_roster = function(roster) {
   }
 }
 
-peer_expand_roster = function(org,
+peer_roster_expand = function(org,
                               roster,
                               prefix = "",
                               suffix = "",
                               prefix_rev = "",
                               suffix_rev = "") {
+
   arg_is_chr_scalar(org, prefix, suffix, prefix_rev, suffix_rev)
 
-  rdf = peer_read_roster(roster)
+  rdf = peer_roster_read(roster)
   peer_check_roster(rdf)
 
   out = purrr::map_dfr(rdf[['user']],
-
                        function(y) {
                          tibble::tibble(
                            author = y,
@@ -57,9 +57,7 @@ peer_expand_roster = function(org,
                            repo_r = as.character(glue::glue("{org}/{prefix}{reviewer}{suffix}")),
                            repo_r_rev = as.character(glue::glue(
                              "{org}/{prefix_rev}{reviewer}{suffix_rev}"
-                           )),
-                           reviewer_no_scorea = names(rdf)[purrr::map_int(reviewer_random, ~
-                                                                            which(rdf[rdf$user_random == .x, ] == author_random))]
+                           ))
                          )
                        })
   out
@@ -171,7 +169,7 @@ peer_create_issue_review = function(rdf,
                 res = purrr::safely(github_api_issue_create)(
                   repo = unique(sub[['repo_r_rev']]),
                   title = title,
-                  body = peer_issue_body_review(sub, path, form_review),
+                  body = peer_issue_body_review(sub, form_review),
                   assignee = x,
                   labels = list(":pencil: Complete review")
                 )
@@ -185,9 +183,7 @@ peer_create_issue_review = function(rdf,
 
 
 peer_issue_body_review = function(sub,
-                                  path,
                                   form_review = NULL) {
-  arg_is_chr(path, allow_null = TRUE)
   arg_is_chr_scalar(form_review, allow_null = T)
 
   repo_r_rev = unique(sub[['repo_r_rev']])
@@ -228,8 +224,9 @@ peer_issue_body_review = function(sub,
                            })
 
   glue::glue(
-    "Your peers' assignments have been added your repository for review.\n\n",
-    'Please complete the following tasks for each of the authors:\n\n',
+    "Your peers' assignments have been added to this review repository.\n\n",
+    "To start the review process, please clone the review repository as a new Version Control Project in RStudio to your local machine. Don't forget to commit and push your work when you are done.\n\n",
+    'After you cloned the review repository, please complete the following tasks for each of the authors:\n\n',
     paste(rev_txt, collapse = "\n\n")
   )
 }
@@ -325,8 +322,8 @@ peer_issue_body_rating = function(sub,
                            })
 
   glue::glue(
-    'The feedback from your peers has been added to your repository.\n\n',
-    'To finish the assignment, please complete the following tasks for each of the reviewers:\n\n',
+    "The feedback from your peers has been added to your repository.\n\n",
+    "To finish the assignment, please pull changes into your assignment repository and complete the  tasks below for each of your reviewers. Don't forget to commit and push your work when you are done.\n\n",
     paste(rev_txt, collapse = "\n\n")
   )
 
@@ -406,7 +403,7 @@ create_diff_url = function(repo, path) {
                     paste0("https://github.com/", x, "/commit/", sha$sha)
                   }
                   )
-  setNames(out, paste0("diff", seq_len(length(out))))
+  stats::setNames(out, paste0("diff", seq_len(length(out))))
 }
 
 

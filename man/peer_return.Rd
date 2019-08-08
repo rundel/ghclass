@@ -34,3 +34,27 @@ peer_return(org, roster, path, form_review = NULL, form_rating = NULL,
 \description{
 Return peer feedback to authors
 }
+\examples{
+\dontrun{
+peer_return(org = "ghclass-test",
+roster = "hw2_roster_seed12345.csv",
+path = c("hw2_task.Rmd", "iris_data.csv"),
+form_review = "hw2_review.Rmd",
+form_rating = "hw2_rating.Rmd",
+prefix = "hw2-")
+}
+
+}
+\seealso{
+Other peer review functions: \code{\link{peer_assign}},
+  \code{\link{peer_file_add_aut}},
+  \code{\link{peer_file_add_rev}},
+  \code{\link{peer_form_create_rating}},
+  \code{\link{peer_form_create_review}},
+  \code{\link{peer_init}},
+  \code{\link{peer_roster_create}},
+  \code{\link{peer_score_rating}},
+  \code{\link{peer_score_review}},
+  \code{\link{repo_file_mirror}}
+}
+\concept{peer review functions}

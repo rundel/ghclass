@@ -8,7 +8,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 params:
-  course: "Peer review 101, Fall"
+  course: "Peer review 101, Summer 2019"
   org: ghclass-test
 ---
 
@@ -49,9 +49,9 @@ Your instructor will create a private repository on the ``r params$org`` organiz
 
 To start the assignment, please complete the following steps:
 
-1. Clone the assignment repository to a local repository
+1. Clone the assignment repository to a local repository by creating a new RStudio Version Control project
 2. Complete the assignment
-3. Push the completed assignment to your remote repository before the posted deadline
+3. Commit and push your work to the remote assignment repository
 
 <span style="color:#C70039">**Things to keep in mind**</span>
 
@@ -74,10 +74,10 @@ knitr::include_graphics("screen_review.jpg")
 
 You instructor will open an issue in this new repository with a check list of tasks to complete. You will go through the following steps:
 
-1. Clone the review repository to a local repository
+1. Clone the review repository to a local repository by creating a new RStudio Version Control project
 2. Review and give comments on the assignment of each of your peers
 3. Fill out review form
-4. Push the changes to your remote repository before the posted deadline
+4. Commit and push your work to the remote review repository
 
 ### Review assignment
 When reviewing your peers' work, please give them helpful comments and suggestions directly in their assignment file.
@@ -116,10 +116,10 @@ knitr::include_graphics("screen_rating.jpeg")
 
 To finish the assignment, please complete the following steps:
 
-1. Pull the changes on your remote assignment repository into the local copy of your assignment repository
+1. Pull the changes from your remote assignment repository into the local copy of your assignment repository
 2. Review the changes the reviewer made directly in your assignment
 3. Fill out the rating form for the feedback you received from your peers
-4. Push everything to your remote repository before the posted deadline
+4. Commit and push your work to the remote assigment repository
 
 You instructor will open an issue in your assignment repository with a check list of tasks to complete. 
 

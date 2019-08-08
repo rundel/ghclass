@@ -18,3 +18,22 @@ peer_init(org, roster, prefix = "", suffix = "")
 \description{
 \code{peer_init()} initiates peer review repositories. It creates a review repository for each user, adds users to their respective repositories, and applies peer review labels to all repositories (i.e. assignment and review repositories).
 }
+\examples{
+\dontrun{
+peer_init(org = "ghclass-test", roster = "roster_test", prefix = "hw2-")
+}
+
+}
+\seealso{
+Other peer review functions: \code{\link{peer_assign}},
+  \code{\link{peer_file_add_aut}},
+  \code{\link{peer_file_add_rev}},
+  \code{\link{peer_form_create_rating}},
+  \code{\link{peer_form_create_review}},
+  \code{\link{peer_return}},
+  \code{\link{peer_roster_create}},
+  \code{\link{peer_score_rating}},
+  \code{\link{peer_score_review}},
+  \code{\link{repo_file_mirror}}
+}
+\concept{peer review functions}

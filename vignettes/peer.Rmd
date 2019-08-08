@@ -39,12 +39,12 @@ knitr::opts_chunk$set(
 This vignette introduces the peer review functionality of `ghclass` and provides a step-by-step guide. For more information on the pedagogy of peer review in undergraduate courses, see the draft of the [accompanying paper](https://github.com/thereseanders/cprpaper/blob/master/cetinkayarundelanders_cpr.pdf) by the package authors.
 
 # Before peer review
-The peer review process is initiated after a regular assignment has been distributed to students. Below, we run through a quick example of how to set up a fictional assignment "hw2" for four students using the `create_repo()` function. For a more detailed description of how to set up student repositories in a GitHub Organization,  see the `ghclass` vignette.
+The peer review process is initiated after a regular assignment has been distributed to students. Below, we run through a quick example of how to set up a fictional assignment "hw2" for four students using the `create_repo()` function. For a more detailed description of how to set up student repositories in a GitHub Organization,  see the `ghclass` ["Get started" vignette](https://rundel.github.io/ghclass/articles/ghclass.html).
 ```{r, eval = F}
 library(ghclass)
-devtools::load_all()
+
 # 1. Set up vector of student user names, HW identifier prefix, and organization name
-user = c("anya", "bruno", "cecile", "diego")
+user = c("anya-ghclass", "bruno-ghclass", "celine-ghclass", "diego-ghclass")
 prefix = "hw2-"
 org = "ghclass-demo"
 
@@ -56,8 +56,8 @@ repo_create(org, user, prefix = prefix)
 repo_add_user(glue::glue("{org}/{prefix}{user}"), user)
 
 # 4. Place homework files in repositories
-task <- "/Users/thereseanders/Documents/RStudio/introggplot2/hw2/hw2_task.Rmd"
-data <- "/Users/thereseanders/Documents/RStudio/introggplot2/hw2/iris_data.csv"
+task <- "/Users/thereseanders/Teaching/introggplot2/hw2/hw2_task.Rmd"
+data <- "/Users/thereseanders/Teaching/introggplot2/hw2/iris_data.csv"
 repo_add_file(org_repos(org, filter = prefix),
               file = c(task, data),
               message = "Adding task and data for homework 2.")
@@ -78,7 +78,7 @@ knitr::include_graphics("sequence.png")
 ## Initiation
 
 ### Create a roster of author-reviewer assignments
-The `peer_create_roster()` function generates data frame of random author-reviewer assignments. The parameter `n_rev` specifies the number of reviewers per assignment. Instructors should choose the number of reviewers per assignment carefully, as each additional review will significantly increase the time investment for students and the calls that have to be made to the API in the review process.
+The `peer_roster_create()` function generates data frame of random author-reviewer assignments. The parameter `n_rev` specifies the number of reviewers per assignment. Instructors should choose the number of reviewers per assignment carefully, as each additional review will significantly increase the time investment for students and the calls that have to be made to the API in the review process.
 
 The function automatically randomizes the order in which students are assigned to review their peers' work. A seed is set to make the assignment of authors to reviewers reproducible. If the function default of `write_csv = TRUE` is selected, the function writes the roster to a .csv file. We recommend for instructors to set `write_csv = TRUE` and the seed that was used to create the roster is automatically incorporated into the file name of the output. This ensures reproducibility of the random assignment.
 
@@ -90,8 +90,7 @@ The roster file should be read as follows.
 
 We recommend for instructors to create a new roster file (with a new random seed) for each assignment to prevent the same pairings of students reviewing each others work over and over throughout the course. For the purpose of demonstration, below we save the roster in a data frame called `roster_test`.
 ```{r, eval = F}
-roster_test = peer_create_roster(2, user, write_csv = F, seed = 678)
-roster_test
+peer_roster_create(2, user, seed = 123)
 ```
 
 ### Create review repositories
@@ -105,24 +104,24 @@ peer_init(org = org,
 ## Assign review
 
 ### Create and customize feedback form for reviewers
-Instructors can use the `peer_create_form_review()` function to create a blank feedback form and save it as an RMarkdown (`.Rmd`) file. Instructors can specify the number of questions to be included in the blank form. The function automatically creates `q*_score` parameters for each question in the YAML header of the RMarkdown document. Students are extracted to use these `q*_score` fields in the YAML to record the scores they give authors for their assignement. These YAML parameters are later used to extract and save student scores. 
+Instructors can use the `peer_form_create_review()` function to create a blank feedback form and save it as an RMarkdown (`.Rmd`) file. Instructors can specify the number of questions to be included in the blank form. The function automatically creates `q*_score` parameters for each question in the YAML header of the RMarkdown document. Students are extracted to use these `q*_score` fields in the YAML to record the scores they give authors for their assignement. These YAML parameters are later used to extract and save student scores. 
 
 By default, the files contain an `author` field in the YAML header to prompt reviewers to identify themselves. Keeping reviewers non-anonymous (as opposed to authors) is likely to discourage overly harsh or rude reviews. If reviewers should instead stay anonymous, setting `double_blind = TRUE` will remove this field.
 ```{r, eval = F}
-peer_create_form_review(2,
+peer_form_create_review(2,
                         double_blind = double_blind,
                         fname = "feedback_blank_review")
 ```
 The blank form is saved in the working directory, unless otherwise specified. The instructor will then customize the questions to be answered by reviewers. 
 
 ### Distribute feedback forms to reviewers
-The `peer_add_file_rev()` function is used to place the customized review forms into reviewers' repositories, based on the review roster. The feedback forms are saved author-specific folders, identified with each author's anonymous author ID contained in the `user_random` column of the roster.
+The `peer_file_add_rev()` function is used to place the customized review forms into reviewers' repositories, based on the review roster. The feedback forms are saved author-specific folders, identified with each author's anonymous author ID contained in the `user_random` column of the roster.
 ```{r, eval = F}
-peer_add_file_rev(
+peer_file_add_rev(
         org = org,
         roster = roster_test,
         prefix = prefix,
-        local_path = "/Users/thereseanders/Documents/RStudio/introggplot2/hw2/hw2_review.Rmd")
+        local_path = "/Users/thereseanders/Teaching/introggplot2/hw2/hw2_review.Rmd")
 ```
 
 ### Move author files to reviewers
@@ -155,7 +154,7 @@ peer_score_review(
 ```
 
 ### [Recommended] Create rating form for authors
-The `peer_create_form_rating()` can be used to create a blank RMarkdown form used to collect authors' feedback on the reviews. By default, three rating categories[^1] are included in the file:
+The `peer_form_create_rating()` can be used to create a blank RMarkdown form used to collect authors' feedback on the reviews. By default, three rating categories[^1] are included in the file:
 
 1. `helpfulness`: The reviewer's feedback was constructive and helpful.
 2. `accuracy`: The reviewer's assessment accurately describes the quality of my work.
@@ -165,27 +164,27 @@ The `peer_create_form_rating()` can be used to create a blank RMarkdown form use
 
 The rating categories can be adjusted via the `category` parameter. By default, the resulting `.Rmd` file is saved in the working directory. Customization of this form is possible, but not necessary.
 ```{r, eval = F}
-peer_create_form_rating(fname = "hw2_rating", 
+peer_form_create_rating(fname = "hw2_rating", 
                         category = c("accuracy", "fairness"))
 ```
 
 ### Double blind vs. single blind review
-The `double_blind` parameter is used to determine whether authors know who reviewed their assignments (`double_blind = FALSE`), or whether the entire review process is anonymous (`double_blind = TRUE`). The default is for authors to know who reviewed their assignments. Keeping reviewers non-anonymous is likely to discourage overly harsh or rude reviews. Authors will always remain anonymous to reviewers.
+The `double_blind` parameter is used to determine whether authors know who reviewed their assignments (`double_blind = FALSE`), or whether the entire review process is anonymous (`double_blind = TRUE`). The default is for authors to know who reviewed their assignments. Keeping reviewers non-anonymous is likely to discourage overly harsh or rude reviews. Authors always remain anonymous to reviewers.
 
-This parameter should be set once for each assignment and then passed to each of the functions in the return review process. `double_blind` determines the naming of folders on authors repositories. Changing from a setting of double blind to single blind review, or vice versa, in the middle of the return review process will prevent `peer_add_file_aut()`, `peer_return()` and `peer_score_rating()` to locate the correct files on reviewers' and authors' repositories.
+This parameter should be set once for each assignment and then passed to each of the functions in the return review process. `double_blind` determines the naming of folders on authors repositories. Changing from a setting of double blind to single blind review, or vice versa, in the middle of the return review process will prevent `peer_file_add_aut()`, `peer_return()` and `peer_score_rating()` to locate the correct files on reviewers' and authors' repositories.
 ```{r, eval = F}
 double_blind = TRUE
 ```
 
 
 ### [Recommended] Distribute author rating forms
-If instructors wish to ask authors for a rating of the reviews, they may use the `peer_add_file_aut` to create reviewer-specific folders on author repositories and place the rating form into these repositories. If `double_blind = TRUE`, folder names will be based on reviewers' user names. If `double_blind = FALSE`, folder names will be based on the random reviewer IDs contained in the roster. 
+If instructors wish to ask authors for a rating of the reviews, they may use the `peer_file_add_aut` to create reviewer-specific folders on author repositories and place the rating form into these repositories. If `double_blind = TRUE`, folder names will be based on reviewers' user names. If `double_blind = FALSE`, folder names will be based on the random reviewer IDs contained in the roster. 
 ```{r, eval = F}
-peer_add_file_aut(
+peer_file_add_aut(
         org = org,
         roster = roster_test,
         prefix = prefix,
-        local_path = "/Users/thereseanders/Documents/RStudio/introggplot2/hw2/hw2_rating.Rmd",
+        local_path = "/Users/thereseanders/Teaching/introggplot2/hw2/hw2_rating.Rmd",
         double_blind = double_blind
 )
 ```
@@ -223,6 +222,26 @@ peer_score_rating(
   form_rating = "hw2_rating.Rmd",
   double_blind = double_blind
 )
+```
+
+The output data frame will replicate the roster and add columns for each reviewer's rating in each category. Scores are listed by the role that a reviewer had for the author rating the review, and coded by the randomized user names. In the example below, user `bruno-ghclass` gave `anya-ghclass` ratings 4 and 3 for their review (Anya was reviewer 1 for Bruno); user `diego-ghclass` gave `anya-ghclass` rating 2 and 1 for their review (Anya was reviewer 2 for Diego).
+```{r, echo = F, message = F}
+#library(ghclass)
+devtools::load_all()
+```
+
+```{r, echo = F}
+user = c("anya-ghclass", "bruno-ghclass", "celine-ghclass", "diego-ghclass")
+scores_aut = peer_roster_create(2, user, seed = 123, write_csv = F)
+scores_aut$rev1_c1 = NA
+scores_aut$rev1_c2 = NA
+scores_aut$rev2_c1 = NA
+scores_aut$rev2_c2 = NA
+scores_aut$rev1_c1[scores_aut$user == "anya-ghclass"] <- 4
+scores_aut$rev1_c2[scores_aut$user == "anya-ghclass"] <- 3
+scores_aut$rev2_c1[scores_aut$user == "anya-ghclass"] <- 2
+scores_aut$rev2_c2[scores_aut$user == "anya-ghclass"] <- 1
+scores_aut
 ```
 
 

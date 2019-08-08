@@ -25,3 +25,26 @@ peer_score_rating(org, roster, form_rating, double_blind = FALSE,
 \description{
 The \code{peer_score_rating()} function collects score information from the YAML of a rating form within authors' repositories. It outputs a new .csv file, with rows specifying individual question scores for each student.
 }
+\examples{
+\dontrun{
+peer_score_rating(
+org = "ghclass-test",
+roster = "hw2_roster_seed12345.csv",
+form_rating = "hw2_rating.Rmd",
+double_blind = TRUE,
+prefix = prefix)
+}
+
+}
+\seealso{
+Other peer review functions: \code{\link{peer_assign}},
+  \code{\link{peer_file_add_aut}},
+  \code{\link{peer_file_add_rev}},
+  \code{\link{peer_form_create_rating}},
+  \code{\link{peer_form_create_review}},
+  \code{\link{peer_init}}, \code{\link{peer_return}},
+  \code{\link{peer_roster_create}},
+  \code{\link{peer_score_review}},
+  \code{\link{repo_file_mirror}}
+}
+\concept{peer review functions}

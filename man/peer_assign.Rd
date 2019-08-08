@@ -30,3 +30,27 @@ peer_assign(org, roster, path = NULL, form_review = NULL,
 \description{
 \code{peer_assign} adds files from authors' repositories to review repositories. It also creates an issue in the reviewers' repositories informing them that the review files are available and with links to the relevant documents.
 }
+\examples{
+\dontrun{
+peer_assign(
+org = "ghclass-test",
+roster = "hw2_roster_seed12345.csv",
+path = c("hw2_task.Rmd", "iris_data.csv"),
+form_review = "hw2_review.Rmd",
+prefix = "hw2-"
+)
+}
+
+}
+\seealso{
+Other peer review functions: \code{\link{peer_file_add_aut}},
+  \code{\link{peer_file_add_rev}},
+  \code{\link{peer_form_create_rating}},
+  \code{\link{peer_form_create_review}},
+  \code{\link{peer_init}}, \code{\link{peer_return}},
+  \code{\link{peer_roster_create}},
+  \code{\link{peer_score_rating}},
+  \code{\link{peer_score_review}},
+  \code{\link{repo_file_mirror}}
+}
+\concept{peer review functions}

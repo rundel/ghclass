@@ -19,7 +19,10 @@ Imports:
     tibble,
     glue,
     processx,
-    here
+    here,
+    tidyr,
+    readr,
+    stats
 Suggests: styler, knitr, rmarkdown
 License: GPL-3
 Encoding: UTF-8

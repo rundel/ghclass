@@ -7,21 +7,23 @@ latin_square = function(j, n) {
 
 #' Create peer review roster
 #'
-#' `peer_create_roster` creates data frame of random assignments of author files to reviewers. By default, the output is saved to a `.csv` file in the current working directory that incorporates the current date and random seed as part of the file name.
+#' `peer_roster_create` creates data frame of random assignments of author files to reviewers. By default, the output is saved to a `.csv` file in the current working directory that incorporates the current date and random seed as part of the file name.
 #'
 #' @param user Character. A vector of GitHub user names.
 #' @param n_rev Numeric. Number of reviews per user. Must be larger than zero and smaller than the number of users.
 #' @param seed Numeric. Random seed for assignment, defaults to `12345`.
 #' @param write_csv Logical. Whether the roster data frame should be saved to a `.csv` file in the current working directory, defaults to TRUE.
 #'
-#' @example
+#' @examples
 #' \dontrun{
-#' peer_create_roster(3, c("anya", "bruno", "celine", "diego"))
+#' peer_roster_create(3, c("anya-ghclass", "bruno-ghclass", "celine-ghclass", "diego-ghclass"))
 #' }
+#'
+#' @family peer review functions
 #'
 #' @export
 #'
-peer_create_roster = function(n_rev,
+peer_roster_create = function(n_rev,
                               user,
                               seed = 12345,
                               write_csv = TRUE) {
@@ -40,9 +42,9 @@ peer_create_roster = function(n_rev,
   user_random = paste0("aut", sample(1:length(user), length(user)))
 
   df_sort = data.frame(user = user,
-                       user_random = as.character(user_random))[order(as.numeric(sub("[aA-zZ]+", "", user_random))),]
+                       user_random = as.character(user_random))[order(as.numeric(sub("[aA-zZ]+", "", user_random))), ]
 
-  res_df = setNames(data.frame(df_sort,
+  res_df = stats::setNames(data.frame(df_sort,
                                if (length(user) > 2) {
                                  purrr::map(res,
                                             ~ tibble::tibble(user_random = as.character(df_sort$user_random)[.x]))
@@ -51,7 +53,7 @@ peer_create_roster = function(n_rev,
                                }),
                     c("user", "user_random", purrr::map_chr(1:n_rev, ~ paste0("rev", .x))))
 
-  res_df = res_df[order(res_df$user_random),]
+  res_df = res_df[order(res_df$user_random), ]
 
   if (write_csv) {
     fname = glue::glue("roster_seed{seed}.csv")
@@ -70,6 +72,13 @@ peer_create_roster = function(n_rev,
 #' @param roster Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column `user` with GitHub user names of authors, a column `user_random` with randomized tokens for user names, and one or more `rev*` columns that specify review assignments as values of the vector `user_random`.
 #' @param prefix Character. Common repository name prefix.
 #' @param suffix Character. Common repository name suffix.
+#'
+#' @examples
+#' \dontrun{
+#' peer_init(org = "ghclass-test", roster = "roster_test", prefix = "hw2-")
+#' }
+#'
+#' @family peer review functions
 #'
 #' @export
 peer_init = function(org,
@@ -116,7 +125,7 @@ format_rev = function(prefix, suffix) {
 #' @param branch Character. Name of branch the file should be committed to, defaults to `master`.
 #' @param overwrite Logical. Whether existing files in reviewers' repositories should be overwritten, defaults to `FALSE`.
 #'
-#' @example
+#' @examples
 #' \dontrun{
 #' peer_assign(
 #' org = "ghclass-test",
@@ -126,6 +135,8 @@ format_rev = function(prefix, suffix) {
 #' prefix = "hw2-"
 #' )
 #' }
+#'
+#' @family peer review functions
 #'
 #' @export
 #'
@@ -145,11 +156,11 @@ peer_assign = function(org,
   prefix_rev = format_rev(prefix, suffix)$prefix_rev
   suffix_rev = format_rev(prefix, suffix)$suffix_rev
 
-  rdf = peer_expand_roster(org, roster, prefix, suffix, prefix_rev, suffix_rev)
+  rdf = peer_roster_expand(org, roster, prefix, suffix, prefix_rev, suffix_rev)
 
   purrr::walk(unique(rdf$author),
               function(x) {
-                sub = rdf[rdf$author == x, ]
+                sub = rdf[rdf$author == x,]
                 repo_a = unique(sub$repo_a)
                 repo_r = unique(sub$repo_r_rev)
 
@@ -212,7 +223,7 @@ peer_assign = function(org,
 
 #' Create reviewer feedback form
 #'
-#' `peer_create_form_review` creates blank feedback forms for reviewers based on the user-specified number of questions.
+#' `peer_form_create_review` creates blank feedback forms for reviewers based on the user-specified number of questions.
 #'
 #' @param n Numerical. Number of score fields to be included in the YAML of the .Rmd file.
 #' @param title Character. Title of form, defaults to "Reviewer feedback form."
@@ -222,14 +233,16 @@ peer_assign = function(org,
 #' @param overwrite Logical. Should existing file or files with same name be overwritten, defaults to `FALSE`.
 #' @param double_blind Logical. If `double_blind = TRUE`, the YAML will contain an `author` field, defaults to `FALSE`.
 #'
-#' @example
+#' @examples
 #' \dontrun{
-#' peer_create_form_review(5, "Reviewer feedback for HW2", "rfeedback_hw2_blank")
+#' peer_form_create_review(5, "Reviewer feedback for HW2", "rfeedback_hw2_blank")
 #' }
+#'
+#' @family peer review functions
 #'
 #' @export
 #'
-peer_create_form_review = function(n,
+peer_form_create_review = function(n,
                                    title = "Reviewer feedback form",
                                    fname = "feedback_blank_review",
                                    output = "github_document",
@@ -303,7 +316,7 @@ peer_create_form_review = function(n,
 
 #' Create author rating form
 #'
-#' `peer_create_form_rating` creates a short feedback form for authors to rate the feedback they got from reviewers. The rating categories are based on Reily, K. and P. Ludford Finnerty,  and L. Terveen (2009): Two Peers Are Better Than One: Aggregating Peer Reviews for Computing Assignments is Surprisingly Accurate. In *Proceedings of the ACM 2009 International Conference on Supporting Group Work*. GROUP’09, May 10–13, 2009, Sanibel Island, Florida, USA.
+#' `peer_form_create_rating` creates a short feedback form for authors to rate the feedback they got from reviewers. The rating categories are based on Reily, K. and P. Ludford Finnerty,  and L. Terveen (2009): Two Peers Are Better Than One: Aggregating Peer Reviews for Computing Assignments is Surprisingly Accurate. In *Proceedings of the ACM 2009 International Conference on Supporting Group Work*. GROUP’09, May 10–13, 2009, Sanibel Island, Florida, USA.
 #'
 #' @param category Character. Categories to be included in the feedback form, defaults to `c("helpfulness", "accuracy", "fairness")`.
 #' @param title Character. Title of form, defaults to "Author feedback form".
@@ -312,14 +325,16 @@ peer_create_form_review = function(n,
 #' @param write_rmd Logical. Whether the feedback form should be saved to a `.Rmd` file in the current working directory, defaults to TRUE.
 #' @param overwrite Logical. Should existing file or files with same name be overwritten, defaults to `FALSE`.
 #'
-#' @example
+#' @examples
 #' \dontrun{
-#' peer_create_form_rating(c("accuracy", "fairness"))
+#' peer_form_create_rating(c("accuracy", "fairness"))
 #' }
+#'
+#' @family peer review functions
 #'
 #' @export
 #'
-peer_create_form_rating = function(category = c("helpfulness", "accuracy", "fairness"),
+peer_form_create_rating = function(category = c("helpfulness", "accuracy", "fairness"),
                                    title = "Author feedback form",
                                    fname = "feedback_blank_rating",
                                    output = "github_document",
@@ -418,7 +433,7 @@ peer_create_form_rating = function(category = c("helpfulness", "accuracy", "fair
 
 #' Add local files to author-specific folders on reviewers' review repositories
 #'
-#' `peer_add_file_rev()` takes a local file and adds it to author-specific folders on reviewers' repositories. The function's main purpose is to distribute review forms into the correct author-specific folders on reviewers' repositories.
+#' `peer_file_add_rev()` takes a local file and adds it to author-specific folders on reviewers' repositories. The function's main purpose is to distribute review forms into the correct author-specific folders on reviewers' repositories.
 #'
 #' @param org Character. Name of the GitHub organization.
 #' @param roster Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column `user` with GitHub user names of authors, a column `user_random` with randomized tokens for user names, and one or more `rev*` columns that specify review assignments as values of the vector `user_random`.
@@ -430,16 +445,18 @@ peer_create_form_rating = function(category = c("helpfulness", "accuracy", "fair
 #' @param overwrite Logical. Whether existing files in reviewers' repositories should be overwritten, defaults to `FALSE`.
 #' @param verbose Logical. Should success / failure messages be printed.
 #'
-#' @example
+#' @examples
 #' \dontrun{
-#' peer_add_file_rev(org = "ghclass-test",
+#' peer_file_add_rev(org = "ghclass-test",
 #' roster = "hw2_roster_seed12345.csv",
 #' local_path = "/Users/profx/introstats/hw2/hw2_review.Rmd",
 #' prefix = prefix)
 #' }
 #'
+#' @family peer review functions
+#'
 #' @export
-peer_add_file_rev = function(org,
+peer_file_add_rev = function(org,
                              roster,
                              local_path,
                              prefix = "",
@@ -456,7 +473,7 @@ peer_add_file_rev = function(org,
   prefix_rev = format_rev(prefix, suffix)$prefix_rev
   suffix_rev = format_rev(prefix, suffix)$suffix_rev
 
-  rdf = peer_expand_roster(org, roster, prefix, suffix, prefix_rev, suffix_rev)
+  rdf = peer_roster_expand(org, roster, prefix, suffix, prefix_rev, suffix_rev)
 
   file_status = fs::file_exists(local_path)
   if (any(!file_status))
@@ -486,7 +503,7 @@ peer_add_file_rev = function(org,
 
 #' Add local files to reviewer-specific folders on authors' repositories
 #'
-#' `peer_add_file_aut()` takes a local file and adds it to reviewer-specific folders on authors' repositories. The function's main purpose is to distribute rating forms into the reviewer-specific folders on authors' repositories.
+#' `peer_file_add_aut()` takes a local file and adds it to reviewer-specific folders on authors' repositories. The function's main purpose is to distribute rating forms into the reviewer-specific folders on authors' repositories.
 #'
 #' @param org Character. Name of the GitHub organization.
 #' @param roster Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column `user` with GitHub user names of authors, a column `user_random` with randomized tokens for user names, and one or more `rev*` columns that specify review assignments as values of the vector `user_random`.
@@ -499,16 +516,18 @@ peer_add_file_rev = function(org,
 #' @param overwrite Logical. Whether existing files in reviewers' repositories should be overwritten, defaults to `FALSE`.
 #' @param verbose Logical. Should success / failure messages be printed.
 #'
-#' @example
+#' @examples
 #' \dontrun{
-#' peer_add_file_aut(org = "ghclass-test",
+#' peer_file_add_aut(org = "ghclass-test",
 #' roster = "hw2_roster_seed12345.csv",
 #' local_path = "/Users/profx/introstats/hw2/hw2_rating.Rmd",
 #' prefix = prefix)
 #' }
 #'
+#' @family peer review functions
+#'
 #' @export
-peer_add_file_aut = function(org,
+peer_file_add_aut = function(org,
                              roster,
                              local_path,
                              double_blind = FALSE,
@@ -526,7 +545,7 @@ peer_add_file_aut = function(org,
   prefix_rev = format_rev(prefix, suffix)$prefix_rev
   suffix_rev = format_rev(prefix, suffix)$suffix_rev
 
-  rdf = peer_expand_roster(org, roster, prefix, suffix, prefix_rev, suffix_rev)
+  rdf = peer_roster_expand(org, roster, prefix, suffix, prefix_rev, suffix_rev)
 
   file_status = fs::file_exists(local_path)
   if (any(!file_status))
@@ -570,7 +589,7 @@ peer_add_file_aut = function(org,
 #' @param suffix Character. Common repository name suffix.
 #' @param write_csv Logical. Whether the roster data frame should be saved to a `.csv` file in the current working directory, defaults to TRUE.
 #'
-#' @example
+#' @examples
 #' \dontrun{
 #' peer_score_review(
 #' org = "ghclass-test",
@@ -578,6 +597,8 @@ peer_add_file_aut = function(org,
 #' form_review = "hw2_review.Rmd",
 #' prefix = prefix)
 #' }
+#'
+#' @family peer review functions
 #'
 #' @export
 #'
@@ -589,7 +610,7 @@ peer_score_review = function(org,
                              write_csv = TRUE) {
   # Checks
   arg_is_chr_scalar(org, prefix, suffix, form_review)
-  arg_is_lgl(double_blind, write_csv)
+  arg_is_lgl(write_csv)
 
   # Check that feedback form is .Rmd
   if (!grepl("\\.[rR]md$", form_review)) {
@@ -599,7 +620,7 @@ peer_score_review = function(org,
   prefix_rev = format_rev(prefix, suffix)$prefix_rev
   suffix_rev = format_rev(prefix, suffix)$suffix_rev
 
-  rdf = peer_expand_roster(org, roster, prefix, suffix, prefix_rev, suffix_rev)
+  rdf = peer_roster_expand(org, roster, prefix, suffix, prefix_rev, suffix_rev)
 
   out_temp = purrr::map_dfr(seq_len(nrow(rdf)),
                             function(x) {
@@ -615,7 +636,7 @@ peer_score_review = function(org,
                                 scores = rmarkdown::yaml_front_matter(tc)$params
                                 scores[scores == "NA"] = NA
 
-                                setNames(c(as.character(rdf[x, 'author']), r_no, scores),
+                                stats::setNames(c(as.character(rdf[x, 'author']), r_no, scores),
                                          c("user", "r_no", paste0("q", 1:length(scores))))
 
                               } else {
@@ -631,7 +652,7 @@ peer_score_review = function(org,
   out = merge(out_temp, roster, all.y = T)
 
   out = out[, union(names(roster), names(out))]
-  out = out[order(out$user_random),]
+  out = out[order(out$user_random), ]
 
   if (write_csv) {
     fname = glue::glue("{revscores}_{fs::path_file(roster)}")
@@ -655,7 +676,7 @@ peer_score_review = function(org,
 #' @param suffix Character. Common repository name suffix.
 #' @param write_csv Logical. Whether the roster data frame should be saved to a `.csv` file in the current working directory, defaults to TRUE.
 #'
-#' @example
+#' @examples
 #' \dontrun{
 #' peer_score_rating(
 #' org = "ghclass-test",
@@ -664,6 +685,8 @@ peer_score_review = function(org,
 #' double_blind = TRUE,
 #' prefix = prefix)
 #' }
+#'
+#' @family peer review functions
 #'
 #' @export
 #'
@@ -686,43 +709,44 @@ peer_score_rating = function(org,
   prefix_rev = format_rev(prefix, suffix)$prefix_rev
   suffix_rev = format_rev(prefix, suffix)$suffix_rev
 
-  rdf = peer_expand_roster(org, roster, prefix, suffix, prefix_rev, suffix_rev)
+  rdf = peer_roster_expand(org, roster, prefix, suffix, prefix_rev, suffix_rev)
 
-  out = purrr::map_dfr(seq_len(nrow(rdf)),
-                       function(x) {
-                         repo = as.character(rdf[x, 'repo_a'])
-                         if (double_blind) {
-                           ghpath = glue::glue("{as.character(rdf[x, 'reviewer_no'])}/{form_rating}")
-                         } else {
-                           ghpath = glue::glue("{as.character(rdf[x, 'reviewer'])}/{form_rating}")
-                         }
-                         r_no = as.character(rdf[x, 'reviewer_no_scorea'])
+  out_temp = purrr::map_dfr(seq_len(nrow(rdf)),
+                            function(x) {
+                              repo = as.character(rdf[x, 'repo_a'])
+                              if (double_blind) {
+                                ghpath = glue::glue("{as.character(rdf[x, 'reviewer_no'])}/{form_rating}")
+                              } else {
+                                ghpath = glue::glue("{as.character(rdf[x, 'reviewer'])}/{form_rating}")
+                              }
+                              r_no = as.character(rdf[x, 'reviewer_no'])
 
-                         feedback = purrr::safely(repo_get_file)(repo = repo,
-                                                                 file = ghpath)
+                              feedback = purrr::safely(repo_get_file)(repo = repo,
+                                                                      file = ghpath)
 
-                         if (succeeded(feedback)) {
-                           tc = textConnection(feedback$result)
-                           scores = rmarkdown::yaml_front_matter(tc)$params
-                           scores[scores == "NA"] = NA
+                              if (succeeded(feedback)) {
+                                tc = textConnection(feedback$result)
+                                scores = rmarkdown::yaml_front_matter(tc)$params
+                                scores[scores == "NA"] = NA
 
-                           setNames(c(as.character(rdf[x, 'reviewer']), r_no, scores),
-                                    c("user", "r_no", paste0("c", 1:length(scores))))
+                                stats::setNames(c(as.character(rdf[x, 'reviewer']), r_no, scores),
+                                         c("user", "r_no", paste0("c", 1:length(scores))))
 
-                         } else {
-                           usethis::ui_oops(
-                             "Cannot locate file {usethis::ui_value(ghpath)} on repo {usethis::ui_value(repo)}."
-                           )
-                         }
-                       }) %>%
-    # Getting data frame in right format
-    tidyr::gather(q_name, q_value, -user, -r_no) %>%
-    tidyr::unite("new", c("r_no", "q_name")) %>%
-    tidyr::spread(new, q_value) %>%
-    merge(roster, all.y = T)
+                              } else {
+                                usethis::ui_oops(
+                                  "Cannot locate file {usethis::ui_value(ghpath)} on repo {usethis::ui_value(repo)}."
+                                )
+                              }
+                            })
+
+  # Getting data frame in right format
+  out_temp = tidyr::gather(out_temp, q_name, q_value,-user,-r_no)
+  out_temp = tidyr::unite(out_temp, "new", c("r_no", "q_name"))
+  out_temp = tidyr::spread(out_temp, new, q_value)
+  out = merge(out_temp, roster, all.y = T)
 
   out = out[, union(names(roster), names(out))]
-  out = out[order(out$user_random),]
+  out = out[order(out$user_random), ]
 
   if (write_csv) {
     fname = glue::glue("{autscores}_{fs::path_file(roster)}")
@@ -748,15 +772,17 @@ peer_score_rating = function(org,
 #' @param branch Character. Name of branch the file should be committed to, defaults to `master`.
 #' @param overwrite Logical. Whether existing files in reviewers' repositories should be overwritten, defaults to `FALSE`.
 #'
-#' @example
+#' @examples
 #' \dontrun{
-#' peer_return(org = "ghclass-test,
+#' peer_return(org = "ghclass-test",
 #' roster = "hw2_roster_seed12345.csv",
 #' path = c("hw2_task.Rmd", "iris_data.csv"),
 #' form_review = "hw2_review.Rmd",
 #' form_rating = "hw2_rating.Rmd",
 #' prefix = "hw2-")
 #' }
+#'
+#' @family peer review functions
 #'
 #' @export
 #'
@@ -779,7 +805,7 @@ peer_return = function(org,
   prefix_rev = format_rev(prefix, suffix)$prefix_rev
   suffix_rev = format_rev(prefix, suffix)$suffix_rev
 
-  rdf = peer_expand_roster(org, roster, prefix, suffix, prefix_rev, suffix_rev)
+  rdf = peer_roster_expand(org, roster, prefix, suffix, prefix_rev, suffix_rev)
 
   if (!double_blind) {
     rev = rdf[['reviewer']]
@@ -793,7 +819,7 @@ peer_return = function(org,
                 repo_r = rdf[['repo_r_rev']][x]
 
                 # 1) place original content
-                repo_mirror_file(
+                repo_file_mirror(
                   source_repo = repo_a,
                   target_repo = repo_a,
                   target_folder = rev[x],
@@ -804,7 +830,7 @@ peer_return = function(org,
                 )
 
                 # 2) move files from reviewer
-                repo_mirror_file(
+                repo_file_mirror(
                   source_repo = repo_r,
                   target_repo = repo_a,
                   source_folder = rdf[['author_random']][x],
@@ -830,7 +856,7 @@ peer_return = function(org,
 
 #' Mirror file(s) between repos
 #'
-#' `repo_mirror_file` mirrors select file(s) between repositories.
+#' `repo_file_mirror` mirrors select file(s) between repositories.
 #'
 #' @param source_repo Character. Address of repository in "owner/name" format.
 #' @param target_repo Character. Address of repository in "owner/name" format.
@@ -842,13 +868,12 @@ peer_return = function(org,
 #' @param overwrite Logical. Should existing file or files with same name be overwritten, defaults to FALSE.
 #' @param verbose Logical. Should success / failure messages be printed.
 #'
-repo_mirror_file = function(source_repo,
+#' @family peer review functions
+repo_file_mirror = function(source_repo,
                             target_repo,
                             path = NULL,
                             source_folder = NULL,
                             target_folder = NULL,
-                            source_files = NULL,
-                            target_files = NULL,
                             message = NULL,
                             branch = "master",
                             overwrite = FALSE,
@@ -857,16 +882,12 @@ repo_mirror_file = function(source_repo,
   arg_is_chr_scalar(source_repo, target_repo)
   arg_is_chr_scalar(source_folder,
                     target_folder,
-                    source_files,
-                    target_files,
                     message,
                     allow_null = TRUE)
   arg_is_lgl_scalar(overwrite)
 
-  if (is.null(source_files))
-    source_files = repo_files(source_repo, branch)
-  if (is.null(target_files))
-    target_files = repo_files(target_repo, branch)
+  source_files = repo_files(source_repo, branch)
+  target_files = repo_files(target_repo, branch)
 
   purrr::walk(path,
               function(p) {

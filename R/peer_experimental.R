@@ -215,7 +215,7 @@ peer_assign_clone = function(org,
   prefix_rev = format_rev(prefix, suffix)$prefix_rev
   suffix_rev = format_rev(prefix, suffix)$suffix_rev
 
-  rdf = peer_expand_roster(org, roster, prefix, suffix, prefix_rev, suffix_rev)
+  rdf = peer_roster_expand(org, roster, prefix, suffix, prefix_rev, suffix_rev)
 
   # 1. Temporary working directory & creating temp folder & change wd
   setwd(local_path)
@@ -349,7 +349,7 @@ peer_return_clone = function(org,
   prefix_rev = format_rev(prefix, suffix)$prefix_rev
   suffix_rev = format_rev(prefix, suffix)$suffix_rev
 
-  rdf = peer_expand_roster(org, roster, prefix, suffix, prefix_rev, suffix_rev)
+  rdf = peer_roster_expand(org, roster, prefix, suffix, prefix_rev, suffix_rev)
 
   # 1. Temporary working directory & creating temp folder & change wd
   setwd(local_path)
@@ -525,7 +525,7 @@ processx_run = function(cmd,
   }
 }
 
-processx_pwd = function() {
+processx_pwd = function(verbose = TRUE) {
   processx::run(
     "pwd",
     error_on_status = FALSE,
