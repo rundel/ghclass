@@ -7,7 +7,7 @@ github_api_repo_get_readme = function(repo, branch) {
     repo = get_repo_name(repo),
     ref = branch,
     .token = github_get_token(),
-    .limit = get_github_api_limit()
+    .limit = github_get_api_limit()
   )
 }
 

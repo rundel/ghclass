@@ -5,7 +5,7 @@ github_api_org_repos = function(owner) {
     "GET /orgs/:owner/repos",
     owner = owner,
     .token = github_get_token(),
-    .limit = get_github_api_limit()
+    .limit = github_get_api_limit()
   )
 }
 

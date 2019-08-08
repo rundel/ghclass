@@ -1,4 +1,4 @@
-github_api_set_subscription = function(repo, subscribed, ignored){
+github_api_repo_subscribe = function(repo, subscribed, ignored){
   arg_is_chr_scalar(repo)
   arg_is_lgl_scalar(subscribed, ignored)
 
@@ -31,7 +31,7 @@ repo_watch = function(repo) {
   purrr::walk(
     repo,
     function(repo, notifications) {
-      res = purrr::safely(github_api_set_subscription)(
+      res = purrr::safely(github_api_repo_subscribe)(
         repo,
         subscribed = TRUE,
         ignored = FALSE
