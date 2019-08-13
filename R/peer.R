@@ -42,18 +42,18 @@ peer_roster_create = function(n_rev,
   user_random = paste0("aut", sample(1:length(user), length(user)))
 
   df_sort = data.frame(user = user,
-                       user_random = as.character(user_random))[order(as.numeric(sub("[aA-zZ]+", "", user_random))), ]
+                       user_random = as.character(user_random))[order(as.numeric(sub("[aA-zZ]+", "", user_random))),]
 
   res_df = stats::setNames(data.frame(df_sort,
-                               if (length(user) > 2) {
-                                 purrr::map(res,
-                                            ~ tibble::tibble(user_random = as.character(df_sort$user_random)[.x]))
-                               } else {
-                                 rev(user_random)
-                               }),
-                    c("user", "user_random", purrr::map_chr(1:n_rev, ~ paste0("rev", .x))))
+                                      if (length(user) > 2) {
+                                        purrr::map(res,
+                                                   ~ tibble::tibble(user_random = as.character(df_sort$user_random)[.x]))
+                                      } else {
+                                        rev(user_random)
+                                      }),
+                           c("user", "user_random", purrr::map_chr(1:n_rev, ~ paste0("rev", .x))))
 
-  res_df = res_df[order(res_df$user_random), ]
+  res_df = res_df[order(res_df$user_random),]
 
   if (write_csv) {
     fname = glue::glue("roster_seed{seed}.csv")
@@ -160,7 +160,7 @@ peer_assign = function(org,
 
   purrr::walk(unique(rdf$author),
               function(x) {
-                sub = rdf[rdf$author == x,]
+                sub = rdf[rdf$author == x, ]
                 repo_a = unique(sub$repo_a)
                 repo_r = unique(sub$repo_r_rev)
 
@@ -259,14 +259,14 @@ peer_form_create_review = function(n,
 
   # YAML
   yaml_txt = sprintf(if (!double_blind) {
-    "---\ntitle: \"%s\"\nauthor: NA\noutput: %s\nparams:\n%s\n---\n\n\n"
+    "---\ntitle: \"%s\"\nauthor: [INSERT NAME]\noutput: %s\nparams:\n%s\n---\n\n\n"
   } else {
     "---\ntitle: \"%s\"\noutput: %s\nparams:\n%s\n---\n\n\n"
   },
   title,
   output,
   paste(purrr::map_chr(1:n, function(x) {
-    paste0("  q", x, "_score: NA")
+    paste0("  q", x, "_score: [INSERT SCORE]")
   }),
   collapse = "\n"))
 
@@ -275,7 +275,8 @@ peer_form_create_review = function(n,
   resp = "Your response goes here..."
   body_txt = paste(
     "## Instructions",
-    "Enter your feedback for each question below. Please replace `NA`s in the `q*_score` fields in the YAML with the scores you give the author for each question.",
+    "Enter your feedback for each question below. Please replace `[INSERT SCORE]` in the `q*_score` fields in the YAML with the scores you give the author for each question.",
+    "Please keep your review comments constructive and professional.",
     "## Feedback",
     paste0(purrr::map(
       1:n,
@@ -319,7 +320,7 @@ peer_form_create_review = function(n,
 #' `peer_form_create_rating` creates a short feedback form for authors to rate the feedback they got from reviewers. The rating categories are based on Reily, K. and P. Ludford Finnerty,  and L. Terveen (2009): Two Peers Are Better Than One: Aggregating Peer Reviews for Computing Assignments is Surprisingly Accurate. In *Proceedings of the ACM 2009 International Conference on Supporting Group Work*. GROUP’09, May 10–13, 2009, Sanibel Island, Florida, USA.
 #'
 #' @param category Character. Categories to be included in the feedback form, defaults to `c("helpfulness", "accuracy", "fairness")`.
-#' @param title Character. Title of form, defaults to "Author feedback form".
+#' @param title Character. Title of form, defaults to "Author rating form".
 #' @param fname Character. File name of RMarkdown document to be written to memory, defaults to `feedback_blank_rating`.
 #' @param output Character. Output parameter for `.Rmd` file, defaults to `github_document`.
 #' @param write_rmd Logical. Whether the feedback form should be saved to a `.Rmd` file in the current working directory, defaults to TRUE.
@@ -335,11 +336,12 @@ peer_form_create_review = function(n,
 #' @export
 #'
 peer_form_create_rating = function(category = c("helpfulness", "accuracy", "fairness"),
-                                   title = "Author feedback form",
+                                   title = "Author rating form",
                                    fname = "feedback_blank_rating",
                                    output = "github_document",
                                    write_rmd = TRUE,
-                                   overwrite = FALSE) {
+                                   overwrite = FALSE,
+                                   allow_comment = FALSE) {
   arg_is_chr(category)
   stopifnot(all(category %in% c("helpfulness", "accuracy", "fairness")))
 
@@ -356,12 +358,12 @@ peer_form_create_rating = function(category = c("helpfulness", "accuracy", "fair
     "---\ntitle: \"%s\"\noutput: %s\nparams:\n%s\n---\n\n\n",
     title,
     output,
-    paste(paste0("  ", category, ": NA"), collapse = "\n")
+    paste(paste0("  ", category, ": [INSERT SCORE]"), collapse = "\n")
   )
 
   # Instructions
   instruct_txt = sprintf(
-    "Please rate the reviewer's feedback based on the categories below on a scale from \"Strongly disagree\" to \"Strongly agree.\" Please replace `NA`s in the %s %s in the YAML with the scores you give the reviewer for each category.",
+    "Please rate the reviewer's feedback based on the categories below on a scale from \"Strongly disagree\" to \"Strongly agree.\" Please replace `[INSERT SCORE]` in the %s %s in the YAML with the scores you give the reviewer for each category.",
     if (length(category) == 1) {
       paste0("`", category, "`")
     } else if (length(category) == 2) {
@@ -395,17 +397,26 @@ peer_form_create_rating = function(category = c("helpfulness", "accuracy", "fair
     sep = "\n"
   )
 
+  if (allow_comment) {
+    comment_txt = "\n---\nIf you have additional comments for the reviewer, please enter it below.\n\n[Your comments go here]"
+  } else {
+    comment_txt = NULL
+  }
+
   # Putting it all together
-  body_txt = paste("## Instructions",
-                   instruct_txt,
-                   paste(paste0(
-                     1:length(category),
-                     ". ",
-                     purrr::map_chr(category, ~ paste(category_txt[which(names(category_txt) == .x)]))
-                   ),
-                   collapse = "\n\n"),
-                   tab_txt,
-                   sep = "\n\n")
+  body_txt = paste(
+    "## Instructions",
+    instruct_txt,
+    paste(paste0(
+      1:length(category),
+      ". ",
+      purrr::map_chr(category, ~ paste(category_txt[which(names(category_txt) == .x)]))
+    ),
+    collapse = "\n\n"),
+    tab_txt,
+    comment_txt,
+    sep = "\n\n"
+  )
 
 
   # Ensure an empty line at the end of the file
@@ -443,7 +454,7 @@ peer_form_create_rating = function(category = c("helpfulness", "accuracy", "fair
 #' @param message Character. Commit message.
 #' @param branch Character. Name of branch the file should be committed to, defaults to `master`.
 #' @param overwrite Logical. Whether existing files in reviewers' repositories should be overwritten, defaults to `FALSE`.
-#' @param verbose Logical. Should success / failure messages be printed.
+#' @param verbose Logical. Should success/failure messages be printed, defaults to `TRUE`.
 #'
 #' @examples
 #' \dontrun{
@@ -514,7 +525,7 @@ peer_file_add_rev = function(org,
 #' @param message Character. Commit message.
 #' @param branch Character. Name of branch the file should be committed to, defaults to `master`.
 #' @param overwrite Logical. Whether existing files in reviewers' repositories should be overwritten, defaults to `FALSE`.
-#' @param verbose Logical. Should success / failure messages be printed.
+#' @param verbose Logical. Should success/failure messages be printed, defaults to `TRUE`.
 #'
 #' @examples
 #' \dontrun{
@@ -634,10 +645,11 @@ peer_score_review = function(org,
                               if (succeeded(feedback)) {
                                 tc = textConnection(feedback$result)
                                 scores = rmarkdown::yaml_front_matter(tc)$params
-                                scores[scores == "NA"] = NA
+                                scores[scores == "[INSERT SCORE]"] = NA
+                                scores = stringr::str_replace_all(scores, "[\\[\\]]", "")
 
                                 stats::setNames(c(as.character(rdf[x, 'author']), r_no, scores),
-                                         c("user", "r_no", paste0("q", 1:length(scores))))
+                                                c("user", "r_no", paste0("q", 1:length(scores))))
 
                               } else {
                                 usethis::ui_oops(
@@ -646,13 +658,13 @@ peer_score_review = function(org,
                               }
                             })
 
-  out_temp = tidyr::gather(out_temp, q_name, q_value, -user, -r_no)
+  out_temp = tidyr::gather(out_temp, q_name, q_value,-user,-r_no)
   out_temp = tidyr::unite(out_temp, "new", c("r_no", "q_name"))
   out_temp = tidyr::spread(out_temp, new, q_value)
   out = merge(out_temp, roster, all.y = T)
 
   out = out[, union(names(roster), names(out))]
-  out = out[order(out$user_random), ]
+  out = out[order(out$user_random),]
 
   if (write_csv) {
     fname = glue::glue("{revscores}_{fs::path_file(roster)}")
@@ -727,10 +739,11 @@ peer_score_rating = function(org,
                               if (succeeded(feedback)) {
                                 tc = textConnection(feedback$result)
                                 scores = rmarkdown::yaml_front_matter(tc)$params
-                                scores[scores == "NA"] = NA
+                                scores[scores == "[INSERT SCORE]"] = NA
+                                scores = stringr::str_replace_all(scores, "[\\[\\]]", "")
 
                                 stats::setNames(c(as.character(rdf[x, 'reviewer']), r_no, scores),
-                                         c("user", "r_no", paste0("c", 1:length(scores))))
+                                                c("user", "r_no", paste0("c", 1:length(scores))))
 
                               } else {
                                 usethis::ui_oops(
@@ -740,13 +753,13 @@ peer_score_rating = function(org,
                             })
 
   # Getting data frame in right format
-  out_temp = tidyr::gather(out_temp, q_name, q_value,-user,-r_no)
+  out_temp = tidyr::gather(out_temp, q_name, q_value, -user, -r_no)
   out_temp = tidyr::unite(out_temp, "new", c("r_no", "q_name"))
   out_temp = tidyr::spread(out_temp, new, q_value)
   out = merge(out_temp, roster, all.y = T)
 
   out = out[, union(names(roster), names(out))]
-  out = out[order(out$user_random), ]
+  out = out[order(out$user_random),]
 
   if (write_csv) {
     fname = glue::glue("{autscores}_{fs::path_file(roster)}")
@@ -813,122 +826,250 @@ peer_return = function(org,
     rev = rdf[['reviewer_no']]
   }
 
-  purrr::walk(seq_len(nrow(rdf)),
-              function(x) {
-                repo_a = rdf[['repo_a']][x]
-                repo_r = rdf[['repo_r_rev']][x]
+  out = purrr::map_dfr(seq_len(nrow(rdf)),
+                       function(x) {
+                         repo_a = rdf[['repo_a']][x]
+                         repo_r = rdf[['repo_r_rev']][x]
 
-                # 1) place original content
-                repo_file_mirror(
-                  source_repo = repo_a,
-                  target_repo = repo_a,
-                  target_folder = rev[x],
-                  path = path,
-                  message = "Placing original file",
-                  branch = branch,
-                  overwrite = overwrite
-                )
+                         # 1) place original content
+                         og = peer_mirror_original(
+                           source_repo = repo_a,
+                           path = path,
+                           target_folder = rev[x],
+                           message = "Placing original file",
+                           branch = branch,
+                           overwrite = overwrite
+                         )
 
-                # 2) move files from reviewer
-                repo_file_mirror(
-                  source_repo = repo_r,
-                  target_repo = repo_a,
-                  source_folder = rdf[['author_random']][x],
-                  target_folder = rev[x],
-                  path = unique(c(path, form_review)),
-                  message = "Adding reviewer feedback",
-                  branch = branch,
-                  overwrite = TRUE,
-                  verbose = TRUE
-                )
-              })
+                         # 2) Move files from reviewer
+                         mv = peer_mirror_review(
+                           og_content = og,
+                           source_repo = repo_r,
+                           target_repo = repo_a,
+                           path = path,
+                           form_review = form_review,
+                           source_folder = rdf[['author_random']][x],
+                           target_folder = rev[x],
+                           message = "Adding reviewer feedback",
+                           branch = branch
+                         )
+
+                         mv
+
+                       })
+
+
 
   # 3) Create issue
-  peer_create_issue_rating(
-    rdf = rdf,
-    path = path,
-    form_review = form_review,
-    form_rating = form_rating,
-    double_blind = double_blind
-  )
+  # peer_create_issue_rating(
+  #   rdf = rdf,
+  #   path = path,
+  #   form_review = form_review,
+  #   form_rating = form_rating,
+  #   double_blind = double_blind
+  # )
 }
 
 
-#' Mirror file(s) between repos
+
+#' Mirror original file(s)
 #'
-#' `repo_file_mirror` mirrors select file(s) between repositories.
+#' `peer_mirror_original` mirrors original file(s) from an author's repository into a reviewer-specific folder on the author's repository and returns a list of contents.
 #'
 #' @param source_repo Character. Address of repository in "owner/name" format.
-#' @param target_repo Character. Address of repository in "owner/name" format.
 #' @param path Character or character vector. Name(s) of file(s) to be moved.
-#' @param source_folder Character. Name of folder containing file on `source_repo`.
 #' @param target_folder Character. Name of folder containing file on `target_repo`.
 #' @param message Character. Commit message.
-#' @param branch Character. Name of branch to use, defaults to "master".
-#' @param overwrite Logical. Should existing file or files with same name be overwritten, defaults to FALSE.
-#' @param verbose Logical. Should success / failure messages be printed.
+#' @param branch Character. Name of branch to use, defaults to `master`.
+#' @param overwrite Logical. Should existing file or files with same name be overwritten, defaults to `FALSE`.
+#' @param verbose Logical. Should success/failure messages be printed, defaults to `TRUE`.
 #'
 #' @family peer review functions
-repo_file_mirror = function(source_repo,
-                            target_repo,
-                            path = NULL,
-                            source_folder = NULL,
-                            target_folder = NULL,
-                            message = NULL,
-                            branch = "master",
-                            overwrite = FALSE,
-                            verbose = TRUE) {
+peer_mirror_original = function(source_repo,
+                                path,
+                                target_folder,
+                                message = NULL,
+                                branch = "master",
+                                overwrite = FALSE,
+                                verbose = TRUE) {
   arg_is_chr(path)
-  arg_is_chr_scalar(source_repo, target_repo)
-  arg_is_chr_scalar(source_folder,
-                    target_folder,
+  arg_is_chr_scalar(source_repo)
+  arg_is_chr_scalar(target_folder,
                     message,
                     allow_null = TRUE)
   arg_is_lgl_scalar(overwrite)
 
   source_files = repo_files(source_repo, branch)
+  target_files = source_files[grepl(glue::glue("{target_folder}/"), source_files[['path']]),]
+
+  out = purrr::map(path,
+                   function(p) {
+                     source_path = p
+                     target_path = format_folder(target_folder, p)
+
+                     if (p %in% source_files[['path']]) {
+                       res = purrr::safely(repo_get_file)(source_repo, source_path)
+
+                       if (succeeded(res)) {
+                         target_exists = target_path %in% target_files[['path']]
+
+                         if (target_exists & !overwrite) {
+                           usethis::ui_oops(
+                             paste(
+                               'Failed to add {usethis::ui_value(target_path)} to {usethis::ui_value(target_repo)}: already exists.',
+                               'If you want to force add this file, re-run the command with {usethis::ui_code("overwrite = TRUE")}.'
+                             )
+                           )
+
+                         } else {
+                           if (target_exists) {
+                             sha = target_files[['sha']][target_files[['path']] == target_path]
+                           } else {
+                             sha = NULL
+                           }
+
+                           peer_repo_put_file(
+                             repo = source_repo,
+                             path = target_path,
+                             content = res[['result']],
+                             message = message,
+                             branch = branch,
+                             sha = sha,
+                             verbose = verbose
+                           )
+
+                           res[['result']]
+
+                         }
+
+                       } else {
+                         usethis::ui_oops(
+                           "Failed to locate {usethis::ui_value(source_path)} on {usethis::ui_value(source_repo)}"
+                         )
+                         NULL
+                       }
+                     }
+                   })
+
+  out
+
+}
+
+
+#' Mirror reviewer file(s)
+#'
+#' `peer_mirror_review` mirrors user-specified file(s) (and review forms if applicable) from a reviewer's review repository into a reviewer-specific folder on the author's repository and returns a list of URLs. The function conducts a check whether author assignment files were changed by the reviewer; the function returns `NULL` if there is no change.
+#'
+#' @param og_content Character. List of files with the content of an author's original assignment file(s)
+#' @param source_repo Character. Address of repository in "owner/name" format.
+#' @param target_repo Character. Address of repository in "owner/name" format.
+#' @param path Character or character vector. Name(s) of file(s) to be moved.
+#' @param form_review Character. File name of reviewer feedback form (must be .Rmd document). If `NULL`, no review form will be moved.
+#' @param source_folder Character. Name of folder containing file on `source_repo`.
+#' @param target_folder Character. Name of folder containing file on `target_repo`.
+#' @param message Character. Commit message.
+#' @param branch Character. Name of branch to use, defaults to `master`.
+#' @param verbose Logical. Should success/failure messages be printed, defaults to `TRUE`.
+#'
+#' @family peer review functions
+peer_mirror_review = function(og_content,
+                              source_repo,
+                              target_repo,
+                              path,
+                              form_review = NULL,
+                              source_folder = NULL,
+                              target_folder = NULL,
+                              message = NULL,
+                              branch = "master",
+                              verbose = TRUE) {
+  arg_is_chr(path)
+  arg_is_chr_scalar(source_repo, target_repo)
+  arg_is_chr_scalar(source_folder,
+                    target_folder,
+                    message,
+                    form_review,
+                    allow_null = TRUE)
+
+  source_files = repo_files(source_repo, branch)
   target_files = repo_files(target_repo, branch)
 
-  purrr::walk(path,
-              function(p) {
-                source_path = format_folder(source_folder, p)
-                target_path = format_folder(target_folder, p)
+  if (!is.null(form_review)) {
+    gh_path = c(path, form_review)
+    autfile = c(form_review != gh_path)
+  } else {
+    gh_path = path
+    autfile = rep(T, length(path))
+  }
 
-                if (source_path %in% source_files[['path']]) {
-                  res = purrr::safely(repo_get_file)(source_repo, source_path)
+  out = purrr::map_dfr(seq_len(length(gh_path)),
+                       function(p) {
+                         source_path = format_folder(source_folder, gh_path[p])
+                         target_path = format_folder(target_folder, gh_path[p])
 
-                  if (succeeded(res)) {
-                    if (!(target_path %in% target_files[['path']]) |
-                        overwrite) {
-                      if ((target_path %in% target_files[['path']]) & overwrite) {
-                        sha = target_files[['sha']][target_files[['path']] == target_path]
-                      } else {
-                        sha = NULL
-                      }
+                         if (source_path %in% source_files[['path']]) {
+                           res = purrr::safely(repo_get_file)(source_repo, source_path)
 
-                      peer_repo_put_file(
-                        repo = target_repo,
-                        path = target_path,
-                        content = res[['result']],
-                        message = message,
-                        branch = branch,
-                        sha = sha,
-                        verbose = verbose
-                      )
-                    } else {
-                      usethis::ui_oops(
-                        paste(
-                          'Failed to add {usethis::ui_value(target_path)} to {usethis::ui_value(target_repo)}: already exists.',
-                          'If you want to force add this file, re-run the command with {usethis::ui_code("overwrite = TRUE")}.'
-                        )
-                      )
-                    }
+                           if (succeeded(res)) {
+                             target_exists = target_path %in% target_files[['path']]
 
-                  } else {
-                    usethis::ui_oops(
-                      "Failed to locate {usethis::ui_value(source_path)} on {usethis::ui_value(source_repo)}"
-                    )
-                  }
-                }
-              })
+                             if (target_exists) {
+                               sha = target_files[['sha']][target_files[['path']] == target_path]
+                             } else {
+                               sha = NULL
+                             }
+
+                             # Checking for changes by reviewer
+                             if (autfile[p] &
+                                 !is.null(og[p]) &
+                                 isTRUE(all.equal(og[p][[1]][1], res$result[[1]][1]))) {
+                               usethis::ui_oops(
+                                 "Skipping mirroring {usethis::ui_value(path[p])} from {usethis::ui_value(source_repo)} to {usethis::ui_value(target_repo)}: no changes detected."
+                               )
+                               changed = FALSE
+                               added = FALSE
+                               commit_sha = NA
+                             } else {
+
+                               if(!autfile[p]) {
+                                 changed = NA
+                               } else {
+                                 changed = TRUE
+                               }
+
+                               res2 = peer_repo_put_file(
+                                 repo = target_repo,
+                                 path = target_path,
+                                 content = res[['result']],
+                                 message = message,
+                                 branch = branch,
+                                 sha = sha,
+                                 verbose = verbose
+                               )
+
+                               if (succeeded(res2)) {
+                                 added = TRUE
+                                 commit_sha = res2[["result"]][["commit"]][["sha"]]
+                               } else {
+                                 added = FALSE
+                                 commit_sha = NA
+                               }
+                             }
+
+                             tibble::tibble(
+                               repo = target_repo,
+                               target_path = target_folder,
+                               path = gh_path[p],
+                               changed = changed,
+                               added = added,
+                               sha = ifelse(is.null(sha), NA, sha),
+                               commit_sha = commit_sha
+                             )
+
+                           } else {
+                             usethis::ui_oops(
+                               "Failed to locate {usethis::ui_value(source_path)} on {usethis::ui_value(source_repo)}"
+                             )
+                           }
+                         }
+                       })
 }

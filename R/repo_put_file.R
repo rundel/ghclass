@@ -80,7 +80,7 @@ peer_github_api_repo_put_file = function(repo, path, content, message, branch, s
 
 peer_repo_put_file = function(repo, path, content, message = NULL, branch = "master", sha, verbose = TRUE) {
   arg_is_chr_scalar(repo, path, branch)
-  arg_is_chr_scalar(message, allow_null = TRUE)
+  arg_is_chr_scalar(message, sha, allow_null = TRUE)
 
   if (is.null(message))
     message = glue::glue("Adding file: {path}")
@@ -88,7 +88,12 @@ peer_repo_put_file = function(repo, path, content, message = NULL, branch = "mas
   if (is.character(content))
     content = charToRaw(content)
 
-  res = purrr::safely(peer_github_api_repo_put_file)(repo, path, content, message, branch, sha)
+  res = purrr::safely(peer_github_api_repo_put_file)(repo = repo,
+                                                     path = path,
+                                                     content = content,
+                                                     message = message,
+                                                     branch = branch,
+                                                     sha = sha)
 
   if(verbose){
     status_msg(

@@ -227,7 +227,9 @@ peer_issue_body_review = function(sub,
     "Your peers' assignments have been added to this review repository.\n\n",
     "To start the review process, please clone the review repository as a new Version Control Project in RStudio to your local machine. Don't forget to commit and push your work when you are done.\n\n",
     'After you cloned the review repository, please complete the following tasks for each of the authors:\n\n',
-    paste(rev_txt, collapse = "\n\n")
+    paste(rev_txt, collapse = "\n\n"),
+    "\n\n",
+    "You can use the check boxes to help you keep track of your progress."
   )
 }
 
@@ -324,7 +326,9 @@ peer_issue_body_rating = function(sub,
   glue::glue(
     "The feedback from your peers has been added to your repository.\n\n",
     "To finish the assignment, please pull changes into your assignment repository and complete the  tasks below for each of your reviewers. Don't forget to commit and push your work when you are done.\n\n",
-    paste(rev_txt, collapse = "\n\n")
+    paste(rev_txt, collapse = "\n\n"),
+    "\n\n",
+    "You can use the check boxes to help you keep track of your progress."
   )
 
 }
@@ -363,7 +367,7 @@ check_afeed_rating = function(out, x) {
 
 format_folder = function(folder, path) {
   if (!is.null(folder)) {
-    glue::glue("{folder}/{path}")
+    paste0(folder, "/", path)
   } else {
     path
   }

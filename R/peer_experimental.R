@@ -91,7 +91,7 @@ github_api_patch_ref = function(repo,
   )
 }
 
-repo_move_file = function(source_repo,
+repo_file_move = function(source_repo,
                           target_repo,
                           source_path = NULL,
                           target_path = NULL,
@@ -108,21 +108,22 @@ repo_move_file = function(source_repo,
   arg_is_chr(source_path, target_path, allow_null = TRUE)
 
   ## Get commits on target repo
-  target_root = get_lastcommit_sha(target_repo)
+  target_root = get_lastcommit_sha(target_repo) #apicall
 
   # Rething whether this is necessary.
   # Can I get the folder from the recursively grabbed branch?
   if (!is.null(source_repo_folder)) {
-    source_files = repo_files(source_repo, branch)
-    source_tree_sha = source_files$sha[files$path == source_repo_folder]
+    source_files = repo_files(source_repo, branch) #apicall
+    source_tree_sha = source_files$sha[source_files$path == source_repo_folder]
   } else {
     source_res = purrr::safely(github_api_branch_get)(source_repo, branch)
     status_msg(source_res,
                fail = "Failed to retrieve branch {usethis::ui_value(branch)} for repository {usethis::ui_value(source_repo)}.")
-    source_tree_sha = source_res$result$commit$commit$tree$sha
+    source_tree_sha1 = source_res$result$commit$commit$tree$sha
   }
 
   source_tree_all = github_api_repo_get_tree(source_repo, sha = source_tree_sha)
+  source_tree_all1 = github_api_repo_get_tree(source_repo, sha = source_tree_sha1)
 
   source_tree = keep_blobs(source_tree_all$tree, source_path)
 

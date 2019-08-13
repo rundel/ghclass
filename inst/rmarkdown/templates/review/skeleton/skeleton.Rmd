@@ -1,0 +1,27 @@
+---
+title: "Reviewer feedback form"
+output: github_document
+params:
+  q1_score: [INSERT SCORE]
+  q2_score: [INSERT SCORE]
+  q3_score: [INSERT SCORE]
+---
+
+
+## Instructions
+
+Enter your feedback for each question below. Please replace `[INSERT SCORE]` in the `q*_score` fields in the YAML with the scores you give the author for each question.
+
+## Feedback
+
+#### 1. Place Question 1 text here. [max. xxx points]
+
+Your response goes here...
+
+#### 2. Place Question 2 text here. [max. xxx points]
+
+Your response goes here...
+
+#### 3. Place Question 3 text here. [max. xxx points]
+
+Your response goes here...
