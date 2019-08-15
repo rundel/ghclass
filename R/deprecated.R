@@ -78,14 +78,14 @@ get_members = function(...) {
 
 #' @export
 get_pending_member = function(...) {
-  .Deprecated("org_pending_members")
-  org_pending_members(...)
+  .Deprecated("org_pending")
+  org_pending(...)
 }
 
 #' @export
 get_pending_members = function(...) {
-  .Deprecated("org_pending_members")
-  org_pending_members(...)
+  .Deprecated("org_pending")
+  org_pending(...)
 }
 
 
@@ -115,8 +115,8 @@ get_team_members = function(...) {
 
 #' @export
 get_pending_team_members = function(...) {
-  .Deprecated("team_pending_members")
-  team_pending_members(...)
+  .Deprecated("team_pending")
+  team_pending(...)
 }
 
 #' @export

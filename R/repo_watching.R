@@ -2,7 +2,7 @@ github_api_repo_watching = function() {
   gh::gh(
     "GET /user/subscriptions",
     .token = github_get_token(),
-    .limit = get_github_api_limit()
+    .limit = github_get_api_limit()
   )
 }
 
