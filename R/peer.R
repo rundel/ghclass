@@ -86,7 +86,10 @@ peer_init = function(org,
   repo_create(org, user, prefix = prefix_rev, suffix = suffix_rev)
   repo_add_user(glue::glue("{org}/{prefix_rev}{user}{suffix_rev}"), user)
 
-  peer_issue_label_apply(org = org)
+  rdf = peer_roster_expand(org, roster, prefix, suffix, prefix_rev, suffix_rev)
+
+  peer_issue_label_apply(org = org,
+                         repo = unique(c(rdf[['repo_a']], rdf[['repo_r_rev']])))
 
 }
 

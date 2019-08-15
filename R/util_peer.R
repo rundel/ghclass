@@ -144,22 +144,26 @@ peer_issue_label_create = function(repo, verbose = FALSE) {
 
 
 peer_issue_label_apply = function(org,
+                                  repo = NULL,
                                   filter = NULL,
                                   exclude = FALSE) {
   arg_is_chr_scalar(org)
   arg_is_chr_scalar(filter, allow_null = TRUE)
+  arg_is_chr(repo, allow_null = TRUE)
   arg_is_lgl(exclude)
 
-  repos = org_repos(
-    org = org,
-    filter = filter,
-    exclude = exclude,
-    full_repo = TRUE
-  )
+  if (is.null(repo)) {
+    repo = org_repos(
+      org = org,
+      filter = filter,
+      exclude = exclude,
+      full_repo = TRUE
+    )
+  }
 
   usethis::ui_info("Applying labels: This might take a moment...")
-  purrr::walk(repos, ~ peer_issue_label_create(.))
-  usethis::ui_done("Applied peer review labels to all repositories in {usethis::ui_value(org)}.")
+  purrr::walk(repo, ~ peer_issue_label_create(.))
+  usethis::ui_done("Applied peer review labels to repositories.")
 
 }
 
