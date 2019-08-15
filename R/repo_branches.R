@@ -4,7 +4,7 @@ github_api_repo_branches = function(repo) {
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
     .token = github_get_token(),
-    .limit=get_github_api_limit()
+    .limit=github_get_api_limit()
   )
 }
 

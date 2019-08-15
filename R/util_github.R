@@ -1,4 +1,4 @@
-github_api_repo_get_tree = function(repo, sha = "master") {
+github_api_repo_tree = function(repo, sha = "master") {
   gh::gh(
     "GET /repos/:owner/:repo/git/trees/:sha?recursive=1",
     owner = get_repo_owner(repo),
@@ -13,7 +13,7 @@ repo_files = function(repo, branch = "master") {
     repo, branch,
     function(repo, branch) {
 
-      res = purrr::safely(github_api_repo_get_tree)(repo, branch)
+      res = purrr::safely(github_api_repo_tree)(repo, branch)
 
       if (failed(res)) {
         r = usethis::ui_value(format_repo(repo, branch))
@@ -74,7 +74,7 @@ extract_content = function(file, include_details = TRUE) {
 github_api_code_search = function(query) {
   gh::gh("GET /search/code", q = query,
          .token = github_get_token(),
-         .limit = get_github_api_limit())
+         .limit = github_get_api_limit())
 }
 
 
@@ -111,7 +111,7 @@ file_exists = function(repo, path, branch = "master"){
 
 }
 
-github_api_get_commits = function(repo, sha=NULL, path=NULL, author=NULL, since=NULL, until=NULL) {
+github_api_repo_commits = function(repo, sha=NULL, path=NULL, author=NULL, since=NULL, until=NULL) {
   args = list(
     endpoint = "GET /repos/:owner/:repo/commits",
     owner = get_repo_owner(repo),
@@ -137,7 +137,7 @@ get_commits = function(repo, sha = NULL, path = NULL, author = NULL, since = NUL
   purrr::map_dfr(
     repo,
     function(repo) {
-      res = purrr::safely(github_api_get_commits)(
+      res = purrr::safely(github_api_repo_commits)(
         repo, sha, path, author, since, until
       )
 

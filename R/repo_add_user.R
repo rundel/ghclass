@@ -1,4 +1,4 @@
-github_api_add_user = function(repo, username, permission){
+github_api_user_add = function(repo, username, permission){
   gh::gh("PUT /repos/:owner/:repo/collaborators/:username",
          owner = get_repo_owner(repo),
          repo = get_repo_name(repo),
@@ -42,7 +42,7 @@ repo_add_user = function(repo, user,
   purrr::walk2(
     repo, user,
     function(repo, user) {
-      res = purrr::safely(github_api_add_user)(
+      res = purrr::safely(github_api_user_add)(
         repo = repo,
         username = user,
         permission = permission
