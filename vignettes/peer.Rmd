@@ -176,35 +176,27 @@ peer_form_create_rating(fname = "hw2_rating",
 ```
 
 ### Double blind vs. single blind review
-The `double_blind` parameter is used to determine whether authors know who reviewed their assignments (`double_blind = FALSE`), or whether the entire review process is anonymous (`double_blind = TRUE`). The default is for authors to know who reviewed their assignments. Keeping reviewers non-anonymous is likely to discourage overly harsh or rude reviews. Authors always remain anonymous to reviewers.
+The `double_blind` parameter is used to determine whether authors know who reviewed their assignments (`double_blind = FALSE`), or whether the entire review process is anonymous (`double_blind = TRUE`). The default is a double blind review process, however, keeping reviewers non-anonymous might discourage overly harsh or rude reviews. Authors always remain anonymous to reviewers.
 
-This parameter should be set once for each assignment and then passed to each of the functions in the return review process. `double_blind` determines the naming of folders on authors repositories. Changing from a setting of double blind to single blind review, or vice versa, in the middle of the return review process will prevent `peer_file_add_aut()`, `peer_return()` and `peer_score_rating()` to locate the correct files on reviewers' and authors' repositories.
+<span style="color:#C70039">If instructors choose to conduct a double blind review process, they should inform students that while their name will be hidden from the students whose assignments they are reviewing, they are not anonymous to the instructor.</span>
+
+This parameter should be set once for each assignment and then passed to each of the functions in the return review process. `double_blind` determines the naming of folders on authors repositories. Changing from a setting of double blind to single blind review, or vice versa, in the middle of the return review process will prevent `peer_return()` or `peer_score_rating()` to locate the correct files on reviewers' and authors' repositories.
 ```{r, eval = F}
 double_blind = TRUE
-```
-
-
-### [Recommended] Distribute author rating forms
-If instructors wish to ask authors for a rating of the reviews, they may use the `peer_file_add_aut` to create reviewer-specific folders on author repositories and place the rating form into these repositories. If `double_blind = TRUE`, folder names will be based on reviewers' user names. If `double_blind = FALSE`, folder names will be based on the random reviewer IDs contained in the roster. 
-```{r, eval = F}
-peer_file_add_aut(
-        org = org,
-        roster = roster_test,
-        prefix = prefix,
-        local_path = "/Users/thereseanders/Teaching/introggplot2/hw2/hw2_rating.Rmd",
-        double_blind = double_blind
-)
 ```
 
 
 ### Move reviewer feedback to author repositories
 `peer_return()` implements the following steps:
 
-1. places authors' original file in reviewer-specific folders on authors' repositories
-2. clones reviewers' feedback and corrections into reviewer-specific folders on authors' repositories
-3. opens an issue on authors' repositories with links to the commit illustrating the difference between their assignment and reviewers' corrections, the review form with reviewers' feedback and, if applicable, the rating form to be completed by authors.
+1. If instructors wish to ask authors for a rating of the reviews: `peer_return()` creates reviewer-specific folders on authors' repositories and places the rating form into these repositories (necessitates instructor to specify path to rating form)
+2. places authors' original file in reviewer-specific folders on authors' repositories
+3. clones reviewers' feedback and corrections into reviewer-specific folders on authors' repositories
+4. opens an issue on authors' repositories with links to the commit illustrating the difference between their assignment and reviewers' corrections, the review form with reviewers' feedback and, if applicable, the rating form to be completed by authors.
 
-Students will receive an email to the address registered for their GitHub user name alerting them that a new issue has been created in their repository. The issue includes check boxes that you students can use to keep track of their progress. You may instruct students to close the issue to signal that they completed the assignment.
+If `double_blind = TRUE`, folder names on authors' repositories will be based on reviewers' user names. If `double_blind = FALSE`, folder names will be based on the random reviewer IDs contained in the roster. 
+
+Students receive an email to the address registered for their GitHub user name alerting them that a new issue has been created in their repository. The issue includes check boxes that you students can use to keep track of their progress. You may instruct students to close the issue to signal that they completed the assignment.
 
 Only select files will be moved and saved in reviewer-specific folders on authors' repositories and should be specified by the instructor via the `path` parameter. Please not that the `peer_return()` function is relatively costly in terms of calls to the API. Instructors are advised to select only the most relevant files in this step, for example the review feedback form and comments made by the reviewer on authors' original files.
 ```{r, eval = F}
@@ -214,7 +206,7 @@ peer_return(
   prefix = prefix,
   path = c("hw2_task.Rmd"),
   form_review = "hw2_review.Rmd",
-  form_rating = "hw2_rating.Rmd",
+  local_path_rating = "/Users/thereseanders/Teaching/introggplot2/hw2/hw2_rating.Rmd",
   double_blind = double_blind
 )
 ```

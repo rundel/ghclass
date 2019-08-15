@@ -83,19 +83,19 @@ You instructor will open an issue in this new repository with a check list of ta
 When reviewing your peers' work, please give them helpful comments and suggestions directly in their assignment file.
 
 ### Fill out review form
-The review form is a RMarkdown (`.Rmd`) document. The review form contains review questions to answer for each of your classmates' assignments. On the top of the review form, you will find a so-called [YAML header](https://bookdown.org/yihui/rmarkdown/html-document.html). The review form contains empty parameters (or placeholders) in the `params` section of the YAML, for example called `q1_score` and `q2_score`. The YAML header might look like this:
+The review form is a RMarkdown (`.Rmd`) document. The review form contains review questions to answer for each of your classmates' assignments. On the top of the review form, you will find a so-called [YAML header](https://bookdown.org/yihui/rmarkdown/html-document.html). The review form contains `[INSERT SCORE]` placeholders in the `params` section of the YAML, for example called `q1_score` and `q2_score`. The YAML header might look like this:
 
 ```
 ---
 title: "Reviewer feedback form"
 output: github_document
 params:
-  q1_score: NA
-  q2_score: NA
+  q1_score: [INSERT SCORE]
+  q2_score: [INSERT SCORE]
 ---
 ```
  
-Please replace the `NA` for each of the `q*_score` parameters with the number of points you give the author for each question. A completed YAML header should look like this:
+Please replace `[INSERT SCORE]` for each of the `q*_score` parameters with the number of points you give the author for each question. A completed YAML header should look like this:
 ```
 ---
 title: "Reviewer feedback form"
