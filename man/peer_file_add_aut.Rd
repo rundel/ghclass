@@ -27,7 +27,7 @@ peer_file_add_aut(org, roster, local_path, double_blind = FALSE,
 
 \item{overwrite}{Logical. Whether existing files in reviewers' repositories should be overwritten, defaults to \code{FALSE}.}
 
-\item{verbose}{Logical. Should success / failure messages be printed.}
+\item{verbose}{Logical. Should success/failure messages be printed, defaults to \code{TRUE}.}
 }
 \description{
 \code{peer_file_add_aut()} takes a local file and adds it to reviewer-specific folders on authors' repositories. The function's main purpose is to distribute rating forms into the reviewer-specific folders on authors' repositories.
@@ -46,10 +46,12 @@ Other peer review functions: \code{\link{peer_assign}},
   \code{\link{peer_file_add_rev}},
   \code{\link{peer_form_create_rating}},
   \code{\link{peer_form_create_review}},
-  \code{\link{peer_init}}, \code{\link{peer_return}},
+  \code{\link{peer_init}},
+  \code{\link{peer_mirror_original}},
+  \code{\link{peer_mirror_review}},
+  \code{\link{peer_return}},
   \code{\link{peer_roster_create}},
   \code{\link{peer_score_rating}},
-  \code{\link{peer_score_review}},
-  \code{\link{repo_file_mirror}}
+  \code{\link{peer_score_review}}
 }
 \concept{peer review functions}

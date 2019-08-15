@@ -39,9 +39,11 @@ Other peer review functions: \code{\link{peer_assign}},
   \code{\link{peer_file_add_rev}},
   \code{\link{peer_form_create_rating}},
   \code{\link{peer_form_create_review}},
-  \code{\link{peer_init}}, \code{\link{peer_return}},
+  \code{\link{peer_init}},
+  \code{\link{peer_mirror_original}},
+  \code{\link{peer_mirror_review}},
+  \code{\link{peer_return}},
   \code{\link{peer_roster_create}},
-  \code{\link{peer_score_rating}},
-  \code{\link{repo_file_mirror}}
+  \code{\link{peer_score_rating}}
 }
 \concept{peer review functions}

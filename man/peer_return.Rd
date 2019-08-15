@@ -4,20 +4,21 @@
 \alias{peer_return}
 \title{Return peer feedback to authors}
 \usage{
-peer_return(org, roster, path, form_review = NULL, form_rating = NULL,
-  double_blind = FALSE, prefix = "", suffix = "", message = NULL,
-  branch = "master", overwrite = FALSE)
+peer_return(org, roster, path, form_review = NULL,
+  local_path_rating = NULL, double_blind = FALSE, prefix = "",
+  suffix = "", message = NULL, branch = "master",
+  overwrite = FALSE)
 }
 \arguments{
 \item{org}{Character. Name of GitHub Organization.}
 
 \item{roster}{Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column \code{user} with GitHub user names of authors, a column \code{user_random} with randomized tokens for user names, and one or more \code{rev*} columns that specify review assignments as values of the vector \code{user_random}.}
 
-\item{path}{Character. File name or vector of file names to be included.}
+\item{path}{Character. File name or vector of file names to be included. Cannot be left empty.}
 
-\item{form_review}{Character. File name of reviewer feedback form (must be .Rmd document). If \code{NULL}, no link to the form will be created in the issue filed for authors.}
+\item{form_review}{Character. File name of reviewer feedback form (must be .Rmd document). If \code{NULL}, no review form will be moved back to authors' repositories.}
 
-\item{form_rating}{Character. File name of rating feedback form (must be .Rmd document). If \code{NULL}, no link to the form will be created in the issue filed for authors.}
+\item{local_path_rating}{Character. Local file path of rating feedback form to be added (must be .Rmd document), defaults to \code{NULL}. If \code{NULL}, no rating form will be added to authors' repositories.}
 
 \item{double_blind}{Logical. Specifies whether review is conducted double-blind (i.e. neither reviewer nor author can identify each other), or single-blind (i.e. authors remain anonymous but reviewer identities are revealed). If \code{double_blind = TRUE}, reviewer folders are identified by the anonymized user IDs in the roster's \code{user_random} column. If \code{double_blind = FALSE}, reviewer folders are identified by the original user names. Defaults to \code{FALSE}.}
 
@@ -40,7 +41,7 @@ peer_return(org = "ghclass-test",
 roster = "hw2_roster_seed12345.csv",
 path = c("hw2_task.Rmd", "iris_data.csv"),
 form_review = "hw2_review.Rmd",
-form_rating = "hw2_rating.Rmd",
+local_path_rating = "./hw2/hw2_rating.Rmd",
 prefix = "hw2-")
 }
 
@@ -52,9 +53,10 @@ Other peer review functions: \code{\link{peer_assign}},
   \code{\link{peer_form_create_rating}},
   \code{\link{peer_form_create_review}},
   \code{\link{peer_init}},
+  \code{\link{peer_mirror_original}},
+  \code{\link{peer_mirror_review}},
   \code{\link{peer_roster_create}},
   \code{\link{peer_score_rating}},
-  \code{\link{peer_score_review}},
-  \code{\link{repo_file_mirror}}
+  \code{\link{peer_score_review}}
 }
 \concept{peer review functions}

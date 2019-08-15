@@ -58,4 +58,13 @@ arg_is_scalar = function(...,  allow_null = FALSE, allow_na = FALSE) {
   )
 }
 
+arg_is_raw = function(...) {
+  handle_arg_list(
+    ...,
+    tests = function(name, value) {
+      if (!(is.raw(value)) | (is.null(value)))
+        usethis::ui_stop("Argument {usethis::ui_value(name)} must be of type raw.")
+    }
+  )
+}
 

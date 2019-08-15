@@ -4,9 +4,10 @@
 \alias{peer_assign}
 \title{Assign file to reviewers}
 \usage{
-peer_assign(org, roster, path = NULL, form_review = NULL,
-  prefix = "", suffix = "", message = "Assigning review",
-  branch = "master", overwrite = FALSE)
+peer_assign(org, roster, path = NULL, local_path_review = NULL,
+  prefix = "", suffix = "", exclude_extension = c("gitignore", "md",
+  "Rhistory", "Rproj"), message = NULL, branch = "master",
+  overwrite = FALSE)
 }
 \arguments{
 \item{org}{Character. Name of GitHub Organization.}
@@ -15,11 +16,13 @@ peer_assign(org, roster, path = NULL, form_review = NULL,
 
 \item{path}{Character. File name or vector of file names to be included. If \code{NULL}, all files not contained in folders, except \code{.gitignore}, \code{.Rhistory}, and \code{.Rproj}, will be moved to the reviewers' repositories.}
 
-\item{form_review}{Character. File name of customized review feedback form. If \code{NULL}, no link will be created in the issue informing reviewers that the review files are available.}
+\item{local_path_review}{Character. Local file path of review feedback form to be added (must be .Rmd document), defaults to \code{NULL}. If \code{NULL}, no review form will be added to authors' repositories.}
 
 \item{prefix}{Character. Common repository name prefix.}
 
 \item{suffix}{Character. Common repository name suffix.}
+
+\item{exclude_extension}{Character. File extensions of files to not be moved to reviewer repositories if \code{path} is \code{NULL}, defaults to \code{c("gitignore", "md", "Rhistory", "Rproj")}.}
 
 \item{message}{Character. Commit message, defaults to "Assigning review."}
 
@@ -47,10 +50,12 @@ Other peer review functions: \code{\link{peer_file_add_aut}},
   \code{\link{peer_file_add_rev}},
   \code{\link{peer_form_create_rating}},
   \code{\link{peer_form_create_review}},
-  \code{\link{peer_init}}, \code{\link{peer_return}},
+  \code{\link{peer_init}},
+  \code{\link{peer_mirror_original}},
+  \code{\link{peer_mirror_review}},
+  \code{\link{peer_return}},
   \code{\link{peer_roster_create}},
   \code{\link{peer_score_rating}},
-  \code{\link{peer_score_review}},
-  \code{\link{repo_file_mirror}}
+  \code{\link{peer_score_review}}
 }
 \concept{peer review functions}
