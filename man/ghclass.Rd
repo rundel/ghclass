@@ -32,7 +32,7 @@ General functions,
 \item \code{\link[=org_admins]{org_admins()}}          - (previously \code{\link[=get_admin]{get_admin()}})
 \item \code{\link[=org_invite]{org_invite()}}          - (previously \code{\link[=invite_user]{invite_user()}})
 \item \code{\link[=org_members]{org_members()}}         - (previously \code{\link[=get_member]{get_member()}})
-\item \code{\link[=org_pending_members]{org_pending_members()}} - (previously \code{\link[=get_pending_member]{get_pending_member()}})
+\item \code{\link[=org_pending]{org_pending()}}         - (previously \code{\link[=get_pending_member]{get_pending_member()}})
 }
 
 Team related functions,
@@ -41,7 +41,7 @@ Team related functions,
 \item \code{\link[=team_rename]{team_rename()}}          - (previously \code{\link[=rename_team]{rename_team()}})
 \item \code{\link[=team_invite]{team_invite()}}          - (previously \code{\link[=add_team_member]{add_team_member()}})
 \item \code{\link[=team_members]{team_members()}}         - (previously \code{\link[=get_team_members]{get_team_members()}})
-\item \code{\link[=team_pending_members]{team_pending_members()}} - (previously \code{\link[=get_pending_team_members]{get_pending_team_members()}})
+\item \code{\link[=team_pending]{team_pending()}}         - (previously \code{\link[=get_pending_team_members]{get_pending_team_members()}})
 \item \code{\link[=team_repos]{team_repos()}}           - (previously \code{\link[=get_team_repos]{get_team_repos()}})
 }
 }
