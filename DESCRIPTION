@@ -9,7 +9,7 @@ Description: Tools for managing classes with github.
 Depends: R (>= 3.4.0)
 Imports: gh, usethis, withr, fs, stringr, purrr, yaml, base64enc, tibble, glue, processx
 Suggests: styler, knitr, rmarkdown
-License: GPL-3
+License: GPL-3 + file LICENSE
 Encoding: UTF-8
 URL: https://rundel.github.io/ghclass/
 BugReports: https://github.com/rundel/ghclass/issues
