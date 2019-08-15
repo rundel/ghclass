@@ -7,8 +7,24 @@ Authors@R: c(person("Colin", "Rundel", email = "rundel@gmail.com", role = c("aut
            )
 Description: Tools for managing classes with github.
 Depends: R (>= 3.4.0)
-Imports: gh, usethis, withr, fs, stringr, purrr, yaml, base64enc, tibble, glue, processx
-Suggests: styler, knitr, rmarkdown
+Imports: 
+    gh,
+    usethis,
+    withr,
+    fs,
+    purrr,
+    base64enc,
+    tibble,
+    glue,
+    processx,
+    crayon
+Suggests: 
+    styler,
+    knitr,
+    rmarkdown,
+    here,
+    readr,
+    sodium
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 URL: https://rundel.github.io/ghclass/

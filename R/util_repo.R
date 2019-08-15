@@ -1,40 +1,38 @@
-github_repo_pattern ="^([A-Za-z0-9]+[A-Za-z0-9-]*[A-Za-z0-9]+)/([A-Za-z0-9_.-]+)$"
-github_username_pattern = "^[A-Za-z\\d](?:[A-Za-z\\d]|-(?=[A-Za-z\\d])){0,38}$"
+#github_repo_pattern ="^([A-Za-z0-9]+[A-Za-z0-9-]*[A-Za-z0-9]+)/([A-Za-z0-9_.-]+)$"
+#github_username_pattern = "^[A-Za-z\\d](?:[A-Za-z\\d]|-(?=[A-Za-z\\d])){0,38}$"
+
+# Use a simplified pattern and let GitHub sort out the particulars
+github_repo_pattern ="^([A-Za-z0-9-]+)/([A-Za-z0-9_.-]+)$"
 
 
-clean_usernames = function(usernames)
-{
-  s = stringr::str_trim(usernames)
-  s[s != ""]
+valid_repo_error = function(repo) {
+  usethis::ui_stop(paste(
+    "Invalid repository name(s) {usethis::ui_value(repo)}.",
+    "Repository names must be in {usethis::ui_code('owner/name')} format."
+  ) )
 }
 
-# Should only be used within GitHub API calls,
-# i.e. functions starting with github_api_*
-# Explicitly not vectorized
-require_valid_repo = function(repo)
-{
-  stopifnot(length(repo) == 1)
+match_repo = function(repo, index=1) {
+  arg_is_chr(repo)
 
-  if (!valid_repo(repo))
-    usethis::ui_stop(paste(
-      "Invalid repository name {usethis::ui_value(repo)}.",
-      "Repository names must be in {usethis::ui_code('owner/name')} format."
-    ) )
+  m = regexec(github_repo_pattern, repo)
+  m = regmatches(repo, m)
+
+  l = purrr::map_int(m, length)
+
+  if (any(l != 3))
+    valid_repo_error(repo[l != 3])
+
+  purrr::map_chr(m, index)
 }
 
-valid_repo = function(repo)
-{
-  stringr::str_detect(repo, github_repo_pattern)
+
+get_repo_name = function(repo) {
+  match_repo(repo, 3)
 }
 
-get_repo_name = function(repo)
-{
-  stringr::str_match(repo, github_repo_pattern)[,3]
-}
-
-get_repo_owner = function(repo)
-{
-  stringr::str_match(repo, github_repo_pattern)[,2]
+get_repo_owner = function(repo) {
+  match_repo(repo, 2)
 }
 
 get_repo_url = function(repo, type = c("https","ssh"), use_token = TRUE)
