@@ -472,9 +472,10 @@ repo_files_select = function(repo,
     ~ sub("^\\.", "", .x)
   ))
   path[!purrr::map_lgl(path,
-                       ~ any(stringr::str_detect(
-                         .x, glue::glue("\\.{exclude_extension}$")
-                       )))]
+                       function(path) {
+                         any(purrr::map_lgl(glue::glue("\\.{exclude_extension}$"),
+                                            ~ grepl(.x, path)))
+                       })]
 }
 
 format_commit_output = function(res = NULL,

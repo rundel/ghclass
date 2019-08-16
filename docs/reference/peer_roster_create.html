@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Collect scores from review forms — peer_score_review • ghclass</title>
+<title>Create peer review roster — peer_roster_create • ghclass</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Collect scores from review forms — peer_score_review" />
+<meta property="og:title" content="Create peer review roster — peer_roster_create" />
 
-<meta property="og:description" content="The peer_score_review() function collects score information from the YAML of a review form within reviewers' review repositories. It outputs a new .csv file, with rows specifying individual question scores for each student." />
+<meta property="og:description" content="peer_roster_create creates data frame of random assignments of author files to reviewers. By default, the output is saved to a .csv file in the current working directory that incorporates the current date and random seed as part of the file name." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -112,42 +112,33 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Collect scores from review forms</h1>
+    <h1>Create peer review roster</h1>
     
-    <div class="hidden name"><code>peer_score_review.Rd</code></div>
+    <div class="hidden name"><code>peer_roster_create.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>The <code>peer_score_review()</code> function collects score information from the YAML of a review form within reviewers' review repositories. It outputs a new .csv file, with rows specifying individual question scores for each student.</p>
+    <p><code>peer_roster_create</code> creates data frame of random assignments of author files to reviewers. By default, the output is saved to a <code>.csv</code> file in the current working directory that incorporates the current date and random seed as part of the file name.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>peer_score_review</span>(<span class='no'>org</span>, <span class='no'>roster</span>, <span class='no'>form_review</span>, <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>write_csv</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>peer_roster_create</span>(<span class='no'>n_rev</span>, <span class='no'>user</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>12345</span>, <span class='kw'>write_csv</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>org</th>
-      <td><p>Character. Name of the GitHub organization.</p></td>
+      <th>n_rev</th>
+      <td><p>Numeric. Number of reviews per user. Must be larger than zero and smaller than the number of users.</p></td>
     </tr>
     <tr>
-      <th>roster</th>
-      <td><p>Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column <code>user</code> with GitHub user names of authors, a column <code>user_random</code> with randomized tokens for user names, and one or more <code>rev*</code> columns that specify review assignments as values of the vector <code>user_random</code>.</p></td>
+      <th>user</th>
+      <td><p>Character. A vector of GitHub user names.</p></td>
     </tr>
     <tr>
-      <th>form_review</th>
-      <td><p>Character. File name of reviewer feedback form (must be .Rmd document).</p></td>
-    </tr>
-    <tr>
-      <th>prefix</th>
-      <td><p>Character. Common repository name prefix.</p></td>
-    </tr>
-    <tr>
-      <th>suffix</th>
-      <td><p>Character. Common repository name suffix.</p></td>
+      <th>seed</th>
+      <td><p>Numeric. Random seed for assignment, defaults to <code>12345</code>.</p></td>
     </tr>
     <tr>
       <th>write_csv</th>
@@ -163,17 +154,13 @@
   <code><a href='peer_form_create_rating.html'>peer_form_create_rating</a></code>,
   <code><a href='peer_form_create_review.html'>peer_form_create_review</a></code>,
   <code><a href='peer_init.html'>peer_init</a></code>, <code><a href='peer_return.html'>peer_return</a></code>,
-  <code><a href='peer_roster_create.html'>peer_roster_create</a></code>,
-  <code><a href='peer_score_rating.html'>peer_score_rating</a></code></p></div>
+  <code><a href='peer_score_rating.html'>peer_score_rating</a></code>,
+  <code><a href='peer_score_review.html'>peer_score_review</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>peer_score_review</span>(
-<span class='kw'>org</span> <span class='kw'>=</span> <span class='st'>"ghclass-test"</span>,
-<span class='kw'>roster</span> <span class='kw'>=</span> <span class='st'>"hw2_roster_seed12345.csv"</span>,
-<span class='kw'>form_review</span> <span class='kw'>=</span> <span class='st'>"hw2_review.Rmd"</span>,
-<span class='kw'>prefix</span> <span class='kw'>=</span> <span class='no'>prefix</span>)
+<span class='fu'>peer_roster_create</span>(<span class='fl'>3</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"anya-ghclass"</span>, <span class='st'>"bruno-ghclass"</span>, <span class='st'>"celine-ghclass"</span>, <span class='st'>"diego-ghclass"</span>))
 <span class='co'># }</span><div class='input'>
 </div></pre>
   </div>

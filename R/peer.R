@@ -256,10 +256,10 @@ peer_form_create_review = function(n,
                                    double_blind = TRUE) {
   stopifnot(!is.null(fname))
   if (grepl("\\s+", fname)) {
-    fname = stringr::str_replace_all(fname, "\\s", "_")
+    fname = gsub("\\s", "_", fname)
   }
   if (grepl("\\.Rmd$", fname)) {
-    fname = stringr::str_replace_all(fname, "\\.Rmd$", "")
+    fname = gsub("\\.Rmd$", "", fname)
   }
 
   # YAML
@@ -353,10 +353,10 @@ peer_form_create_rating = function(category = c("helpfulness", "accuracy", "fair
 
   stopifnot(!is.null(fname))
   if (grepl("\\s+", fname)) {
-    fname = stringr::str_replace_all(fname, "\\s", "_")
+    fname = gsub("\\s", "_", fname)
   }
   if (grepl("\\.Rmd$", fname)) {
-    fname = stringr::str_replace_all(fname, "\\.Rmd$", "")
+    fname = gsub("\\.Rmd$", "", fname)
   }
 
   # YAML
@@ -652,7 +652,7 @@ peer_score_review = function(org,
                                 tc = textConnection(feedback$result)
                                 scores = rmarkdown::yaml_front_matter(tc)$params
                                 scores[scores == "[INSERT SCORE]"] = NA
-                                scores = stringr::str_replace_all(scores, "[\\[\\]]", "")
+                                scores = purrr::map_chr(scores, ~gsub("[][]", "", .x))
 
                                 inp = stats::setNames(c(as.character(rdf[x, 'author']), r_no, scores),
                                                       c("user", "r_no", paste0("q", 1:length(scores))))
@@ -747,7 +747,7 @@ peer_score_rating = function(org,
                                 tc = textConnection(feedback$result)
                                 scores = rmarkdown::yaml_front_matter(tc)$params
                                 scores[scores == "[INSERT SCORE]"] = NA
-                                scores = stringr::str_replace_all(scores, "[\\[\\]]", "")
+                                scores = purrr::map_chr(scores, ~gsub("[][]", "", .x))
 
                                 inp = stats::setNames(c(as.character(rdf[x, 'reviewer']), r_no, scores),
                                                       c("user", "r_no", paste0("c", 1:length(scores))))

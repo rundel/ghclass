@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Collect scores from review forms — peer_score_review • ghclass</title>
+<title>Add local files to reviewer-specific folders on authors' repositories — peer_file_add_aut • ghclass</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Collect scores from review forms — peer_score_review" />
+<meta property="og:title" content="Add local files to reviewer-specific folders on authors' repositories — peer_file_add_aut" />
 
-<meta property="og:description" content="The peer_score_review() function collects score information from the YAML of a review form within reviewers' review repositories. It outputs a new .csv file, with rows specifying individual question scores for each student." />
+<meta property="og:description" content="peer_file_add_aut() takes a local file and adds it to reviewer-specific folders on authors' repositories. The function's main purpose is to distribute rating forms into the reviewer-specific folders on authors' repositories." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -112,19 +112,20 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Collect scores from review forms</h1>
+    <h1>Add local files to reviewer-specific folders on authors' repositories</h1>
     
-    <div class="hidden name"><code>peer_score_review.Rd</code></div>
+    <div class="hidden name"><code>peer_file_add_aut.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>The <code>peer_score_review()</code> function collects score information from the YAML of a review form within reviewers' review repositories. It outputs a new .csv file, with rows specifying individual question scores for each student.</p>
+    <p><code>peer_file_add_aut()</code> takes a local file and adds it to reviewer-specific folders on authors' repositories. The function's main purpose is to distribute rating forms into the reviewer-specific folders on authors' repositories.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>peer_score_review</span>(<span class='no'>org</span>, <span class='no'>roster</span>, <span class='no'>form_review</span>, <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>write_csv</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>peer_file_add_aut</span>(<span class='no'>org</span>, <span class='no'>roster</span>, <span class='no'>local_path</span>, <span class='kw'>double_blind</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>message</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>,
+  <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -138,8 +139,12 @@
       <td><p>Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column <code>user</code> with GitHub user names of authors, a column <code>user_random</code> with randomized tokens for user names, and one or more <code>rev*</code> columns that specify review assignments as values of the vector <code>user_random</code>.</p></td>
     </tr>
     <tr>
-      <th>form_review</th>
-      <td><p>Character. File name of reviewer feedback form (must be .Rmd document).</p></td>
+      <th>local_path</th>
+      <td><p>Character. File name of file to be added.</p></td>
+    </tr>
+    <tr>
+      <th>double_blind</th>
+      <td><p>Logical. Specifies whether review is conducted double-blind (i.e. neither reviewer nor author can identify each other), or single-blind (i.e. authors remain anonymous but reviewer identities are revealed). If <code>double_blind = TRUE</code>, reviewer folders are identified by the reviewer's ID. If <code>double_blind = FALSE</code>, reviewer folders are identified by the original user names. Defaults to <code>TRUE</code>.</p></td>
     </tr>
     <tr>
       <th>prefix</th>
@@ -150,29 +155,40 @@
       <td><p>Character. Common repository name suffix.</p></td>
     </tr>
     <tr>
-      <th>write_csv</th>
-      <td><p>Logical. Whether the roster data frame should be saved to a <code>.csv</code> file in the current working directory, defaults to TRUE.</p></td>
+      <th>message</th>
+      <td><p>Character. Commit message.</p></td>
+    </tr>
+    <tr>
+      <th>branch</th>
+      <td><p>Character. Name of branch the file should be committed to, defaults to <code>master</code>.</p></td>
+    </tr>
+    <tr>
+      <th>overwrite</th>
+      <td><p>Logical. Whether existing files in reviewers' repositories should be overwritten, defaults to <code>FALSE</code>.</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>Logical. Should success/failure messages be printed, defaults to <code>TRUE</code>.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other peer review functions: <code><a href='peer_assign.html'>peer_assign</a></code>,
-  <code><a href='peer_file_add_aut.html'>peer_file_add_aut</a></code>,
   <code><a href='peer_file_add_rev.html'>peer_file_add_rev</a></code>,
   <code><a href='peer_form_create_rating.html'>peer_form_create_rating</a></code>,
   <code><a href='peer_form_create_review.html'>peer_form_create_review</a></code>,
   <code><a href='peer_init.html'>peer_init</a></code>, <code><a href='peer_return.html'>peer_return</a></code>,
   <code><a href='peer_roster_create.html'>peer_roster_create</a></code>,
-  <code><a href='peer_score_rating.html'>peer_score_rating</a></code></p></div>
+  <code><a href='peer_score_rating.html'>peer_score_rating</a></code>,
+  <code><a href='peer_score_review.html'>peer_score_review</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>peer_score_review</span>(
-<span class='kw'>org</span> <span class='kw'>=</span> <span class='st'>"ghclass-test"</span>,
+<span class='fu'>peer_file_add_aut</span>(<span class='kw'>org</span> <span class='kw'>=</span> <span class='st'>"ghclass-test"</span>,
 <span class='kw'>roster</span> <span class='kw'>=</span> <span class='st'>"hw2_roster_seed12345.csv"</span>,
-<span class='kw'>form_review</span> <span class='kw'>=</span> <span class='st'>"hw2_review.Rmd"</span>,
+<span class='kw'>local_path</span> <span class='kw'>=</span> <span class='st'>"/Users/profx/introstats/hw2/hw2_rating.Rmd"</span>,
 <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='no'>prefix</span>)
 <span class='co'># }</span><div class='input'>
 </div></pre>

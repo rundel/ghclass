@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Collect scores from review forms — peer_score_review • ghclass</title>
+<title>Create author rating form — peer_form_create_rating • ghclass</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Collect scores from review forms — peer_score_review" />
+<meta property="og:title" content="Create author rating form — peer_form_create_rating" />
 
-<meta property="og:description" content="The peer_score_review() function collects score information from the YAML of a review form within reviewers' review repositories. It outputs a new .csv file, with rows specifying individual question scores for each student." />
+<meta property="og:description" content="peer_form_create_rating creates a short feedback form for authors to rate the feedback they got from reviewers. The rating categories are based on Reily, K. and P. Ludford Finnerty,  and L. Terveen (2009): Two Peers Are Better Than One: Aggregating Peer Reviews for Computing Assignments is Surprisingly Accurate. In Proceedings of the ACM 2009 International Conference on Supporting Group Work. GROUP’09, May 10–13, 2009, Sanibel Island, Florida, USA." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -112,46 +112,52 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Collect scores from review forms</h1>
+    <h1>Create author rating form</h1>
     
-    <div class="hidden name"><code>peer_score_review.Rd</code></div>
+    <div class="hidden name"><code>peer_form_create_rating.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>The <code>peer_score_review()</code> function collects score information from the YAML of a review form within reviewers' review repositories. It outputs a new .csv file, with rows specifying individual question scores for each student.</p>
+    <p><code>peer_form_create_rating</code> creates a short feedback form for authors to rate the feedback they got from reviewers. The rating categories are based on Reily, K. and P. Ludford Finnerty,  and L. Terveen (2009): Two Peers Are Better Than One: Aggregating Peer Reviews for Computing Assignments is Surprisingly Accurate. In <em>Proceedings of the ACM 2009 International Conference on Supporting Group Work</em>. GROUP’09, May 10–13, 2009, Sanibel Island, Florida, USA.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>peer_score_review</span>(<span class='no'>org</span>, <span class='no'>roster</span>, <span class='no'>form_review</span>, <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>write_csv</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>peer_form_create_rating</span>(<span class='kw'>category</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"helpfulness"</span>, <span class='st'>"accuracy"</span>,
+  <span class='st'>"fairness"</span>), <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>"Author rating form"</span>,
+  <span class='kw'>fname</span> <span class='kw'>=</span> <span class='st'>"feedback_blank_rating"</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"github_document"</span>,
+  <span class='kw'>write_rmd</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>allow_comment</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>org</th>
-      <td><p>Character. Name of the GitHub organization.</p></td>
+      <th>category</th>
+      <td><p>Character. Categories to be included in the feedback form, defaults to <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("helpfulness", "accuracy", "fairness")</a></code>.</p></td>
     </tr>
     <tr>
-      <th>roster</th>
-      <td><p>Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column <code>user</code> with GitHub user names of authors, a column <code>user_random</code> with randomized tokens for user names, and one or more <code>rev*</code> columns that specify review assignments as values of the vector <code>user_random</code>.</p></td>
+      <th>title</th>
+      <td><p>Character. Title of form, defaults to "Author rating form".</p></td>
     </tr>
     <tr>
-      <th>form_review</th>
-      <td><p>Character. File name of reviewer feedback form (must be .Rmd document).</p></td>
+      <th>fname</th>
+      <td><p>Character. File name of RMarkdown document to be written to memory, defaults to <code>feedback_blank_rating</code>.</p></td>
     </tr>
     <tr>
-      <th>prefix</th>
-      <td><p>Character. Common repository name prefix.</p></td>
+      <th>output</th>
+      <td><p>Character. Output parameter for <code>.Rmd</code> file, defaults to <code>github_document</code>.</p></td>
     </tr>
     <tr>
-      <th>suffix</th>
-      <td><p>Character. Common repository name suffix.</p></td>
+      <th>write_rmd</th>
+      <td><p>Logical. Whether the feedback form should be saved to a <code>.Rmd</code> file in the current working directory, defaults to TRUE.</p></td>
     </tr>
     <tr>
-      <th>write_csv</th>
-      <td><p>Logical. Whether the roster data frame should be saved to a <code>.csv</code> file in the current working directory, defaults to TRUE.</p></td>
+      <th>overwrite</th>
+      <td><p>Logical. Should existing file or files with same name be overwritten, defaults to <code>FALSE</code>.</p></td>
+    </tr>
+    <tr>
+      <th>allow_comment</th>
+      <td><p>Logical. Should optional comment field be included? Defaults to <code>FALSE</code>.</p></td>
     </tr>
     </table>
     
@@ -160,20 +166,16 @@
     <div class='dont-index'><p>Other peer review functions: <code><a href='peer_assign.html'>peer_assign</a></code>,
   <code><a href='peer_file_add_aut.html'>peer_file_add_aut</a></code>,
   <code><a href='peer_file_add_rev.html'>peer_file_add_rev</a></code>,
-  <code><a href='peer_form_create_rating.html'>peer_form_create_rating</a></code>,
   <code><a href='peer_form_create_review.html'>peer_form_create_review</a></code>,
   <code><a href='peer_init.html'>peer_init</a></code>, <code><a href='peer_return.html'>peer_return</a></code>,
   <code><a href='peer_roster_create.html'>peer_roster_create</a></code>,
-  <code><a href='peer_score_rating.html'>peer_score_rating</a></code></p></div>
+  <code><a href='peer_score_rating.html'>peer_score_rating</a></code>,
+  <code><a href='peer_score_review.html'>peer_score_review</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>peer_score_review</span>(
-<span class='kw'>org</span> <span class='kw'>=</span> <span class='st'>"ghclass-test"</span>,
-<span class='kw'>roster</span> <span class='kw'>=</span> <span class='st'>"hw2_roster_seed12345.csv"</span>,
-<span class='kw'>form_review</span> <span class='kw'>=</span> <span class='st'>"hw2_review.Rmd"</span>,
-<span class='kw'>prefix</span> <span class='kw'>=</span> <span class='no'>prefix</span>)
+<span class='fu'>peer_form_create_rating</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"accuracy"</span>, <span class='st'>"fairness"</span>))
 <span class='co'># }</span><div class='input'>
 </div></pre>
   </div>
