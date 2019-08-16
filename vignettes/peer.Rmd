@@ -262,4 +262,4 @@ Suppose you wanted to give students the weekend to complete assignments, your cl
 | ...  | ...                                                   | ...                                                   |
 
 ### API rate limits
-The GitHub API that is used to access information on students' repositories has [maximum hourly rate limits](https://developer.github.com/apps/building-github-apps/understanding-rate-limits-for-github-apps/). The baseline limit is 5,000 calls to the API per hour. With two reviewers per assignment and 2 files to be moved when returning the review, this hourly limit is reached by `peer_return()` with 166 students. 
+The GitHub API that is used to access information on students' repositories has [maximum hourly rate limits](https://developer.github.com/apps/building-github-apps/understanding-rate-limits-for-github-apps/). The baseline limit is 5,000 calls to the API per hour. With two reviewers per assignment and 2 files to be moved when returning the review, this hourly limit is reached by `peer_return()` after 294 students. 
