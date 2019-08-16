@@ -122,8 +122,8 @@ repo_file_move = function(source_repo,
     source_tree_sha1 = source_res$result$commit$commit$tree$sha
   }
 
-  source_tree_all = github_api_repo_get_tree(source_repo, sha = source_tree_sha)
-  source_tree_all1 = github_api_repo_get_tree(source_repo, sha = source_tree_sha1)
+  source_tree_all = github_api_repo_tree(source_repo, sha = source_tree_sha)
+  source_tree_all1 = github_api_repo_tree(source_repo, sha = source_tree_sha1)
 
   source_tree = keep_blobs(source_tree_all$tree, source_path)
 
@@ -137,7 +137,7 @@ repo_file_move = function(source_repo,
     target_tree_sha = target_res$result$commit$commit$tree$sha
   }
 
-  target_tree_all = github_api_repo_get_tree(target_repo, sha = target_tree_sha)
+  target_tree_all = github_api_repo_tree(target_repo, sha = target_tree_sha)
 
   target_tree = keep_blobs(target_tree_all$tree, target_path)
 
@@ -533,4 +533,26 @@ processx_pwd = function(verbose = TRUE) {
     echo = verbose,
     echo_cmd = verbose
   )
+}
+
+get_lastcommit_sha = function(repo, path = NULL) {
+  arg_is_chr_scalar(repo)
+  arg_is_chr(path, allow_null = TRUE)
+
+  if (!is.null(path)) {
+    purrr::map_dfr(path,
+                   function(path) {
+                     sub = get_commits(repo = repo, path = path)
+                     sub = sub[order(sub$date, decreasing = TRUE), ]
+                     tibble::tibble(sha = as.character(sub[1, 'sha']),
+                                    path = path)
+                   })
+  } else {
+    purrr::map_chr(repo,
+                   function(.x) {
+                     sub = get_commits(repo = repo)
+                     sub = sub[order(sub$date, decreasing = TRUE), ]
+                     as.character(sub[1, 'sha'])
+                   })
+  }
 }

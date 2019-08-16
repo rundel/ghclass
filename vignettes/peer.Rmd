@@ -120,26 +120,18 @@ peer_form_create_review(2,
 ```
 The blank form is saved in the working directory, unless otherwise specified. The instructor will then customize the questions to be answered by reviewers. 
 
-### Distribute feedback forms to reviewers
-The `peer_file_add_rev()` function is used to place the customized review forms into reviewers' repositories, based on the review roster. The feedback forms are saved author-specific folders, identified with each author's anonymous author ID contained in the `user_random` column of the roster.
-```{r, eval = F}
-peer_file_add_rev(
-        org = org,
-        roster = roster_test,
-        prefix = prefix,
-        local_path = "/Users/thereseanders/Teaching/introggplot2/hw2/hw2_review.Rmd")
-```
-
 ### Move author files to reviewers
-The `peer_assign()` function distributes review assignment to reviewers. It grabs designated files on the authors' repositories and clones them into the author-specific folder on reviewers' repositories, based on the roster. `peer_assign()` will open an issue in the reviewers' repositories that contains links to the relevant review files.
+The `peer_assign()` function distributes review assignment to reviewers. It grabs designated files on the authors' repositories and clones them into the author-specific folder on reviewers' repositories, based on the roster. Author-specific folders are identified with each author's anonymous author ID contained in the `user_random` column of the roster. If a file path to a review form is specified in `local_path_review`, the form will be added to reviewers' review repositories. 
 
-If no `path` is specified within `peer_assign()`, all files on authors' repositories will be moved to their folder on the review repositories. Specifying the name of the review feedback form via the `form_review` parameter leads the issue that is created in the process to contain a link to this form. You may instruct students to close the issue to signal that they completed the assignment.
+If no `path` is specified within `peer_assign()`, all files on authors' repositories will be moved to their folder on the review repositories. By default, files with the following extensions will not be moved if no `path` is specified: `c("gitignore", "md", "Rhistory", "Rproj", "html")`. Users may customize the file extensions to be excluded via the `exclude_extension` parameter.
+
+`peer_assign()` will open an issue in the reviewers' repositories that contains links to the relevant review files. You may instruct students to close the issue to signal that they completed the assignment.
 ```{r, eval = F}
 peer_assign(
   org = org,
   roster = roster_test,
   prefix = prefix,
-  form_review = "hw2_review.Rmd"
+  local_path_review = "/Users/thereseanders/Teaching/introggplot2/hw2/hw2_review.Rmd"
 )
 ```
 
@@ -189,7 +181,7 @@ double_blind = TRUE
 ### Move reviewer feedback to author repositories
 `peer_return()` implements the following steps:
 
-1. If instructors wish to ask authors for a rating of the reviews: `peer_return()` creates reviewer-specific folders on authors' repositories and places the rating form into these repositories (necessitates instructor to specify path to rating form)
+1. If instructors wish to ask authors for a rating of the reviews: `peer_return()` creates reviewer-specific folders on authors' repositories and places the rating form into these repositories (necessitates instructor to specify `local_path_rating`)
 2. places authors' original file in reviewer-specific folders on authors' repositories
 3. clones reviewers' feedback and corrections into reviewer-specific folders on authors' repositories
 4. opens an issue on authors' repositories with links to the commit illustrating the difference between their assignment and reviewers' corrections, the review form with reviewers' feedback and, if applicable, the rating form to be completed by authors.

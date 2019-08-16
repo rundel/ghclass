@@ -1,3 +1,16 @@
+format_rev = function(prefix, suffix) {
+  tag = "review"
+  if (prefix != "" & suffix == "") {
+    list(prefix_rev = paste0(prefix, tag, "-"),
+         suffix_rev = suffix)
+  } else {
+    list(prefix_rev = prefix,
+         suffix_rev = paste0(suffix, "-", tag))
+  }
+}
+
+
+
 # Helper function for Latin square
 latin_square = function(j, n) {
   i <- seq_len(n)

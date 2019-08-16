@@ -83,31 +83,20 @@ peer_init = function(org,
   prefix_rev = format_rev(prefix, suffix)$prefix_rev
   suffix_rev = format_rev(prefix, suffix)$suffix_rev
 
-  repo_create(org, user, prefix = prefix_rev, suffix = suffix_rev)
-  repo_add_user(glue::glue("{org}/{prefix_rev}{user}{suffix_rev}"), user)
-
   rdf = peer_roster_expand(org, roster, prefix, suffix, prefix_rev, suffix_rev)
+  user = unique(rdf$reviewer)
+
+  repo_create(org = org, name = user, prefix = prefix_rev, suffix = suffix_rev)
+  repo_add_user(glue::glue("{org}/{prefix_rev}{user}{suffix_rev}"), user)
 
   peer_issue_label_apply(org = org,
                          repo = unique(c(rdf[['repo_a']], rdf[['repo_r_rev']])))
 
 }
 
-format_rev = function(prefix, suffix) {
-  tag = "review"
-  if (prefix != "" & suffix == "") {
-    list(prefix_rev = paste0(prefix, tag, "-"),
-         suffix_rev = suffix)
-  } else {
-    list(prefix_rev = prefix,
-         suffix_rev = paste0(suffix, "-", tag))
-  }
-}
-
-
 #' Assign file to reviewers
 #'
-#' `peer_assign` adds files from authors' repositories to review repositories. It also creates an issue in the reviewers' repositories informing them that the review files are available and with links to the relevant documents.
+#' `peer_assign` adds files from authors' repositories to review repositories. The function creates an issue on the reviewers' repositories informing them that the review files are available and creates links to the relevant documents.
 #'
 #' @param org Character. Name of GitHub Organization.
 #' @param roster Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column `user` with GitHub user names of authors, a column `user_random` with randomized tokens for user names, and one or more `rev*` columns that specify review assignments as values of the vector `user_random`.
@@ -141,7 +130,7 @@ peer_assign = function(org,
                        local_path_review = NULL,
                        prefix = "",
                        suffix = "",
-                       exclude_extension = c("gitignore", "md", "Rhistory", "Rproj"),
+                       exclude_extension = c("gitignore", "md", "Rhistory", "Rproj", "html"),
                        message = NULL,
                        branch = "master",
                        overwrite = FALSE) {
@@ -207,7 +196,6 @@ peer_assign = function(org,
                         }
 
                         ## iii. Place content
-                        # iterates over target_repo and content
                         mr = peer_add_content(
                           target_repo = repo_r,
                           target_folder = repo_folder_r,
@@ -677,9 +665,9 @@ peer_score_review = function(org,
                               }
                             })
 
-  out_temp = tidyr::gather(out_temp, q_name, q_value, -user, -r_no)
-  out_temp = tidyr::unite(out_temp, "new", c("r_no", "q_name"))
-  out_temp = tidyr::spread(out_temp, new, q_value)
+  out_temp = tidyr::gather(out_temp, .data$q_name, .data$q_value, -.data$user, -.data$r_no)
+  out_temp = tidyr::unite(out_temp, .data$new, c("r_no", "q_name"))
+  out_temp = tidyr::spread(out_temp, .data$new, .data$q_value)
   out = merge(out_temp, roster, all.y = T)
 
   out = out[, union(names(roster), names(out))]
@@ -774,9 +762,9 @@ peer_score_rating = function(org,
                             })
 
   # Getting data frame in right format
-  out_temp = tidyr::gather(out_temp, q_name, q_value, -user, -r_no)
-  out_temp = tidyr::unite(out_temp, "new", c("r_no", "q_name"))
-  out_temp = tidyr::spread(out_temp, new, q_value)
+  out_temp = tidyr::gather(out_temp, .data$q_name, .data$q_value, -.data$user, -.data$r_no)
+  out_temp = tidyr::unite(out_temp, .data$new, c("r_no", "q_name"))
+  out_temp = tidyr::spread(out_temp, .data$new, .data$q_value)
   out = merge(out_temp, roster, all.y = T)
 
   out = out[, union(names(roster), names(out))]
@@ -793,6 +781,9 @@ peer_score_rating = function(org,
 
 
 #' Return peer feedback to authors
+#'
+#'#' `peer_assign` adds files from authors' repositories to review repositories. The function creates an issue on the reviewers' repositories informing them that the review files are available and creates links to the relevant documents.
+#' `peer_return()` returns the review files from reviewers' review repositories to authors' repositories. The function i) adds empty rating form (if specified via `local_path_rating`), ii) moves completed review (if specified via `form_review`) from reviewer to author, iii) moves assignment files from reviewer to author (if specified via `path` and changed by reviewer), and iv) opens an issue on authors' repositories informing them about the added files.
 #'
 #' @param org Character. Name of GitHub Organization.
 #' @param roster Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column `user` with GitHub user names of authors, a column `user_random` with randomized tokens for user names, and one or more `rev*` columns that specify review assignments as values of the vector `user_random`.

@@ -6,7 +6,7 @@
 \usage{
 peer_assign(org, roster, path = NULL, local_path_review = NULL,
   prefix = "", suffix = "", exclude_extension = c("gitignore", "md",
-  "Rhistory", "Rproj"), message = NULL, branch = "master",
+  "Rhistory", "Rproj", "html"), message = NULL, branch = "master",
   overwrite = FALSE)
 }
 \arguments{
@@ -31,7 +31,7 @@ peer_assign(org, roster, path = NULL, local_path_review = NULL,
 \item{overwrite}{Logical. Whether existing files in reviewers' repositories should be overwritten, defaults to \code{FALSE}.}
 }
 \description{
-\code{peer_assign} adds files from authors' repositories to review repositories. It also creates an issue in the reviewers' repositories informing them that the review files are available and with links to the relevant documents.
+\code{peer_assign} adds files from authors' repositories to review repositories. The function creates an issue on the reviewers' repositories informing them that the review files are available and creates links to the relevant documents.
 }
 \examples{
 \dontrun{
