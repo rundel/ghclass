@@ -6,7 +6,7 @@
 \usage{
 peer_form_create_review(n, title = "Reviewer feedback form",
   fname = "feedback_blank_review", output = "github_document",
-  write_rmd = TRUE, overwrite = FALSE, double_blind = FALSE)
+  write_rmd = TRUE, overwrite = FALSE, double_blind = TRUE)
 }
 \arguments{
 \item{n}{Numerical. Number of score fields to be included in the YAML of the .Rmd file.}
@@ -21,7 +21,7 @@ peer_form_create_review(n, title = "Reviewer feedback form",
 
 \item{overwrite}{Logical. Should existing file or files with same name be overwritten, defaults to \code{FALSE}.}
 
-\item{double_blind}{Logical. If \code{double_blind = TRUE}, the YAML will contain an \code{author} field, defaults to \code{FALSE}.}
+\item{double_blind}{Logical. If \code{double_blind = TRUE}, the YAML will contain an \code{author} field, defaults to \code{TRUE}.}
 }
 \description{
 \code{peer_form_create_review} creates blank feedback forms for reviewers based on the user-specified number of questions.
@@ -37,10 +37,7 @@ Other peer review functions: \code{\link{peer_assign}},
   \code{\link{peer_file_add_aut}},
   \code{\link{peer_file_add_rev}},
   \code{\link{peer_form_create_rating}},
-  \code{\link{peer_init}},
-  \code{\link{peer_mirror_original}},
-  \code{\link{peer_mirror_review}},
-  \code{\link{peer_return}},
+  \code{\link{peer_init}}, \code{\link{peer_return}},
   \code{\link{peer_roster_create}},
   \code{\link{peer_score_rating}},
   \code{\link{peer_score_review}}

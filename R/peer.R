@@ -164,6 +164,7 @@ peer_assign = function(org,
                         sub = rdf[rdf[['author']] == a, ]
                         repo_a = unique(sub[['repo_a']])
                         repo_r = unique(sub[['repo_r_rev']])
+                        repo_files_a = repo_files(repo = repo_a, branch = branch)
 
                         repo_folder_r = unique(sub[['author_random']])
                         repo_files_r = repo_files(repo = repo_r, branch = branch)
@@ -187,6 +188,7 @@ peer_assign = function(org,
                         ## i.  Select paths
                         if (is.null(path)) {
                           path = repo_files_select(repo = repo_a,
+                                                   repo_files = repo_files_a,
                                                    exclude_extension = exclude_extension,
                                                    branch = branch)
                         }
@@ -194,7 +196,7 @@ peer_assign = function(org,
                         ## ii. Grab content
                         content_repo = repo_path_content_grab(repo = repo_a,
                                                               path = path,
-                                                              repo_files = repo_files_r,
+                                                              repo_files = repo_files_a,
                                                               branch = branch)
 
                         if (length(content_review) > 0) {
@@ -224,7 +226,7 @@ peer_assign = function(org,
   peer_issue_create(
     out = out,
     title = "Assigning review",
-    step = "rating",
+    step = "review",
     org = org,
     prefix = prefix,
     suffix = suffix,
@@ -340,6 +342,7 @@ peer_form_create_review = function(n,
 #' @param output Character. Output parameter for `.Rmd` file, defaults to `github_document`.
 #' @param write_rmd Logical. Whether the feedback form should be saved to a `.Rmd` file in the current working directory, defaults to TRUE.
 #' @param overwrite Logical. Should existing file or files with same name be overwritten, defaults to `FALSE`.
+#' @param allow_comment Logical. Should optional comment field be included? Defaults to `FALSE`.
 #'
 #' @examples
 #' \dontrun{
@@ -982,17 +985,14 @@ peer_return = function(org,
                        })
 
   # 6. Create issue
-  # 3. Create issue
   peer_issue_create(
     out = out,
     title = "Returning review",
-    step = "review",
+    step = "rating",
     org = org,
     prefix = prefix,
     suffix = suffix,
     branch = branch
   )
-
-  # peer_issue_create_rating(out = out)
 
 }

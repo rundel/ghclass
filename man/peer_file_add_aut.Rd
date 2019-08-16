@@ -4,7 +4,7 @@
 \alias{peer_file_add_aut}
 \title{Add local files to reviewer-specific folders on authors' repositories}
 \usage{
-peer_file_add_aut(org, roster, local_path, double_blind = FALSE,
+peer_file_add_aut(org, roster, local_path, double_blind = TRUE,
   prefix = "", suffix = "", message = NULL, branch = "master",
   overwrite = FALSE, verbose = TRUE)
 }
@@ -15,7 +15,7 @@ peer_file_add_aut(org, roster, local_path, double_blind = FALSE,
 
 \item{local_path}{Character. File name of file to be added.}
 
-\item{double_blind}{Logical. Specifies whether review is conducted double-blind (i.e. neither reviewer nor author can identify each other), or single-blind (i.e. authors remain anonymous but reviewer identities are revealed). If \code{double_blind = TRUE}, reviewer folders are identified by the reviewer's ID. If \code{double_blind = FALSE}, reviewer folders are identified by the original user names. Defaults to \code{FALSE}.}
+\item{double_blind}{Logical. Specifies whether review is conducted double-blind (i.e. neither reviewer nor author can identify each other), or single-blind (i.e. authors remain anonymous but reviewer identities are revealed). If \code{double_blind = TRUE}, reviewer folders are identified by the reviewer's ID. If \code{double_blind = FALSE}, reviewer folders are identified by the original user names. Defaults to \code{TRUE}.}
 
 \item{prefix}{Character. Common repository name prefix.}
 
@@ -46,10 +46,7 @@ Other peer review functions: \code{\link{peer_assign}},
   \code{\link{peer_file_add_rev}},
   \code{\link{peer_form_create_rating}},
   \code{\link{peer_form_create_review}},
-  \code{\link{peer_init}},
-  \code{\link{peer_mirror_original}},
-  \code{\link{peer_mirror_review}},
-  \code{\link{peer_return}},
+  \code{\link{peer_init}}, \code{\link{peer_return}},
   \code{\link{peer_roster_create}},
   \code{\link{peer_score_rating}},
   \code{\link{peer_score_review}}
