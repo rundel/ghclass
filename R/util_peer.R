@@ -508,7 +508,7 @@ format_commit_output = function(res = NULL,
   tibble::tibble(
     repo = target_repo,
     path = target_path,
-    mode = mode,
+    mode = as.numeric(mode),
     type = type,
     sha = sha,
     size = size,
@@ -542,6 +542,9 @@ peer_add_content = function(target_repo,
 
                          purrr::map_dfr(content,
                                         function(c) {
+
+                                          changed = NA
+
                                           target_path = paste0(target_folder, "/", c[['path']])
 
                                           target_exists = target_path %in% sub_r[['path']]
@@ -575,10 +578,9 @@ peer_add_content = function(target_repo,
                                               content_compare_path = purrr::map_chr(content_compare, "path")
                                               if (length(content_compare_path) > 0) {
                                                 n = which(purrr::map_chr(content_compare, "path") == c[['path']])
-                                                changed = !all.equal(c[['content']][1], content_compare[[n]][['content']][1])
+                                                changed = !isTRUE(all.equal(c[['content']][1],
+                                                                     content_compare[[n]][['content']][1]))
                                               }
-                                            } else {
-                                              changed = NA
                                             }
 
                                             if (is.na(changed) |
