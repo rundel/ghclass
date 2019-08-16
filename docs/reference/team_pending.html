@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Rename existing team(s) — team_rename • ghclass</title>
+<title>Get pending team members — team_pending • ghclass</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Rename existing team(s) — team_rename" />
+<meta property="og:title" content="Get pending team members — team_pending" />
 
-<meta property="og:description" content="team_rename renames an existing team within the given GitHub organization." />
+<meta property="og:description" content="team_pending returns a data frame of pending team members." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -81,21 +81,6 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/instructions_students.html">Instructions for students</a>
-    </li>
-    <li>
-      <a href="../articles/peer.html">Peer review with `ghclass`</a>
-    </li>
-  </ul>
-</li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
@@ -112,40 +97,36 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Rename existing team(s)</h1>
+    <h1>Get pending team members</h1>
     
-    <div class="hidden name"><code>team_rename.Rd</code></div>
+    <div class="hidden name"><code>team_pending.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p><code>team_rename</code> renames an existing team within the given GitHub organization.</p>
+    <p><code>team_pending</code> returns a data frame of pending team members.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>team_rename</span>(<span class='no'>org</span>, <span class='no'>team</span>, <span class='no'>new_team</span>)</pre>
+    <pre class="usage"><span class='fu'>team_pending</span>(<span class='no'>org</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='fu'><a href='org_teams.html'>org_teams</a></span>(<span class='no'>org</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>org</th>
-      <td><p>character, name of the GitHub organization</p></td>
+      <td><p>character, name of the GitHub organization.</p></td>
     </tr>
     <tr>
       <th>team</th>
-      <td><p>character, one or more existing team names</p></td>
-    </tr>
-    <tr>
-      <th>new_team</th>
-      <td><p>character, one or more new team names</p></td>
+      <td><p>character or data frame, listing one or more team</p></td>
     </tr>
     </table>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>team_rename</span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-team01"</span>, <span class='st'>"hw01-team01"</span>)
+<span class='fu'>team_pending</span>(<span class='st'>"ghclass"</span>,<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"team01"</span>,<span class='st'>"team02"</span>))
 <span class='co'># }</span><div class='input'>
 </div></pre>
   </div>

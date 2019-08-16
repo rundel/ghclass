@@ -12,19 +12,23 @@ Imports:
     usethis,
     withr,
     fs,
-    stringr,
     purrr,
     yaml,
     base64enc,
     tibble,
     glue,
     processx,
+    stats,
+    crayon
+Suggests: 
+    styler,
+    knitr,
+    rmarkdown,
     here,
-    tidyr,
     readr,
-    stats
-Suggests: styler, knitr, rmarkdown
-License: GPL-3
+    tidyr,
+    sodium
+License: GPL-3 + file LICENSE
 Encoding: UTF-8
 URL: https://rundel.github.io/ghclass/
 BugReports: https://github.com/rundel/ghclass/issues
