@@ -169,12 +169,12 @@ peer_issue_label_apply = function(org,
 
 peer_issue_create = function(out,
                              title,
-                             review_rating = c("review", "rating"),
+                             step = c("review", "rating"),
                              org,
                              prefix,
                              suffix,
                              branch = "master") {
-  arg_is_chr_scalar(review_rating, prefix, suffix, org, branch, title)
+  arg_is_chr_scalar(step, prefix, suffix, org, branch, title)
 
   if (is.null(out[['repo']])) {
     usethis::ui_oops("Skipping issue creation: no files found for any repositories.")
@@ -190,7 +190,7 @@ peer_issue_create = function(out,
                   commit = paste0("https://github.com/", r, "/commit/")
                 )
 
-                if (review_rating == "review") {
+                if (step == "review") {
                   body = peer_issue_body_review(sub = sub, url_start = url_start)
                   assignee = peer_repo_get_user(
                     repo = r,
@@ -199,7 +199,7 @@ peer_issue_create = function(out,
                     suffix = suffix
                   )
                   labels = list(":pencil: Complete review")
-                } else if (review_rating == "rating") {
+                } else if (step == "rating") {
                   body = peer_issue_body_rating(sub = sub, url_start = url_start)
                   assignee = unique(sub[['author']])
                   labels = list(":mag: Inspect review")
@@ -252,8 +252,16 @@ peer_issue_body_review = function(sub, url_start) {
                            function(y) {
                              paste(
                                glue::glue("**For {y}**"),
-                               issue_txt_assignment(sub = sub, aut = y, url_start = url_start),
-                               issue_txt_complete_review(sub = sub, aut = y, url_start = url_start),
+                               issue_txt_assignment(
+                                 sub = sub,
+                                 aut = y,
+                                 url_start = url_start
+                               ),
+                               issue_txt_complete_review(
+                                 sub = sub,
+                                 aut = y,
+                                 url_start = url_start
+                               ),
                                sep = "\n"
                              )
                            })
@@ -424,8 +432,10 @@ local_path_content_grab = function(local_path = NULL,
                            }
                          }
 
-                         list(content = readChar(local_path, file.info(local_path)$size),
-                              path = fs::path_file(local_path))
+                         list(
+                           content = readChar(local_path, file.info(local_path)$size),
+                           path = fs::path_file(local_path)
+                         )
 
                        } else {
                          usethis::ui_stop("Unable to locate the following file: {usethis::ui_value(local_path)}")
@@ -738,7 +748,9 @@ format_commit_output = function(res = NULL,
                                 target_repo,
                                 target_path,
                                 target_folder,
-                                category) {
+                                category,
+                                changed = NA) {
+
   if (is.null(res) & !is.null(target_files)) {
     mode = target_files[["mode"]]
     type = target_files[["type"]]
@@ -764,6 +776,11 @@ format_commit_output = function(res = NULL,
     added = FALSE
     commit_sha = NA
   }
+
+  if (!is.na(changed)) {
+    changed = changed
+  }
+
   tibble::tibble(
     repo = target_repo,
     path = target_path,
@@ -773,7 +790,7 @@ format_commit_output = function(res = NULL,
     size = size,
     url = url,
     target_folder = target_folder,
-    changed = NA,
+    changed = changed,
     added = added,
     commit_sha = commit_sha,
     category = category
@@ -784,19 +801,19 @@ peer_add_content = function(target_repo,
                             target_folder,
                             target_files,
                             content,
-                            category = c("assignment"),
+                            content_compare = NULL,
+                            category,
                             message,
                             branch,
                             overwrite) {
+  arg_is_chr_scalar(category)
+
   out = purrr::map_dfr(target_repo,
                        function(r) {
                          sub_r = target_files[target_files[['repo']] == r, ]
 
                          purrr::map_dfr(content,
                                         function(c) {
-                                          # Note this is similar to peer_file_place
-                                          # Difference is in reading local file vs. passing it in
-                                          # also saving it to an object
                                           target_path = paste0(target_folder, "/", c[['path']])
 
                                           target_exists = target_path %in% sub_r[['path']]
@@ -825,22 +842,40 @@ peer_add_content = function(target_repo,
                                               sha = NULL
                                             }
 
-                                            res = peer_repo_put_file(
-                                              repo = r,
-                                              path = target_path,
-                                              content = c[['content']][1],
-                                              branch = branch,
-                                              sha = sha
-                                            )
+                                            # Compare with content_compare
+                                            if (!is.null(content_compare)) {
+                                              n = which(purrr::map_chr(content_compare, "path") == c[['path']])
+                                              changed = !all.equal(c[['content']][1], content_compare[[n]][['content']][1])
+                                            } else {
+                                              changed = NA
+                                            }
 
-                                            format_commit_output(
-                                              res = res,
-                                              target_repo = r,
-                                              target_path = target_path,
-                                              target_folder = target_folder,
-                                              category = category
-                                            )
-
+                                            if (is.na(changed) | changed) {
+                                              res = peer_repo_put_file(
+                                                repo = r,
+                                                path = target_path,
+                                                content = c[['content']][1],
+                                                branch = branch,
+                                                sha = sha
+                                              )
+                                              format_commit_output(
+                                                res = res,
+                                                target_repo = r,
+                                                target_path = target_path,
+                                                target_folder = target_folder,
+                                                category = category,
+                                                changed = changed
+                                              )
+                                            } else {
+                                              format_commit_output(
+                                                target_files = sub_r[sub_r[['path']] == target_path,],
+                                                target_repo = r,
+                                                target_path = target_path,
+                                                target_folder = target_folder,
+                                                category = category,
+                                                changed = changed
+                                              )
+                                            }
                                           }
                                         })
                        })
@@ -856,18 +891,38 @@ peer_repo_get_user = function(repo, org, prefix, suffix) {
 }
 
 # Grab content of specific files on a repo; return list w content and name
-repo_file_content_grab = function(repo, path, branch) {
-  out = purrr::map(path,
-                   function(path) {
-                     res = purrr::safely(repo_get_file)(repo = repo,
-                                                        file = path,
-                                                        branch = branch)
-                     if (succeeded(res))
-                       list(content = res$result,
-                            path = path)
+repo_path_content_grab = function(repo,
+                                  path,
+                                  repo_files = NULL,
+                                  branch) {
+  arg_is_chr_scalar(repo, branch)
+  arg_is_chr(path)
 
-                   })
+  purrr::map(path,
+             function(path) {
+               if (is.null(repo_files)) {
+                 repo_files = repo_files(repo = repo, branch = branch)
+               }
 
-  out
+               path_exists = path %in% repo_files[['path']]
 
+               if (path_exists) {
+                 res = purrr::safely(repo_get_file)(repo = repo,
+                                                    file = path,
+                                                    branch = branch)
+                 if (succeeded(res))
+                   list(content = res$result,
+                        path = path)
+               } else {
+                 list(content = NULL,
+                      path = NULL)
+               }
+             })
+}
+
+content_path_folder_strip = function(list, folder) {
+  purrr::map(list,
+             ~ purrr::modify_at(.,
+                                .at = c("path"),
+                                ~ gsub(paste0(folder, "/"), "", .x)))
 }

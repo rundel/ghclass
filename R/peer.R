@@ -35,7 +35,7 @@ peer_roster_create = function(n_rev,
   user_random = paste0("aut", sample(1:length(user), length(user)))
 
   df_sort = data.frame(user = user,
-                       user_random = as.character(user_random))[order(as.numeric(sub("[aA-zZ]+", "", user_random))), ]
+                       user_random = as.character(user_random))[order(as.numeric(sub("[aA-zZ]+", "", user_random))),]
 
   res_df = stats::setNames(data.frame(df_sort,
                                       if (length(user) > 2) {
@@ -46,7 +46,7 @@ peer_roster_create = function(n_rev,
                                       }),
                            c("user", "user_random", purrr::map_chr(1:n_rev, ~ paste0("rev", .x))))
 
-  res_df = res_df[order(res_df$user_random), ]
+  res_df = res_df[order(res_df$user_random),]
 
   if (write_csv) {
     fname = glue::glue("roster_seed{seed}.csv")
@@ -161,7 +161,7 @@ peer_assign = function(org,
 
   out = purrr::map_df(unique(rdf$author),
                       function(a) {
-                        sub = rdf[rdf[['author']] == a,]
+                        sub = rdf[rdf[['author']] == a, ]
                         repo_a = unique(sub[['repo_a']])
                         repo_r = unique(sub[['repo_r_rev']])
 
@@ -192,8 +192,9 @@ peer_assign = function(org,
                         }
 
                         ## ii. Grab content
-                        repo_content = repo_file_content_grab(repo = repo_a,
+                        content_repo = repo_path_content_grab(repo = repo_a,
                                                               path = path,
+                                                              repo_files = repo_files_r,
                                                               branch = branch)
 
                         if (length(content_review) > 0) {
@@ -209,7 +210,7 @@ peer_assign = function(org,
                           target_repo = repo_r,
                           target_folder = repo_folder_r,
                           target_files = repo_files_r_patch,
-                          content = repo_content,
+                          content = content_repo,
                           category = "assignment",
                           message = "Adding assignment files",
                           branch = branch,
@@ -223,7 +224,7 @@ peer_assign = function(org,
   peer_issue_create(
     out = out,
     title = "Assigning review",
-    review_rating = "review",
+    step = "rating",
     org = org,
     prefix = prefix,
     suffix = suffix,
@@ -673,13 +674,13 @@ peer_score_review = function(org,
                               }
                             })
 
-  out_temp = tidyr::gather(out_temp, q_name, q_value,-user,-r_no)
+  out_temp = tidyr::gather(out_temp, q_name, q_value, -user, -r_no)
   out_temp = tidyr::unite(out_temp, "new", c("r_no", "q_name"))
   out_temp = tidyr::spread(out_temp, new, q_value)
   out = merge(out_temp, roster, all.y = T)
 
   out = out[, union(names(roster), names(out))]
-  out = out[order(out$user_random), ]
+  out = out[order(out$user_random),]
 
   if (write_csv) {
     fname = glue::glue("{revscores}_{fs::path_file(roster)}")
@@ -758,7 +759,7 @@ peer_score_rating = function(org,
                                 scores = stringr::str_replace_all(scores, "[\\[\\]]", "")
 
                                 inp = stats::setNames(c(as.character(rdf[x, 'reviewer']), r_no, scores),
-                                                c("user", "r_no", paste0("c", 1:length(scores))))
+                                                      c("user", "r_no", paste0("c", 1:length(scores))))
 
                                 tibble::as_tibble(as.list(inp))
 
@@ -770,13 +771,13 @@ peer_score_rating = function(org,
                             })
 
   # Getting data frame in right format
-  out_temp = tidyr::gather(out_temp, q_name, q_value,-user,-r_no)
+  out_temp = tidyr::gather(out_temp, q_name, q_value, -user, -r_no)
   out_temp = tidyr::unite(out_temp, "new", c("r_no", "q_name"))
   out_temp = tidyr::spread(out_temp, new, q_value)
   out = merge(out_temp, roster, all.y = T)
 
   out = out[, union(names(roster), names(out))]
-  out = out[order(out$user_random), ]
+  out = out[order(out$user_random),]
 
   if (write_csv) {
     fname = glue::glue("{autscores}_{fs::path_file(roster)}")
@@ -844,66 +845,154 @@ peer_return = function(org,
   }
 
   # Contents of blank rating form from local file
-  content_rating = local_path_content(local_path_rating)
+  content_rating = local_path_content_grab(local_path_rating)
+
+  # Take snapshot of reviewers' review repos
+  repo_r_og = unique(rdf[['repo_r_rev']])
+  repo_files_r_og = purrr::map(repo_r_og, ~ repo_files(.x))
+
+  # Take snapshot of authors' repos
+  repo_a_og = unique(rdf[['repo_a']])
+  repo_files_a_og = purrr::map(repo_a_og, ~ repo_files(.x))
+
+  # get original content
+  content_og = purrr::map(seq_along(repo_a_og),
+                          function(a) {
+                            repo_path_content_grab(
+                              repo = repo_a_og[a],
+                              path = path,
+                              repo_files = repo_files_a_og[[a]],
+                              branch = branch
+                            )
+                          })
 
   out = purrr::map_dfr(seq_len(nrow(rdf)),
                        function(x) {
                          repo_a = rdf[['repo_a']][x]
+                         n_a = which(repo_a_og == repo_a)
+                         repo_files_a = repo_files_a_og[[n_a]]
+
                          repo_r = rdf[['repo_r_rev']][x]
-                         repo_files_a = repo_files(repo_a)
+                         n_r = which(repo_r_og == repo_r)
+                         repo_folder_r = rdf[['author_random']][x]
+                         repo_files_r = repo_files_r_og[[n_r]]
 
                          # 1. Place rating form if applicable
                          # What if no rating form
                          # Check if the vectorized version still works
-                         if (!is.null(content_rating)) {
-                           rt = peer_add_local(
+                         if (length(content_rating) > 0) {
+                           rt = peer_add_content(
                              target_repo = repo_a,
                              target_folder = rev[x],
                              target_files = repo_files_a,
-                             content = content_rating[['content']],
-                             path = content_rating[['path']],
+                             content = content_rating,
                              category = "rating",
                              message = "Adding rating form",
                              branch = branch,
                              overwrite = overwrite
                            )
-                           rt[['author']] = rdf[['author']][x]
+                         } else {
+                           rt = NULL
                          }
 
+                         if (length(content_rating) > 0) {
+                           repo_files_a_patch = unique(rbind(repo_files_a,
+                                                             rt[names(rt) %in% names(repo_files_a)]))
+                         } else {
+                           repo_files_a_patch = repo_files_a
+                         }
 
                          # 2. place original content
-                         og = peer_mirror_original(
-                           source_repo = repo_a,
-                           path = path,
-                           target_folder = rev[x],
-                           message = "Placing original file",
-                           branch = branch,
-                           overwrite = overwrite
-                         )
-
-                         # 3. Move files from reviewer
-                         mv = peer_mirror_review(
-                           content_og = og,
-                           source_repo = repo_r,
+                         og = peer_add_content(
                            target_repo = repo_a,
-                           path = path,
-                           form_review = form_review,
-                           source_folder = rdf[['author_random']][x],
                            target_folder = rev[x],
-                           message = "Adding reviewer feedback",
-                           branch = branch
+                           target_files = repo_files_a_patch,
+                           content = content_og[[n_a]],
+                           category = "original",
+                           message = "Adding original file",
+                           branch = branch,
+                           overwrite = TRUE
                          )
-                         mv[['author']] = rdf[['author']][x]
 
-                         if (!is.null(content_rating)) {
-                           rbind(rt, mv)
+                         # 3. Move assignment files from reviewer
+                         # (difference will be created from this)
+                         ## i. Grab content from review repos & remove folder
+                         path_folder = glue::glue("{repo_folder_r}/{path}")
+                         content_folder = content_path_folder_strip(
+                           repo_path_content_grab(
+                             repo = repo_r,
+                             path = path_folder,
+                             repo_files = repo_files_r,
+                             branch = branch
+                           ),
+                           repo_folder_r
+                         )
+
+                         repo_files_a_patch2 = unique(rbind(repo_files_a_patch,
+                                                            og[names(og) %in% names(repo_files_a_patch)]))
+
+                         ## ii. Place content
+                         mv = peer_add_content(
+                           target_repo = repo_a,
+                           target_folder = rev[x],
+                           target_files = repo_files_a_patch2,
+                           content = content_folder,
+                           content_compare = content_og[[n_a]],
+                           category = "assignment",
+                           message = "Adding reviewer feedback",
+                           branch = branch,
+                           overwrite = TRUE
+                         )
+
+                         # 4. Move reviewer form
+                         # i. Grab content
+                         if (!is.null(form_review)) {
+                           repo_files_a_patch3 = unique(rbind(repo_files_a_patch2,
+                                                              mv[names(mv) %in% names(repo_files_a_patch2)]))
+
+                           path_review = glue::glue("{repo_folder_r}/{form_review}")
+                           content_review = content_path_folder_strip(
+                             repo_path_content_grab(
+                               repo = repo_r,
+                               path = path_review,
+                               repo_files = repo_files_r,
+                               branch = branch
+                             ),
+                             repo_folder_r
+                           )
+
+                           ## ii. Place content
+                           rv = peer_add_content(
+                             target_repo = repo_a,
+                             target_folder = rev[x],
+                             target_files = repo_files_a_patch3,
+                             content = content_review,
+                             category = "review",
+                             message = "Adding reviewer form",
+                             branch = branch,
+                             overwrite = overwrite
+                           )
                          } else {
-                           mv
+                           rv = NULL
                          }
+
+                         # 5. compile output
+                         rbind(rt, og, mv, rv)
 
                        })
 
-  # 4. Create issue
-  peer_issue_create_rating(out = out)
+  # 6. Create issue
+  # 3. Create issue
+  peer_issue_create(
+    out = out,
+    title = "Returning review",
+    step = "review",
+    org = org,
+    prefix = prefix,
+    suffix = suffix,
+    branch = branch
+  )
+
+  # peer_issue_create_rating(out = out)
 
 }
