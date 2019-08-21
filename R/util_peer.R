@@ -26,7 +26,7 @@ peer_roster_process = function(roster) {
   } else if (is_chr) {
     if (!fs::file_exists(roster))
       usethis::ui_stop("Cannot locate file: {usethis::ui_value(roster)}")
-    tmp = readr::read_csv(roster)
+    tmp = readr::read_csv(roster, col_types = readr::cols())
   } else {
     usethis::ui_stop("{usethis::ui_field('roster')} must be a data.frame or .csv file.")
   }
