@@ -20,13 +20,14 @@ Imports:
     processx,
     stats,
     crayon,
-    readr
+    readr,
+    tidyr,
+    rlang
 Suggests: 
     styler,
     knitr,
     rmarkdown,
     here,
-    tidyr,
     sodium
 License: GPL-3 + file LICENSE
 Encoding: UTF-8

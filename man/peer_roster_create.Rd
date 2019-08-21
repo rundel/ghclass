@@ -23,7 +23,9 @@ peer_roster_create(n_rev, user, seed = NULL, write_csv = TRUE,
 }
 \examples{
 \dontrun{
-peer_roster_create(3, c("anya-ghclass", "bruno-ghclass", "celine-ghclass", "diego-ghclass"), dir = "/Users/profx/introstats/hw2/")
+peer_roster_create(3,
+c("anya-ghclass", "bruno-ghclass", "celine-ghclass", "diego-ghclass"),
+dir = "/Users/profx/introstats/hw2/")
 }
 
 }

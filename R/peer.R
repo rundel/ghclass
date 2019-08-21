@@ -20,7 +20,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' peer_roster_create(3, c("anya-ghclass", "bruno-ghclass", "celine-ghclass", "diego-ghclass"), dir = "/Users/profx/introstats/hw2/")
+#' peer_roster_create(3,
+#' c("anya-ghclass", "bruno-ghclass", "celine-ghclass", "diego-ghclass"),
+#' dir = "/Users/profx/introstats/hw2/")
 #' }
 #'
 #' @family peer review functions
@@ -47,13 +49,9 @@ peer_roster_create = function(n_rev,
   }
   if (write_csv) {
     if (is.null(dir)) {
-      usethis::ui_stop(
-        "No directory specified in {usethis::ui_field('dir')}."
-      )
+      usethis::ui_stop("No directory specified in {usethis::ui_field('dir')}.")
     } else if (!dir.exists(dir)) {
-      usethis::ui_stop(
-        "Directory {usethis::ui_value(dir)} does not exist."
-      )
+      usethis::ui_stop("Directory {usethis::ui_value(dir)} does not exist.")
     }
   }
 
@@ -73,7 +71,7 @@ peer_roster_create = function(n_rev,
 
 
   df_sort = tibble::tibble(user = user,
-                           user_random = user_random)[order(as.numeric(sub("[aA-zZ]+", "", user_random))), ]
+                           user_random = user_random)[order(as.numeric(sub("[aA-zZ]+", "", user_random))),]
 
   df_tmp = purrr::set_names(if (length(user) > 2) {
     out = purrr::map_dfc(res, ~ df_sort[['user_random']][.x])
@@ -211,7 +209,7 @@ peer_assign = function(org,
   # per hour.
   out = purrr::map_df(unique(rdf[['aut']]),
                       function(aut) {
-                        sub = rdf[rdf[['aut']] == aut,]
+                        sub = rdf[rdf[['aut']] == aut, ]
                         repo_aut = unique(sub[['repo_aut']])
                         repo_rev = unique(sub[['repo_rev_review']])
                         repo_files_aut = repo_files(repo = repo_aut, branch = branch)
@@ -680,6 +678,7 @@ peer_file_add_aut = function(org,
 #' prefix = prefix)
 #' }
 #'
+#' @importFrom rlang .data
 #' @family peer review functions
 #'
 #' @export
@@ -730,13 +729,19 @@ peer_score_review = function(org,
                               }
                             })
 
-  out_temp = tidyr::gather(out_temp, q_name, q_value,-user,-rev_no)
-  out_temp = tidyr::unite(out_temp, new, c("rev_no", "q_name"))
-  out_temp = tidyr::spread(out_temp, new, q_value)
+  out_temp = tidyr::gather(
+    out_temp,
+    "q_name",
+    "q_value",
+    -.data$user,
+    -.data$rev_no
+  )
+  out_temp = tidyr::unite(out_temp, "new", c("rev_no", "q_name"))
+  out_temp = tidyr::spread(out_temp, .data$new, .data$q_value)
   out = merge(out_temp, roster, all.y = T)
 
   out = out[, union(names(roster), names(out))]
-  out = out[order(out[['user_random']]), ]
+  out = out[order(out[['user_random']]),]
 
   if (write_csv) {
     fname = glue::glue("{revscores}_{fs::path_file(roster)}")
@@ -770,6 +775,7 @@ peer_score_review = function(org,
 #' prefix = prefix)
 #' }
 #'
+#' @importFrom rlang .data
 #' @family peer review functions
 #'
 #' @export
@@ -827,13 +833,19 @@ peer_score_rating = function(org,
                             })
 
   # Getting data frame in right format
-  out_temp = tidyr::gather(out_temp, q_name, q_value,-user,-rev_no)
-  out_temp = tidyr::unite(out_temp, new, c("rev_no", "q_name"))
-  out_temp = tidyr::spread(out_temp, new, q_value)
+  out_temp = tidyr::gather(
+    out_temp,
+    "q_name",
+    "q_value",
+    -.data$user,
+    -.data$rev_no
+  )
+  out_temp = tidyr::unite(out_temp, "new", c("rev_no", "q_name"))
+  out_temp = tidyr::spread(out_temp, .data$new, .data$q_value)
   out = merge(out_temp, roster, all.y = T)
 
   out = out[, union(names(roster), names(out))]
-  out = out[order(out[['user_random']]), ]
+  out = out[order(out[['user_random']]),]
 
   if (write_csv) {
     fname = glue::glue("{autscores}_{fs::path_file(roster)}")
