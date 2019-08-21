@@ -4,7 +4,8 @@
 \alias{peer_init}
 \title{Initiate peer review repositories}
 \usage{
-peer_init(org, roster, prefix = "", suffix = "")
+peer_init(org, roster, prefix = "", suffix = "", verbose = FALSE,
+  show_label_result = FALSE)
 }
 \arguments{
 \item{org}{Character. Name of GitHub Organization.}
@@ -14,6 +15,10 @@ peer_init(org, roster, prefix = "", suffix = "")
 \item{prefix}{Character. Common repository name prefix.}
 
 \item{suffix}{Character. Common repository name suffix.}
+
+\item{verbose}{Logical. Whether information about label creation should be given, defaults to \code{FALSE}. Issues can still be created even labels were not applied to a particular repository.}
+
+\item{show_label_result}{Logical. Whether a tibble with details on the creation of labels should be returned, defaults to \code{FALSE}.}
 }
 \description{
 \code{peer_init()} initiates peer review repositories. It creates a review repository for each user, adds users to their respective repositories, and applies peer review labels to all repositories (i.e. assignment and review repositories).

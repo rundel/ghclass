@@ -1,3 +1,13 @@
+##---------------------------------------------------------
+# Naming principles
+#
+# rev denotes reviewer
+# aut renotes author
+# _review indicates repositories that are specific for review files
+#
+##---------------------------------------------------------
+
+
 #' Create peer review roster
 #'
 #' `peer_roster_create` creates data frame of random assignments of author files to reviewers. By default, the output is saved to a `.csv` file in the current working directory that incorporates the current date and random seed as part of the file name.
@@ -5,7 +15,8 @@
 #' @param user Character. A vector of GitHub user names.
 #' @param n_rev Numeric. Number of reviews per user. Must be larger than zero and smaller than the number of users.
 #' @param seed Numeric. Random seed for assignment, defaults to `12345`.
-#' @param write_csv Logical. Whether the roster data frame should be saved to a `.csv` file in the current working directory, defaults to TRUE.
+#' @param write_csv Logical. Whether the roster data frame should be written to a `.csv` file in the current working directory, defaults to TRUE.
+#' @param dir Character. Directory where the peer review roster will be written if `write_csv = TRUE`, defaults to current working directory.
 #'
 #' @examples
 #' \dontrun{
@@ -18,43 +29,64 @@
 #'
 peer_roster_create = function(n_rev,
                               user,
-                              seed = 12345,
-                              write_csv = TRUE) {
-  stopifnot(is.numeric(n_rev))
-  stopifnot(is.numeric(seed))
-  arg_is_chr(user)
-  stopifnot(length(user) > 1, n_rev > 0, n_rev < length(user))
+                              seed = NULL,
+                              write_csv = TRUE,
+                              dir = getwd()) {
+  arg_is_chr(user, dir)
+  arg_is_int(n_rev)
+  arg_is_int_scalar(seed, allow_null = TRUE) #fails now
 
-  set.seed(seed)
-  j = sample(2:length(user), n_rev)
+  if (!(length(user) > 1)) {
+    usethis::ui_stop("{usethis::ui_field('user')} must contain more than one user name.")
+  }
+  if (!(n_rev > 0)) {
+    usethis::ui_stop("{usethis::ui_field('n_rev')} must be at least 1.")
+  }
+  if (!(n_rev < length(user))) {
+    usethis::ui_stop(
+      "{usethis::ui_field('n_rev')} must be smaller than the number of users in {usethis::ui_field('user')}."
+    )
+  }
+  if (!dir.exists(dir)) {
+    dir = getwd()
+    usethis::ui_warn(
+      "Directory {usethis::ui_value(dir)} does not exist. Saving to working directory instead."
+    )
+  }
+
+  if (is.null(seed)) {
+    seed = sample.int(1e+06, 1L)
+    usethis::ui_warn("No seed was supplied. Using randomly sampled seed {usethis::ui_value(seed)}")
+  }
+
+  j = withr::with_seed(seed, sample(2:length(user), n_rev))
   res = purrr::map(j, ~ latin_square(.x, length(user)))
 
   # Randomizing user names to avoid clustering
-  # if length(user) == 2, will always res = c(2, 1)
-  set.seed(seed)
-  user_random = paste0("aut", sample(1:length(user), length(user)))
+  user_random = paste0("aut", withr::with_seed(seed, sample(1:length(user), length(user))))
 
-  df_sort = data.frame(user = user,
-                       user_random = as.character(user_random))[order(as.numeric(sub("[aA-zZ]+", "", user_random))),]
+  df_sort = tibble::tibble(user = user,
+                           user_random = user_random)[order(as.numeric(sub("[aA-zZ]+", "", user_random))),]
 
-  res_df = stats::setNames(data.frame(df_sort,
-                                      if (length(user) > 2) {
-                                        purrr::map(res,
-                                                   ~ tibble::tibble(user_random = as.character(df_sort$user_random)[.x]))
-                                      } else {
-                                        rev(user_random)
-                                      }),
-                           c("user", "user_random", purrr::map_chr(1:n_rev, ~ paste0("rev", .x))))
+  df_tmp = purrr::set_names(if (length(user) > 2) {
+    out = purrr::map_dfc(res, ~ df_sort[['user_random']][.x])
+  } else {
+    # if length(user) == 2, will always res = c(2, 1)
+    out = tibble::tibble(rev(user_random))
+  },
+  purrr::map_chr(1:n_rev, ~ paste0("rev", .x)))
 
-  res_df = res_df[order(res_df$user_random),]
+  res_df = tibble::as_tibble(cbind(df_sort, df_tmp))
+  attr(res_df, "seed") <- seed
+  attr(res_df, "username") <- user
+  attributes(res_df)
 
   if (write_csv) {
     fname = glue::glue("roster_seed{seed}.csv")
-    readr::write_csv(res_df, fname)
-    usethis::ui_done("Saved file {usethis::ui_value(fname)} to working directory.")
-  } else {
-    tibble::as_tibble(purrr::modify_if(res_df, is.factor, as.character))
+    readr::write_csv(res_df, glue::glue("{dir}/{fname}"))
+    usethis::ui_done("Saved file {usethis::ui_value(fname)} to {usethis::ui_value(dir)}.")
   }
+  res_df
 }
 
 #' Initiate peer review repositories
@@ -65,6 +97,8 @@ peer_roster_create = function(n_rev,
 #' @param roster Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column `user` with GitHub user names of authors, a column `user_random` with randomized tokens for user names, and one or more `rev*` columns that specify review assignments as values of the vector `user_random`.
 #' @param prefix Character. Common repository name prefix.
 #' @param suffix Character. Common repository name suffix.
+#' @param verbose Logical. Whether information about label creation should be given, defaults to `FALSE`. Issues can still be created even labels were not applied to a particular repository.
+#' @param show_label_result Logical. Whether a tibble with details on the creation of labels should be returned, defaults to `FALSE`.
 #'
 #' @examples
 #' \dontrun{
@@ -77,20 +111,32 @@ peer_roster_create = function(n_rev,
 peer_init = function(org,
                      roster,
                      prefix = "",
-                     suffix = "") {
+                     suffix = "",
+                     verbose = FALSE,
+                     show_label_result = FALSE) {
   arg_is_chr_scalar(org, prefix, suffix)
 
-  prefix_rev = format_rev(prefix, suffix)$prefix_rev
-  suffix_rev = format_rev(prefix, suffix)$suffix_rev
+  prefix_review = format_rev(prefix, suffix)[["prefix_review"]]
+  suffix_review = format_rev(prefix, suffix)[["suffix_review"]]
 
-  rdf = peer_roster_expand(org, roster, prefix, suffix, prefix_rev, suffix_rev)
-  user = unique(rdf$reviewer)
+  rdf = peer_roster_expand(org, roster, prefix, suffix, prefix_review, suffix_review)
+  user = unique(rdf[['rev']])
 
-  repo_create(org = org, name = user, prefix = prefix_rev, suffix = suffix_rev)
-  repo_add_user(glue::glue("{org}/{prefix_rev}{user}{suffix_rev}"), user)
+  repo_create(
+    org = org,
+    name = user,
+    prefix = prefix_review,
+    suffix = suffix_review
+  )
+  repo_add_user(glue::glue("{org}/{prefix_review}{user}{suffix_review}"),
+                user)
 
-  peer_issue_label_apply(org = org,
-                         repo = unique(c(rdf[['repo_a']], rdf[['repo_r_rev']])))
+  peer_issue_label_apply(
+    org = org,
+    repo = unique(c(rdf[['repo_aut']], rdf[['repo_rev_review']])),
+    verbose = verbose,
+    show_label_result = show_label_result
+  )
 
 }
 
@@ -100,11 +146,11 @@ peer_init = function(org,
 #'
 #' @param org Character. Name of GitHub Organization.
 #' @param roster Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column `user` with GitHub user names of authors, a column `user_random` with randomized tokens for user names, and one or more `rev*` columns that specify review assignments as values of the vector `user_random`.
-#' @param path Character. File name or vector of file names to be included. If `NULL`, all files not contained in folders, except `.gitignore`, `.Rhistory`, and `.Rproj`, will be moved to the reviewers' repositories.
+#' @param path Character. File name or vector of file names to be included. If `NULL`, all files not contained in folders, except `.gitignore`, `.Rhistory`, `.Rproj`, `*.html`, `*.md`, and `*.pdf` will be moved to the reviewers' repositories.
 #' @param local_path_review Character. Local file path of review feedback form to be added (must be .Rmd document), defaults to `NULL`. If `NULL`, no review form will be added to authors' repositories.
 #' @param prefix Character. Common repository name prefix.
 #' @param suffix Character. Common repository name suffix.
-#' @param exclude_extension Character. File extensions of files to not be moved to reviewer repositories if `path` is `NULL`, defaults to `c("gitignore", "md", "Rhistory", "Rproj")`.
+#' @param exclude_pattern Character. File extensions of files to not be moved to reviewer repositories if `path` is `NULL`, defaults to `c(".gitignore", ".Rhistory", ".Rproj", "*.html", "*.md", "*.pdf")`.
 #' @param message Character. Commit message, defaults to "Assigning review."
 #' @param branch Character. Name of branch the file should be committed to, defaults to `master`.
 #' @param overwrite Logical. Whether existing files in reviewers' repositories should be overwritten, defaults to `FALSE`.
@@ -130,7 +176,7 @@ peer_assign = function(org,
                        local_path_review = NULL,
                        prefix = "",
                        suffix = "",
-                       exclude_extension = c("gitignore", "md", "Rhistory", "Rproj", "html"),
+                       exclude_pattern = c(".gitignore", ".Rhistory", ".Rproj", "*.html", "*.md", "*.pdf"),
                        message = NULL,
                        branch = "master",
                        overwrite = FALSE) {
@@ -139,67 +185,81 @@ peer_assign = function(org,
   arg_is_chr(path, allow_null = TRUE)
   arg_is_lgl_scalar(overwrite)
 
-  prefix_rev = format_rev(prefix, suffix)$prefix_rev
-  suffix_rev = format_rev(prefix, suffix)$suffix_rev
+  prefix_review = format_rev(prefix, suffix)[['prefix_review']]
+  suffix_review = format_rev(prefix, suffix)[['suffix_review']]
 
-  rdf = peer_roster_expand(org, roster, prefix, suffix, prefix_rev, suffix_rev)
+  rdf = peer_roster_expand(org, roster, prefix, suffix, prefix_review, suffix_review)
 
   # Contents of blank review form from local file
   content_review = local_path_content_grab(local_path = local_path_review,
                                            check_rmd = TRUE)
 
-  out = purrr::map_df(unique(rdf$author),
-                      function(a) {
-                        sub = rdf[rdf[['author']] == a, ]
-                        repo_a = unique(sub[['repo_a']])
-                        repo_r = unique(sub[['repo_r_rev']])
-                        repo_files_a = repo_files(repo = repo_a, branch = branch)
+  # The `purrr::map_df` statement below goes through multiple steps in the
+  # assignment process: i. add review forms (if applicable), determine which
+  # files should be moved from author repositories (if no path is specified
+  # by user), grab the content of the paths, and copy them to each of the
+  # reviewers, and open an issue on reviewers' review repositores.
+  # We keep all the steps in a single iteration over author repositories
+  # in order to reduce calls to the GitHub API, which are limited to 5000
+  # per hour.
+  out = purrr::map_df(unique(rdf[['aut']]),
+                      function(aut) {
+                        sub = rdf[rdf[['aut']] == aut, ]
+                        repo_aut = unique(sub[['repo_aut']])
+                        repo_rev = unique(sub[['repo_rev_review']])
+                        repo_files_aut = repo_files(repo = repo_aut, branch = branch)
 
-                        repo_folder_r = unique(sub[['author_random']])
-                        repo_files_r = repo_files(repo = repo_r, branch = branch)
+                        repo_folder_rev = unique(sub[['aut_random']])
+                        repo_files_rev = repo_files(repo = repo_rev, branch = branch)
 
                         # 1. Place rating form
                         # iterates over target_repo, but not content
                         if (length(content_review) > 0) {
                           rv = peer_add_content(
-                            target_repo = repo_r,
-                            target_folder = repo_folder_r,
-                            target_files = repo_files_r,
+                            target_repo = repo_rev,
+                            target_folder = repo_folder_rev,
+                            target_files = repo_files_rev,
                             content = content_review,
                             category = "review",
                             message = "Adding review form",
                             branch = branch,
                             overwrite = overwrite
                           )
+
+                          # Keeping track of added files manually to reduce API calls
+                          # repo_files_rev_patch is used in peer_add_content below to check whether
+                          # whether file exists on reviewer repository
+                          repo_files_rev_patch = unique(rbind(repo_files_rev,
+                                                              rv[names(rv) %in% names(repo_files_rev)]))
+
+                        } else {
+                          repo_files_rev = repo_files_rev
                         }
 
-                        # 2. Mirror files to reviewers
+                        # 2. Copy files to reviewers
                         ## i.  Select paths
                         if (is.null(path)) {
-                          path = repo_files_select(repo = repo_a,
-                                                   repo_files = repo_files_a,
-                                                   exclude_extension = exclude_extension,
-                                                   branch = branch)
+                          path = repo_files_select(
+                            repo = repo_aut,
+                            repo_files = repo_files_aut,
+                            exclude_pattern = exclude_pattern,
+                            branch = branch
+                          )
                         }
 
                         ## ii. Grab content
-                        content_repo = repo_path_content_grab(repo = repo_a,
-                                                              path = path,
-                                                              repo_files = repo_files_a,
-                                                              branch = branch)
-
-                        if (length(content_review) > 0) {
-                          repo_files_r_patch = unique(rbind(repo_files_r,
-                                                            rv[names(rv) %in% names(repo_files_r)]))
-                        } else {
-                          repo_files_r_patch = repo_files_r
-                        }
+                        content_repo = repo_path_content_grab(
+                          repo = repo_aut,
+                          path = path,
+                          repo_files = repo_files_aut,
+                          branch = branch
+                        )
 
                         ## iii. Place content
                         mr = peer_add_content(
-                          target_repo = repo_r,
-                          target_folder = repo_folder_r,
-                          target_files = repo_files_r_patch,
+                          target_repo = repo_rev,
+                          target_folder = repo_folder_rev,
+                          target_files = repo_files_rev_patch,
                           content = content_repo,
                           category = "assignment",
                           message = "Adding assignment files",
@@ -222,8 +282,6 @@ peer_assign = function(org,
   )
 
 }
-
-
 
 
 #' Create reviewer feedback form
@@ -487,10 +545,10 @@ peer_file_add_rev = function(org,
   arg_is_chr(local_path)
   arg_is_lgl(overwrite, verbose)
 
-  prefix_rev = format_rev(prefix, suffix)$prefix_rev
-  suffix_rev = format_rev(prefix, suffix)$suffix_rev
+  prefix_review = format_rev(prefix, suffix)[['prefix_review']]
+  suffix_review = format_rev(prefix, suffix)[['suffix_review']]
 
-  rdf = peer_roster_expand(org, roster, prefix, suffix, prefix_rev, suffix_rev)
+  rdf = peer_roster_expand(org, roster, prefix, suffix, prefix_review, suffix_review)
 
   file_status = fs::file_exists(local_path)
   if (any(!file_status))
@@ -498,16 +556,16 @@ peer_file_add_rev = function(org,
       "Unable to locate the following file(s): {usethis::ui_value(local_path[!file_status])}"
     )
 
-  rev = unique(rdf[['repo_r_rev']])
+  rev = unique(rdf[['repo_rev_review']])
 
   purrr::walk(rev,
-              function(x) {
-                repo_files = repo_files(x, branch = branch)
-                aut = rdf[['author_random']][rdf[['repo_r_rev']] == x]
+              function(rev) {
+                repo_files = repo_files(rev, branch = branch)
+                aut = rdf[['aut_random']][rdf[['repo_rev_review']] == rev]
 
                 peer_file_place(
                   repo_files = repo_files,
-                  target_repo = x,
+                  target_repo = rev,
                   input = purrr::cross2(aut, local_path),
                   message = message,
                   branch = branch,
@@ -559,10 +617,10 @@ peer_file_add_aut = function(org,
   arg_is_chr(local_path)
   arg_is_lgl(double_blind, overwrite, verbose)
 
-  prefix_rev = format_rev(prefix, suffix)$prefix_rev
-  suffix_rev = format_rev(prefix, suffix)$suffix_rev
+  prefix_review = format_rev(prefix, suffix)[['prefix_review']]
+  suffix_review = format_rev(prefix, suffix)[['suffix_review']]
 
-  rdf = peer_roster_expand(org, roster, prefix, suffix, prefix_rev, suffix_rev)
+  rdf = peer_roster_expand(org, roster, prefix, suffix, prefix_review, suffix_review)
 
   file_status = fs::file_exists(local_path)
   if (any(!file_status))
@@ -570,20 +628,20 @@ peer_file_add_aut = function(org,
       "Unable to locate the following file(s): {usethis::ui_value(local_path[!file_status])}"
     )
 
-  aut = unique(rdf[['repo_a']])
+  aut = unique(rdf[['repo_aut']])
 
   purrr::walk(aut,
-              function(x) {
-                repo_files = repo_files(x)
+              function(aut) {
+                repo_files = repo_files(aut)
                 if (!double_blind) {
-                  rev = rdf[['reviewer']][rdf[['repo_a']] == x]
+                  rev = rdf[['rev']][rdf[['repo_aut']] == aut]
                 } else {
-                  rev = rdf[['reviewer_no']][rdf[['repo_a']] == x]
+                  rev = rdf[['rev_no']][rdf[['repo_aut']] == aut]
                 }
 
                 peer_file_place(
                   repo_files = repo_files,
-                  target_repo = x,
+                  target_repo = aut,
                   input = purrr::cross2(rev, local_path),
                   message = message,
                   branch = branch,
@@ -634,28 +692,28 @@ peer_score_review = function(org,
     usethis::ui_stop("{usethis::ui_field('form_review')} must be a {usethis::ui_path('.Rmd')} file.")
   }
 
-  prefix_rev = format_rev(prefix, suffix)$prefix_rev
-  suffix_rev = format_rev(prefix, suffix)$suffix_rev
+  prefix_review = format_rev(prefix, suffix)[['prefix_review']]
+  suffix_review = format_rev(prefix, suffix)[['suffix_review']]
 
-  rdf = peer_roster_expand(org, roster, prefix, suffix, prefix_rev, suffix_rev)
+  rdf = peer_roster_expand(org, roster, prefix, suffix, prefix_review, suffix_review)
 
   out_temp = purrr::map_dfr(seq_len(nrow(rdf)),
                             function(x) {
-                              repo = as.character(rdf[x, 'repo_r_rev'])
-                              ghpath = glue::glue("{as.character(rdf[x, 'author_random'])}/{form_review}")
-                              r_no = as.character(rdf[x, 'reviewer_no'])
+                              repo = as.character(rdf[x, 'repo_rev_review'])
+                              ghpath = glue::glue("{as.character(rdf[x, 'aut_random'])}/{form_review}")
+                              rev_no = as.character(rdf[x, 'rev_no'])
 
                               feedback = purrr::safely(repo_get_file)(repo = repo,
                                                                       file = ghpath)
 
                               if (succeeded(feedback)) {
-                                tc = textConnection(feedback$result)
-                                scores = rmarkdown::yaml_front_matter(tc)$params
+                                tc = textConnection(feedback[['result']])
+                                scores = rmarkdown::yaml_front_matter(tc)[['params']]
                                 scores[scores == "[INSERT SCORE]"] = NA
-                                scores = purrr::map_chr(scores, ~gsub("[][]", "", .x))
+                                scores = purrr::map_chr(scores, ~ gsub("[][]", "", .x))
 
-                                inp = stats::setNames(c(as.character(rdf[x, 'author']), r_no, scores),
-                                                      c("user", "r_no", paste0("q", 1:length(scores))))
+                                inp = stats::setNames(c(as.character(rdf[x, 'aut']), rev_no, scores),
+                                                      c("user", "rev_no", paste0("q", 1:length(scores))))
                                 tibble::as_tibble(as.list(inp))
 
                               } else {
@@ -665,13 +723,13 @@ peer_score_review = function(org,
                               }
                             })
 
-  out_temp = tidyr::gather(out_temp, .data$q_name, .data$q_value, -.data$user, -.data$r_no)
-  out_temp = tidyr::unite(out_temp, .data$new, c("r_no", "q_name"))
-  out_temp = tidyr::spread(out_temp, .data$new, .data$q_value)
+  out_temp = tidyr::gather(out_temp, q_name, q_value, -user, -rev_no)
+  out_temp = tidyr::unite(out_temp, new, c("rev_no", "q_name"))
+  out_temp = tidyr::spread(out_temp, new, q_value)
   out = merge(out_temp, roster, all.y = T)
 
   out = out[, union(names(roster), names(out))]
-  out = out[order(out$user_random),]
+  out = out[order(out[['user_random']]),]
 
   if (write_csv) {
     fname = glue::glue("{revscores}_{fs::path_file(roster)}")
@@ -725,32 +783,32 @@ peer_score_rating = function(org,
     usethis::ui_stop("{usethis::ui_field('form_rating')} must be a {usethis::ui_path('.Rmd')} file.")
   }
 
-  prefix_rev = format_rev(prefix, suffix)$prefix_rev
-  suffix_rev = format_rev(prefix, suffix)$suffix_rev
+  prefix_review = format_rev(prefix, suffix)[['prefix_review']]
+  suffix_review = format_rev(prefix, suffix)[['suffix_review']]
 
-  rdf = peer_roster_expand(org, roster, prefix, suffix, prefix_rev, suffix_rev)
+  rdf = peer_roster_expand(org, roster, prefix, suffix, prefix_review, suffix_review)
 
   out_temp = purrr::map_dfr(seq_len(nrow(rdf)),
                             function(x) {
-                              repo = as.character(rdf[x, 'repo_a'])
+                              repo = as.character(rdf[x, 'repo_aut'])
                               if (double_blind) {
-                                ghpath = glue::glue("{as.character(rdf[x, 'reviewer_no'])}/{form_rating}")
+                                ghpath = glue::glue("{as.character(rdf[x, 'rev_no'])}/{form_rating}")
                               } else {
-                                ghpath = glue::glue("{as.character(rdf[x, 'reviewer'])}/{form_rating}")
+                                ghpath = glue::glue("{as.character(rdf[x, 'rev'])}/{form_rating}")
                               }
-                              r_no = as.character(rdf[x, 'reviewer_no'])
+                              rev_no = as.character(rdf[x, 'rev_no'])
 
                               feedback = purrr::safely(repo_get_file)(repo = repo,
                                                                       file = ghpath)
 
                               if (succeeded(feedback)) {
-                                tc = textConnection(feedback$result)
-                                scores = rmarkdown::yaml_front_matter(tc)$params
+                                tc = textConnection(feedback[['result']])
+                                scores = rmarkdown::yaml_front_matter(tc)[['params']]
                                 scores[scores == "[INSERT SCORE]"] = NA
-                                scores = purrr::map_chr(scores, ~gsub("[][]", "", .x))
+                                scores = purrr::map_chr(scores, ~ gsub("[][]", "", .x))
 
-                                inp = stats::setNames(c(as.character(rdf[x, 'reviewer']), r_no, scores),
-                                                      c("user", "r_no", paste0("c", 1:length(scores))))
+                                inp = stats::setNames(c(as.character(rdf[x, 'rev']), rev_no, scores),
+                                                      c("user", "rev_no", paste0("c", 1:length(scores))))
 
                                 tibble::as_tibble(as.list(inp))
 
@@ -762,13 +820,13 @@ peer_score_rating = function(org,
                             })
 
   # Getting data frame in right format
-  out_temp = tidyr::gather(out_temp, .data$q_name, .data$q_value, -.data$user, -.data$r_no)
-  out_temp = tidyr::unite(out_temp, .data$new, c("r_no", "q_name"))
-  out_temp = tidyr::spread(out_temp, .data$new, .data$q_value)
+  out_temp = tidyr::gather(out_temp, q_name, q_value, -user, -rev_no)
+  out_temp = tidyr::unite(out_temp, new, c("rev_no", "q_name"))
+  out_temp = tidyr::spread(out_temp, new, q_value)
   out = merge(out_temp, roster, all.y = T)
 
   out = out[, union(names(roster), names(out))]
-  out = out[order(out$user_random),]
+  out = out[order(out[['user_random']]),]
 
   if (write_csv) {
     fname = glue::glue("{autscores}_{fs::path_file(roster)}")
@@ -827,153 +885,164 @@ peer_return = function(org,
   arg_is_chr_scalar(message, form_review, local_path_rating, allow_null = TRUE)
   arg_is_lgl_scalar(overwrite)
 
-  prefix_rev = format_rev(prefix, suffix)$prefix_rev
-  suffix_rev = format_rev(prefix, suffix)$suffix_rev
+  prefix_review = format_rev(prefix, suffix)[['prefix_review']]
+  suffix_review = format_rev(prefix, suffix)[['suffix_review']]
 
-  rdf = peer_roster_expand(org, roster, prefix, suffix, prefix_rev, suffix_rev)
+  rdf = peer_roster_expand(org, roster, prefix, suffix, prefix_review, suffix_review)
 
   if (!double_blind) {
-    rev = rdf[['reviewer']]
+    rev = rdf[['rev']]
   } else {
-    rev = rdf[['reviewer_no']]
+    rev = rdf[['rev_no']]
   }
 
   # Contents of blank rating form from local file
   content_rating = local_path_content_grab(local_path_rating)
 
   # Take snapshot of reviewers' review repos
-  repo_r_og = unique(rdf[['repo_r_rev']])
-  repo_files_r_og = purrr::map(repo_r_og, ~ repo_files(.x))
+  repo_rev_og = unique(rdf[['repo_rev_review']])
+  repo_files_rev_og = purrr::map(repo_rev_og, ~ repo_files(.x))
 
   # Take snapshot of authors' repos
-  repo_a_og = unique(rdf[['repo_a']])
-  repo_files_a_og = purrr::map(repo_a_og, ~ repo_files(.x))
+  repo_aut_og = unique(rdf[['repo_aut']])
+  repo_files_aut_og = purrr::map(repo_aut_og, ~ repo_files(.x))
 
   # get original content
-  content_og = purrr::map(seq_along(repo_a_og),
+  content_og = purrr::map(seq_along(repo_aut_og),
                           function(a) {
                             repo_path_content_grab(
-                              repo = repo_a_og[a],
+                              repo = repo_aut_og[a],
                               path = path,
-                              repo_files = repo_files_a_og[[a]],
+                              repo_files = repo_files_aut_og[[a]],
                               branch = branch
                             )
                           })
 
-  out = purrr::map_dfr(seq_len(nrow(rdf)),
-                       function(x) {
-                         repo_a = rdf[['repo_a']][x]
-                         n_a = which(repo_a_og == repo_a)
-                         repo_files_a = repo_files_a_og[[n_a]]
+  # The `purrr::map_df` statement below goes through multiple steps in the
+  # return review process: add rating forms (if applicable), copy authors'
+  # original content into reviewer-specific folders on authors' repositories
+  # (to create a difference view on GitHub for the author), copy select
+  # assignment files from reviewer to author repositores, copy completed review
+  # forms from reviewer to author repositores, and create an issue for the author.
+  # We keep all the steps in a single iteration over author repositories
+  # in order to reduce calls to the GitHub API, which are limited to 5000
+  # per hour.
+  out = purrr::map_df(seq_len(nrow(rdf)),
+                      function(x) {
+                        repo_aut = rdf[['repo_aut']][x]
+                        n_a = which(repo_aut_og == repo_aut)
+                        repo_files_aut = repo_files_aut_og[[n_a]]
 
-                         repo_r = rdf[['repo_r_rev']][x]
-                         n_r = which(repo_r_og == repo_r)
-                         repo_folder_r = rdf[['author_random']][x]
-                         repo_files_r = repo_files_r_og[[n_r]]
+                        repo_rev = rdf[['repo_rev_review']][x]
+                        n_r = which(repo_rev_og == repo_rev)
+                        repo_folder_rev = rdf[['aut_random']][x]
+                        repo_files_rev = repo_files_rev_og[[n_r]]
 
-                         # 1. Place rating form if applicable
-                         # What if no rating form
-                         # Check if the vectorized version still works
-                         if (length(content_rating) > 0) {
-                           rt = peer_add_content(
-                             target_repo = repo_a,
-                             target_folder = rev[x],
-                             target_files = repo_files_a,
-                             content = content_rating,
-                             category = "rating",
-                             message = "Adding rating form",
-                             branch = branch,
-                             overwrite = overwrite
-                           )
-                         } else {
-                           rt = NULL
-                         }
+                        # 1. Place rating form if applicable
+                        # What if no rating form
+                        # Check if the vectorized version still works
+                        if (length(content_rating) > 0) {
+                          rt = peer_add_content(
+                            target_repo = repo_aut,
+                            target_folder = rev[x],
+                            target_files = repo_files_aut,
+                            content = content_rating,
+                            category = "rating",
+                            message = "Adding rating form",
+                            branch = branch,
+                            overwrite = overwrite
+                          )
 
-                         if (length(content_rating) > 0) {
-                           repo_files_a_patch = unique(rbind(repo_files_a,
-                                                             rt[names(rt) %in% names(repo_files_a)]))
-                         } else {
-                           repo_files_a_patch = repo_files_a
-                         }
+                          # Keeping track of added files manually to reduce API calls
+                          # repo_files_aut_path used in peer_add_content below to check
+                          # whether file exists on author repository
+                          repo_files_aut_patch = unique(rbind(repo_files_aut,
+                                                              rt[names(rt) %in% names(repo_files_aut)]))
+                        } else {
+                          rt = NULL
+                          repo_files_aut_patch = repo_files_aut
+                        }
 
-                         # 2. place original content
-                         og = peer_add_content(
-                           target_repo = repo_a,
-                           target_folder = rev[x],
-                           target_files = repo_files_a_patch,
-                           content = content_og[[n_a]],
-                           category = "original",
-                           message = "Adding original file",
-                           branch = branch,
-                           overwrite = TRUE
-                         )
+                        # 2. place original content
+                        og = peer_add_content(
+                          target_repo = repo_aut,
+                          target_folder = rev[x],
+                          target_files = repo_files_aut_patch,
+                          content = content_og[[n_a]],
+                          category = "original",
+                          message = "Adding original file",
+                          branch = branch,
+                          overwrite = TRUE
+                        )
 
-                         # 3. Move assignment files from reviewer
-                         # (difference will be created from this)
-                         ## i. Grab content from review repos & remove folder
-                         path_folder = glue::glue("{repo_folder_r}/{path}")
-                         content_folder = content_path_folder_strip(
-                           repo_path_content_grab(
-                             repo = repo_r,
-                             path = path_folder,
-                             repo_files = repo_files_r,
-                             branch = branch
-                           ),
-                           repo_folder_r
-                         )
+                        # 3. Copy assignment files from reviewer
+                        # (difference will be created from this)
+                        ## i. Grab content from review repos & remove folder
+                        path_folder = glue::glue("{repo_folder_rev}/{path}")
+                        content_folder = content_path_folder_strip(
+                          repo_path_content_grab(
+                            repo = repo_rev,
+                            path = path_folder,
+                            repo_files = repo_files_rev,
+                            branch = branch
+                          ),
+                          repo_folder_rev
+                        )
 
-                         repo_files_a_patch2 = unique(rbind(repo_files_a_patch,
-                                                            og[names(og) %in% names(repo_files_a_patch)]))
+                        # Keeping track of files on author repositores to reduce API calls
+                        repo_files_aut_patch2 = unique(rbind(repo_files_aut_patch,
+                                                             og[names(og) %in% names(repo_files_aut_patch)]))
 
-                         ## ii. Place content
-                         mv = peer_add_content(
-                           target_repo = repo_a,
-                           target_folder = rev[x],
-                           target_files = repo_files_a_patch2,
-                           content = content_folder,
-                           content_compare = content_og[[n_a]],
-                           category = "assignment",
-                           message = "Adding reviewer feedback",
-                           branch = branch,
-                           overwrite = TRUE
-                         )
+                        ## ii. Place content
+                        mv = peer_add_content(
+                          target_repo = repo_aut,
+                          target_folder = rev[x],
+                          target_files = repo_files_aut_patch2,
+                          content = content_folder,
+                          content_compare = content_og[[n_a]],
+                          category = "assignment",
+                          message = "Adding reviewer feedback",
+                          branch = branch,
+                          overwrite = TRUE
+                        )
 
-                         # 4. Move reviewer form
-                         # i. Grab content
-                         if (!is.null(form_review)) {
-                           repo_files_a_patch3 = unique(rbind(repo_files_a_patch2,
-                                                              mv[names(mv) %in% names(repo_files_a_patch2)]))
+                        # 4. Move reviewer form
+                        # i. Grab content
+                        if (!is.null(form_review)) {
+                          # Keeping track of files on author repositores to reduce API calls
+                          repo_files_aut_patch3 = unique(rbind(repo_files_aut_patch2,
+                                                               mv[names(mv) %in% names(repo_files_aut_patch2)]))
 
-                           path_review = glue::glue("{repo_folder_r}/{form_review}")
-                           content_review = content_path_folder_strip(
-                             repo_path_content_grab(
-                               repo = repo_r,
-                               path = path_review,
-                               repo_files = repo_files_r,
-                               branch = branch
-                             ),
-                             repo_folder_r
-                           )
+                          path_review = glue::glue("{repo_folder_rev}/{form_review}")
+                          content_review = content_path_folder_strip(
+                            repo_path_content_grab(
+                              repo = repo_rev,
+                              path = path_review,
+                              repo_files = repo_files_rev,
+                              branch = branch
+                            ),
+                            repo_folder_rev
+                          )
 
-                           ## ii. Place content
-                           rv = peer_add_content(
-                             target_repo = repo_a,
-                             target_folder = rev[x],
-                             target_files = repo_files_a_patch3,
-                             content = content_review,
-                             category = "review",
-                             message = "Adding reviewer form",
-                             branch = branch,
-                             overwrite = overwrite
-                           )
-                         } else {
-                           rv = NULL
-                         }
+                          ## ii. Place content
+                          rv = peer_add_content(
+                            target_repo = repo_aut,
+                            target_folder = rev[x],
+                            target_files = repo_files_aut_patch3,
+                            content = content_review,
+                            category = "review",
+                            message = "Adding reviewer form",
+                            branch = branch,
+                            overwrite = overwrite
+                          )
+                        } else {
+                          rv = NULL
+                        }
 
-                         # 5. compile output
-                         rbind(rt, og, mv, rv)
+                        # 5. compile output
+                        rbind(rt, og, mv, rv)
 
-                       })
+                      })
 
   # 6. Create issue
   peer_issue_create(

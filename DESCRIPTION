@@ -19,13 +19,13 @@ Imports:
     glue,
     processx,
     stats,
-    crayon
+    crayon,
+    readr
 Suggests: 
     styler,
     knitr,
     rmarkdown,
     here,
-    readr,
     tidyr,
     sodium
 License: GPL-3 + file LICENSE

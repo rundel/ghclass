@@ -1,14 +1,13 @@
 format_rev = function(prefix, suffix) {
   tag = "review"
   if (prefix != "" & suffix == "") {
-    list(prefix_rev = paste0(prefix, tag, "-"),
-         suffix_rev = suffix)
+    list(prefix_review = paste0(prefix, tag, "-"),
+         suffix_review = suffix)
   } else {
-    list(prefix_rev = prefix,
-         suffix_rev = paste0(suffix, "-", tag))
+    list(prefix_review = prefix,
+         suffix_review = paste0(suffix, "-", tag))
   }
 }
-
 
 
 # Helper function for Latin square
@@ -18,37 +17,64 @@ latin_square = function(j, n) {
 }
 
 # Reads roster file
-peer_roster_read = function(roster) {
-  res = purrr::safely(fs::file_exists)(roster)
+peer_roster_process = function(roster) {
+  is_df = is.data.frame(roster)
+  is_chr = is.character(roster)
 
-  if (is.null(res$result) & is.data.frame(roster)) {
-    rdf = tibble::as_tibble(purrr::modify_if(roster, is.factor, as.character))
-  } else if (is.null(res$result) & !is.data.frame(roster)) {
+  if (is_df) {
+    tmp = tibble::as_tibble(purrr::modify_if(roster, is.factor, as.character))
+  } else if (is_chr) {
+    if (fs::file_exists(roster)) {
+      res = suppressMessages(purrr::safely(readr::read_csv)(roster))
+      status_msg(res,
+                 fail = "Cannot read {usethis::ui_field('roster')}.")
+      if (succeeded(res))
+        tmp = res[["result"]]
+    } else {
+      usethis::ui_stop("Cannot locate file: {usethis::ui_value(roster)}")
+    }
+  } else {
     usethis::ui_stop("{usethis::ui_field('roster')} must be a data.frame or .csv file.")
-  } else if (!res$result) {
-    usethis::ui_stop("Cannot locate file: {usethis::ui_value(roster)}")
-  } else if (res$result) {
-    rdf = suppressMessages(readr::read_csv(roster))
   }
 
-  rdf
-
+  rdf = peer_roster_check(tmp)
+  if (!is.null(rdf)) {
+    rdf
+  } else {
+    usethis::ui_stop(
+      "Please supply a peer review roster in the expected format (see reference for `peer_roster_create()`)."
+    )
+  }
 }
 
 # Checks whether necessary column names are present
 peer_roster_check = function(roster) {
+  # Check user and user_random colnames
   val = c("user", "user_random")
-  purrr::walk(val,
-              function(val) {
-                if (!(val %in% names(roster))) {
-                  usethis::ui_oops("{usethis::ui_field('roster')} must contain column {usethis::ui_value(val)}")
-                }
-              })
+  passed1 = purrr::map_lgl(val,
+                           function(val) {
+                             if (!(val %in% names(roster))) {
+                               usethis::ui_oops("{usethis::ui_field('roster')} must contain column {usethis::ui_value(val)}")
+                               FALSE
+                             } else {
+                               TRUE
+                             }
+                           })
 
+  # Check rev* colname(s)
+  val2 = "rev*"
+  passed2 = TRUE
   if (!(any(grepl("^rev[0-9]+$", names(roster))))) {
     usethis::ui_oops(
-      "{usethis::ui_field('roster')} must contain at least one column {usethis::ui_field('rev*')}"
+      "{usethis::ui_field('roster')} must contain at least one column {usethis::ui_value(val2)}, where '*' denotes a reviewer number."
     )
+    passed2 = FALSE
+  }
+
+  if (!all(c(passed1, passed2))) {
+    NULL
+  } else {
+    roster
   }
 }
 
@@ -57,48 +83,50 @@ peer_roster_expand = function(org,
                               roster,
                               prefix = "",
                               suffix = "",
-                              prefix_rev = "",
-                              suffix_rev = "") {
-  arg_is_chr_scalar(org, prefix, suffix, prefix_rev, suffix_rev)
+                              prefix_review = "",
+                              suffix_review = "") {
+  arg_is_chr_scalar(org, prefix, suffix, prefix_review, suffix_review)
 
-  rdf = peer_roster_read(roster)
-  peer_roster_check(rdf)
+  rdf = peer_roster_process(roster)
 
-  out = purrr::map_dfr(rdf[['user']],
-                       function(y) {
-                         tibble::tibble(
-                           author = y,
-                           author_random = as.character(rdf[rdf$user == y, 'user_random']),
-                           repo_a = as.character(glue::glue("{org}/{prefix}{y}{suffix}")),
-                           reviewer = peer_get_reviewer(y, rdf, "reviewer"),
-                           reviewer_random = peer_get_reviewer(y, rdf, "reviewer_random"),
-                           reviewer_no = peer_get_reviewer(y, rdf, "reviewer_no"),
-                           repo_r = as.character(glue::glue("{org}/{prefix}{reviewer}{suffix}")),
-                           repo_r_rev = as.character(glue::glue(
-                             "{org}/{prefix_rev}{reviewer}{suffix_rev}"
-                           ))
-                         )
-                       })
+  out = peer_roster_format_cols(rdf, prefix, suffix, prefix_review, suffix_review)
+
   out
 }
 
-# Grab reviewer for author
-peer_get_reviewer = function(author,
-                             roster,
-                             out = c("reviewer",
-                                     "reviewer_random",
-                                     "reviewer_no")) {
-  m = seq_len(length(names(roster)[grepl("^rev[0-9]+$", names(roster))]))
-  reviewer_random = as.character(roster[roster$user == author, paste0("rev", m)])
-  reviewer = roster$user[purrr::map_int(reviewer_random, ~ which(roster$user_random == .x))]
-  reviewer_no = names(roster)[purrr::map_int(reviewer_random, ~ which(roster[roster$user == author,] == .x))]
+peer_roster_format_cols = function(roster, prefix, suffix, prefix_review, suffix_review) {
+  purrr::map_df(roster[["user"]],
+    ~ tibble::tibble(
+      aut = .x,
+      aut_random = as.character(roster[["user_random"]][roster[["user"]] == .x]),
+      repo_aut = paste0(org, "/", prefix, .x, suffix),
+      rev = peer_get_rev(.x, roster, "rev"),
+      rev_random = peer_get_rev(.x, roster, "rev_random"),
+      rev_no = peer_get_rev(.x, roster, "rev_no"),
+      repo_rev = paste0(org, "/", prefix, rev, suffix),
+      repo_rev_review = paste0(org, "/", prefix_review, rev, suffix_review),
+    )
+  )
+}
 
-  if (out == "reviewer") {
-    reviewer
-  } else if (out == "reviewer_random") {
-    reviewer_random
-  } else if (out == "reviewer_no") {
-    reviewer_no
+
+# Grab reviewer for author
+peer_get_rev = function(aut,
+                        roster,
+                        out = c("rev",
+                                "rev_random",
+                                "rev_no")) {
+  m = seq_len(length(names(roster)[grepl("^rev[0-9]+$", names(roster))]))
+  rev_random = as.character(roster[roster[["user"]] == aut, paste0("rev", m)])
+  rev = roster[["user"]][purrr::map_int(rev_random, ~ which(roster[["user_random"]] == .x))]
+  rev_no = names(roster)[purrr::map_int(rev_random, ~ which(roster[roster[["user"]] == aut,] == .x))]
+
+  if (out == "rev") {
+    rev
+  } else if (out == "rev_random") {
+    rev_random
+  } else if (out == "rev_no") {
+    rev_no
   }
 }
 
@@ -129,41 +157,49 @@ github_api_label_create = function(repo, name, color, description) {
   )
 }
 
-peer_issue_label_create = function(repo, verbose = FALSE) {
+peer_issue_label_create = function(repo) {
   arg_is_chr(repo)
 
   name = c(":pencil: Complete review", ":mag: Inspect review")
   color = c("ff004d", "ffb400")
   desc = c("Please complete review", "Please inspect and rate review")
 
-  purrr::pwalk(list(name, color, desc),
-               function(name, color, desc) {
-                 res = purrr::safely(github_api_label_create)(
-                   repo = repo,
-                   name = name,
-                   color = color,
-                   description = desc
-                 )
+  purrr::pmap_dfr(list(name, color, desc),
+                  function(name, color, desc) {
+                    res = purrr::safely(github_api_label_create)(
+                      repo = repo,
+                      name = name,
+                      color = color,
+                      description = desc
+                    )
 
-                 if (verbose) {
-                   status_msg(
-                     res,
-                     glue::glue("Created label {usethis::ui_value(name)}"),
-                     glue::glue("Failed to create label {usethis::ui_value(name)}")
-                   )
-                 }
-               })
+                    if (succeeded(res)) {
+                      created = TRUE
+                      error = NA
+                    } else {
+                      created = FALSE
+                      error = res[["error"]][["headers"]][["status"]]
+                    }
+                    tibble::tibble(
+                      repo = repo,
+                      label = name,
+                      created = created,
+                      error = error
+                    )
+                  })
 }
 
 
 peer_issue_label_apply = function(org,
                                   repo = NULL,
                                   filter = NULL,
-                                  exclude = FALSE) {
+                                  exclude = FALSE,
+                                  verbose = FALSE,
+                                  show_label_result = FALSE) {
   arg_is_chr_scalar(org)
   arg_is_chr_scalar(filter, allow_null = TRUE)
   arg_is_chr(repo, allow_null = TRUE)
-  arg_is_lgl(exclude)
+  arg_is_lgl(exclude, verbose, show_label_result)
 
   if (is.null(repo)) {
     repo = org_repos(
@@ -175,9 +211,37 @@ peer_issue_label_apply = function(org,
   }
 
   usethis::ui_info("Applying labels: This might take a moment...")
-  purrr::walk(repo, ~ peer_issue_label_create(.))
-  usethis::ui_done("Applied peer review labels to repositories.")
+  out = purrr::map_dfr(repo, ~ peer_issue_label_create(.x))
 
+  # TODO: Improve messaging about label creation
+  # Note that the 422 error likely means that the label already exists.
+  if (verbose)
+    peer_issue_label_apply_msg(out)
+
+  if (show_label_result)
+    out
+
+}
+
+peer_issue_label_apply_msg = function(label_df) {
+  purrr::walk(unique(label_df[["label"]]),
+              function(x) {
+                repo_label_yes = label_df[["repo"]][label_df[["label"]] == x &
+                                                      label_df[["created"]]]
+                repo_label_no = label_df[["repo"]][label_df[["label"]] == x &
+                                                     !label_df[["created"]]]
+
+                if (length(repo_label_yes) > 0)
+                  usethis::ui_done(
+                    "Created label {usethis::ui_value(x)} for {usethis::ui_value(length(repo_label_yes))} repositories."
+                  )
+
+                if (length(repo_label_no) > 0)
+                  usethis::ui_oops(
+                    "Failed to create label {usethis::ui_value(x)} for {usethis::ui_value(length(repo_label_no))} repositories. The label may already exist. Re-run with `show_label_result = TRUE` for more information."
+                  )
+
+              })
 }
 
 peer_issue_create = function(out,
@@ -235,7 +299,6 @@ peer_issue_create = function(out,
 
 
 peer_issue_body_review = function(sub, url_start) {
-
   aut = unique(sub[['target_folder']])
 
   rev_txt = purrr::map_chr(aut,
@@ -290,7 +353,6 @@ issue_txt_complete_review = function(sub, aut, url_start) {
 
 
 peer_issue_body_rating = function(sub, url_start = url_start) {
-
   rev = unique(sub[['target_folder']])
 
   rev_txt = purrr::map_chr(rev,
@@ -359,7 +421,7 @@ issue_txt_read_review = function(sub, rev, url_start = url_start) {
 
 issue_txt_complete_rating = function(sub, rev, url_start = url_start) {
   tmp = sub[sub[['category']] == "rating" &
-               sub[['target_folder']] == rev, ]
+              sub[['target_folder']] == rev, ]
 
   if (nrow(tmp) > 0) {
     arg_is_chr_scalar(tmp[['path']])
@@ -428,23 +490,19 @@ local_path_content_grab = function(local_path = NULL,
              function(local_path) {
                if (!is.null(local_path)) {
                  file_status = fs::file_exists(local_path)
+                 if (!file_status)
+                   usethis::ui_stop("Unable to locate the following file: {usethis::ui_value(local_path)}")
 
-                 if (file_status) {
-                   if (check_rmd) {
-                     if (!grepl("\\.[rR]md$", fs::path_file(local_path))) {
-                       usethis::ui_stop(
-                         "{usethis::ui_field('local_path')} must be a {usethis::ui_path('.Rmd')} file."
-                       )
-                     }
-                   }
-
+                 if (check_rmd &
+                     (tolower(fs::path_ext(local_path)) == "rmd")) {
                    list(
-                     content = readChar(local_path, file.info(local_path)$size),
+                     content = readChar(local_path, file.info(local_path)[['size']]),
                      path = fs::path_file(local_path)
                    )
-
                  } else {
-                   usethis::ui_stop("Unable to locate the following file: {usethis::ui_value(local_path)}")
+                   usethis::ui_stop(
+                     "{usethis::ui_field('local_path')} must be a {usethis::ui_path('.Rmd')} file."
+                   )
                  }
                }
              })
@@ -454,28 +512,20 @@ local_path_content_grab = function(local_path = NULL,
 # subset repository files
 repo_files_select = function(repo,
                              repo_files = NULL,
-                             exclude_extension,
+                             exclude_pattern,
                              branch) {
-
   arg_is_chr_scalar(repo, branch)
-  arg_is_chr(exclude_extension, allow_null = T)
+  arg_is_chr(exclude_pattern, allow_null = T)
 
   if (is.null(repo_files)) {
     repo_files = repo_files(repo = repo, branch = branch)
   }
 
   path = repo_files[['path']][repo_files[['type']] == "blob" &
-                           !grepl("/", repo_files[['path']])]
-  exclude_extension = unlist(purrr::map_if(
-    exclude_extension,
-    grepl("^\\.", exclude_extension),
-    ~ sub("^\\.", "", .x)
-  ))
-  path[!purrr::map_lgl(path,
-                       function(path) {
-                         any(purrr::map_lgl(glue::glue("\\.{exclude_extension}$"),
-                                            ~ grepl(.x, path)))
-                       })]
+                                !grepl("/", repo_files[['path']])]
+
+  rx_exclude_pattern = paste(utils::glob2rx(exclude_pattern), collapse = "|")
+  path[!grepl(rx_exclude_pattern, path)]
 }
 
 format_commit_output = function(res = NULL,
@@ -485,7 +535,6 @@ format_commit_output = function(res = NULL,
                                 target_folder,
                                 category,
                                 changed = NA) {
-
   arg_is_chr_scalar(target_repo, target_path, target_folder, category)
   arg_is_lgl_scalar(changed, allow_na = TRUE)
 
@@ -498,6 +547,10 @@ format_commit_output = function(res = NULL,
     added = FALSE
     commit_sha = NA
   } else if (!is.null(res) & succeeded(res)) {
+    # https://developer.github.com/v3/git/trees/#create-a-tree
+    # mode = 100644 & type = "blob" is added manually to reduce API calls
+    # Needed to accurately track files present on repositories
+    # Assumes that only file blobs are added to repositories
     mode = 100644
     type = "blob"
     sha = res[["result"]][["content"]][["sha"]]
@@ -544,19 +597,18 @@ peer_add_content = function(target_repo,
                             message,
                             branch,
                             overwrite) {
-
   arg_is_chr(target_repo)
   arg_is_chr_scalar(category, target_folder)
   arg_is_chr_scalar(message, branch, allow_null = TRUE)
   arg_is_lgl(overwrite)
 
+  # TODO: Review to simplify nested mapping
   out = purrr::map_dfr(target_repo,
                        function(r) {
                          sub_r = target_files[target_files[['repo']] == r,]
 
                          purrr::map_dfr(content,
                                         function(c) {
-
                                           changed = NA
 
                                           target_path = paste0(target_folder, "/", c[['path']])
@@ -593,7 +645,7 @@ peer_add_content = function(target_repo,
                                               if (length(content_compare_path) > 0) {
                                                 n = which(purrr::map_chr(content_compare, "path") == c[['path']])
                                                 changed = !isTRUE(all.equal(c[['content']][1],
-                                                                     content_compare[[n]][['content']][1]))
+                                                                            content_compare[[n]][['content']][1]))
                                               }
                                             }
 
@@ -646,6 +698,7 @@ repo_path_content_grab = function(repo,
   arg_is_chr_scalar(repo, branch)
   arg_is_chr(path)
 
+  # TODO: Review to simplify nested mapping
   purrr::map(path,
              function(path) {
                if (is.null(repo_files)) {
@@ -659,7 +712,7 @@ repo_path_content_grab = function(repo,
                                                     file = path,
                                                     branch = branch)
                  if (succeeded(res))
-                   list(content = res$result,
+                   list(content = res[['result']],
                         path = path)
                } else {
                  list(content = NULL,

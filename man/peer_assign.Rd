@@ -5,16 +5,16 @@
 \title{Assign file to reviewers}
 \usage{
 peer_assign(org, roster, path = NULL, local_path_review = NULL,
-  prefix = "", suffix = "", exclude_extension = c("gitignore", "md",
-  "Rhistory", "Rproj", "html"), message = NULL, branch = "master",
-  overwrite = FALSE)
+  prefix = "", suffix = "", exclude_pattern = c(".gitignore",
+  ".Rhistory", ".Rproj", "*.html", "*.md", "*.pdf"), message = NULL,
+  branch = "master", overwrite = FALSE)
 }
 \arguments{
 \item{org}{Character. Name of GitHub Organization.}
 
 \item{roster}{Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column \code{user} with GitHub user names of authors, a column \code{user_random} with randomized tokens for user names, and one or more \code{rev*} columns that specify review assignments as values of the vector \code{user_random}.}
 
-\item{path}{Character. File name or vector of file names to be included. If \code{NULL}, all files not contained in folders, except \code{.gitignore}, \code{.Rhistory}, and \code{.Rproj}, will be moved to the reviewers' repositories.}
+\item{path}{Character. File name or vector of file names to be included. If \code{NULL}, all files not contained in folders, except \code{.gitignore}, \code{.Rhistory}, \code{.Rproj}, \code{*.html}, \code{*.md}, and \code{*.pdf} will be moved to the reviewers' repositories.}
 
 \item{local_path_review}{Character. Local file path of review feedback form to be added (must be .Rmd document), defaults to \code{NULL}. If \code{NULL}, no review form will be added to authors' repositories.}
 
@@ -22,7 +22,7 @@ peer_assign(org, roster, path = NULL, local_path_review = NULL,
 
 \item{suffix}{Character. Common repository name suffix.}
 
-\item{exclude_extension}{Character. File extensions of files to not be moved to reviewer repositories if \code{path} is \code{NULL}, defaults to \code{c("gitignore", "md", "Rhistory", "Rproj")}.}
+\item{exclude_pattern}{Character. File extensions of files to not be moved to reviewer repositories if \code{path} is \code{NULL}, defaults to \code{c(".gitignore", ".Rhistory", ".Rproj", "*.html", "*.md", "*.pdf")}.}
 
 \item{message}{Character. Commit message, defaults to "Assigning review."}
 
