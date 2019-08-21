@@ -20,7 +20,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' peer_roster_create(3, c("anya-ghclass", "bruno-ghclass", "celine-ghclass", "diego-ghclass"))
+#' peer_roster_create(3, c("anya-ghclass", "bruno-ghclass", "celine-ghclass", "diego-ghclass"), dir = "/Users/profx/introstats/hw2/")
 #' }
 #'
 #' @family peer review functions
@@ -45,15 +45,21 @@ peer_roster_create = function(n_rev,
       "{usethis::ui_field('n_rev')} must be smaller than the number of users in {usethis::ui_field('user')}."
     )
   }
-  if (write_csv & (is.null(dir) | (!is.null(dir) && !dir.exists(dir)))) {
-    usethis::ui_stop(
-      "Directory {usethis::ui_value(dir)} does not exist."
-    )
+  if (write_csv) {
+    if (is.null(dir)) {
+      usethis::ui_stop(
+        "No directory specified in {usethis::ui_field('dir')}."
+      )
+    } else if (!dir.exists(dir)) {
+      usethis::ui_stop(
+        "Directory {usethis::ui_value(dir)} does not exist."
+      )
+    }
   }
 
   if (is.null(seed)) {
     seed = sample.int(1e+06, 1L)
-    usethis::ui_warn("No seed was supplied. Using randomly sampled seed {usethis::ui_value(seed)}")
+    usethis::ui_warn("No seed was specified Using randomly sampled seed {usethis::ui_value(seed)}")
   }
 
   withr::with_seed(seed, {
