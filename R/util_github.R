@@ -53,11 +53,22 @@ org_accept_invite = function(org, user, pat) {
   )
 }
 
-
 # Extracts base64 encoded content from files
-extract_content = function(file, include_details = TRUE) {
-  if (is.null(file))
-    return(NULL)
+extract_content = function(repo, path, file, include_details = TRUE) {
+  if (is.null(file)) {
+    usethis::ui_oops( paste(
+      "Unable to retrieve file {usethis::ui_value(path)}",
+      "from repo {usethis::ui_value(repo)}."
+    ) )
+    return(invisible(NULL))
+  }
+  if (is.null(file[["content"]])) {
+    usethis::ui_oops( paste(
+      "Unable to retrieve {usethis::ui_value(path)} in",
+      "repo {usethis::ui_value(repo)} is not a file."
+    ) )
+    return(invisible(NULL))
+  }
 
   content = base64enc::base64decode(file[["content"]])
   content = purrr::possibly(rawToChar, content)(content)
