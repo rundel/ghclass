@@ -21,8 +21,8 @@ arg_is_lgl_scalar = function(..., allow_null = FALSE, allow_na = FALSE) {
   arg_is_scalar(..., allow_null = allow_null, allow_na = allow_na)
 }
 
-arg_is_int_scalar = function(..., allow_null = FALSE, allow_na = FALSE) {
-  arg_is_int(..., allow_null = allow_null)
+arg_is_pos_int_scalar = function(..., allow_null = FALSE, allow_na = FALSE) {
+  arg_is_pos_int(..., allow_null = allow_null)
   arg_is_scalar(..., allow_null = allow_null, allow_na = allow_na)
 }
 
@@ -72,13 +72,22 @@ arg_is_raw = function(..., allow_null = FALSE) {
   )
 }
 
-arg_is_int = function(..., allow_null = FALSE) {
+arg_is_pos_int = function(..., allow_null = FALSE) {
   handle_arg_list(
     ...,
     tests = function(name, value) {
-      if (!(is.integer(value) | (is.numeric(value) && value%%1 == 0) | (is.null(value) & allow_null)))
+      if (!(is.integer(value) | (is.numeric(value) && value > 0 && value%%1 == 0) | (is.null(value) & allow_null)))
         usethis::ui_stop("Argument {usethis::ui_value(name)} must be a whole positive number.")
     }
   )
 }
 
+arg_is_pos_int = function(..., allow_null = FALSE) {
+  handle_arg_list(
+    ...,
+    tests = function(name, value) {
+      if (!(is.integer(value) | (is.numeric(value) && value > 0 && value%%1 == 0) | (is.null(value) & allow_null)))
+        usethis::ui_stop("Argument {usethis::ui_value(name)} must be a whole positive non-zero number.")
+    }
+  )
+}

@@ -6,7 +6,7 @@
 \usage{
 peer_assign(org, roster, path = NULL, local_path_review = NULL,
   prefix = "", suffix = "", exclude_pattern = c(".gitignore",
-  ".Rhistory", ".Rproj", "*.html", "*.md", "*.pdf"), message = NULL,
+  ".Rhistory", "*.Rproj", "*.html", "*.md", "*.pdf"), message = NULL,
   branch = "master", overwrite = FALSE)
 }
 \arguments{
@@ -22,7 +22,7 @@ peer_assign(org, roster, path = NULL, local_path_review = NULL,
 
 \item{suffix}{Character. Common repository name suffix.}
 
-\item{exclude_pattern}{Character. File extensions of files to not be moved to reviewer repositories if \code{path} is \code{NULL}, defaults to \code{c(".gitignore", ".Rhistory", ".Rproj", "*.html", "*.md", "*.pdf")}.}
+\item{exclude_pattern}{Character. File extensions of files to not be moved to reviewer repositories if \code{path} is \code{NULL}, defaults to \code{c(".gitignore", ".Rhistory", "*.Rproj", "*.html", "*.md", "*.pdf")}.}
 
 \item{message}{Character. Commit message, defaults to "Assigning review."}
 

@@ -24,27 +24,21 @@ peer_roster_process = function(roster) {
   if (is_df) {
     tmp = tibble::as_tibble(purrr::modify_if(roster, is.factor, as.character))
   } else if (is_chr) {
-    if (fs::file_exists(roster)) {
-      res = suppressMessages(purrr::safely(readr::read_csv)(roster))
-      status_msg(res,
-                 fail = "Cannot read {usethis::ui_field('roster')}.")
-      if (succeeded(res))
-        tmp = res[["result"]]
-    } else {
+    if (!fs::file_exists(roster))
       usethis::ui_stop("Cannot locate file: {usethis::ui_value(roster)}")
-    }
+    tmp = readr::read_csv(roster)
   } else {
     usethis::ui_stop("{usethis::ui_field('roster')} must be a data.frame or .csv file.")
   }
 
+  # Checking if roster is in the right format
   rdf = peer_roster_check(tmp)
-  if (!is.null(rdf)) {
-    rdf
-  } else {
+  if (is.null(rdf)) {
     usethis::ui_stop(
       "Please supply a peer review roster in the expected format (see reference for `peer_roster_create()`)."
     )
   }
+  rdf
 }
 
 # Checks whether necessary column names are present
@@ -94,8 +88,13 @@ peer_roster_expand = function(org,
   out
 }
 
-peer_roster_format_cols = function(roster, prefix, suffix, prefix_review, suffix_review) {
-  purrr::map_df(roster[["user"]],
+peer_roster_format_cols = function(roster,
+                                   prefix,
+                                   suffix,
+                                   prefix_review,
+                                   suffix_review) {
+  purrr::map_df(
+    roster[["user"]],
     ~ tibble::tibble(
       aut = .x,
       aut_random = as.character(roster[["user_random"]][roster[["user"]] == .x]),
@@ -119,7 +118,7 @@ peer_get_rev = function(aut,
   m = seq_len(length(names(roster)[grepl("^rev[0-9]+$", names(roster))]))
   rev_random = as.character(roster[roster[["user"]] == aut, paste0("rev", m)])
   rev = roster[["user"]][purrr::map_int(rev_random, ~ which(roster[["user_random"]] == .x))]
-  rev_no = names(roster)[purrr::map_int(rev_random, ~ which(roster[roster[["user"]] == aut,] == .x))]
+  rev_no = names(roster)[purrr::map_int(rev_random, ~ which(roster[roster[["user"]] == aut, ] == .x))]
 
   if (out == "rev") {
     rev
@@ -259,7 +258,7 @@ peer_issue_create = function(out,
 
   purrr::walk(unique(out[['repo']]),
               function(r) {
-                sub = out[out[['repo']] == r,]
+                sub = out[out[['repo']] == r, ]
 
                 url_start = list(
                   blob = paste0("https://github.com/", r, "/blob/", branch, "/"),
@@ -331,7 +330,7 @@ peer_issue_body_review = function(sub, url_start) {
 
 issue_txt_assignment = function(sub, aut, url_start) {
   tmp = sub[sub[['category']] == "assignment" &
-              sub[['target_folder']] == aut, ]
+              sub[['target_folder']] == aut,]
 
   if (nrow(tmp) > 0) {
     url = glue::glue("{url_start[['tree']]}{aut}")
@@ -341,7 +340,7 @@ issue_txt_assignment = function(sub, aut, url_start) {
 
 issue_txt_complete_review = function(sub, aut, url_start) {
   tmp = sub[sub[['category']] == "review" &
-              sub[['target_folder']] == aut, ]
+              sub[['target_folder']] == aut,]
 
   if (nrow(tmp) > 0) {
     arg_is_chr_scalar(tmp[['path']])
@@ -390,7 +389,7 @@ peer_issue_body_rating = function(sub, url_start = url_start) {
 
 issue_txt_diff = function(sub, rev, url_start = url_start) {
   tmp = sub[sub[['category']] == "assignment" &
-              sub[['target_folder']] == rev, ]
+              sub[['target_folder']] == rev,]
 
   diff_txt = purrr::map_chr(seq_len(nrow(tmp)),
                             function(z) {
@@ -408,7 +407,7 @@ issue_txt_diff = function(sub, rev, url_start = url_start) {
 
 issue_txt_read_review = function(sub, rev, url_start = url_start) {
   tmp = sub[sub[['category']] == "review" &
-              sub[['target_folder']] == rev, ]
+              sub[['target_folder']] == rev,]
 
   if (nrow(tmp) > 0) {
     arg_is_chr_scalar(tmp[['path']])
@@ -421,7 +420,7 @@ issue_txt_read_review = function(sub, rev, url_start = url_start) {
 
 issue_txt_complete_rating = function(sub, rev, url_start = url_start) {
   tmp = sub[sub[['category']] == "rating" &
-              sub[['target_folder']] == rev, ]
+              sub[['target_folder']] == rev,]
 
   if (nrow(tmp) > 0) {
     arg_is_chr_scalar(tmp[['path']])
@@ -547,8 +546,9 @@ format_commit_output = function(res = NULL,
     added = FALSE
     commit_sha = NA
   } else if (!is.null(res) & succeeded(res)) {
-    # https://developer.github.com/v3/git/trees/#create-a-tree
     # mode = 100644 & type = "blob" is added manually to reduce API calls
+    # mode = 100644 is the mode for a blob, see documentation
+    # https://developer.github.com/v3/git/trees/#create-a-tree
     # Needed to accurately track files present on repositories
     # Assumes that only file blobs are added to repositories
     mode = 100644
@@ -605,7 +605,7 @@ peer_add_content = function(target_repo,
   # TODO: Review to simplify nested mapping
   out = purrr::map_dfr(target_repo,
                        function(r) {
-                         sub_r = target_files[target_files[['repo']] == r,]
+                         sub_r = target_files[target_files[['repo']] == r, ]
 
                          purrr::map_dfr(content,
                                         function(c) {
@@ -625,7 +625,7 @@ peer_add_content = function(target_repo,
                                             )
 
                                             format_commit_output(
-                                              target_files = sub_r[sub_r[['path']] == target_path, ],
+                                              target_files = sub_r[sub_r[['path']] == target_path,],
                                               target_repo = r,
                                               target_path = target_path,
                                               target_folder = target_folder,
@@ -668,7 +668,7 @@ peer_add_content = function(target_repo,
                                               )
                                             } else {
                                               format_commit_output(
-                                                target_files = sub_r[sub_r[['path']] == target_path, ],
+                                                target_files = sub_r[sub_r[['path']] == target_path,],
                                                 target_repo = r,
                                                 target_path = target_path,
                                                 target_folder = target_folder,

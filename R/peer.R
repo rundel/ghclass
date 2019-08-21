@@ -16,7 +16,7 @@
 #' @param n_rev Numeric. Number of reviews per user. Must be larger than zero and smaller than the number of users.
 #' @param seed Numeric. Random seed for assignment, defaults to `12345`.
 #' @param write_csv Logical. Whether the roster data frame should be written to a `.csv` file in the current working directory, defaults to TRUE.
-#' @param dir Character. Directory where the peer review roster will be written if `write_csv = TRUE`, defaults to current working directory.
+#' @param dir Character. Directory where the peer review roster will be written if `write_csv = TRUE`.
 #'
 #' @examples
 #' \dontrun{
@@ -31,26 +31,23 @@ peer_roster_create = function(n_rev,
                               user,
                               seed = NULL,
                               write_csv = TRUE,
-                              dir = getwd()) {
-  arg_is_chr(user, dir)
-  arg_is_int(n_rev)
-  arg_is_int_scalar(seed, allow_null = TRUE) #fails now
+                              dir = NULL) {
+  arg_is_chr(user)
+  arg_is_chr(dir, allow_null = TRUE)
+  arg_is_pos_int(n_rev)
+  arg_is_pos_int_scalar(seed, allow_null = TRUE) #fails now
 
   if (!(length(user) > 1)) {
     usethis::ui_stop("{usethis::ui_field('user')} must contain more than one user name.")
-  }
-  if (!(n_rev > 0)) {
-    usethis::ui_stop("{usethis::ui_field('n_rev')} must be at least 1.")
   }
   if (!(n_rev < length(user))) {
     usethis::ui_stop(
       "{usethis::ui_field('n_rev')} must be smaller than the number of users in {usethis::ui_field('user')}."
     )
   }
-  if (!dir.exists(dir)) {
-    dir = getwd()
-    usethis::ui_warn(
-      "Directory {usethis::ui_value(dir)} does not exist. Saving to working directory instead."
+  if (write_csv & (is.null(dir) | (!is.null(dir) && !dir.exists(dir)))) {
+    usethis::ui_stop(
+      "Directory {usethis::ui_value(dir)} does not exist."
     )
   }
 
@@ -59,14 +56,18 @@ peer_roster_create = function(n_rev,
     usethis::ui_warn("No seed was supplied. Using randomly sampled seed {usethis::ui_value(seed)}")
   }
 
-  j = withr::with_seed(seed, sample(2:length(user), n_rev))
+  withr::with_seed(seed, {
+    j = sample(2:length(user), n_rev)
+
+    # Randomizing user names to avoid clustering
+    user_random = paste0("aut", sample(1:length(user), length(user)))
+  })
+
   res = purrr::map(j, ~ latin_square(.x, length(user)))
 
-  # Randomizing user names to avoid clustering
-  user_random = paste0("aut", withr::with_seed(seed, sample(1:length(user), length(user))))
 
   df_sort = tibble::tibble(user = user,
-                           user_random = user_random)[order(as.numeric(sub("[aA-zZ]+", "", user_random))),]
+                           user_random = user_random)[order(as.numeric(sub("[aA-zZ]+", "", user_random))), ]
 
   df_tmp = purrr::set_names(if (length(user) > 2) {
     out = purrr::map_dfc(res, ~ df_sort[['user_random']][.x])
@@ -74,7 +75,7 @@ peer_roster_create = function(n_rev,
     # if length(user) == 2, will always res = c(2, 1)
     out = tibble::tibble(rev(user_random))
   },
-  purrr::map_chr(1:n_rev, ~ paste0("rev", .x)))
+  paste0("rev", 1:n_rev))
 
   res_df = tibble::as_tibble(cbind(df_sort, df_tmp))
   attr(res_df, "seed") <- seed
@@ -150,7 +151,7 @@ peer_init = function(org,
 #' @param local_path_review Character. Local file path of review feedback form to be added (must be .Rmd document), defaults to `NULL`. If `NULL`, no review form will be added to authors' repositories.
 #' @param prefix Character. Common repository name prefix.
 #' @param suffix Character. Common repository name suffix.
-#' @param exclude_pattern Character. File extensions of files to not be moved to reviewer repositories if `path` is `NULL`, defaults to `c(".gitignore", ".Rhistory", ".Rproj", "*.html", "*.md", "*.pdf")`.
+#' @param exclude_pattern Character. File extensions of files to not be moved to reviewer repositories if `path` is `NULL`, defaults to `c(".gitignore", ".Rhistory", "*.Rproj", "*.html", "*.md", "*.pdf")`.
 #' @param message Character. Commit message, defaults to "Assigning review."
 #' @param branch Character. Name of branch the file should be committed to, defaults to `master`.
 #' @param overwrite Logical. Whether existing files in reviewers' repositories should be overwritten, defaults to `FALSE`.
@@ -176,7 +177,7 @@ peer_assign = function(org,
                        local_path_review = NULL,
                        prefix = "",
                        suffix = "",
-                       exclude_pattern = c(".gitignore", ".Rhistory", ".Rproj", "*.html", "*.md", "*.pdf"),
+                       exclude_pattern = c(".gitignore", ".Rhistory", "*.Rproj", "*.html", "*.md", "*.pdf"),
                        message = NULL,
                        branch = "master",
                        overwrite = FALSE) {
@@ -204,7 +205,7 @@ peer_assign = function(org,
   # per hour.
   out = purrr::map_df(unique(rdf[['aut']]),
                       function(aut) {
-                        sub = rdf[rdf[['aut']] == aut, ]
+                        sub = rdf[rdf[['aut']] == aut,]
                         repo_aut = unique(sub[['repo_aut']])
                         repo_rev = unique(sub[['repo_rev_review']])
                         repo_files_aut = repo_files(repo = repo_aut, branch = branch)
@@ -723,13 +724,13 @@ peer_score_review = function(org,
                               }
                             })
 
-  out_temp = tidyr::gather(out_temp, q_name, q_value, -user, -rev_no)
+  out_temp = tidyr::gather(out_temp, q_name, q_value,-user,-rev_no)
   out_temp = tidyr::unite(out_temp, new, c("rev_no", "q_name"))
   out_temp = tidyr::spread(out_temp, new, q_value)
   out = merge(out_temp, roster, all.y = T)
 
   out = out[, union(names(roster), names(out))]
-  out = out[order(out[['user_random']]),]
+  out = out[order(out[['user_random']]), ]
 
   if (write_csv) {
     fname = glue::glue("{revscores}_{fs::path_file(roster)}")
@@ -820,13 +821,13 @@ peer_score_rating = function(org,
                             })
 
   # Getting data frame in right format
-  out_temp = tidyr::gather(out_temp, q_name, q_value, -user, -rev_no)
+  out_temp = tidyr::gather(out_temp, q_name, q_value,-user,-rev_no)
   out_temp = tidyr::unite(out_temp, new, c("rev_no", "q_name"))
   out_temp = tidyr::spread(out_temp, new, q_value)
   out = merge(out_temp, roster, all.y = T)
 
   out = out[, union(names(roster), names(out))]
-  out = out[order(out[['user_random']]),]
+  out = out[order(out[['user_random']]), ]
 
   if (write_csv) {
     fname = glue::glue("{autscores}_{fs::path_file(roster)}")
