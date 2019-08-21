@@ -16,13 +16,15 @@
 #'
 repo_modify_file = function(repo, file, pattern, content, method = c("replace", "before", "after"), all = FALSE,
                             message = "Modified content", branch = "master") {
-  arg_is_chr(repo, file, content, message, branch)
-  arg_is_lgl(all)
+  arg_is_chr(repo, file, pattern, content, message, branch)
+
   method = match.arg(method)
+  arg_is_chr_scalar(method)
+  arg_is_lgl_scalar(all)
 
   purrr::pwalk(
-    list(repo, file, content, message, branch),
-    function(repo, file, content, message, branch) {
+    list(repo, file, pattern, content, message, branch),
+    function(repo, file, pattern, content, message, branch) {
 
       cur_content = repo_get_file(repo, file, branch)
 
