@@ -9,6 +9,7 @@ github_api_pr_create = function(repo, base, head, title, body, draft = TRUE){
     body = body,
     draft = draft,
     .token = github_get_token(),
+    # Needed for draft PRs
     .send_headers = c(Accept = "application/vnd.github.shadow-cat-preview+json")
   )
 }
