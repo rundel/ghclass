@@ -13,17 +13,21 @@ Imports:
     withr,
     fs,
     purrr,
+    yaml,
     base64enc,
     tibble,
     glue,
     processx,
-    crayon
+    stats,
+    crayon,
+    readr,
+    tidyr,
+    rlang
 Suggests: 
     styler,
     knitr,
     rmarkdown,
     here,
-    readr,
     sodium
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
