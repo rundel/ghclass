@@ -3,6 +3,7 @@
 \name{team_pending}
 \alias{team_pending}
 \alias{get_pending_team_members}
+\alias{team_pending_members}
 \title{Get pending team members}
 \usage{
 team_pending(org, team = org_teams(org))

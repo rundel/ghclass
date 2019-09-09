@@ -10,9 +10,9 @@ repo_get_file(repo, path, branch = "master")
 \arguments{
 \item{repo}{Character. Address of repository in \code{owner/name} format.}
 
-\item{branch}{Character. Name of branch to use, defaults to "master".}
+\item{path}{Characer. Path to the file within the repository.}
 
-\item{file}{Characer. Path to the file within the repository.}
+\item{branch}{Character. Name of branch to use, defaults to "master".}
 }
 \description{
 Low level function for retrieving a file from a GitHub Repository
