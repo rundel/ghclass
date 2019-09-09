@@ -26,7 +26,7 @@ github_api_repo_get_file = function(repo, path, branch) {
 #' @export
 #'
 repo_get_file = function(repo, path, branch = "master") {
-  arg_is_chr_scalar(repo, file, branch)
+  arg_is_chr_scalar(repo, path, branch)
 
   file = purrr::possibly(github_api_repo_get_file, NULL)(repo, path, branch)
   extract_content(repo, path, file)
