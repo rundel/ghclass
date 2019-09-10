@@ -118,13 +118,13 @@ repo_commits = function(repo, branch = "master", sha = branch, path = NULL,
       } else {
         tibble::tibble(
           repo  = repo,
-          name  = purrr::map_chr(commits, c("commit", "author","name")),
-          email = purrr::map_chr(commits, c("commit", "author","email")),
-          login = purrr::map_chr(commits, c("author","login")),
+          name  = purrr::map_chr(commits, c("commit", "author","name"), .default = NA),
+          email = purrr::map_chr(commits, c("commit", "author","email"), .default = NA),
+          login = purrr::map_chr(commits, c("author", "login"), .default = NA),
           date  = lubridate::ymd_hms(
-            purrr::map_chr(commits, c("commit","author","date"))
+            purrr::map_chr(commits, c("commit", "author", "date"), .default = NA)
           ),
-          msg   = purrr::map_chr(commits, c("commit","message"))
+          msg   = purrr::map_chr(commits, c("commit", "message"), .default = NA)
         )
       }
     }
