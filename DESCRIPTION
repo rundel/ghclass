@@ -22,7 +22,8 @@ Imports:
     crayon,
     readr,
     tidyr,
-    rlang
+    rlang,
+    lubridate
 Suggests: 
     styler,
     knitr,
