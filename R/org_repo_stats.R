@@ -1,4 +1,4 @@
-github_api_v4_repo_stats = function(org) {
+github_api_org_repo_stats = function(org) {
   query = '
     query {
       organization(login: <graphql_quote(org)>) {
@@ -59,7 +59,7 @@ github_api_v4_repo_stats = function(org) {
 org_repo_stats = function(org) {
   arg_is_chr_scalar(org)
 
-  pages = github_api_v4_repo_stats(org)
+  pages = github_api_org_repo_stats(org)
 
   purrr::map_dfr(
     pages,
