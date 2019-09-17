@@ -92,7 +92,7 @@ repo_style = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = 
     function(repo, base, branch, draft) {
       ## TODO add base to branch
       branch_create(repo, cur_branch = base, new_branch = branch)
-      local_repo_clone(repo, local_path = dir, branch = branch)
+      local_repo_clone(repo, local_path = dir, branch = base)
 
       path = fs::path(dir, get_repo_name(repo))
 
