@@ -87,8 +87,6 @@ repo_style = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = 
 
   dir.create(dir, showWarnings = FALSE, recursive = TRUE)
 
-  withr::local_dir(dir)
-
   purrr::pwalk(
     list(repo, base, branch, draft),
     function(repo, base, branch, draft) {
