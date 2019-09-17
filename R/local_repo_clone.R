@@ -48,7 +48,7 @@ local_repo_clone = function(repo, local_path="./", branch = "master", verbose = 
       if (succeeded(res)) {
         dir
       } else {
-        unlink(dir, recursive = FALSE)
+        unlink(dir, recursive = TRUE)
         NA
       }
     }
