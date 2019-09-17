@@ -1,22 +1,18 @@
 #' @rdname local_repo
 #' @export
-local_repo_commit = function(repo_dir, message,
-                       git = require_git(), options = character(),
-                       verbose = FALSE)
-{
-  stopifnot(all(fs::dir_exists(repo_dir)))
-  stopifnot(fs::file_exists(git))
-  stopifnot(!missing(message))
+local_repo_commit = function(repo_dir, message, verbose = FALSE) {
+  require_gert()
+
+  arg_is_chr(repo_dir, message)
+  arg_is_lgl_scalar(verbose)
 
   repo_dir = repo_dir_helper(repo_dir)
 
   purrr::walk2(
     repo_dir, message,
     function(dir, message) {
-      withr::local_dir(dir)
-
-      res = purrr::safely(run_git)(
-        git, "commit", c("-m", message, options), verbose = verbose
+      res = purrr::safely(gert::git_commit)(
+        message = message, repo = dir, verbose = verbose
       )
 
       status_msg(

@@ -1,6 +1,12 @@
 # If we are given a single repo directory check if it is a repo or a directory of repos
 repo_dir_helper = function(repo_dir) {
-  arg_is_chr(repo_dir)
+
+  exists = fs::dir_exists(repo_dir)
+  if(!all(exists)) {
+    usethis::ui_stop( paste(
+      "Unable to locate the files: {usethis::ui_value(repo_dir[!exists])}."
+    ) )
+  }
 
   if (length(repo_dir) == 1 & !fs::dir_exists(fs::path(repo_dir[1],".git"))) {
     dir = fs::dir_ls(repo_dir, type="directory")

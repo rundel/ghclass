@@ -15,12 +15,7 @@
 #' @param message Commit message
 #' @param remote Repository remote to use.
 #' @param branch Repository branch to use.
-#' @param git Path to the local git binary. `require_git()` attempts to
-#' find the git binary based on your `PATH``, it will throw an error if git cannot be found.
-#' @param options Additional git binary options (e.g. `--all`).
 #' @param verbose Display verbose output.
-#'
-#' @aliases add_repo clone_repo commit_repo pull_repo push_repo
 #'
 #' @examples
 #' \dontrun{

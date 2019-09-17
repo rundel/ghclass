@@ -1,21 +1,18 @@
 #' @rdname local_repo
 #' @export
-local_repo_add = function(repo_dir, files = ".",
-                    git = require_git(), options = character(),
-                    verbose = FALSE)
-{
-  stopifnot(all(fs::dir_exists(repo_dir)))
-  stopifnot(fs::file_exists(git))
+local_repo_add = function(repo_dir, files = ".", verbose = FALSE) {
+  require_gert()
+
+  arg_is_chr(repo_dir, files)
+  arg_is_lgl_scalar(verbose)
 
   repo_dir = repo_dir_helper(repo_dir)
 
   purrr::walk(
     repo_dir,
     function(dir) {
-      withr::local_dir(dir)
-
-      res = purrr::safely(run_git)(
-        git, "add", c(files, options), verbose = verbose
+      res = purrr::safely(gert::git_add)(
+        files = files, repo = dir, verbose = verbose
       )
 
       status_msg(
