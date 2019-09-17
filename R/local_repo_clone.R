@@ -2,12 +2,9 @@
 #'
 #' @description Clones repositories from GitHub to a local directory.
 #'
-#' @param repo GitHub repo names with the form `owner/name`.
+#' @param repo GitHub repo address with the form `owner/name`.
 #' @param local_path Local directory to store cloned repos.
 #' @param branch Repository branch to use.
-#' @param git Path to the local git binary. `require_git()` attempts to
-#' find the git binary based on your `PATH``, it will throw an error if git cannot be found.
-#' @param options Additional git binary options (e.g. `--all`).
 #' @param verbose Display verbose output.
 #'
 #' @aliases repo_clone
@@ -20,27 +17,24 @@
 #'
 
 #' @export
-local_repo_clone = function(repo, local_path="./", branch = "master",
-                      git = require_git(), options = character(),
-                      verbose = FALSE)
-{
-  stopifnot(!missing(repo))
-  stopifnot(file.exists(git))
+local_repo_clone = function(repo, local_path="./", branch = "master", verbose = FALSE) {
+  require_gert()
+
+  arg_is_chr(repo, branch)
+  arg_is_chr_scalar(local_path)
+  arg_is_lgl_scalar(verbose)
 
   local_path = fs::path_expand(local_path)
-
   dir.create(local_path, showWarnings = FALSE, recursive = TRUE)
 
   dirs = purrr::map2_chr(
     repo, branch,
     function(repo, branch) {
       dir = fs::path(local_path, get_repo_name(repo))
+      url = glue::glue("https://github.com/{repo}.git")
 
-      if (!branch %in% c("", "master"))
-        options = c("-b", branch, options)
-
-      res = purrr::safely(run_git)(
-        git, "clone", c(options, get_repo_url(repo), dir), verbose = verbose
+      res = purrr::safely(gert::git_clone)(
+        url = url, path = dir, branch = branch, verbose = verbose
       )
 
       fmt_repo = format_repo(repo, branch)
@@ -51,7 +45,12 @@ local_repo_clone = function(repo, local_path="./", branch = "master",
         glue::glue("Failed to clone {usethis::ui_value(fmt_repo)}.")
       )
 
-      dir
+      if (succeeded(res)) {
+        dir
+      } else {
+        unlink(dir, recursive = TRUE)
+        NA
+      }
     }
   )
 
@@ -59,7 +58,7 @@ local_repo_clone = function(repo, local_path="./", branch = "master",
 }
 
 #' @export
-repo_clone = function(...)
+repo_clone = function(repo, local_path="./", branch = "master", verbose = FALSE)
 {
-  local_repo_clone(...)
+  local_repo_clone(repo, local_path, branch, verbose)
 }
