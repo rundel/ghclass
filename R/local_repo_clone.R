@@ -48,7 +48,7 @@ local_repo_clone = function(repo, local_path="./", branch = "master", verbose = 
       if (succeeded(res)) {
         dir
       } else {
-        unlink(dir, recursive = TRUE)
+        unlink(dir, recursive = FALSE)
         NA
       }
     }
@@ -58,7 +58,6 @@ local_repo_clone = function(repo, local_path="./", branch = "master", verbose = 
 }
 
 #' @export
-repo_clone = function(repo, local_path="./", branch = "master", verbose = FALSE)
-{
+repo_clone = function(repo, local_path="./", branch = "master", verbose = FALSE) {
   local_repo_clone(repo, local_path, branch, verbose)
 }
