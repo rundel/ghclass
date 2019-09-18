@@ -12,12 +12,12 @@ handle_arg_list = function(..., tests) {
 }
 
 arg_is_chr_scalar = function(..., allow_null = FALSE, allow_na = FALSE) {
-  arg_is_chr(..., allow_null = allow_null)
+  arg_is_chr(..., allow_null = allow_null, allow_na = allow_na)
   arg_is_scalar(..., allow_null = allow_null, allow_na = allow_na)
 }
 
 arg_is_lgl_scalar = function(..., allow_null = FALSE, allow_na = FALSE) {
-  arg_is_lgl(...)
+  arg_is_lgl(..., allow_null = allow_null, allow_na = allow_na)
   arg_is_scalar(..., allow_null = allow_null, allow_na = allow_na)
 }
 
@@ -26,22 +26,28 @@ arg_is_pos_int_scalar = function(..., allow_null = FALSE, allow_na = FALSE) {
   arg_is_scalar(..., allow_null = allow_null, allow_na = allow_na)
 }
 
-arg_is_chr = function(..., allow_null = FALSE) {
+arg_is_chr = function(..., allow_null = FALSE, allow_na = FALSE) {
   handle_arg_list(
     ...,
     tests = function(name, value) {
       if (!(is.character(value) | (is.null(value) & allow_null)))
         usethis::ui_stop("Argument {usethis::ui_value(name)} must be of character type.")
+
+      if (any(is.na(value)) & !allow_na)
+        usethis::ui_stop("Argument {usethis::ui_value(name)} must not contain any missing values ({usethis::ui_value(NA)}).")
     }
   )
 }
 
-arg_is_lgl = function(..., allow_null = FALSE) {
+arg_is_lgl = function(..., allow_null = FALSE, allow_na = FALSE) {
   handle_arg_list(
     ...,
     tests = function(name, value) {
       if (!(is.logical(value) | (is.null(value) & allow_null)))
         usethis::ui_stop("Argument {usethis::ui_value(name)} must be of logical type.")
+
+      if (any(is.na(value)) & !allow_na)
+        usethis::ui_stop("Argument {usethis::ui_value(name)} must not contain any missing values ({usethis::ui_value(NA)}).")
     }
   )
 }

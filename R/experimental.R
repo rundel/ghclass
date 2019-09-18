@@ -1,5 +1,3 @@
-
-
 #' Style repository
 #'
 #' `style_repo` implements "non-invasive pretty-printing of R source code" of .R or .Rmd files within a repository using the `styler` package and adhering to `tidyverse` formatting guidelines.
