@@ -35,6 +35,11 @@ failed = function(x) {
   !is.null(error(x))
 }
 
+any_failed = function(x) {
+  any(purrr::map_lgl(x, failed))
+}
+
+
 error_msg = function(x, wrap = 80, prefix = "\u2514\u2500 ") {
 
   wrap = min(wrap, getOption("width"))

@@ -1,5 +1,3 @@
-
-
 #' Style repository
 #'
 #' `style_repo` implements "non-invasive pretty-printing of R source code" of .R or .Rmd files within a repository using the `styler` package and adhering to `tidyverse` formatting guidelines.
@@ -22,54 +20,61 @@
 #' @export
 #'
 repo_style = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = "master",
-                      draft = TRUE, create_pull_request = TRUE, tag_collaborators = TRUE,
-                      git = require_git()) {
-  stopifnot(styler_available())
+                      draft = TRUE, create_pull_request = TRUE, tag_collaborators = TRUE) {
+  require_styler()
+  require_gert()
 
   arg_is_chr(repo, files, branch, base)
   arg_is_lgl(draft)
   arg_is_lgl_scalar(create_pull_request, tag_collaborators)
-  arg_is_chr_scalar(git)
 
   dir = file.path(tempdir(),"styler")
-  unlink(dir, recursive = TRUE)
 
+  # Make sure the directory is empty
+  unlink(dir, recursive = TRUE)
   dir.create(dir, showWarnings = FALSE, recursive = TRUE)
+
+
 
   purrr::pwalk(
     list(repo, base, branch, draft),
     function(repo, base, branch, draft) {
+      withr::local_dir(dir)
+      path = get_repo_name(repo)
+      unlink(path, recursive = TRUE)
+
       ## TODO add base to branch
-      branch_create(repo, cur_branch = base, new_branch = branch)
+      #branch_create(repo, cur_branch = base, new_branch = branch)
       local_repo_clone(repo, local_path = dir, branch = base)
-
-      path = fs::path(dir, get_repo_name(repo))
-
-      withr::local_dir(path)
+      gert::git_branch_create(branch, repo = path)
 
       file_paths = unlist(purrr::map(files, ~ fs::dir_ls(path, recurse = TRUE, glob = .x)),
                           use.names = FALSE)
 
       if (length(file_paths) == 0) {
-        usethis::ui_oops("Found no files with the glob {usethis::ui_value(files)} in repo {usethis::ui_value(repo)}")
+        usethis::ui_oops( paste(
+          "Found no files with the glob {usethis::ui_value(files)}",
+          "in repo {usethis::ui_value(repo)}"
+        ) )
         return()
       }
 
+      output = utils::capture.output( styler::style_file(file_paths) )
+      msg = c("Results of running styler:\n", output)
+      msg = paste(msg, collapse = "\n")
 
-      msg = c("Results of running styler:\n", utils::capture.output( styler::style_file(file_paths) ))
-      writeLines(msg, "commit_msg")
+      # Check if styler didnt fix anything
+      status = gert::git_status(path)
+      if (nrow(status) == 0) {
+        usethis::ui_info("No changes were suggested my styler")
+        return()
+      }
 
-      system(paste0(git, " add ", paste0(file_paths, collapse = " ")),
-             intern = FALSE, wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
-
-      system(paste0(git, " commit -F commit_msg"),
-             intern = FALSE, wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
-
-      system(paste0(git, " push"),
-             intern = FALSE, wait = TRUE, ignore.stdout = TRUE, ignore.stderr = TRUE)
+      if (any_failed( local_repo_add(path) )) { return() }
+      local_repo_commit(path, msg)
+      local_repo_push(path, branch = branch)
 
       if (create_pull_request) {
-
         msg = paste(c(
           "This pull request contains the results of running the automated R code formating tool styler ",
           "on your repo. Styling is based on the [tidyverse R style guide](http://style.tidyverse.org).\n",

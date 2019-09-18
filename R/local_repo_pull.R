@@ -8,13 +8,13 @@ local_repo_pull = function(repo_dir, remote="origin", branch="master", verbose =
 
   dir = repo_dir_helper(repo_dir)
 
-  purrr::pwalk(
+  res = purrr::pmap(
     list(dir, remote, branch),
     function(dir, remote, branch) {
       withr::local_dir(dir)
 
-      res = purrr::safely(gert::pull)(
-        remote = remote, refspec = branch, repo = dir, verbose = verbose
+      res = purrr::safely(gert::git_pull)(
+        remote = remote, repo = dir, verbose = verbose
       )
 
       status_msg(
@@ -22,8 +22,12 @@ local_repo_pull = function(repo_dir, remote="origin", branch="master", verbose =
         glue::glue("Pulled {usethis::ui_value(dir)}."),
         glue::glue("Failed to pull {usethis::ui_value(dir)}.")
       )
+
+      res
     }
   )
+
+  invisible(res)
 }
 
 

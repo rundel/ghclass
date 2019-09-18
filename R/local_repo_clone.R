@@ -17,7 +17,7 @@
 #'
 
 #' @export
-local_repo_clone = function(repo, local_path="./", branch = "master", verbose = FALSE) {
+local_repo_clone = function(repo, local_path=".", branch = "master", verbose = FALSE) {
   require_gert()
 
   arg_is_chr(repo, branch)
@@ -27,7 +27,7 @@ local_repo_clone = function(repo, local_path="./", branch = "master", verbose = 
   local_path = fs::path_expand(local_path)
   dir.create(local_path, showWarnings = FALSE, recursive = TRUE)
 
-  dirs = purrr::map2_chr(
+  res = purrr::map2(
     repo, branch,
     function(repo, branch) {
       dir = fs::path(local_path, get_repo_name(repo))
@@ -45,16 +45,11 @@ local_repo_clone = function(repo, local_path="./", branch = "master", verbose = 
         glue::glue("Failed to clone {usethis::ui_value(fmt_repo)}.")
       )
 
-      if (succeeded(res)) {
-        dir
-      } else {
-        unlink(dir, recursive = TRUE)
-        NA
-      }
+      res
     }
   )
 
-  invisible(dirs)
+  invisible(res)
 }
 
 #' @export
