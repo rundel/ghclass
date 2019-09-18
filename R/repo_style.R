@@ -42,7 +42,7 @@ repo_style = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = 
       unlink(path, recursive = TRUE)
 
       return_on_any_failed( local_repo_clone(repo, local_path = dir, branch = base) )
-      return_on_any_failed( local_repo_branch(repo, branch = branch) )
+      return_on_any_failed( local_repo_branch(path, branch = branch) )
 
       file_paths = unlist(purrr::map(files, ~ fs::dir_ls(path, recurse = TRUE, glob = .x)),
                           use.names = FALSE)

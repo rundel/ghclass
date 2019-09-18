@@ -16,10 +16,11 @@ local_repo_add = function(repo_dir, files = ".") {
         files = files, repo = dir
       )
 
+      repo = fs::path_file(dir)
       status_msg(
         res,
-        glue::glue("Added {usethis::ui_value(files)} to {usethis::ui_value(dir)}."),
-        glue::glue("Failed to add {usethis::ui_value(files)} to {usethis::ui_value(dir)}.")
+        glue::glue("Added files {usethis::ui_value(files)} to {usethis::ui_value(repo)}."),
+        glue::glue("Failed to add files {usethis::ui_value(files)} to {usethis::ui_value(repo)}.")
       )
 
       res

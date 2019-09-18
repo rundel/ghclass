@@ -9,6 +9,7 @@
 #' * git commit = `local_repo_commit`
 #' * git push = `local_repo_push`
 #' * git pull = `local_repo_pull`
+#' * git branch = `local_repo_branch`
 #'
 #' @param repo_dir Vector of repo directories or a single directory containing one or more repos.
 #' @param files Files to be staged
