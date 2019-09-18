@@ -5,7 +5,7 @@
 \alias{repo_clone}
 \title{Local repository tools}
 \usage{
-local_repo_clone(repo, local_path = "./", branch = "master",
+local_repo_clone(repo, local_path = ".", branch = "master",
   verbose = FALSE)
 }
 \arguments{
