@@ -1,7 +1,7 @@
 #' Modify a file within a repository
 #'
 #' @param repo Character. Address of repository in `owner/name` format.
-#' @param file Character. File's path within the repository.
+#' @param path Character. File's path within the repository.
 #' @param pattern Character. Regex pattern.
 #' @param content Character. Content to be added to the file.
 #' @param method Character. Should the content be `insert`ed after the match or should it `replace` the matched string.
@@ -14,23 +14,22 @@
 #'
 #' @export
 #'
-repo_modify_file = function(repo, file, pattern, content, method = c("replace", "before", "after"), all = FALSE,
+repo_modify_file = function(repo, path, pattern, content, method = c("replace", "before", "after"), all = FALSE,
                             message = "Modified content", branch = "master") {
-  arg_is_chr(repo, file, pattern, content, message, branch)
+  arg_is_chr(repo, path, pattern, content, message, branch)
 
   method = match.arg(method)
   arg_is_chr_scalar(method)
   arg_is_lgl_scalar(all)
 
   purrr::pwalk(
-    list(repo, file, pattern, content, message, branch),
-    function(repo, file, pattern, content, message, branch) {
-
-      cur_content = repo_get_file(repo, file, branch)
+    list(repo, path, pattern, content, message, branch),
+    function(repo, path, pattern, content, message, branch) {
+      cur_content = repo_get_file(repo = repo, path = path, branch = branch)
 
       if (is.null(cur_content)) {
         usethis::ui_oops(
-          "Unable to retrieve {usethis::ui_value(format_repo(repo, branch, file))}."
+          "Unable to retrieve {usethis::ui_value(format_repo(repo, branch, path))}."
         )
       } else {
 
@@ -51,17 +50,17 @@ repo_modify_file = function(repo, file, pattern, content, method = c("replace", 
 
         if (cur_content == new_content) {
           usethis::ui_oops(
-            "Unable to find pattern {usethis::ui_value(pattern)} in {usethis::ui_value(format_repo(repo, branch, file))}."
+            "Unable to find pattern {usethis::ui_value(pattern)} in {usethis::ui_value(format_repo(repo, branch, path))}."
           )
           return(NULL)
         }
 
-        res = repo_put_file(repo, file, new_content, message, branch, verbose = FALSE)
+        res = repo_put_file(repo, path, new_content, message, branch, verbose = FALSE)
 
         status_msg(
           res,
-          glue::glue("Modified file {usethis::ui_value(format_repo(repo, branch, file))}."),
-          glue::glue("Failed to modify file {usethis::ui_value(format_repo(repo, branch, file))}."),
+          glue::glue("Modified file {usethis::ui_value(format_repo(repo, branch, path))}."),
+          glue::glue("Failed to modify file {usethis::ui_value(format_repo(repo, branch, path))}."),
         )
       }
     }

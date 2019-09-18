@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Course management with ghclass • ghclass</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Course management with ghclass">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
@@ -38,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -47,6 +48,21 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="../articles/instructions_students.html">Peer review instructions for students</a>
+    </li>
+    <li>
+      <a href="../articles/peer.html">Peer review with ghclass</a>
+    </li>
+  </ul>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
@@ -58,13 +74,14 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Course management with ghclass</h1>
                         <h4 class="author">Mine Çetinkaya-Rundel, Colin Rundel, Therese Anders</h4>
             
-            <h4 class="date">2019-08-15</h4>
+            <h4 class="date">2019-09-11</h4>
       
       
       <div class="hidden name"><code>ghclass.Rmd</code></div>
@@ -126,7 +143,7 @@
 <a href="#adding-students-to-the-organization" class="anchor"></a>Adding students to the organization</h3>
 <p>Next, collect your students’ GitHub user names. You can do this with a Google form and then read the spreadsheet containing their responses into R using the <strong>googlesheets</strong> package. The resulting data frame should include two columns: one called <code>github</code> which contains students’ GitHub user names and another column called <code>team</code> that contains the team name for each student.</p>
 <p>For example, your roster file might look something like the following:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>roster =<span class="st"> </span>readr<span class="op">::</span><span class="kw"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span>( <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"roster.csv"</span>, <span class="dt">package =</span> <span class="st">"ghclass"</span>) )</span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>roster =<span class="st"> </span>readr<span class="op">::</span><span class="kw"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span>( <span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"roster.csv"</span>, <span class="dt">package =</span> <span class="st">"ghclass"</span>) )</span>
 <span id="cb2-2"><a href="#cb2-2"></a>roster</span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="co">#&gt; # A tibble: 6 x 5</span></span>
 <span id="cb2-4"><a href="#cb2-4"></a><span class="co">#&gt;   email              github          hw01        hw02        hw03       </span></span>
@@ -145,19 +162,19 @@
 <span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt; ✔ Invited user 'ghclass-diego' to org 'ghclass-vignette'.</span></span>
 <span id="cb3-6"><a href="#cb3-6"></a><span class="co">#&gt; ✔ Invited user 'ghclass-elijah' to org 'ghclass-vignette'.</span></span>
 <span id="cb3-7"><a href="#cb3-7"></a><span class="co">#&gt; ✔ Invited user 'ghclass-francis' to org 'ghclass-vignette'.</span></span></code></pre></div>
-<p>We now need to wait for the students to accept these invitations before the will have access to the organization. We can check the status of these acceptances using the <code><a href="../reference/org_members.html">org_members()</a></code> and <code>org_pending_members()</code> to see which students have accepting and have not accepted the invitation.</p>
+<p>We now need to wait for the students to accept these invitations before the will have access to the organization. We can check the status of these acceptances using the <code><a href="../reference/org_members.html">org_members()</a></code> and <code><a href="../reference/org_pending.html">org_pending()</a></code> to see which students have accepting and have not accepted the invitation.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw"><a href="../reference/org_members.html">org_members</a></span>(<span class="st">"ghclass-vignette"</span>)</span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&gt; [1] "mine-cetinkaya-rundel" "rundel"                "thereseanders"</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="kw"><a href="../reference/org_members.html">org_members</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="dt">include_admins =</span> <span class="ot">FALSE</span>)</span>
 <span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt; character(0)</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="kw">org_pending_members</span>(<span class="st">"ghclass-vignette"</span>)</span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="kw"><a href="../reference/org_pending.html">org_pending</a></span>(<span class="st">"ghclass-vignette"</span>)</span>
 <span id="cb4-6"><a href="#cb4-6"></a><span class="co">#&gt; [1] "ghclass-anya"    "ghclass-bruno"   "ghclass-diego"   "ghclass-elijah" </span></span>
 <span id="cb4-7"><a href="#cb4-7"></a><span class="co">#&gt; [5] "ghclass-francis" "ghclass-celine"</span></span></code></pre></div>
 <p>If we give things a bit of time, some of the students will have accepted the invitation.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw"><a href="../reference/org_members.html">org_members</a></span>(<span class="st">"ghclass-vignette"</span>)</span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="co">#&gt; [1] "ghclass-anya"          "ghclass-celine"        "ghclass-francis"      </span></span>
 <span id="cb5-3"><a href="#cb5-3"></a><span class="co">#&gt; [4] "mine-cetinkaya-rundel" "rundel"                "thereseanders"</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="kw">org_pending_members</span>(<span class="st">"ghclass-vignette"</span>)</span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="kw"><a href="../reference/org_pending.html">org_pending</a></span>(<span class="st">"ghclass-vignette"</span>)</span>
 <span id="cb5-5"><a href="#cb5-5"></a><span class="co">#&gt; [1] "ghclass-bruno"  "ghclass-diego"  "ghclass-elijah"</span></span></code></pre></div>
 <p>We can now see that Anya, Celine, and Francis have accepted the invite and we are still waitin on Bruno, Diego, and Elijah. Gentle prodding and reminder emails are often necessary to get all of the students into the organization.</p>
 </div>
@@ -172,7 +189,7 @@
 <span id="cb6-5"><a href="#cb6-5"></a><span class="co">#&gt;      https://developer.github.com/v3/teams/#create-team)</span></span>
 <span id="cb6-6"><a href="#cb6-6"></a><span class="co">#&gt; ✔ Created team 'hw01-team02' in org 'ghclass-vignette'.</span></span>
 <span id="cb6-7"><a href="#cb6-7"></a><span class="co">#&gt; ✔ Created team 'hw01-team03' in org 'ghclass-vignette'.</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw"><a href="../reference/team_create.html">team_create</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="dt">team=</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"team01"</span>, <span class="st">"team02"</span>,<span class="st">"team03"</span>), <span class="dt">prefix=</span><span class="st">"hw02-"</span>)</span>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw"><a href="../reference/team_create.html">team_create</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="dt">team=</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"team01"</span>, <span class="st">"team02"</span>,<span class="st">"team03"</span>), <span class="dt">prefix=</span><span class="st">"hw02-"</span>)</span>
 <span id="cb7-2"><a href="#cb7-2"></a><span class="co">#&gt; ✖ Failed to create team 'hw02-team01' in org 'ghclass-vignette'.</span></span>
 <span id="cb7-3"><a href="#cb7-3"></a><span class="co">#&gt;   GitHub API error (422): 422 Unprocessable Entity</span></span>
 <span id="cb7-4"><a href="#cb7-4"></a><span class="co">#&gt;   └─ Validation Failed (See</span></span>
@@ -225,7 +242,7 @@
 <h3 class="hasAnchor">
 <a href="#creating-a-team-assignment" class="anchor"></a>Creating a team assignment</h3>
 <p>Now that we have teams within our organization we can now create repos for each team and each assignment as well as add each team to these repositories (which gives then read and write access).</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>r =<span class="st"> </span><span class="kw"><a href="../reference/repo_create.html">repo_create</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="dt">name =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"team01"</span>, <span class="st">"team02"</span>,<span class="st">"team03"</span>), <span class="dt">prefix=</span><span class="st">"hw01-"</span>)</span>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>r =<span class="st"> </span><span class="kw"><a href="../reference/repo_create.html">repo_create</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="dt">name =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"team01"</span>, <span class="st">"team02"</span>,<span class="st">"team03"</span>), <span class="dt">prefix=</span><span class="st">"hw01-"</span>)</span>
 <span id="cb10-2"><a href="#cb10-2"></a><span class="co">#&gt; ✔ Created repo 'ghclass-vignette/hw01-team01'.</span></span>
 <span id="cb10-3"><a href="#cb10-3"></a><span class="co">#&gt; ✔ Created repo 'ghclass-vignette/hw01-team02'.</span></span>
 <span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt; ✔ Created repo 'ghclass-vignette/hw01-team03'.</span></span>
@@ -310,9 +327,9 @@
 <a href="#modifying-repos" class="anchor"></a>Modifying Repos</h3>
 <p>Mirroring repos is somewhat heavy handed, since it forces the target repo to be identical to the source repo. In some cases we only want to add or modify a single file in the repository.</p>
 <p>You can modify repos after they have been created. This will overwrite existing files with the same name in the repo, so you should be careful not to do this if students have already started working on the repos.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>file =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"README.md"</span>, <span class="dt">package =</span> <span class="st">"ghclass"</span>)</span>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>file =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"README.md"</span>, <span class="dt">package =</span> <span class="st">"ghclass"</span>)</span>
 <span id="cb17-2"><a href="#cb17-2"></a>file</span>
-<span id="cb17-3"><a href="#cb17-3"></a><span class="co">#&gt; [1] "/usr/local/lib/R/3.6/site-library/ghclass/README.md"</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="co">#&gt; [1] "/private/var/folders/kx/pvtbsc010kn6hbch7hm5yv040000gn/T/RtmpyLOpqE/temp_libpath305d4adda72b/ghclass/README.md"</span></span>
 <span id="cb17-4"><a href="#cb17-4"></a></span>
 <span id="cb17-5"><a href="#cb17-5"></a><span class="kw"><a href="../reference/repo_add_file.html">repo_add_file</a></span>(</span>
 <span id="cb17-6"><a href="#cb17-6"></a>  <span class="kw"><a href="../reference/org_repos.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>,<span class="st">"hw01-"</span>),</span>
@@ -337,26 +354,25 @@
 <span id="cb18-7"><a href="#cb18-7"></a><span class="co">#&gt; ✔ Added file 'README.md' to repo 'ghclass-vignette/hw01-team01'.</span></span>
 <span id="cb18-8"><a href="#cb18-8"></a><span class="co">#&gt; ✔ Added file 'README.md' to repo 'ghclass-vignette/hw01-team02'.</span></span>
 <span id="cb18-9"><a href="#cb18-9"></a><span class="co">#&gt; ✔ Added file 'README.md' to repo 'ghclass-vignette/hw01-team03'.</span></span></code></pre></div>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cat">cat</a></span>( <span class="kw"><a href="../reference/repo_get_readme.html">repo_get_readme</a></span>(<span class="st">"ghclass-vignette/hw01-team01"</span>) )</span>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>( <span class="kw"><a href="../reference/repo_get_readme.html">repo_get_readme</a></span>(<span class="st">"ghclass-vignette/hw01-team01"</span>) )</span>
 <span id="cb19-2"><a href="#cb19-2"></a><span class="co">#&gt; ## Homework 01</span></span>
 <span id="cb19-3"><a href="#cb19-3"></a><span class="co">#&gt; </span></span>
 <span id="cb19-4"><a href="#cb19-4"></a><span class="co">#&gt; This is the corrected version of the HW01 Readme</span></span></code></pre></div>
 <p>We can also use the function <code>repo_modify_file</code> to make changes to existing files,</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw"><a href="../reference/repo_modify_file.html">repo_modify_file</a></span>(</span>
-<span id="cb20-2"><a href="#cb20-2"></a>  <span class="kw"><a href="../reference/org_repos.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>,<span class="st">"hw01-"</span>),</span>
-<span id="cb20-3"><a href="#cb20-3"></a>  <span class="dt">file =</span> <span class="st">"README.md"</span>,</span>
-<span id="cb20-4"><a href="#cb20-4"></a>  <span class="dt">pattern =</span> <span class="st">"## Homework 01</span><span class="ch">\n</span><span class="st">"</span>,</span>
+<span id="cb20-2"><a href="#cb20-2"></a>  <span class="dt">repo =</span> <span class="kw"><a href="../reference/org_repos.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>,<span class="st">"hw01-"</span>),</span>
+<span id="cb20-3"><a href="#cb20-3"></a>  <span class="dt">path =</span> <span class="st">"README.md"</span>,</span>
+<span id="cb20-4"><a href="#cb20-4"></a>  <span class="dt">pattern =</span> <span class="st">"Due by 11:59 pm on Thursday 1/24/2019.</span><span class="ch">\n</span><span class="st">"</span>,</span>
 <span id="cb20-5"><a href="#cb20-5"></a>  <span class="dt">content =</span> <span class="st">"Due: Tomorrow</span><span class="ch">\n</span><span class="st">"</span>,</span>
-<span id="cb20-6"><a href="#cb20-6"></a>  <span class="dt">method =</span> <span class="st">"after"</span></span>
+<span id="cb20-6"><a href="#cb20-6"></a>  <span class="dt">method =</span> <span class="st">"replace"</span></span>
 <span id="cb20-7"><a href="#cb20-7"></a>)</span>
-<span id="cb20-8"><a href="#cb20-8"></a><span class="co">#&gt; ✔ Modified file 'ghclass-vignette/hw01-team01/README.md'.</span></span>
-<span id="cb20-9"><a href="#cb20-9"></a><span class="co">#&gt; ✔ Modified file 'ghclass-vignette/hw01-team02/README.md'.</span></span>
-<span id="cb20-10"><a href="#cb20-10"></a><span class="co">#&gt; ✔ Modified file 'ghclass-vignette/hw01-team03/README.md'.</span></span></code></pre></div>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cat">cat</a></span>( <span class="kw"><a href="../reference/repo_get_readme.html">repo_get_readme</a></span>(<span class="st">"ghclass-vignette/hw01-team01"</span>) )</span>
+<span id="cb20-8"><a href="#cb20-8"></a><span class="co">#&gt; ✖ Unable to find pattern '(Due by 11:59 pm on Thursday 1/24/2019.\n)' in 'ghclass-vignette/hw01-team01/README.md'.</span></span>
+<span id="cb20-9"><a href="#cb20-9"></a><span class="co">#&gt; ✖ Unable to find pattern '(Due by 11:59 pm on Thursday 1/24/2019.\n)' in 'ghclass-vignette/hw01-team02/README.md'.</span></span>
+<span id="cb20-10"><a href="#cb20-10"></a><span class="co">#&gt; ✖ Unable to find pattern '(Due by 11:59 pm on Thursday 1/24/2019.\n)' in 'ghclass-vignette/hw01-team03/README.md'.</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>( <span class="kw"><a href="../reference/repo_get_readme.html">repo_get_readme</a></span>(<span class="st">"ghclass-vignette/hw01-team01"</span>) )</span>
 <span id="cb21-2"><a href="#cb21-2"></a><span class="co">#&gt; ## Homework 01</span></span>
-<span id="cb21-3"><a href="#cb21-3"></a><span class="co">#&gt; Due: Tomorrow</span></span>
-<span id="cb21-4"><a href="#cb21-4"></a><span class="co">#&gt; </span></span>
-<span id="cb21-5"><a href="#cb21-5"></a><span class="co">#&gt; This is the corrected version of the HW01 Readme</span></span></code></pre></div>
+<span id="cb21-3"><a href="#cb21-3"></a><span class="co">#&gt; </span></span>
+<span id="cb21-4"><a href="#cb21-4"></a><span class="co">#&gt; This is the corrected version of the HW01 Readme</span></span></code></pre></div>
 </div>
 <div id="collecting-student-work" class="section level3">
 <h3 class="hasAnchor">
@@ -442,6 +458,7 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+
         <div id="tocnav">
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
@@ -460,17 +477,20 @@
 </div>
 
 
+
       <footer><div class="copyright">
   <p>Developed by Colin Rundel, Mine Cetinkaya-Rundel.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>
