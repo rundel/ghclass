@@ -1,6 +1,6 @@
-#' Style repository
+#' Style repository with styler
 #'
-#' `style_repo` implements "non-invasive pretty-printing of R source code" of .R or .Rmd files within a repository using the `styler` package and adhering to `tidyverse` formatting guidelines.
+#' `repo_style` implements "non-invasive pretty-printing of R source code" of .R or .Rmd files within a repository using the `styler` package and adhering to `tidyverse` formatting guidelines.
 #'
 #' @param repo Character. Address of repository in "owner/name" format.
 #' @param files Character or vector of characters. Names of .R and/or .Rmd files that styler should be applied to.
@@ -34,8 +34,6 @@ repo_style = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = 
   unlink(dir, recursive = TRUE)
   dir.create(dir, showWarnings = FALSE, recursive = TRUE)
 
-
-
   purrr::pwalk(
     list(repo, base, branch, draft),
     function(repo, base, branch, draft) {
@@ -43,10 +41,8 @@ repo_style = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = 
       path = get_repo_name(repo)
       unlink(path, recursive = TRUE)
 
-      ## TODO add base to branch
-      #branch_create(repo, cur_branch = base, new_branch = branch)
-      local_repo_clone(repo, local_path = dir, branch = base)
-      gert::git_branch_create(branch, repo = path)
+      return_on_any_failed( local_repo_clone(repo, local_path = dir, branch = base) )
+      return_on_any_failed( local_repo_branch(repo, branch = branch) )
 
       file_paths = unlist(purrr::map(files, ~ fs::dir_ls(path, recurse = TRUE, glob = .x)),
                           use.names = FALSE)
@@ -70,9 +66,9 @@ repo_style = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = 
         return()
       }
 
-      if (any_failed( local_repo_add(path) )) { return() }
-      local_repo_commit(path, msg)
-      local_repo_push(path, branch = branch)
+      return_on_any_failed( local_repo_add(path) )
+      return_on_any_failed( local_repo_commit(path, message = msg) )
+      return_on_any_failed( local_repo_push(path, branch = branch) )
 
       if (create_pull_request) {
         msg = paste(c(

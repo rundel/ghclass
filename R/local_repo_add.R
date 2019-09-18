@@ -26,5 +26,5 @@ local_repo_add = function(repo_dir, files = ".") {
     }
   )
 
-  iinvisible(res)
+  invisible(res)
 }
