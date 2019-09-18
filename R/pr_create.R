@@ -39,7 +39,7 @@ pr_create = function(repo, title, base, head = "master", body = "", draft = TRUE
       )
 
       details = usethis::ui_value( glue::glue(
-        "{repo} ({base} <= {head})"
+        "{repo} ({base} <- {head})"
       ) )
 
       status_msg(
