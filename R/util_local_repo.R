@@ -4,7 +4,7 @@ repo_dir_helper = function(repo_dir) {
   exists = fs::dir_exists(repo_dir)
   if(!all(exists)) {
     usethis::ui_stop( paste(
-      "Unable to locate the files: {usethis::ui_value(repo_dir[!exists])}."
+      "Unable to locate the repos: {usethis::ui_value(repo_dir[!exists])}."
     ) )
   }
 
