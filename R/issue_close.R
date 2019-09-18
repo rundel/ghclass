@@ -48,6 +48,8 @@ issue_close = function(repo, number) {
         glue::glue("Closed issue {usethis::ui_value(num_text)} for repo {usethis::ui_value(repo)}."),
         glue::glue("Failed to close issue {usethis::ui_value(num_text)} for repo {usethis::ui_value(repo)}.")
       )
+
+      res
     }
   )
 
@@ -83,6 +85,8 @@ issue_open = function(repo, number) {
         glue::glue("Opened issue {usethis::ui_value(num_text)} for repo {usethis::ui_value(repo)}."),
         glue::glue("Failed to open issue {usethis::ui_value(num_text)} for repo {usethis::ui_value(repo)}.")
       )
+
+      res
     }
   )
 

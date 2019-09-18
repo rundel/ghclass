@@ -46,6 +46,8 @@ issue_create = function(repo, title, body, labels = character(), assignees = cha
         glue::glue("Created issue for repo {usethis::ui_value(repo)}."),
         glue::glue("Failed to create issue for repo {usethis::ui_value(repo)}.")
       )
+
+      res
     }
   )
 
