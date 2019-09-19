@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Protect branch — branch_protect • ghclass</title>
+<title>Mirror template repository — repo_mirror_template • ghclass</title>
 
 
 <!-- jquery -->
@@ -35,10 +35,9 @@
 
 
 
-<meta property="og:title" content="Protect branch — branch_protect" />
-<meta property="og:description" content="`branch_protect`` turns on protection for the specified branch. See
-https://help.github.com/en/articles/about-protected-branches for more details
-on what this changes." />
+<meta property="og:title" content="Mirror template repository — repo_mirror_template" />
+<meta property="og:description" content="repo_mirror_template mirrors the content of one repository to another repository, or set of
+repositories." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -120,29 +119,32 @@ on what this changes." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Protect branch</h1>
+    <h1>Mirror template repository</h1>
     
-    <div class="hidden name"><code>branch_protect.Rd</code></div>
+    <div class="hidden name"><code>repo_mirror_template.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>`branch_protect`` turns on protection for the specified branch. See
-<a href='https://help.github.com/en/articles/about-protected-branches'>https://help.github.com/en/articles/about-protected-branches</a> for more details
-on what this changes.</p>
+    <p><code>repo_mirror_template</code> mirrors the content of one repository to another repository, or set of
+repositories.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>branch_protect</span>(<span class='no'>repo</span>, <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>)</pre>
+    <pre class="usage"><span class='fu'>repo_mirror_template</span>(<span class='no'>template_repo</span>, <span class='no'>repo</span>, <span class='kw'>private</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>repo</th>
-      <td><p>github repository address in <code>owner/repo</code> format</p></td>
+      <th>template_repo</th>
+      <td><p>Character. Address of template repository in <code>owner/name</code> format.</p></td>
     </tr>
     <tr>
-      <th>branch</th>
-      <td><p>name of the branch to protect</p></td>
+      <th>private</th>
+      <td><p>Logical. Should the new repository be private or public.</p></td>
+    </tr>
+    <tr>
+      <th>new_repo</th>
+      <td><p>Character. One or more repository addresses in <code>owner/name</code> format.</p></td>
     </tr>
     </table>
 

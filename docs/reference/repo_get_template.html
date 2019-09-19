@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Protect branch — branch_protect • ghclass</title>
+<title>Check if a GitHub repository is a template repository — repo_get_template • ghclass</title>
 
 
 <!-- jquery -->
@@ -35,10 +35,8 @@
 
 
 
-<meta property="og:title" content="Protect branch — branch_protect" />
-<meta property="og:description" content="`branch_protect`` turns on protection for the specified branch. See
-https://help.github.com/en/articles/about-protected-branches for more details
-on what this changes." />
+<meta property="og:title" content="Check if a GitHub repository is a template repository — repo_get_template" />
+<meta property="og:description" content="repo_get_template returns TRUE if the github repository is a template repository." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -120,38 +118,41 @@ on what this changes." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Protect branch</h1>
+    <h1>Check if a GitHub repository is a template repository</h1>
     
-    <div class="hidden name"><code>branch_protect.Rd</code></div>
+    <div class="hidden name"><code>repo_get_template.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>`branch_protect`` turns on protection for the specified branch. See
-<a href='https://help.github.com/en/articles/about-protected-branches'>https://help.github.com/en/articles/about-protected-branches</a> for more details
-on what this changes.</p>
+    <p><code>repo_get_template</code> returns TRUE if the github repository is a template repository.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>branch_protect</span>(<span class='no'>repo</span>, <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>)</pre>
+    <pre class="usage"><span class='fu'>repo_get_template</span>(<span class='no'>repo</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>repo</th>
-      <td><p>github repository address in <code>owner/repo</code> format</p></td>
-    </tr>
-    <tr>
-      <th>branch</th>
-      <td><p>name of the branch to protect</p></td>
+      <td><p>Character. Address of repository in "owner/name" format.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p>A logical vector</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'>repo_get_template</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"rundel/ghclass"</span>, <span class='st'>"rundel/ghclass_fake"</span>))
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
+      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Protect branch — branch_protect • ghclass</title>
+<title>Get the cloning url for a GitHub repo — repo_clone_url • ghclass</title>
 
 
 <!-- jquery -->
@@ -35,10 +35,8 @@
 
 
 
-<meta property="og:title" content="Protect branch — branch_protect" />
-<meta property="og:description" content="`branch_protect`` turns on protection for the specified branch. See
-https://help.github.com/en/articles/about-protected-branches for more details
-on what this changes." />
+<meta property="og:title" content="Get the cloning url for a GitHub repo — repo_clone_url" />
+<meta property="og:description" content="Get the cloning url for a GitHub repo" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -120,38 +118,40 @@ on what this changes." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Protect branch</h1>
+    <h1>Get the cloning url for a GitHub repo</h1>
     
-    <div class="hidden name"><code>branch_protect.Rd</code></div>
+    <div class="hidden name"><code>repo_clone_url.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>`branch_protect`` turns on protection for the specified branch. See
-<a href='https://help.github.com/en/articles/about-protected-branches'>https://help.github.com/en/articles/about-protected-branches</a> for more details
-on what this changes.</p>
+    <p>Get the cloning url for a GitHub repo</p>
     </div>
 
-    <pre class="usage"><span class='fu'>branch_protect</span>(<span class='no'>repo</span>, <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>)</pre>
+    <pre class="usage"><span class='fu'>repo_clone_url</span>(<span class='no'>repo</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"https"</span>, <span class='st'>"ssh"</span>))</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>repo</th>
-      <td><p>github repository address in <code>owner/repo</code> format</p></td>
+      <td><p>Character. Address of repository in "owner/name" format.</p></td>
     </tr>
     <tr>
-      <th>branch</th>
-      <td><p>name of the branch to protect</p></td>
+      <th>type</th>
+      <td><p>Character. Either https or ssh.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A character vector of urls</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
     </ul>
 
   </div>
