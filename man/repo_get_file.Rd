@@ -5,12 +5,12 @@
 \alias{get_file}
 \title{Low level function for retrieving a file from a GitHub Repository}
 \usage{
-repo_get_file(repo, file, branch = "master")
+repo_get_file(repo, path, branch = "master")
 }
 \arguments{
 \item{repo}{Character. Address of repository in \code{owner/name} format.}
 
-\item{file}{Characer. Path to the file within the repository.}
+\item{path}{Characer. Path to the file within the repository.}
 
 \item{branch}{Character. Name of branch to use, defaults to "master".}
 }

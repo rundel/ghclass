@@ -22,10 +22,8 @@ github_api_repo_get_readme = function(repo, branch) {
 #' @export
 #'
 repo_get_readme = function(repo, branch = "master") {
-  stopifnot(length(repo) == 1)
-  stopifnot(length(branch) == 1)
+  arg_is_chr_scalar(repo, branch)
 
   file = purrr::possibly(github_api_repo_get_readme, NULL)(repo, branch)
-
-  extract_content(file)
+  extract_content(repo, "README.md", file)
 }

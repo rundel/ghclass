@@ -12,6 +12,7 @@ repo_files = function(repo, branch = "master") {
   purrr::map2_dfr(
     repo, branch,
     function(repo, branch) {
+
       res = purrr::safely(github_api_repo_tree)(repo, branch)
 
       if (failed(res)) {
@@ -53,11 +54,22 @@ org_accept_invite = function(org, user, pat) {
   )
 }
 
-
 # Extracts base64 encoded content from files
-extract_content = function(file, include_details = TRUE) {
-  if (is.null(file))
-    return(NULL)
+extract_content = function(repo, path, file, include_details = TRUE) {
+  if (is.null(file)) {
+    usethis::ui_oops( paste(
+      "Unable to retrieve file {usethis::ui_value(path)}",
+      "from repo {usethis::ui_value(repo)}."
+    ) )
+    return(invisible(NULL))
+  }
+  if (is.null(file[["content"]])) {
+    usethis::ui_oops( paste(
+      "Unable to retrieve {usethis::ui_value(path)} in",
+      "repo {usethis::ui_value(repo)} is not a file."
+    ) )
+    return(invisible(NULL))
+  }
 
   content = base64enc::base64decode(file[["content"]])
   content = purrr::possibly(rawToChar, content)(content)
@@ -110,71 +122,10 @@ file_exists = function(repo, path, branch = "master"){
 
 }
 
-github_api_repo_commits = function(repo, sha=NULL, path=NULL, author=NULL, since=NULL, until=NULL) {
-  args = list(
-    endpoint = "GET /repos/:owner/:repo/commits",
-    owner = get_repo_owner(repo),
-    repo = get_repo_name(repo),
-    .token = github_get_token()
-  )
 
-  args[["sha"]] = sha
-  args[["path"]] = path
-  args[["author"]] = author
-  args[["since"]] = since
-  args[["until"]] = until
-
-  do.call(gh::gh, args)
-}
-
-
-get_commits = function(repo, sha = NULL, path = NULL, author = NULL, since = NULL, until = NULL) {
-
-  arg_is_chr(repo)
-  arg_is_chr_scalar(repo, sha, path, author, since, until, allow_null = TRUE)
-
-  purrr::map_dfr(
-    repo,
-    function(repo) {
-      res = purrr::safely(github_api_repo_commits)(
-        repo, sha, path, author, since, until
-      )
-
-      # API gives an error if the repo has 0 commits
-      res = allow_error(res, message = "Git Repository is empty")
-
-      status_msg(
-        res,
-        fail = glue::glue("Failed to retrieve commits from {usethis::ui_value(repo)}.")
-      )
-
-      commits = result(res)
-
-      if (empty_result(commits)) {
-        tibble::tibble(
-          repo = character(),
-          path = character(),
-          sha  = character(),
-          user = character(),
-          date = character(),
-          msg  = character()
-        )
-      } else {
-        tibble::tibble(
-          repo = repo,
-          path = ifelse(!is.null(path), path, character()),
-          sha  = purrr::map_chr(commits, "sha"),
-          user = purrr::map_chr(commits, c("author","login")),
-          date = purrr::map_chr(commits, c("commit","author","date")),
-          msg  = purrr::map_chr(commits, c("commit","message"))
-        )
-      }
-    }
-  )
-}
 
 check_file_modification = function(repo, path, branch = "master"){
   arg_is_chr_scalar(repo, branch, path)
-  commits = get_commits(repo, sha = branch, path = path)
+  commits = repo_commits(repo, branch = branch, path = path)
   nrow(commits) > 1
 }

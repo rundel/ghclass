@@ -5,7 +5,9 @@ github_api_repo = function(repo) {
     "GET /repos/:owner/:repo",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
-    .token = github_get_token()
+    .token = github_get_token(),
+    # Needed for template repos
+    .send_headers = c(Accept = "application/vnd.github.baptiste-preview+json")
   )
 }
 

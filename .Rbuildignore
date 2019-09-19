@@ -5,3 +5,5 @@ docs/
 man-roxygen/
 credentials/
 ^LICENSE\.md$
+^doc$
+^Meta$
