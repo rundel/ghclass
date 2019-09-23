@@ -14,14 +14,21 @@ repo_add_badge = function(repo, workflow, where = "^.", line_padding = "\n\n\n")
   arg_is_chr(repo, workflow)
   arg_is_chr_scalar(where, line_padding)
 
-  url = glue::glue("https://github.com/{repo}/workflows/{workflow}/badge.svg")
-  url = URLencode(url)
+  res = purrr::map2(
+    repo, workflow,
+    function(repo, workflow) {
+      url = glue::glue("https://github.com/{repo}/workflows/{workflow}/badge.svg")
+      url = URLencode(url)
 
-  link = glue::glue(
-    "[![{workflow} status]({url})](https://github.com/{repo}/actions){line_padding}"
+      link = glue::glue(
+        "[![{workflow} status]({url})](https://github.com/{repo}/actions){line_padding}"
+      )
+
+      repo_modify_file(repo, "README.md", where, content = link, method = "before")
+    }
   )
 
-  repo_modify_file(repo, "README.md", where, content = link, method = "before")
+  invisible(res)
 }
 
 
@@ -36,12 +43,19 @@ repo_add_badge = function(repo, workflow, where = "^.", line_padding = "\n\n\n")
 repo_remove_badge = function(repo, workflow = ".*?") {
   arg_is_chr(repo, workflow)
 
-  pattern = glue::glue(
-    "\\[!\\[{workflow} status\\]\\(.*?\\)\\]\\(https://github.com/.*?/actions\\)\\s*"
+  res = purrr::map2(
+    repo, workflow,
+    function(repo, workflow) {
+      pattern = glue::glue(
+        "\\[!\\[{workflow} status\\]\\(.*?\\)\\]\\(https://github.com/.*?/actions\\)\\s*"
+      )
+
+      repo_modify_file(
+        repo, "README.md",
+        pattern, content = "", method = "replace", all = TRUE
+      )
+    }
   )
 
-  repo_modify_file(
-    repo, "README.md",
-    pattern, content = "", method = "replace", all = TRUE
-  )
+  invisible(res)
 }
