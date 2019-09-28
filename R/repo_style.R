@@ -62,7 +62,7 @@ repo_style = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = 
       # Check if styler didnt fix anything
       status = gert::git_status(path)
       if (nrow(status) == 0) {
-        usethis::ui_info("No changes were suggested my styler")
+        usethis::ui_info("No changes were suggested by styler")
         return()
       }
 
