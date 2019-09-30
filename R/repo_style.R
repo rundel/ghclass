@@ -92,12 +92,28 @@ repo_style = function(repo, files = c("*.R", "*.Rmd"), branch = "styler", base =
         #    msg = paste0(msg,"\n\n", paste0("@", users, collapse = ", "))
         #}
 
-        pr_create(
-          repo, title = "styler revisions",
-          base = base, head = branch,
-          body = paste0(msg, collapse = "\n"),
-          draft = draft
-        )
+
+        open_prs = repo_prs(repo, state="open")
+        pr_already_open = any( (base == open_prs[["base_ref"]]) & (branch == open_prs[["head_ref"]]) )
+
+
+        if (pr_already_open) {
+          details = usethis::ui_value( glue::glue(
+            "{repo} ({base} <- {branch})"
+          ) )
+
+          usethis::ui_info( paste(
+            "Pull request {details} already exists.",
+            "New styler changes should still be reflected in this PR."
+          ) )
+        } else {
+          pr_create(
+            repo, title = "styler revisions",
+            base = base, head = branch,
+            body = paste0(msg, collapse = "\n"),
+            draft = draft
+          )
+        }
       }
     }
   )
