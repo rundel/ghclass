@@ -21,7 +21,7 @@ local_repo_pull(repo_dir, remote = "origin", branch = "master",
   verbose = FALSE)
 
 local_repo_push(repo_dir, remote = "origin", branch = "master",
-  verbose = FALSE)
+  verbose = FALSE, force = FALSE, prompt = TRUE)
 }
 \arguments{
 \item{repo_dir}{Vector of repo directories or a single directory containing one or more repos.}

@@ -1,16 +1,17 @@
 #' Style repository with styler
 #'
-#' `repo_style` implements "non-invasive pretty-printing of R source code" of .R or .Rmd files within a repository using the `styler` package and adhering to `tidyverse` formatting guidelines.
+#' `repo_style` implements "non-invasive pretty-printing of R source code" of .R or .Rmd files
+#' within a repository using the `styler` package and adhering to `tidyverse` formatting guidelines.
 #'
 #' @param repo Character. Address of repository in "owner/name" format.
 #' @param files Character or vector of characters. Names of .R and/or .Rmd files that styler should be applied to.
-#' @param branch Character. Name of new branch to be created. Default is "styler".
-#' @param base Character. Name of branch that contains the .R and/or .Rmd files to be reformatted.
+#' @param branch Character. Name of new branch to be created or overwritten. Default is "styler".
+#' @param base Character. Name of branch that contains the .R and/or .Rmd files to be styled
+#' @param create_pull_request Logical. If TRUE, a pull request is created from branch to base.
 #' @param draft Logical. Should the pull request be created as a draft pull request? (Draft PRs cannot be merged
 #'   until allowed by the author)
-#' @param create_pull_request Logical. If TRUE, a pull request is created from branch to base.
 #' @param tag_collaborators Logical. If TRUE, a message with the repository collaborators is displayed.
-#' @param git Chacacter. Path to the git binary.
+#' @param prompt Chacacter. Prompt the user before overwriting an existing branch.
 #'
 #' @examples
 #' \dontrun{
@@ -19,8 +20,9 @@
 #'
 #' @export
 #'
-repo_style = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = "master",
-                      draft = TRUE, create_pull_request = TRUE, tag_collaborators = TRUE) {
+repo_style = function(repo, files = c("*.R", "*.Rmd"), branch = "styler", base = "master",
+                      create_pull_request = TRUE, draft = TRUE, tag_collaborators = TRUE,
+                      prompt = TRUE) {
   require_styler()
   require_gert()
 
@@ -44,8 +46,12 @@ repo_style = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = 
       return_on_any_failed( local_repo_clone(repo, local_path = dir, branch = base) )
       return_on_any_failed( local_repo_branch(path, branch = branch) )
 
-      file_paths = unlist(purrr::map(files, ~ fs::dir_ls(path, recurse = TRUE, glob = .x)),
-                          use.names = FALSE)
+      #branch_exists = paste0("origin/",branch) %in% gert::git_branch_list(path)[["name"]]
+
+      file_paths = unlist(
+        purrr::map(files, ~ fs::dir_ls(path, recurse = TRUE, glob = .x)),
+        use.names = FALSE
+      )
 
       if (length(file_paths) == 0) {
         usethis::ui_oops( paste(
@@ -68,7 +74,7 @@ repo_style = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = 
 
       return_on_any_failed( local_repo_add(path) )
       return_on_any_failed( local_repo_commit(path, message = msg) )
-      return_on_any_failed( local_repo_push(path, branch = branch) )
+      return_on_any_failed( local_repo_push(path, branch = branch, force = TRUE, prompt = prompt) )
 
       if (create_pull_request) {
         msg = paste(c(
@@ -80,11 +86,11 @@ repo_style = function(repo, files = c("*.R","*.Rmd"), branch = "styler", base = 
           "you should review the style guide with an eye towards potentially improving your code formatting."
         ), collapse = "")
 
-        if (tag_collaborators) {
-          users = repo_collaborators(repo, include_admins = FALSE)[["username"]]
-          if (length(users) > 0)
-            msg = paste0(msg,"\n\n", paste0("@", users, collapse = ", "))
-        }
+        #if (tag_collaborators) {
+        #  users = repo_collaborators(repo, include_admins = FALSE)[["username"]]
+        #  if (length(users) > 0)
+        #    msg = paste0(msg,"\n\n", paste0("@", users, collapse = ", "))
+        #}
 
         pr_create(
           repo, title = "styler revisions",
