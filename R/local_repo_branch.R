@@ -5,8 +5,6 @@ local_repo_branch = function(repo_dir, branch) {
   arg_is_chr(repo_dir)
   arg_is_chr_scalar(branch)
 
-  print(repo_dir)
-
   repo_dir = repo_dir_helper(repo_dir)
 
   res = purrr::map(
