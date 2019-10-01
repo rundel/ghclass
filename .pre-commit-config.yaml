@@ -1,0 +1,9 @@
+repos:
+- repo: https://github.com/lorenzwalthert/pre-commit-hooks
+  rev: v0.0.0.9016
+  hooks:
+  - id: parsable-R
+  - id: roxygenize
+  - id: deps-in-desc
+  - id: use-tidy-description
+

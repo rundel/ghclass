@@ -1,40 +1,51 @@
 Package: ghclass
 Title: Tools for managing classes with github
 Version: 0.1.0
-Authors@R: c(person("Colin", "Rundel", email = "rundel@gmail.com", role = c("aut", "cre")),
-             person("Mine", "Cetinkaya-Rundel", email = "mine@rstudio.com", role = c("aut")),
-             person("Therese", "Anders", email = "tanders@usc.edu", role = c("ctb"))
-           )
+Authors@R: 
+    c(person(given = "Colin",
+             family = "Rundel",
+             role = c("aut", "cre"),
+             email = "rundel@gmail.com"),
+      person(given = "Mine",
+             family = "Cetinkaya-Rundel",
+             role = "aut",
+             email = "mine@rstudio.com"),
+      person(given = "Therese",
+             family = "Anders",
+             role = "ctb",
+             email = "tanders@usc.edu"))
 Description: Tools for managing classes with github.
-Depends: R (>= 3.4.0)
-Imports: 
-    gh,
-    usethis,
-    withr,
-    fs,
-    purrr,
-    yaml,
-    base64enc,
-    tibble,
-    glue,
-    processx,
-    stats,
-    crayon,
-    readr,
-    tidyr,
-    rlang,
-    lubridate
-Suggests: 
-    styler,
-    knitr,
-    rmarkdown,
-    here,
-    sodium
 License: GPL-3 + file LICENSE
-Encoding: UTF-8
 URL: https://rundel.github.io/ghclass/
 BugReports: https://github.com/rundel/ghclass/issues
+Depends: 
+    R (>= 3.4.0)
+Imports: 
+    base64enc,
+    crayon,
+    fs,
+    gh,
+    glue,
+    lubridate,
+    processx,
+    purrr,
+    readr,
+    rlang,
+    stats,
+    tibble,
+    tidyr,
+    usethis,
+    withr,
+    yaml
+Suggests: 
+    here,
+    knitr,
+    rmarkdown,
+    sodium,
+    styler
+VignetteBuilder: 
+    knitr
+Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
-VignetteBuilder: knitr
