@@ -16,6 +16,13 @@ github_api_org_repo_stats = function(org) {
             node {
               name
               isPrivate
+              object(expression: "master") {
+      					... on Commit {
+        					history {
+          					totalCount
+        					}
+      					}
+    					}
               closed_issues: issues(states: CLOSED) {
                 totalCount
               }
@@ -70,6 +77,7 @@ org_repo_stats = function(org) {
       tibble::tibble(
         repo          = paste0(org, "/", purrr::map_chr(repos, c("node", "name"))),
         private       = purrr::map_lgl(repos, c("node", "isPrivate")),
+        commits       = purrr::map_int(repos, c("node", "object", "history", "totalCount")),
         open_issues   = purrr::map_int(repos, c("node", "open_issues", "totalCount")),
         closed_issues = purrr::map_int(repos, c("node", "closed_issues", "totalCount")),
         open_prs      = purrr::map_int(repos, c("node", "open_prs", "totalCount")),
