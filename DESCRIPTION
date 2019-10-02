@@ -26,6 +26,7 @@ Imports:
     fs,
     gh,
     glue,
+    httr,
     lubridate,
     processx,
     purrr,
