@@ -15,7 +15,7 @@ basic statistics about those repositories.
 }
 \examples{
 \dontrun{
-org_repo_stats("ghclass")
+org_repo_stats("ghclass-demo")
 }
 
 }
