@@ -42,6 +42,12 @@ github_api_v4_graphql_paginated = function(query, vars, page_info, cursor_var = 
     res[[i]] = github_api_v4_graphql(query, vars)
     page = purrr::pluck(res[[i]], !!!page_info)
 
+    if (!is.null(res[[i]]$errors)) {
+      msgs = purrr::map(res[[i]]$errors, "message")
+      msg = paste(unlist(msgs), collapse="\n")
+      usethis::ui_stop(msg)
+    }
+
     if (is.null(page)) {
       usethis::ui_stop("Unable to locate page info for this query.")
     }
