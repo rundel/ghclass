@@ -28,6 +28,6 @@ github_api_user = function(user) {
 user_exists = function(user) {
   arg_is_chr(user)
 
-  res = purrr::map(user, github_api_user)
+  res = purrr::map(user, purrr::safely(github_api_user))
   purrr::map_lgl(res, succeeded)
 }
