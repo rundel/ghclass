@@ -77,6 +77,8 @@ repo_add_file = function(repo, file, message = NULL, repo_folder = NULL, branch 
               'If you want to force-add this file, re-run the command with {usethis::ui_code("overwrite = TRUE")}.'
             ) )
           }
-        })
-    })
+        }
+      )
+    }
+  )
 }

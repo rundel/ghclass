@@ -18,7 +18,7 @@ repo_add_badge = function(repo, workflow, where = "^.", line_padding = "\n\n\n")
     repo, workflow,
     function(repo, workflow) {
       url = glue::glue("https://github.com/{repo}/workflows/{workflow}/badge.svg")
-      url = URLencode(url)
+      url = utils::URLencode(url)
 
       link = glue::glue(
         "[![{workflow} status]({url})](https://github.com/{repo}/actions){line_padding}"
