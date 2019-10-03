@@ -35,6 +35,12 @@ local_repo_push(repo_dir, remote = "origin", branch = "master",
 \item{remote}{Repository remote to use.}
 
 \item{verbose}{Display verbose output.}
+
+\item{force}{Force push?}
+
+\item{prompt}{Prompt before force push?}
+
+\item{mirror}{Equivalent to \code{--mirror}}
 }
 \description{
 The functions provide tools for working with local git repositories, ghclass includes support for following git commands:

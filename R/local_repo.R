@@ -16,6 +16,9 @@
 #' @param message Commit message
 #' @param remote Repository remote to use.
 #' @param branch Repository branch to use.
+#' @param mirror Equivalent to `--mirror`
+#' @param force Force push?
+#' @param prompt Prompt before force push?
 #' @param verbose Display verbose output.
 #'
 #' @examples
