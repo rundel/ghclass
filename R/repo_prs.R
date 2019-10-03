@@ -17,6 +17,7 @@ github_api_repo_prs = function(repo, state) {
 #' `repo_prs` returns a data fram of repository pull requests.
 #'
 #' @param repo Character. Address of repository in `owner/name` format.
+#' @param state Character. Pull request state.
 #' @export
 #'
 repo_prs = function(repo, state = c("open","closed","all")) {

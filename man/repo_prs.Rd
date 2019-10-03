@@ -8,6 +8,8 @@ repo_prs(repo, state = c("open", "closed", "all"))
 }
 \arguments{
 \item{repo}{Character. Address of repository in \code{owner/name} format.}
+
+\item{state}{Character. Pull request state.}
 }
 \description{
 \code{repo_prs} returns a data fram of repository pull requests.
