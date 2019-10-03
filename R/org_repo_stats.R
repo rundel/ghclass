@@ -1,19 +1,18 @@
-github_api_org_repo_stats = function(org, inc_commits, inc_issues, inc_prs) {
-  org = graphql_quote(org)
+github_api_org_repo_stats = function(org, filter, filter_type, inc_commits, inc_issues, inc_prs) {
+  filter_type = paste(filter_type, collapse = ",")
 
   query = '
     query {
-      organization(login: {{{org}}}) {
-        login
-        repositories(first: 100, after: <graphql_quote(cursor)>) {
-          totalCount
-          pageInfo {
-            hasNextPage
-            endCursor
-          }
-          edges {
-            node {
-              name
+      search(query: "org:{{org}} {{filter}} {{filter_type}}", type: REPOSITORY, first: 100, after: <graphql_quote(cursor)>) {
+        repositoryCount
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+        edges {
+          node {
+            ... on Repository {
+              nameWithOwner
               isPrivate
               {{#inc_commits}}
               object(expression: "master") {
@@ -51,7 +50,7 @@ github_api_org_repo_stats = function(org, inc_commits, inc_issues, inc_prs) {
 
   query = whisker::whisker.render(query)
 
-  github_api_v4_graphql_paginated(query, page_info = c("organization", "repositories"))
+  github_api_v4_graphql_paginated(query, page_info = c("search"))
 }
 
 
@@ -63,7 +62,7 @@ github_api_org_repo_stats = function(org, inc_commits, inc_issues, inc_prs) {
 #'
 #' @param org Character. Name of the GitHub organization.
 #' @param filter Character. Regular expression pattern for matching (or excluding) repositories.
-#' @param exclude Logical. Should entries matching the regular expression in `filter` be excluded or included?
+#' @param filter_type Character. One or more GitHub search `in` qualifiers. See [documentation](https://help.github.com/en/articles/searching-for-repositories) for more details.
 #' @param inc_commits Logical. Include commit statistics
 #' @param inc_issues Logical. Include issue statistics
 #' @param inc_prs Logical. Include pull request statistics
@@ -75,20 +74,20 @@ github_api_org_repo_stats = function(org, inc_commits, inc_issues, inc_prs) {
 #'
 #' @export
 #'
-org_repo_stats = function(org, filter = NULL, exclude = FALSE, inc_commits = TRUE, inc_issues = TRUE, inc_prs = TRUE) {
-  arg_is_chr_scalar(org)
+org_repo_stats = function(org, filter = "", filter_type="in:name", inc_commits = TRUE, inc_issues = TRUE, inc_prs = TRUE) {
+  arg_is_chr_scalar(org, filter)
+  arg_is_chr(org, filter_type)
   arg_is_lgl_scalar(inc_commits, inc_issues, inc_prs)
 
-  pages = github_api_org_repo_stats(org, inc_commits, inc_issues, inc_prs)
+  pages = github_api_org_repo_stats(org, filter, filter_type, inc_commits, inc_issues, inc_prs)
 
-  res = purrr::map_dfr(
+  purrr::map_dfr(
     pages,
     function(page) {
-      org = purrr::pluck(page, "data", "organization", "login")
-      repos = purrr::pluck(page, "data", "organization", "repositories", "edges")
+      repos = purrr::pluck(page, "data", "search", "edges")
 
       df = tibble::tibble(
-        repo          = paste0(org, "/", purrr::map_chr(repos, c("node", "name"))),
+        repo          = purrr::map_chr(repos, c("node", "nameWithOwner")),
         private       = purrr::map_lgl(repos, c("node", "isPrivate"))
       )
 
@@ -111,6 +110,4 @@ org_repo_stats = function(org, filter = NULL, exclude = FALSE, inc_commits = TRU
       df
     }
   )
-
-  filter_results(res, "repo", filter, exclude)
 }

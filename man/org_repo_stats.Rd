@@ -4,7 +4,7 @@
 \alias{org_repo_stats}
 \title{Get organization repository}
 \usage{
-org_repo_stats(org, filter = NULL, exclude = FALSE,
+org_repo_stats(org, filter = "", filter_type = "in:name",
   inc_commits = TRUE, inc_issues = TRUE, inc_prs = TRUE)
 }
 \arguments{
@@ -12,7 +12,7 @@ org_repo_stats(org, filter = NULL, exclude = FALSE,
 
 \item{filter}{Character. Regular expression pattern for matching (or excluding) repositories.}
 
-\item{exclude}{Logical. Should entries matching the regular expression in \code{filter} be excluded or included?}
+\item{filter_type}{Character. One or more GitHub search \code{in} qualifiers. See \href{https://help.github.com/en/articles/searching-for-repositories}{documentation} for more details.}
 
 \item{inc_commits}{Logical. Include commit statistics}
 
