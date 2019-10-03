@@ -54,7 +54,7 @@ get_repo_url = function(repo, type = c("https","ssh"), use_token = TRUE)
 
 
 format_repo = function(repo, branch = "master", file = NULL) {
-  repo = if (branch == "master") {
+  repo = if (is.null(branch) || branch == "master") {
     repo
   } else{
     paste(repo, branch, sep="@")

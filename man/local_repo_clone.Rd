@@ -6,7 +6,7 @@
 \title{Local repository tools}
 \usage{
 local_repo_clone(repo, local_path = ".", branch = "master",
-  verbose = FALSE)
+  mirror = FALSE, verbose = FALSE)
 }
 \arguments{
 \item{repo}{GitHub repo address with the form \code{owner/name}.}
@@ -14,6 +14,8 @@ local_repo_clone(repo, local_path = ".", branch = "master",
 \item{local_path}{Local directory to store cloned repos.}
 
 \item{branch}{Repository branch to use.}
+
+\item{mirror}{Use equivalent of \code{--mirror} when cloning.}
 
 \item{verbose}{Display verbose output.}
 }

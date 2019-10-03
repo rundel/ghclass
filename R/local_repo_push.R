@@ -1,7 +1,8 @@
 #' @rdname local_repo
 #' @export
 local_repo_push = function(repo_dir, remote = "origin", branch = "master",
-                           verbose = FALSE, force = FALSE, prompt = TRUE) {
+                           force = FALSE, prompt = TRUE, mirror = FALSE,
+                           verbose = FALSE) {
   require_gert()
 
   arg_is_chr(repo_dir, remote, branch)
@@ -28,7 +29,8 @@ local_repo_push = function(repo_dir, remote = "origin", branch = "master",
         res = purrr::safely(gert::git_push)(
           remote = remote,
           refspec = glue::glue("refs/heads/{branch}:refs/heads/{branch}"),
-          verbose = verbose, repo = dir, force = force
+          repo = dir, force = force, mirror = mirror,
+          verbose = verbose
         )
       } else {
         res = purrr::safely(usethis::ui_stop)("User canceled (force push) overwrite of branch.")
