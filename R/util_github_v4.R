@@ -22,10 +22,11 @@ github_api_v4_graphql = function(query, vars) {
   res
 }
 
-github_api_v4_graphql_paginated = function(query, vars, page_info, cursor_var = "cursor") {
+github_api_v4_graphql_paginated = function(query, page_info, cursor_var = "cursor") {
   arg_is_chr_scalar(query)
   arg_is_chr(page_info)
 
+  vars = list()
   vars[cursor_var] = list(NULL)
 
   page_info = as.list(page_info)

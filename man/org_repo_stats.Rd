@@ -4,10 +4,21 @@
 \alias{org_repo_stats}
 \title{Get organization repository}
 \usage{
-org_repo_stats(org)
+org_repo_stats(org, filter = NULL, exclude = FALSE,
+  inc_commits = TRUE, inc_issues = TRUE, inc_prs = TRUE)
 }
 \arguments{
 \item{org}{Character. Name of the GitHub organization.}
+
+\item{filter}{Character. Regular expression pattern for matching (or excluding) repositories.}
+
+\item{exclude}{Logical. Should entries matching the regular expression in \code{filter} be excluded or included?}
+
+\item{inc_commits}{Logical. Include commit statistics}
+
+\item{inc_issues}{Logical. Include issue statistics}
+
+\item{inc_prs}{Logical. Include pull request statistics}
 }
 \description{
 \code{org_repo_stats} returns a tibble of repositories belonging to a GitHub organization along with some
