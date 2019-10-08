@@ -34,10 +34,13 @@ github_api_org_repo_stats = function(org, filter, filter_type, inc_commits, inc_
               }
               {{/inc_issues}}
               {{#inc_prs}}
-              closed_prs: pullRequests(states: CLOSED) {
+              open_prs: pullRequests(states: OPEN) {
                 totalCount
               }
-              open_prs: pullRequests(states: OPEN) {
+              merged_prs: pullRequests(states: MERGED) {
+                totalCount
+              }
+              closed_prs: pullRequests(states: CLOSED) {
                 totalCount
               }
               {{/inc_prs}}
@@ -104,6 +107,7 @@ org_repo_stats = function(org, filter = "", filter_type="in:name", inc_commits =
 
       if (inc_prs) {
         df$open_prs      = purrr::map_int(repos, c("node", "open_prs", "totalCount"))
+        df$merged_prs    = purrr::map_int(repos, c("node", "merged_prs", "totalCount"))
         df$closed_prs    = purrr::map_int(repos, c("node", "closed_prs", "totalCount"))
       }
 
