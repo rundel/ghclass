@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Mirror template repository — repo_mirror_template • ghclass</title>
+<title>Add a GitHub Action badge — repo_add_badge • ghclass</title>
 
 
 <!-- jquery -->
@@ -35,9 +35,8 @@
 
 
 
-<meta property="og:title" content="Mirror template repository — repo_mirror_template" />
-<meta property="og:description" content="repo_mirror_template mirrors the content of one repository to another repository, or set of
-repositories." />
+<meta property="og:title" content="Add a GitHub Action badge — repo_add_badge" />
+<meta property="og:description" content="Add a GitHub Action badge" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -119,32 +118,39 @@ repositories." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Mirror template repository</h1>
+    <h1>Add a GitHub Action badge</h1>
     
-    <div class="hidden name"><code>repo_mirror_template.Rd</code></div>
+    <div class="hidden name"><code>repo_add_badge.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>repo_mirror_template</code> mirrors the content of one repository to another repository, or set of
-repositories.</p>
+    <p>Add a GitHub Action badge</p>
     </div>
 
-    <pre class="usage"><span class='fu'>repo_mirror_template</span>(<span class='no'>template_repo</span>, <span class='no'>repo</span>, <span class='kw'>private</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>repo_add_badge</span>(<span class='no'>repo</span>, <span class='no'>workflow</span>, <span class='kw'>where</span> <span class='kw'>=</span> <span class='st'>"^."</span>,
+  <span class='kw'>line_padding</span> <span class='kw'>=</span> <span class='st'>"\n\n\n"</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>template_repo</th>
-      <td><p>Character. Address of template repository in <code>owner/name</code> format.</p></td>
-    </tr>
-    <tr>
       <th>repo</th>
-      <td><p>Character. One or more repository addresses in <code>owner/name</code> format.</p></td>
+      <td><p>Character. Address of repository in <code>owner/name</code> format.</p></td>
     </tr>
     <tr>
-      <th>private</th>
-      <td><p>Logical. Should the new repository be private or public.</p></td>
+      <th>workflow</th>
+      <td><p>Character. Name of the workflow located in
+<code>.github/workflows/</code> folder.</p></td>
+    </tr>
+    <tr>
+      <th>where</th>
+      <td><p>Character. Regex pattern of where to insert the badge, defaults
+to the beginning of the README</p></td>
+    </tr>
+    <tr>
+      <th>line_padding</th>
+      <td><p>Character. What should be added to the end of the link,
+defaults to sufficient new lines to add a blank line after the badge.</p></td>
     </tr>
     </table>
 

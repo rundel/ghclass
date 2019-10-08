@@ -12,7 +12,8 @@ github_api_org_admins = function(owner){
 #'
 #' @examples
 #' \dontrun{
-#' org_admins("Sta523-Fa17")
+#' org_admins("ghclass-test")
+#' org_admins("rundel")
 #' }
 #'
 #' @return A character vector of repository administrators.
@@ -26,8 +27,14 @@ org_admins = function(org) {
 
   res = purrr::safely(github_api_org_admins)(owner = org)
 
-  if (failed(res))
+  if (failed(res)) {
+    if (user_exists(org)) {
+      ## In this case it is a user not an org, admin is just that user
+      return(org)
+    }
+
     usethis::ui_stop(glue::glue("Failed to retrieve admins for org {usethis::ui_value(org)}."))
-  else
+  } else {
     purrr::map_chr(result(res), "login")
+  }
 }
