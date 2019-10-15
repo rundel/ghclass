@@ -59,7 +59,7 @@ format_repo = function(repo, branch = "master", path = NULL) {
     paste(repo, branch, sep="@")
   }
 
-  if (!is.null(file))
+  if (!is.null(path))
     repo = file.path(repo, path)
 
   repo
