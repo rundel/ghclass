@@ -9,18 +9,17 @@
 #' * git commit = `local_repo_commit`
 #' * git push = `local_repo_push`
 #' * git pull = `local_repo_pull`
+#' * git branch = `local_repo_branch`
 #'
 #' @param repo_dir Vector of repo directories or a single directory containing one or more repos.
 #' @param files Files to be staged
 #' @param message Commit message
 #' @param remote Repository remote to use.
 #' @param branch Repository branch to use.
-#' @param git Path to the local git binary. `require_git()` attempts to
-#' find the git binary based on your `PATH``, it will throw an error if git cannot be found.
-#' @param options Additional git binary options (e.g. `--all`).
+#' @param mirror Equivalent to `--mirror`
+#' @param force Force push?
+#' @param prompt Prompt before force push?
 #' @param verbose Display verbose output.
-#'
-#' @aliases add_repo clone_repo commit_repo pull_repo push_repo
 #'
 #' @examples
 #' \dontrun{

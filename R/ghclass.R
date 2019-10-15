@@ -3,13 +3,12 @@
 
 #' @section Local git repository functions:
 #'
-#' * [local_repo_clone()] or
-#'   [repo_clone()]        - (previously [clone_repo()]) -
-#' * [local_repo_add()]    - (previously [add_repo()]) -
-#' * [local_repo_commit()] - (previously [commit_repo()]) -
-#' * [local_repo_push()]   - (previously [push_repo()]) -
-#' * [local_repo_pull()]   - (previously [pull_repo()]) -
-#' * [local_repo_rename()] - (previously [rename_local_repo()]) -
+#' * [local_repo_clone()]
+#' * [local_repo_add()]
+#' * [local_repo_commit()]
+#' * [local_repo_push()]
+#' * [local_repo_pull()]
+#' * [local_repo_rename()]
 #'
 #'
 #' @section Organization functions:

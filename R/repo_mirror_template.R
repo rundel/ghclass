@@ -28,6 +28,7 @@ repo_mirror_template = function(template_repo, repo, private = TRUE) {
   arg_is_chr(repo)
   arg_is_lgl_scalar(private)
 
+  repo = unique(repo)
 
   res = purrr::map(
     repo,

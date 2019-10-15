@@ -1,40 +1,4 @@
 #' @export
-clone_repo = function(...) {
-  .Deprecated("local_repo_clone")
-  local_repo_clone(...)
-}
-
-#' @export
-add_repo = function(...) {
-  .Deprecated("local_repo_add")
-  local_repo_add(...)
-}
-
-#' @export
-commit_repo = function(...) {
-  .Deprecated("local_repo_commit")
-  local_repo_commit(...)
-}
-
-#' @export
-push_repo = function(...) {
-  .Deprecated("repo_push")
-  local_repo_push(...)
-}
-
-#' @export
-pull_repo = function(...) {
-  .Deprecated("local_repo_pull")
-  local_repo_pull(...)
-}
-
-#' @export
-rename_local_repo = function(...) {
-  .Deprecated("local_repo_rename")
-  local_repo_rename(...)
-}
-
-#' @export
 get_repo = function(...) {
   .Deprecated("org_repos")
   org_repos(...)

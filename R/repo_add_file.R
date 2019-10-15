@@ -70,11 +70,11 @@ repo_add_file = function(repo, file, message = NULL, repo_folder = NULL, branch 
           } else {
 
             usethis::ui_oops( paste(
-              'Failed to add file {usethis::ui_value(gh_path)} to repo {usethis::ui_value(repo)}:  already exists.\n',
+              'Failed to add file {usethis::ui_value(gh_path)} to repo {usethis::ui_value(repo)}, this file already exists.\n',
               if (check_file_modification(repo, gh_path, branch)) {
                 'File has been modified after initial commit.\n'
               },
-              'If you want to force-add this file, re-run the command with {usethis::ui_code("overwrite = TRUE")}.'
+              'If you want to force add this file, re-run the command with {usethis::ui_code("overwrite = TRUE")}.'
             ) )
           }
         }
