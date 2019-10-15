@@ -96,7 +96,7 @@ org_repo_stats = function(org, filter = "", filter_type="in:name", inc_commits =
 
       if (inc_commits) {
         df$commits     = purrr::map_int(repos, c("node", "object", "history", "totalCount"), .default=NA)
-        df$last_push   = lubridate::ymd_hms(purrr::map_chr(repos, c("node", "pushedAt")))
+        #df$last_push   = lubridate::ymd_hms(purrr::map_chr(repos, c("node", "pushedAt")))
         df$last_update = lubridate::ymd_hms(purrr::map_chr(repos, c("node", "updatedAt")))
       }
 
