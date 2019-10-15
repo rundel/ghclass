@@ -23,15 +23,19 @@ repo_mirror = function(source_repo, target_repo, verbose=FALSE) {
 
   withr::local_dir(tempdir())
 
-  dir = local_repo_clone(source_repo, getwd(), options = "--bare", verbose = verbose)
+  dir = file.path(getwd(), get_repo_name(source_repo))
+  unlink(dir, recursive = TRUE)
+
+  local_repo_clone(source_repo, getwd(), mirror = TRUE, verbose = verbose)
 
   purrr::walk(
     target_repo,
     function(repo) {
-      local_repo_mirror_push(dir, repo, verbose = verbose)
+      repo_url = glue::glue("https://github.com/{repo}.git")
+      local_repo_push(dir, remote = repo_url, mirror = TRUE, force = TRUE, verbose = verbose)
     }
   )
 
-  unlink(file.path(dir), recursive = TRUE)
+  unlink(dir, recursive = TRUE)
   usethis::ui_done("Removed local copy of {usethis::ui_value(source_repo)}")
 }

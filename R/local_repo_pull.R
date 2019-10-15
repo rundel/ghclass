@@ -1,30 +1,34 @@
 #' @rdname local_repo
 #' @export
-local_repo_pull = function(repo_dir, remote="origin", branch="master",
-                     git = require_git(), options = character(),
-                     verbose = FALSE)
-{
-  stopifnot(all(fs::dir_exists(repo_dir)))
-  stopifnot(fs::file_exists(git))
+local_repo_pull = function(repo_dir, remote="origin", branch="master", verbose = FALSE) {
+  require_gert()
+
+  arg_is_chr(repo_dir, remote, branch)
+  arg_is_lgl_scalar(verbose)
 
   dir = repo_dir_helper(repo_dir)
 
-  purrr::pwalk(
+  res = purrr::pmap(
     list(dir, remote, branch),
     function(dir, remote, branch) {
       withr::local_dir(dir)
 
-      res = purrr::safely(run_git)(
-        git, "pull", c(remote, branch, options), verbose = verbose
+      res = purrr::safely(gert::git_pull)(
+        remote = remote, repo = dir, verbose = verbose
       )
 
+      repo = fs::path_file(dir)
       status_msg(
         res,
-        glue::glue("Pulled {usethis::ui_value(dir)}."),
-        glue::glue("Failed to pull {usethis::ui_value(dir)}.")
+        glue::glue("Pulled to {usethis::ui_value(repo)}."),
+        glue::glue("Failed to pull to {usethis::ui_value(repo)}.")
       )
+
+      res
     }
   )
+
+  invisible(res)
 }
 
 

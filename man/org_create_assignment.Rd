@@ -4,7 +4,8 @@
 \alias{org_create_assignment}
 \title{Create a team or individual assignment}
 \usage{
-org_create_assignment(org, repo, user, team = NULL, source_repo = NULL)
+org_create_assignment(org, repo, user, team = NULL, source_repo = NULL,
+  private = TRUE)
 }
 \arguments{
 \item{org}{Character. Name of the GitHub organization.}
@@ -16,6 +17,8 @@ org_create_assignment(org, repo, user, team = NULL, source_repo = NULL)
 \item{team}{Character. Team names, if `NULL`` an individual assignment will be created.}
 
 \item{source_repo}{Character. Address of the repository to use as a template for all created repos.}
+
+\item{private}{Logical. Should the created repositories be private.}
 }
 \description{
 This is a higher level function that combines the following steps:
