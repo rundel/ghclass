@@ -52,7 +52,6 @@ get_repo_url = function(repo, type = c("https","ssh"), use_token = TRUE)
 }
 
 
-
 format_repo = function(repo, branch = "master", file = NULL) {
   repo = if (is.null(branch) || branch == "master") {
     repo
@@ -61,7 +60,7 @@ format_repo = function(repo, branch = "master", file = NULL) {
   }
 
   if (!is.null(file))
-    repo = file.path(repo, file)
+    repo = file.path(repo, path)
 
   repo
 }

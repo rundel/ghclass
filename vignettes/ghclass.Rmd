@@ -29,7 +29,6 @@ rm(enc, key)
 
 ```{r reset, include = FALSE}
 # Remove all repos, teams, and members
-
 repo_delete(org_repos("ghclass-vignette"), prompt = FALSE)
 team_delete("ghclass-vignette", org_teams("ghclass-vignette"), prompt = FALSE)
 org_remove("ghclass-vignette", org_members("ghclass-vignette", include_admins = FALSE), prompt = FALSE)
@@ -195,7 +194,7 @@ team_create("ghclass-vignette", roster$hw01)
 ```
 
 ```{r}
-team_create("ghclass-vignette", team= c("team01", "team02","team03"), prefix="hw02-")
+team_create("ghclass-vignette", team = c("team01", "team02", "team03"), prefix = "hw02-")
 ```
 
 Once the teams are created we can then add the students to these teams.

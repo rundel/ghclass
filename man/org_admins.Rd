@@ -18,7 +18,8 @@ List repository administrators
 }
 \examples{
 \dontrun{
-org_admins("Sta523-Fa17")
+org_admins("ghclass-test")
+org_admins("rundel")
 }
 
 }
