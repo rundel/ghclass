@@ -18,7 +18,7 @@ repo_modify_file(repo, path, pattern, content, method = c("replace",
 
 \item{content}{Character. Content to be added to the file.}
 
-\item{method}{Character. Should the content be \code{insert}ed after the match or should it \code{replace} the matched string.}
+\item{method}{Character. Should the content \code{replace} the matched pattern or be inserted \code{before} or \code{after} the match.}
 
 \item{all}{Character. Should all instances of the pattern be modified (\code{TRUE}) or just the first (\code{FALSE}).}
 
