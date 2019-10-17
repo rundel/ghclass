@@ -131,7 +131,7 @@ peer_get_rev = function(aut,
 
 
 
-github_api_issue_create = function(repo, title, body, assignee, labels) {
+github_api_peer_issue_create = function(repo, title, body, assignee, labels) {
   gh::gh(
     "POST /repos/:owner/:repo/issues",
     owner = get_repo_owner(repo),
@@ -281,7 +281,7 @@ peer_issue_create = function(out,
                   suffix = suffix
                 )
 
-                res = purrr::safely(github_api_issue_create)(
+                res = purrr::safely(github_api_peer_issue_create)(
                   repo = r,
                   title = title,
                   body = body,
