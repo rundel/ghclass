@@ -1,5 +1,5 @@
 github_api_get_org = function(org) {
-  arg_is_chr_scalar(user)
+  arg_is_chr_scalar(org)
 
   gh::gh(
     "/orgs/:org",
@@ -26,6 +26,6 @@ github_api_get_org = function(org) {
 org_exists = function(org) {
   arg_is_chr(org)
 
-  res = purrr::map(user, purrr::safely(github_api_get_org))
+  res = purrr::map(org, purrr::safely(github_api_get_org))
   purrr::map_lgl(res, succeeded)
 }
