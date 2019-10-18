@@ -35,20 +35,39 @@ org_repos = function(org, filter = NULL, exclude = FALSE, full_repo = TRUE) {
   arg_is_chr_scalar(org)
   arg_is_chr_scalar(filter, allow_null = TRUE)
 
-  res = purrr::safely(github_api_org_repos)(org)
-  status_msg(
-    res, fail = glue::glue("Failed to retrieve repos for org {usethis::ui_value(org)}.")
-  )
+  res = purrr::safely(
+    function() {
+      type = user_type(org)
+
+      if (is.na(type)) {
+        usethis::ui_stop( paste(
+          "Organization {usethis::ui_value(org)} does not exist on GitHub."
+        ) )
+      } else if (type == "Organization") {
+        github_api_org_repos(org)
+      } else if (type == "User") {
+        usethis::ui_stop( paste(
+          "{usethis::ui_value(org)} is a user not an organization.",
+          "Use {usethis::ui_code('user_repos')} instead."
+        ) )
+      } else {
+        usethis::ui_stop( paste(
+          "{usethis::ui_value(org)} has unknown type {usethis::ui_value(type)}."
+        ) )
+      }
+    }
+  )()
+
+  status_msg(res, fail = "Failed to retrieve repos for org {usethis::ui_value(org)}.")
 
   if (failed(res))
     return(invisible(NULL))
 
-  res = purrr::map(result(res), "name")
-  res = purrr::flatten_chr(res)
-  res = filter_results(res, filter, exclude)
+  if (full_repo) {
+    res = purrr::map_chr(result(res), "full_name")
+  } else {
+    res = purrr::map_chr(result(res), "name")
+  }
 
-  if (full_repo & length(res) > 0)
-    res = paste0(org,"/",res)
-
-  res
+  filter_results(res, filter, exclude)
 }
