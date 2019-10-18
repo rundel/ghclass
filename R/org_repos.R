@@ -58,7 +58,10 @@ org_repos = function(org, filter = NULL, exclude = FALSE, full_repo = TRUE) {
     }
   )()
 
-  status_msg(res, fail = "Failed to retrieve repos for org {usethis::ui_value(org)}.")
+  status_msg(
+    res,
+    fail = glue::glue("Failed to retrieve repos for org {usethis::ui_value(org)}.")
+  )
 
   if (failed(res))
     return(invisible(NULL))
