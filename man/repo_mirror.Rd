@@ -5,12 +5,15 @@
 \alias{mirror_repo}
 \title{Mirror repository}
 \usage{
-repo_mirror(source_repo, target_repo, verbose = FALSE)
+repo_mirror(source_repo, target_repo, overwrite = FALSE,
+  verbose = FALSE)
 }
 \arguments{
 \item{source_repo}{Character. Address of repository in "owner/name" format.}
 
 \item{target_repo}{Character. One or more repository addresses in "owner/name" format.}
+
+\item{overwrite}{Logical. Should the target repositories be overwritten.}
 
 \item{verbose}{Logical. Display verbose output.}
 }
