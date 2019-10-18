@@ -1,4 +1,4 @@
-github_api_user = function(user) {
+github_api_get_user = function(user) {
   arg_is_chr_scalar(user)
 
   gh::gh(
@@ -10,11 +10,11 @@ github_api_user = function(user) {
 
 #' Check if username(s) exists
 #'
-#' `user_exists` returns TRUE if the supplied username(s) exists on GitHub and FALSE otherwise.
+#' `user_exists` returns TRUE if the supplied username(s) exist on GitHub and FALSE otherwise.
 #'
-#' @param user Character. Username to be checked. Can be a vector or list of usernames.
+#' @param user Character. Username(s) to be checked.
 #'
-#' @return TRUE or FALSE
+#' @return Vector of logical values
 #'
 #' @examples
 #' \dontrun{
@@ -28,6 +28,6 @@ github_api_user = function(user) {
 user_exists = function(user) {
   arg_is_chr(user)
 
-  res = purrr::map(user, purrr::safely(github_api_user))
+  res = purrr::map(user, purrr::safely(github_api_get_user))
   purrr::map_lgl(res, succeeded)
 }

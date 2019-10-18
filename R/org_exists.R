@@ -14,11 +14,11 @@ github_api_get_org = function(org) {
 #'
 #' @param org Character. Organization name to be checked.
 #'
-#' @return TRUE or FALSE
+#' @return Vector of logical values
 #'
 #' @examples
 #' \dontrun{
-#' user_exists(c("rundel","ghclass-demo"))
+#' org_exists(c("rundel","ghclass-demo"))
 #' }
 #'
 #' @export
