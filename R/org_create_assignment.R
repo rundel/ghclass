@@ -16,21 +16,33 @@
 #'
 #' @export
 #'
-org_create_assignment = function(org, repo, user, team = NULL, source_repo = NULL, private = TRUE) {
+
+org_create_assignment = function(org, repo, user, team = NULL, source_repo = NULL,
+                                 private = TRUE) {
 
   arg_is_chr_scalar(org)
   arg_is_chr(repo, user)
   arg_is_chr(team, allow_null = TRUE)
   arg_is_chr_scalar(source_repo, allow_null = TRUE)
+  arg_is_lgl_scalar(private, overwrite)
 
   repos = paste0(org, "/", repo)
+
+  existing = repo_exists(repos)
+  if (any(existing)) {
+    usethis::ui_stop( c(
+      "The following repos already exist:",
+      "\t{usethis::ui_value(repos[existing])}.",
+      "Either delete them or use an alternative method to create the assignment."
+    ) )
+  }
 
   if (!is.null(source_repo) && repo_is_template(source_repo)) {
     repo_mirror_template(source_repo, repos, private = private)
   } else {
     repo_create(org, repo, private = private)
     if (!is.null(source_repo)) {
-      repo_mirror(source_repo, repos)
+      repo_mirror(source_repo, repos, overwrite = TRUE)
     }
   }
 
