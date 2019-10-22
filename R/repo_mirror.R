@@ -18,6 +18,7 @@
 #'
 #' @export
 #'
+
 repo_mirror = function(source_repo, target_repo, overwrite=FALSE, verbose=FALSE) {
   arg_is_chr_scalar(source_repo)
   arg_is_chr(target_repo)
@@ -39,11 +40,11 @@ repo_mirror = function(source_repo, target_repo, overwrite=FALSE, verbose=FALSE)
   }
 
   if (!overwrite & any(n_commits > 1)) {
-    usethis::ui_stop( paste(
+    usethis::ui_stop( c(
       "The following {usethis::ui_code('target_repo')}s have more than a single initialization commit:",
-      "\n\t{usethis::ui_value(target_repo[n_commits > 1])}.\n",
-      "This process will permanently overwrite these repositories. If you are sure this is what you want",
-      "to do re-run this function with {usethis::ui_code('overwrite = TRUE')}"
+      "\t{usethis::ui_value(target_repo[n_commits > 1])}.",
+      "This process will permanently overwrite these repositories. If you are sure this is what",
+      "you want to do re-run this function with {usethis::ui_code('overwrite = TRUE')}"
     ) )
   }
 

@@ -24,7 +24,7 @@ org_create_assignment = function(org, repo, user, team = NULL, source_repo = NUL
   arg_is_chr(repo, user)
   arg_is_chr(team, allow_null = TRUE)
   arg_is_chr_scalar(source_repo, allow_null = TRUE)
-  arg_is_lgl_scalar(private, overwrite)
+  arg_is_lgl_scalar(private)
 
   repos = paste0(org, "/", repo)
 
