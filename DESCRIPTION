@@ -24,7 +24,7 @@ Imports:
     base64enc,
     crayon,
     fs,
-    gert (> 0.2),
+    gert (>= 0.3),
     gh,
     glue,
     lubridate,
@@ -45,8 +45,6 @@ Suggests:
     styler
 VignetteBuilder: 
     knitr
-Remotes:
-    rundel/gert@mirror
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
