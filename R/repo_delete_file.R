@@ -25,12 +25,12 @@ repo_delete_file = function(repo, path, message = NULL, branch = "master") {
   arg_is_chr(repo, path, branch)
   arg_is_chr_scalar(message, allow_null = TRUE)
 
-  if (is.null(message))
-    message = glue::glue("Adding file: {path}")
 
   invisible(purrr::pmap(
     list(repo, path, branch),
     function(repo, path, branch) {
+      if (is.null(message))
+        message = glue::glue("Deleting file: {path}")
 
       res = purrr::safely(
         function() {
