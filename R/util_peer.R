@@ -523,8 +523,8 @@ repo_files_select = function(repo,
     repo_files = repo_files(repo = repo, branch = branch)
   }
 
-  path = repo_files[['path']][repo_files[['type']] == "blob" &
-                                !grepl("/", repo_files[['path']])]
+  sub = repo_files[['type']] == "blob" #& !grepl("/", repo_files[['path']])]
+  path = repo_files[['path']][sub]
 
   rx_exclude_pattern = paste(utils::glob2rx(exclude_pattern), collapse = "|")
   path[!grepl(rx_exclude_pattern, path)]
