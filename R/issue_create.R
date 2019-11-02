@@ -5,8 +5,8 @@ github_api_issue_create = function(repo, title, body, labels, assignees){
     repo = get_repo_name(repo),
     title = title,
     body = body,
-    labels = labels,
-    assignees = assignees,
+    labels = list(labels),
+    assignees = list(assignees),
     .token = github_get_token()
   )
 }
@@ -23,6 +23,7 @@ github_api_issue_create = function(repo, title, body, labels, assignees){
 #'
 #' @export
 #'
+
 issue_create = function(repo, title, body, labels = character(), assignees = character()) {
 
   arg_is_chr(repo, title, body)
