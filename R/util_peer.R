@@ -709,8 +709,9 @@ repo_path_content_grab = function(repo,
 
                if (path_exists) {
                  res = purrr::safely(repo_get_file)(repo = repo,
-                                                    file = path,
+                                                    path = path,
                                                     branch = branch)
+
                  if (succeeded(res))
                    list(content = res[['result']],
                         path = path)
