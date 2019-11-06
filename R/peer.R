@@ -744,7 +744,7 @@ peer_score_review = function(org,
   out = out[order(out[['user_random']]),]
 
   if (write_csv) {
-    fname = glue::glue("{revscores}_{fs::path_file(roster)}")
+    fname = glue::glue("revscores_{fs::path_file(roster)}")
     readr::write_csv(out, fname)
     usethis::ui_done("Saved file {usethis::ui_value(fname)} to working directory.")
   } else {
