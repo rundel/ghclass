@@ -710,7 +710,7 @@ peer_score_review = function(org,
                               rev_no = as.character(rdf[x, 'rev_no'])
 
                               feedback = purrr::safely(repo_get_file)(repo = repo,
-                                                                      file = ghpath)
+                                                                      path = ghpath)
 
                               if (succeeded(feedback)) {
                                 tc = textConnection(feedback[['result']])
@@ -812,7 +812,7 @@ peer_score_rating = function(org,
                               rev_no = as.character(rdf[x, 'rev_no'])
 
                               feedback = purrr::safely(repo_get_file)(repo = repo,
-                                                                      file = ghpath)
+                                                                      path = ghpath)
 
                               if (succeeded(feedback)) {
                                 tc = textConnection(feedback[['result']])
