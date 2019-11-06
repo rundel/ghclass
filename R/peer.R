@@ -744,7 +744,7 @@ peer_score_review = function(org,
   out = out[order(out[['user_random']]),]
 
   if (write_csv) {
-    prefix_for_fname = sub("-", "", prefix)
+    prefix_for_fname = sub("-$", "", prefix)
     fname = glue::glue('revscores-{prefix_for_fname}.csv')
     readr::write_csv(out, fname)
     usethis::ui_done("Saved file {usethis::ui_value(fname)} to working directory.")
