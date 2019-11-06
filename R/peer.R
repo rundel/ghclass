@@ -712,6 +712,12 @@ peer_score_review = function(org,
                               feedback = purrr::safely(repo_get_file)(repo = repo,
                                                                       path = ghpath)
 
+                              status_msg(
+                                feedback,
+                                glue::glue("Located file {usethis::ui_value(ghpath)} on repo {usethis::ui_value(repo)}."),
+                                glue::glue("Cannot locate file {usethis::ui_value(ghpath)} on repo {usethis::ui_value(repo)}.")
+                              )
+
                               if (succeeded(feedback)) {
                                 tc = textConnection(feedback[['result']])
                                 scores = rmarkdown::yaml_front_matter(tc)[['params']]
@@ -722,10 +728,6 @@ peer_score_review = function(org,
                                                       c("user", "rev_no", paste0("q", 1:length(scores))))
                                 tibble::as_tibble(as.list(inp))
 
-                              } else {
-                                usethis::ui_oops(
-                                  "Cannot locate file {usethis::ui_value(ghpath)} on repo {usethis::ui_value(repo)}."
-                                )
                               }
                             })
 
