@@ -63,7 +63,7 @@ org_repos = function(org, filter = NULL, exclude = FALSE, full_repo = TRUE) {
     fail = glue::glue("Failed to retrieve repos for org {usethis::ui_value(org)}.")
   )
 
-  if (failed(res))
+  if (failed(res) | empty_result(res))
     return(invisible(NULL))
 
   if (full_repo) {
