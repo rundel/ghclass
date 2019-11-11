@@ -187,27 +187,27 @@ ghclass:::org_accept_invite("ghclass-vignette", names(pats), pats)
 
 ### Creating teams
 
-We will now create teams which will be used for the first two homework assignments in the class. We can either use the `hw01` and `hw02` columns from the `roster` data frame directly or we can vectorize the process and add either a common prefix or suffix.
+We will now create teams which will be used for the first two homework assignments in the class. We can either use the `hw1` and `hw2` columns from the `roster` data frame directly or we can vectorize the process and add either a common prefix or suffix.
 
 ```{r}
-team_create("ghclass-vignette", roster$hw01)
+team_create("ghclass-vignette", roster$hw1)
 ```
 
 ```{r}
-team_create("ghclass-vignette", team = c("team01", "team02", "team03"), prefix = "hw02-")
+team_create("ghclass-vignette", team = c("team01", "team02", "team03"), prefix = "hw2-")
 ```
 
 Once the teams are created we can then add the students to these teams.
 
 ```{r}
-team_invite(org = "ghclass-vignette", user = roster$github, team = roster$hw01)
-team_invite(org = "ghclass-vignette", user = roster$github, team = roster$hw02)
+team_invite(org = "ghclass-vignette", user = roster$github, team = roster$hw1)
+team_invite(org = "ghclass-vignette", user = roster$github, team = roster$hw2)
 ```
 
 Also if we happen to try to invite students to a team that does not exist yet, then helpfully `team_invite` will create the team for you and then invite the students. This behavior is governed by the `create_missing_teams` parameter, which is `TRUE` by default.
 
 ```{r}
-team_invite("ghclass-vignette", roster$github, roster$hw03)
+team_invite("ghclass-vignette", roster$github, roster$hw3)
 ```
 
 
@@ -216,20 +216,20 @@ team_invite("ghclass-vignette", roster$github, roster$hw03)
 Now that we have teams within our organization we can now create repos for each team and each assignment as well as add each team to these repositories (which gives then read and write access).
 
 ```{r}
-r = repo_create("ghclass-vignette", name = c("team01", "team02","team03"), prefix="hw01-")
-repo_add_team(r, roster$hw01)
+r = repo_create("ghclass-vignette", name = c("team01", "team02","team03"), prefix="hw1-")
+repo_add_team(r, roster$hw1)
 ```
 
 In the above example we are counting on the fact that the team and repository names are identical, if this were not the case we could do something like the following:
 
 ```{r}
-teams = org_teams("ghclass-vignette", filter="hw01-", exclude = TRUE)
+teams = org_teams("ghclass-vignette", filter="hw1-", exclude = TRUE)
 
 repo_create("ghclass-vignette", teams)
 
-repo_add_team(org_repos("ghclass-vignette","hw02-"), roster$hw02)
+repo_add_team(org_repos("ghclass-vignette","hw2-"), roster$hw2)
 
-repo_add_team(org_repos("ghclass-vignette","hw03-"), roster$hw03)
+repo_add_team(org_repos("ghclass-vignette","hw3-"), roster$hw3)
 ```
 
 We can check on all of the existing teams and repos using the `org_teams` and `org_repos` functions respectively.
@@ -244,7 +244,7 @@ If we want to place starter docs / code into our assignment repos we can do this
 ```{r}
 repo_mirror(
   source_repo = "Sta323-Sp19/hw1",
-  target_repo = org_repos("ghclass-vignette","hw01-")
+  target_repo = org_repos("ghclass-vignette","hw1-")
 )
 ```
 
@@ -255,13 +255,13 @@ creating a team assignment, we will need to create repositories for each student
 
 ```{r}
 students = org_members("ghclass-vignette", include_admins = FALSE)
-repo_create("ghclass-vignette", students, prefix="hw04-")
+repo_create("ghclass-vignette", students, prefix="hw4-")
 ```
 
 Adding students individually to repos is done using the `repo_add_user` instead of the `repo_add_team` function.
 
 ```{r}
-repo_add_user(org_repos("ghclass-vignette", "hw04-"), students)
+repo_add_user(org_repos("ghclass-vignette", "hw4-"), students)
 ```
 
 And once again we can provide template code and documentation using the `repo_mirror` function.
@@ -269,7 +269,7 @@ And once again we can provide template code and documentation using the `repo_mi
 ```{r}
 repo_mirror(
   source_repo = "Sta323-Sp19/hw4",
-  target_repo = org_repos("ghclass-vignette","hw04-")
+  target_repo = org_repos("ghclass-vignette","hw4-")
 )
 ```
 
@@ -290,7 +290,7 @@ file = system.file("README.md", package = "ghclass")
 file
 
 repo_add_file(
-  org_repos("ghclass-vignette","hw01-"),
+  org_repos("ghclass-vignette","hw1-"),
   message = "Replace README.md with the correct version",
   file = file
 )
@@ -298,7 +298,7 @@ repo_add_file(
 
 ```{r}
 repo_add_file(
-  org_repos("ghclass-vignette","hw01-"),
+  org_repos("ghclass-vignette","hw1-"),
   message = "Replace README.md with the correct version",
   file = file,
   overwrite = TRUE
@@ -306,14 +306,14 @@ repo_add_file(
 ```
 
 ```{r}
-cat( repo_get_readme("ghclass-vignette/hw01-team01") )
+cat( repo_get_readme("ghclass-vignette/hw1-team01") )
 ```
 
 We can also use the function `repo_modify_file` to make changes to existing files,
 
 ```{r}
 repo_modify_file(
-  repo = org_repos("ghclass-vignette","hw01-"),
+  repo = org_repos("ghclass-vignette","hw1-"),
   path = "README.md",
   pattern = "Due by 11:59 pm on Thursday 1/24/2019.\n",
   content = "Due: Tomorrow\n",
@@ -322,7 +322,7 @@ repo_modify_file(
 ```
 
 ```{r}
-cat( repo_get_readme("ghclass-vignette/hw01-team01") )
+cat( repo_get_readme("ghclass-vignette/hw1-team01") )
 ```
 
 ### Collecting Student Work
@@ -332,15 +332,15 @@ Eventually the students will be finished with the work and of the assignment dea
 
 ```{r}
 local_repo_clone(
-  repo = org_repos("ghclass-vignette", "hw01-"),
-  local_path = "hw01"
+  repo = org_repos("ghclass-vignette", "hw1-"),
+  local_path = "hw1"
 )
 
-fs::dir_tree("hw01/.")
+fs::dir_tree("hw1/.")
 ```
 
 ```{r include=FALSE}
-unlink("hw01", recursive = TRUE)
+unlink("hw1", recursive = TRUE)
 ```
 
 ## Other Suggestions
