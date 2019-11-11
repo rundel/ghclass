@@ -160,7 +160,7 @@ GitHub organization.
 org_invite("ghclass-vignette", roster$github)
 ```
 
-We now need to wait for the students to accept these invitations before the will have access to the organization. We can check the status of these acceptances using the `org_members()` and `org_pending()` to see which students have accepting and have not accepted the invitation.
+We now need to wait for the students to accept these invitations before they will have access to the organization. We can check the status of these acceptances using the `org_members()` and `org_pending()` to see which students have accepting and have not accepted the invitation.
 
 ```{r}
 org_members("ghclass-vignette")
