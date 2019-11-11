@@ -127,15 +127,15 @@
     <p>Clones repositories from GitHub to a local directory.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>local_repo_clone</span>(<span class='no'>repo</span>, <span class='kw'>local_path</span> <span class='kw'>=</span> <span class='st'>"./"</span>, <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>,
-  <span class='kw'>git</span> <span class='kw'>=</span> <span class='fu'>require_git</span>(), <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(), <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>local_repo_clone</span>(<span class='no'>repo</span>, <span class='kw'>local_path</span> <span class='kw'>=</span> <span class='st'>"."</span>, <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>,
+  <span class='kw'>mirror</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>repo</th>
-      <td><p>GitHub repo names with the form <code>owner/name</code>.</p></td>
+      <td><p>GitHub repo address with the form <code>owner/name</code>.</p></td>
     </tr>
     <tr>
       <th>local_path</th>
@@ -146,13 +146,8 @@
       <td><p>Repository branch to use.</p></td>
     </tr>
     <tr>
-      <th>git</th>
-      <td><p>Path to the local git binary. <code>require_git()</code> attempts to
-find the git binary based on your `PATH``, it will throw an error if git cannot be found.</p></td>
-    </tr>
-    <tr>
-      <th>options</th>
-      <td><p>Additional git binary options (e.g. <code>--all</code>).</p></td>
+      <th>mirror</th>
+      <td><p>Use equivalent of <code>--mirror</code> when cloning.</p></td>
     </tr>
     <tr>
       <th>verbose</th>

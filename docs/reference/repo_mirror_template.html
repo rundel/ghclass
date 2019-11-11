@@ -36,8 +36,8 @@
 
 
 <meta property="og:title" content="Mirror template repository — repo_mirror_template" />
-<meta property="og:description" content="repo_mirror_template mirrors the content of one repository to another repository, or set of
-repositories." />
+<meta property="og:description" content="repo_mirror_template mirrors the content of a source (template) repository to a new (not yet created)
+repository, or vector of repositories." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -125,8 +125,8 @@ repositories." />
     </div>
 
     <div class="ref-description">
-    <p><code>repo_mirror_template</code> mirrors the content of one repository to another repository, or set of
-repositories.</p>
+    <p><code>repo_mirror_template</code> mirrors the content of a source (template) repository to a new (not yet created)
+repository, or vector of repositories.</p>
     </div>
 
     <pre class="usage"><span class='fu'>repo_mirror_template</span>(<span class='no'>template_repo</span>, <span class='no'>repo</span>, <span class='kw'>private</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
@@ -140,7 +140,8 @@ repositories.</p>
     </tr>
     <tr>
       <th>repo</th>
-      <td><p>Character. One or more repository addresses in <code>owner/name</code> format.</p></td>
+      <td><p>Character. One or more repository addresses in <code>owner/name</code> format.
+Note when using template repos these new repositories must not already exist.</p></td>
     </tr>
     <tr>
       <th>private</th>

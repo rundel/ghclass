@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>List repository administrators — org_admins • ghclass</title>
+<title>Check if organization exists — org_exists • ghclass</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="List repository administrators — org_admins" />
-<meta property="og:description" content="List repository administrators" />
+<meta property="og:title" content="Check if organization exists — org_exists" />
+<meta property="og:description" content="org_exists returns TRUE if the supplied org(s) exist on GitHub and FALSE otherwise." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -118,34 +118,33 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>List repository administrators</h1>
+    <h1>Check if organization exists</h1>
     
-    <div class="hidden name"><code>org_admins.Rd</code></div>
+    <div class="hidden name"><code>org_exists.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>List repository administrators</p>
+    <p><code>org_exists</code> returns TRUE if the supplied org(s) exist on GitHub and FALSE otherwise.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>org_admins</span>(<span class='no'>org</span>)</pre>
+    <pre class="usage"><span class='fu'>org_exists</span>(<span class='no'>org</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>org</th>
-      <td><p>Character. Name of a GitHub organization.</p></td>
+      <td><p>Character. Organization name to be checked.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A character vector of repository administrators.</p>
+    <p>Vector of logical values</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'>org_admins</span>(<span class='st'>"ghclass-test"</span>)
-<span class='fu'>org_admins</span>(<span class='st'>"rundel"</span>)
+<span class='fu'>org_exists</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"rundel"</span>,<span class='st'>"ghclass-demo"</span>))
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
