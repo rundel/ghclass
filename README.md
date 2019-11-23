@@ -7,4 +7,11 @@ an R user, and you probably teach R as well, though that's not a requirement
 since this package is all about setting up repositories with the right 
 permissions, not what your students put in those repositories. 
 
+Install the development version package from GitHub:
+
+``` r
+# install.packages("remotes")
+remotes::install_github("rundel/ghclass")
+```
+
 See package vignette for details on how to use the package.
