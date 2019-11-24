@@ -5,8 +5,8 @@ github_api_issue_create = function(repo, title, body, labels, assignees){
     repo = get_repo_name(repo),
     title = title,
     body = body,
-    labels = list(labels),
-    assignees = list(assignees),
+    labels = labels,
+    assignees = assignees,
     .token = github_get_token()
   )
 }
@@ -44,8 +44,8 @@ issue_create = function(repo, title, body, labels = character(), assignees = cha
 
       status_msg(
         res,
-        glue::glue("Created issue for repo {usethis::ui_value(repo)}."),
-        glue::glue("Failed to create issue for repo {usethis::ui_value(repo)}.")
+        glue::glue("Created issue {usethis::ui_value(title)} for repo {usethis::ui_value(repo)}."),
+        glue::glue("Failed to create issue {usethis::ui_value(title)} for repo {usethis::ui_value(repo)}.")
       )
 
       res
