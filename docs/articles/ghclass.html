@@ -162,7 +162,7 @@
 <span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt; ✔ Invited user 'ghclass-diego' to org 'ghclass-vignette'.</span></span>
 <span id="cb3-6"><a href="#cb3-6"></a><span class="co">#&gt; ✔ Invited user 'ghclass-elijah' to org 'ghclass-vignette'.</span></span>
 <span id="cb3-7"><a href="#cb3-7"></a><span class="co">#&gt; ✔ Invited user 'ghclass-francis' to org 'ghclass-vignette'.</span></span></code></pre></div>
-<p>We now need to wait for the students to accept these invitations before the will have access to the organization. We can check the status of these acceptances using the <code><a href="../reference/org_members.html">org_members()</a></code> and <code><a href="../reference/org_pending.html">org_pending()</a></code> to see which students have accepting and have not accepted the invitation.</p>
+<p>We now need to wait for the students to accept these invitations before they will have access to the organization. We can check the status of these acceptances using the <code><a href="../reference/org_members.html">org_members()</a></code> and <code><a href="../reference/org_pending.html">org_pending()</a></code> to see which students have accepting and have not accepted the invitation.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw"><a href="../reference/org_members.html">org_members</a></span>(<span class="st">"ghclass-vignette"</span>)</span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&gt; [1] "mine-cetinkaya-rundel" "rundel"                "thereseanders"</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="kw"><a href="../reference/org_members.html">org_members</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="dt">include_admins =</span> <span class="ot">FALSE</span>)</span>
@@ -311,7 +311,7 @@
 <p>You can modify repos after they have been created. This will overwrite existing files with the same name in the repo, so you should be careful not to do this if students have already started working on the repos.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>file =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"README.md"</span>, <span class="dt">package =</span> <span class="st">"ghclass"</span>)</span>
 <span id="cb17-2"><a href="#cb17-2"></a>file</span>
-<span id="cb17-3"><a href="#cb17-3"></a><span class="co">#&gt; [1] "/private/var/folders/kx/pvtbsc010kn6hbch7hm5yv040000gn/T/RtmpQFVZUe/temp_libpathbf33ba4ff01/ghclass/README.md"</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="co">#&gt; [1] "/private/var/folders/kx/pvtbsc010kn6hbch7hm5yv040000gn/T/RtmpQFVZUe/temp_libpathbf35e322718/ghclass/README.md"</span></span>
 <span id="cb17-4"><a href="#cb17-4"></a></span>
 <span id="cb17-5"><a href="#cb17-5"></a><span class="kw"><a href="../reference/repo_add_file.html">repo_add_file</a></span>(</span>
 <span id="cb17-6"><a href="#cb17-6"></a>  <span class="kw"><a href="../reference/org_repos.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>,<span class="st">"hw1-"</span>),</span>
@@ -350,7 +350,10 @@
 <span id="cb20-7"><a href="#cb20-7"></a>)</span>
 <span id="cb20-8"><a href="#cb20-8"></a><span class="co">#&gt; ✖ Unable to find pattern '(Due by 11:59 pm on Thursday 1/24/2019.\n)' in 'ghclass-vignette/hw1-team01/README.md'.</span></span>
 <span id="cb20-9"><a href="#cb20-9"></a><span class="co">#&gt; ✖ Unable to find pattern '(Due by 11:59 pm on Thursday 1/24/2019.\n)' in 'ghclass-vignette/hw1-team02/README.md'.</span></span>
-<span id="cb20-10"><a href="#cb20-10"></a><span class="co">#&gt; ✖ Unable to find pattern '(Due by 11:59 pm on Thursday 1/24/2019.\n)' in 'ghclass-vignette/hw1-team03/README.md'.</span></span></code></pre></div>
+<span id="cb20-10"><a href="#cb20-10"></a><span class="co">#&gt; ✖ Failed to modify file 'ghclass-vignette/hw1-team03/README.md'.</span></span>
+<span id="cb20-11"><a href="#cb20-11"></a><span class="co">#&gt;   GitHub API error (409): 409 Conflict</span></span>
+<span id="cb20-12"><a href="#cb20-12"></a><span class="co">#&gt;   └─ README.md does not match 84b65401a11c934442fd68d5641da35b69de3ad2 (See</span></span>
+<span id="cb20-13"><a href="#cb20-13"></a><span class="co">#&gt;      https://developer.github.com/v3/repos/contents/#create-or-update-a-file)</span></span></code></pre></div>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>( <span class="kw"><a href="../reference/repo_get_readme.html">repo_get_readme</a></span>(<span class="st">"ghclass-vignette/hw1-team01"</span>) )</span>
 <span id="cb21-2"><a href="#cb21-2"></a><span class="co">#&gt; ## Homework 01</span></span>
 <span id="cb21-3"><a href="#cb21-3"></a><span class="co">#&gt; </span></span>
