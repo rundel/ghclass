@@ -5,8 +5,15 @@
 \alias{create_repo}
 \title{Create repository}
 \usage{
-repo_create(org, name, prefix = "", suffix = "", private = TRUE,
-  auto_init = FALSE, gitignore_template = "R")
+repo_create(
+  org,
+  name,
+  prefix = "",
+  suffix = "",
+  private = TRUE,
+  auto_init = FALSE,
+  gitignore_template = "R"
+)
 }
 \arguments{
 \item{org}{Character. Name of the GitHub organization.}

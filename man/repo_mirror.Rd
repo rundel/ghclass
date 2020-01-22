@@ -5,8 +5,7 @@
 \alias{mirror_repo}
 \title{Mirror repository}
 \usage{
-repo_mirror(source_repo, target_repo, overwrite = FALSE,
-  verbose = FALSE)
+repo_mirror(source_repo, target_repo, overwrite = FALSE, verbose = FALSE)
 }
 \arguments{
 \item{source_repo}{Character. Address of repository in "owner/name" format.}

@@ -4,10 +4,15 @@
 \alias{peer_form_create_rating}
 \title{Create author rating form}
 \usage{
-peer_form_create_rating(category = c("helpfulness", "accuracy",
-  "fairness"), title = "Author rating form",
-  fname = "feedback_blank_rating", output = "github_document",
-  write_rmd = TRUE, overwrite = FALSE, allow_comment = FALSE)
+peer_form_create_rating(
+  category = c("helpfulness", "accuracy", "fairness"),
+  title = "Author rating form",
+  fname = "feedback_blank_rating",
+  output = "github_document",
+  write_rmd = TRUE,
+  overwrite = FALSE,
+  allow_comment = FALSE
+)
 }
 \arguments{
 \item{category}{Character. Categories to be included in the feedback form, defaults to \code{c("helpfulness", "accuracy", "fairness")}.}
@@ -34,13 +39,15 @@ peer_form_create_rating(c("accuracy", "fairness"))
 
 }
 \seealso{
-Other peer review functions: \code{\link{peer_assign}},
-  \code{\link{peer_file_add_aut}},
-  \code{\link{peer_file_add_rev}},
-  \code{\link{peer_form_create_review}},
-  \code{\link{peer_init}}, \code{\link{peer_return}},
-  \code{\link{peer_roster_create}},
-  \code{\link{peer_score_rating}},
-  \code{\link{peer_score_review}}
+Other peer review functions: 
+\code{\link{peer_assign}()},
+\code{\link{peer_file_add_aut}()},
+\code{\link{peer_file_add_rev}()},
+\code{\link{peer_form_create_review}()},
+\code{\link{peer_init}()},
+\code{\link{peer_return}()},
+\code{\link{peer_roster_create}()},
+\code{\link{peer_score_rating}()},
+\code{\link{peer_score_review}()}
 }
 \concept{peer review functions}

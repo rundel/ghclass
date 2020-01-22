@@ -5,8 +5,13 @@
 \alias{create_team}
 \title{Create team(s)}
 \usage{
-team_create(org, team, prefix = "", suffix = "",
-  privacy = c("secret", "closed"))
+team_create(
+  org,
+  team,
+  prefix = "",
+  suffix = "",
+  privacy = c("secret", "closed")
+)
 }
 \arguments{
 \item{org}{character, name of the GitHub organization}

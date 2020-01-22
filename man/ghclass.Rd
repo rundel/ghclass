@@ -3,7 +3,6 @@
 \docType{package}
 \name{ghclass}
 \alias{ghclass}
-\alias{ghclass-package}
 \title{ghclass: A package for github based classroom and assignment management}
 \description{
 ghclass: A package for github based classroom and assignment management

@@ -15,7 +15,7 @@ This function looks for the token in the following places (in order):
 \itemize{
 \item Value of \code{GITHUB_PAT} environmental variable.
 \item Value of \code{GITHUB_TOKEN} environmental variable.
-\item Contents of \code{~/.github/token} file.
+\item Contents of \verb{~/.github/token} file.
 }
 }
 \examples{

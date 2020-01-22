@@ -5,8 +5,14 @@
 \alias{put_file}
 \title{Low level function for adding a file to a Github repository}
 \usage{
-repo_put_file(repo, path, content, message = NULL, branch = "master",
-  verbose = TRUE)
+repo_put_file(
+  repo,
+  path,
+  content,
+  message = NULL,
+  branch = "master",
+  verbose = TRUE
+)
 }
 \arguments{
 \item{repo}{Character. Address of repository in \code{owner/name} format.}

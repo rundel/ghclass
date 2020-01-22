@@ -4,8 +4,7 @@
 \alias{pr_create}
 \title{Create pull request}
 \usage{
-pr_create(repo, title, base, head = "master", body = "",
-  draft = TRUE)
+pr_create(repo, title, base, head = "master", body = "", draft = TRUE)
 }
 \arguments{
 \item{repo}{Character. Address of one or more repositories in "owner/name" format.}

@@ -4,8 +4,13 @@
 \alias{user_repos}
 \title{Get user's repository}
 \usage{
-user_repos(user, type = c("owner", "all", "public", "private", "member"),
-  filter = NULL, exclude = FALSE, full_repo = TRUE)
+user_repos(
+  user,
+  type = c("owner", "all", "public", "private", "member"),
+  filter = NULL,
+  exclude = FALSE,
+  full_repo = TRUE
+)
 }
 \arguments{
 \item{user}{Character. Username of the GitHub user.}

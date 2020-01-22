@@ -5,8 +5,15 @@
 \alias{add_file}
 \title{Add files to a repo}
 \usage{
-repo_add_file(repo, file, message = NULL, repo_folder = NULL,
-  branch = "master", preserve_path = FALSE, overwrite = FALSE)
+repo_add_file(
+  repo,
+  file,
+  message = NULL,
+  repo_folder = NULL,
+  branch = "master",
+  preserve_path = FALSE,
+  overwrite = FALSE
+)
 }
 \arguments{
 \item{repo}{Character. Address of repository in "owner/name" format.}

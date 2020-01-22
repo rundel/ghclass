@@ -4,8 +4,14 @@
 \alias{org_create_assignment}
 \title{Create a team or individual assignment}
 \usage{
-org_create_assignment(org, repo, user, team = NULL, source_repo = NULL,
-  private = TRUE)
+org_create_assignment(
+  org,
+  repo,
+  user,
+  team = NULL,
+  source_repo = NULL,
+  private = TRUE
+)
 }
 \arguments{
 \item{org}{Character. Name of the GitHub organization.}

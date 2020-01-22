@@ -4,8 +4,7 @@
 \alias{peer_roster_create}
 \title{Create peer review roster}
 \usage{
-peer_roster_create(n_rev, user, seed = NULL, write_csv = TRUE,
-  dir = NULL)
+peer_roster_create(n_rev, user, seed = NULL, write_csv = TRUE, dir = NULL)
 }
 \arguments{
 \item{n_rev}{Numeric. Number of reviews per user. Must be larger than zero and smaller than the number of users.}
@@ -30,13 +29,15 @@ dir = "/Users/profx/introstats/hw2/")
 
 }
 \seealso{
-Other peer review functions: \code{\link{peer_assign}},
-  \code{\link{peer_file_add_aut}},
-  \code{\link{peer_file_add_rev}},
-  \code{\link{peer_form_create_rating}},
-  \code{\link{peer_form_create_review}},
-  \code{\link{peer_init}}, \code{\link{peer_return}},
-  \code{\link{peer_score_rating}},
-  \code{\link{peer_score_review}}
+Other peer review functions: 
+\code{\link{peer_assign}()},
+\code{\link{peer_file_add_aut}()},
+\code{\link{peer_file_add_rev}()},
+\code{\link{peer_form_create_rating}()},
+\code{\link{peer_form_create_review}()},
+\code{\link{peer_init}()},
+\code{\link{peer_return}()},
+\code{\link{peer_score_rating}()},
+\code{\link{peer_score_review}()}
 }
 \concept{peer review functions}

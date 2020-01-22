@@ -6,8 +6,7 @@
 \alias{get_members}
 \title{Get organization member}
 \usage{
-org_members(org, filter = NULL, exclude = FALSE,
-  include_admins = TRUE)
+org_members(org, filter = NULL, exclude = FALSE, include_admins = TRUE)
 }
 \arguments{
 \item{org}{Character. Name of the GitHub organization.}

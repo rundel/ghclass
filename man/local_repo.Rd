@@ -20,11 +20,22 @@ local_repo_commit(repo_dir, message)
 
 local_repo_log(repo_dir, max = 100)
 
-local_repo_pull(repo_dir, remote = "origin", branch = "master",
-  verbose = FALSE)
+local_repo_pull(
+  repo_dir,
+  remote = "origin",
+  branch = "master",
+  verbose = FALSE
+)
 
-local_repo_push(repo_dir, remote = "origin", branch = "master",
-  force = FALSE, prompt = TRUE, mirror = FALSE, verbose = FALSE)
+local_repo_push(
+  repo_dir,
+  remote = "origin",
+  branch = "master",
+  force = FALSE,
+  prompt = TRUE,
+  mirror = FALSE,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{repo_dir}{Vector of repo directories or a single directory containing one or more repos.}

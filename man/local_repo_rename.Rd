@@ -16,6 +16,6 @@ local_repo_rename(repo_dir, pattern, replacement)
 }
 \description{
 This is particularly helpful for renaming student repos to include
-something more useful like \code{Last, First name} or \code{netid} so that
+something more useful like \verb{Last, First name} or \code{netid} so that
 folder ordering matches student ordering within your LMS.
 }

@@ -4,8 +4,15 @@
 \alias{repo_commits}
 \title{Get repository commits}
 \usage{
-repo_commits(repo, branch = "master", sha = branch, path = NULL,
-  author = NULL, since = NULL, until = NULL)
+repo_commits(
+  repo,
+  branch = "master",
+  sha = branch,
+  path = NULL,
+  author = NULL,
+  since = NULL,
+  until = NULL
+)
 }
 \arguments{
 \item{repo}{Character. Address of repository in \code{owner/name} format.}

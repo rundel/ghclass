@@ -4,13 +4,20 @@
 \alias{peer_score_rating}
 \title{Collect scores from rating forms}
 \usage{
-peer_score_rating(org, roster, form_rating, double_blind = TRUE,
-  prefix = "", suffix = "", write_csv = TRUE)
+peer_score_rating(
+  org,
+  roster,
+  form_rating,
+  double_blind = TRUE,
+  prefix = "",
+  suffix = "",
+  write_csv = TRUE
+)
 }
 \arguments{
 \item{org}{Character. Name of the GitHub organization.}
 
-\item{roster}{Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column \code{user} with GitHub user names of authors, a column \code{user_random} with randomized tokens for user names, and one or more \code{rev*} columns that specify review assignments as values of the vector \code{user_random}.}
+\item{roster}{Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column \code{user} with GitHub user names of authors, a column \code{user_random} with randomized tokens for user names, and one or more \verb{rev*} columns that specify review assignments as values of the vector \code{user_random}.}
 
 \item{form_rating}{Character. File name of rating feedback form (must be .Rmd document).}
 
@@ -37,13 +44,15 @@ prefix = prefix)
 
 }
 \seealso{
-Other peer review functions: \code{\link{peer_assign}},
-  \code{\link{peer_file_add_aut}},
-  \code{\link{peer_file_add_rev}},
-  \code{\link{peer_form_create_rating}},
-  \code{\link{peer_form_create_review}},
-  \code{\link{peer_init}}, \code{\link{peer_return}},
-  \code{\link{peer_roster_create}},
-  \code{\link{peer_score_review}}
+Other peer review functions: 
+\code{\link{peer_assign}()},
+\code{\link{peer_file_add_aut}()},
+\code{\link{peer_file_add_rev}()},
+\code{\link{peer_form_create_rating}()},
+\code{\link{peer_form_create_review}()},
+\code{\link{peer_init}()},
+\code{\link{peer_return}()},
+\code{\link{peer_roster_create}()},
+\code{\link{peer_score_review}()}
 }
 \concept{peer review functions}
