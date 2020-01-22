@@ -1,5 +1,16 @@
-#' @rdname local_repo
-#' @export
+#' @title Local repository tools
+#'
+#' @description Returns up to `max` entries from a git repo's log
+#'
+#' @param repo_dir Vector of repo directories or a single directory containing one or more repos.
+#' @param max Maximum number of log entries to retrieve per repo.
+#'
+#' @examples
+#' \dontrun{
+#' local_repo_log("hw1/")
+#' }
+#'
+
 local_repo_log = function(repo_dir, max = 100) {
   require_gert()
   arg_is_chr(repo_dir)
