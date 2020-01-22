@@ -129,3 +129,8 @@ check_file_modification = function(repo, path, branch = "master"){
   commits = repo_commits(repo, branch = branch, path = path)
   nrow(commits) > 1
 }
+
+
+response_status = function(x) {
+  attr(x, "response")[["status"]]
+}

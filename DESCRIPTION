@@ -27,6 +27,7 @@ Imports:
     gert (>= 0.3),
     gh,
     glue,
+    httr,
     lubridate,
     purrr,
     readr,
@@ -35,6 +36,7 @@ Imports:
     tibble,
     tidyr,
     usethis,
+    whisker,
     withr,
     yaml
 Suggests: 
