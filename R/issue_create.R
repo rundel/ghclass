@@ -5,8 +5,8 @@ github_api_issue_create = function(repo, title, body, labels, assignees){
     repo = get_repo_name(repo),
     title = title,
     body = body,
-    labels = labels,
-    assignees = assignees,
+    labels = as.list(labels),
+    assignees = as.list(assignees),
     .token = github_get_token()
   )
 }
@@ -28,12 +28,11 @@ issue_create = function(repo, title, body, labels = character(), assignees = cha
 
   arg_is_chr(repo, title, body)
 
-  if (!is.list(labels))
-    labels = list(labels)
+  if (is.list(labels))
+    labels = unlist(labels)
 
-  if (!is.list(assignees))
-    assignees = list(assignees)
-
+  if (is.list(assignees))
+    assignees = unlist(assignees)
 
   res = purrr::pmap(
     list(repo, title, body, labels, assignees),
