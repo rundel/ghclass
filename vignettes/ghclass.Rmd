@@ -359,7 +359,7 @@ Member Privileges). We suggest the organization-level settings below.
 *Member repository permissions*
 
 * Base permissions: None
-* Repository creation: Disabled
+* Repository creation (both Public and Private): Disabled
 * Repository forking: Disabled
 
 *Admin repository permissions*
