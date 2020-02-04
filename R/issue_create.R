@@ -5,8 +5,8 @@ github_api_issue_create = function(repo, title, body, labels, assignees){
     repo = get_repo_name(repo),
     title = title,
     body = body,
-    labels = labels,
-    assignees = assignees,
+    labels = I(labels),
+    assignees = I(assignees),
     .token = github_get_token()
   )
 }
