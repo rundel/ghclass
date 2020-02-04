@@ -75,13 +75,13 @@
 
       
 
-      </header><div class="row">
+      </header><script src="ghclass_files/header-attrs-2.1/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Course management with ghclass</h1>
                         <h4 class="author">Mine Çetinkaya-Rundel, Colin Rundel, Therese Anders</h4>
             
-            <h4 class="date">2019-11-11</h4>
+            <h4 class="date">2020-02-04</h4>
       
       
       <div class="hidden name"><code>ghclass.Rmd</code></div>
@@ -129,8 +129,7 @@
 <span id="cb1-2"><a href="#cb1-2"></a><span class="co">#&gt; ✔ Your github token is functioning correctly.</span></span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="kw"><a href="../reference/github_test_token.html">github_test_token</a></span>(<span class="st">"bad token"</span>)</span>
 <span id="cb1-4"><a href="#cb1-4"></a><span class="co">#&gt; ✖ Your github token failed to authenticate.</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="co">#&gt;   GitHub API error (401): 401 Unauthorized</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="co">#&gt;   └─ Bad credentials (See https://developer.github.com/v3)</span></span></code></pre></div>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co">#&gt; </span></span></code></pre></div>
 </div>
 <div id="step-by-step-guide" class="section level2">
 <h2 class="hasAnchor">
@@ -168,8 +167,8 @@
 <span id="cb4-3"><a href="#cb4-3"></a><span class="kw"><a href="../reference/org_members.html">org_members</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="dt">include_admins =</span> <span class="ot">FALSE</span>)</span>
 <span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt; character(0)</span></span>
 <span id="cb4-5"><a href="#cb4-5"></a><span class="kw"><a href="../reference/org_pending.html">org_pending</a></span>(<span class="st">"ghclass-vignette"</span>)</span>
-<span id="cb4-6"><a href="#cb4-6"></a><span class="co">#&gt; [1] "ghclass-anya"    "ghclass-bruno"   "ghclass-diego"   "ghclass-elijah" </span></span>
-<span id="cb4-7"><a href="#cb4-7"></a><span class="co">#&gt; [5] "ghclass-francis" "ghclass-celine"</span></span></code></pre></div>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co">#&gt; [1] "ghclass-anya"    "ghclass-bruno"   "ghclass-diego"   "ghclass-elijah"  "ghclass-francis"</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co">#&gt; [6] "ghclass-celine"</span></span></code></pre></div>
 <p>If we give things a bit of time, some of the students will have accepted the invitation.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw"><a href="../reference/org_members.html">org_members</a></span>(<span class="st">"ghclass-vignette"</span>)</span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="co">#&gt; [1] "ghclass-anya"          "ghclass-celine"        "ghclass-francis"      </span></span>
@@ -251,14 +250,12 @@
 <span id="cb11-19"><a href="#cb11-19"></a><span class="co">#&gt; ✔ Added team 'hw3-team03' to repo 'ghclass-vignette/hw3-team03'.</span></span></code></pre></div>
 <p>We can check on all of the existing teams and repos using the <code>org_teams</code> and <code>org_repos</code> functions respectively.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw"><a href="../reference/org_teams.html">org_teams</a></span>(<span class="st">"ghclass-vignette"</span>)</span>
-<span id="cb12-2"><a href="#cb12-2"></a><span class="co">#&gt; [1] "hw1-team01" "hw1-team02" "hw1-team03" "hw2-team01" "hw2-team02"</span></span>
-<span id="cb12-3"><a href="#cb12-3"></a><span class="co">#&gt; [6] "hw2-team03" "hw3-team01" "hw3-team02" "hw3-team03"</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="co">#&gt; [1] "hw1-team01" "hw1-team02" "hw1-team03" "hw2-team01" "hw2-team02" "hw2-team03" "hw3-team01"</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="co">#&gt; [8] "hw3-team02" "hw3-team03"</span></span>
 <span id="cb12-4"><a href="#cb12-4"></a><span class="kw"><a href="../reference/org_repos.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>)</span>
-<span id="cb12-5"><a href="#cb12-5"></a><span class="co">#&gt; [1] "ghclass-vignette/hw1-team01" "ghclass-vignette/hw1-team02"</span></span>
-<span id="cb12-6"><a href="#cb12-6"></a><span class="co">#&gt; [3] "ghclass-vignette/hw1-team03" "ghclass-vignette/hw2-team01"</span></span>
-<span id="cb12-7"><a href="#cb12-7"></a><span class="co">#&gt; [5] "ghclass-vignette/hw2-team02" "ghclass-vignette/hw2-team03"</span></span>
-<span id="cb12-8"><a href="#cb12-8"></a><span class="co">#&gt; [7] "ghclass-vignette/hw3-team01" "ghclass-vignette/hw3-team02"</span></span>
-<span id="cb12-9"><a href="#cb12-9"></a><span class="co">#&gt; [9] "ghclass-vignette/hw3-team03"</span></span></code></pre></div>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="co">#&gt; [1] "ghclass-vignette/hw1-team01" "ghclass-vignette/hw1-team02" "ghclass-vignette/hw1-team03"</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="co">#&gt; [4] "ghclass-vignette/hw2-team01" "ghclass-vignette/hw2-team02" "ghclass-vignette/hw2-team03"</span></span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="co">#&gt; [7] "ghclass-vignette/hw3-team01" "ghclass-vignette/hw3-team02" "ghclass-vignette/hw3-team03"</span></span></code></pre></div>
 <p>If we want to place starter docs / code into our assignment repos we can do this by either adding the files directly or mirroring (copying) and existing repository on top of our assignment repo. Generally we have found it to be a good idea to create a public template repository for each assignment which is then used to populate each team individual repository. In this case we will borrow assignments from a class we’ve previously taught.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw"><a href="../reference/repo_mirror.html">repo_mirror</a></span>(</span>
 <span id="cb13-2"><a href="#cb13-2"></a>  <span class="dt">source_repo =</span> <span class="st">"Sta323-Sp19/hw1"</span>,</span>
@@ -311,7 +308,7 @@
 <p>You can modify repos after they have been created. This will overwrite existing files with the same name in the repo, so you should be careful not to do this if students have already started working on the repos.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>file =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"README.md"</span>, <span class="dt">package =</span> <span class="st">"ghclass"</span>)</span>
 <span id="cb17-2"><a href="#cb17-2"></a>file</span>
-<span id="cb17-3"><a href="#cb17-3"></a><span class="co">#&gt; [1] "/private/var/folders/kx/pvtbsc010kn6hbch7hm5yv040000gn/T/RtmpQFVZUe/temp_libpathbf35e322718/ghclass/README.md"</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="co">#&gt; [1] "/Users/rundel/Desktop/Projects/ghclass/inst/README.md"</span></span>
 <span id="cb17-4"><a href="#cb17-4"></a></span>
 <span id="cb17-5"><a href="#cb17-5"></a><span class="kw"><a href="../reference/repo_add_file.html">repo_add_file</a></span>(</span>
 <span id="cb17-6"><a href="#cb17-6"></a>  <span class="kw"><a href="../reference/org_repos.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>,<span class="st">"hw1-"</span>),</span>
@@ -350,10 +347,7 @@
 <span id="cb20-7"><a href="#cb20-7"></a>)</span>
 <span id="cb20-8"><a href="#cb20-8"></a><span class="co">#&gt; ✖ Unable to find pattern '(Due by 11:59 pm on Thursday 1/24/2019.\n)' in 'ghclass-vignette/hw1-team01/README.md'.</span></span>
 <span id="cb20-9"><a href="#cb20-9"></a><span class="co">#&gt; ✖ Unable to find pattern '(Due by 11:59 pm on Thursday 1/24/2019.\n)' in 'ghclass-vignette/hw1-team02/README.md'.</span></span>
-<span id="cb20-10"><a href="#cb20-10"></a><span class="co">#&gt; ✖ Failed to modify file 'ghclass-vignette/hw1-team03/README.md'.</span></span>
-<span id="cb20-11"><a href="#cb20-11"></a><span class="co">#&gt;   GitHub API error (409): 409 Conflict</span></span>
-<span id="cb20-12"><a href="#cb20-12"></a><span class="co">#&gt;   └─ README.md does not match 84b65401a11c934442fd68d5641da35b69de3ad2 (See</span></span>
-<span id="cb20-13"><a href="#cb20-13"></a><span class="co">#&gt;      https://developer.github.com/v3/repos/contents/#create-or-update-a-file)</span></span></code></pre></div>
+<span id="cb20-10"><a href="#cb20-10"></a><span class="co">#&gt; ✖ Unable to find pattern '(Due by 11:59 pm on Thursday 1/24/2019.\n)' in 'ghclass-vignette/hw1-team03/README.md'.</span></span></code></pre></div>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>( <span class="kw"><a href="../reference/repo_get_readme.html">repo_get_readme</a></span>(<span class="st">"ghclass-vignette/hw1-team01"</span>) )</span>
 <span id="cb21-2"><a href="#cb21-2"></a><span class="co">#&gt; ## Homework 01</span></span>
 <span id="cb21-3"><a href="#cb21-3"></a><span class="co">#&gt; </span></span>
@@ -407,7 +401,7 @@
 <p><em>Member repository permissions</em></p>
 <ul>
 <li>Base permissions: None</li>
-<li>Repository creation: Disabled</li>
+<li>Repository creation (both Public and Private): Disabled</li>
 <li>Repository forking: Disabled</li>
 </ul>
 <p><em>Admin repository permissions</em></p>

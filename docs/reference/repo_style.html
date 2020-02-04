@@ -129,9 +129,16 @@ within a repository using the styler package and adhering to tidyverse formattin
 within a repository using the <code>styler</code> package and adhering to <code>tidyverse</code> formatting guidelines.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>repo_style</span>(<span class='no'>repo</span>, <span class='kw'>files</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"*.R"</span>, <span class='st'>"*.Rmd"</span>), <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"styler"</span>,
-  <span class='kw'>base</span> <span class='kw'>=</span> <span class='st'>"master"</span>, <span class='kw'>create_pull_request</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>draft</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>tag_collaborators</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prompt</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>repo_style</span>(
+  <span class='no'>repo</span>,
+  <span class='kw'>files</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"*.R"</span>, <span class='st'>"*.Rmd"</span>),
+  <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"styler"</span>,
+  <span class='kw'>base</span> <span class='kw'>=</span> <span class='st'>"master"</span>,
+  <span class='kw'>create_pull_request</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>draft</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>tag_collaborators</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>prompt</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

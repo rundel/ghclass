@@ -147,13 +147,22 @@ git branch = local_repo_branch
 
 <span class='fu'>local_repo_commit</span>(<span class='no'>repo_dir</span>, <span class='no'>message</span>)
 
-<span class='fu'>local_repo_log</span>(<span class='no'>repo_dir</span>, <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>100</span>)
+<span class='fu'>local_repo_pull</span>(
+  <span class='no'>repo_dir</span>,
+  <span class='kw'>remote</span> <span class='kw'>=</span> <span class='st'>"origin"</span>,
+  <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>,
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)
 
-<span class='fu'>local_repo_pull</span>(<span class='no'>repo_dir</span>, <span class='kw'>remote</span> <span class='kw'>=</span> <span class='st'>"origin"</span>, <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-
-<span class='fu'>local_repo_push</span>(<span class='no'>repo_dir</span>, <span class='kw'>remote</span> <span class='kw'>=</span> <span class='st'>"origin"</span>, <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>,
-  <span class='kw'>force</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>prompt</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>mirror</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+<span class='fu'>local_repo_push</span>(
+  <span class='no'>repo_dir</span>,
+  <span class='kw'>remote</span> <span class='kw'>=</span> <span class='st'>"origin"</span>,
+  <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>,
+  <span class='kw'>force</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>prompt</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>mirror</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

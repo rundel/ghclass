@@ -127,10 +127,15 @@
     <p><code>peer_form_create_rating</code> creates a short feedback form for authors to rate the feedback they got from reviewers. The rating categories are based on Reily, K. and P. Ludford Finnerty,  and L. Terveen (2009): Two Peers Are Better Than One: Aggregating Peer Reviews for Computing Assignments is Surprisingly Accurate. In <em>Proceedings of the ACM 2009 International Conference on Supporting Group Work</em>. GROUP’09, May 10–13, 2009, Sanibel Island, Florida, USA.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>peer_form_create_rating</span>(<span class='kw'>category</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"helpfulness"</span>, <span class='st'>"accuracy"</span>,
-  <span class='st'>"fairness"</span>), <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>"Author rating form"</span>,
-  <span class='kw'>fname</span> <span class='kw'>=</span> <span class='st'>"feedback_blank_rating"</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"github_document"</span>,
-  <span class='kw'>write_rmd</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>allow_comment</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>peer_form_create_rating</span>(
+  <span class='kw'>category</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"helpfulness"</span>, <span class='st'>"accuracy"</span>, <span class='st'>"fairness"</span>),
+  <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>"Author rating form"</span>,
+  <span class='kw'>fname</span> <span class='kw'>=</span> <span class='st'>"feedback_blank_rating"</span>,
+  <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"github_document"</span>,
+  <span class='kw'>write_rmd</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>allow_comment</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -167,14 +172,16 @@
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other peer review functions: <code><a href='peer_assign.html'>peer_assign</a></code>,
-  <code><a href='peer_file_add_aut.html'>peer_file_add_aut</a></code>,
-  <code><a href='peer_file_add_rev.html'>peer_file_add_rev</a></code>,
-  <code><a href='peer_form_create_review.html'>peer_form_create_review</a></code>,
-  <code><a href='peer_init.html'>peer_init</a></code>, <code><a href='peer_return.html'>peer_return</a></code>,
-  <code><a href='peer_roster_create.html'>peer_roster_create</a></code>,
-  <code><a href='peer_score_rating.html'>peer_score_rating</a></code>,
-  <code><a href='peer_score_review.html'>peer_score_review</a></code></p></div>
+    <div class='dont-index'><p>Other peer review functions: 
+<code><a href='peer_assign.html'>peer_assign</a>()</code>,
+<code><a href='peer_file_add_aut.html'>peer_file_add_aut</a>()</code>,
+<code><a href='peer_file_add_rev.html'>peer_file_add_rev</a>()</code>,
+<code><a href='peer_form_create_review.html'>peer_form_create_review</a>()</code>,
+<code><a href='peer_init.html'>peer_init</a>()</code>,
+<code><a href='peer_return.html'>peer_return</a>()</code>,
+<code><a href='peer_roster_create.html'>peer_roster_create</a>()</code>,
+<code><a href='peer_score_rating.html'>peer_score_rating</a>()</code>,
+<code><a href='peer_score_review.html'>peer_score_review</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
