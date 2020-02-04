@@ -1,4 +1,10 @@
 
+<!-- badges: start -->
+
+[![R build
+status](https://github.com/rundel/ghclass/workflows/R-CMD-check/badge.svg)](https://github.com/rundel/ghclass)
+<!-- badges: end -->
+
 ## Tools for managing github class organization accounts
 
 This package is for everyone\! But really, if you’re an instructor who
