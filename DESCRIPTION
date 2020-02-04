@@ -16,7 +16,7 @@ Authors@R:
              email = "tanders@usc.edu"))
 Description: Tools for managing classes with github.
 License: GPL-3 + file LICENSE
-URL: https://rundel.github.io/ghclass/
+URL: https://github.com/rundel/ghclass
 BugReports: https://github.com/rundel/ghclass/issues
 Depends: 
     R (>= 3.4.0)
