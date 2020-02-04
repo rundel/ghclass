@@ -8,3 +8,4 @@ credentials/
 ^doc$
 ^Meta$
 .pre-commit-config.yaml
+.github/
