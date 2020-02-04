@@ -28,14 +28,14 @@ github_api_issue_create = function(repo, title, body, labels, assignees){
 #'
 #' issue_create(
 #'   "ghclass-test/issue-test",
-#'   title = "Issue 2", body = "This is also issue",
+#'   title = "Issue 2", body = "This is also an issue",
 #'   label = "Important"
 #' )
 #'
 #' issue_create(
 #'   "ghclass-test/issue-test",
-#'   title = "Issue 3", body = "This is also issue",
-#'   label = c("Important", "Super Important")
+#'   title = "Issue 3", body = "This is also an issue",
+#'   label = c("Important", "Super Important"),
 #'   assignees = "rundel"
 #' )
 #'
