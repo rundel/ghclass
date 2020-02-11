@@ -38,7 +38,8 @@ Imports:
     usethis,
     whisker,
     withr,
-    yaml
+    yaml,
+    dplyr
 Suggests: 
     here,
     knitr,
