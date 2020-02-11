@@ -73,6 +73,7 @@
 #' * [user_exists()] - (previously [check_user_exists()])
 #'
 #' @import gh
+#' @importFrom dplyr "%>%"
 #'
 #' @docType package
 #' @name ghclass

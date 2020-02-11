@@ -25,38 +25,40 @@ repo_mirror = function(source_repo, target_repo, overwrite=FALSE, verbose=FALSE)
   arg_is_lgl_scalar(overwrite, verbose)
 
   withr::local_dir(tempdir())
-
   dir = file.path(getwd(), get_repo_name(source_repo))
-  unlink(dir, recursive = TRUE)
+  unlink(dir, recursive = TRUE) # Make sure the source repo local folder does not exist
 
-  n_commits = table(repo_commits(target_repo)[["repo"]])
-
-  missing_repos = target_repo[!target_repo %in% names(n_commits)]
-  if (length(missing_repos) != 0) {
-    usethis::ui_stop( paste(
-      "The following {usethis::ui_code('target_repo')}s do not exist:",
-      "{usethis::ui_value(missing_repos)}"
-    ) )
-  }
-
-  if (!overwrite & any(n_commits > 1)) {
-    usethis::ui_stop( c(
-      "The following {usethis::ui_code('target_repo')}s have more than a single initialization commit:",
-      "\t{usethis::ui_value(target_repo[n_commits > 1])}.",
-      "This process will permanently overwrite these repositories. If you are sure this is what",
-      "you want to do re-run this function with {usethis::ui_code('overwrite = TRUE')}"
-    ) )
-  }
+  repos = repo_n_commits(target_repo, quiet = TRUE)
 
   local_repo_clone(source_repo, getwd(), mirror = TRUE, verbose = verbose)
 
-  purrr::walk(
-    target_repo,
-    function(repo) {
+  warned = FALSE
+
+  purrr::pwalk(
+    repos,
+    function(repo, n) {
       repo_url = glue::glue("https://github.com/{repo}.git")
 
+      if (is.na(n)) {
+        usethis::ui_oops("The repo {usethis::ui_value(repo)} does not exist")
+      } else if (n > 1 & !overwrite) {
+        msg = paste(
+          "The repo {usethis::ui_value(repo)} has more than one commit",
+          "(n_commit = {usethis::ui_value(n)})."
+        )
 
-      local_repo_push(dir, remote = repo_url, force = TRUE, prompt = FALSE, mirror = TRUE, verbose = verbose)
+        if (!warned) {
+          msg = c(msg, paste(
+            "Use {usethis::ui_code('overwrite = TRUE')} if you want to permanently",
+            "overwrite this repository."
+          ))
+          warned <<- TRUE
+        }
+
+        usethis::ui_oops( msg )
+      } else {
+        local_repo_push(dir, remote = repo_url, force = TRUE, prompt = FALSE, mirror = TRUE, verbose = verbose)
+      }
     }
   )
 

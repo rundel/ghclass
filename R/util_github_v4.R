@@ -1,4 +1,4 @@
-github_api_v4_graphql = function(query, vars) {
+github_api_v4_graphql = function(query, vars = list()) {
   arg_is_chr_scalar(query)
 
   query = graphql_glue(query, vars)

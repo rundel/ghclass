@@ -57,7 +57,7 @@ peer_roster_create = function(n_rev,
 
   if (is.null(seed)) {
     seed = sample.int(1e+06, 1L)
-    usethis::ui_warn("No seed was specified Using randomly sampled seed {usethis::ui_value(seed)}")
+    usethis::ui_warn("No seed was specified. Using randomly sampled seed {usethis::ui_value(seed)}")
   }
 
   withr::with_seed(seed, {
