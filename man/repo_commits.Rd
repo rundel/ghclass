@@ -11,7 +11,8 @@ repo_commits(
   path = NULL,
   author = NULL,
   since = NULL,
-  until = NULL
+  until = NULL,
+  quiet = FALSE
 )
 }
 \arguments{
@@ -25,9 +26,11 @@ repo_commits(
 
 \item{author}{Character.    GitHub login or email address by which to filter commit author.}
 
-\item{since}{Character.    Only commits after this date will be returned, \code{YYYY-MM-DDTHH:MM:SSZ} format.}
+\item{since}{Character.    Only commits after this date will be returned, expects \code{YYYY-MM-DDTHH:MM:SSZ} format.}
 
-\item{until}{Character.    Only commits before this date will be returned, \code{YYYY-MM-DDTHH:MM:SSZ} format.
+\item{until}{Character.    Only commits before this date will be returned, expects \code{YYYY-MM-DDTHH:MM:SSZ} format.}
+
+\item{quiet}{Logical. Should an error message be printed if the repo does not exist.
 Character.}
 }
 \description{

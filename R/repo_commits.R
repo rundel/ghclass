@@ -71,8 +71,9 @@ github_api_repo_commits = function(repo, sha=NULL, path=NULL, author=NULL, since
 #' @param sha	   Character.	SHA to start listing commits from.
 #' @param path	 Character.	Only commits containing this file path will be returned.
 #' @param author Character.	GitHub login or email address by which to filter commit author.
-#' @param since	 Character.	Only commits after this date will be returned, `YYYY-MM-DDTHH:MM:SSZ` format.
-#' @param until	 Character.	Only commits before this date will be returned, `YYYY-MM-DDTHH:MM:SSZ` format.
+#' @param since	 Character.	Only commits after this date will be returned, expects `YYYY-MM-DDTHH:MM:SSZ` format.
+#' @param until	 Character.	Only commits before this date will be returned, expects `YYYY-MM-DDTHH:MM:SSZ` format.
+#' @param quiet  Logical. Should an error message be printed if the repo does not exist.
 #'Character.
 #' @examples
 #' \dontrun{
@@ -83,11 +84,12 @@ github_api_repo_commits = function(repo, sha=NULL, path=NULL, author=NULL, since
 #'
 
 repo_commits = function(repo, branch = "master", sha = branch, path = NULL,
-                        author = NULL, since = NULL, until = NULL) {
+                        author = NULL, since = NULL, until = NULL, quiet = FALSE) {
 
   arg_is_chr(repo)
   arg_is_chr_scalar(branch, sha)
   arg_is_chr_scalar(path, author, since, until, allow_null = TRUE)
+  arg_is_lgl_scalar(quiet)
 
   purrr::map_dfr(
     repo,
@@ -99,10 +101,12 @@ repo_commits = function(repo, branch = "master", sha = branch, path = NULL,
       # API gives an error if the repo has 0 commits
       res = allow_error(res, message = "Git Repository is empty")
 
-      status_msg(
-        res,
-        fail = glue::glue("Failed to retrieve commits from {usethis::ui_value(repo)}.")
-      )
+      if (!quiet) {
+        status_msg(
+          res,
+          fail = glue::glue("Failed to retrieve commits from {usethis::ui_value(repo)}.")
+        )
+      }
 
       commits = result(res)
 
