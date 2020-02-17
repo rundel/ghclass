@@ -36,10 +36,3 @@ org_pending = function(org, filter = NULL, exclude = FALSE) {
   invite = purrr::flatten_chr(invite)
   filter_results(invite, filter, exclude)
 }
-
-#' @export
-#'
-org_pending_members = function(org, filter = NULL, exclude = FALSE) {
-  .Deprecated("org_pending")
-  org_pending(org, filter, exclude)
-}

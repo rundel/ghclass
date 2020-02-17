@@ -2,6 +2,7 @@
 % Please edit documentation in R/local_repo_clone.R
 \name{local_repo_clone}
 \alias{local_repo_clone}
+\alias{repo_clone}
 \title{Local repository tools}
 \usage{
 local_repo_clone(

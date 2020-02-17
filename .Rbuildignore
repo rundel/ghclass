@@ -9,3 +9,4 @@ credentials/
 ^Meta$
 .pre-commit-config.yaml
 .github/
+README.Rmd

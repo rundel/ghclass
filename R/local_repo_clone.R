@@ -14,7 +14,8 @@
 #' local_repo_clone(g, "hw3")
 #' }
 #'
-
+#' @aliases repo_clone
+#'
 #' @export
 local_repo_clone = function(repo, local_path=".", branch = "master", mirror = FALSE, verbose = FALSE) {
   require_gert()

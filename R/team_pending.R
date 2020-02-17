@@ -51,10 +51,3 @@ team_pending = function(org, team = org_teams(org)) {
     }
   )
 }
-
-#' @export
-#'
-team_pending_members = function(org, team = org_teams(org)) {
-  .Deprecated("team_pending")
-  team_pending(org, team)
-}
