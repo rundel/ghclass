@@ -19,9 +19,6 @@ github_api_team_repos = function(team_id) {
 #' team_repos("ghclass",c("team01","team02"))
 #' }
 #'
-
-#' @aliases get_team_repos
-#'
 #' @export
 #'
 team_repos = function(org, team) {

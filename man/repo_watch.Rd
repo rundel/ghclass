@@ -2,7 +2,6 @@
 % Please edit documentation in R/repo_watch.R
 \name{repo_watch}
 \alias{repo_watch}
-\alias{watch_repo}
 \title{Watch repository}
 \usage{
 repo_watch(repo)

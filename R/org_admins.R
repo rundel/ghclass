@@ -18,8 +18,6 @@ github_api_org_admins = function(owner){
 #'
 #' @return A character vector of repository administrators.
 #'
-#' @aliases get_admin
-#'
 #' @export
 #'
 org_admins = function(org) {

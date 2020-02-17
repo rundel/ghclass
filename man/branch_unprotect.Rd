@@ -2,7 +2,6 @@
 % Please edit documentation in R/branch_unprotect.R
 \name{branch_unprotect}
 \alias{branch_unprotect}
-\alias{unprotect_branch}
 \title{Unprotect branch}
 \usage{
 branch_unprotect(repo, branch = "master")

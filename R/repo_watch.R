@@ -21,8 +21,6 @@ github_api_repo_subscribe = function(repo, subscribed, ignored){
 #'
 #' @param repo github repository address in `owner/repo` format
 #'
-#' @aliases watch_repo
-#'
 #' @export
 #'
 repo_watch = function(repo) {

@@ -2,7 +2,6 @@
 % Please edit documentation in R/org_team_ids.R
 \name{org_team_ids}
 \alias{org_team_ids}
-\alias{get_teams}
 \title{Get organization teams and their ids}
 \usage{
 org_team_ids(org, filter = NULL, exclude = FALSE)

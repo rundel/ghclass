@@ -27,9 +27,6 @@ github_api_repo = function(repo) {
 #'
 #' @return A logical vector
 #'
-
-#' @aliases check_repo check_repos
-#'
 #' @export
 #'
 repo_exists = function(repo, strict = FALSE, verbose = TRUE) {

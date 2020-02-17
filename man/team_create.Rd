@@ -2,7 +2,6 @@
 % Please edit documentation in R/team_create.R
 \name{team_create}
 \alias{team_create}
-\alias{create_team}
 \title{Create team(s)}
 \usage{
 team_create(

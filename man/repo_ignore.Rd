@@ -2,7 +2,6 @@
 % Please edit documentation in R/repo_ignore.R
 \name{repo_ignore}
 \alias{repo_ignore}
-\alias{ignore_repo}
 \title{Ignore repository}
 \usage{
 repo_ignore(repo)

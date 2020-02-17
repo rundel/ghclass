@@ -2,7 +2,6 @@
 % Please edit documentation in R/repo_create.R
 \name{repo_create}
 \alias{repo_create}
-\alias{create_repo}
 \title{Create repository}
 \usage{
 repo_create(

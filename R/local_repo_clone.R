@@ -8,8 +8,6 @@
 #' @param mirror Use equivalent of `--mirror` when cloning.
 #' @param verbose Display verbose output.
 #'
-#' @aliases repo_clone
-#'
 #' @examples
 #' \dontrun{
 #' g = org_repos("Sta323-Sp18","hw3-")

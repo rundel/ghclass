@@ -65,7 +65,14 @@
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/rundel/ghclass">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -83,7 +90,7 @@
             
             <h4 class="date">2020-02-04</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/rundel/ghclass/blob/master/vignettes/ghclass.Rmd"><code>vignettes/ghclass.Rmd</code></a></small>
       <div class="hidden name"><code>ghclass.Rmd</code></div>
 
     </div>
@@ -224,7 +231,7 @@
 <span id="cb10-2"><a href="#cb10-2"></a><span class="co">#&gt; ✔ Created repo 'ghclass-vignette/hw1-team01'.</span></span>
 <span id="cb10-3"><a href="#cb10-3"></a><span class="co">#&gt; ✔ Created repo 'ghclass-vignette/hw1-team02'.</span></span>
 <span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt; ✔ Created repo 'ghclass-vignette/hw1-team03'.</span></span>
-<span id="cb10-5"><a href="#cb10-5"></a><span class="kw"><a href="../reference/repo_add_member.html">repo_add_team</a></span>(r, roster<span class="op">$</span>hw1)</span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="kw"><a href="../reference/repo_add_team.html">repo_add_team</a></span>(r, roster<span class="op">$</span>hw1)</span>
 <span id="cb10-6"><a href="#cb10-6"></a><span class="co">#&gt; ✔ Added team 'hw1-team01' to repo 'ghclass-vignette/hw1-team01'.</span></span>
 <span id="cb10-7"><a href="#cb10-7"></a><span class="co">#&gt; ✔ Added team 'hw1-team02' to repo 'ghclass-vignette/hw1-team02'.</span></span>
 <span id="cb10-8"><a href="#cb10-8"></a><span class="co">#&gt; ✔ Added team 'hw1-team03' to repo 'ghclass-vignette/hw1-team03'.</span></span></code></pre></div>
@@ -239,12 +246,12 @@
 <span id="cb11-8"><a href="#cb11-8"></a><span class="co">#&gt; ✔ Created repo 'ghclass-vignette/hw3-team02'.</span></span>
 <span id="cb11-9"><a href="#cb11-9"></a><span class="co">#&gt; ✔ Created repo 'ghclass-vignette/hw3-team03'.</span></span>
 <span id="cb11-10"><a href="#cb11-10"></a></span>
-<span id="cb11-11"><a href="#cb11-11"></a><span class="kw"><a href="../reference/repo_add_member.html">repo_add_team</a></span>(<span class="kw"><a href="../reference/org_repos.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>,<span class="st">"hw2-"</span>), roster<span class="op">$</span>hw2)</span>
+<span id="cb11-11"><a href="#cb11-11"></a><span class="kw"><a href="../reference/repo_add_team.html">repo_add_team</a></span>(<span class="kw"><a href="../reference/org_repos.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>,<span class="st">"hw2-"</span>), roster<span class="op">$</span>hw2)</span>
 <span id="cb11-12"><a href="#cb11-12"></a><span class="co">#&gt; ✔ Added team 'hw2-team01' to repo 'ghclass-vignette/hw2-team01'.</span></span>
 <span id="cb11-13"><a href="#cb11-13"></a><span class="co">#&gt; ✔ Added team 'hw2-team02' to repo 'ghclass-vignette/hw2-team02'.</span></span>
 <span id="cb11-14"><a href="#cb11-14"></a><span class="co">#&gt; ✔ Added team 'hw2-team03' to repo 'ghclass-vignette/hw2-team03'.</span></span>
 <span id="cb11-15"><a href="#cb11-15"></a></span>
-<span id="cb11-16"><a href="#cb11-16"></a><span class="kw"><a href="../reference/repo_add_member.html">repo_add_team</a></span>(<span class="kw"><a href="../reference/org_repos.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>,<span class="st">"hw3-"</span>), roster<span class="op">$</span>hw3)</span>
+<span id="cb11-16"><a href="#cb11-16"></a><span class="kw"><a href="../reference/repo_add_team.html">repo_add_team</a></span>(<span class="kw"><a href="../reference/org_repos.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>,<span class="st">"hw3-"</span>), roster<span class="op">$</span>hw3)</span>
 <span id="cb11-17"><a href="#cb11-17"></a><span class="co">#&gt; ✔ Added team 'hw3-team01' to repo 'ghclass-vignette/hw3-team01'.</span></span>
 <span id="cb11-18"><a href="#cb11-18"></a><span class="co">#&gt; ✔ Added team 'hw3-team02' to repo 'ghclass-vignette/hw3-team02'.</span></span>
 <span id="cb11-19"><a href="#cb11-19"></a><span class="co">#&gt; ✔ Added team 'hw3-team03' to repo 'ghclass-vignette/hw3-team03'.</span></span></code></pre></div>
@@ -280,7 +287,7 @@
 <span id="cb14-7"><a href="#cb14-7"></a><span class="co">#&gt; ✔ Created repo 'ghclass-vignette/hw4-ghclass-elijah'.</span></span>
 <span id="cb14-8"><a href="#cb14-8"></a><span class="co">#&gt; ✔ Created repo 'ghclass-vignette/hw4-ghclass-francis'.</span></span></code></pre></div>
 <p>Adding students individually to repos is done using the <code>repo_add_user</code> instead of the <code>repo_add_team</code> function.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw"><a href="../reference/repo_add_member.html">repo_add_user</a></span>(<span class="kw"><a href="../reference/org_repos.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="st">"hw4-"</span>), students)</span>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw"><a href="../reference/repo_add_user.html">repo_add_user</a></span>(<span class="kw"><a href="../reference/org_repos.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="st">"hw4-"</span>), students)</span>
 <span id="cb15-2"><a href="#cb15-2"></a><span class="co">#&gt; ✔ Added user 'ghclass-anya' to repo 'ghclass-vignette/hw4-ghclass-anya'.</span></span>
 <span id="cb15-3"><a href="#cb15-3"></a><span class="co">#&gt; ✔ Added user 'ghclass-bruno' to repo 'ghclass-vignette/hw4-ghclass-bruno'.</span></span>
 <span id="cb15-4"><a href="#cb15-4"></a><span class="co">#&gt; ✔ Added user 'ghclass-celine' to repo 'ghclass-vignette/hw4-ghclass-celine'.</span></span>

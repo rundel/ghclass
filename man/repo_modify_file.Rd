@@ -2,7 +2,6 @@
 % Please edit documentation in R/repo_modify_file.R
 \name{repo_modify_file}
 \alias{repo_modify_file}
-\alias{add_content}
 \title{Modify a file within a repository}
 \usage{
 repo_modify_file(

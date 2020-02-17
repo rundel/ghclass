@@ -2,7 +2,6 @@
 % Please edit documentation in R/team_repos.R
 \name{team_repos}
 \alias{team_repos}
-\alias{get_team_repos}
 \title{Get teams' repos}
 \usage{
 team_repos(org, team)

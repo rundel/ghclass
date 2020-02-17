@@ -2,7 +2,6 @@
 % Please edit documentation in R/repo_unwatch.R
 \name{repo_unwatch}
 \alias{repo_unwatch}
-\alias{unwatch_repo}
 \title{Unwatch repository}
 \usage{
 repo_unwatch(repo)
