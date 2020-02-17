@@ -21,7 +21,8 @@ github_api_issue_create = function(repo, title, body, labels, assignees){
 #' @param labels Character. Vector of the labels to associate with this issue
 #' @param assignees Character. Vector of logins for users assigned to the issue.
 #'
-#' @examplesIf FALSE
+#' @examples
+#' \dontrun{
 #' repo_create("ghclass-test","issue-test")
 #'
 #' issue_create("ghclass-test/issue-test", title = "Issue 1", body = "This is an issue")
@@ -38,6 +39,7 @@ github_api_issue_create = function(repo, title, body, labels, assignees){
 #'   label = c("Important", "Super Important")
 #'   assignees = "rundel"
 #' )
+#' }
 #'
 #' @export
 #'

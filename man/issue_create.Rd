@@ -20,3 +20,24 @@ issue_create(repo, title, body, labels = character(), assignees = character())
 \description{
 \code{issue_create} creates an issue for a GitHub repository.
 }
+\examples{
+\dontrun{
+repo_create("ghclass-test","issue-test")
+
+issue_create("ghclass-test/issue-test", title = "Issue 1", body = "This is an issue")
+
+issue_create(
+  "ghclass-test/issue-test",
+  title = "Issue 2", body = "This is also issue",
+  label = "Important"
+)
+
+issue_create(
+  "ghclass-test/issue-test",
+  title = "Issue 3", body = "This is also issue",
+  label = c("Important", "Super Important")
+  assignees = "rundel"
+)
+}
+
+}
