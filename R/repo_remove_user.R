@@ -22,8 +22,7 @@ repo_remove_user = function(repo, user) {
     function(repo, user) {
       res = purrr::safely(github_api_repo_remove_user)(
         repo = repo,
-        username = user,
-        permission = permission
+        username = user
       )
 
       status_msg(
