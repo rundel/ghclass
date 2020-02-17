@@ -5,7 +5,7 @@
 \alias{repo_add_user}
 \alias{add_user_to_repo}
 \alias{add_team_to_repo}
-\title{Add a user or team to a repository}
+\title{Add a user to a repository}
 \usage{
 repo_add_team(repo, team, permission = c("push", "pull", "admin"))
 
@@ -14,18 +14,17 @@ repo_add_user(repo, user, permission = c("push", "pull", "admin"))
 \arguments{
 \item{repo}{Character. Address of repository in "owner/name" format.}
 
-\item{team}{Character. One or more GitHub team names.}
-
 \item{permission}{Character. Permission to be granted to team for repo ("push", "pull", or "admin"), defaults to "push".
-
-\code{pull} results in read privileges, \code{push} in write privileges,
-and \code{admin} in Admin privileges for the team in the respective repository.
-Note that permissions will overwrite existing access privileges.}
+\itemize{
+\item pull - can pull, but not push to or administer this repository.
+\item push - can pull and push, but not administer this repository.
+\item admin - can pull, push and administer this repository.
+}}
 
 \item{user}{Character. One or more GitHub usernames.}
 }
 \description{
-Add a user or team to a repository
+Add a user to a repository
 }
 \examples{
 \dontrun{
