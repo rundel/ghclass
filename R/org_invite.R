@@ -24,9 +24,6 @@ github_api_org_invite = function(org, user) {
 #' org_invite("Sta523-Fa17", user)
 #' }
 #'
-
-#' @aliases invite_user
-#'
 #' @export
 org_invite = function(org, user) {
   arg_is_chr_scalar(org)

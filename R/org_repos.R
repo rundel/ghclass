@@ -25,9 +25,6 @@ github_api_org_repos = function(owner) {
 #' org_repos("ghclass", "hw1-")
 #' }
 #'
-
-#' @aliases get_repo get_repos
-#'
 #' @export
 #'
 org_repos = function(org, filter = NULL, exclude = FALSE, full_repo = TRUE) {

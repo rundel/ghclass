@@ -27,9 +27,6 @@ github_api_org_repo_create = function(repo, private, auto_init, gitignore_templa
 #' repo_create("ghclass-test", c("user01","user02"), prefix = "hw01-")
 #' }
 #'
-
-#' @aliases create_repo
-#'
 #' @export
 #'
 repo_create = function(org, name,

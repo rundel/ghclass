@@ -2,8 +2,6 @@
 % Please edit documentation in R/org_members.R
 \name{org_members}
 \alias{org_members}
-\alias{get_member}
-\alias{get_members}
 \title{Get organization member}
 \usage{
 org_members(org, filter = NULL, exclude = FALSE, include_admins = TRUE)

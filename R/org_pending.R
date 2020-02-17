@@ -15,8 +15,6 @@ github_api_org_pending = function(owner){
 #' @param filter Character. Regular expression pattern for matching (or excluding) repos.
 #' @param exclude Logical. Should entries matching the regular expression be excluded or included.
 #'
-#' @aliases get_pending_member get_pending_members org_pending_members
-#'
 #' @examples
 #' \dontrun{
 #' org_pending("ghclass")
@@ -37,11 +35,4 @@ org_pending = function(org, filter = NULL, exclude = FALSE) {
   invite = purrr::map(result(res), "login")
   invite = purrr::flatten_chr(invite)
   filter_results(invite, filter, exclude)
-}
-
-#' @export
-#'
-org_pending_members = function(org, filter = NULL, exclude = FALSE) {
-  .Deprecated("org_pending")
-  org_pending(org, filter, exclude)
 }

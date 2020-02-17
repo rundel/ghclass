@@ -2,7 +2,6 @@
 % Please edit documentation in R/team_members.R
 \name{team_members}
 \alias{team_members}
-\alias{get_team_members}
 \title{Get team members}
 \usage{
 team_members(org, team = org_teams(org))

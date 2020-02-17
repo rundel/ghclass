@@ -9,9 +9,6 @@
 #' @param message Character. Commit message.
 #' @param branch Character. Name of branch to use, defaults to "master".
 #'
-
-#' @aliases add_content
-#'
 #' @export
 #'
 repo_modify_file = function(repo, path, pattern, content, method = c("replace", "before", "after"), all = FALSE,

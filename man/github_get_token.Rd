@@ -2,7 +2,6 @@
 % Please edit documentation in R/github_get_token.R
 \name{github_get_token}
 \alias{github_get_token}
-\alias{get_github_token}
 \title{Get github token}
 \usage{
 github_get_token()

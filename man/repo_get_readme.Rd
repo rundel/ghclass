@@ -2,7 +2,6 @@
 % Please edit documentation in R/repo_get_readme.R
 \name{repo_get_readme}
 \alias{repo_get_readme}
-\alias{get_readme}
 \title{Low level function for retrieving the README of a GitHub Repository}
 \usage{
 repo_get_readme(repo, branch = "master")

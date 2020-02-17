@@ -27,10 +27,6 @@ github_api_repo_add_user = function(repo, username, permission){
 #' repo_add_user(paste0("ghclass-test/hw2-", user), user)
 #' }
 #'
-#' @rdname repo_add_member
-#'
-#' @aliases add_user_to_repo add_team_to_repo
-#'
 #' @export
 repo_add_user = function(repo, user, permission = c("push", "pull", "admin")) {
   permission = match.arg(permission)

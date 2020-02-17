@@ -13,9 +13,6 @@
 #' github_get_token()
 #' }
 #'
-
-#' @aliases get_github_token
-#'
 #' @export
 
 github_get_token = function() {

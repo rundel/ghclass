@@ -25,9 +25,6 @@ read_bin_file = function(x) {
 #' repo_add_file("rundel/ghclass", "./DESCRIPTION", "Update DESCRIPTION")
 #' }
 #'
-
-#' @aliases add_file
-#'
 #' @export
 #'
 repo_add_file = function(repo, file, message = NULL, repo_folder = NULL, branch = "master",

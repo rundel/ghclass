@@ -9,7 +9,16 @@ github_api_team_add = function(repo, team_id, permission){
   )
 }
 
-#' @rdname repo_add_member
+#' Add a team to a repository
+#'
+#' @param repo Character. Address of repository in "owner/name" format.
+#' @param team Character. Team name.
+#' @param permission Character. Permission to be granted to team for repo ("push", "pull", or "admin"), defaults to "push".
+#'
+#' * pull - can pull, but not push to or administer this repository.
+#' * push - can pull and push, but not administer this repository.
+#' * admin - can pull, push and administer this repository.
+#'
 #' @export
 repo_add_team = function(repo, team, permission = c("push", "pull", "admin")) {
 

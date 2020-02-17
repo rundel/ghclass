@@ -105,7 +105,12 @@ basic statistics about those repositories." />
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/rundel/ghclass">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -120,7 +125,7 @@ basic statistics about those repositories." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get repository commits</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/repo_commits.R'><code>R/repo_commits.R</code></a></small>
     <div class="hidden name"><code>repo_commits.Rd</code></div>
     </div>
 
@@ -136,7 +141,8 @@ basic statistics about those repositories.</p>
   <span class='kw'>path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>author</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>since</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>until</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+  <span class='kw'>until</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -164,11 +170,15 @@ basic statistics about those repositories.</p>
     </tr>
     <tr>
       <th>since</th>
-      <td><p>Character.    Only commits after this date will be returned, <code>YYYY-MM-DDTHH:MM:SSZ</code> format.</p></td>
+      <td><p>Character.    Only commits after this date will be returned, expects <code>YYYY-MM-DDTHH:MM:SSZ</code> format.</p></td>
     </tr>
     <tr>
       <th>until</th>
-      <td><p>Character.    Only commits before this date will be returned, <code>YYYY-MM-DDTHH:MM:SSZ</code> format.
+      <td><p>Character.    Only commits before this date will be returned, expects <code>YYYY-MM-DDTHH:MM:SSZ</code> format.</p></td>
+    </tr>
+    <tr>
+      <th>quiet</th>
+      <td><p>Logical. Should an error message be printed if the repo does not exist.
 Character.</p></td>
     </tr>
     </table>

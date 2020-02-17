@@ -23,9 +23,6 @@ github_api_team_create = function(org, name, privacy) {
 #' team_create("ghclass",c("team01","team01"))
 #' }
 #'
-
-#' @aliases create_team
-#'
 #' @export
 #'
 team_create = function(org, team,

@@ -21,8 +21,6 @@ github_api_team_rename = function(id, new_name) {
 #' team_rename("ghclass-test", "hw1-team01", "hw01-team01")
 #' }
 #'
-#' @aliases rename_team
-#'
 #' @export
 team_rename = function(org, team, new_team) {
   arg_is_chr_scalar(org)

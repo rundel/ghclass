@@ -2,9 +2,6 @@
 % Please edit documentation in R/org_pending.R
 \name{org_pending}
 \alias{org_pending}
-\alias{get_pending_member}
-\alias{get_pending_members}
-\alias{org_pending_members}
 \title{Get pending organization members}
 \usage{
 org_pending(org, filter = NULL, exclude = FALSE)

@@ -18,9 +18,6 @@ github_api_branch_unprotect = function(repo, branch) {
 #' @param repo github repository address in `owner/repo` format
 #' @param branch name of the branch to unprotect
 #'
-
-#' @aliases unprotect_branch
-#'
 #' @export
 #'
 branch_unprotect = function(repo, branch = "master") {

@@ -21,9 +21,6 @@ github_api_team_members = function(id) {
 #' team_members("ghclass-test",c("team01","team02"))
 #' }
 #'
-
-#' @aliases get_team_members
-#'
 #' @export
 #'
 team_members = function(org, team = org_teams(org)) {
