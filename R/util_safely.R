@@ -2,7 +2,7 @@ empty_result = function(res) {
   if (is_safely_result(res)){
     empty_result(result(res))
   } else {
-    length(res) == 1 & all(res == "")
+    (length(res) == 1 & all(res == "")) | (is.list(res) & length(res) == 0)
   }
 }
 
