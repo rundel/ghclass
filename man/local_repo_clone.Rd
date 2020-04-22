@@ -5,8 +5,14 @@
 \alias{repo_clone}
 \title{Local repository tools}
 \usage{
-local_repo_clone(repo, local_path = "./", branch = "master",
-  git = require_git(), options = character(), verbose = FALSE)
+local_repo_clone(
+  repo,
+  local_path = "./",
+  branch = "master",
+  git = require_git(),
+  options = character(),
+  verbose = FALSE
+)
 }
 \arguments{
 \item{repo}{GitHub repo names with the form \code{owner/name}.}

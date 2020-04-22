@@ -4,14 +4,13 @@
 \alias{repo_add_badge}
 \title{Add a GitHub Action badge}
 \usage{
-repo_add_badge(repo, workflow, where = "^.",
-  line_padding = "\\n\\n\\n")
+repo_add_badge(repo, workflow, where = "^.", line_padding = "\\n\\n\\n")
 }
 \arguments{
 \item{repo}{Character. Address of repository in \code{owner/name} format.}
 
 \item{workflow}{Character. Name of the workflow located in
-\code{.github/workflows/} folder.}
+\verb{.github/workflows/} folder.}
 
 \item{where}{Character. Regex pattern of where to insert the badge, defaults
 to the beginning of the README}

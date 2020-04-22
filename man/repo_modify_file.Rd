@@ -5,9 +5,16 @@
 \alias{add_content}
 \title{Modify a file within a repository}
 \usage{
-repo_modify_file(repo, path, pattern, content, method = c("replace",
-  "before", "after"), all = FALSE, message = "Modified content",
-  branch = "master")
+repo_modify_file(
+  repo,
+  path,
+  pattern,
+  content,
+  method = c("replace", "before", "after"),
+  all = FALSE,
+  message = "Modified content",
+  branch = "master"
+)
 }
 \arguments{
 \item{repo}{Character. Address of repository in \code{owner/name} format.}

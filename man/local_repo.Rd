@@ -14,17 +14,39 @@
 \alias{local_repo_push}
 \title{Local repository tools}
 \usage{
-local_repo_add(repo_dir, files = ".", git = require_git(),
-  options = character(), verbose = FALSE)
+local_repo_add(
+  repo_dir,
+  files = ".",
+  git = require_git(),
+  options = character(),
+  verbose = FALSE
+)
 
-local_repo_commit(repo_dir, message, git = require_git(),
-  options = character(), verbose = FALSE)
+local_repo_commit(
+  repo_dir,
+  message,
+  git = require_git(),
+  options = character(),
+  verbose = FALSE
+)
 
-local_repo_pull(repo_dir, remote = "origin", branch = "master",
-  git = require_git(), options = character(), verbose = FALSE)
+local_repo_pull(
+  repo_dir,
+  remote = "origin",
+  branch = "master",
+  git = require_git(),
+  options = character(),
+  verbose = FALSE
+)
 
-local_repo_push(repo_dir, remote = "origin", branch = "master",
-  git = require_git(), options = character(), verbose = FALSE)
+local_repo_push(
+  repo_dir,
+  remote = "origin",
+  branch = "master",
+  git = require_git(),
+  options = character(),
+  verbose = FALSE
+)
 }
 \arguments{
 \item{repo_dir}{Vector of repo directories or a single directory containing one or more repos.}

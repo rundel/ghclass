@@ -4,8 +4,7 @@
 \alias{issue_create}
 \title{Create an issue}
 \usage{
-issue_create(repo, title, body, labels = character(),
-  assignees = character())
+issue_create(repo, title, body, labels = character(), assignees = character())
 }
 \arguments{
 \item{repo}{Character. Address of one or more repositories in \code{owner/name} format.}

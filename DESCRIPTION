@@ -36,5 +36,5 @@ URL: https://rundel.github.io/ghclass/
 BugReports: https://github.com/rundel/ghclass/issues
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0
 VignetteBuilder: knitr

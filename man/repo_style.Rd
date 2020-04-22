@@ -4,9 +4,16 @@
 \alias{repo_style}
 \title{Style repository}
 \usage{
-repo_style(repo, files = c("*.R", "*.Rmd"), branch = "styler",
-  base = "master", draft = TRUE, create_pull_request = TRUE,
-  tag_collaborators = TRUE, git = require_git())
+repo_style(
+  repo,
+  files = c("*.R", "*.Rmd"),
+  branch = "styler",
+  base = "master",
+  draft = TRUE,
+  create_pull_request = TRUE,
+  tag_collaborators = TRUE,
+  git = require_git()
+)
 }
 \arguments{
 \item{repo}{Character. Address of repository in "owner/name" format.}
