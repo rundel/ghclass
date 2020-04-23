@@ -4,12 +4,15 @@
 \alias{repo_remove_badge}
 \title{Remove one or more GitHub Action badges}
 \usage{
-repo_remove_badge(repo, workflow = ".*?")
+repo_remove_badge(repo, workflow = ".*?", file = "README.md")
 }
 \arguments{
 \item{repo}{Character. Address of repository in \code{owner/name} format.}
 
-\item{workflow}{Character. Name of the workflow badge to be removed, or a regex pattern that matches the workflow name.}
+\item{workflow}{Character. Name of the workflow badge to be removed, or a regex pattern
+that matches the workflow name.}
+
+\item{file}{Character. Target file to be modified, defaults to \code{README.md}.}
 }
 \description{
 Remove one or more GitHub Action badges
