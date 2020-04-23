@@ -7,3 +7,6 @@ credentials/
 ^LICENSE\.md$
 ^doc$
 ^Meta$
+.pre-commit-config.yaml
+.github/
+README.Rmd

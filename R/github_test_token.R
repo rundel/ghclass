@@ -11,7 +11,6 @@
 #' github_test_token("bad_token")
 #' }
 #'
-
 #' @aliases test_github_token
 #'
 #' @export

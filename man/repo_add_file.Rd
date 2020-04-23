@@ -2,7 +2,6 @@
 % Please edit documentation in R/repo_add_file.R
 \name{repo_add_file}
 \alias{repo_add_file}
-\alias{add_file}
 \title{Add files to a repo}
 \usage{
 repo_add_file(

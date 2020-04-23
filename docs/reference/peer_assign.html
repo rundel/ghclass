@@ -104,7 +104,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/rundel/ghclass">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -119,7 +124,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Assign file to reviewers</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/peer.R'><code>R/peer.R</code></a></small>
     <div class="hidden name"><code>peer_assign.Rd</code></div>
     </div>
 
@@ -127,10 +132,18 @@
     <p><code>peer_assign</code> adds files from authors' repositories to review repositories. The function creates an issue on the reviewers' repositories informing them that the review files are available and creates links to the relevant documents.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>peer_assign</span>(<span class='no'>org</span>, <span class='no'>roster</span>, <span class='kw'>path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>local_path_review</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>exclude_pattern</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>".gitignore"</span>,
-  <span class='st'>".Rhistory"</span>, <span class='st'>"*.Rproj"</span>, <span class='st'>"*.html"</span>, <span class='st'>"*.md"</span>, <span class='st'>"*.pdf"</span>), <span class='kw'>message</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>peer_assign</span>(
+  <span class='no'>org</span>,
+  <span class='no'>roster</span>,
+  <span class='kw'>path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>local_path_review</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>""</span>,
+  <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='st'>""</span>,
+  <span class='kw'>exclude_pattern</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>".gitignore"</span>, <span class='st'>".Rhistory"</span>, <span class='st'>"*.Rproj"</span>, <span class='st'>"*.html"</span>, <span class='st'>"*.md"</span>, <span class='st'>"*.pdf"</span>),
+  <span class='kw'>message</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>,
+  <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -179,14 +192,16 @@
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other peer review functions: <code><a href='peer_file_add_aut.html'>peer_file_add_aut</a></code>,
-  <code><a href='peer_file_add_rev.html'>peer_file_add_rev</a></code>,
-  <code><a href='peer_form_create_rating.html'>peer_form_create_rating</a></code>,
-  <code><a href='peer_form_create_review.html'>peer_form_create_review</a></code>,
-  <code><a href='peer_init.html'>peer_init</a></code>, <code><a href='peer_return.html'>peer_return</a></code>,
-  <code><a href='peer_roster_create.html'>peer_roster_create</a></code>,
-  <code><a href='peer_score_rating.html'>peer_score_rating</a></code>,
-  <code><a href='peer_score_review.html'>peer_score_review</a></code></p></div>
+    <div class='dont-index'><p>Other peer review functions: 
+<code><a href='peer_file_add_aut.html'>peer_file_add_aut</a>()</code>,
+<code><a href='peer_file_add_rev.html'>peer_file_add_rev</a>()</code>,
+<code><a href='peer_form_create_rating.html'>peer_form_create_rating</a>()</code>,
+<code><a href='peer_form_create_review.html'>peer_form_create_review</a>()</code>,
+<code><a href='peer_init.html'>peer_init</a>()</code>,
+<code><a href='peer_return.html'>peer_return</a>()</code>,
+<code><a href='peer_roster_create.html'>peer_roster_create</a>()</code>,
+<code><a href='peer_score_rating.html'>peer_score_rating</a>()</code>,
+<code><a href='peer_score_review.html'>peer_score_review</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {

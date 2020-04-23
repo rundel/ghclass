@@ -16,9 +16,6 @@ github_api_repo_get_readme = function(repo, branch) {
 #' @param repo Character. Address of repository in `owner/name` format.
 #' @param branch Character. Name of branch to use, defaults to "master".
 #'
-
-#' @aliases get_readme
-#'
 #' @export
 #'
 repo_get_readme = function(repo, branch = "master") {

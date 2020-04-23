@@ -104,7 +104,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/rundel/ghclass">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -119,7 +124,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create a team or individual assignment</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/org_create_assignment.R'><code>R/org_create_assignment.R</code></a></small>
     <div class="hidden name"><code>org_create_assignment.Rd</code></div>
     </div>
 
@@ -127,7 +132,14 @@
     <p>This is a higher level function that combines the following steps:</p>
     </div>
 
-    <pre class="usage"><span class='fu'>org_create_assignment</span>(<span class='no'>org</span>, <span class='no'>repo</span>, <span class='no'>user</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>source_repo</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>org_create_assignment</span>(
+  <span class='no'>org</span>,
+  <span class='no'>repo</span>,
+  <span class='no'>user</span>,
+  <span class='kw'>team</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>source_repo</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>private</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -151,6 +163,10 @@
     <tr>
       <th>source_repo</th>
       <td><p>Character. Address of the repository to use as a template for all created repos.</p></td>
+    </tr>
+    <tr>
+      <th>private</th>
+      <td><p>Logical. Should the created repositories be private.</p></td>
     </tr>
     </table>
 

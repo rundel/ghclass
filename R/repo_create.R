@@ -1,4 +1,4 @@
-github_api_repo_create = function(repo, private, auto_init, gitignore_template){
+github_api_org_repo_create = function(repo, private, auto_init, gitignore_template){
   gh::gh("POST /orgs/:owner/repos",
          owner = get_repo_owner(repo),
          name = get_repo_name(repo),
@@ -27,9 +27,6 @@ github_api_repo_create = function(repo, private, auto_init, gitignore_template){
 #' repo_create("ghclass-test", c("user01","user02"), prefix = "hw01-")
 #' }
 #'
-
-#' @aliases create_repo
-#'
 #' @export
 #'
 repo_create = function(org, name,
@@ -43,22 +40,22 @@ repo_create = function(org, name,
 
   name = unique(name)
 
-  org_repos = org_repos(org)
-
   repo = paste0(prefix, name, suffix)
   repo = paste0(org, "/", repo)
 
   if (length(repo) != length(unique(repo)))
     usethis::ui_stop("Not all repo names are unique: {usethis::ui_value(repo)}.")
 
-  res = purrr::map(
-    repo,
-    function(repo) {
-      if (repo %in% org_repos) {
+  exists = repo_exists(repo)
+
+  res = purrr::map2(
+    repo, exists,
+    function(repo, exists) {
+      if (exists) {
         usethis::ui_info("Skipping repo {usethis::ui_value(repo)}, it already exists.")
         return()
       }
-      res = purrr::safely(github_api_repo_create)(
+      res = purrr::safely(github_api_org_repo_create)(
         repo,
         private = private,
         auto_init = auto_init,

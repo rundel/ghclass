@@ -2,8 +2,6 @@
 % Please edit documentation in R/repo_exists.R
 \name{repo_exists}
 \alias{repo_exists}
-\alias{check_repo}
-\alias{check_repos}
 \title{Check existence of GitHub repository}
 \usage{
 repo_exists(repo, strict = FALSE, verbose = TRUE)

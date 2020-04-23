@@ -2,7 +2,6 @@
 % Please edit documentation in R/repo_watching.R
 \name{repo_watching}
 \alias{repo_watching}
-\alias{get_watching}
 \title{Get watched repos}
 \usage{
 repo_watching(filter = NULL, exclude = FALSE)

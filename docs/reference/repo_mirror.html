@@ -105,7 +105,12 @@ repositories." />
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/rundel/ghclass">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -120,7 +125,7 @@ repositories." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Mirror repository</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/repo_mirror.R'><code>R/repo_mirror.R</code></a></small>
     <div class="hidden name"><code>repo_mirror.Rd</code></div>
     </div>
 
@@ -129,7 +134,7 @@ repositories." />
 repositories.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>repo_mirror</span>(<span class='no'>source_repo</span>, <span class='no'>target_repo</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>repo_mirror</span>(<span class='no'>source_repo</span>, <span class='no'>target_repo</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -141,6 +146,10 @@ repositories.</p>
     <tr>
       <th>target_repo</th>
       <td><p>Character. One or more repository addresses in "owner/name" format.</p></td>
+    </tr>
+    <tr>
+      <th>overwrite</th>
+      <td><p>Logical. Should the target repositories be overwritten.</p></td>
     </tr>
     <tr>
       <th>verbose</th>

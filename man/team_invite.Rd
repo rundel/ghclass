@@ -2,7 +2,6 @@
 % Please edit documentation in R/team_invite.R
 \name{team_invite}
 \alias{team_invite}
-\alias{add_team_member}
 \title{Add Members to an Organizaton's Team(s)}
 \usage{
 team_invite(org, user, team, create_missing_teams = TRUE)

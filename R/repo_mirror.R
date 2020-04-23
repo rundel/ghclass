@@ -5,6 +5,7 @@
 #'
 #' @param source_repo Character. Address of repository in "owner/name" format.
 #' @param target_repo Character. One or more repository addresses in "owner/name" format.
+#' @param overwrite Logical. Should the target repositories be overwritten.
 #' @param verbose Logical. Display verbose output.
 #'
 #' @examples
@@ -13,25 +14,52 @@
 #' repo_mirror("ghclass-test/hw1", org_repos("ghclass-test","hw1-"))
 #' }
 #'
-#' @aliases mirror_repo
-#'
 #' @export
 #'
-repo_mirror = function(source_repo, target_repo, verbose=FALSE) {
+
+repo_mirror = function(source_repo, target_repo, overwrite=FALSE, verbose=FALSE) {
   arg_is_chr_scalar(source_repo)
   arg_is_chr(target_repo)
+  arg_is_lgl_scalar(overwrite, verbose)
 
   withr::local_dir(tempdir())
+  dir = file.path(getwd(), get_repo_name(source_repo))
+  unlink(dir, recursive = TRUE) # Make sure the source repo local folder does not exist
 
-  dir = local_repo_clone(source_repo, getwd(), options = "--bare", verbose = verbose)
+  repos = repo_n_commits(target_repo, quiet = TRUE)
 
-  purrr::walk(
-    target_repo,
-    function(repo) {
-      local_repo_mirror_push(dir, repo, verbose = verbose)
+  local_repo_clone(source_repo, getwd(), mirror = TRUE, verbose = verbose)
+
+  warned = FALSE
+
+  purrr::pwalk(
+    repos,
+    function(repo, n) {
+      repo_url = glue::glue("https://github.com/{repo}.git")
+
+      if (is.na(n)) {
+        usethis::ui_oops("The repo {usethis::ui_value(repo)} does not exist")
+      } else if (n > 1 & !overwrite) {
+        msg = paste(
+          "The repo {usethis::ui_value(repo)} has more than one commit",
+          "(n_commit = {usethis::ui_value(n)})."
+        )
+
+        if (!warned) {
+          msg = c(msg, paste(
+            "Use {usethis::ui_code('overwrite = TRUE')} if you want to permanently",
+            "overwrite this repository."
+          ))
+          warned <<- TRUE
+        }
+
+        usethis::ui_oops( msg )
+      } else {
+        local_repo_push(dir, remote = repo_url, force = TRUE, prompt = FALSE, mirror = TRUE, verbose = verbose)
+      }
     }
   )
 
-  unlink(file.path(dir), recursive = TRUE)
+  unlink(dir, recursive = TRUE)
   usethis::ui_done("Removed local copy of {usethis::ui_value(source_repo)}")
 }

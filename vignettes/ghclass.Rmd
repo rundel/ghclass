@@ -1,7 +1,7 @@
 ---
 title: "Course management with ghclass"
 author: "Mine Çetinkaya-Rundel, Colin Rundel, Therese Anders"
-date: "`r Sys.Date()`"
+date: "2020-02-04"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Course management with ghclass}
@@ -9,31 +9,12 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-
-library(ghclass)
-```
-
-```{r pats, include = FALSE}
-enc = readRDS(here::here("credentials/example_users.enc.rds"))
-key = sodium::sha256(charToRaw(Sys.getenv("GHCLASS_PAT")))
-pats = unserialize( sodium::data_decrypt(enc, key) )
-
-rm(enc, key)
-```
 
 
-```{r reset, include = FALSE}
-# Remove all repos, teams, and members
 
-repo_delete(org_repos("ghclass-vignette"), prompt = FALSE)
-team_delete("ghclass-vignette", org_teams("ghclass-vignette"), prompt = FALSE)
-org_remove("ghclass-vignette", org_members("ghclass-vignette", include_admins = FALSE), prompt = FALSE)
-```
+
+
+
 
 ## Who is this package for?
 
@@ -111,9 +92,13 @@ Personal access tokens) or use
 
 You can test that your token is working correctly using the `github_test_token()` function.
 
-```{r}
+
+```r
 github_test_token()
+#> ✔ Your github token is functioning correctly.
 github_test_token("bad token")
+#> ✖ Your github token failed to authenticate.
+#> 
 ```
 
 ## Step-by-step guide
@@ -148,67 +133,120 @@ column called `team` that contains the team name for each student.
 
 For example, your roster file might look something like the following:
 
-```{r message=FALSE}
+
+```r
 roster = readr::read_csv( system.file("roster.csv", package = "ghclass") )
 roster
+#> # A tibble: 6 x 5
+#>   email              github          hw1        hw2        hw3       
+#>   <chr>              <chr>           <chr>      <chr>      <chr>     
+#> 1 anya@school.edu    ghclass-anya    hw1-team01 hw2-team01 hw3-team01
+#> 2 bruno@school.edu   ghclass-bruno   hw1-team02 hw2-team02 hw3-team02
+#> 3 celine@school.edu  ghclass-celine  hw1-team03 hw2-team03 hw3-team03
+#> 4 diego@school.edu   ghclass-diego   hw1-team01 hw2-team03 hw3-team02
+#> 5 elijah@school.edu  ghclass-elijah  hw1-team02 hw2-team01 hw3-team03
+#> 6 francis@school.edu ghclass-francis hw1-team03 hw2-team02 hw3-team01
 ```
 
 Using the `roster` data frame, we can then invite the students to the class'
 organzation. This will send an email to each student inviting them to join the
 GitHub organization.
 
-```{r}
+
+```r
 org_invite("ghclass-vignette", roster$github)
+#> ✔ Invited user 'ghclass-anya' to org 'ghclass-vignette'.
+#> ✔ Invited user 'ghclass-bruno' to org 'ghclass-vignette'.
+#> ✔ Invited user 'ghclass-celine' to org 'ghclass-vignette'.
+#> ✔ Invited user 'ghclass-diego' to org 'ghclass-vignette'.
+#> ✔ Invited user 'ghclass-elijah' to org 'ghclass-vignette'.
+#> ✔ Invited user 'ghclass-francis' to org 'ghclass-vignette'.
 ```
 
-We now need to wait for the students to accept these invitations before the will have access to the organization. We can check the status of these acceptances using the `org_members()` and `org_pending()` to see which students have accepting and have not accepted the invitation.
+We now need to wait for the students to accept these invitations before they will have access to the organization. We can check the status of these acceptances using the `org_members()` and `org_pending()` to see which students have accepting and have not accepted the invitation.
 
-```{r}
+
+```r
 org_members("ghclass-vignette")
+#> [1] "mine-cetinkaya-rundel" "rundel"                "thereseanders"
 org_members("ghclass-vignette", include_admins = FALSE)
+#> character(0)
 org_pending("ghclass-vignette")
+#> [1] "ghclass-anya"    "ghclass-bruno"   "ghclass-diego"   "ghclass-elijah"  "ghclass-francis"
+#> [6] "ghclass-celine"
 ```
 
 If we give things a bit of time, some of the students will have accepted the invitation.
 
-```{r include = FALSE}
-ghclass:::org_accept_invite("ghclass-vignette", names(pats)[c(1,3,6)], pats[c(1,3,6)])
-```
 
-```{r}
+
+
+```r
 org_members("ghclass-vignette")
+#> [1] "ghclass-anya"          "ghclass-celine"        "ghclass-francis"      
+#> [4] "mine-cetinkaya-rundel" "rundel"                "thereseanders"
 org_pending("ghclass-vignette")
+#> [1] "ghclass-bruno"  "ghclass-diego"  "ghclass-elijah"
 ```
 
 We can now see that Anya, Celine, and Francis have accepted the invite and we are still waitin on Bruno, Diego, and Elijah. Gentle prodding and reminder emails are often necessary to get all of the students into the organization.
 
-```{r include = FALSE}
-ghclass:::org_accept_invite("ghclass-vignette", names(pats), pats)
-```
+
 
 ### Creating teams
 
-We will now create teams which will be used for the first two homework assignments in the class. We can either use the `hw01` and `hw02` columns from the `roster` data frame directly or we can vectorize the process and add either a common prefix or suffix.
+We will now create teams which will be used for the first two homework assignments in the class. We can either use the `hw1` and `hw2` columns from the `roster` data frame directly or we can vectorize the process and add either a common prefix or suffix.
 
-```{r}
-team_create("ghclass-vignette", roster$hw01)
+
+```r
+team_create("ghclass-vignette", roster$hw1)
+#> ✔ Created team 'hw1-team01' in org 'ghclass-vignette'.
+#> ✔ Created team 'hw1-team02' in org 'ghclass-vignette'.
+#> ✔ Created team 'hw1-team03' in org 'ghclass-vignette'.
 ```
 
-```{r}
-team_create("ghclass-vignette", team= c("team01", "team02","team03"), prefix="hw02-")
+
+```r
+team_create("ghclass-vignette", team = c("team01", "team02", "team03"), prefix = "hw2-")
+#> ✔ Created team 'hw2-team01' in org 'ghclass-vignette'.
+#> ✔ Created team 'hw2-team02' in org 'ghclass-vignette'.
+#> ✔ Created team 'hw2-team03' in org 'ghclass-vignette'.
 ```
 
 Once the teams are created we can then add the students to these teams.
 
-```{r}
-team_invite(org = "ghclass-vignette", user = roster$github, team = roster$hw01)
-team_invite(org = "ghclass-vignette", user = roster$github, team = roster$hw02)
+
+```r
+team_invite(org = "ghclass-vignette", user = roster$github, team = roster$hw1)
+#> ✔ Added 'ghclass-anya' to team 'hw1-team01'.
+#> ✔ Added 'ghclass-diego' to team 'hw1-team01'.
+#> ✔ Added 'ghclass-bruno' to team 'hw1-team02'.
+#> ✔ Added 'ghclass-elijah' to team 'hw1-team02'.
+#> ✔ Added 'ghclass-celine' to team 'hw1-team03'.
+#> ✔ Added 'ghclass-francis' to team 'hw1-team03'.
+team_invite(org = "ghclass-vignette", user = roster$github, team = roster$hw2)
+#> ✔ Added 'ghclass-anya' to team 'hw2-team01'.
+#> ✔ Added 'ghclass-elijah' to team 'hw2-team01'.
+#> ✔ Added 'ghclass-bruno' to team 'hw2-team02'.
+#> ✔ Added 'ghclass-francis' to team 'hw2-team02'.
+#> ✔ Added 'ghclass-celine' to team 'hw2-team03'.
+#> ✔ Added 'ghclass-diego' to team 'hw2-team03'.
 ```
 
 Also if we happen to try to invite students to a team that does not exist yet, then helpfully `team_invite` will create the team for you and then invite the students. This behavior is governed by the `create_missing_teams` parameter, which is `TRUE` by default.
 
-```{r}
-team_invite("ghclass-vignette", roster$github, roster$hw03)
+
+```r
+team_invite("ghclass-vignette", roster$github, roster$hw3)
+#> ✔ Created team 'hw3-team01' in org 'ghclass-vignette'.
+#> ✔ Created team 'hw3-team02' in org 'ghclass-vignette'.
+#> ✔ Created team 'hw3-team03' in org 'ghclass-vignette'.
+#> ✔ Added 'ghclass-anya' to team 'hw3-team01'.
+#> ✔ Added 'ghclass-francis' to team 'hw3-team01'.
+#> ✔ Added 'ghclass-bruno' to team 'hw3-team02'.
+#> ✔ Added 'ghclass-diego' to team 'hw3-team02'.
+#> ✔ Added 'ghclass-celine' to team 'hw3-team03'.
+#> ✔ Added 'ghclass-elijah' to team 'hw3-team03'.
 ```
 
 
@@ -216,37 +254,69 @@ team_invite("ghclass-vignette", roster$github, roster$hw03)
 
 Now that we have teams within our organization we can now create repos for each team and each assignment as well as add each team to these repositories (which gives then read and write access).
 
-```{r}
-r = repo_create("ghclass-vignette", name = c("team01", "team02","team03"), prefix="hw01-")
-repo_add_team(r, roster$hw01)
+
+```r
+r = repo_create("ghclass-vignette", name = c("team01", "team02","team03"), prefix="hw1-")
+#> ✔ Created repo 'ghclass-vignette/hw1-team01'.
+#> ✔ Created repo 'ghclass-vignette/hw1-team02'.
+#> ✔ Created repo 'ghclass-vignette/hw1-team03'.
+repo_add_team(r, roster$hw1)
+#> ✔ Added team 'hw1-team01' to repo 'ghclass-vignette/hw1-team01'.
+#> ✔ Added team 'hw1-team02' to repo 'ghclass-vignette/hw1-team02'.
+#> ✔ Added team 'hw1-team03' to repo 'ghclass-vignette/hw1-team03'.
 ```
 
 In the above example we are counting on the fact that the team and repository names are identical, if this were not the case we could do something like the following:
 
-```{r}
-teams = org_teams("ghclass-vignette", filter="hw01-", exclude = TRUE)
+
+```r
+teams = org_teams("ghclass-vignette", filter="hw1-", exclude = TRUE)
 
 repo_create("ghclass-vignette", teams)
+#> ✔ Created repo 'ghclass-vignette/hw2-team01'.
+#> ✔ Created repo 'ghclass-vignette/hw2-team02'.
+#> ✔ Created repo 'ghclass-vignette/hw2-team03'.
+#> ✔ Created repo 'ghclass-vignette/hw3-team01'.
+#> ✔ Created repo 'ghclass-vignette/hw3-team02'.
+#> ✔ Created repo 'ghclass-vignette/hw3-team03'.
 
-repo_add_team(org_repos("ghclass-vignette","hw02-"), roster$hw02)
+repo_add_team(org_repos("ghclass-vignette","hw2-"), roster$hw2)
+#> ✔ Added team 'hw2-team01' to repo 'ghclass-vignette/hw2-team01'.
+#> ✔ Added team 'hw2-team02' to repo 'ghclass-vignette/hw2-team02'.
+#> ✔ Added team 'hw2-team03' to repo 'ghclass-vignette/hw2-team03'.
 
-repo_add_team(org_repos("ghclass-vignette","hw03-"), roster$hw03)
+repo_add_team(org_repos("ghclass-vignette","hw3-"), roster$hw3)
+#> ✔ Added team 'hw3-team01' to repo 'ghclass-vignette/hw3-team01'.
+#> ✔ Added team 'hw3-team02' to repo 'ghclass-vignette/hw3-team02'.
+#> ✔ Added team 'hw3-team03' to repo 'ghclass-vignette/hw3-team03'.
 ```
 
 We can check on all of the existing teams and repos using the `org_teams` and `org_repos` functions respectively.
 
-```{r}
+
+```r
 org_teams("ghclass-vignette")
+#> [1] "hw1-team01" "hw1-team02" "hw1-team03" "hw2-team01" "hw2-team02" "hw2-team03" "hw3-team01"
+#> [8] "hw3-team02" "hw3-team03"
 org_repos("ghclass-vignette")
+#> [1] "ghclass-vignette/hw1-team01" "ghclass-vignette/hw1-team02" "ghclass-vignette/hw1-team03"
+#> [4] "ghclass-vignette/hw2-team01" "ghclass-vignette/hw2-team02" "ghclass-vignette/hw2-team03"
+#> [7] "ghclass-vignette/hw3-team01" "ghclass-vignette/hw3-team02" "ghclass-vignette/hw3-team03"
 ```
 
 If we want to place starter docs / code into our assignment repos we can do this by either adding the files directly or mirroring (copying) and existing repository on top of our assignment repo. Generally we have found it to be a good idea to create a public template repository for each assignment which is then used to populate each team individual repository. In this case we will borrow assignments from a class we've previously taught.
 
-```{r}
+
+```r
 repo_mirror(
   source_repo = "Sta323-Sp19/hw1",
-  target_repo = org_repos("ghclass-vignette","hw01-")
+  target_repo = org_repos("ghclass-vignette","hw1-")
 )
+#> ✔ Cloned 'Sta323-Sp19/hw1'.
+#> ✔ Pushed from 'hw1' to 'https://github.com/ghclass-vignette/hw1-team01.git/master'.
+#> ✔ Pushed from 'hw1' to 'https://github.com/ghclass-vignette/hw1-team02.git/master'.
+#> ✔ Pushed from 'hw1' to 'https://github.com/ghclass-vignette/hw1-team03.git/master'.
+#> ✔ Removed local copy of 'Sta323-Sp19/hw1'
 ```
 
 ### Creating an individual assignment
@@ -254,24 +324,47 @@ repo_mirror(
 The process for creating an individual assignment is very similar to that for
 creating a team assignment, we will need to create repositories for each student and then add them individually to those repos.
 
-```{r}
+
+```r
 students = org_members("ghclass-vignette", include_admins = FALSE)
-repo_create("ghclass-vignette", students, prefix="hw04-")
+repo_create("ghclass-vignette", students, prefix="hw4-")
+#> ✔ Created repo 'ghclass-vignette/hw4-ghclass-anya'.
+#> ✔ Created repo 'ghclass-vignette/hw4-ghclass-bruno'.
+#> ✔ Created repo 'ghclass-vignette/hw4-ghclass-celine'.
+#> ✔ Created repo 'ghclass-vignette/hw4-ghclass-diego'.
+#> ✔ Created repo 'ghclass-vignette/hw4-ghclass-elijah'.
+#> ✔ Created repo 'ghclass-vignette/hw4-ghclass-francis'.
 ```
 
 Adding students individually to repos is done using the `repo_add_user` instead of the `repo_add_team` function.
 
-```{r}
-repo_add_user(org_repos("ghclass-vignette", "hw04-"), students)
+
+```r
+repo_add_user(org_repos("ghclass-vignette", "hw4-"), students)
+#> ✔ Added user 'ghclass-anya' to repo 'ghclass-vignette/hw4-ghclass-anya'.
+#> ✔ Added user 'ghclass-bruno' to repo 'ghclass-vignette/hw4-ghclass-bruno'.
+#> ✔ Added user 'ghclass-celine' to repo 'ghclass-vignette/hw4-ghclass-celine'.
+#> ✔ Added user 'ghclass-diego' to repo 'ghclass-vignette/hw4-ghclass-diego'.
+#> ✔ Added user 'ghclass-elijah' to repo 'ghclass-vignette/hw4-ghclass-elijah'.
+#> ✔ Added user 'ghclass-francis' to repo 'ghclass-vignette/hw4-ghclass-francis'.
 ```
 
 And once again we can provide template code and documentation using the `repo_mirror` function.
 
-```{r}
+
+```r
 repo_mirror(
   source_repo = "Sta323-Sp19/hw4",
-  target_repo = org_repos("ghclass-vignette","hw04-")
+  target_repo = org_repos("ghclass-vignette","hw4-")
 )
+#> ✔ Cloned 'Sta323-Sp19/hw4'.
+#> ✔ Pushed from 'hw4' to 'https://github.com/ghclass-vignette/hw4-ghclass-anya.git/master'.
+#> ✔ Pushed from 'hw4' to 'https://github.com/ghclass-vignette/hw4-ghclass-bruno.git/master'.
+#> ✔ Pushed from 'hw4' to 'https://github.com/ghclass-vignette/hw4-ghclass-celine.git/master'.
+#> ✔ Pushed from 'hw4' to 'https://github.com/ghclass-vignette/hw4-ghclass-diego.git/master'.
+#> ✔ Pushed from 'hw4' to 'https://github.com/ghclass-vignette/hw4-ghclass-elijah.git/master'.
+#> ✔ Pushed from 'hw4' to 'https://github.com/ghclass-vignette/hw4-ghclass-francis.git/master'.
+#> ✔ Removed local copy of 'Sta323-Sp19/hw4'
 ```
 
 
@@ -286,44 +379,71 @@ You can modify repos after they have been created. This will overwrite existing
 files with the same name in the repo, so you should be careful not to do this
 if students have already started working on the repos.
 
-```{r}
+
+```r
 file = system.file("README.md", package = "ghclass")
 file
+#> [1] "/Users/rundel/Desktop/Projects/ghclass/inst/README.md"
 
 repo_add_file(
-  org_repos("ghclass-vignette","hw01-"),
+  org_repos("ghclass-vignette","hw1-"),
   message = "Replace README.md with the correct version",
   file = file
 )
+#> ✖ Failed to add file 'README.md' to repo 'ghclass-vignette/hw1-team01', this file already exists.
+#>   File has been modified after initial commit.
+#>   If you want to force add this file, re-run the command with `overwrite = TRUE`.
+#> ✖ Failed to add file 'README.md' to repo 'ghclass-vignette/hw1-team02', this file already exists.
+#>   File has been modified after initial commit.
+#>   If you want to force add this file, re-run the command with `overwrite = TRUE`.
+#> ✖ Failed to add file 'README.md' to repo 'ghclass-vignette/hw1-team03', this file already exists.
+#>   File has been modified after initial commit.
+#>   If you want to force add this file, re-run the command with `overwrite = TRUE`.
 ```
 
-```{r}
+
+```r
 repo_add_file(
-  org_repos("ghclass-vignette","hw01-"),
+  org_repos("ghclass-vignette","hw1-"),
   message = "Replace README.md with the correct version",
   file = file,
   overwrite = TRUE
 )
+#> ✔ Added file 'README.md' to repo 'ghclass-vignette/hw1-team01'.
+#> ✔ Added file 'README.md' to repo 'ghclass-vignette/hw1-team02'.
+#> ✔ Added file 'README.md' to repo 'ghclass-vignette/hw1-team03'.
 ```
 
-```{r}
-cat( repo_get_readme("ghclass-vignette/hw01-team01") )
+
+```r
+cat( repo_get_readme("ghclass-vignette/hw1-team01") )
+#> ## Homework 01
+#> 
+#> This is the corrected version of the HW01 Readme
 ```
 
 We can also use the function `repo_modify_file` to make changes to existing files,
 
-```{r}
+
+```r
 repo_modify_file(
-  repo = org_repos("ghclass-vignette","hw01-"),
+  repo = org_repos("ghclass-vignette","hw1-"),
   path = "README.md",
   pattern = "Due by 11:59 pm on Thursday 1/24/2019.\n",
   content = "Due: Tomorrow\n",
   method = "replace"
 )
+#> ✖ Unable to find pattern '(Due by 11:59 pm on Thursday 1/24/2019.\n)' in 'ghclass-vignette/hw1-team01/README.md'.
+#> ✖ Unable to find pattern '(Due by 11:59 pm on Thursday 1/24/2019.\n)' in 'ghclass-vignette/hw1-team02/README.md'.
+#> ✖ Unable to find pattern '(Due by 11:59 pm on Thursday 1/24/2019.\n)' in 'ghclass-vignette/hw1-team03/README.md'.
 ```
 
-```{r}
-cat( repo_get_readme("ghclass-vignette/hw01-team01") )
+
+```r
+cat( repo_get_readme("ghclass-vignette/hw1-team01") )
+#> ## Homework 01
+#> 
+#> This is the corrected version of the HW01 Readme
 ```
 
 ### Collecting Student Work
@@ -331,18 +451,42 @@ cat( repo_get_readme("ghclass-vignette/hw01-team01") )
 Eventually the students will be finished with the work and of the assignment deadline will have passed. ghclass makes it easy to collect all of the student work off of GitHub and make it accessible on your local computer for grading.
 
 
-```{r}
+
+```r
 local_repo_clone(
-  repo = org_repos("ghclass-vignette", "hw01-"),
-  local_path = "hw01"
+  repo = org_repos("ghclass-vignette", "hw1-"),
+  local_path = "hw1"
 )
+#> ✔ Cloned 'ghclass-vignette/hw1-team01'.
+#> ✔ Cloned 'ghclass-vignette/hw1-team02'.
+#> ✔ Cloned 'ghclass-vignette/hw1-team03'.
 
-fs::dir_tree("hw01/.")
+fs::dir_tree("hw1/.")
+#> hw1/.
+#> ├── hw1-team01
+#> │   ├── README.md
+#> │   ├── fizzbuzz.png
+#> │   ├── hw1.Rmd
+#> │   ├── hw1.Rproj
+#> │   ├── hw1_whitelist.R
+#> │   └── wercker.yml
+#> ├── hw1-team02
+#> │   ├── README.md
+#> │   ├── fizzbuzz.png
+#> │   ├── hw1.Rmd
+#> │   ├── hw1.Rproj
+#> │   ├── hw1_whitelist.R
+#> │   └── wercker.yml
+#> └── hw1-team03
+#>     ├── README.md
+#>     ├── fizzbuzz.png
+#>     ├── hw1.Rmd
+#>     ├── hw1.Rproj
+#>     ├── hw1_whitelist.R
+#>     └── wercker.yml
 ```
 
-```{r include=FALSE}
-unlink("hw01", recursive = TRUE)
-```
+
 
 ## Other Suggestions
 
@@ -360,7 +504,7 @@ Member Privileges). We suggest the organization-level settings below.
 *Member repository permissions*
 
 * Base permissions: None
-* Repository creation: Disabled
+* Repository creation (both Public and Private): Disabled
 * Repository forking: Disabled
 
 *Admin repository permissions*

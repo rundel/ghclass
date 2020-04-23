@@ -23,9 +23,6 @@ github_api_team_invite = function(team_id, username) {
 #' team_invite("ghclass-test", "rundel", c("hw1-team01","hw1-team02"))
 #' }
 #'
-
-#' @aliases add_team_member
-#'
 #' @export
 team_invite = function(org, user, team, create_missing_teams = TRUE) {
 

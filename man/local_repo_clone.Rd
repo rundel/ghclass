@@ -7,24 +7,18 @@
 \usage{
 local_repo_clone(
   repo,
-  local_path = "./",
+  local_path = ".",
   branch = "master",
-  git = require_git(),
-  options = character(),
-  verbose = FALSE
-)
+  mirror = FALSE,
 }
 \arguments{
-\item{repo}{GitHub repo names with the form \code{owner/name}.}
+\item{repo}{GitHub repo address with the form \code{owner/name}.}
 
 \item{local_path}{Local directory to store cloned repos.}
 
 \item{branch}{Repository branch to use.}
 
-\item{git}{Path to the local git binary. \code{require_git()} attempts to
-find the git binary based on your `PATH``, it will throw an error if git cannot be found.}
-
-\item{options}{Additional git binary options (e.g. \code{--all}).}
+\item{mirror}{Use equivalent of \code{--mirror} when cloning.}
 
 \item{verbose}{Display verbose output.}
 }

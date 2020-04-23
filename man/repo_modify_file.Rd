@@ -2,7 +2,6 @@
 % Please edit documentation in R/repo_modify_file.R
 \name{repo_modify_file}
 \alias{repo_modify_file}
-\alias{add_content}
 \title{Modify a file within a repository}
 \usage{
 repo_modify_file(
@@ -25,7 +24,7 @@ repo_modify_file(
 
 \item{content}{Character. Content to be added to the file.}
 
-\item{method}{Character. Should the content be \code{insert}ed after the match or should it \code{replace} the matched string.}
+\item{method}{Character. Should the content \code{replace} the matched pattern or be inserted \code{before} or \code{after} the match.}
 
 \item{all}{Character. Should all instances of the pattern be modified (\code{TRUE}) or just the first (\code{FALSE}).}
 

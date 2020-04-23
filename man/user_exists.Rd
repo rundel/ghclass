@@ -2,19 +2,18 @@
 % Please edit documentation in R/user_exists.R
 \name{user_exists}
 \alias{user_exists}
-\alias{check_user_exists}
 \title{Check if username(s) exists}
 \usage{
 user_exists(user)
 }
 \arguments{
-\item{user}{Character. Username to be checked. Can be a vector or list of usernames.}
+\item{user}{Character. Username(s) to be checked.}
 }
 \value{
-TRUE or FALSE
+Vector of logical values
 }
 \description{
-\code{user_exists} returns TRUE if the supplied username(s) exists on GitHub and FALSE otherwise.
+\code{user_exists} returns TRUE if the supplied username(s) exist on GitHub and FALSE otherwise.
 }
 \examples{
 \dontrun{

@@ -105,7 +105,12 @@ basic statistics about those repositories." />
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/rundel/ghclass">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -120,7 +125,7 @@ basic statistics about those repositories." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get repository commits</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/repo_commits.R'><code>R/repo_commits.R</code></a></small>
     <div class="hidden name"><code>repo_commits.Rd</code></div>
     </div>
 
@@ -129,8 +134,16 @@ basic statistics about those repositories." />
 basic statistics about those repositories.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>repo_commits</span>(<span class='no'>repo</span>, <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>, <span class='kw'>sha</span> <span class='kw'>=</span> <span class='no'>branch</span>, <span class='kw'>path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>author</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>since</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>until</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>repo_commits</span>(
+  <span class='no'>repo</span>,
+  <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>,
+  <span class='kw'>sha</span> <span class='kw'>=</span> <span class='no'>branch</span>,
+  <span class='kw'>path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>author</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>since</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>until</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -157,11 +170,15 @@ basic statistics about those repositories.</p>
     </tr>
     <tr>
       <th>since</th>
-      <td><p>Character.    Only commits after this date will be returned, <code>YYYY-MM-DDTHH:MM:SSZ</code> format.</p></td>
+      <td><p>Character.    Only commits after this date will be returned, expects <code>YYYY-MM-DDTHH:MM:SSZ</code> format.</p></td>
     </tr>
     <tr>
       <th>until</th>
-      <td><p>Character.    Only commits before this date will be returned, <code>YYYY-MM-DDTHH:MM:SSZ</code> format.
+      <td><p>Character.    Only commits before this date will be returned, expects <code>YYYY-MM-DDTHH:MM:SSZ</code> format.</p></td>
+    </tr>
+    <tr>
+      <th>quiet</th>
+      <td><p>Logical. Should an error message be printed if the repo does not exist.
 Character.</p></td>
     </tr>
     </table>
@@ -169,7 +186,7 @@ Character.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'>org_repo_stats</span>(<span class='st'>"ghclass"</span>)
+<span class='fu'><a href='org_repo_stats.html'>org_repo_stats</a></span>(<span class='st'>"ghclass"</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

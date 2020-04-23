@@ -4,9 +4,6 @@
 #'
 #' @param repo github repository address in `owner/repo` format
 #'
-
-#' @aliases ignore_repo
-#'
 #' @export
 #'
 repo_ignore = function(repo) {

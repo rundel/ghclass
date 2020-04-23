@@ -25,9 +25,6 @@ github_api_branch_protect = function(repo, branch) {
 #' @param repo github repository address in `owner/repo` format
 #' @param branch name of the branch to protect
 #'
-
-#' @aliases protect_branch
-#'
 #' @export
 #'
 branch_protect = function(repo, branch = "master") {

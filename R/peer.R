@@ -57,7 +57,7 @@ peer_roster_create = function(n_rev,
 
   if (is.null(seed)) {
     seed = sample.int(1e+06, 1L)
-    usethis::ui_warn("No seed was specified Using randomly sampled seed {usethis::ui_value(seed)}")
+    usethis::ui_warn("No seed was specified. Using randomly sampled seed {usethis::ui_value(seed)}")
   }
 
   withr::with_seed(seed, {
@@ -710,7 +710,13 @@ peer_score_review = function(org,
                               rev_no = as.character(rdf[x, 'rev_no'])
 
                               feedback = purrr::safely(repo_get_file)(repo = repo,
-                                                                      file = ghpath)
+                                                                      path = ghpath)
+
+                              status_msg(
+                                feedback,
+                                glue::glue("Located file {usethis::ui_value(ghpath)} on repo {usethis::ui_value(repo)}."),
+                                glue::glue("Cannot locate file {usethis::ui_value(ghpath)} on repo {usethis::ui_value(repo)}.")
+                              )
 
                               if (succeeded(feedback)) {
                                 tc = textConnection(feedback[['result']])
@@ -722,10 +728,6 @@ peer_score_review = function(org,
                                                       c("user", "rev_no", paste0("q", 1:length(scores))))
                                 tibble::as_tibble(as.list(inp))
 
-                              } else {
-                                usethis::ui_oops(
-                                  "Cannot locate file {usethis::ui_value(ghpath)} on repo {usethis::ui_value(repo)}."
-                                )
                               }
                             })
 
@@ -744,7 +746,8 @@ peer_score_review = function(org,
   out = out[order(out[['user_random']]),]
 
   if (write_csv) {
-    fname = glue::glue("{revscores}_{fs::path_file(roster)}")
+    prefix_for_fname = sub("-$", "", prefix)
+    fname = glue::glue('revscores-{prefix_for_fname}.csv')
     readr::write_csv(out, fname)
     usethis::ui_done("Saved file {usethis::ui_value(fname)} to working directory.")
   } else {
@@ -812,7 +815,7 @@ peer_score_rating = function(org,
                               rev_no = as.character(rdf[x, 'rev_no'])
 
                               feedback = purrr::safely(repo_get_file)(repo = repo,
-                                                                      file = ghpath)
+                                                                      path = ghpath)
 
                               if (succeeded(feedback)) {
                                 tc = textConnection(feedback[['result']])

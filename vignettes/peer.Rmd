@@ -2,7 +2,7 @@
 title: "Peer review with ghclass"
 output: rmarkdown::html_vignette
 author: "Therese Anders and Mine Çetinkaya-Rundel"
-date: "`r Sys.Date()`"
+date: "2020-02-04"
 vignette: >
   %\VignetteIndexEntry{Peer review with ghclass}
   %\VignetteEngine{knitr::rmarkdown}
@@ -29,18 +29,14 @@ h3 { /* Header 3 */
 }
 </style>
 
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
+
 
 This vignette introduces the peer review functionality of `ghclass` and provides a step-by-step guide. For more information on the pedagogy of peer review in undergraduate courses, see the draft of the [accompanying paper](https://github.com/thereseanders/cprpaper/blob/master/cetinkayarundelanders_cpr.pdf) by the package authors.
 
 # Before peer review
 The peer review process is initiated after a regular assignment has been distributed to students. Below, we run through a quick example of how to set up a fictional assignment "hw2" for four students using the `create_repo()` function. For a more detailed description of how to set up student repositories in a GitHub Organization,  see the `ghclass` ["Get started" vignette](https://rundel.github.io/ghclass/articles/ghclass.html).
-```{r, eval = F}
+
+```r
 library(ghclass)
 
 # 1. Set up vector of student user names, HW identifier prefix, and organization name
@@ -70,9 +66,7 @@ The peer review process with `ghclass` has three stages.
 2. **Assign review**: Create and customize review forms, distribute review forms and authors' assignments to reviewers, students complete review.
 3. **Return review & rating**: Create rating form, return review to authors, optional: students rate reviews.
 
-```{r, out.width = "500px", echo = FALSE}
-knitr::include_graphics("sequence.png")
-```
+<img src="sequence.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" width="500px" />
 
 
 ## Initiation
@@ -93,13 +87,15 @@ The roster file should be read as follows.
 - The `rev*` column(s) specify the randomized user ID of the student(s) that are assigned to review the user's assignment.
 
 We recommend for instructors to create a new roster file (with a new random seed) for each assignment to prevent the same pairings of students reviewing each others work over and over throughout the course. For the purpose of demonstration, below we save the roster in a data frame called `roster_test`.
-```{r, eval = F}
+
+```r
 roster_test = peer_roster_create(2, user, seed = 123, write_csv = FALSE)
 ```
 
 ### Create review repositories
 The `peer_init()` function initiates peer review repositories for each user. This is done to ensure that authors' assignments do not permanently live on the repositories in which reviewers created their assignment. `peer_init()` creates a review repository for each user, adds users to the respective repositories, and applies peer review labels to all repositories (i.e. assignment and review repositories). The repositories are identified via the tag "-review" being automatically added to the instructor-specified `prefix` or `suffix` parameters.
-```{r, eval = F}
+
+```r
 peer_init(org = org,
           roster = roster_test,
           prefix = prefix)
@@ -113,7 +109,8 @@ Instructors can use the `peer_form_create_review()` function to create a blank f
 [^2]: Alternatively, you can access a reviewer feedback form template via `File` > `New File` > `R Markdown` > `From Template` > `Reviewer feedback form` after installing and loading the `ghclass` package.
 
 By default, the files contain an `author` field in the YAML header to prompt reviewers to identify themselves. Keeping reviewers non-anonymous (as opposed to authors) is likely to discourage overly harsh or rude reviews. If reviewers should instead stay anonymous, setting `double_blind = TRUE` will remove this field.
-```{r, eval = F}
+
+```r
 peer_form_create_review(2,
                         double_blind = double_blind,
                         fname = "feedback_blank_review")
@@ -126,7 +123,8 @@ The `peer_assign()` function distributes review assignment to reviewers. It grab
 If no `path` is specified within `peer_assign()`, all files on authors' repositories will be moved to their folder on the review repositories. By default, files with the following extensions will not be moved if no `path` is specified: `c(".gitignore", ".Rhistory", "*.Rproj", "*.html", "*.md", "*.pdf")`. Users may customize the file extensions to be excluded via the `exclude_pattern` parameter.
 
 `peer_assign()` will open an issue in the reviewers' repositories that contains links to the relevant review files. You may instruct students to close the issue to signal that they completed the assignment.
-```{r, eval = F}
+
+```r
 peer_assign(
   org = org,
   roster = roster_test,
@@ -141,7 +139,8 @@ To ensure that the process of moving files from authors' to reviewers' repositor
 
 ### Collect scores given by reviewers
 `peer_score_review()` collects the scores given by reviewers to authors. We recommend keeping the default setting of `write_csv = TRUE` to save the output as a `.csv` file in the working directory.
-```{r, eval = F}
+
+```r
 peer_score_review(
   org = org,
   roster = roster_test,
@@ -162,7 +161,8 @@ The `peer_form_create_rating()` can be used to create a blank RMarkdown form use
 [^4]: The rating categories are based on Reily, K. and P. Ludford Finnerty,  and L. Terveen (2009): Two Peers Are Better Than One: Aggregating Peer Reviews for Computing Assignments is Surprisingly Accurate. In *Proceedings of the ACM 2009 International Conference on Supporting Group Work*. GROUP’09, May 10–13, 2009, Sanibel Island, Florida, USA.
 
 The rating categories can be adjusted via the `category` parameter. By default, the resulting `.Rmd` file is saved in the working directory. Customization of this form is possible, but not necessary.
-```{r, eval = F}
+
+```r
 peer_form_create_rating(fname = "hw2_rating", 
                         category = c("accuracy", "fairness"))
 ```
@@ -173,7 +173,8 @@ The `double_blind` parameter is used to determine whether authors know who revie
 <span style="color:#C70039">If instructors choose to conduct a double blind review process, they should inform students that while their name will be hidden from the students whose assignments they are reviewing, they are not anonymous to the instructor.</span>
 
 This parameter should be set once for each assignment and then passed to each of the functions in the return review process. `double_blind` determines the naming of folders on authors repositories. Changing from a setting of double blind to single blind review, or vice versa, in the middle of the return review process will prevent `peer_return()` or `peer_score_rating()` to locate the correct files on reviewers' and authors' repositories.
-```{r, eval = F}
+
+```r
 double_blind = TRUE
 ```
 
@@ -191,7 +192,8 @@ If `double_blind = TRUE`, folder names on authors' repositories will be based on
 Students receive an email to the address registered for their GitHub user name alerting them that a new issue has been created in their repository. The issue includes check boxes that you students can use to keep track of their progress. You may instruct students to close the issue to signal that they completed the assignment.
 
 Only select files will be moved and saved in reviewer-specific folders on authors' repositories and should be specified by the instructor via the `path` parameter. Please not that the `peer_return()` function is relatively costly in terms of calls to the API. Instructors are advised to select only the most relevant files in this step, for example the review feedback form and comments made by the reviewer on authors' original files.
-```{r, eval = F}
+
+```r
 peer_return(
   org = org,
   roster = roster_test,
@@ -205,7 +207,8 @@ peer_return(
 
 ### [Recommended] Collect scores given by authors
 We use `peer_score_rating()` to collect the ratings given by authors on reviewers' feedback. We recommend keeping the default setting of `write_csv = TRUE` to save the output as a `.csv` file.
-```{r, eval = F}
+
+```r
 peer_score_rating(
   org = org,
   roster = roster_test,
@@ -216,23 +219,17 @@ peer_score_rating(
 ```
 
 The output data frame will replicate the roster and add columns for each reviewer's rating in each category. Scores are listed by the role that a reviewer had for the author rating the review, and coded by the randomized user names. In the example below, user `bruno-ghclass` gave `anya-ghclass` ratings 4 and 3 for their review (Anya was reviewer 1 for Bruno); user `diego-ghclass` gave `anya-ghclass` rating 2 and 1 for their review (Anya was reviewer 2 for Diego).
-```{r, echo = F, message = F}
-#library(ghclass)
-devtools::load_all()
-```
 
-```{r, echo = F}
-user = c("anya-ghclass", "bruno-ghclass", "celine-ghclass", "diego-ghclass")
-scores_aut = peer_roster_create(2, user, seed = 123, write_csv = F)
-scores_aut$rev1_c1 = NA
-scores_aut$rev1_c2 = NA
-scores_aut$rev2_c1 = NA
-scores_aut$rev2_c2 = NA
-scores_aut$rev1_c1[scores_aut$user == "anya-ghclass"] <- 4
-scores_aut$rev1_c2[scores_aut$user == "anya-ghclass"] <- 3
-scores_aut$rev2_c1[scores_aut$user == "anya-ghclass"] <- 2
-scores_aut$rev2_c2[scores_aut$user == "anya-ghclass"] <- 1
-scores_aut
+
+
+```
+#> # A tibble: 4 x 8
+#>   user           user_random rev1  rev2  rev1_c1 rev1_c2 rev2_c1 rev2_c2
+#>   <chr>          <chr>       <chr> <chr>   <dbl>   <dbl>   <dbl>   <dbl>
+#> 1 celine-ghclass aut1        aut4  aut2       NA      NA      NA      NA
+#> 2 bruno-ghclass  aut2        aut1  aut3       NA      NA      NA      NA
+#> 3 anya-ghclass   aut3        aut2  aut4        4       3       2       1
+#> 4 diego-ghclass  aut4        aut3  aut1       NA      NA      NA      NA
 ```
 
 ## Issues and recommendations

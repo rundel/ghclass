@@ -36,7 +36,7 @@
 
 
 <meta property="og:title" content="Check if username(s) exists — user_exists" />
-<meta property="og:description" content="user_exists returns TRUE if the supplied username(s) exists on GitHub and FALSE otherwise." />
+<meta property="og:description" content="user_exists returns TRUE if the supplied username(s) exist on GitHub and FALSE otherwise." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -104,7 +104,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/rundel/ghclass">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -119,12 +124,12 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Check if username(s) exists</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/user_exists.R'><code>R/user_exists.R</code></a></small>
     <div class="hidden name"><code>user_exists.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>user_exists</code> returns TRUE if the supplied username(s) exists on GitHub and FALSE otherwise.</p>
+    <p><code>user_exists</code> returns TRUE if the supplied username(s) exist on GitHub and FALSE otherwise.</p>
     </div>
 
     <pre class="usage"><span class='fu'>user_exists</span>(<span class='no'>user</span>)</pre>
@@ -134,13 +139,13 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>user</th>
-      <td><p>Character. Username to be checked. Can be a vector or list of usernames.</p></td>
+      <td><p>Character. Username(s) to be checked.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>TRUE or FALSE</p>
+    <p>Vector of logical values</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {

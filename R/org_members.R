@@ -22,9 +22,6 @@ github_api_org_members = function(org) {
 #' org_members("ghclass")
 #' }
 #'
-
-#' @aliases get_member get_members
-#'
 #' @export
 #'
 org_members = function(org, filter = NULL, exclude = FALSE,

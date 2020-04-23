@@ -9,11 +9,12 @@ repo_mirror_template(template_repo, repo, private = TRUE)
 \arguments{
 \item{template_repo}{Character. Address of template repository in \code{owner/name} format.}
 
-\item{private}{Logical. Should the new repository be private or public.}
+\item{repo}{Character. One or more repository addresses in \code{owner/name} format.
+Note when using template repos these new repositories must not already exist.}
 
-\item{new_repo}{Character. One or more repository addresses in \code{owner/name} format.}
+\item{private}{Logical. Should the new repository be private or public.}
 }
 \description{
-\code{repo_mirror_template} mirrors the content of one repository to another repository, or set of
-repositories.
+\code{repo_mirror_template} mirrors the content of a source (template) repository to a new (not yet created)
+repository, or vector of repositories.
 }

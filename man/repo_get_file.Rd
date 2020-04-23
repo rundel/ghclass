@@ -2,7 +2,6 @@
 % Please edit documentation in R/repo_get_file.R
 \name{repo_get_file}
 \alias{repo_get_file}
-\alias{get_file}
 \title{Low level function for retrieving a file from a GitHub Repository}
 \usage{
 repo_get_file(repo, path, branch = "master")

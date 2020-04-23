@@ -1,29 +1,27 @@
 #' @rdname local_repo
 #' @export
-local_repo_commit = function(repo_dir, message,
-                       git = require_git(), options = character(),
-                       verbose = FALSE)
-{
-  stopifnot(all(fs::dir_exists(repo_dir)))
-  stopifnot(fs::file_exists(git))
-  stopifnot(!missing(message))
-
+local_repo_commit = function(repo_dir, message) {
+  require_gert()
+  arg_is_chr(repo_dir, message)
   repo_dir = repo_dir_helper(repo_dir)
 
-  purrr::walk2(
+  res = purrr::map2(
     repo_dir, message,
     function(dir, message) {
-      withr::local_dir(dir)
-
-      res = purrr::safely(run_git)(
-        git, "commit", c("-m", message, options), verbose = verbose
+      res = purrr::safely(gert::git_commit)(
+        message = message, repo = dir
       )
 
+      repo = fs::path_file(dir)
       status_msg(
         res,
-        glue::glue("Committed {usethis::ui_value(dir)}."),
-        glue::glue("Failed to commit {usethis::ui_value(dir)}.")
+        glue::glue("Committed changes to {usethis::ui_value(repo)}."),
+        glue::glue("Failed to commit changes to {usethis::ui_value(repo)}.")
       )
+
+      res
     }
   )
+
+  invisible(res)
 }

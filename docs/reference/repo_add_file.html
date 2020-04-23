@@ -104,7 +104,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/rundel/ghclass">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -119,7 +124,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Add files to a repo</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/repo_add_file.R'><code>R/repo_add_file.R</code></a></small>
     <div class="hidden name"><code>repo_add_file.Rd</code></div>
     </div>
 
@@ -127,8 +132,15 @@
     <p><code>repo_add_file</code> uses the GitHub API to add/update files in an existing repo on GitHub. Note that due to time delays in caching, files that have been added very recently might not yet be displayed as existing and might accidentally be overwritten.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>repo_add_file</span>(<span class='no'>repo</span>, <span class='no'>file</span>, <span class='kw'>message</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>repo_folder</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>, <span class='kw'>preserve_path</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>repo_add_file</span>(
+  <span class='no'>repo</span>,
+  <span class='no'>file</span>,
+  <span class='kw'>message</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>repo_folder</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>,
+  <span class='kw'>preserve_path</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

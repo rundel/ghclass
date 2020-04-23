@@ -131,7 +131,7 @@ peer_get_rev = function(aut,
 
 
 
-github_api_issue_create = function(repo, title, body, assignee, labels) {
+github_api_peer_issue_create = function(repo, title, body, assignee, labels) {
   gh::gh(
     "POST /repos/:owner/:repo/issues",
     owner = get_repo_owner(repo),
@@ -268,10 +268,10 @@ peer_issue_create = function(out,
 
                 if (step == "review") {
                   body = peer_issue_body_review(sub = sub, url_start = url_start)
-                  labels = list(":pencil: Complete review")
+                  labels = c(":pencil: Complete review")
                 } else if (step == "rating") {
                   body = peer_issue_body_rating(sub = sub, url_start = url_start)
-                  labels = list(":mag: Inspect review")
+                  labels = c(":mag: Inspect review")
                 }
 
                 assignee = peer_repo_get_user(
@@ -281,18 +281,21 @@ peer_issue_create = function(out,
                   suffix = suffix
                 )
 
-                res = purrr::safely(github_api_issue_create)(
+                #res = purrr::safely(github_api_peer_issue_create)(
+                #  repo = r,
+                #  title = title,
+                #  body = body,
+                #  assignee = assignee,
+                #  labels = labels
+                #)
+
+                issue_create(
                   repo = r,
                   title = title,
                   body = body,
-                  assignee = assignee,
-                  labels = labels
+                  labels = labels,
+                  assignees = assignee
                 )
-
-                status_msg(res,
-                           glue::glue("Posted issue for {r}"),
-                           glue::glue("Cannot post issue for {r}"))
-
               })
 }
 
@@ -520,8 +523,8 @@ repo_files_select = function(repo,
     repo_files = repo_files(repo = repo, branch = branch)
   }
 
-  path = repo_files[['path']][repo_files[['type']] == "blob" &
-                                !grepl("/", repo_files[['path']])]
+  sub = repo_files[['type']] == "blob" #& !grepl("/", repo_files[['path']])]
+  path = repo_files[['path']][sub]
 
   rx_exclude_pattern = paste(utils::glob2rx(exclude_pattern), collapse = "|")
   path[!grepl(rx_exclude_pattern, path)]
@@ -685,8 +688,8 @@ peer_add_content = function(target_repo,
 
 # Extract user from a repo of format org/repo
 peer_repo_get_user = function(repo, org, prefix, suffix) {
-  tmp = sub(glue::glue("{org}/{prefix}[(-review)]*"), "", repo)
-  tmp = sub(glue::glue("{suffix}[(-review)]*"), "", tmp)
+  tmp = sub(glue::glue("^{org}/{prefix}(review-)?"), "", repo)
+  tmp = sub(glue::glue("{suffix}(-review)?$"), "", tmp)
   tmp
 }
 
@@ -709,8 +712,9 @@ repo_path_content_grab = function(repo,
 
                if (path_exists) {
                  res = purrr::safely(repo_get_file)(repo = repo,
-                                                    file = path,
+                                                    path = path,
                                                     branch = branch)
+
                  if (succeeded(res))
                    list(content = res[['result']],
                         path = path)

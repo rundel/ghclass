@@ -16,12 +16,19 @@ team_id_lookup.default = function(x, org) {
 }
 
 team_id_lookup.data.frame = function(x, org) {
-  team_ids = org_team_ids(org)
+  if (nrow(x) == 0) {
+    tibble::tibble(
+      team = character(),
+      id = integer()
+    )
+  } else {
+    team_ids = org_team_ids(org)
 
-  merge(
-    team_ids, x,
-    by = "team", all.y = TRUE
-  )
+    merge(
+      team_ids, x,
+      by = "team", all.y = TRUE
+    )
+  }
 }
 
 team_id_lookup.character = function(x, org) {

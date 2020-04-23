@@ -12,8 +12,6 @@
 #' github_set_token("0123456789ABCDEF0123456789ABCDEF01234567")
 #' }
 #'
-#' @aliases set_github_token
-#'
 #' @export
 
 github_set_token = function(token) {

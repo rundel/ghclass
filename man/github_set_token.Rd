@@ -2,7 +2,6 @@
 % Please edit documentation in R/github_set_token.R
 \name{github_set_token}
 \alias{github_set_token}
-\alias{set_github_token}
 \title{Set github token}
 \usage{
 github_set_token(token)

@@ -2,7 +2,6 @@
 % Please edit documentation in R/branch_create.R
 \name{branch_create}
 \alias{branch_create}
-\alias{create_branch}
 \title{Create branch}
 \usage{
 branch_create(repo, cur_branch = "master", new_branch)

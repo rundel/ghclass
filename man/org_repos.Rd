@@ -2,8 +2,6 @@
 % Please edit documentation in R/org_repos.R
 \name{org_repos}
 \alias{org_repos}
-\alias{get_repo}
-\alias{get_repos}
 \title{Get organization repository}
 \usage{
 org_repos(org, filter = NULL, exclude = FALSE, full_repo = TRUE)

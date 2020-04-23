@@ -65,7 +65,14 @@
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/rundel/ghclass">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -75,15 +82,15 @@
 
       
 
-      </header><div class="row">
+      </header><script src="peer_files/header-attrs-2.1/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Peer review with ghclass</h1>
                         <h4 class="author">Therese Anders and Mine Çetinkaya-Rundel</h4>
             
-            <h4 class="date">2019-09-19</h4>
+            <h4 class="date">2020-02-04</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/rundel/ghclass/blob/master/vignettes/peer.Rmd"><code>vignettes/peer.Rmd</code></a></small>
       <div class="hidden name"><code>peer.Rmd</code></div>
 
     </div>
@@ -113,7 +120,7 @@ h3 { /* Header 3 */
 <div id="before-peer-review" class="section level1">
 <h1 class="hasAnchor">
 <a href="#before-peer-review" class="anchor"></a>Before peer review</h1>
-<p>The peer review process is initiated after a regular assignment has been distributed to students. Below, we run through a quick example of how to set up a fictional assignment “hw2” for four students using the <code><a href="../reference/repo_create.html">create_repo()</a></code> function. For a more detailed description of how to set up student repositories in a GitHub Organization, see the <code>ghclass</code> <a href="https://rundel.github.io/ghclass/articles/ghclass.html">“Get started” vignette</a>.</p>
+<p>The peer review process is initiated after a regular assignment has been distributed to students. Below, we run through a quick example of how to set up a fictional assignment “hw2” for four students using the <code>create_repo()</code> function. For a more detailed description of how to set up student repositories in a GitHub Organization, see the <code>ghclass</code> <a href="https://rundel.github.io/ghclass/articles/ghclass.html">“Get started” vignette</a>.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ghclass)</span>
 <span id="cb1-2"><a href="#cb1-2"></a></span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="co"># 1. Set up vector of student user names, HW identifier prefix, and organization name</span></span>
@@ -126,7 +133,7 @@ h3 { /* Header 3 */
 <span id="cb1-10"><a href="#cb1-10"></a><span class="kw"><a href="../reference/repo_create.html">repo_create</a></span>(org, user, <span class="dt">prefix =</span> prefix)</span>
 <span id="cb1-11"><a href="#cb1-11"></a></span>
 <span id="cb1-12"><a href="#cb1-12"></a><span class="co"># 3. Add students to their individual repos</span></span>
-<span id="cb1-13"><a href="#cb1-13"></a><span class="kw"><a href="../reference/repo_add_member.html">repo_add_user</a></span>(glue<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/glue/man/glue.html">glue</a></span>(<span class="st">"{org}/{prefix}{user}"</span>), user)</span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="kw"><a href="../reference/repo_add_user.html">repo_add_user</a></span>(glue<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/glue/man/glue.html">glue</a></span>(<span class="st">"{org}/{prefix}{user}"</span>), user)</span>
 <span id="cb1-14"><a href="#cb1-14"></a></span>
 <span id="cb1-15"><a href="#cb1-15"></a><span class="co"># 4. Place homework files in repositories</span></span>
 <span id="cb1-16"><a href="#cb1-16"></a>task &lt;-<span class="st"> "/Users/thereseanders/Teaching/introggplot2/hw2/hw2_task.Rmd"</span></span>
@@ -147,7 +154,7 @@ h3 { /* Header 3 */
 <li>
 <strong>Return review &amp; rating</strong>: Create rating form, return review to authors, optional: students rate reviews.</li>
 </ol>
-<p><img src="sequence.png" width="500px"></p>
+<p><img src="sequence.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" width="500px"></p>
 <div id="initiation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#initiation" class="anchor"></a>Initiation</h2>
@@ -378,7 +385,8 @@ h3 { /* Header 3 */
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#before-peer-review">Before peer review</a></li>
       <li>
-<a href="#step-by-step-guide-to-peer-review">Step-by-step guide to peer review</a><ul class="nav nav-pills nav-stacked">
+<a href="#step-by-step-guide-to-peer-review">Step-by-step guide to peer review</a>
+      <ul class="nav nav-pills nav-stacked">
 <li><a href="#initiation">Initiation</a></li>
       <li><a href="#assign-review">Assign review</a></li>
       <li><a href="#return-review-rating">Return review &amp; rating</a></li>

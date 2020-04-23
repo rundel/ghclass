@@ -104,7 +104,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/rundel/ghclass">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -119,7 +124,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create repository</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/repo_create.R'><code>R/repo_create.R</code></a></small>
     <div class="hidden name"><code>repo_create.Rd</code></div>
     </div>
 
@@ -127,8 +132,15 @@
     <p><code>repo_create</code> creates either individual or team repositories.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>repo_create</span>(<span class='no'>org</span>, <span class='no'>name</span>, <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>private</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>auto_init</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>gitignore_template</span> <span class='kw'>=</span> <span class='st'>"R"</span>)</pre>
+    <pre class="usage"><span class='fu'>repo_create</span>(
+  <span class='no'>org</span>,
+  <span class='no'>name</span>,
+  <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>""</span>,
+  <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='st'>""</span>,
+  <span class='kw'>private</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>auto_init</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>gitignore_template</span> <span class='kw'>=</span> <span class='st'>"R"</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

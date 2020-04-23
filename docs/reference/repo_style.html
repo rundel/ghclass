@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Style repository — repo_style • ghclass</title>
+<title>Style repository with styler — repo_style • ghclass</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,9 @@
 
 
 
-<meta property="og:title" content="Style repository — repo_style" />
-<meta property="og:description" content="style_repo implements &quot;non-invasive pretty-printing of R source code&quot; of .R or .Rmd files within a repository using the styler package and adhering to tidyverse formatting guidelines." />
+<meta property="og:title" content="Style repository with styler — repo_style" />
+<meta property="og:description" content="repo_style implements &quot;non-invasive pretty-printing of R source code&quot; of .R or .Rmd files
+within a repository using the styler package and adhering to tidyverse formatting guidelines." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -104,7 +105,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/rundel/ghclass">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -118,18 +124,26 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Style repository</h1>
-    
+    <h1>Style repository with styler</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/repo_style.R'><code>R/repo_style.R</code></a></small>
     <div class="hidden name"><code>repo_style.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>style_repo</code> implements "non-invasive pretty-printing of R source code" of .R or .Rmd files within a repository using the <code>styler</code> package and adhering to <code>tidyverse</code> formatting guidelines.</p>
+    <p><code>repo_style</code> implements "non-invasive pretty-printing of R source code" of .R or .Rmd files
+within a repository using the <code>styler</code> package and adhering to <code>tidyverse</code> formatting guidelines.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>repo_style</span>(<span class='no'>repo</span>, <span class='kw'>files</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"*.R"</span>, <span class='st'>"*.Rmd"</span>), <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"styler"</span>,
-  <span class='kw'>base</span> <span class='kw'>=</span> <span class='st'>"master"</span>, <span class='kw'>draft</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>create_pull_request</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>tag_collaborators</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>git</span> <span class='kw'>=</span> <span class='fu'>require_git</span>())</pre>
+    <pre class="usage"><span class='fu'>repo_style</span>(
+  <span class='no'>repo</span>,
+  <span class='kw'>files</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"*.R"</span>, <span class='st'>"*.Rmd"</span>),
+  <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"styler"</span>,
+  <span class='kw'>base</span> <span class='kw'>=</span> <span class='st'>"master"</span>,
+  <span class='kw'>create_pull_request</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>draft</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>tag_collaborators</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>prompt</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -144,11 +158,15 @@
     </tr>
     <tr>
       <th>branch</th>
-      <td><p>Character. Name of new branch to be created. Default is "styler".</p></td>
+      <td><p>Character. Name of new branch to be created or overwritten. Default is "styler".</p></td>
     </tr>
     <tr>
       <th>base</th>
-      <td><p>Character. Name of branch that contains the .R and/or .Rmd files to be reformatted.</p></td>
+      <td><p>Character. Name of branch that contains the .R and/or .Rmd files to be styled</p></td>
+    </tr>
+    <tr>
+      <th>create_pull_request</th>
+      <td><p>Logical. If TRUE, a pull request is created from branch to base.</p></td>
     </tr>
     <tr>
       <th>draft</th>
@@ -156,16 +174,12 @@
 until allowed by the author)</p></td>
     </tr>
     <tr>
-      <th>create_pull_request</th>
-      <td><p>Logical. If TRUE, a pull request is created from branch to base.</p></td>
-    </tr>
-    <tr>
       <th>tag_collaborators</th>
       <td><p>Logical. If TRUE, a message with the repository collaborators is displayed.</p></td>
     </tr>
     <tr>
-      <th>git</th>
-      <td><p>Chacacter. Path to the git binary.</p></td>
+      <th>prompt</th>
+      <td><p>Chacacter. Prompt the user before overwriting an existing branch.</p></td>
     </tr>
     </table>
 

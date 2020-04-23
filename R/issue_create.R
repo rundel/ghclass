@@ -5,8 +5,8 @@ github_api_issue_create = function(repo, title, body, labels, assignees){
     repo = get_repo_name(repo),
     title = title,
     body = body,
-    labels = labels,
-    assignees = assignees,
+    labels = I(labels),
+    assignees = I(assignees),
     .token = github_get_token()
   )
 }
@@ -21,8 +21,29 @@ github_api_issue_create = function(repo, title, body, labels, assignees){
 #' @param labels Character. Vector of the labels to associate with this issue
 #' @param assignees Character. Vector of logins for users assigned to the issue.
 #'
+#' @examples
+#' \dontrun{
+#' repo_create("ghclass-test","issue-test")
+#'
+#' issue_create("ghclass-test/issue-test", title = "Issue 1", body = "This is an issue")
+#'
+#' issue_create(
+#'   "ghclass-test/issue-test",
+#'   title = "Issue 2", body = "This is also issue",
+#'   label = "Important"
+#' )
+#'
+#' issue_create(
+#'   "ghclass-test/issue-test",
+#'   title = "Issue 3", body = "This is also issue",
+#'   label = c("Important", "Super Important")
+#'   assignees = "rundel"
+#' )
+#' }
+#'
 #' @export
 #'
+
 issue_create = function(repo, title, body, labels = character(), assignees = character()) {
 
   arg_is_chr(repo, title, body)
@@ -33,7 +54,6 @@ issue_create = function(repo, title, body, labels = character(), assignees = cha
   if (!is.list(assignees))
     assignees = list(assignees)
 
-
   res = purrr::pmap(
     list(repo, title, body, labels, assignees),
     function(repo, title, body, labels, assignees) {
@@ -43,8 +63,8 @@ issue_create = function(repo, title, body, labels = character(), assignees = cha
 
       status_msg(
         res,
-        glue::glue("Created issue for repo {usethis::ui_value(repo)}."),
-        glue::glue("Failed to create issue for repo {usethis::ui_value(repo)}.")
+        glue::glue("Created issue {usethis::ui_value(title)} for repo {usethis::ui_value(repo)}."),
+        glue::glue("Failed to create issue {usethis::ui_value(title)} for repo {usethis::ui_value(repo)}.")
       )
 
       res

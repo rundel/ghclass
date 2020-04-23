@@ -7,8 +7,6 @@
 #' @param filter character, regex pattern for matching (or excluding) repos.
 #' @param exclude logical, should entries matching the regex be excluded or included.
 #'
-#' @aliases get_teams
-#'
 #' @export
 #'
 org_team_ids = function(org, filter=NULL, exclude=FALSE) {

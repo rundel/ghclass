@@ -2,7 +2,6 @@
 % Please edit documentation in R/team_rename.R
 \name{team_rename}
 \alias{team_rename}
-\alias{rename_team}
 \title{Rename existing team(s)}
 \usage{
 team_rename(org, team, new_team)

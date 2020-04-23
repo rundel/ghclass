@@ -2,7 +2,6 @@
 % Please edit documentation in R/org_admins.R
 \name{org_admins}
 \alias{org_admins}
-\alias{get_admin}
 \title{List repository administrators}
 \usage{
 org_admins(org)
@@ -18,7 +17,8 @@ List repository administrators
 }
 \examples{
 \dontrun{
-org_admins("Sta523-Fa17")
+org_admins("ghclass-test")
+org_admins("rundel")
 }
 
 }

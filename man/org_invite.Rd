@@ -2,7 +2,6 @@
 % Please edit documentation in R/org_invite.R
 \name{org_invite}
 \alias{org_invite}
-\alias{invite_user}
 \title{Invite user(s)}
 \usage{
 org_invite(org, user)

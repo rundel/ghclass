@@ -14,8 +14,6 @@ github_api_team_pending = function(id) {
 #' @param org character, name of the GitHub organization.
 #' @param team character or data frame, listing one or more team
 #'
-#' @aliases get_pending_team_members team_pending_members
-#'
 #' @examples
 #' \dontrun{
 #' team_pending("ghclass",c("team01","team02"))
@@ -52,11 +50,4 @@ team_pending = function(org, team = org_teams(org)) {
       }
     }
   )
-}
-
-#' @export
-#'
-team_pending_members = function(org, team = org_teams(org)) {
-  .Deprecated("team_pending")
-  team_pending(org, team)
 }

@@ -104,7 +104,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/rundel/ghclass">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -119,7 +124,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>ghclass: A package for github based classroom and assignment management</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/ghclass.R'><code>R/ghclass.R</code></a></small>
     <div class="hidden name"><code>ghclass.Rd</code></div>
     </div>
 
@@ -129,108 +134,11 @@
 
 
 
-    <h2 class="hasAnchor" id="local-git-repository-functions"><a class="anchor" href="#local-git-repository-functions"></a>Local git repository functions</h2>
-
-    
-
-<ul>
-<li><p><code><a href='local_repo_clone.html'>local_repo_clone()</a></code> or
-<code><a href='local_repo_clone.html'>repo_clone()</a></code>        - (previously <code><a href='local_repo.html'>clone_repo()</a></code>) -</p></li>
-<li><p><code><a href='local_repo.html'>local_repo_add()</a></code>    - (previously <code><a href='local_repo.html'>add_repo()</a></code>) -</p></li>
-<li><p><code><a href='local_repo.html'>local_repo_commit()</a></code> - (previously <code><a href='local_repo.html'>commit_repo()</a></code>) -</p></li>
-<li><p><code><a href='local_repo.html'>local_repo_push()</a></code>   - (previously <code><a href='local_repo.html'>push_repo()</a></code>) -</p></li>
-<li><p><code><a href='local_repo.html'>local_repo_pull()</a></code>   - (previously <code><a href='local_repo.html'>pull_repo()</a></code>) -</p></li>
-<li><p><code><a href='local_repo_rename.html'>local_repo_rename()</a></code> - (previously <code><a href='local_repo_rename.html'>rename_local_repo()</a></code>) -</p></li>
-</ul>
-
-    <h2 class="hasAnchor" id="organization-functions"><a class="anchor" href="#organization-functions"></a>Organization functions</h2>
-
-    
-
-
-<p>General functions,</p><ul>
-<li><p><code><a href='org_repos.html'>org_repos()</a></code>           - (previously <code><a href='org_repos.html'>get_repo()</a></code>)</p></li>
-<li><p><code><a href='org_teams.html'>org_teams()</a></code>           -</p></li>
-<li><p><code><a href='org_team_ids.html'>org_team_ids()</a></code>        - (previously <code><a href='org_team_ids.html'>get_teams()</a></code>)</p></li>
-<li><p><code><a href='org_admins.html'>org_admins()</a></code>          - (previously <code><a href='org_admins.html'>get_admin()</a></code>)</p></li>
-<li><p><code><a href='org_invite.html'>org_invite()</a></code>          - (previously <code><a href='org_invite.html'>invite_user()</a></code>)</p></li>
-<li><p><code><a href='org_members.html'>org_members()</a></code>         - (previously <code><a href='org_members.html'>get_member()</a></code>)</p></li>
-<li><p><code><a href='org_pending.html'>org_pending()</a></code>         - (previously <code><a href='org_pending.html'>get_pending_member()</a></code>)</p></li>
-</ul>
-
-<p>Team related functions,</p><ul>
-<li><p><code><a href='team_create.html'>team_create()</a></code>          - (previously <code><a href='team_create.html'>create_team()</a></code>)</p></li>
-<li><p><code><a href='team_rename.html'>team_rename()</a></code>          - (previously <code><a href='team_rename.html'>rename_team()</a></code>)</p></li>
-<li><p><code><a href='team_invite.html'>team_invite()</a></code>          - (previously <code><a href='team_invite.html'>add_team_member()</a></code>)</p></li>
-<li><p><code><a href='team_members.html'>team_members()</a></code>         - (previously <code><a href='team_members.html'>get_team_members()</a></code>)</p></li>
-<li><p><code><a href='team_pending.html'>team_pending()</a></code>         - (previously <code><a href='team_pending.html'>get_pending_team_members()</a></code>)</p></li>
-<li><p><code><a href='team_repos.html'>team_repos()</a></code>           - (previously <code><a href='team_repos.html'>get_team_repos()</a></code>)</p></li>
-</ul>
-
-    <h2 class="hasAnchor" id="github-repository-functions"><a class="anchor" href="#github-repository-functions"></a>GitHub repository functions</h2>
-
-    
-
-
-<p>General functions,</p><ul>
-<li><p><code><a href='repo_create.html'>repo_create()</a></code>        - (previously <code><a href='repo_create.html'>create_repo()</a></code>)</p></li>
-<li><p><code><a href='repo_rename.html'>repo_rename()</a></code>        - (previously <code><a href='repo_rename.html'>rename_repo()</a></code>)</p></li>
-<li><p><code><a href='repo_add_member.html'>repo_add_team()</a></code>      - (previously <code><a href='repo_add_member.html'>add_team_to_repo()</a></code>)</p></li>
-<li><p><code><a href='repo_add_member.html'>repo_add_user()</a></code>      - (previously <code><a href='repo_add_member.html'>add_user_to_repo()</a></code>)</p></li>
-<li><p><code><a href='repo_mirror.html'>repo_mirror()</a></code>        - (previously <code><a href='repo_mirror.html'>mirror_repo()</a></code>)</p></li>
-<li><p><code><a href='repo_collaborators.html'>repo_collaborators()</a></code> - (previously <code><a href='repo_collaborators.html'>get_collaborator()</a></code>)</p></li>
-</ul>
-
-<p>File manipulation functions,</p><ul>
-<li><p><code><a href='repo_add_file.html'>repo_add_file()</a></code>    - (previously <code><a href='repo_add_file.html'>add_file()</a></code>)</p></li>
-<li><p><code><a href='repo_modify_file.html'>repo_modify_file()</a></code> -</p></li>
-<li><p><code><a href='repo_put_file.html'>repo_put_file()</a></code>    - (previously <code><a href='repo_put_file.html'>put_file()</a></code>)</p></li>
-<li><p><code><a href='repo_get_file.html'>repo_get_file()</a></code>    - (previously <code><a href='repo_get_file.html'>get_file()</a></code>)</p></li>
-<li><p><code><a href='repo_get_readme.html'>repo_get_readme()</a></code>  - (previously <code><a href='repo_get_readme.html'>get_readme()</a></code>)</p></li>
-</ul>
-
-<p>Branch functions,</p><ul>
-<li><p><code><a href='branch_create.html'>branch_create()</a></code>    - (previously <code><a href='branch_create.html'>create_branch()</a></code>)</p></li>
-<li><p><code><a href='branch_protect.html'>branch_protect()</a></code>   - (previously <code><a href='branch_protect.html'>protect_branch()</a></code>)</p></li>
-<li><p><code><a href='branch_unprotect.html'>branch_unprotect()</a></code> - (previously <code><a href='branch_unprotect.html'>unprotect_branch()</a></code>)</p></li>
-</ul>
-
-<p>Notification functions:</p><ul>
-<li><p><code><a href='repo_watching.html'>repo_watching()</a></code> - (previously <code><a href='repo_watching.html'>get_watching()</a></code> -)</p></li>
-<li><p><code><a href='repo_ignore.html'>repo_ignore()</a></code>   - (previously <code><a href='repo_ignore.html'>ignore_repo()</a></code> -)</p></li>
-<li><p><code><a href='repo_unwatch.html'>repo_unwatch()</a></code>  - (previously <code><a href='repo_unwatch.html'>unwatch_repo()</a></code> -)</p></li>
-<li><p><code><a href='repo_watch.html'>repo_watch()</a></code>    - (previously <code><a href='repo_watch.html'>watch_repo()</a></code>)</p></li>
-</ul>
-
-    <h2 class="hasAnchor" id="github-authentication-functions"><a class="anchor" href="#github-authentication-functions"></a>GitHub authentication functions</h2>
-
-    
-
-<ul>
-<li><p><code><a href='github_get_token.html'>github_get_token()</a></code>  - (previously <code><a href='github_get_token.html'>get_github_token()</a></code>)</p></li>
-<li><p><code><a href='github_set_token.html'>github_set_token()</a></code>  - (previously <code><a href='github_set_token.html'>set_github_token()</a></code>)</p></li>
-<li><p><code><a href='github_test_token.html'>github_test_token()</a></code> - (previously <code><a href='github_test_token.html'>test_github_token()</a></code>)</p></li>
-</ul>
-
-    <h2 class="hasAnchor" id="utility-functions"><a class="anchor" href="#utility-functions"></a>Utility functions</h2>
-
-    
-
-<ul>
-<li><p><code><a href='repo_exists.html'>repo_exists()</a></code> - (previously <code><a href='repo_exists.html'>check_repo()</a></code>)</p></li>
-<li><p><code><a href='user_exists.html'>user_exists()</a></code> - (previously <code><a href='user_exists.html'>check_user_exists()</a></code>)</p></li>
-</ul>
-
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#local-git-repository-functions">Local git repository functions</a></li>
-      <li><a href="#organization-functions">Organization functions</a></li>
-      <li><a href="#github-repository-functions">GitHub repository functions</a></li>
-      <li><a href="#github-authentication-functions">GitHub authentication functions</a></li>
-      <li><a href="#utility-functions">Utility functions</a></li>
     </ul>
 
   </div>
