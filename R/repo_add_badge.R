@@ -31,7 +31,7 @@ repo_add_badge = function(repo, workflow = NULL, where = "^.", line_padding = "\
   }
 
   d[["url"]] =  glue::glue_data(d, "https://github.com/{repo}/workflows/{workflow}/badge.svg")
-  d[["dest"]] = glue::glue_data(d, "https://github.com/{repo}/actions?query=workflow:{workflow}")
+  d[["dest"]] = glue::glue_data(d, "https://github.com/{repo}/actions?query=workflow:\"{workflow}\"")
   d[["link"]] = glue::glue_data(d, "[![{workflow}]({url_encode(url)})]({url_encode(dest)})")
 
   # Collapse by repo to save multiple changes to a single file
