@@ -10,8 +10,6 @@ local_repo_clone(
   local_path = ".",
   branch = "master",
   mirror = FALSE,
-  verbose = FALSE
-)
 }
 \arguments{
 \item{repo}{GitHub repo address with the form \code{owner/name}.}

@@ -2,22 +2,29 @@
 % Please edit documentation in R/repo_add_badge.R
 \name{repo_add_badge}
 \alias{repo_add_badge}
-\title{Add a GitHub Action badge}
+\title{Add a GitHub Actions badge}
 \usage{
-repo_add_badge(repo, workflow, where = "^.", line_padding = "\\n\\n\\n")
+repo_add_badge(
+  repo,
+  workflow = NULL,
+  where = "^.",
+  line_padding = "\\n\\n\\n",
+  file = "README.md"
+)
 }
 \arguments{
 \item{repo}{Character. Address of repository in \code{owner/name} format.}
 
-\item{workflow}{Character. Name of the workflow located in
-\verb{.github/workflows/} folder.}
+\item{workflow}{Character. Name of the workflow located in \verb{.github/workflows/}.}
 
 \item{where}{Character. Regex pattern of where to insert the badge, defaults
 to the beginning of the README}
 
 \item{line_padding}{Character. What should be added to the end of the link,
 defaults to sufficient new lines to add a blank line after the badge.}
+
+\item{file}{Character. Target file to be modified, defaults to \code{README.md}.}
 }
 \description{
-Add a GitHub Action badge
+Add a GitHub Actions badge
 }
