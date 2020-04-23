@@ -15,6 +15,10 @@ flag_experimental = function() {
   ) )
 }
 
+url_encode = function(urls) {
+  purrr::map_chr(urls, URLencode)
+}
+
 
 
 
