@@ -6,19 +6,26 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Peer review with ghclass • ghclass</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Peer review with ghclass">
-<meta property="og:description" content="">
-<meta name="twitter:card" content="summary">
+<meta property="og:description" content="ghclass">
+<meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -67,7 +74,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/rundel/ghclass">
+  <a href="https://github.com/rundel/ghclass/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -85,7 +92,7 @@
       </header><script src="peer_files/header-attrs-2.1/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Peer review with ghclass</h1>
+      <h1 data-toc-skip>Peer review with ghclass</h1>
                         <h4 class="author">Therese Anders and Mine Çetinkaya-Rundel</h4>
             
             <h4 class="date">2020-02-04</h4>
@@ -121,26 +128,26 @@ h3 { /* Header 3 */
 <h1 class="hasAnchor">
 <a href="#before-peer-review" class="anchor"></a>Before peer review</h1>
 <p>The peer review process is initiated after a regular assignment has been distributed to students. Below, we run through a quick example of how to set up a fictional assignment “hw2” for four students using the <code>create_repo()</code> function. For a more detailed description of how to set up student repositories in a GitHub Organization, see the <code>ghclass</code> <a href="https://rundel.github.io/ghclass/articles/ghclass.html">“Get started” vignette</a>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ghclass)</span>
-<span id="cb1-2"><a href="#cb1-2"></a></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="co"># 1. Set up vector of student user names, HW identifier prefix, and organization name</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a>user =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"anya-ghclass"</span>, <span class="st">"bruno-ghclass"</span>, <span class="st">"celine-ghclass"</span>, <span class="st">"diego-ghclass"</span>)</span>
-<span id="cb1-5"><a href="#cb1-5"></a>prefix =<span class="st"> "hw2-"</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a>org =<span class="st"> "ghclass-demo"</span></span>
-<span id="cb1-7"><a href="#cb1-7"></a></span>
-<span id="cb1-8"><a href="#cb1-8"></a></span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="co"># 2. Create student- and assignment-specific repositories</span></span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="kw"><a href="../reference/repo_create.html">repo_create</a></span>(org, user, <span class="dt">prefix =</span> prefix)</span>
-<span id="cb1-11"><a href="#cb1-11"></a></span>
-<span id="cb1-12"><a href="#cb1-12"></a><span class="co"># 3. Add students to their individual repos</span></span>
-<span id="cb1-13"><a href="#cb1-13"></a><span class="kw"><a href="../reference/repo_add_user.html">repo_add_user</a></span>(glue<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/glue/man/glue.html">glue</a></span>(<span class="st">"{org}/{prefix}{user}"</span>), user)</span>
-<span id="cb1-14"><a href="#cb1-14"></a></span>
-<span id="cb1-15"><a href="#cb1-15"></a><span class="co"># 4. Place homework files in repositories</span></span>
-<span id="cb1-16"><a href="#cb1-16"></a>task &lt;-<span class="st"> "/Users/thereseanders/Teaching/introggplot2/hw2/hw2_task.Rmd"</span></span>
-<span id="cb1-17"><a href="#cb1-17"></a>data &lt;-<span class="st"> "/Users/thereseanders/Teaching/introggplot2/hw2/iris_data.csv"</span></span>
-<span id="cb1-18"><a href="#cb1-18"></a><span class="kw"><a href="../reference/repo_add_file.html">repo_add_file</a></span>(<span class="kw"><a href="../reference/org_repos.html">org_repos</a></span>(org, <span class="dt">filter =</span> prefix),</span>
-<span id="cb1-19"><a href="#cb1-19"></a>              <span class="dt">file =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(task, data),</span>
-<span id="cb1-20"><a href="#cb1-20"></a>              <span class="dt">message =</span> <span class="st">"Adding task and data for homework 2."</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ghclass</span>)
+
+<span class="co"># 1. Set up vector of student user names, HW identifier prefix, and organization name</span>
+<span class="no">user</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"anya-ghclass"</span>, <span class="st">"bruno-ghclass"</span>, <span class="st">"celine-ghclass"</span>, <span class="st">"diego-ghclass"</span>)
+<span class="no">prefix</span> <span class="kw">=</span> <span class="st">"hw2-"</span>
+<span class="no">org</span> <span class="kw">=</span> <span class="st">"ghclass-demo"</span>
+
+
+<span class="co"># 2. Create student- and assignment-specific repositories</span>
+<span class="fu"><a href="../reference/repo_create.html">repo_create</a></span>(<span class="no">org</span>, <span class="no">user</span>, <span class="kw">prefix</span> <span class="kw">=</span> <span class="no">prefix</span>)
+
+<span class="co"># 3. Add students to their individual repos</span>
+<span class="fu"><a href="../reference/repo_add_user.html">repo_add_user</a></span>(<span class="kw pkg">glue</span><span class="kw ns">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html">glue</a></span>(<span class="st">"{org}/{prefix}{user}"</span>), <span class="no">user</span>)
+
+<span class="co"># 4. Place homework files in repositories</span>
+<span class="no">task</span> <span class="kw">&lt;-</span> <span class="st">"/Users/thereseanders/Teaching/introggplot2/hw2/hw2_task.Rmd"</span>
+<span class="no">data</span> <span class="kw">&lt;-</span> <span class="st">"/Users/thereseanders/Teaching/introggplot2/hw2/iris_data.csv"</span>
+<span class="fu"><a href="../reference/repo_add_file.html">repo_add_file</a></span>(<span class="fu"><a href="../reference/org_repos.html">org_repos</a></span>(<span class="no">org</span>, <span class="kw">filter</span> <span class="kw">=</span> <span class="no">prefix</span>),
+              <span class="kw">file</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">task</span>, <span class="no">data</span>),
+              <span class="kw">message</span> <span class="kw">=</span> <span class="st">"Adding task and data for homework 2."</span>)</pre></body></html></div>
 </div>
 <div id="step-by-step-guide-to-peer-review" class="section level1">
 <h1 class="hasAnchor">
@@ -173,15 +180,15 @@ h3 { /* Header 3 */
 <li>The <code>rev*</code> column(s) specify the randomized user ID of the student(s) that are assigned to review the user’s assignment.</li>
 </ul>
 <p>We recommend for instructors to create a new roster file (with a new random seed) for each assignment to prevent the same pairings of students reviewing each others work over and over throughout the course. For the purpose of demonstration, below we save the roster in a data frame called <code>roster_test</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>roster_test =<span class="st"> </span><span class="kw"><a href="../reference/peer_roster_create.html">peer_roster_create</a></span>(<span class="dv">2</span>, user, <span class="dt">seed =</span> <span class="dv">123</span>, <span class="dt">write_csv =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">roster_test</span> <span class="kw">=</span> <span class="fu"><a href="../reference/peer_roster_create.html">peer_roster_create</a></span>(<span class="fl">2</span>, <span class="no">user</span>, <span class="kw">seed</span> <span class="kw">=</span> <span class="fl">123</span>, <span class="kw">write_csv</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
 </div>
 <div id="create-review-repositories" class="section level3">
 <h3 class="hasAnchor">
 <a href="#create-review-repositories" class="anchor"></a>Create review repositories</h3>
 <p>The <code><a href="../reference/peer_init.html">peer_init()</a></code> function initiates peer review repositories for each user. This is done to ensure that authors’ assignments do not permanently live on the repositories in which reviewers created their assignment. <code><a href="../reference/peer_init.html">peer_init()</a></code> creates a review repository for each user, adds users to the respective repositories, and applies peer review labels to all repositories (i.e. assignment and review repositories). The repositories are identified via the tag “-review” being automatically added to the instructor-specified <code>prefix</code> or <code>suffix</code> parameters.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw"><a href="../reference/peer_init.html">peer_init</a></span>(<span class="dt">org =</span> org,</span>
-<span id="cb3-2"><a href="#cb3-2"></a>          <span class="dt">roster =</span> roster_test,</span>
-<span id="cb3-3"><a href="#cb3-3"></a>          <span class="dt">prefix =</span> prefix)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="../reference/peer_init.html">peer_init</a></span>(<span class="kw">org</span> <span class="kw">=</span> <span class="no">org</span>,
+          <span class="kw">roster</span> <span class="kw">=</span> <span class="no">roster_test</span>,
+          <span class="kw">prefix</span> <span class="kw">=</span> <span class="no">prefix</span>)</pre></body></html></div>
 </div>
 </div>
 <div id="assign-review" class="section level2">
@@ -192,9 +199,9 @@ h3 { /* Header 3 */
 <a href="#create-and-customize-feedback-form-for-reviewers" class="anchor"></a>Create and customize feedback form for reviewers</h3>
 <p>Instructors can use the <code><a href="../reference/peer_form_create_review.html">peer_form_create_review()</a></code> function to create a blank feedback form and save it as an RMarkdown (<code>.Rmd</code>) file.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> Instructors can specify the number of questions to be included in the blank form. The function automatically creates <code>q*_score</code> parameters for each question in the YAML header of the RMarkdown document. Students are extracted to use these <code>q*_score</code> fields in the YAML to record the scores they give authors for their assignement. These YAML parameters are later used to extract and save student scores.</p>
 <p>By default, the files contain an <code>author</code> field in the YAML header to prompt reviewers to identify themselves. Keeping reviewers non-anonymous (as opposed to authors) is likely to discourage overly harsh or rude reviews. If reviewers should instead stay anonymous, setting <code>double_blind = TRUE</code> will remove this field.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw"><a href="../reference/peer_form_create_review.html">peer_form_create_review</a></span>(<span class="dv">2</span>,</span>
-<span id="cb4-2"><a href="#cb4-2"></a>                        <span class="dt">double_blind =</span> double_blind,</span>
-<span id="cb4-3"><a href="#cb4-3"></a>                        <span class="dt">fname =</span> <span class="st">"feedback_blank_review"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="../reference/peer_form_create_review.html">peer_form_create_review</a></span>(<span class="fl">2</span>,
+                        <span class="kw">double_blind</span> <span class="kw">=</span> <span class="no">double_blind</span>,
+                        <span class="kw">fname</span> <span class="kw">=</span> <span class="st">"feedback_blank_review"</span>)</pre></body></html></div>
 <p>The blank form is saved in the working directory, unless otherwise specified. The instructor will then customize the questions to be answered by reviewers.</p>
 </div>
 <div id="move-author-files-to-reviewers" class="section level3">
@@ -203,12 +210,12 @@ h3 { /* Header 3 */
 <p>The <code><a href="../reference/peer_assign.html">peer_assign()</a></code> function distributes review assignment to reviewers. It grabs designated files on the authors’ repositories and clones them into the author-specific folder on reviewers’ repositories, based on the roster. Author-specific folders are identified with each author’s anonymous author ID contained in the <code>user_random</code> column of the roster. If a file path to a review form is specified in <code>local_path_review</code>, the form will be added to reviewers’ review repositories.</p>
 <p>If no <code>path</code> is specified within <code><a href="../reference/peer_assign.html">peer_assign()</a></code>, all files on authors’ repositories will be moved to their folder on the review repositories. By default, files with the following extensions will not be moved if no <code>path</code> is specified: <code><a href="https://rdrr.io/r/base/c.html">c(".gitignore", ".Rhistory", "*.Rproj", "*.html", "*.md", "*.pdf")</a></code>. Users may customize the file extensions to be excluded via the <code>exclude_pattern</code> parameter.</p>
 <p><code><a href="../reference/peer_assign.html">peer_assign()</a></code> will open an issue in the reviewers’ repositories that contains links to the relevant review files. You may instruct students to close the issue to signal that they completed the assignment.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw"><a href="../reference/peer_assign.html">peer_assign</a></span>(</span>
-<span id="cb5-2"><a href="#cb5-2"></a>  <span class="dt">org =</span> org,</span>
-<span id="cb5-3"><a href="#cb5-3"></a>  <span class="dt">roster =</span> roster_test,</span>
-<span id="cb5-4"><a href="#cb5-4"></a>  <span class="dt">prefix =</span> prefix,</span>
-<span id="cb5-5"><a href="#cb5-5"></a>  <span class="dt">local_path_review =</span> <span class="st">"/Users/thereseanders/Teaching/introggplot2/hw2/hw2_review.Rmd"</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="../reference/peer_assign.html">peer_assign</a></span>(
+  <span class="kw">org</span> <span class="kw">=</span> <span class="no">org</span>,
+  <span class="kw">roster</span> <span class="kw">=</span> <span class="no">roster_test</span>,
+  <span class="kw">prefix</span> <span class="kw">=</span> <span class="no">prefix</span>,
+  <span class="kw">local_path_review</span> <span class="kw">=</span> <span class="st">"/Users/thereseanders/Teaching/introggplot2/hw2/hw2_review.Rmd"</span>
+)</pre></body></html></div>
 <p>To ensure that the process of moving files from authors’ to reviewers’ repositores runs smoothly and author anonymity is maintained, students should be asked to not change file names and to not add identifying information such as name, student ID, or email addresses to their assignments.</p>
 </div>
 </div>
@@ -219,13 +226,13 @@ h3 { /* Header 3 */
 <h3 class="hasAnchor">
 <a href="#collect-scores-given-by-reviewers" class="anchor"></a>Collect scores given by reviewers</h3>
 <p><code><a href="../reference/peer_score_review.html">peer_score_review()</a></code> collects the scores given by reviewers to authors. We recommend keeping the default setting of <code>write_csv = TRUE</code> to save the output as a <code>.csv</code> file in the working directory.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw"><a href="../reference/peer_score_review.html">peer_score_review</a></span>(</span>
-<span id="cb6-2"><a href="#cb6-2"></a>  <span class="dt">org =</span> org,</span>
-<span id="cb6-3"><a href="#cb6-3"></a>  <span class="dt">roster =</span> roster_test,</span>
-<span id="cb6-4"><a href="#cb6-4"></a>  <span class="dt">prefix =</span> prefix,</span>
-<span id="cb6-5"><a href="#cb6-5"></a>  <span class="dt">form_review =</span> <span class="st">"hw2_review.Rmd"</span>,</span>
-<span id="cb6-6"><a href="#cb6-6"></a>  <span class="dt">write_csv =</span> <span class="ot">TRUE</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="../reference/peer_score_review.html">peer_score_review</a></span>(
+  <span class="kw">org</span> <span class="kw">=</span> <span class="no">org</span>,
+  <span class="kw">roster</span> <span class="kw">=</span> <span class="no">roster_test</span>,
+  <span class="kw">prefix</span> <span class="kw">=</span> <span class="no">prefix</span>,
+  <span class="kw">form_review</span> <span class="kw">=</span> <span class="st">"hw2_review.Rmd"</span>,
+  <span class="kw">write_csv</span> <span class="kw">=</span> <span class="fl">TRUE</span>
+)</pre></body></html></div>
 </div>
 <div id="recommended-create-rating-form-for-authors" class="section level3">
 <h3 class="hasAnchor">
@@ -240,8 +247,8 @@ h3 { /* Header 3 */
 <code>fairness</code>: The reviewer’s assessment was fair.</li>
 </ol>
 <p>The rating categories can be adjusted via the <code>category</code> parameter. By default, the resulting <code>.Rmd</code> file is saved in the working directory. Customization of this form is possible, but not necessary.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw"><a href="../reference/peer_form_create_rating.html">peer_form_create_rating</a></span>(<span class="dt">fname =</span> <span class="st">"hw2_rating"</span>, </span>
-<span id="cb7-2"><a href="#cb7-2"></a>                        <span class="dt">category =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"accuracy"</span>, <span class="st">"fairness"</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="../reference/peer_form_create_rating.html">peer_form_create_rating</a></span>(<span class="kw">fname</span> <span class="kw">=</span> <span class="st">"hw2_rating"</span>,
+                        <span class="kw">category</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"accuracy"</span>, <span class="st">"fairness"</span>))</pre></body></html></div>
 </div>
 <div id="double-blind-vs--single-blind-review" class="section level3">
 <h3 class="hasAnchor">
@@ -249,7 +256,7 @@ h3 { /* Header 3 */
 <p>The <code>double_blind</code> parameter is used to determine whether authors know who reviewed their assignments (<code>double_blind = FALSE</code>), or whether the entire review process is anonymous (<code>double_blind = TRUE</code>). The default is a double blind review process, however, keeping reviewers non-anonymous might discourage overly harsh or rude reviews. Authors always remain anonymous to reviewers.</p>
 <p><span style="color:#C70039">If instructors choose to conduct a double blind review process, they should inform students that while their name will be hidden from the students whose assignments they are reviewing, they are not anonymous to the instructor.</span></p>
 <p>This parameter should be set once for each assignment and then passed to each of the functions in the return review process. <code>double_blind</code> determines the naming of folders on authors repositories. Changing from a setting of double blind to single blind review, or vice versa, in the middle of the return review process will prevent <code><a href="../reference/peer_return.html">peer_return()</a></code> or <code><a href="../reference/peer_score_rating.html">peer_score_rating()</a></code> to locate the correct files on reviewers’ and authors’ repositories.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>double_blind =<span class="st"> </span><span class="ot">TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">double_blind</span> <span class="kw">=</span> <span class="fl">TRUE</span></pre></body></html></div>
 </div>
 <div id="move-reviewer-feedback-to-author-repositories" class="section level3">
 <h3 class="hasAnchor">
@@ -264,27 +271,27 @@ h3 { /* Header 3 */
 <p>If <code>double_blind = TRUE</code>, folder names on authors’ repositories will be based on reviewers’ user names. If <code>double_blind = FALSE</code>, folder names will be based on the random reviewer IDs contained in the roster.</p>
 <p>Students receive an email to the address registered for their GitHub user name alerting them that a new issue has been created in their repository. The issue includes check boxes that you students can use to keep track of their progress. You may instruct students to close the issue to signal that they completed the assignment.</p>
 <p>Only select files will be moved and saved in reviewer-specific folders on authors’ repositories and should be specified by the instructor via the <code>path</code> parameter. Please not that the <code><a href="../reference/peer_return.html">peer_return()</a></code> function is relatively costly in terms of calls to the API. Instructors are advised to select only the most relevant files in this step, for example the review feedback form and comments made by the reviewer on authors’ original files.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw"><a href="../reference/peer_return.html">peer_return</a></span>(</span>
-<span id="cb9-2"><a href="#cb9-2"></a>  <span class="dt">org =</span> org,</span>
-<span id="cb9-3"><a href="#cb9-3"></a>  <span class="dt">roster =</span> roster_test,</span>
-<span id="cb9-4"><a href="#cb9-4"></a>  <span class="dt">prefix =</span> prefix,</span>
-<span id="cb9-5"><a href="#cb9-5"></a>  <span class="dt">path =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"hw2_task.Rmd"</span>),</span>
-<span id="cb9-6"><a href="#cb9-6"></a>  <span class="dt">form_review =</span> <span class="st">"hw2_review.Rmd"</span>,</span>
-<span id="cb9-7"><a href="#cb9-7"></a>  <span class="dt">local_path_rating =</span> <span class="st">"/Users/thereseanders/Teaching/introggplot2/hw2/hw2_rating.Rmd"</span>,</span>
-<span id="cb9-8"><a href="#cb9-8"></a>  <span class="dt">double_blind =</span> double_blind</span>
-<span id="cb9-9"><a href="#cb9-9"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="../reference/peer_return.html">peer_return</a></span>(
+  <span class="kw">org</span> <span class="kw">=</span> <span class="no">org</span>,
+  <span class="kw">roster</span> <span class="kw">=</span> <span class="no">roster_test</span>,
+  <span class="kw">prefix</span> <span class="kw">=</span> <span class="no">prefix</span>,
+  <span class="kw">path</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"hw2_task.Rmd"</span>),
+  <span class="kw">form_review</span> <span class="kw">=</span> <span class="st">"hw2_review.Rmd"</span>,
+  <span class="kw">local_path_rating</span> <span class="kw">=</span> <span class="st">"/Users/thereseanders/Teaching/introggplot2/hw2/hw2_rating.Rmd"</span>,
+  <span class="kw">double_blind</span> <span class="kw">=</span> <span class="no">double_blind</span>
+)</pre></body></html></div>
 </div>
 <div id="recommended-collect-scores-given-by-authors" class="section level3">
 <h3 class="hasAnchor">
 <a href="#recommended-collect-scores-given-by-authors" class="anchor"></a>[Recommended] Collect scores given by authors</h3>
 <p>We use <code><a href="../reference/peer_score_rating.html">peer_score_rating()</a></code> to collect the ratings given by authors on reviewers’ feedback. We recommend keeping the default setting of <code>write_csv = TRUE</code> to save the output as a <code>.csv</code> file.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw"><a href="../reference/peer_score_rating.html">peer_score_rating</a></span>(</span>
-<span id="cb10-2"><a href="#cb10-2"></a>  <span class="dt">org =</span> org,</span>
-<span id="cb10-3"><a href="#cb10-3"></a>  <span class="dt">roster =</span> roster_test,</span>
-<span id="cb10-4"><a href="#cb10-4"></a>  <span class="dt">prefix =</span> prefix,</span>
-<span id="cb10-5"><a href="#cb10-5"></a>  <span class="dt">form_rating =</span> <span class="st">"hw2_rating.Rmd"</span>,</span>
-<span id="cb10-6"><a href="#cb10-6"></a>  <span class="dt">double_blind =</span> double_blind</span>
-<span id="cb10-7"><a href="#cb10-7"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="../reference/peer_score_rating.html">peer_score_rating</a></span>(
+  <span class="kw">org</span> <span class="kw">=</span> <span class="no">org</span>,
+  <span class="kw">roster</span> <span class="kw">=</span> <span class="no">roster_test</span>,
+  <span class="kw">prefix</span> <span class="kw">=</span> <span class="no">prefix</span>,
+  <span class="kw">form_rating</span> <span class="kw">=</span> <span class="st">"hw2_rating.Rmd"</span>,
+  <span class="kw">double_blind</span> <span class="kw">=</span> <span class="no">double_blind</span>
+)</pre></body></html></div>
 <p>The output data frame will replicate the roster and add columns for each reviewer’s rating in each category. Scores are listed by the role that a reviewer had for the author rating the review, and coded by the randomized user names. In the example below, user <code>bruno-ghclass</code> gave <code>anya-ghclass</code> ratings 4 and 3 for their review (Anya was reviewer 1 for Bruno); user <code>diego-ghclass</code> gave <code>anya-ghclass</code> rating 2 and 1 for their review (Anya was reviewer 2 for Diego).</p>
 <pre><code>#&gt; # A tibble: 4 x 8
 #&gt;   user           user_random rev1  rev2  rev1_c1 rev1_c2 rev2_c1 rev2_c2
@@ -377,25 +384,11 @@ h3 { /* Header 3 */
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <div id="tocnav">
-      <h2 class="hasAnchor">
-<a href="#tocnav" class="anchor"></a>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-<li><a href="#before-peer-review">Before peer review</a></li>
-      <li>
-<a href="#step-by-step-guide-to-peer-review">Step-by-step guide to peer review</a>
-      <ul class="nav nav-pills nav-stacked">
-<li><a href="#initiation">Initiation</a></li>
-      <li><a href="#assign-review">Assign review</a></li>
-      <li><a href="#return-review-rating">Return review &amp; rating</a></li>
-      <li><a href="#issues-and-recommendations">Issues and recommendations</a></li>
-      </ul>
-</li>
-      </ul>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
 </div>
-      </div>
 
 </div>
 
@@ -406,7 +399,7 @@ h3 { /* Header 3 */
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
