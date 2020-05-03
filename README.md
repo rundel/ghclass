@@ -1,4 +1,6 @@
 
+# ghclass <img src='man/figures/logo.png' align="right" height="100" />
+
 <!-- badges: start -->
 
 [![R build

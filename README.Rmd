@@ -2,6 +2,8 @@
 output: github_document
 ---
 
+# ghclass <img src='man/figures/logo.png' align="right" height="100" />
+
 <!-- badges: start -->
 [![R build status](https://github.com/rundel/ghclass/workflows/R-CMD-check/badge.svg)](https://github.com/rundel/ghclass/actions?query=workflow%3AR-CMD-check)
 <!-- badges: end -->
