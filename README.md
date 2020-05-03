@@ -1,5 +1,5 @@
 
-# ghclass <img src='man/figures/logo.png' align="right" height="100" />
+# ghclass <img src='man/figures/logo.png' align="right" height="140" />
 
 <!-- badges: start -->
 
