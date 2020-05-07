@@ -111,11 +111,12 @@ of all of your different courses.
 
 Once you have created the course organization you can then go 
 [here](https://education.github.com/discount_requests/new) to apply for
-GitHub Education discount. This discount will allow you and your organizations to have unlimited 
-private repositories. Once you have been approved as an educator you should be able to see a list
-of your organizations on the [GitHub Education benefits page](https://education.github.com/benefits). 
-Upgrading your organizations should now just be a matter of clicking the upgrade button and answering
-a couple of quick questions.
+GitHub Education discount. This discount will allow you to have unlimited
+private repositories. Once you have been approved as an educator, you should then
+apply for an [organizational upgrade](https://education.github.com/toolbox/redeem/github-org-upgrades), 
+too, so that your course organisation also has access to unlimited private repos. 
+For more details, see 
+[here](https://github.blog/2020-03-18-set-up-your-digital-classroom-with-github-classroom/).
 
 All of this is an optional step, but one that many will want to do. GitHub charges for private
 repositories unless they are used for teaching purposes. Approval is usually pretty quick, 
