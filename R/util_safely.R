@@ -3,7 +3,13 @@ cli_glue = function(..., .envir = parent.frame()) {
 }
 
 cli_stop = function(..., .envir = parent.frame()) {
-  stop(cli_glue(..., .envir = .envir), call. = FALSE)
+  text = cli_glue(..., .envir = .envir)
+  stop(paste(text, collapse = "\n"), call. = FALSE)
+}
+
+cli_warn = function(..., .envir = parent.frame()) {
+  text = cli_glue(..., .envir = .envir)
+  warning(paste(text, collapse = "\n"), call. = FALSE)
 }
 
 
