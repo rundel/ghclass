@@ -44,7 +44,7 @@ repo_create = function(org, name,
   repo = paste0(org, "/", repo)
 
   if (length(repo) != length(unique(repo)))
-    usethis::ui_stop("Not all repo names are unique: {usethis::ui_value(repo)}.")
+    cli_stop("Not all repo names are unique: {.val {repo}}.")
 
   exists = repo_exists(repo)
 
@@ -52,8 +52,8 @@ repo_create = function(org, name,
     repo, exists,
     function(repo, exists) {
       if (exists) {
-        usethis::ui_info("Skipping repo {usethis::ui_value(repo)}, it already exists.")
-        return()
+        cli::cli_alert_info("Skipping repo {.val {repo}}, it already exists.")
+        return(NULL)
       }
       res = purrr::safely(github_api_org_repo_create)(
         repo,
@@ -64,8 +64,8 @@ repo_create = function(org, name,
 
       status_msg(
         res,
-        glue::glue("Created repo {usethis::ui_value(repo)}."),
-        glue::glue("Failed to create repo {usethis::ui_value(repo)}.")
+        "Created repo {.val {repo}}.",
+        "Failed to create repo {.val {repo}}."
       )
 
       ternary(succeeded(res), repo, NULL)

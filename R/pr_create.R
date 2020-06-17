@@ -31,6 +31,19 @@ github_api_pr_create = function(repo, head, base, title, body, draft = TRUE){
 #'
 #' @export
 #'
+#' @examples
+#' \dontrun{
+#' repo_create("ghclass-demo", "test_pr", auto_init=TRUE)
+#'
+#' branch_create("ghclass-demo/test_pr", new_branch = "test")
+#'
+#' repo_modify_file("ghclass-demo/test_pr", "README.md", pattern = "test_pr",
+#'                  content = "Hello", method = "after", branch = "test")
+#'
+#' pr_create("ghclass-demo/test_pr", "merge", "test")
+#'
+#' repo_delete("ghclass-demo/test_pr", prompt = FALSE)
+#' }
 pr_create = function(repo, title, head, base = "master", body = "", draft = FALSE) {
 
   arg_is_chr(repo, title, base, head, body)
@@ -43,14 +56,12 @@ pr_create = function(repo, title, head, base = "master", body = "", draft = FALS
         repo, base = base, head = head, title = title, body = body, draft = draft
       )
 
-      print(res)
-
-      details = glue::glue("{repo} ({base} <- {head})")
+      details = cli_glue("{repo} ({base} <- {head})")
 
       status_msg(
         res,
-        glue::glue("Created pull request for {.val {details}}."),
-        glue::glue("Failed create pull request for {.val {details}}.")
+        "Created pull request for {.val {details}}.",
+        "Failed create pull request for {.val {details}}."
       )
     }
   )
