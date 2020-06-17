@@ -2,6 +2,11 @@ cli_glue = function(..., .envir = parent.frame()) {
   cli::cli_format_method(cli::cli_text(..., .envir = .envir))
 }
 
+cli_stop = function(..., .envir = parent.frame()) {
+  stop(cli_glue(..., .envir = .envir), call. = FALSE)
+}
+
+
 empty_result = function(res) {
   if (is_safely_result(res)){
     empty_result(result(res))
