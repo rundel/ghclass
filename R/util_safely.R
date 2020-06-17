@@ -1,3 +1,7 @@
+cli_glue = function(..., .envir = parent.frame()) {
+  cli::cli_format_method(cli::cli_text(..., .envir = .envir))
+}
+
 empty_result = function(res) {
   if (is_safely_result(res)){
     empty_result(result(res))
@@ -7,23 +11,28 @@ empty_result = function(res) {
 }
 
 
-is_safely_result = function(res) {
-  if (!is.list(res))
+is_safely_result = function(x) {
+  if (!is.list(x))
     return(FALSE)
 
-  if (!all(c("result", "error") %in% names(res)))
+  if (!all(c("result", "error") %in% names(x)))
     return(FALSE)
 
   TRUE
 }
 
+check_safely_result = function(x) {
+  if (!is_safely_result(x))
+    stop(cli_glue("Object is not a {.code purrr::safely} result"), call. = FALSE)
+}
+
 result = function(x) {
-  stopifnot("result" %in% names(x))
+  #check_safely_result(x)
   x[["result"]]
 }
 
 error = function(x) {
-  stopifnot("error" %in% names(x))
+  #check_safely_result(x)
   x[["error"]]
 }
 
@@ -104,16 +113,22 @@ ternary = function(check, success, fail) {
     fail
 }
 
+# TODO - fix error_msg processing - doesnt work for PR and some others
 
-status_msg = function(x, success, fail, include_error_msg = TRUE) {
-  if (succeeded(x) & !missing(success)) {
-    usethis::ui_done(success)
+status_msg = function(x, success = NULL, fail = NULL, include_error_msg = FALSE, .envir = parent.frame()) {
+
+
+  if (succeeded(x) & !is.null(success)) {
+    cli::cli_alert_success(success, wrap = TRUE, .envir = .envir)
   }
 
-  if (failed(x) & !missing(fail)) {
+  if (failed(x) & !is.null(fail)) {
+    cli::cli_alert_danger(fail, wrap = TRUE, .envir = .envir)
     if (include_error_msg) {
-      fail = c(fail, crayon::blurred("{error_msg(x)}"))
+      cli::cli_div(theme = list(ul = list("list-style-type" = "└─", "padding-left" = 0)))
+      cli::cli_ul(error_msg(x))
     }
-    usethis::ui_oops(fail)
   }
 }
+
+
