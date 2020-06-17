@@ -1,10 +1,10 @@
-github_api_pr_create = function(repo, base, head, title, body, draft = TRUE){
+github_api_pr_create = function(repo, head, base, title, body, draft = TRUE){
   gh::gh(
     "POST /repos/:owner/:repo/pulls",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
-    base = base,
     head = head,
+    base = base,
     title = title,
     body = body,
     draft = draft,
@@ -19,14 +19,19 @@ github_api_pr_create = function(repo, base, head, title, body, draft = TRUE){
 #'
 #' @param repo Character. Address of one or more repositories in "owner/name" format.
 #' @param title Character. Title of the pull request.
-#' @param base Character. The name of the branch where your changes are implemented. In creating a pull request from a
-#' fork then use `username:branch` as the format.
-#' @param head Character. The branch you want the changed pulled into.
+#' @param head Character. The name of the branch where your changes are implemented.
+#' For cross-repository pull requests in the same network, namespace `head` with a user
+#' like this: `username:branch`.
+#' @param base Character. The name of the branch you want the changes pulled into.
+#' This should be an existing branch on the current repository. You cannot submit
+#' a pull request to one repository that requests a merge to a base of another repository.
 #' @param body Character. The text contents of the pull request.
-#' @param draft Logical. Should the pull request be created as a draft pull request (these cannot be merged
-#'   until allowed by the author).
+#' @param draft Logical. Should the pull request be created as a draft pull request
+#' (these cannot be merged until allowed by the author).
 #'
-pr_create = function(repo, title, base, head = "master", body = "", draft = TRUE) {
+#' @export
+#'
+pr_create = function(repo, title, head, base = "master", body = "", draft = FALSE) {
 
   arg_is_chr(repo, title, base, head, body)
   arg_is_lgl(draft)
@@ -38,14 +43,14 @@ pr_create = function(repo, title, base, head = "master", body = "", draft = TRUE
         repo, base = base, head = head, title = title, body = body, draft = draft
       )
 
-      details = usethis::ui_value( glue::glue(
-        "{repo} ({base} <- {head})"
-      ) )
+      print(res)
+
+      details = glue::glue("{repo} ({base} <- {head})")
 
       status_msg(
         res,
-        glue::glue("Created pull request for {details}."),
-        glue::glue("Failed create pull request for {details}.")
+        glue::glue("Created pull request for {.val {details}}."),
+        glue::glue("Failed create pull request for {.val {details}}.")
       )
     }
   )

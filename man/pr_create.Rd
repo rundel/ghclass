@@ -4,22 +4,25 @@
 \alias{pr_create}
 \title{Create pull request}
 \usage{
-pr_create(repo, title, base, head = "master", body = "", draft = TRUE)
+pr_create(repo, title, head, base = "master", body = "", draft = FALSE)
 }
 \arguments{
 \item{repo}{Character. Address of one or more repositories in "owner/name" format.}
 
 \item{title}{Character. Title of the pull request.}
 
-\item{base}{Character. The name of the branch where your changes are implemented. In creating a pull request from a
-fork then use \code{username:branch} as the format.}
+\item{head}{Character. The name of the branch where your changes are implemented.
+For cross-repository pull requests in the same network, namespace \code{head} with a user
+like this: \code{username:branch}.}
 
-\item{head}{Character. The branch you want the changed pulled into.}
+\item{base}{Character. The name of the branch you want the changes pulled into.
+This should be an existing branch on the current repository. You cannot submit
+a pull request to one repository that requests a merge to a base of another repository.}
 
 \item{body}{Character. The text contents of the pull request.}
 
-\item{draft}{Logical. Should the pull request be created as a draft pull request (these cannot be merged
-until allowed by the author).}
+\item{draft}{Logical. Should the pull request be created as a draft pull request
+(these cannot be merged until allowed by the author).}
 }
 \description{
 \code{pr_create} creates a pull request on GitHub from the \code{base} branch to the \code{head} branch.
