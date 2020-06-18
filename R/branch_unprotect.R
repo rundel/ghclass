@@ -29,12 +29,12 @@ branch_unprotect = function(repo, branch = "master") {
 
       res = purrr::safely(github_api_branch_unprotect)(repo, branch)
 
-      repo_fmt = usethis::ui_value(format_repo(repo, branch))
+      repo_fmt = format_repo(repo, branch)
 
       status_msg(
         res,
-        glue::glue("Removing protection from branch {repo_fmt}."),
-        glue::glue("Failed to remove protection from branch {repo_fmt}.")
+        glue::glue("Removing protection from branch {.val {repo_fmt}}."),
+        glue::glue("Failed to remove protection from branch {.val {repo_fmt}}.")
       )
     }
   )

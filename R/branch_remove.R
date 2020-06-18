@@ -28,8 +28,8 @@ branch_remove = function(repo, branch) {
 
       status_msg(
         res,
-        glue::glue("Removed branch {usethis::ui_value(format_repo(repo, branch))}."),
-        glue::glue("Failed to remove branch {usethis::ui_value(format_repo(repo, branch))}.")
+        glue::glue("Removed branch {.val {format_repo(repo, branch)}}."),
+        glue::glue("Failed to remove branch {.val {format_repo(repo, branch)}}.")
       )
     }
   )

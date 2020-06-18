@@ -13,10 +13,10 @@ get_branch_ref = function(repo, branch) {
   arg_is_chr_scalar(repo, branch)
 
   res = purrr::safely(github_api_branch_get_ref)(repo, branch)
+  repo_txt = format_repo(repo, branch)
+  if (failed(res))
+    cli_stop("Unable to locate branch {.val {repo_txt}}.")
 
-  if (failed(res)) {
-    usethis::ui_stop("Unable to locate branch {usethis::ui_value(format_repo(repo, branch))}.")
-  }
   result(res)
 }
 
@@ -53,18 +53,18 @@ branch_create = function(repo, cur_branch = "master", new_branch) {
     list(repo, cur_branch, new_branch),
     function(repo, cur_branch, new_branch) {
 
-      cur_repo_fmt = usethis::ui_value(format_repo(repo, cur_branch))
-      new_repo_fmt = usethis::ui_value(format_repo(repo, new_branch))
+      cur_repo = format_repo(repo, cur_branch)
+      new_repo = format_repo(repo, new_branch)
 
       branches = repo_branches(repo)
 
       if (!cur_branch %in% branches) {
-        usethis::ui_oops("Failed to create branch, {cur_repo_fmt} does not exist.")
+        cli::cli_alert_danger("Failed to create branch, {.val {cur_repo}} does not exist.")
         return(NULL)
       }
 
       if (new_branch %in% branches) {
-        usethis::ui_oops("Skipping creation of branch {new_repo_fmt}, it already exists.")
+        cli::cli_alert_danger("Skipping creation of branch {.val {new_repo}}, it already exists.")
         return(NULL)
       }
 
@@ -72,8 +72,8 @@ branch_create = function(repo, cur_branch = "master", new_branch) {
 
       status_msg(
         res,
-        glue::glue("Created branch {usethis::ui_value(new_branch)} from {cur_repo_fmt}."),
-        glue::glue("Failed to create branch {usethis::ui_value(new_branch)} from {cur_repo_fmt}.")
+        "Created branch {.val {new_branch}} from {.val {cur_repo}}.",
+        "Failed to create branch {.val {new_branch}} from {.val {cur_repo}}."
       )
     }
   )

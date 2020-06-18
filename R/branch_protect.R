@@ -35,12 +35,12 @@ branch_protect = function(repo, branch = "master") {
     function(repo, branch) {
       res = purrr::safely(github_api_branch_protect)(repo, branch)
 
-      repo_fmt = usethis::ui_value(format_repo(repo, branch))
+      repo_fmt = format_repo(repo, branch)
 
       status_msg(
         res,
-        glue::glue("Protecting branch {repo_fmt}."),
-        glue::glue("Failed to protect branch {repo_fmt}.")
+        glue::glue("Protecting branch {.val {repo_fmt}}."),
+        glue::glue("Failed to protect branch {.val {repo_fmt}}.")
       )
     }
   )
