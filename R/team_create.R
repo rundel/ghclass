@@ -42,19 +42,19 @@ team_create = function(org, team,
   existing_teams = intersect(team, org_teams)
 
   if (length(existing_teams) > 0)
-    usethis::ui_info("Skipping existing teams: {usethis::ui_value(existing_teams)}.")
+    cli::cli_alert_info("Skipping existing teams: {.val {existing_teams}}.")
 
   purrr::walk(
     new_teams,
     function(team) {
       res = purrr::safely(github_api_team_create)(
-        org=org, name=team, privacy=privacy
+        org = org, name = team, privacy = privacy
       )
 
       status_msg(
         res,
-        glue::glue("Created team {usethis::ui_value(team)} in org {usethis::ui_value(org)}."),
-        glue::glue("Failed to create team {usethis::ui_value(team)} in org {usethis::ui_value(org)}."),
+        "Created team {.val {team}} in org {.val {org}}.",
+        "Failed to create team {.val {team}} in org {.val {org}}."
       )
     }
   )

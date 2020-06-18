@@ -42,8 +42,8 @@ team_rename = function(org, team, new_team) {
 
       status_msg(
         res,
-        glue::glue("Renamed team {usethis::ui_value(team)} to {usethis::ui_value(new_team)}."),
-        glue::glue("Failed to rename team {usethis::ui_value(team)} to {usethis::ui_value(new_team)}.")
+        glue::glue("Renamed team {.val {team}} to {.val {new_team}}."),
+        glue::glue("Failed to rename team {.val {team}} to {.val {new_team}}.")
       )
     }
   )

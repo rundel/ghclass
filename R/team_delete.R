@@ -21,10 +21,7 @@ team_delete = function(org, team, prompt = TRUE) {
   arg_is_lgl_scalar(prompt)
 
   if (prompt) {
-    delete = usethis::ui_yeah( paste(
-      "This command will delete the following teams permanently:",
-      "{usethis::ui_value(team)}."
-    ) )
+    delete = cli_yeah("This command will delete the following teams permanently: {.val {team}}.")
     if (!delete) {
       return(invisible())
     }
@@ -37,7 +34,7 @@ team_delete = function(org, team, prompt = TRUE) {
     function(team, id) {
 
       if (is.na(id)) {
-        usethis::ui_oops("Team {usethis::ui_value(team)} does not exist in org {usethis::ui_value(org)}.")
+        cli::cli_alert_danger("Team {.val {team}} does not exist in org {.val {org}}.")
         return()
       }
 
@@ -45,8 +42,8 @@ team_delete = function(org, team, prompt = TRUE) {
 
       status_msg(
         res,
-        glue::glue("Deleted team {usethis::ui_value(team)} from org {usethis::ui_value(org)}."),
-        glue::glue("Failed to delete team {usethis::ui_value(team)} from org {usethis::ui_value(org)}.")
+        "Deleted team {.val {team}} from org {.val {org}}.",
+        "Failed to delete team {.val {team}} from org {.val {org}}."
       )
     }
   )
