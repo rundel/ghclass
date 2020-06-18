@@ -37,27 +37,20 @@ org_repos = function(org, filter = NULL, exclude = FALSE, full_repo = TRUE) {
       type = user_type(org)
 
       if (is.na(type)) {
-        usethis::ui_stop( paste(
-          "Organization {usethis::ui_value(org)} does not exist on GitHub."
-        ) )
+        cli_stop("Organization {.val {org}} does not exist on GitHub.")
       } else if (type == "Organization") {
         github_api_org_repos(org)
       } else if (type == "User") {
-        usethis::ui_stop( paste(
-          "{usethis::ui_value(org)} is a user not an organization.",
-          "Use {usethis::ui_code('user_repos')} instead."
-        ) )
+        cli_stop("{.val {org}} is a user not an organization. Use {.field user_repos)} instead.")
       } else {
-        usethis::ui_stop( paste(
-          "{usethis::ui_value(org)} has unknown type {usethis::ui_value(type)}."
-        ) )
+        cli_stop("{.val {org}} has unknown type {.val {type}}.")
       }
     }
   )()
 
   status_msg(
     res,
-    fail = glue::glue("Failed to retrieve repos for org {usethis::ui_value(org)}.")
+    fail = "Failed to retrieve repos for org {.val {org}}."
   )
 
   if (failed(res) | empty_result(res))

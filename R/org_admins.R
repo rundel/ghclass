@@ -31,7 +31,7 @@ org_admins = function(org) {
       return(org)
     }
 
-    usethis::ui_stop(glue::glue("Failed to retrieve admins for org {usethis::ui_value(org)}."))
+    cli_stop(glue::glue("Failed to retrieve admins for org {.val {org}}."))
   } else {
     purrr::map_chr(result(res), "login")
   }

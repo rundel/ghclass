@@ -25,7 +25,7 @@ org_teams = function(org, filter=NULL, exclude=FALSE) {
 
   status_msg(
     res,
-    fail = glue::glue("Failed to retrieve teams for org {usethis::ui_value(org)}.")
+    fail = glue::glue("Failed to retrieve teams for org {.val {org}}.")
   )
 
   if (failed(res) | empty_result(res)) {

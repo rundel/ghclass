@@ -25,10 +25,7 @@ org_remove = function(org, user, prompt = TRUE) {
   arg_is_lgl_scalar(prompt)
 
   if (prompt) {
-    delete = usethis::ui_yeah( paste(
-      "This command will delete the following users:",
-      "{usethis::ui_value(user)} from org {usethis::ui_value(org)}."
-    ) )
+    delete = cli_yeah("This command will delete the following users: {.val {user}} from org {.val {org}}.")
     if (!delete) {
       return(invisible())
     }
@@ -41,8 +38,8 @@ org_remove = function(org, user, prompt = TRUE) {
 
       status_msg(
         res,
-        glue::glue("Removed user {usethis::ui_value(user)} from org {usethis::ui_value(org)}."),
-        glue::glue("Failed to remove user {usethis::ui_value(user)} from org {usethis::ui_value(org)}.")
+        "Removed user {.val {user}} from org {.val {org}}.",
+        "Failed to remove user {.val {user}} from org {.val {org}}."
       )
     }
   )

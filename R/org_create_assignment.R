@@ -30,11 +30,10 @@ org_create_assignment = function(org, repo, user, team = NULL, source_repo = NUL
 
   existing = repo_exists(repos)
   if (any(existing)) {
-    usethis::ui_stop( c(
-      "The following repos already exist:",
-      "\t{usethis::ui_value(repos[existing])}.",
-      "Either delete them or use an alternative method to create the assignment."
-    ) )
+    cli_stop(
+      "The following repo{?s} already exist{?s/}: {.val {repos[existing]}}. ",
+      "Delete these repo{?s} or use an alternative method to create the assignment."
+    )
   }
 
   if (!is.null(source_repo) && repo_is_template(source_repo)) {
