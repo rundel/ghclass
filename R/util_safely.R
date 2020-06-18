@@ -1,17 +1,3 @@
-cli_glue = function(..., .envir = parent.frame()) {
-  cli::cli_format_method(cli::cli_text(..., .envir = .envir))
-}
-
-cli_stop = function(..., .envir = parent.frame()) {
-  text = cli_glue(..., .envir = .envir)
-  stop(paste(text, collapse = "\n"), call. = FALSE)
-}
-
-cli_warn = function(..., .envir = parent.frame()) {
-  text = cli_glue(..., .envir = .envir)
-  warning(paste(text, collapse = "\n"), call. = FALSE)
-}
-
 
 empty_result = function(res) {
   if (is_safely_result(res)){
