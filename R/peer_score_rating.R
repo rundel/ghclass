@@ -33,7 +33,7 @@ peer_score_rating = function(org, roster, form_rating, double_blind = TRUE,
 
   # Check that feedback form is .Rmd
   if (!grepl("\\.[rR]md$", form_rating)) {
-    usethis::ui_stop("{usethis::ui_field('form_rating')} must be a {usethis::ui_path('.Rmd')} file.")
+    cli_stop("{.field form_rating} must be an {.file .Rmd} file.")
   }
 
   prefix_review = format_rev(prefix, suffix)[['prefix_review']]
@@ -64,11 +64,8 @@ peer_score_rating = function(org, roster, form_rating, double_blind = TRUE,
                               c("user", "rev_no", paste0("c", 1:length(scores))))
 
         tibble::as_tibble(as.list(inp))
-
       } else {
-        usethis::ui_oops(
-          "Cannot locate file {.val {ghpath}} on repo {.val {repo}}."
-        )
+        cli::cli_alert_danger("Cannot locate file {.val {ghpath}} on repo {.val {repo}}.")
       }
     }
   )
@@ -91,7 +88,7 @@ peer_score_rating = function(org, roster, form_rating, double_blind = TRUE,
   if (write_csv) {
     fname = glue::glue("{autscores}_{fs::path_file(roster)}")
     readr::write_csv(out, fname)
-    usethis::ui_done("Saved file {.val {fname}} to working directory.")
+    cli::cli_alert_success("Saved file {.val {fname}} to working directory.")
   } else {
     out
   }

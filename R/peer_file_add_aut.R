@@ -39,9 +39,7 @@ peer_file_add_aut = function(org, roster, local_path, double_blind = TRUE, prefi
 
   file_status = fs::file_exists(local_path)
   if (any(!file_status))
-    usethis::ui_stop(
-      "Unable to locate the following file(s): {.val {local_path[!file_status]}}"
-    )
+    cli_stop("Unable to locate the following file(s): {.val {local_path[!file_status]}}")
 
   aut = unique(rdf[['repo_aut']])
 

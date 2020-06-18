@@ -74,7 +74,7 @@ peer_issue_label_apply = function(org, repo = NULL, filter = NULL,
     )
   }
 
-  usethis::ui_info("Applying labels: This might take a moment...")
+  cli::cli_alert_info("Applying labels: This might take a moment ...")
   out = purrr::map_dfr(repo, ~ peer_issue_label_create(.x))
 
   # TODO: Improve messaging about label creation
@@ -115,7 +115,7 @@ peer_issue_create = function(out, title, step = c("review", "rating"),
   arg_is_chr_scalar(step, prefix, suffix, org, branch, title)
 
   if (is.null(out[['repo']])) {
-    usethis::ui_oops("Skipping issue creation: no files found for any repositories.")
+    cli::cli_alert_danger("Skipping issue creation: no files found for any repositories.")
   }
 
   purrr::walk(

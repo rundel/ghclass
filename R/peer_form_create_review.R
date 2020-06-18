@@ -73,14 +73,12 @@ peer_form_create_review = function(n, title = "Reviewer feedback form", fname = 
     fname = paste0(fname, ".Rmd")
     if (!(fs::file_exists(fname)) | overwrite) {
       cat(doc_txt, file = fname)
-      usethis::ui_done("Saved file {.val {fname}}")
+      cli::cli_alert_success("Saved file {.file {fname}}")
     } else {
-      usethis::ui_oops(
-        paste(
-          'File {.val {fname}} already exists.',
-          'If you want to force save this file, re-run the command with {usethis::ui_code("overwrite = TRUE")}.'
-        )
-      )
+      cli::cli_alert_danger( paste(
+        'File {.val {fname}} already exists.',
+        'If you want to force save this file, re-run the command with {.code overwrite = TRUE}.'
+      ) )
     }
   } else {
     doc_txt

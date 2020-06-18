@@ -30,7 +30,7 @@ peer_score_review = function(org, roster, form_review, prefix = "", suffix = "",
 
   # Check that feedback form is .Rmd
   if (!grepl("\\.[rR]md$", form_review)) {
-    usethis::ui_stop("{usethis::ui_field('form_review')} must be a {usethis::ui_path('.Rmd')} file.")
+    cli_stop("{.field form_review} must be an {.file .Rmd} file.")
   }
 
   prefix_review = format_rev(prefix, suffix)[['prefix_review']]
@@ -45,13 +45,12 @@ peer_score_review = function(org, roster, form_review, prefix = "", suffix = "",
       ghpath = glue::glue("{as.character(rdf[x, 'aut_random'])}/{form_review}")
       rev_no = as.character(rdf[x, 'rev_no'])
 
-      feedback = purrr::safely(repo_get_file)(repo = repo,
-                                              path = ghpath)
+      feedback = purrr::safely(repo_get_file)(repo = repo, path = ghpath)
 
       status_msg(
         feedback,
-        glue::glue("Located file {.val {ghpath}} on repo {.val {repo}}."),
-        glue::glue("Cannot locate file {.val {ghpath}} on repo {.val {repo}}.")
+        "Located file {.val {ghpath}} on repo {.val {repo}}.",
+        "Cannot locate file {.val {ghpath}} on repo {.val {repo}}."
       )
 
       if (succeeded(feedback)) {
@@ -86,7 +85,7 @@ peer_score_review = function(org, roster, form_review, prefix = "", suffix = "",
     prefix_for_fname = sub("-$", "", prefix)
     fname = glue::glue('revscores-{prefix_for_fname}.csv')
     readr::write_csv(out, fname)
-    usethis::ui_done("Saved file {.val {fname}} to working directory.")
+    cli::cli_alert_success("Saved file {.val {fname}} to working directory.")
   } else {
     out
   }

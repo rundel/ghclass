@@ -34,24 +34,24 @@ peer_roster_create = function(n_rev, user, seed = NULL, write_csv = TRUE, dir = 
   arg_is_pos_int_scalar(seed, allow_null = TRUE) #fails now
 
   if (!(length(user) > 1)) {
-    usethis::ui_stop("{usethis::ui_field('user')} must contain more than one user name.")
+    cli_stop("{.field user} must contain more than one user name.")
   }
+
   if (!(n_rev < length(user))) {
-    usethis::ui_stop(
-      "{usethis::ui_field('n_rev')} must be smaller than the number of users in {usethis::ui_field('user')}."
-    )
+    cli_stop("{.field n_rev} must be smaller than the number of users in {.field user}.")
   }
+
   if (write_csv) {
     if (is.null(dir)) {
-      usethis::ui_stop("No directory specified in {usethis::ui_field('dir')}.")
+      cli_stop("No directory specified in {.field dir}.")
     } else if (!dir.exists(dir)) {
-      usethis::ui_stop("Directory {.val {dir}} does not exist.")
+      cli_stop("Directory {.val {dir}} does not exist.")
     }
   }
 
   if (is.null(seed)) {
     seed = sample.int(1e+06, 1L)
-    usethis::ui_warn("No seed was specified. Using randomly sampled seed {.val {seed}}")
+    cli_warn("No seed was specified. Using randomly sampled seed {.val {seed}}")
   }
 
   withr::with_seed(seed, {
@@ -67,13 +67,15 @@ peer_roster_create = function(n_rev, user, seed = NULL, write_csv = TRUE, dir = 
   df_sort = tibble::tibble(user = user,
                            user_random = user_random)[order(as.numeric(sub("[aA-zZ]+", "", user_random))),]
 
-  df_tmp = purrr::set_names(if (length(user) > 2) {
-    out = purrr::map_dfc(res, ~ df_sort[['user_random']][.x])
-  } else {
-    # if length(user) == 2, will always res = c(2, 1)
-    out = tibble::tibble(rev(user_random))
-  },
-  paste0("rev", 1:n_rev))
+  df_tmp = purrr::set_names(
+    if (length(user) > 2) {
+      out = purrr::map_dfc(res, ~ df_sort[['user_random']][.x])
+    } else {
+      # if length(user) == 2, will always res = c(2, 1)
+      out = tibble::tibble(rev(user_random))
+    },
+    paste0("rev", 1:n_rev)
+  )
 
   res_df = tibble::as_tibble(cbind(df_sort, df_tmp))
   attr(res_df, "seed") <- seed
@@ -83,7 +85,7 @@ peer_roster_create = function(n_rev, user, seed = NULL, write_csv = TRUE, dir = 
   if (write_csv) {
     fname = glue::glue("roster_seed{seed}.csv")
     readr::write_csv(res_df, glue::glue("{dir}/{fname}"))
-    usethis::ui_done("Saved file {.val {fname}} to {.val {dir}}.")
+    cli::cli_alert_success("Saved file {.val {fname}} to {.val {dir}}.")
   }
   res_df
 }

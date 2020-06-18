@@ -38,9 +38,7 @@ peer_file_add_rev = function(org, roster, local_path, prefix = "", suffix = "",
 
   file_status = fs::file_exists(local_path)
   if (any(!file_status))
-    usethis::ui_stop(
-      "Unable to locate the following file(s): {.val {local_path[!file_status]}}"
-    )
+    cli_stop("Unable to locate the following file(s): {.val {local_path[!file_status]}}")
 
   rev = unique(rdf[['repo_rev_review']])
 
