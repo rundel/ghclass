@@ -16,7 +16,7 @@
 #' @export
 
 github_get_token = function() {
-  token = usethis::github_token()
+  token = usethis_github_token()
   if (token != "")
     return(invisible(token))
 
@@ -25,6 +25,18 @@ github_get_token = function() {
     return(invisible(github_get_token()))
   }
 
-  stop("Unable to locate github token, please use github_set_token",
-       " or define the GITHUB_TOKEN environmental variable.")
+  cli_stop(
+    "Unable to locate a github token, please use {.fun github_set_token}",
+    " or define the {.field GITHUB_PAT} environmental variable in your {.file .Renviron} file."
+  )
+}
+
+
+# Code from usethis::github_token
+usethis_github_token = function () {
+  token = Sys.getenv("GITHUB_PAT", "")
+  if (token == "")
+    Sys.getenv("GITHUB_TOKEN", "")
+  else
+    token
 }
