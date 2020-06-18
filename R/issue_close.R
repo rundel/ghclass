@@ -45,8 +45,8 @@ issue_close = function(repo, number) {
       num_text = paste0("#",number)
       status_msg(
         res,
-        glue::glue("Closed issue {usethis::ui_value(num_text)} for repo {usethis::ui_value(repo)}."),
-        glue::glue("Failed to close issue {usethis::ui_value(num_text)} for repo {usethis::ui_value(repo)}.")
+        glue::glue("Closed issue {.val {num_text}} for repo {.val {repo}}."),
+        glue::glue("Failed to close issue {.val {num_text}} for repo {.val {repo}}.")
       )
 
       res
@@ -82,8 +82,8 @@ issue_open = function(repo, number) {
       num_text = paste0("#",number)
       status_msg(
         res,
-        glue::glue("Opened issue {usethis::ui_value(num_text)} for repo {usethis::ui_value(repo)}."),
-        glue::glue("Failed to open issue {usethis::ui_value(num_text)} for repo {usethis::ui_value(repo)}.")
+        glue::glue("Opened issue {.val {num_text}} for repo {.val {repo}}."),
+        glue::glue("Failed to open issue {.val {num_text}} for repo {.val {repo}}.")
       )
 
       res
