@@ -56,7 +56,7 @@ user_repos = function(user, type = c("owner", "all", "public", "private", "membe
     }
   )()
 
-  status_msg(res, fail = "Failed to retrieve repos for user {usethis::ui_value(user)}.")
+  status_msg(res, fail = "Failed to retrieve repos for user {.val {user}}.")
 
   if (failed(res))
     return(invisible(NULL))
