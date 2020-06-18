@@ -31,10 +31,10 @@ arg_is_chr = function(..., allow_null = FALSE, allow_na = FALSE) {
     ...,
     tests = function(name, value) {
       if (!(is.character(value) | (is.null(value) & allow_null)))
-        usethis::ui_stop("Argument {usethis::ui_value(name)} must be of character type.")
+        cli_stop("Argument {.val {name}} must be of character type.")
 
       if (any(is.na(value)) & !allow_na)
-        usethis::ui_stop("Argument {usethis::ui_value(name)} must not contain any missing values ({usethis::ui_value(NA)}).")
+        cli_stop("Argument {.val {name}} must not contain any missing values ({.val {NA}}).")
     }
   )
 }
@@ -44,10 +44,10 @@ arg_is_lgl = function(..., allow_null = FALSE, allow_na = FALSE) {
     ...,
     tests = function(name, value) {
       if (!(is.logical(value) | (is.null(value) & allow_null)))
-        usethis::ui_stop("Argument {usethis::ui_value(name)} must be of logical type.")
+        cli_stop("Argument {.val {name}} must be of logical type.")
 
       if (any(is.na(value)) & !allow_na)
-        usethis::ui_stop("Argument {usethis::ui_value(name)} must not contain any missing values ({usethis::ui_value(NA)}).")
+        cli_stop("Argument {.val {name}} must not contain any missing values ({.val {NA}}).")
     }
   )
 }
@@ -57,12 +57,12 @@ arg_is_scalar = function(...,  allow_null = FALSE, allow_na = FALSE) {
     ...,
     tests = function(name, value) {
       if (length(value) > 1 | (!allow_null & length(value) == 0)) {
-        usethis::ui_stop("Argument {usethis::ui_value(name)} must be of length 1.")
+        cli_stop("Argument {.val {name}} must be of length 1.")
       }
 
       if (!is.null(value)) {
         if (is.na(value) & !allow_na)
-          usethis::ui_stop("Argument {usethis::ui_value(name)} must not be a missing value ({usethis::ui_value(NA)}).")
+          cli_stop("Argument {.val {name}} must not be a missing value ({.val {NA}}).")
       }
     }
   )
@@ -73,7 +73,7 @@ arg_is_raw = function(..., allow_null = FALSE) {
     ...,
     tests = function(name, value) {
       if (!(is.raw(value) | (is.null(value) & allow_null)))
-        usethis::ui_stop("Argument {usethis::ui_value(name)} must be of type raw.")
+        cli_stop("Argument {.val {name}} must be of type raw.")
     }
   )
 }
@@ -83,7 +83,7 @@ arg_is_pos_int = function(..., allow_null = FALSE) {
     ...,
     tests = function(name, value) {
       if (!(is.integer(value) | (is.numeric(value) && value > 0 && value%%1 == 0) | (is.null(value) & allow_null)))
-        usethis::ui_stop("Argument {usethis::ui_value(name)} must be a whole positive number.")
+        cli_stop("Argument {.val {name}} must be a whole positive number.")
     }
   )
 }
@@ -93,7 +93,7 @@ arg_is_pos_int = function(..., allow_null = FALSE) {
     ...,
     tests = function(name, value) {
       if (!(is.integer(value) | (is.numeric(value) && value > 0 && value%%1 == 0) | (is.null(value) & allow_null)))
-        usethis::ui_stop("Argument {usethis::ui_value(name)} must be a whole positive non-zero number.")
+        cli_stop("Argument {.val {name}} must be a whole positive non-zero number.")
     }
   )
 }

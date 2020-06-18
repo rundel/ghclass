@@ -16,7 +16,7 @@ github_api_v4_graphql = function(query, vars = list()) {
   code = httr::status_code(req)
 
   if (code >= 300) {
-    usethis::ui_stop("Github API v4 error code ({code}) - {res[['message']]}")
+    cli_stop("Github API v4 error code ({code}) - {res[['message']]}")
   }
 
   res
@@ -46,11 +46,11 @@ github_api_v4_graphql_paginated = function(query, page_info, cursor_var = "curso
     if (!is.null(res[[i]]$errors)) {
       msgs = purrr::map(res[[i]]$errors, "message")
       msg = paste(unlist(msgs), collapse="\n")
-      usethis::ui_stop(msg)
+      cli_stop(msg)
     }
 
     if (is.null(page)) {
-      usethis::ui_stop("Unable to locate page info for this query.")
+      cli_stop("Unable to locate page info for this query.")
     }
 
     if (!page$hasNextPage)
@@ -72,7 +72,7 @@ graphql_quote = function(x) {
   if (is.null(x)) {
     "null"
   } else if (is.na(x)) {
-    usethis::ui_stop("{usethis::ui_value(NA)} values are not supported by graphql.")
+    cli_stop("{.val NA} values are not supported by graphql.")
   } else {
     glue::double_quote(x)
   }

@@ -14,10 +14,10 @@ repo_files = function(repo, branch = "master") {
     function(repo, branch) {
 
       res = purrr::safely(github_api_repo_tree)(repo, branch)
+      repo_txt = format_repo(repo, branch)
 
       if (failed(res)) {
-        r = usethis::ui_value(format_repo(repo, branch))
-        usethis::ui_oops("Failed to retrieve files for repo {r}")
+        cli::cli_alert_danger("Failed to retrieve files for repo {.val {repo_txt}}")
         return(NULL)
       }
 
@@ -47,8 +47,8 @@ org_accept_invite = function(org, user, pat) {
 
       status_msg(
         res,
-        glue::glue("Accepted {usethis::ui_value(user)}s invite to org {usethis::ui_value(org)}."),
-        glue::glue("Failed to accept {usethis::ui_value(user)}s invite to org {usethis::ui_value(org)}.")
+        glue::glue("Accepted {.val {user}}s invite to org {.val {org}}."),
+        glue::glue("Failed to accept {.val {user}}s invite to org {.val {org}}.")
       )
     }
   )
@@ -57,17 +57,15 @@ org_accept_invite = function(org, user, pat) {
 # Extracts base64 encoded content from files
 extract_content = function(repo, path, file, include_details = TRUE) {
   if (is.null(file)) {
-    usethis::ui_oops( paste(
-      "Unable to retrieve file {usethis::ui_value(path)}",
-      "from repo {usethis::ui_value(repo)}."
-    ) )
+    cli::cli_alert_danger(
+      "Unable to retrieve file {.val {path}} from repo {.val {repo}}."
+    )
     return(invisible(NULL))
   }
   if (is.null(file[["content"]])) {
-    usethis::ui_oops( paste(
-      "Unable to retrieve {usethis::ui_value(path)} in",
-      "repo {usethis::ui_value(repo)} is not a file."
-    ) )
+    cli::cli_alert_danger(
+      "Unable to retrieve {.val {path}} in repo {.val {repo}}, it is not a file."
+    )
     return(invisible(NULL))
   }
 
@@ -106,7 +104,7 @@ find_file = function(repo, file, verbose = TRUE){
         if(res[["total_count"]] > 0){
           purrr::map_chr(res[["items"]], "path")
         } else if (verbose){
-          usethis::ui_oops("Cannot find file {usethis::ui_value(file)} on {usethis::ui_value(repo)}.")
+          cli::cli_alert_danger("Cannot find file {.val {file}} on {.val {repo}}.")
         }
       }
     )

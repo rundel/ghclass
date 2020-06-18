@@ -6,10 +6,10 @@ github_repo_pattern ="^([A-Za-z0-9-]+)/([A-Za-z0-9_.-]+)$"
 
 
 valid_repo_error = function(repo) {
-  usethis::ui_stop(paste(
-    "Invalid repository name(s) {usethis::ui_value(repo)}.",
-    "Repository names must be in {usethis::ui_code('owner/name')} format."
-  ) )
+  cli_stop(
+    "Invalid repository name(s) {.val {repo}}.",
+    "Repository names must be in {.val 'owner/name'} format."
+  )
 }
 
 match_repo = function(repo, index=1) {

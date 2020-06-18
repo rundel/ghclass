@@ -1,6 +1,6 @@
 missing_team = function(team, id, org) {
   if (is.na(id)) {
-    usethis::ui_oops("Failed to find team {usethis::ui_value(team)} in org {usethis::ui_value(org)}.")
+    cli::cli_alert_danger("Failed to find team {.val {team}} in org {.val {org}}.")
     TRUE
   } else {
     FALSE
@@ -12,7 +12,7 @@ team_id_lookup = function(x, ...) {
 }
 
 team_id_lookup.default = function(x, org) {
-  usethis::ui_stop("Unsupported class: {usethis::ui_value(class(x))}.")
+  cli_stop("Unsupported class: {.val {class(x)}}.")
 }
 
 team_id_lookup.data.frame = function(x, org) {

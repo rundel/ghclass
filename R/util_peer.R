@@ -25,7 +25,7 @@ peer_roster_process = function(roster) {
     tmp = tibble::as_tibble(purrr::modify_if(roster, is.factor, as.character))
   } else if (is_chr) {
     if (!fs::file_exists(roster))
-      usethis::ui_stop("Cannot locate file: {usethis::ui_value(roster)}")
+      usethis::ui_stop("Cannot locate file: {.val {roster}}")
     tmp = readr::read_csv(roster, col_types = readr::cols())
   } else {
     usethis::ui_stop("{usethis::ui_field('roster')} must be a data.frame or .csv file.")
@@ -48,7 +48,7 @@ peer_roster_check = function(roster) {
   passed1 = purrr::map_lgl(val,
                            function(val) {
                              if (!(val %in% names(roster))) {
-                               usethis::ui_oops("{usethis::ui_field('roster')} must contain column {usethis::ui_value(val)}")
+                               usethis::ui_oops("{usethis::ui_field('roster')} must contain column {.val {val}}")
                                FALSE
                              } else {
                                TRUE
@@ -60,7 +60,7 @@ peer_roster_check = function(roster) {
   passed2 = TRUE
   if (!(any(grepl("^rev[0-9]+$", names(roster))))) {
     usethis::ui_oops(
-      "{usethis::ui_field('roster')} must contain at least one column {usethis::ui_value(val2)}, where '*' denotes a reviewer number."
+      "{usethis::ui_field('roster')} must contain at least one column {.val {val2}}, where '*' denotes a reviewer number."
     )
     passed2 = FALSE
   }
@@ -230,14 +230,17 @@ peer_issue_label_apply_msg = function(label_df) {
                 repo_label_no = label_df[["repo"]][label_df[["label"]] == x &
                                                      !label_df[["created"]]]
 
-                if (length(repo_label_yes) > 0)
+                n_yes = length(repo_label_yes)
+                n_no = length(repo_label_no)
+
+                if (n_yes > 0)
                   usethis::ui_done(
-                    "Created label {usethis::ui_value(x)} for {usethis::ui_value(length(repo_label_yes))} repositories."
+                    "Created label {.val {x}} for {.val {n_yes}} repositories."
                   )
 
-                if (length(repo_label_no) > 0)
+                if (n_no > 0)
                   usethis::ui_oops(
-                    "Failed to create label {usethis::ui_value(x)} for {usethis::ui_value(length(repo_label_no))} repositories. The label may already exist. Re-run with `show_label_result = TRUE` for more information."
+                    "Failed to create label {.val {x}} for {.val {n_no}} repositories. The label may already exist. Re-run with `show_label_result = TRUE` for more information."
                   )
 
               })
@@ -474,7 +477,7 @@ peer_file_place = function(repo_files,
                 } else {
                   usethis::ui_oops(
                     paste(
-                      'Failed to add {usethis::ui_value(gh_path)} to {usethis::ui_value(target_repo)}: already exists.',
+                      'Failed to add {.val {gh_path}} to {.val {target_repo}}: already exists.',
                       'If you want to force add this file, re-run the command with {usethis::ui_code("overwrite = TRUE")}.'
                     )
                   )
@@ -493,7 +496,7 @@ local_path_content_grab = function(local_path = NULL,
                if (!is.null(local_path)) {
                  file_status = fs::file_exists(local_path)
                  if (!file_status)
-                   usethis::ui_stop("Unable to locate the following file: {usethis::ui_value(local_path)}")
+                   usethis::ui_stop("Unable to locate the following file: {.val {local_path}}")
 
                  if (check_rmd &
                      (tolower(fs::path_ext(local_path)) == "rmd")) {
@@ -622,7 +625,7 @@ peer_add_content = function(target_repo,
                                               !overwrite) {
                                             usethis::ui_oops(
                                               paste(
-                                                'Failed to add {usethis::ui_value(target_path)} to {usethis::ui_value(r)}: already exists.',
+                                                'Failed to add {.val {target_path}} to {.val {r}}: already exists.',
                                                 'If you want to force add this file, re-run the command with {usethis::ui_code("overwrite = TRUE")}.'
                                               )
                                             )
