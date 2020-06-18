@@ -3,7 +3,7 @@ github_api_repo_subscribe = function(repo, subscribed, ignored){
   arg_is_lgl_scalar(subscribed, ignored)
 
   if (subscribed == ignored)
-    usethis::ui_stop("{usethis::ui_code('subscribed != ignored')} must be true")
+    cli_stop("{.code subscribed != ignored} must be true")
 
   gh::gh(
     "PUT /repos/:owner/:repo/subscription",
@@ -37,8 +37,8 @@ repo_watch = function(repo) {
 
       status_msg(
         res,
-        glue::glue("Watched {usethis::ui_value(repo)}."),
-        glue::glue("Failed to watch {usethis::ui_value(repo)}.")
+        "Watched {.val {repo}}.",
+        "Failed to watch {.val {repo}}."
       )
     }
   )

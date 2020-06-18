@@ -20,10 +20,10 @@ repo_set_template = function(repo, status = TRUE) {
       status_msg(
         res,
         glue::glue( paste0(
-          "Changed the template status of repo {usethis::ui_value(repo)} ",
-          "to {usethis::ui_value(status)}."
+          "Changed the template status of repo {.val {repo}} ",
+          "to {.val {status}}."
         ) ),
-        glue::glue("Failed to change template status of repo {usethis::ui_value(repo)}.")
+        glue::glue("Failed to change template status of repo {.val {repo}}.")
       )
     }
   )

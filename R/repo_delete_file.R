@@ -38,8 +38,9 @@ repo_delete_file = function(repo, path, message = NULL, branch = "master") {
             list(usethis.quiet = TRUE),
             {
               cur_file = repo_get_file(repo, path, branch)
+              repo_txt = format_repo(repo, branch, path)
               if (is.null(cur_file)) {
-                usethis::ui_stop("Unable to find file {usethis::ui_value(format_repo(repo, branch, path))}.")
+                cli_stop("Unable to find file {.val {repo_txt}}.")
               }
               attr(cur_file, "sha")
             }
@@ -51,8 +52,8 @@ repo_delete_file = function(repo, path, message = NULL, branch = "master") {
 
       status_msg(
         res,
-        glue::glue("Deleted file {usethis::ui_value(path)} from repo {usethis::ui_value(repo)}."),
-        glue::glue("Failed to delete file {usethis::ui_value(path)} from repo {usethis::ui_value(repo)}.")
+        "Deleted file {.val {path}} from repo {.val {repo}}.",
+        "Failed to delete file {.val {path}} from repo {.val {repo}}."
       )
 
       res

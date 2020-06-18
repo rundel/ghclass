@@ -32,8 +32,8 @@ repo_rename = function(repo, new_name) {
     function(repo, new_name) {
       status_msg(
         purrr::safely(github_api_repo_rename)(repo, new_name),
-        glue::glue("Renamed repo {usethis::ui_value(repo)} to {usethis::ui_value(new_name)}."),
-        glue::glue("Failed to rename repo {usethis::ui_value(repo)} to {usethis::ui_value(new_name)}.")
+        glue::glue("Renamed repo {.val {repo}} to {.val {new_name}}."),
+        glue::glue("Failed to rename repo {.val {repo}} to {.val {new_name}}.")
       )
     }
   )

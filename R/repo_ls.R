@@ -14,11 +14,12 @@ repo_ls = function(repo, path, branch = "master", full_path = FALSE) {
   res = purrr::safely(github_api_repo_get_file)(repo, path, branch)
 
   if (failed(res)) {
-    usethis::ui_stop( paste(
-      "Failed to retrieve path {usethis::ui_value(path)}",
-      "in repo {usethis::ui_value(repo)}.",
-      "({error(res)[['headers']][['status']]})"
-    ) )
+    status = error(res)[['headers']][['status']]
+
+    cli_stop(
+      "Failed to retrieve path {.val {path}} in repo {.val {repo}}.",
+      " ({.val status})"
+    )
   }
   files = purrr::map_chr(result(res), "path")
   if (!full_path)

@@ -25,7 +25,7 @@ repo_workflows = function(repo, full = FALSE) {
 
   status_msg(
     res,
-    fail = glue::glue("Failed to retrieve workflows for repo {usethis::ui_value(repo)}.")
+    fail = glue::glue("Failed to retrieve workflows for repo {.val {repo}}.")
   )
 
   if (failed(res) | empty_result(res)) {

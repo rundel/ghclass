@@ -51,8 +51,8 @@ repo_put_file = function(repo, path, content, message = NULL, branch = "master",
   if(verbose){
     status_msg(
       res,
-      glue::glue("Added file {usethis::ui_value(path)} to repo {usethis::ui_value(repo)}."),
-      glue::glue("Failed to add file {usethis::ui_value(path)} to repo {usethis::ui_value(repo)}.")
+      glue::glue("Added file {.val {path}} to repo {.val {repo}}."),
+      glue::glue("Failed to add file {.val {path}} to repo {.val {repo}}.")
     )
   }
 
@@ -102,8 +102,8 @@ peer_repo_put_file = function(repo, path, content, message = NULL, branch = "mas
   if(verbose){
     status_msg(
       res,
-      glue::glue("Added file {usethis::ui_value(path)} to repo {usethis::ui_value(repo)}."),
-      glue::glue("Failed to add file {usethis::ui_value(path)} to repo {usethis::ui_value(repo)}.")
+      glue::glue("Added file {.val {path}} to repo {.val {repo}}."),
+      glue::glue("Failed to add file {.val {path}} to repo {.val {repo}}.")
     )
   }
 

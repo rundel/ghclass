@@ -38,22 +38,22 @@ repo_mirror = function(source_repo, target_repo, overwrite=FALSE, verbose=FALSE)
       repo_url = glue::glue("https://github.com/{repo}.git")
 
       if (is.na(n)) {
-        usethis::ui_oops("The repo {usethis::ui_value(repo)} does not exist")
+        cli::cli_alert_danger("The repo {.val {repo}} does not exist")
       } else if (n > 1 & !overwrite) {
         msg = paste(
-          "The repo {usethis::ui_value(repo)} has more than one commit",
-          "(n_commit = {usethis::ui_value(n)})."
+          "The repo {.val {repo}} has more than one commit",
+          "(n_commit = {.val {n}})."
         )
 
         if (!warned) {
           msg = c(msg, paste(
-            "Use {usethis::ui_code('overwrite = TRUE')} if you want to permanently",
+            "Use {.code overwrite = TRUE} if you want to permanently",
             "overwrite this repository."
           ))
           warned <<- TRUE
         }
 
-        usethis::ui_oops( msg )
+        cli::cli_alert_danger( msg )
       } else {
         local_repo_push(dir, remote = repo_url, force = TRUE, prompt = FALSE, mirror = TRUE, verbose = verbose)
       }
@@ -61,5 +61,5 @@ repo_mirror = function(source_repo, target_repo, overwrite=FALSE, verbose=FALSE)
   )
 
   unlink(dir, recursive = TRUE)
-  usethis::ui_done("Removed local copy of {usethis::ui_value(source_repo)}")
+  cli::cli_alert_success("Removed local copy of {.val {source_repo}}")
 }

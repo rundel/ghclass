@@ -48,12 +48,10 @@ repo_n_commits = function(repo, branch = "master", quiet = FALSE) {
       res = github_api_repo_n_commits(repo, branch)
 
       if (!is.null(res[["errors"]]) & !quiet) {
-        # FIXME - work on a staus_msg_v4 function
-        # FIXME - retieve error message from graphql response
+        # TODO - work on a staus_msg_v4 function
+        # TODO - retieve error message from graphql response
 
-        usethis::ui_oops(
-          glue::glue("Failed to retrieve commits for {usethis::ui_value(repo)}.")
-        )
+        cli::cli_alert_danger("Failed to retrieve commits for {.val {repo}}.")
 
         tibble::tibble(repo = repo,  n = NA_integer_)
       } else {

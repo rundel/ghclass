@@ -27,8 +27,8 @@ repo_remove_user = function(repo, user) {
 
       status_msg(
         res,
-        glue::glue("Removed user {usethis::ui_value(user)} from repo {usethis::ui_value(repo)}."),
-        glue::glue("Failed to remove user {usethis::ui_value(user)} from repo {usethis::ui_value(repo)}.")
+        glue::glue("Removed user {.val {user}} from repo {.val {repo}}."),
+        glue::glue("Failed to remove user {.val {user}} from repo {.val {repo}}.")
       )
     }
   )

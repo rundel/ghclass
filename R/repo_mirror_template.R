@@ -38,10 +38,7 @@ repo_mirror_template = function(template_repo, repo, private = TRUE) {
       res = purrr::safely(
         function() {
           if (exists) {
-            usethis::ui_stop( paste(
-              "Cannot mirror (template) to repo {usethis::ui_value(repo)} because",
-              "this reposistory already exists."
-            ) )
+            cli_stop("Cannot mirror (template) to repo {.val {repo}} because this reposistory already exists.")
           }
 
           github_api_repo_mirror_template(template_repo, repo, private)
@@ -50,8 +47,8 @@ repo_mirror_template = function(template_repo, repo, private = TRUE) {
 
       status_msg(
         res,
-        glue::glue("Mirrored {usethis::ui_value(template_repo)} to {usethis::ui_value(repo)}."),
-        glue::glue("Failed to mirror {usethis::ui_value(template_repo)} to {usethis::ui_value(repo)}.")
+        "Mirrored {.val {template_repo}} to {.val {repo}}.",
+        "Failed to mirror {.val {template_repo}} to {.val {repo}}."
       )
 
       res

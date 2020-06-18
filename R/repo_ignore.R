@@ -20,8 +20,8 @@ repo_ignore = function(repo) {
 
       status_msg(
         res,
-        glue::glue("Ignored {usethis::ui_value(repo)}."),
-        glue::glue("Failed to ignore {usethis::ui_value(repo)}.")
+        glue::glue("Ignored {.val {repo}}."),
+        glue::glue("Failed to ignore {.val {repo}}.")
       )
     }
   )

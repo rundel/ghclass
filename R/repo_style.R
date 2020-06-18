@@ -54,10 +54,7 @@ repo_style = function(repo, files = c("*.R", "*.Rmd"), branch = "styler", base =
       )
 
       if (length(file_paths) == 0) {
-        usethis::ui_oops( paste(
-          "Found no files with the glob {usethis::ui_value(files)}",
-          "in repo {usethis::ui_value(repo)}"
-        ) )
+        cli::cli_alert_danger("Found 0 files with the glob {.val {files}} in repo {.val {repo}}")
         return()
       }
 
@@ -68,7 +65,7 @@ repo_style = function(repo, files = c("*.R", "*.Rmd"), branch = "styler", base =
       # Check if styler didnt fix anything
       status = gert::git_status(path)
       if (nrow(status) == 0) {
-        usethis::ui_info("No changes were suggested by styler")
+        cli::cli_alert_info("No changes were suggested by styler")
         return()
       }
 
@@ -92,20 +89,16 @@ repo_style = function(repo, files = c("*.R", "*.Rmd"), branch = "styler", base =
         #    msg = paste0(msg,"\n\n", paste0("@", users, collapse = ", "))
         #}
 
-
         open_prs = repo_prs(repo, state="open")
-        pr_already_open = any( (base == open_prs[["base_ref"]]) & (branch == open_prs[["head_ref"]]) )
-
+        pr_already_open = any(  (base == open_prs[["base_ref"]])
+                              & (branch == open_prs[["head_ref"]]) )
 
         if (pr_already_open) {
-          details = usethis::ui_value( glue::glue(
-            "{repo} ({base} <- {branch})"
-          ) )
+          details = cli_glue("{repo} ({base} <- {branch})")
 
-          usethis::ui_info( paste(
-            "Pull request {details} already exists.",
-            "New styler changes should still be reflected in this PR."
-          ) )
+          cli::cli_alert_info(
+            "Pull request {details} already exists. New styler changes should be reflected in this PR."
+          )
         } else {
           pr_create(
             repo, title = "styler revisions",

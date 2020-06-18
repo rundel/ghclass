@@ -46,6 +46,8 @@ repo_contributors = function(repo, include_admins = TRUE) {
 
       res = purrr::safely(
         function() {
+          # TODO - fix me, oh god it is terrible
+
           for(i in 1:10) {
             r = github_api_repo_contributors(repo)
 
@@ -56,13 +58,13 @@ repo_contributors = function(repo, include_admins = TRUE) {
             Sys.sleep(1)
           }
 
-          usethis::ui_stop("Timeout, no response within 10 seconds.")
+          cli_stop("Timeout, no response within 10 seconds.")
         }
       )()
 
       status_msg(
         res,
-        fail = glue::glue("Failed to retrieve contributors for {usethis::ui_value(repo)}.")
+        fail = "Failed to retrieve contributors for {.val {repo}}."
       )
 
       contribs = result(res)

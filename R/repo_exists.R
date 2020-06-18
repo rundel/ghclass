@@ -46,7 +46,7 @@ repo_exists = function(repo, strict = FALSE, verbose = TRUE) {
   if (verbose) {
     purrr::walk2(
       repo[renamed], cur_names[renamed],
-      ~ usethis::ui_info("Repo {usethis::ui_value(.x)} has been renamed to {usethis::ui_value(.y)}.")
+      ~ cli::cli_alert_info("Repo {.val {.x}} has been renamed to {.val {.y}}.")
     )
   }
 

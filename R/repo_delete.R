@@ -21,10 +21,7 @@ repo_delete = function(repo, prompt = TRUE) {
   arg_is_lgl_scalar(prompt)
 
   if (prompt) {
-    delete = usethis::ui_yeah( paste(
-      "This command will delete the following repositories permanently:",
-      "{usethis::ui_value(repo)}."
-    ) )
+    delete = cli_yeah("This command will delete the following repositories permanently: {.val {repo}}.")
     if (!delete) {
       return(invisible())
     }
@@ -37,8 +34,8 @@ repo_delete = function(repo, prompt = TRUE) {
 
       status_msg(
         res,
-        glue::glue("Deleted repo {usethis::ui_value(repo)}."),
-        glue::glue("Failed to delete repo {usethis::ui_value(repo)}.")
+        "Deleted repo {.val {repo}}.",
+        "Failed to delete repo {.val {repo}}."
       )
     }
   )
