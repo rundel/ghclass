@@ -15,8 +15,8 @@ local_repo_commit = function(repo_dir, message) {
       repo = fs::path_file(dir)
       status_msg(
         res,
-        glue::glue("Committed changes to {usethis::ui_value(repo)}."),
-        glue::glue("Failed to commit changes to {usethis::ui_value(repo)}.")
+        glue::glue("Committed changes to {.val {repo}}."),
+        glue::glue("Failed to commit changes to {.val {repo}}.")
       )
 
       res

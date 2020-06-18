@@ -44,8 +44,8 @@ local_repo_clone = function(repo, local_path=".", branch = "master", mirror = FA
 
       status_msg(
         res,
-        glue::glue("Cloned {usethis::ui_value(fmt_repo)}."),
-        glue::glue("Failed to clone {usethis::ui_value(fmt_repo)}.")
+        glue::glue("Cloned {.val {fmt_repo}}."),
+        glue::glue("Failed to clone {.val {fmt_repo}}.")
       )
 
       res

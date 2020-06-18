@@ -39,8 +39,8 @@ local_repo_rename = function(repo_dir, pattern, replacement) {
 
       status_msg(
         res,
-        glue::glue("Renaming {usethis::ui_value(cur)} to {usethis::ui_value(new)}."),
-        glue::glue("Failed to rename {usethis::ui_value(cur)} to {usethis::ui_value(new)}.")
+        glue::glue("Renaming {.val {cur}} to {.val {new}}."),
+        glue::glue("Failed to rename {.val {cur}} to {.val {new}}.")
       )
     }
   )
