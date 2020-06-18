@@ -52,8 +52,8 @@ team_invite = function(org, user, team, create_missing_teams = TRUE) {
 
       status_msg(
         res,
-        glue::glue("Added {.val {user}} to team {.val {team}}."),
-        glue::glue("Failed to add {.val {user}} to team {.val {team}}.")
+        "Added user {.val {user}} to team {.val {team}}.",
+        "Failed to add user {.val {user}} to team {.val {team}}."
       )
     }
   )

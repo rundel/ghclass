@@ -30,7 +30,7 @@ repo_delete_file = function(repo, path, message = NULL, branch = "master") {
     list(repo, path, branch),
     function(repo, path, branch) {
       if (is.null(message))
-        message = glue::glue("Deleting file: {path}")
+        message = cli_glue("Deleting file {path}")
 
       res = purrr::safely(
         function() {

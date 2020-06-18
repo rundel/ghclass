@@ -32,8 +32,8 @@ repo_unwatch = function(repo) {
 
       status_msg(
         res,
-        glue::glue("Unwatched {.val {repo}}."),
-        glue::glue("Failed to unwatch {.val {repo}}.")
+        "Unwatched repo {.val {repo}}.",
+        "Failed to unwatch repo {.val {repo}}."
       )
     }
   )

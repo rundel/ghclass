@@ -39,8 +39,8 @@ branch_protect = function(repo, branch = "master") {
 
       status_msg(
         res,
-        glue::glue("Protecting branch {.val {repo_fmt}}."),
-        glue::glue("Failed to protect branch {.val {repo_fmt}}.")
+        "Protecting branch {.val {repo_fmt}}.",
+        "Failed to protect branch {.val {repo_fmt}}."
       )
     }
   )

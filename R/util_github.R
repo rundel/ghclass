@@ -47,8 +47,8 @@ org_accept_invite = function(org, user, pat) {
 
       status_msg(
         res,
-        glue::glue("Accepted {.val {user}}s invite to org {.val {org}}."),
-        glue::glue("Failed to accept {.val {user}}s invite to org {.val {org}}.")
+        "Accepted {.val {user}}s invite to org {.val {org}}.",
+        "Failed to accept {.val {user}}s invite to org {.val {org}}."
       )
     }
   )

@@ -104,7 +104,7 @@ repo_commits = function(repo, branch = "master", sha = branch, path = NULL,
       if (!quiet) {
         status_msg(
           res,
-          fail = glue::glue("Failed to retrieve commits from {.val {repo}}.")
+          fail = "Failed to retrieve commits from {.val {repo}}."
         )
       }
 

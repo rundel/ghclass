@@ -36,7 +36,7 @@ team_members = function(org, team = org_teams(org)) {
 
       status_msg(
         res,
-        fail = glue::glue("Failed to retrieve team members for {.val {team}}.")
+        fail = "Failed to retrieve team members for {.val {team}}."
       )
 
       if (failed(res) | empty_result(res)) {

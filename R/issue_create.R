@@ -63,8 +63,8 @@ issue_create = function(repo, title, body, labels = character(), assignees = cha
 
       status_msg(
         res,
-        glue::glue("Created issue {.val {title}} for repo {.val {repo}}."),
-        glue::glue("Failed to create issue {.val {title}} for repo {.val {repo}}.")
+        "Created issue {.val {title}} for repo {.val {repo}}.",
+        "Failed to create issue {.val {title}} for repo {.val {repo}}."
       )
 
       res

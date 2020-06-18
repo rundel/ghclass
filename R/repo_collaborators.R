@@ -41,7 +41,7 @@ repo_collaborators = function(repo, include_admins = TRUE) {
       res = purrr::safely(github_api_repo_collaborators)(repo)
       status_msg(
         res,
-        fail = glue::glue("Failed to retrieve collaborators for {.val {repo}}.")
+        fail = "Failed to retrieve collaborators for {.val {repo}}."
       )
 
       collabs = result(res)

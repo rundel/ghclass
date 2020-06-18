@@ -17,8 +17,8 @@ local_repo_branch = function(repo_dir, branch) {
       repo = fs::path_file(dir)
       status_msg(
         res,
-        glue::glue("Added branch {.val {branch}} to {.val {repo}}."),
-        glue::glue("Failed to add branch {.val {branch}} to {.val {repo}}.")
+        "Added branch {.val {branch}} to {.val {repo}}.",
+        "Failed to add branch {.val {branch}} to {.val {repo}}."
       )
 
       res

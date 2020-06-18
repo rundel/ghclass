@@ -35,7 +35,7 @@ repo_mirror = function(source_repo, target_repo, overwrite=FALSE, verbose=FALSE)
   purrr::pwalk(
     repos,
     function(repo, n) {
-      repo_url = glue::glue("https://github.com/{repo}.git")
+      repo_url = cli_glue("https://github.com/{repo}.git")
 
       if (is.na(n)) {
         cli::cli_alert_danger("The repo {.val {repo}} does not exist")

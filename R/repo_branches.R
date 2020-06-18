@@ -27,7 +27,7 @@ repo_branches = function(repo, filter=NULL, exclude=FALSE) {
 
   status_msg(
     res,
-    fail = glue::glue("Failed to retrieve branches for repo {.val {repo}}.")
+    fail = "Failed to retrieve branches for repo {.val {repo}}."
   )
 
   if (failed(res) | empty_result(res)) {

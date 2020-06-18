@@ -24,7 +24,7 @@ repo_is_template = function(repo) {
       res = purrr::safely(github_api_repo)(repo)
       status_msg(
         res,
-        fail = glue::glue("Failed to retrieve repo {.val {repo}}.")
+        fail = "Failed to retrieve repo {.val {repo}}."
       )
 
       if (succeeded(res)) {

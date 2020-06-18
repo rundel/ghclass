@@ -20,8 +20,8 @@ repo_ignore = function(repo) {
 
       status_msg(
         res,
-        glue::glue("Ignored {.val {repo}}."),
-        glue::glue("Failed to ignore {.val {repo}}.")
+        "Ignored repo {.val {repo}}.",
+        "Failed to ignore repo {.val {repo}}."
       )
     }
   )

@@ -46,8 +46,8 @@ repo_add_team = function(repo, team, permission = c("push", "pull", "admin")) {
 
       status_msg(
         res,
-        glue::glue("Added team {.val {team}} to repo {.val {repo}}."),
-        glue::glue("Failed to add team {.val {team}} to repo {.val {repo}}.")
+        "Added team {.val {team}} to repo {.val {repo}}.",
+        "Failed to add team {.val {team}} to repo {.val {repo}}."
       )
     }
   )

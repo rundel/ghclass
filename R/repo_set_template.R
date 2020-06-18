@@ -19,11 +19,8 @@ repo_set_template = function(repo, status = TRUE) {
       res = purrr::safely(github_api_repo_edit)(repo, is_template = status)
       status_msg(
         res,
-        glue::glue( paste0(
-          "Changed the template status of repo {.val {repo}} ",
-          "to {.val {status}}."
-        ) ),
-        glue::glue("Failed to change template status of repo {.val {repo}}.")
+        "Changed the template status of repo {.val {repo}} to {.val {status}}.",
+        "Failed to change template status of repo {.val {repo}}."
       )
     }
   )

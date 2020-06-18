@@ -30,7 +30,7 @@ repo_put_file = function(repo, path, content, message = NULL, branch = "master",
   arg_is_chr_scalar(message, allow_null = TRUE)
 
   if (is.null(message))
-    message = glue::glue("Adding file: {path}")
+    message = cli_glue("Adding file {path}")
 
   if (is.character(content))
     content = charToRaw(content)
@@ -51,8 +51,8 @@ repo_put_file = function(repo, path, content, message = NULL, branch = "master",
   if(verbose){
     status_msg(
       res,
-      glue::glue("Added file {.val {path}} to repo {.val {repo}}."),
-      glue::glue("Failed to add file {.val {path}} to repo {.val {repo}}.")
+      "Added file {.val {path}} to repo {.val {repo}}.",
+      "Failed to add file {.val {path}} to repo {.val {repo}}."
     )
   }
 
@@ -87,23 +87,21 @@ peer_repo_put_file = function(repo, path, content, message = NULL, branch = "mas
   arg_is_chr_scalar(message, sha, allow_null = TRUE)
 
   if (is.null(message))
-    message = glue::glue("Adding file: {path}")
+    message = cli_glue("Adding file: {path}")
 
   if (is.character(content))
     content = charToRaw(content)
 
-  res = purrr::safely(peer_github_api_repo_put_file)(repo = repo,
-                                                     path = path,
-                                                     content = content,
-                                                     message = message,
-                                                     branch = branch,
-                                                     sha = sha)
+  res = purrr::safely(peer_github_api_repo_put_file)(
+    repo = repo, path = path, content = content,
+    message = message, branch = branch, sha = sha
+  )
 
-  if(verbose){
+  if (verbose){
     status_msg(
       res,
-      glue::glue("Added file {.val {path}} to repo {.val {repo}}."),
-      glue::glue("Failed to add file {.val {path}} to repo {.val {repo}}.")
+      "Added file {.val {path}} to repo {.val {repo}}.",
+      "Failed to add file {.val {path}} to repo {.val {repo}}."
     )
   }
 

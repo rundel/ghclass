@@ -31,7 +31,7 @@ org_admins = function(org) {
       return(org)
     }
 
-    cli_stop(glue::glue("Failed to retrieve admins for org {.val {org}}."))
+    cli_stop("Failed to retrieve admins for org {.val {org}}.")
   } else {
     purrr::map_chr(result(res), "login")
   }

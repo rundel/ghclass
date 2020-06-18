@@ -33,8 +33,8 @@ branch_unprotect = function(repo, branch = "master") {
 
       status_msg(
         res,
-        glue::glue("Removing protection from branch {.val {repo_fmt}}."),
-        glue::glue("Failed to remove protection from branch {.val {repo_fmt}}.")
+        "Removing protection from branch {.val {repo_fmt}}.",
+        "Failed to remove protection from branch {.val {repo_fmt}}."
       )
     }
   )

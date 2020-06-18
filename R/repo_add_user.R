@@ -43,8 +43,8 @@ repo_add_user = function(repo, user, permission = c("push", "pull", "admin")) {
 
       status_msg(
         res,
-        glue::glue("Added user {.val {user}} to repo {.val {repo}}."),
-        glue::glue("Failed to add user {.val {user}} to repo {.val {repo}}.")
+        "Added user {.val {user}} to repo {.val {repo}}.",
+        "Failed to add user {.val {user}} to repo {.val {repo}}."
       )
     }
   )

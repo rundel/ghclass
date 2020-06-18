@@ -20,8 +20,8 @@ local_repo_pull = function(repo_dir, remote="origin", branch="master", verbose =
       repo = fs::path_file(dir)
       status_msg(
         res,
-        glue::glue("Pulled to {.val {repo}}."),
-        glue::glue("Failed to pull to {.val {repo}}.")
+        "Pulled to {.val {repo}}.",
+        "Failed to pull to {.val {repo}}."
       )
 
       res
