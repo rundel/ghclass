@@ -22,9 +22,7 @@ Depends:
     R (>= 3.4.0)
 Imports: 
     base64enc,
-    crayon,
     fs,
-    gert (>= 0.3),
     gh,
     glue,
     httr,
@@ -35,7 +33,6 @@ Imports:
     stats,
     tibble,
     tidyr,
-    usethis,
     whisker,
     withr,
     yaml,
@@ -45,7 +42,9 @@ Suggests:
     knitr,
     rmarkdown,
     sodium,
-    styler
+    styler,
+    usethis,
+    gert
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
