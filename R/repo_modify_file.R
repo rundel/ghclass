@@ -46,7 +46,7 @@ repo_modify_file = function(repo, path, pattern, content, method = c("replace", 
         new_content = sub_func(pattern, content, cur_content)
 
         if (cur_content == new_content) {
-          cli::cli_alert_danger("Unable to find pattern {.val {pattern}} in {.val {repo_txt}}.")
+          cli::cli_alert_danger("Unable to find pattern in {.val {repo_txt}}.", wrap = TRUE)
           return(NULL)
         }
 
