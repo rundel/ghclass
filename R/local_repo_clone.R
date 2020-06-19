@@ -17,6 +17,7 @@
 #' @aliases repo_clone
 #'
 #' @export
+#'
 local_repo_clone = function(repo, local_path=".", branch = "master", mirror = FALSE, verbose = FALSE) {
   require_gert()
 
@@ -48,11 +49,15 @@ local_repo_clone = function(repo, local_path=".", branch = "master", mirror = FA
         "Failed to clone {.val {fmt_repo}}."
       )
 
-      res
+      # TODO - think about should this be NULL or NA
+      ternary(succeeded(res), dir, NULL)
     }
   )
 
-  invisible(res)
+  dirs = purrr::flatten_chr(res)
+  names(dirs) = repo
+
+  invisible(dirs)
 }
 
 #' @export
