@@ -1,4 +1,14 @@
-github_api_repo_delete_file = function(repo, path, message, sha, branch) {
+github_api_repo_delete_file = function(repo, path, message, sha = NULL, branch = "master") {
+
+  if (is.null(sha)) {
+    cur_file = repo_get_file(repo, path, branch, quiet = TRUE)
+    sha = attr(cur_file, "sha")
+  }
+
+  if (is.null(sha)) {
+    cli_stop("Unable to locate file using the given path.")
+  }
+
   gh::gh(
     "DELETE /repos/:owner/:repo/contents/:path",
     owner = get_repo_owner(repo),
@@ -45,14 +55,7 @@ repo_delete_file = function(repo, path, message = NULL, branch = "master") {
 
       res = purrr::safely(
         function() {
-          cur_file = repo_get_file(repo, path, branch, quiet = TRUE)
-
-          if (is.null(cur_file)) {
-            cli_stop("Unable to locate file using the given path.")
-          }
-          sha = attr(cur_file, "sha")
-
-          github_api_repo_delete_file(repo, path, message, sha, branch)
+          github_api_repo_delete_file(repo, path, message, branch = branch)
         }
       )()
 
