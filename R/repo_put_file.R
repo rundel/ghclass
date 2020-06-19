@@ -37,14 +37,8 @@ repo_put_file = function(repo, path, content, message = NULL, branch = "master",
 
   # To update an existing file we need its current SHA,
   # if the file does not exist this will be NULL.
-
-  sha = withr::with_options(
-    list(usethis.quiet = TRUE),
-    {
-      cur_file = repo_get_file(repo, path, branch)
-      attr(cur_file, "sha")
-    }
-  )
+  cur_file = repo_get_file(repo, path, branch, quiet=TRUE)
+  sha = attr(cur_file, "sha")
 
   res = purrr::safely(github_api_repo_put_file)(repo, path, content, message, branch, sha)
 

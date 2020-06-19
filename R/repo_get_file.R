@@ -22,9 +22,9 @@ github_api_repo_get_file = function(repo, path, branch) {
 #'
 #' @export
 #'
-repo_get_file = function(repo, path, branch = "master") {
+repo_get_file = function(repo, path, branch = "master", quiet = FALSE) {
   arg_is_chr_scalar(repo, path, branch)
 
   file = purrr::possibly(github_api_repo_get_file, NULL)(repo, path, branch)
-  extract_content(repo, path, file)
+  extract_content(repo = repo, path = path, file = file, quiet = quiet)
 }

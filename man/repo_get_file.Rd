@@ -4,7 +4,7 @@
 \alias{repo_get_file}
 \title{Low level function for retrieving a file from a GitHub Repository}
 \usage{
-repo_get_file(repo, path, branch = "master")
+repo_get_file(repo, path, branch = "master", quiet = FALSE)
 }
 \arguments{
 \item{repo}{Character. Address of repository in \code{owner/name} format.}

@@ -18,3 +18,15 @@ repo_delete_file(repo, path, message = NULL, branch = "master")
 \description{
 Function for deleting files from a Github repository
 }
+\examples{
+\dontrun{
+repo = repo_create("ghclass-demo", "hw1-demo")
+repo_mirror("Sta323-Sp19/hw1", repo)
+
+repo_delete_file("ghclass-demo/hw1-demo", "README.md")
+repo_delete_file("ghclass-demo/hw1-demo", "README.md") # Fails since the file does not exist
+
+repo_delete(repo, prompt=FALSE)
+}
+
+}

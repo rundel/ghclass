@@ -55,17 +55,12 @@ org_accept_invite = function(org, user, pat) {
 }
 
 # Extracts base64 encoded content from files
-extract_content = function(repo, path, file, include_details = TRUE) {
-  if (is.null(file)) {
-    cli::cli_alert_danger(
-      "Unable to retrieve file {.val {path}} from repo {.val {repo}}."
-    )
-    return(invisible(NULL))
-  }
-  if (is.null(file[["content"]])) {
-    cli::cli_alert_danger(
-      "Unable to retrieve {.val {path}} in repo {.val {repo}}, it is not a file."
-    )
+extract_content = function(repo, path, file, include_details = TRUE, quiet = FALSE) {
+  if (is.null(file) | is.null(file[["content"]])) {
+    if (!quiet)
+      cli::cli_alert_danger(
+        "Unable to retrieve file {.val {path}} from repo {.val {repo}}."
+      )
     return(invisible(NULL))
   }
 
