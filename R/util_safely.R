@@ -112,7 +112,8 @@ ternary = function(check, success, fail) {
 
 # TODO - fix error_msg processing - doesnt work for PR and some others
 
-status_msg = function(x, success = NULL, fail = NULL, include_error_msg = FALSE, .envir = parent.frame()) {
+status_msg = function(x, success = NULL, fail = NULL, include_error_msg = TRUE,
+                      .envir = parent.frame()) {
 
 
   if (succeeded(x) & !is.null(success)) {
