@@ -76,4 +76,15 @@ local_repo_commit("hw3", "Revised homework")
 local_repo_push("hw3")
 }
 
+\dontrun{
+local_repo = local_repo_clone("Sta323-Sp19/hw1", tempdir())
+
+repo = repo_create("ghclass-demo", "hw1-mirror")
+repo_url = paste0("https://github.com/",repo,".git")
+
+local_repo_push(local_repo, remote = repo_url, force = TRUE, prompt = FALSE, mirror = TRUE)
+
+repo_delete(repo, prompt = FALSE)
+}
+
 }

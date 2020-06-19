@@ -1,5 +1,19 @@
 #' @rdname local_repo
+#'
+#' @examples
+#' \dontrun{
+#' local_repo = local_repo_clone("Sta323-Sp19/hw1", tempdir())
+#'
+#' repo = repo_create("ghclass-demo", "hw1-mirror")
+#' repo_url = paste0("https://github.com/",repo,".git")
+#'
+#' local_repo_push(local_repo, remote = repo_url, force = TRUE, prompt = FALSE, mirror = TRUE)
+#'
+#' repo_delete(repo, prompt = FALSE)
+#' }
+#'
 #' @export
+#'
 local_repo_push = function(repo_dir, remote = "origin", branch = "master",
                            force = FALSE, prompt = TRUE, mirror = FALSE,
                            verbose = FALSE) {
@@ -37,8 +51,8 @@ local_repo_push = function(repo_dir, remote = "origin", branch = "master",
 
       status_msg(
         res,
-        "Pushed from {.val {fs::path_file(repo)}} to {.val {ref}}.",
-        "Failed to push from {.val {repo}} to {.val {ref}}."
+        "Pushed from local repo {.val {fs::path_file(repo)}} to {.val {ref}}.",
+        "Failed to push from local repo {.val {repo}} to {.val {ref}}."
       )
 
       res
