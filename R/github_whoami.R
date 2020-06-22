@@ -1,14 +1,22 @@
-#' Get github login
-#'
-#' `github_whoami` returns the login of the authenticated user.
-#'
-#' @examples
-#' \dontrun{
-#' github_whoami()
-#' }
-#'
-#' @export
+github_api_whoami = function() {
+  gh::gh(
+    "GET /user",
+    .token = github_get_token()
+  )
+}
 
-github_whoami = function() {
-  gh::gh_whoami()[["login"]]
+#' @rdname github
+#' @export
+#'
+github_whoami = function(quiet = FALSE) {
+  res = purrr::safely(github_api_whoami)()
+
+  if (!quiet) {
+    status_msg(
+      res,
+      fail = "Failed to retrieve whoami results."
+    )
+  }
+
+  result(res)[["login"]]
 }
