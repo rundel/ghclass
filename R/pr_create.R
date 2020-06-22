@@ -29,8 +29,6 @@ github_api_pr_create = function(repo, head, base, title, body, draft = TRUE){
 #' @param draft Logical. Should the pull request be created as a draft pull request
 #' (these cannot be merged until allowed by the author).
 #'
-#' @export
-#'
 #' @examples
 #' \dontrun{
 #' repo_create("ghclass-demo", "test_pr", auto_init=TRUE)
@@ -44,6 +42,9 @@ github_api_pr_create = function(repo, head, base, title, body, draft = TRUE){
 #'
 #' repo_delete("ghclass-demo/test_pr", prompt = FALSE)
 #' }
+#'
+#' @export
+#'
 pr_create = function(repo, title, head, base = "master", body = "", draft = FALSE) {
 
   arg_is_chr(repo, title, base, head, body)
