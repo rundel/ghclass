@@ -20,14 +20,14 @@ get_branch_ref = function(repo, branch) {
   result(res)
 }
 
-github_api_branch_create = function(repo, cur_branch, new_branch) {
-  head = get_branch_ref(repo, cur_branch)
+github_api_branch_create = function(repo, branch, new_branch) {
+  head = get_branch_ref(repo, branch)
 
   gh::gh(
     "POST /repos/:owner/:repo/git/refs",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
-    ref = paste0("refs/heads/",new_branch),
+    ref = paste0("refs/heads/", new_branch),
     sha = head[["sha"]],
     .token = github_get_token()
   )
@@ -40,34 +40,34 @@ github_api_branch_create = function(repo, cur_branch, new_branch) {
 #' @rdname branch
 #' @export
 #'
-branch_create = function(repo, cur_branch = "master", new_branch) {
-  arg_is_chr(repo, cur_branch, new_branch)
+branch_create = function(repo, branch = "master", new_branch) {
+  arg_is_chr(repo, branch, new_branch)
 
   purrr::pwalk(
-    list(repo, cur_branch, new_branch),
-    function(repo, cur_branch, new_branch) {
+    list(repo, branch, new_branch),
+    function(repo, branch, new_branch) {
 
-      cur_repo = format_repo(repo, cur_branch)
+      cur_repo = format_repo(repo, branch)
       new_repo = format_repo(repo, new_branch)
 
       branches = repo_branches(repo)
 
-      if (!cur_branch %in% branches) {
+      if (!branch %in% branches) {
         cli::cli_alert_danger("Failed to create branch, {.val {cur_repo}} does not exist.")
-        return(NULL)
+        return()
       }
 
       if (new_branch %in% branches) {
         cli::cli_alert_danger("Skipping creation of branch {.val {new_repo}}, it already exists.")
-        return(NULL)
+        return()
       }
 
-      res = purrr::safely(github_api_branch_create)(repo, cur_branch, new_branch)
+      res = purrr::safely(github_api_branch_create)(repo, branch, new_branch)
 
       status_msg(
         res,
-        "Created branch {.val {new_branch}} from {.val {cur_repo}}.",
-        "Failed to create branch {.val {new_branch}} from {.val {cur_repo}}."
+        "Created branch {.val {new_branch}} in repo {.val {repo}}.",
+        "Failed to create branch {.val {new_branch}} in repo {.val {repo}}."
       )
     }
   )
