@@ -11,39 +11,10 @@ github_api_issue_create = function(repo, title, body, labels, assignees){
   )
 }
 
-#' Create an issue
-#'
-#' `issue_create` creates an issue for a GitHub repository.
-#'
-#' @param repo Character. Address of one or more repositories in `owner/name` format.
-#' @param title Character. Title of the issue.
-#' @param body Character. Content of the issue.
-#' @param labels Character. Vector of the labels to associate with this issue
-#' @param assignees Character. Vector of logins for users assigned to the issue.
-#'
-#' @examples
-#' \dontrun{
-#' repo_create("ghclass-test","issue-test")
-#'
-#' issue_create("ghclass-test/issue-test", title = "Issue 1", body = "This is an issue")
-#'
-#' issue_create(
-#'   "ghclass-test/issue-test",
-#'   title = "Issue 2", body = "This is also issue",
-#'   label = "Important"
-#' )
-#'
-#' issue_create(
-#'   "ghclass-test/issue-test",
-#'   title = "Issue 3", body = "This is also issue",
-#'   label = c("Important", "Super Important")
-#'   assignees = "rundel"
-#' )
-#' }
-#'
+
+#' @rdname issue
 #' @export
 #'
-
 issue_create = function(repo, title, body, labels = character(), assignees = character()) {
 
   arg_is_chr(repo, title, body)
