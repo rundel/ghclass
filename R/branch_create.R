@@ -36,14 +36,8 @@ github_api_branch_create = function(repo, cur_branch, new_branch) {
 
 
 
-#' Create branch
-#'
-#' `branch_create` creates a new branch from an existing git repo.
-#'
-#' @param repo github repository address in `owner/repo` format
-#' @param cur_branch name of existing branch
-#' @param new_branch name of branch to create
-#'
+
+#' @rdname branch
 #' @export
 #'
 branch_create = function(repo, cur_branch = "master", new_branch) {

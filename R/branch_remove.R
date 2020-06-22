@@ -9,13 +9,7 @@ github_api_branch_remove = function(repo, branch) {
 }
 
 
-#' Remove branch
-#'
-#' `branch_remove` deletes a branch from an existing GitHub repository.
-#'
-#' @param repo github repository address in `owner/repo` format
-#' @param branch name of existing branch
-#'
+#' @rdname branch
 #' @export
 #'
 branch_remove = function(repo, branch) {
