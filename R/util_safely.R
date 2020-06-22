@@ -60,12 +60,42 @@ error_msg = function(x) {
     pre = sub("Message: .*", "", msg)
     suf = sub(".* Message: ", "", msg)
 
+
+
     msg = paste0(pre, " (", cli::col_grey(suf), ")")
   }
 
   trimws(msg)
 }
 
+
+error_msg = function(x) {
+  msg = trimws( error(x)[["message"]] )
+
+  if (grepl("GitHub API error", msg)) {
+    msg = gsub("\n+", "\n", msg)
+    msg = strsplit(msg, "\n")[[1]]
+
+    sub_replace = function(m, pat) {
+      res = gsub(pat, "", m[grepl(pat, m)])
+
+      if(length(res) == 0)
+        NULL
+      else
+        res
+    }
+
+    error = msg[1]
+
+    attr(error, "msg") = sub_replace(msg, "Message: ")
+    attr(error, "doc") = sub_replace(msg, "Read more at ")
+    attr(error, "404") = sub_replace(msg, "URL not found: ")
+
+    error
+  } else {
+    msg
+  }
+}
 
 allow_error = function(res, message = NULL, class = NULL, result = "") {
 
@@ -101,6 +131,14 @@ ternary = function(check, success, fail) {
     fail
 }
 
+has_doc_attr = function(x) {
+  !is.null(attr(x, "doc"))
+}
+
+has_404_attr = function(x) {
+  !is.null(attr(x, "doc"))
+}
+
 # TODO - fix error_msg processing - doesnt work for PR and some others
 
 status_msg = function(x, success = NULL, fail = NULL, include_error_msg = TRUE,
@@ -114,10 +152,43 @@ status_msg = function(x, success = NULL, fail = NULL, include_error_msg = TRUE,
   if (failed(x) & !is.null(fail)) {
     cli::cli_alert_danger(fail, wrap = TRUE, .envir = .envir)
     if (include_error_msg) {
-      cli::cli_div(theme = list(ul = list("list-style-type" = "└─", "padding-left" = 0)))
-      cli::cli_ul(error_msg(x))
+      msg = error_msg(x)
+
+      print(error_msg_tree(msg))
+
+      #d = cli::cli_div(theme = list(ul = list("list-style-type" = "└─", "padding-left" = 0)))
+      #cli::cli_ul( c(
+      #  p1 = cli::cli_par(),
+      #  cli::cli_text(msg),
+      #  cli::cli_end(p1),
+      #  p2 = cli::cli_par(),
+      #  cli::cli_text("API Docs: ", attr(msg,"doc")),
+      #  cli::cli_end(p2)
+      #) )
+      #cli::cli_end(d)
+
     }
   }
+}
+
+error_msg_tree = function(msg) {
+  # Only use the attrs that are provided
+  attrs = names(attributes(msg))
+
+  d = data.frame(
+    id = c("root", "error", "msg", "doc", "404"),
+    nodes = I(list("error", attrs, NULL, NULL, NULL)),
+    extra = I(list(
+      "\b",
+      msg,
+      cli_glue('API message: {cli::col_grey(attr(msg,"msg"))}'),
+      cli_glue('API docs: {cli::col_grey(attr(msg,"doc"))}'),
+      cli_glue('Missing page: {cli::col_grey(attr(msg,"404"))}')
+    )),
+    stringsAsFactors = FALSE
+  )
+
+  cli::tree(d, style = list(h = "─ ", v = "│", l = "└", j = "├"))
 }
 
 
