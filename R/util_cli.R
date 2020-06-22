@@ -1,5 +1,9 @@
 cli_glue = function(..., .envir = parent.frame()) {
-  cli::cli_format_method(cli::cli_text(..., .envir = .envir))
+  txt = cli::cli_format_method(cli::cli_text(..., .envir = .envir))
+
+  # cli_format_method does wrapping which we dont want at this stage
+  # so glue things back together.
+  paste(txt, collapse = " ")
 }
 
 cli_stop = function(..., .envir = parent.frame()) {
