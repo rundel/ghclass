@@ -1,5 +1,6 @@
 #' @rdname local_repo
 #' @export
+#'
 local_repo_add = function(repo_dir, files = ".") {
   require_gert()
   arg_is_chr(repo_dir, files)

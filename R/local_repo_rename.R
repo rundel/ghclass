@@ -1,8 +1,9 @@
 #' Rename local directories using a vector of patterns and replacements
 #'
 #' This is particularly helpful for renaming student repos to include
-#' something more useful like `Last, First name` or `netid` so that
-#' folder ordering matches student ordering within your LMS.
+#' something more useful like `Last, First name` or a unique identifier
+#' like a `netid` so that folder ordering matches student ordering within
+#' your LMS.
 #'
 #' @param repo_dir Character. Vector of repo directories or a single directory containing one or more repos.
 #' @param pattern Character. One or more regexp patterns to match to directory names.
@@ -23,7 +24,7 @@ local_repo_rename = function(repo_dir, pattern, replacement) {
   cur_repos = repos
 
   for(i in seq_along(pattern)) {
-    repos = sub(pattern[i],replacement[i], repos)
+    repos = sub(pattern[i], replacement[i], repos)
   }
 
   sub = repos != cur_repos
