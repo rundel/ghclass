@@ -8,7 +8,6 @@
 #'
 #' `issue_close` closes an issue for a GitHub repository.
 #
-#'
 #' @param repo Character. Address of one or more repositories in `owner/name` format.
 #' @param title Character. Title of the issue.
 #' @param body Character. Content of the issue.
@@ -16,14 +15,10 @@
 #' @param assignees Character. Vector of logins for users assigned to the issue.
 #' @param number Integer. GitHub issue number of the issue.
 #'
-#' @param repo Character. Address of one or more repositories in `owner/name` format.
-
-
-#'
 #' @details
 #'
 #'
-#' @seealso [repo_ussues]
+#' @seealso [repo_issues]
 #'
 #' @examples
 #' \dontrun{
