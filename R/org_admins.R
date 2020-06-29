@@ -6,18 +6,7 @@ github_api_org_admins = function(owner){
          .limit = github_get_api_limit())
 }
 
-#' List repository administrators
-#'
-#' @param org Character. Name of a GitHub organization.
-#'
-#' @examples
-#' \dontrun{
-#' org_admins("ghclass-test")
-#' org_admins("rundel")
-#' }
-#'
-#' @return A character vector of repository administrators.
-#'
+#' @rdname org
 #' @export
 #'
 org_admins = function(org) {

@@ -11,20 +11,9 @@ github_api_org_invite = function(org, user) {
 }
 
 
-#' Invite user(s)
-#'
-#' `org_invite` invites user(s) to your organization.
-#'
-#' @param org Character. Name of the GitHub organization.
-#' @param user Character, character vector, or list. Listing one or more user names.
-#'
-#' @examples
-#' \dontrun{
-#' user = c("Alice","Bob","Carol","Dave","Eve")
-#' org_invite("Sta523-Fa17", user)
-#' }
-#'
+#' @rdname org
 #' @export
+#'
 org_invite = function(org, user) {
   arg_is_chr_scalar(org)
   arg_is_chr(user)

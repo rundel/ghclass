@@ -14,6 +14,6 @@ org_team_ids(org, filter = NULL, exclude = FALSE)
 \item{exclude}{logical, should entries matching the regex be excluded or included.}
 }
 \description{
-\code{org_team_ids} returns a (filtered) data frame of teams in the organization with columns for
-their names (\code{name}) and their unique ids (\code{id}).
+\code{org_team_ids} returns a (filtered) data frame of teams in the organization with their
+names (\code{name}) and unique ids (\code{id}).
 }

@@ -7,21 +7,8 @@ github_api_org_members = function(org) {
          .limit = github_get_api_limit())
 }
 
-
-#' Get organization member
-#'
-#' `org_members` returns a (filtered) vector of organization memebers.
-#'
-#' @param org Character. Name of the GitHub organization.
-#' @param filter Character. Regular expression pattern for matching (or excluding) repositories.
-#' @param exclude Logical. Should entries matching the regular expression be excluded or included.
+#' @rdname org
 #' @param include_admins Logical. Should admin users be included in the results.
-#'
-#' @examples
-#' \dontrun{
-#' org_members("ghclass")
-#' }
-#'
 #' @export
 #'
 org_members = function(org, filter = NULL, exclude = FALSE,

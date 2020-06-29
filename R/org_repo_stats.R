@@ -65,19 +65,23 @@ github_api_org_repo_stats = function(org, filter, filter_type, inc_commits, inc_
 #'
 #' @param org Character. Name of the GitHub organization.
 #' @param filter Character. Regular expression pattern for matching (or excluding) repositories.
-#' @param filter_type Character. One or more GitHub search `in` qualifiers. See [documentation](https://help.github.com/en/articles/searching-for-repositories) for more details.
+#' @param filter_type Character. One or more GitHub search `in` qualifiers.
+#' See [documentation](https://help.github.com/en/articles/searching-for-repositories)
+#' for more details.
 #' @param inc_commits Logical. Include commit statistics
 #' @param inc_issues Logical. Include issue statistics
 #' @param inc_prs Logical. Include pull request statistics
 #'
 #' @examples
 #' \dontrun{
-#' org_repo_stats("ghclass-demo")
+#' org_repo_stats("ghclass-test")
 #' }
 #'
 #' @export
 #'
 org_repo_stats = function(org, filter = "", filter_type="in:name", inc_commits = TRUE, inc_issues = TRUE, inc_prs = TRUE) {
+  ghclass:::flag_experimental()
+
   arg_is_chr_scalar(org, filter)
   arg_is_chr(org, filter_type)
   arg_is_lgl_scalar(inc_commits, inc_issues, inc_prs)

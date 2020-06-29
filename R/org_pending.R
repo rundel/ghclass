@@ -6,20 +6,7 @@ github_api_org_pending = function(owner){
          .limit = github_get_api_limit())
 }
 
-
-#' Get pending organization members
-#'
-#' `org_pending` returns a (filtered) vector of pending organization memebers.
-#'
-#' @param org Character. Name of the GitHub organization.
-#' @param filter Character. Regular expression pattern for matching (or excluding) repos.
-#' @param exclude Logical. Should entries matching the regular expression be excluded or included.
-#'
-#' @examples
-#' \dontrun{
-#' org_pending("ghclass")
-#' }
-#'
+#' @rdname org
 #' @export
 #'
 org_pending = function(org, filter = NULL, exclude = FALSE) {

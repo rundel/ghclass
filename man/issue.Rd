@@ -60,5 +60,5 @@ repo_delete("ghclass-test/test_issue", prompt=FALSE)
 }
 }
 \seealso{
-\link{repo_ussues}
+\link{repo_issues}
 }

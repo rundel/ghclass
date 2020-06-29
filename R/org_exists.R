@@ -8,19 +8,8 @@ github_api_get_org = function(org) {
   )
 }
 
-#' Check if organization exists
-#'
-#' `org_exists` returns TRUE if the supplied org(s) exist on GitHub and FALSE otherwise.
-#'
-#' @param org Character. Organization name to be checked.
-#'
-#' @return Vector of logical values
-#'
-#' @examples
-#' \dontrun{
-#' org_exists(c("rundel","ghclass-demo"))
-#' }
-#'
+
+#' @rdname org
 #' @export
 #'
 org_exists = function(org) {

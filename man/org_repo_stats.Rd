@@ -18,7 +18,9 @@ org_repo_stats(
 
 \item{filter}{Character. Regular expression pattern for matching (or excluding) repositories.}
 
-\item{filter_type}{Character. One or more GitHub search \verb{in} qualifiers. See \href{https://help.github.com/en/articles/searching-for-repositories}{documentation} for more details.}
+\item{filter_type}{Character. One or more GitHub search \verb{in} qualifiers.
+See \href{https://help.github.com/en/articles/searching-for-repositories}{documentation}
+for more details.}
 
 \item{inc_commits}{Logical. Include commit statistics}
 
@@ -32,7 +34,7 @@ basic statistics about those repositories.
 }
 \examples{
 \dontrun{
-org_repo_stats("ghclass-demo")
+org_repo_stats("ghclass-test")
 }
 
 }

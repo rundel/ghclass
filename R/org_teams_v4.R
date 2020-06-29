@@ -34,9 +34,8 @@ github_api_org_teams_v4 = function(org) {
 #' org_teams_v4("ghclass-demo")
 #' }
 #'
-#' @export
-#'
 org_teams_v4 = function(org) {
+  tag_experimental()
   arg_is_chr_scalar(org)
 
   pages = github_api_org_teams_v4(org)

@@ -9,22 +9,8 @@ github_api_org_repos = function(owner) {
   )
 }
 
-#' Get organization repository
-#'
-#' `org_repos` returns a (filtered) vector of repositories belonging to a GitHub organization.
-#'
-#' @param org Character. Name of the GitHub organization.
-#' @param filter Character. Regular expression pattern for matching (or excluding) repositories.
-#' @param exclude Logical. Should entries matching the regular expression in `filter` be excluded or included?
-#' @param full_repo Logical. Should the full repository address be returned (e.g. `owner/name` instead of just `repo`)?
-#'
-#'
-#' @examples
-#' \dontrun{
-#' org_repos("ghclass")
-#' org_repos("ghclass", "hw1-")
-#' }
-#'
+#' @rdname org
+#' @param full_repo Logical. Should the full repository address be returned (e.g. `owner/repo` instead of just `repo`)?
 #' @export
 #'
 org_repos = function(org, filter = NULL, exclude = FALSE, full_repo = TRUE) {

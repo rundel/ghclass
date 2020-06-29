@@ -6,14 +6,6 @@ github_api_org_teams = function(org) {
   )
 }
 
-#' Get organization teams
-#'
-#' `org_teams` returns a (filtered) vector of teams in the organization.
-#'
-#' @param org character, name of the GitHub organization.
-#' @param filter character, regex pattern for matching (or excluding) teams
-#' @param exclude logical, should entries matching the regex be excluded or included.
-#'
 #' @export
 #'
 org_teams = function(org, filter=NULL, exclude=FALSE) {
