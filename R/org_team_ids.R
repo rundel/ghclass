@@ -1,13 +1,11 @@
 #' Get organization teams and their ids
 #'
-#' `org_team_ids` returns a (filtered) data frame of teams in the organization with columns for
-#' their names (`name`) and their unique ids (`id`).
+#' `org_team_ids` returns a (filtered) data frame of teams in the organization with their
+#' names (`name`) and unique ids (`id`).
 #'
 #' @param org character, name of the GitHub organization.
 #' @param filter character, regex pattern for matching (or excluding) repos.
 #' @param exclude logical, should entries matching the regex be excluded or included.
-#'
-#' @export
 #'
 org_team_ids = function(org, filter=NULL, exclude=FALSE) {
   arg_is_chr_scalar(org)
