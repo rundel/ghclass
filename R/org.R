@@ -57,12 +57,7 @@
 #' org_teams("ghclass-test")
 #' }
 #'
-#'
-#' @details
-#'
-#'
 #' @seealso [org_repo_stats]
-
-
+#'
 
 NULL

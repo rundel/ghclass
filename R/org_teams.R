@@ -6,6 +6,7 @@ github_api_org_teams = function(org) {
   )
 }
 
+#' @rdname org
 #' @export
 #'
 org_teams = function(org, filter=NULL, exclude=FALSE) {

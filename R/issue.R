@@ -15,9 +15,6 @@
 #' @param assignees Character. Vector of logins for users assigned to the issue.
 #' @param number Integer. GitHub issue number of the issue.
 #'
-#' @details
-#'
-#'
 #' @seealso [repo_issues]
 #'
 #' @examples

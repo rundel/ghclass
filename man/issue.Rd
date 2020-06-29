@@ -28,9 +28,6 @@ issue_create(repo, title, body, labels = character(), assignees = character())
 
 \code{issue_close} closes an issue for a GitHub repository.
 }
-\details{
-
-}
 \examples{
 \dontrun{
 repo_create("ghclass-test","test_issue")
