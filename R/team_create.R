@@ -6,28 +6,13 @@ github_api_team_create = function(org, name, privacy) {
   )
 }
 
-#' Create team(s)
-#'
-#' `team_create` creates teams in your GitHub organization
-#'
-#' @param org character, name of the GitHub organization
-#' @param team character, listing one or more teams
-#' @param prefix Character. Common team name prefix
-#' @param suffix Character. Common team name suffix
-#' @param privacy character, level of privacy of teams, closed (visible to all
-#' members of the organization) or secret (only visible to organization owners
-#' and members of a team), default is closed
-#'
-#' @examples
-#' \dontrun{
-#' team_create("ghclass",c("team01","team01"))
-#' }
-#'
+#' @rdname team
 #' @export
 #'
-team_create = function(org, team,
-                       prefix = "", suffix = "",
-                       privacy = c("secret","closed")) {
+team_create = function(
+  org, team, prefix = "", suffix = "",
+  privacy = c("secret","closed")
+) {
   arg_is_chr_scalar(org, prefix, suffix)
   arg_is_chr(team)
 
@@ -44,7 +29,7 @@ team_create = function(org, team,
   if (length(existing_teams) > 0)
     cli::cli_alert_info("Skipping existing teams: {.val {existing_teams}}.")
 
-  purrr::walk(
+  r = purrr::map(
     new_teams,
     function(team) {
       res = purrr::safely(github_api_team_create)(
@@ -58,4 +43,6 @@ team_create = function(org, team,
       )
     }
   )
+
+  invisible(r)
 }

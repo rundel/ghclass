@@ -1,43 +1,45 @@
-github_api_team_members = function(id) {
+github_api_team_members = function(org, team_slug, role = c("all", "member", "maintainer")) {
+  role = match.arg(role)
+
   gh::gh(
-    "GET /teams/:id/members",
-    id = id,
-    role = "all",
+    "GET /orgs/:org/teams/:team_slug/members",
+    org = org,
+    team_slug = team_slug,
+    role = role,
     .token = github_get_token(),
     .limit = github_get_api_limit()
   )
 }
 
+# TODO - good candidate for v4 upgrade
 
-#' Get team members
-#'
-#' `team_members` returns a data frame of teams and their members.
-#'
-#' @param org character, name of the GitHub organization.
-#' @param team character or data frame, listing one or more team
-#'
-#' @examples
-#' \dontrun{
-#' team_members("ghclass-test",c("team01","team02"))
-#' }
-#'
+#' @rdname team
 #' @export
 #'
-team_members = function(org, team = org_teams(org)) {
+team_members = function(org, team = org_teams(org), team_type = c("slug", "name")) {
   arg_is_chr_scalar(org)
   arg_is_chr(team)
+  team_type = match.arg(team_type)
 
-  team = team_id_lookup(team, org)
+  if (team_type == "name")
+    team = team_slug_lookup(org, team)
 
-  purrr::pmap_df(
+  check_team_slug(team)
+
+  purrr::map_dfr(
     team,
-    function(team, id) {
-      res = purrr::safely(github_api_team_members)(id)
+    function(team) {
 
-      status_msg(
-        res,
-        fail = "Failed to retrieve team members for {.val {team}}."
-      )
+      if (is.na(team)) {
+        res = NULL
+      } else {
+        res = purrr::safely(github_api_team_members)(org, team)
+
+        status_msg(
+          res,
+          fail = "Failed to retrieve team members for {.val {team}}."
+        )
+      }
 
       if (failed(res) | empty_result(res)) {
         tibble::tibble(

@@ -7,38 +7,45 @@ github_api_team_rename = function(id, new_name) {
   )
 }
 
-
-#' Rename existing team(s)
-#'
-#' `team_rename` renames an existing team within the given GitHub organization.
-#'
-#' @param org character, name of the GitHub organization
-#' @param team character, one or more existing team names
-#' @param new_team character, one or more new team names
-#'
-#' @examples
-#' \dontrun{
-#' team_rename("ghclass-test", "hw1-team01", "hw01-team01")
-#' }
-#'
-#' @export
-team_rename = function(org, team, new_team) {
-  arg_is_chr_scalar(org)
-
-  d = tibble::tibble(
-    team = team,
-    new_team = new_team
+github_api_team_update = function(
+  org, team_slug,
+  name = NULL, description = NULL,
+  privacy = NULL, permission = NULL, parent_team_id = NULL
+) {
+  gh::gh(
+    "PATCH /orgs/:org/teams/:team_slug",
+    org = org,
+    team_slug = team_slug,
+    name = name,
+    description = description,
+    privacy = privacy,
+    permission = permission,
+    parent_team_id = parent_team_id,
+    .token = github_get_token()
   )
+}
 
-  d = team_id_lookup(d, org)
 
-  purrr::pwalk(
-    d,
-    function(team, id, new_team) {
+#' @rdname team
+#' @param new_team character, new team name.
+#' @export
+team_rename = function(org, team, new_team, team_type = c("slug", "name")) {
+  arg_is_chr_scalar(org)
+  arg_is_chr(team, new_team)
+  team_type = match.arg(team_type)
 
-      if (missing_team(team, id, org)) return()
+  if (team_type == "name")
+    team = team_slug_lookup(org, team)
 
-      res = purrr::safely(github_api_team_rename)(id, new_team)
+  check_team_slug(team)
+
+  purrr::walk2(
+    team, new_team,
+    function(team, new_team) {
+      if (is.na(team))
+        return()
+
+      res = purrr::safely(github_api_team_update)(org, team, name = new_team)
 
       status_msg(
         res,

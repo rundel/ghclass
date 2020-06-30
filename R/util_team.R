@@ -1,11 +1,39 @@
 missing_team = function(team, id, org) {
   if (is.na(id)) {
-    cli::cli_alert_danger("Failed to find team {.val {team}} in org {.val {org}}.")
+    cli::cli_alert_danger()
     TRUE
   } else {
     FALSE
   }
 }
+
+team_slug_lookup = function(org, name) {
+  dplyr::left_join(
+    tibble::tibble(name = name),
+    org_team_details(org),
+    by = "name"
+  )[["slug"]]
+}
+
+is_slug = function(name) {
+  # a slug consists of solely lowercase alphanumeric characters, dashes and underscores,
+  # without 2 or more dashes in a row (sequences of underscores are allowed).
+  # Furthermore, a slug cannot start or end with a hyphen.
+  !grepl("[^a-z0-9_-]+|-{2,}|^-|-$", name)
+}
+
+check_team_slug = function(name, quiet = FALSE) {
+  r = is_slug(name)
+
+  if(!quiet & sum(r) != length(r))
+    cli::cli_alert_warning(
+      "The following team names do not appear to be valid slugs: {.val {name[!r]}}"
+    )
+
+  all(r)
+}
+
+
 
 team_id_lookup = function(x, ...) {
   UseMethod("team_id_lookup", x)
@@ -22,7 +50,7 @@ team_id_lookup.data.frame = function(x, org) {
       id = integer()
     )
   } else {
-    team_ids = org_team_ids(org)
+
 
     merge(
       team_ids, x,
@@ -45,11 +73,3 @@ team_id_lookup.NULL = function(x, org) {
 }
 
 
-filter_results.data.frame = function(res, col, pattern = NULL, exclude = FALSE) {
-  if (!is.null(pattern)) {
-    subset = grepl(pattern, res[[col]])
-    if (exclude) res = res[!subset,]
-    else         res = res[subset,]
-  }
-  res
-}
