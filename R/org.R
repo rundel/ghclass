@@ -22,10 +22,7 @@
 #'
 #' `org_teams` - returns a (filtered) vector of organization teams.
 #'
-#' @param org Character. Name of the GitHub organization.
-#' @param filter Character. Regular expression pattern for matching (or excluding) repositories.
-#' @param exclude Logical. Should entries matching the regular expression in `filter` be excluded or included?
-#'
+#' `org_team_details` - returns a data frame of all organization teams containing identification and permission details.
 #'
 #' @param org Character. Name of the GitHub organization(s).
 #' @param user Character. GitHub username(s).
@@ -55,6 +52,8 @@
 #' org_repos("ghclass-test")
 #' org_repos("ghclass-test", "hw1-")
 #' org_teams("ghclass-test")
+#'
+#' org_team_details("ghclass-test")
 #' }
 #'
 #' @seealso [org_repo_stats]

@@ -7,9 +7,11 @@ github_api_org_teams = function(org) {
 }
 
 #' @rdname org
+#' @param slug Logical. Should the slugified (sanitized) name be returned or the full name
+#' (potentially includes spaces, unicode, etc.)
 #' @export
 #'
-org_teams = function(org, filter=NULL, exclude=FALSE) {
+org_teams = function(org, slug = TRUE, filter = NULL, exclude = FALSE) {
   arg_is_chr_scalar(org)
   arg_is_chr_scalar(filter, allow_null = TRUE)
   arg_is_lgl_scalar(exclude)
@@ -24,7 +26,9 @@ org_teams = function(org, filter=NULL, exclude=FALSE) {
   if (failed(res) | empty_result(res)) {
     character()
   } else {
-    teams = purrr::map_chr(result(res), "name")
+    field = ternary(slug, "slug", "name")
+
+    teams = purrr::map_chr(result(res), field)
     filter_results(teams, filter, exclude)
   }
 }
