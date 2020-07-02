@@ -3,6 +3,7 @@
 #'
 #' @title Repository branch tools
 #'
+#' @description
 #' `branch_create` creates a new branch from an existing GitHub repo.
 #'
 #' `branch_delete` deletes a branch from an existing GitHub repo.

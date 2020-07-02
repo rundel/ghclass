@@ -5,11 +5,7 @@
 \alias{branch_create}
 \alias{branch_delete}
 \alias{branch_remove}
-\title{Repository branch tools
-
-\code{branch_create} creates a new branch from an existing GitHub repo.
-
-\code{branch_delete} deletes a branch from an existing GitHub repo.}
+\title{Repository branch tools}
 \usage{
 branch_create(repo, branch = "master", new_branch)
 
@@ -25,8 +21,6 @@ branch_remove(repo, branch)
 \item{new_branch}{Name of branch to create.}
 }
 \description{
-Repository branch tools
-
 \code{branch_create} creates a new branch from an existing GitHub repo.
 
 \code{branch_delete} deletes a branch from an existing GitHub repo.
