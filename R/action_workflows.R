@@ -1,4 +1,4 @@
-github_api_repo_workflows = function(repo) {
+github_api_action_workflows = function(repo) {
   gh::gh(
     "GET /repos/:owner/:repo/actions/workflows",
     owner = get_repo_owner(repo),
@@ -8,20 +8,13 @@ github_api_repo_workflows = function(repo) {
   )
 }
 
-#' Get repository workflows (actions)
-#'
-#' `repo_workflows` returns a tibble containing details on a repositories workflows.
-#'
-#' @param repo character, a single GitHub repository address in `owner/repo` format
-#' @param full logical, should all columns be returned
-#'
-#' @aliases repo_actions
+#' @rdname action
 #' @export
 #'
-repo_workflows = function(repo, full = FALSE) {
+action_workflows = function(repo, full = FALSE) {
   arg_is_chr_scalar(repo)
 
-  res = purrr::safely(github_api_repo_workflows)(repo)
+  res = purrr::safely(github_api_action_workflows)(repo)
 
   status_msg(
     res,
@@ -50,9 +43,3 @@ repo_workflows = function(repo, full = FALSE) {
 
   d
 }
-
-repo_actions = function(repo, full) {
-  repo_workflows(repo, full)
-}
-
-

@@ -4,7 +4,12 @@
 \alias{repo_add_team}
 \title{Add a team to a repository}
 \usage{
-repo_add_team(repo, team, permission = c("push", "pull", "admin"))
+repo_add_team(
+  repo,
+  team,
+  permission = c("push", "pull", "admin", "maintain", "triage"),
+  team_type = c("slug", "name")
+)
 }
 \arguments{
 \item{repo}{Character. Address of repository in "owner/name" format.}
