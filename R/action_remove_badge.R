@@ -4,7 +4,7 @@
 #' @export
 #'
 action_remove_badge = function(repo, workflow_pat = ".*?", file = "README.md") {
-  arg_is_chr(repo, workflow)
+  arg_is_chr(repo, workflow_pat)
   arg_is_chr_scalar(file)
 
   res = purrr::map2(

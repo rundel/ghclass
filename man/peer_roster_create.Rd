@@ -7,18 +7,22 @@
 peer_roster_create(n_rev, user, seed = NULL, write_csv = TRUE, dir = NULL)
 }
 \arguments{
-\item{n_rev}{Numeric. Number of reviews per user. Must be larger than zero and smaller than the number of users.}
+\item{n_rev}{Numeric. Number of reviews per user. Must be larger than zero and smaller
+than the number of users.}
 
 \item{user}{Character. A vector of GitHub user names.}
 
 \item{seed}{Numeric. Random seed for assignment, if not set a random seed will be chosen.}
 
-\item{write_csv}{Logical. Whether the roster data frame should be written to a \code{.csv} file in the current working directory, defaults to TRUE.}
+\item{write_csv}{Logical. Whether the roster data frame should be written to a \code{.csv} file
+in the current working directory, defaults to TRUE.}
 
 \item{dir}{Character. Directory where the peer review roster will be written if \code{write_csv = TRUE}.}
 }
 \description{
-\code{peer_roster_create} creates data frame of random assignments of author files to reviewers. By default, the output is saved to a \code{.csv} file in the current working directory that incorporates the current date and random seed as part of the file name.
+\code{peer_roster_create} creates data frame of random assignments of author files to
+reviewers. By default, the output is saved to a \code{.csv} file in the current working
+directory that incorporates the current date and random seed as part of the file name.
 }
 \examples{
 \dontrun{

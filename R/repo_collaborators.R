@@ -45,7 +45,7 @@ repo_collaborators = function(repo, include_admins = TRUE) {
       }
 
       if (!include_admins)
-        d = dplyr::filter(d, !admin)
+        d = dplyr::filter(d, !.data$admin)
 
       d
     }

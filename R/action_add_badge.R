@@ -30,7 +30,7 @@ action_add_badge = function(repo, workflow = NULL, where = "^.",
   # Collapse by repo to save multiple changes to a single file
   d = dplyr::group_by(d, repo) %>%
     dplyr::summarize(
-      link = paste0(paste(link, collapse = " "), line_padding),
+      link = paste0(paste(.data$link, collapse = " "), line_padding),
       workflows = list(workflow)
     )
 

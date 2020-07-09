@@ -18,7 +18,7 @@ repo_mirror = function(source_repo, target_repo, overwrite=FALSE, verbose=FALSE)
   unlink(dir, recursive = TRUE) # Make sure the source repo local folder does not exist
 
   repos = repo_n_commits(target_repo, quiet = TRUE) %>%
-    dplyr::select(repo, n)
+    dplyr::select(.data$repo, .data$n)
 
   local_repo_clone(source_repo, getwd(), mirror = TRUE, verbose = verbose)
 

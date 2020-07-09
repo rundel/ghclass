@@ -14,7 +14,7 @@ local_repo_log = function(repo_dir, max = 100) {
     function(dir) {
       gert::git_log(repo = dir, max = max) %>%
         dplyr::mutate(repo = dir) %>%
-        dplyr::relocate(repo)
+        dplyr::relocate(.data$repo)
     }
   )
 }
