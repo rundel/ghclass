@@ -1,18 +1,7 @@
-#' @title Local repository tools
-#'
-#' @description Clones repositories from GitHub to a local directory.
+#' @rdname local_repo
 #'
 #' @param repo GitHub repo address with the form `owner/name`.
 #' @param local_path Local directory to store cloned repos.
-#' @param branch Repository branch to use.
-#' @param mirror Use equivalent of `--mirror` when cloning.
-#' @param verbose Display verbose output.
-#'
-#' @examples
-#' \dontrun{
-#' g = org_repos("Sta323-Sp18","hw3-")
-#' local_repo_clone(g, "hw3")
-#' }
 #'
 #' @aliases repo_clone
 #'

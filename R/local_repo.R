@@ -1,16 +1,28 @@
 #' @name local_repo
 #' @rdname local_repo
 #'
-#' @title Local repository tools
+#' @title Functions for working with local git repositories
 #'
 #' @description
-#' The functions provide tools for working with local git repositories, ghclass includes support for following git commands:
-#' * git add = `local_repo_add`
-#' * git commit = `local_repo_commit`
-#' * git push = `local_repo_push`
-#' * git pull = `local_repo_pull`
-#' * git branch = `local_repo_branch`
-#' * git log = `local_repo_log`
+#'
+#' `local_repo_clone` - Clones a GitHub repository to a local directory.
+#'
+#' `local_repo_add` - Equivalent to `git add` - stages a file in a local repository.
+#'
+#' `local_repo_commit` - Equivalent to `git commit` - commits staged files in a local repository.
+#'
+#' `local_repo_push` - Equivalent to `git push` - push a local repository.
+#'
+#' `local_repo_pull` - Equivalent to `git pull` - pull a local repository.
+#'
+#' `local_repo_branch` - Equivalent to `git branch` - create a branch in a local repository.
+#'
+#' `local_repo_log` - Equivalent to `git log` - returns a data frame for git log entries.
+#'
+#' `local_repo_rename` - Rename local directories using a vector of patterns and replacements .
+#' This is meant to help with renaming student repos to include
+#' something more useful like `Last, First name` or a unique identifier
+#' for the purposes of ordering repository folders.
 #'
 #' @param repo_dir Vector of repo directories or a single directory containing one or more repos.
 #' @param files Files to be staged
