@@ -58,13 +58,8 @@ github_api_org_repo_stats = function(org, filter, filter_type, inc_commits, inc_
 
 
 
-#' Get organization repository
+#' @rdname org
 #'
-#' `org_repo_stats` returns a tibble of repositories belonging to a GitHub organization along with some
-#' basic statistics about those repositories.
-#'
-#' @param org Character. Name of the GitHub organization.
-#' @param filter Character. Regular expression pattern for matching (or excluding) repositories.
 #' @param filter_type Character. One or more GitHub search `in` qualifiers.
 #' See [documentation](https://help.github.com/en/articles/searching-for-repositories)
 #' for more details.

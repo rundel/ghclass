@@ -46,9 +46,12 @@ org_create_assignment = function(org, repo, user, team = NULL, source_repo = NUL
   }
 
   if (!is.null(team)) {
+    # Assume team assignment
+    team_create(org, unique(team))
     team_invite(org, user, team)
     repo_add_team(repos, team)
   } else {
+    # Assume individual assignment
     repo_add_user(repos, user)
   }
 }

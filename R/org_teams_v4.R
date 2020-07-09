@@ -24,16 +24,6 @@ github_api_org_teams_v4 = function(org) {
 }
 
 
-
-#' Get organization teams
-#'
-#' @param org Character. Name of the GitHub organization.
-#'
-#' @examples
-#' \dontrun{
-#' org_teams_v4("ghclass-demo")
-#' }
-#'
 org_teams_v4 = function(org) {
   tag_experimental()
   arg_is_chr_scalar(org)

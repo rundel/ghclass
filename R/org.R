@@ -24,6 +24,11 @@
 #'
 #' `org_team_details` - returns a data frame of all organization teams containing identification and permission details.
 #'
+#' ## Experimental
+#'
+#' `org_repo_stats` - returns a tibble of repositories belonging to a GitHub organization along with some
+#' basic statistics about those repositories.
+#'
 #' @param org Character. Name of the GitHub organization(s).
 #' @param user Character. GitHub username(s).
 #' @param filter Character. Regular expression pattern for matching (or excluding) results
