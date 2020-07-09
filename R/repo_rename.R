@@ -19,7 +19,7 @@ repo_rename = function(repo, new_repo) {
     repo, new_repo,
     function(repo, new_repo) {
       res = purrr::safely(github_api_repo_rename)(repo, new_repo)
-      new_full = paste0(ghclass:::get_repo_owner(repo), "/", new_repo)
+      new_full = paste0(get_repo_owner(repo), "/", new_repo)
 
       status_msg(
         res,

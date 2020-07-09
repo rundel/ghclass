@@ -75,7 +75,7 @@ github_api_org_repo_stats = function(org, filter, filter_type, inc_commits, inc_
 #' @export
 #'
 org_repo_stats = function(org, filter = "", filter_type="in:name", inc_commits = TRUE, inc_issues = TRUE, inc_prs = TRUE) {
-  ghclass:::flag_experimental()
+  flag_experimental()
 
   arg_is_chr_scalar(org, filter)
   arg_is_chr(org, filter_type)

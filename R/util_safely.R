@@ -155,20 +155,7 @@ status_msg = function(x, success = NULL, fail = NULL, include_error_msg = TRUE,
     cli::cli_alert_danger(fail, wrap = TRUE, .envir = .envir)
     if (include_error_msg) {
       msg = error_msg(x)
-
       print(error_msg_tree(msg))
-
-      #d = cli::cli_div(theme = list(ul = list("list-style-type" = "└─", "padding-left" = 0)))
-      #cli::cli_ul( c(
-      #  p1 = cli::cli_par(),
-      #  cli::cli_text(msg),
-      #  cli::cli_end(p1),
-      #  p2 = cli::cli_par(),
-      #  cli::cli_text("API Docs: ", attr(msg,"doc")),
-      #  cli::cli_end(p2)
-      #) )
-      #cli::cli_end(d)
-
     }
   }
 }
@@ -190,7 +177,7 @@ error_msg_tree = function(msg) {
     stringsAsFactors = FALSE
   )
 
-  cli::tree(d, style = list(h = "─ ", v = "│", l = "└", j = "├"))
+  cli::tree(d)
 }
 
 

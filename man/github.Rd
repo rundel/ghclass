@@ -30,6 +30,8 @@ github_whoami(quiet = FALSE)
 \item{limit}{The maximum number of records to return from an API request.}
 
 \item{token}{Character. Either the literal token path, or the path of a file containing the token.}
+
+\item{quiet}{Logical. Should status messages be shown.}
 }
 \description{
 \code{github_whoami} returns the login of the authenticated user.
@@ -70,8 +72,8 @@ pat
 
 # Test the PAT
 github_reset_token()
-github_test_token()
-github_test_token("bad_token")
+try(github_test_token())
+try(github_test_token("bad_token"))
 }
 \seealso{
 \link{repo_branches}

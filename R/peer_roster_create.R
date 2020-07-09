@@ -24,7 +24,12 @@
 #'
 #' @examples
 #' \dontrun{
-#' peer_roster_create(3, c("anya-ghclass", "bruno-ghclass", "celine-ghclass", "diego-ghclass"), dir = "hw2/")
+#' peer_roster_create(
+#'   3,
+#'   c("anya-ghclass", "bruno-ghclass",
+#'     "celine-ghclass", "diego-ghclass"),
+#'   dir = "hw2/"
+#' )
 #' }
 #'
 #' @family peer review functions

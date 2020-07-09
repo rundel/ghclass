@@ -42,8 +42,8 @@
 #'
 #' # Test the PAT
 #' github_reset_token()
-#' github_test_token()
-#' github_test_token("bad_token")
+#' try(github_test_token())
+#' try(github_test_token("bad_token"))
 
 NULL
 

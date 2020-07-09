@@ -20,7 +20,7 @@
 #'
 #' @examples
 #' \dontrun{
-#'
+#' action_workflows("rundel/ghclass")
 #' }
 #'
 NULL

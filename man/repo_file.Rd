@@ -74,6 +74,8 @@ repo_put_file(
 
 \item{path}{Character. File's path within the repository.}
 
+\item{quiet}{Logical. Should status messages be printed.}
+
 \item{include_details}{Logical. Should file details be attached as attributes.}
 
 \item{full_path}{Logical. Should the function return the full path of the files and directories.}

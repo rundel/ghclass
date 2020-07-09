@@ -6,6 +6,9 @@ github_api_whoami = function() {
 }
 
 #' @rdname github
+#'
+#' @param quiet Logical. Should status messages be shown.
+#'
 #' @export
 #'
 github_whoami = function(quiet = FALSE) {
