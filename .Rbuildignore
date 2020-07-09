@@ -10,3 +10,4 @@ credentials/
 .pre-commit-config.yaml
 .github/
 README.Rmd
+pkgdown/
