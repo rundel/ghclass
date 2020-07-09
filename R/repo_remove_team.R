@@ -1,28 +1,25 @@
-github_api_team_add = function(
+
+github_api_repo_remove_team = function(
   org, team_slug, repo,
   permission = c("pull", "push", "admin", "maintain", "triage")
 ){
   permission = match.arg(permission)
 
   gh::gh(
-    "PUT /orgs/:org/teams/:team_slug/repos/:owner/:repo",
+    "DELETE /orgs/:org/teams/:team_slug/repos/:owner/:repo",
     org = org,
     team_slug = team_slug,
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
-    permission = permission,
     .token = github_get_token()
   )
 }
 
 
 #' @rdname repo_user
-#' @param team Character. Slug or name of team to add.
-#' @param team_type Character. Either "slug" if the team names are slugs or "name" if full team names are provided.
 #' @export
-repo_add_team = function(
+repo_remove_team = function(
   repo, team,
-  permission = c("push", "pull", "admin", "maintain", "triage"),
   team_type = c("slug", "name")
 ) {
   arg_is_chr(repo, team)

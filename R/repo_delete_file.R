@@ -21,23 +21,7 @@ github_api_repo_delete_file = function(repo, path, message, sha = NULL, branch =
 }
 
 
-#' Function for deleting files from a Github repository
-#'
-#' @param repo Character. Address of repository in `owner/name` format.
-#' @param path Character. File path within the repository.
-#' @param message Character. Commit message. If not provided, a custom character string will be created.
-#' @param branch Character. Name of branch to use, defaults to "master".
-#'
-#' @examples
-#' \dontrun{
-#' repo = repo_create("ghclass-demo", "hw1-demo")
-#' repo_mirror("Sta323-Sp19/hw1", repo)
-#'
-#' repo_delete_file("ghclass-demo/hw1-demo", "README.md")
-#' repo_delete_file("ghclass-demo/hw1-demo", "README.md") # Fails since the file does not exist
-#'
-#' repo_delete(repo, prompt=FALSE)
-#' }
+#' @rdname repo_file
 #'
 #' @export
 #'

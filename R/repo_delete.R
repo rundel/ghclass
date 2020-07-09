@@ -5,14 +5,8 @@ github_api_repo_delete = function(repo) {
          .token = github_get_token())
 }
 
-#' Delete repository
-#'
-#' `repo_delete` deletes an existing repository from GitHub.
-#'
-#' @param repo Character. Name of the GitHub repository in `owner/name` format.
+#' @rdname repo_core
 #' @param prompt Logical. Should the user be prompted before deleting repositories. Default `true`.
-#'
-
 #' @export
 #'
 repo_delete = function(repo, prompt = TRUE) {

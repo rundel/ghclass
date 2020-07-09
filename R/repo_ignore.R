@@ -1,9 +1,4 @@
-#' Ignore repository
-#'
-#' Ignores the provided GitHub repositories.
-#'
-#' @param repo github repository address in `owner/repo` format
-#'
+#' @rdname repo_notification
 #' @export
 #'
 repo_ignore = function(repo) {

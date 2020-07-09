@@ -1,18 +1,9 @@
-#' Mirror repository
-#'
-#' `repo_mirror` mirrors the content of one repository to another repository, or set of
-#' repositories.
+#' @rdname repo_core
 #'
 #' @param source_repo Character. Address of repository in "owner/name" format.
 #' @param target_repo Character. One or more repository addresses in "owner/name" format.
 #' @param overwrite Logical. Should the target repositories be overwritten.
 #' @param verbose Logical. Display verbose output.
-#'
-#' @examples
-#' \dontrun{
-#' repo_mirror("ghclass-test/hw1", c("ghclass-test/hw1-Team1", "ghclass-test/hw1-Team2"))
-#' repo_mirror("ghclass-test/hw1", org_repos("ghclass-test","hw1-"))
-#' }
 #'
 #' @export
 #'
@@ -26,7 +17,8 @@ repo_mirror = function(source_repo, target_repo, overwrite=FALSE, verbose=FALSE)
   dir = file.path(getwd(), get_repo_name(source_repo))
   unlink(dir, recursive = TRUE) # Make sure the source repo local folder does not exist
 
-  repos = repo_n_commits(target_repo, quiet = TRUE)
+  repos = repo_n_commits(target_repo, quiet = TRUE) %>%
+    dplyr::select(repo, n)
 
   local_repo_clone(source_repo, getwd(), mirror = TRUE, verbose = verbose)
 

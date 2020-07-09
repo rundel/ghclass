@@ -29,7 +29,8 @@ github_api_repo_issues = function(
   )
 }
 
-#' @param repo      Character.
+#' @rdname repo_details
+#'
 #' @param state	    Character. State of the issues to return. Can be either "open", "closed", or "all".
 #' @param assignee	Character. Return issues assigned to a particular username.
 #'   Pass in "none" for issues with no assigned user, and "*" for issues assigned to any user.

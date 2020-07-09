@@ -1,19 +1,18 @@
 github_api_repo_remove_user = function(repo, username, permission){
-  gh::gh("DELETE /repos/:owner/:repo/collaborators/:username",
-         owner = get_repo_owner(repo),
-         repo = get_repo_name(repo),
-         username = username,
-         permission = permission,
-         .token = github_get_token())
+  gh::gh(
+    "DELETE /repos/:owner/:repo/collaborators/:username",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    username = username,
+    permission = permission,
+    .token = github_get_token()
+  )
 }
 
 
-#' Remove a user from a repository
-#'
-#' @param repo Character. Address of repository in "owner/name" format.
-#' @param user Character. One or more GitHub usernames.
-#'
+#' @rdname repo_user
 #' @export
+#'
 repo_remove_user = function(repo, user) {
   arg_is_chr(repo, user)
 

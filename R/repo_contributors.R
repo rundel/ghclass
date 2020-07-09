@@ -8,42 +8,19 @@ github_api_repo_contributors = function(repo) {
   )
 }
 
-#' Get repository contributor(s)
-#'
-#' `repo_contributors` Returns a data frame containing statistics on contributor(s) to the provided repositories.
-#'
-#' @param repo Character. Address of one or more repositories in `owner/name` format.
-#' @param include_admins Logical. If `FALSE`, usernames of users with Admin rights are excluded, defaults to `TRUE`.
-#'
-#' @return A tibble.
-#'
-#' @examples
-#' \dontrun{
-#' repo_contributors("ghclass-test/test")
-#' }
-#'
+#' @rdname repo_user
 #' @export
 #'
-repo_contributors = function(repo, include_admins = TRUE) {
+repo_contributors = function(repo) {
 
   arg_is_chr(repo)
   repo = unique(repo)
 
-  admins = character()
-
-  if (!include_admins) {
-    org = unique(get_repo_owner(repo))
-    stopifnot(length(org) == 1)
-    admins = org_admins(org)
-  }
-
   purrr::map_dfr(
     repo,
     function(repo) {
-
       # Calculating these stats can take some time, initial request will begin the calculation
       # and return a 202, we wait n seconds and try again. Timeout after m seconds.
-
       res = purrr::safely(
         function() {
           # TODO - fix me, oh god it is terrible
@@ -82,8 +59,6 @@ repo_contributors = function(repo, include_admins = TRUE) {
           commits = purrr::map_int(contribs, "total")
         )
       }
-
-      d[!d[["username"]] %in% admins, ]
     }
   )
 }

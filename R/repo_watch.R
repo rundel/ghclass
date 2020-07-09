@@ -15,12 +15,7 @@ github_api_repo_subscribe = function(repo, subscribed, ignored){
   )
 }
 
-#' Watch repository
-#'
-#' Watches / subscribes to the provided GitHub repositories.
-#'
-#' @param repo github repository address in `owner/repo` format
-#'
+#' @rdname repo_notification
 #' @export
 #'
 repo_watch = function(repo) {

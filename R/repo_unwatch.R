@@ -8,18 +8,7 @@ github_api_repo_unwatch = function(repo){
 
 }
 
-#' Unwatch repository
-#'
-#' Unwatches / unsubscribes from the provided GitHub repositories.
-#'
-#' @param repo github repository address in `owner/repo` format
-#'
-#' @examples
-#' \dontrun{
-#' repo_unwatch()
-#' repo_unwatch("Sta523-Fa15/hw1-Tim")
-#' }
-#'
+#' @rdname repo_notification
 #' @export
 #'
 repo_unwatch = function(repo) {

@@ -1,13 +1,10 @@
-#' Low level function for listing the contents of a GitHub Repository
+#' @rdname repo_file
 #'
-#' @param repo Character. Address of repository in `owner/name` format.
-#' @param path Characer. Path to list.
-#' @param branch Character. Name of branch to use, defaults to "master".
 #' @param full_path Logical. Should the function return the full path of the files and directories.
 #'
 #' @export
 #'
-repo_ls = function(repo, path, branch = "master", full_path = FALSE) {
+repo_ls = function(repo, path = ".", branch = "master", full_path = FALSE) {
   arg_is_chr_scalar(repo, path, branch)
   arg_is_lgl_scalar(full_path)
 

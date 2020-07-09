@@ -11,15 +11,11 @@ github_api_repo_mirror_template = function(template_repo, repo, private){
   )
 }
 
-
-#' Mirror template repository
-#'
-#' `repo_mirror_template` mirrors the content of a source (template) repository to a new (not yet created)
-#' repository, or vector of repositories.
+#' @rdname repo_core
 #'
 #' @param template_repo Character. Address of template repository in `owner/name` format.
 #' @param repo Character. One or more repository addresses in `owner/name` format.
-#' Note when using template repos these new repositories must not already exist.
+#' Note when using template repos these new repositories must *not* exist.
 #' @param private Logical. Should the new repository be private or public.
 #'
 #' @export

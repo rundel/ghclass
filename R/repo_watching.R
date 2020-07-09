@@ -6,21 +6,10 @@ github_api_repo_watching = function() {
   )
 }
 
-#' Get watched repos
-#'
-#' Returns all of the authenticated user's watched repositories. This should
-#' match the list at [github.com/watching](https://github.com/watching).
-#' The function can also filter the results for matching (or excluding)
-#' repositories.
+#' @rdname repo_notification
 #'
 #' @param filter character, regex pattern for matching (or excluding) repositories.
 #' @param exclude logical, should entries matching the regex be excluded or included.
-#'
-#' @examples
-#' \dontrun{
-#' repo_watching()
-#' repo_watching("hw1")
-#' }
 #'
 #' @export
 #'

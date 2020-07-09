@@ -1,10 +1,19 @@
-#' Change the template status of a GitHub repository
-#'
-#' `repo_set_template` returns TRUE if the github repository is a template repository.
-#'
-#' @param repo Character. Address of repository in "owner/name" format.
+github_api_repo_edit = function(repo, ...) {
+  arg_is_chr_scalar(repo)
+
+  gh::gh(
+    "PATCH /repos/:owner/:repo",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    ...,
+    .token = github_get_token(),
+    # Needed for template repos
+    .send_headers = c(Accept = "application/vnd.github.baptiste-preview+json")
+  )
+}
+
+#' @rdname repo_core
 #' @param status Logical. Should the repository be set as a template repository
-#'
 #' @export
 #'
 repo_set_template = function(repo, status = TRUE) {

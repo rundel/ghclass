@@ -1,13 +1,9 @@
-#' Modify a file within a repository
+#' @rdname repo_file
 #'
-#' @param repo Character. Address of repository in `owner/name` format.
-#' @param path Character. File's path within the repository.
 #' @param pattern Character. Regex pattern.
 #' @param content Character. Content to be added to the file.
 #' @param method Character. Should the content `replace` the matched pattern or be inserted `before` or `after` the match.
 #' @param all Character. Should all instances of the pattern be modified (`TRUE`) or just the first (`FALSE`).
-#' @param message Character. Commit message.
-#' @param branch Character. Name of branch to use, defaults to "master".
 #'
 #' @export
 #'

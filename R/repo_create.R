@@ -8,31 +8,24 @@ github_api_org_repo_create = function(repo, private, auto_init, gitignore_templa
          .token = github_get_token())
 }
 
-#' Create repository
-#'
-#' `repo_create` creates either individual or team repositories.
+#' @rdname repo_core
 #'
 #' @param org Character. Name of the GitHub organization.
 #' @param name Character. One or more GitHub username or team name.
 #' @param prefix Character. Common repository name prefix
 #' @param suffix Character. Common repository name suffix
 #' @param private Logical. Create private repositories?
-#' @param auto_init Logical. Initialize the repository with a README.md?
-#' @param gitignore_template Character. .gitignore template language.
-#'
-#' @return A character vector of created repository addresses.
-#'
-#' @examples
-#' \dontrun{
-#' repo_create("ghclass-test", c("user01","user02"), prefix = "hw01-")
-#' }
+#' @param auto_init Logical. Should the repository be initialized with a `README.md`.
+#' @param gitignore_template Character. `.gitignore` language template to use.
 #'
 #' @export
 #'
-repo_create = function(org, name,
-                       prefix = "", suffix = "",
-                       private = TRUE, auto_init = FALSE,
-                       gitignore_template = "R") {
+repo_create = function(
+  org, name,
+  prefix = "", suffix = "",
+  private = TRUE, auto_init = FALSE,
+  gitignore_template = "R"
+) {
 
   arg_is_chr(name)
   arg_is_chr_scalar(org, prefix, suffix, gitignore_template)

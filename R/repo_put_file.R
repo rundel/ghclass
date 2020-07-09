@@ -12,14 +12,9 @@ github_api_repo_put_file = function(repo, path, content, message, branch, sha = 
   do.call(gh::gh, args)
 }
 
-
-#' Low level function for adding a file to a Github repository
+#' @rdname repo_file
 #'
-#' @param repo Character. Address of repository in `owner/name` format.
-#' @param path Character. File path within the repository.
 #' @param content Character or raw. Content of the file.
-#' @param message Character. Commit message. If not provided, a custom character string will be created.
-#' @param branch Character. Name of branch to use, defaults to "master".
 #' @param verbose Logical. Should success / failure messages be printed
 #'
 #' @export
