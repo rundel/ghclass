@@ -61,12 +61,12 @@ peer_roster_expand = function(org, roster, prefix = "", suffix = "",
 
   rdf = peer_roster_process(roster)
 
-  out = peer_roster_format_cols(rdf, prefix, suffix, prefix_review, suffix_review)
+  out = peer_roster_format_cols(org, rdf, prefix, suffix, prefix_review, suffix_review)
 
   out
 }
 
-peer_roster_format_cols = function(roster, prefix, suffix, prefix_review, suffix_review) {
+peer_roster_format_cols = function(org, roster, prefix, suffix, prefix_review, suffix_review) {
   purrr::map_dfr(
     roster[["user"]],
     function(x) {

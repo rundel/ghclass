@@ -52,7 +52,7 @@ repo_add_team = function(
 
       res = purrr::safely(github_api_team_add)(
         org = org,
-        team_slug = team_slug,
+        team_slug = team,
         repo = repo,
         permission = permission
       )

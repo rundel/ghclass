@@ -1,7 +1,7 @@
 github_api_team_repos = function(org, team_slug) {
   gh::gh(
     "GET /orgs/:org/teams/:team_slug/repos",
-    id=team_id,
+    team_slug = team_slug,
     .token = github_get_token(),
     .limit = github_get_api_limit()
   )

@@ -2,7 +2,8 @@
 #' @param workflow Character. Name of the workflow located in `.github/workflows/`.
 #' @export
 #'
-action_add_badge = function(repo, workflow = NULL, where = "^.", line_padding = "\n\n\n", file = "README.md") {
+action_add_badge = function(repo, workflow = NULL, where = "^.",
+                            line_padding = "\n\n\n", file = "README.md") {
   arg_is_chr(repo)
   arg_is_chr(workflow, allow_null=TRUE)
   arg_is_chr_scalar(where, line_padding, file)
@@ -27,11 +28,11 @@ action_add_badge = function(repo, workflow = NULL, where = "^.", line_padding = 
   d[["link"]] = glue::glue_data(d, "[![{workflow}]({url_encode(url)})]({url_encode(dest)})")
 
   # Collapse by repo to save multiple changes to a single file
-  d = dplyr::summarize(
-    dplyr::group_by(d, repo),
-    link = paste0(paste(link, collapse = " "), line_padding),
-    workflows = list(workflow)
-  )
+  d = dplyr::group_by(d, repo) %>%
+    dplyr::summarize(
+      link = paste0(paste(link, collapse = " "), line_padding),
+      workflows = list(workflow)
+    )
 
   res = purrr::pmap(
     d,

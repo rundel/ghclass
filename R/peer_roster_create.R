@@ -10,12 +10,16 @@
 
 #' Create peer review roster
 #'
-#' `peer_roster_create` creates data frame of random assignments of author files to reviewers. By default, the output is saved to a `.csv` file in the current working directory that incorporates the current date and random seed as part of the file name.
+#' `peer_roster_create` creates data frame of random assignments of author files to
+#' reviewers. By default, the output is saved to a `.csv` file in the current working
+#' directory that incorporates the current date and random seed as part of the file name.
 #'
-#' @param n_rev Numeric. Number of reviews per user. Must be larger than zero and smaller than the number of users.
+#' @param n_rev Numeric. Number of reviews per user. Must be larger than zero and smaller
+#' than the number of users.
 #' @param user Character. A vector of GitHub user names.
 #' @param seed Numeric. Random seed for assignment, if not set a random seed will be chosen.
-#' @param write_csv Logical. Whether the roster data frame should be written to a `.csv` file in the current working directory, defaults to TRUE.
+#' @param write_csv Logical. Whether the roster data frame should be written to a `.csv` file
+#' in the current working directory, defaults to TRUE.
 #' @param dir Character. Directory where the peer review roster will be written if `write_csv = TRUE`.
 #'
 #' @examples
