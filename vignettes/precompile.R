@@ -2,8 +2,16 @@
 
 # Vignettes that depend on GitHub PAT are precompiled:
 
-knitr::knit("vignettes/.raw/ghclass.Rmd", "vignettes/ghclass.Rmd")
-knitr::knit("vignettes/.raw/instructions_students.Rmd.orig", "vignettes/instructions_students.Rmd")
-knitr::knit("vignettes/.raw/peer.Rmd.orig", "vignettes/peer.Rmd")
+withr::with_dir(
+  here::here("vignettes/"),
+  {
+    print(getwd())
+    knitr::knit(".raw/ghclass.Rmd", "ghclass.Rmd")
+    knitr::knit(".raw/peer_students.Rmd", "peer_students.Rmd")
+    #knitr::knit(".raw/peer.Rmd", "peer.Rmd")
+  }
+)
+
+
 
 devtools::build_vignettes()

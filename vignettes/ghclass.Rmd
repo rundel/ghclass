@@ -1,7 +1,7 @@
 ---
 title: "Course management with ghclass"
 author: "Mine Çetinkaya-Rundel, Colin Rundel, Therese Anders"
-date: "2020-07-09"
+date: "2020-07-13"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Course management with ghclass}
@@ -102,8 +102,8 @@ github_test_token("bad token")
 #> API docs: https://developer.github.com/v3
 #> Missing page:
 #> 
-#> └─ GitHub API error (401): 401 Unauthorized
-#>   ├─ 
+#> └─GitHub API error (401): 401 Unauthorized
+#>   ├─
 #>   └─
 ```
 
@@ -246,69 +246,63 @@ Also if we happen to try to invite students to a team that does not exist yet, t
 team_invite("ghclass-vignette", roster$github, roster$hw3)
 #> x Failed to add user 'ghclass-anya' to team 'hw3-team01'.
 #> API message: Not Found
-#> API docs:
-#> https://developer.github.com/v3/teams/members/#add-or-update-team-membership
+#> API docs: https://developer.github.com/v3/teams/members/#add-or-update-team-membership
 #> Missing page:
 #> https://api.github.com/orgs/ghclass-vignette/teams/hw3-team01/memberships/ghclass-anya
 #> 
-#> └─ GitHub API error (404): 404 Not Found
-#>   ├─ 
-#>   ├─ 
+#> └─GitHub API error (404): 404 Not Found
+#>   ├─
+#>   ├─
 #>   └─
 #> x Failed to add user 'ghclass-bruno' to team 'hw3-team02'.
 #> API message: Not Found
-#> API docs:
-#> https://developer.github.com/v3/teams/members/#add-or-update-team-membership
+#> API docs: https://developer.github.com/v3/teams/members/#add-or-update-team-membership
 #> Missing page:
 #> https://api.github.com/orgs/ghclass-vignette/teams/hw3-team02/memberships/ghclass-bruno
 #> 
-#> └─ GitHub API error (404): 404 Not Found
-#>   ├─ 
-#>   ├─ 
+#> └─GitHub API error (404): 404 Not Found
+#>   ├─
+#>   ├─
 #>   └─
 #> x Failed to add user 'ghclass-celine' to team 'hw3-team03'.
 #> API message: Not Found
-#> API docs:
-#> https://developer.github.com/v3/teams/members/#add-or-update-team-membership
+#> API docs: https://developer.github.com/v3/teams/members/#add-or-update-team-membership
 #> Missing page:
 #> https://api.github.com/orgs/ghclass-vignette/teams/hw3-team03/memberships/ghclass-celine
 #> 
-#> └─ GitHub API error (404): 404 Not Found
-#>   ├─ 
-#>   ├─ 
+#> └─GitHub API error (404): 404 Not Found
+#>   ├─
+#>   ├─
 #>   └─
 #> x Failed to add user 'ghclass-diego' to team 'hw3-team02'.
 #> API message: Not Found
-#> API docs:
-#> https://developer.github.com/v3/teams/members/#add-or-update-team-membership
+#> API docs: https://developer.github.com/v3/teams/members/#add-or-update-team-membership
 #> Missing page:
 #> https://api.github.com/orgs/ghclass-vignette/teams/hw3-team02/memberships/ghclass-diego
 #> 
-#> └─ GitHub API error (404): 404 Not Found
-#>   ├─ 
-#>   ├─ 
+#> └─GitHub API error (404): 404 Not Found
+#>   ├─
+#>   ├─
 #>   └─
 #> x Failed to add user 'ghclass-elijah' to team 'hw3-team03'.
 #> API message: Not Found
-#> API docs:
-#> https://developer.github.com/v3/teams/members/#add-or-update-team-membership
+#> API docs: https://developer.github.com/v3/teams/members/#add-or-update-team-membership
 #> Missing page:
 #> https://api.github.com/orgs/ghclass-vignette/teams/hw3-team03/memberships/ghclass-elijah
 #> 
-#> └─ GitHub API error (404): 404 Not Found
-#>   ├─ 
-#>   ├─ 
+#> └─GitHub API error (404): 404 Not Found
+#>   ├─
+#>   ├─
 #>   └─
 #> x Failed to add user 'ghclass-francis' to team 'hw3-team01'.
 #> API message: Not Found
-#> API docs:
-#> https://developer.github.com/v3/teams/members/#add-or-update-team-membership
+#> API docs: https://developer.github.com/v3/teams/members/#add-or-update-team-membership
 #> Missing page:
 #> https://api.github.com/orgs/ghclass-vignette/teams/hw3-team01/memberships/ghclass-francis
 #> 
-#> └─ GitHub API error (404): 404 Not Found
-#>   ├─ 
-#>   ├─ 
+#> └─GitHub API error (404): 404 Not Found
+#>   ├─
+#>   ├─
 #>   └─
 ```
 
@@ -357,8 +351,7 @@ We can check on all of the existing teams and repos using the `org_teams` and `o
 
 ```r
 org_teams("ghclass-vignette")
-#> [1] "hw1-team01" "hw1-team02" "hw1-team03" "hw2-team01" "hw2-team02"
-#> [6] "hw2-team03"
+#> [1] "hw1-team01" "hw1-team02" "hw1-team03" "hw2-team01" "hw2-team02" "hw2-team03"
 org_repos("ghclass-vignette")
 #> [1] "ghclass-vignette/hw1-team01" "ghclass-vignette/hw1-team02"
 #> [3] "ghclass-vignette/hw1-team03" "ghclass-vignette/hw2-team01"
@@ -380,21 +373,21 @@ repo_mirror(
 #> API docs:
 #> Missing page:
 #> 
-#> └─ Remote must either be an existing remote or URL
+#> └─Remote must either be an existing remote or URL
 #> https://github.com/ghclass-vignette/hw1-team02.git
 #> x Failed to push from local repo 'hw1' to '/master'.
 #> API message:
 #> API docs:
 #> Missing page:
 #> 
-#> └─ Remote must either be an existing remote or URL
+#> └─Remote must either be an existing remote or URL
 #> https://github.com/ghclass-vignette/hw1-team03.git
 #> x Failed to push from local repo 'hw1' to '/master'.
 #> API message:
 #> API docs:
 #> Missing page:
 #> 
-#> └─ Remote must either be an existing remote or URL
+#> └─Remote must either be an existing remote or URL
 #> ✓ Removed local copy of 'Sta323-Sp19/hw1'
 ```
 
@@ -420,18 +413,12 @@ Adding students individually to repos is done using the `repo_add_user` instead 
 
 ```r
 repo_add_user(org_repos("ghclass-vignette", "hw4-"), students)
-#> ✓ Added user 'ghclass-anya' to repo
-#>   'ghclass-vignette/hw4-ghclass-anya'.
-#> ✓ Added user 'ghclass-bruno' to repo
-#>   'ghclass-vignette/hw4-ghclass-bruno'.
-#> ✓ Added user 'ghclass-celine' to repo
-#>   'ghclass-vignette/hw4-ghclass-celine'.
-#> ✓ Added user 'ghclass-diego' to repo
-#>   'ghclass-vignette/hw4-ghclass-diego'.
-#> ✓ Added user 'ghclass-elijah' to repo
-#>   'ghclass-vignette/hw4-ghclass-elijah'.
-#> ✓ Added user 'ghclass-francis' to repo
-#>   'ghclass-vignette/hw4-ghclass-francis'.
+#> ✓ Added user 'ghclass-anya' to repo 'ghclass-vignette/hw4-ghclass-anya'.
+#> ✓ Added user 'ghclass-bruno' to repo 'ghclass-vignette/hw4-ghclass-bruno'.
+#> ✓ Added user 'ghclass-celine' to repo 'ghclass-vignette/hw4-ghclass-celine'.
+#> ✓ Added user 'ghclass-diego' to repo 'ghclass-vignette/hw4-ghclass-diego'.
+#> ✓ Added user 'ghclass-elijah' to repo 'ghclass-vignette/hw4-ghclass-elijah'.
+#> ✓ Added user 'ghclass-francis' to repo 'ghclass-vignette/hw4-ghclass-francis'.
 ```
 
 And once again we can provide template code and documentation using the `repo_mirror` function.
@@ -449,42 +436,42 @@ repo_mirror(
 #> API docs:
 #> Missing page:
 #> 
-#> └─ Remote must either be an existing remote or URL
+#> └─Remote must either be an existing remote or URL
 #> https://github.com/ghclass-vignette/hw4-ghclass-bruno.git
 #> x Failed to push from local repo 'hw4' to '/master'.
 #> API message:
 #> API docs:
 #> Missing page:
 #> 
-#> └─ Remote must either be an existing remote or URL
+#> └─Remote must either be an existing remote or URL
 #> https://github.com/ghclass-vignette/hw4-ghclass-celine.git
 #> x Failed to push from local repo 'hw4' to '/master'.
 #> API message:
 #> API docs:
 #> Missing page:
 #> 
-#> └─ Remote must either be an existing remote or URL
+#> └─Remote must either be an existing remote or URL
 #> https://github.com/ghclass-vignette/hw4-ghclass-diego.git
 #> x Failed to push from local repo 'hw4' to '/master'.
 #> API message:
 #> API docs:
 #> Missing page:
 #> 
-#> └─ Remote must either be an existing remote or URL
+#> └─Remote must either be an existing remote or URL
 #> https://github.com/ghclass-vignette/hw4-ghclass-elijah.git
 #> x Failed to push from local repo 'hw4' to '/master'.
 #> API message:
 #> API docs:
 #> Missing page:
 #> 
-#> └─ Remote must either be an existing remote or URL
+#> └─Remote must either be an existing remote or URL
 #> https://github.com/ghclass-vignette/hw4-ghclass-francis.git
 #> x Failed to push from local repo 'hw4' to '/master'.
 #> API message:
 #> API docs:
 #> Missing page:
 #> 
-#> └─ Remote must either be an existing remote or URL
+#> └─Remote must either be an existing remote or URL
 #> ✓ Removed local copy of 'Sta323-Sp19/hw4'
 ```
 
