@@ -19,7 +19,7 @@
 #'
 #' * `local_repo_log` - Equivalent to `git log` - returns a data frame for git log entries.
 #'
-#' `local_repo_rename` - Rename local directories using a vector of patterns and replacements .
+#' * `local_repo_rename` - Rename local directories using a vector of patterns and replacements .
 #' This is meant to help with renaming student repos to include
 #' something more useful like `Last, First name` or a unique identifier
 #' for the purposes of ordering repository folders.
