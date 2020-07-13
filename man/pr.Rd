@@ -30,16 +30,16 @@ a pull request to one repository that requests a merge to a base of another repo
 }
 \examples{
 \dontrun{
-repo_create("ghclass-demo", "test_pr", auto_init=TRUE)
+repo_create("ghclass-test", "test_pr", auto_init=TRUE)
 
-branch_create("ghclass-demo/test_pr", new_branch = "test")
+branch_create("ghclass-test/test_pr", new_branch = "test")
 
-repo_modify_file("ghclass-demo/test_pr", "README.md", pattern = "test_pr",
+repo_modify_file("ghclass-test/test_pr", "README.md", pattern = "test_pr",
                  content = "Hello", method = "after", branch = "test")
 
-pr_create("ghclass-demo/test_pr", "merge", "test")
+pr_create("ghclass-test/test_pr", "merge", "test")
 
-repo_delete("ghclass-demo/test_pr", prompt = FALSE)
+repo_delete("ghclass-test/test_pr", prompt = FALSE)
 }
 }
 \seealso{

@@ -20,15 +20,15 @@
 #'
 #' @examples
 #' \dontrun{
-#' repo_create("ghclass-demo", "test_branch", auto_init=TRUE)
+#' repo_create("ghclass-test", "test_branch", auto_init=TRUE)
 #'
-#' branch_create("ghclass-demo/test_branch", new_branch = "test")
-#' repo_branches("ghclass-demo/test_branch")
+#' branch_create("ghclass-test/test_branch", new_branch = "test")
+#' repo_branches("ghclass-test/test_branch")
 #'
-#' branch_delete("ghclass-demo/test_branch", branch="test")
-#' repo_branches("ghclass-demo/test_branch")
+#' branch_delete("ghclass-test/test_branch", branch="test")
+#' repo_branches("ghclass-test/test_branch")
 #'
-#' repo_delete("ghclass-demo/test_branch", prompt = FALSE)
+#' repo_delete("ghclass-test/test_branch", prompt = FALSE)
 #' }
 #'
 NULL
