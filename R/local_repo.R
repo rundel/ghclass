@@ -5,19 +5,19 @@
 #'
 #' @description
 #'
-#' `local_repo_clone` - Clones a GitHub repository to a local directory.
+#' * `local_repo_clone` - Clones a GitHub repository to a local directory.
 #'
-#' `local_repo_add` - Equivalent to `git add` - stages a file in a local repository.
+#' * `local_repo_add` - Equivalent to `git add` - stages a file in a local repository.
 #'
-#' `local_repo_commit` - Equivalent to `git commit` - commits staged files in a local repository.
+#' * `local_repo_commit` - Equivalent to `git commit` - commits staged files in a local repository.
 #'
-#' `local_repo_push` - Equivalent to `git push` - push a local repository.
+#' * `local_repo_push` - Equivalent to `git push` - push a local repository.
 #'
-#' `local_repo_pull` - Equivalent to `git pull` - pull a local repository.
+#' * `local_repo_pull` - Equivalent to `git pull` - pull a local repository.
 #'
-#' `local_repo_branch` - Equivalent to `git branch` - create a branch in a local repository.
+#' * `local_repo_branch` - Equivalent to `git branch` - create a branch in a local repository.
 #'
-#' `local_repo_log` - Equivalent to `git log` - returns a data frame for git log entries.
+#' * `local_repo_log` - Equivalent to `git log` - returns a data frame for git log entries.
 #'
 #' `local_repo_rename` - Rename local directories using a vector of patterns and replacements .
 #' This is meant to help with renaming student repos to include

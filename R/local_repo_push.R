@@ -1,17 +1,4 @@
 #' @rdname local_repo
-#'
-#' @examples
-#' \dontrun{
-#' local_repo = local_repo_clone("Sta323-Sp19/hw1", tempdir())
-#'
-#' repo = repo_create("ghclass-demo", "hw1-mirror")
-#' repo_url = paste0("https://github.com/",repo,".git")
-#'
-#' local_repo_push(local_repo, remote = repo_url, force = TRUE, prompt = FALSE, mirror = TRUE)
-#'
-#' repo_delete(repo, prompt = FALSE)
-#' }
-#'
 #' @export
 #'
 local_repo_push = function(repo_dir, remote = "origin", branch = "master",

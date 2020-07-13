@@ -76,19 +76,15 @@ local_repo_rename(repo_dir, pattern, replacement)
 \item{replacement}{Character.  One or more text strings containing the replacement value for matched patterns.}
 }
 \description{
-\code{local_repo_clone} - Clones a GitHub repository to a local directory.
-
-\code{local_repo_add} - Equivalent to \verb{git add} - stages a file in a local repository.
-
-\code{local_repo_commit} - Equivalent to \verb{git commit} - commits staged files in a local repository.
-
-\code{local_repo_push} - Equivalent to \verb{git push} - push a local repository.
-
-\code{local_repo_pull} - Equivalent to \verb{git pull} - pull a local repository.
-
-\code{local_repo_branch} - Equivalent to \verb{git branch} - create a branch in a local repository.
-
-\code{local_repo_log} - Equivalent to \verb{git log} - returns a data frame for git log entries.
+\itemize{
+\item \code{local_repo_clone} - Clones a GitHub repository to a local directory.
+\item \code{local_repo_add} - Equivalent to \verb{git add} - stages a file in a local repository.
+\item \code{local_repo_commit} - Equivalent to \verb{git commit} - commits staged files in a local repository.
+\item \code{local_repo_push} - Equivalent to \verb{git push} - push a local repository.
+\item \code{local_repo_pull} - Equivalent to \verb{git pull} - pull a local repository.
+\item \code{local_repo_branch} - Equivalent to \verb{git branch} - create a branch in a local repository.
+\item \code{local_repo_log} - Equivalent to \verb{git log} - returns a data frame for git log entries.
+}
 
 \code{local_repo_rename} - Rename local directories using a vector of patterns and replacements .
 This is meant to help with renaming student repos to include
@@ -118,17 +114,6 @@ local_repo_pull(local_repo)
 local_repo_log(dir)
 
 repo_delete("ghclass-test/local_repo_test", prompt=FALSE)
-}
-
-\dontrun{
-local_repo = local_repo_clone("Sta323-Sp19/hw1", tempdir())
-
-repo = repo_create("ghclass-demo", "hw1-mirror")
-repo_url = paste0("https://github.com/",repo,".git")
-
-local_repo_push(local_repo, remote = repo_url, force = TRUE, prompt = FALSE, mirror = TRUE)
-
-repo_delete(repo, prompt = FALSE)
 }
 
 }
