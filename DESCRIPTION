@@ -1,6 +1,6 @@
 Package: ghclass
 Title: Tools for managing classes with github
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: 
     c(person(given = "Colin",
              family = "Rundel",
@@ -36,7 +36,8 @@ Imports:
     whisker,
     withr,
     yaml,
-    dplyr
+    dplyr,
+    cli
 Suggests: 
     here,
     knitr,
