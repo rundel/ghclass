@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Initiate peer review repositories — peer_init • ghclass</title>
+<title>GitHub Repository tools - user functions — repo_user • ghclass</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,13 @@
 
 
 
-<meta property="og:title" content="Initiate peer review repositories — peer_init" />
-<meta property="og:description" content="peer_init() initiates peer review repositories. It creates a review repository for each user, adds users to their respective repositories, and applies peer review labels to all repositories (i.e. assignment and review repositories)." />
+<meta property="og:title" content="GitHub Repository tools - user functions — repo_user" />
+<meta property="og:description" content="repo_add_user - Add a user to a repository
+repo_remove_user - Remove a user from a repository
+repo_add_team - Add a team to a repository
+repo_remove_team - Remove a team from a repository
+repo_collaborators - Returns a data frame of repos, their collaborators, and their permissions.
+repo_contributors - Returns a data frame containing details on repository contributor(s)." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -119,71 +124,92 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Initiate peer review repositories</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/peer_init.R'><code>R/peer_init.R</code></a></small>
-    <div class="hidden name"><code>peer_init.Rd</code></div>
+    <h1>GitHub Repository tools - user functions</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/repo.R'><code>R/repo.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/repo_add_team.R'><code>R/repo_add_team.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/repo_add_user.R'><code>R/repo_add_user.R</code></a>, and 4 more</small>
+    <div class="hidden name"><code>repo_user.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>peer_init()</code> initiates peer review repositories. It creates a review repository for each user, adds users to their respective repositories, and applies peer review labels to all repositories (i.e. assignment and review repositories).</p>
+    <p><code>repo_add_user</code> - Add a user to a repository
+<code>repo_remove_user</code> - Remove a user from a repository
+<code>repo_add_team</code> - Add a team to a repository
+<code>repo_remove_team</code> - Remove a team from a repository
+<code>repo_collaborators</code> - Returns a data frame of repos, their collaborators, and their permissions.
+<code>repo_contributors</code> - Returns a data frame containing details on repository contributor(s).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>peer_init</span>(
-  <span class='no'>org</span>,
-  <span class='no'>roster</span>,
-  <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>show_label_result</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>repo_add_team</span>(
+  <span class='no'>repo</span>,
+  <span class='no'>team</span>,
+  <span class='kw'>permission</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"push"</span>, <span class='st'>"pull"</span>, <span class='st'>"admin"</span>, <span class='st'>"maintain"</span>, <span class='st'>"triage"</span>),
+  <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"slug"</span>, <span class='st'>"name"</span>)
+)
+
+<span class='fu'>repo_add_user</span>(
+  <span class='no'>repo</span>,
+  <span class='no'>user</span>,
+  <span class='kw'>permission</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"push"</span>, <span class='st'>"pull"</span>, <span class='st'>"admin"</span>, <span class='st'>"maintain"</span>, <span class='st'>"triage"</span>)
+)
+
+<span class='fu'>repo_collaborators</span>(<span class='no'>repo</span>, <span class='kw'>include_admins</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='fu'>repo_contributors</span>(<span class='no'>repo</span>)
+
+<span class='fu'>repo_remove_team</span>(<span class='no'>repo</span>, <span class='no'>team</span>, <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"slug"</span>, <span class='st'>"name"</span>))
+
+<span class='fu'>repo_remove_user</span>(<span class='no'>repo</span>, <span class='no'>user</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>org</th>
-      <td><p>Character. Name of GitHub Organization.</p></td>
+      <th>repo</th>
+      <td><p>Character. Address of repository in <code>owner/repo</code> format.</p></td>
     </tr>
     <tr>
-      <th>roster</th>
-      <td><p>Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column <code>user</code> with GitHub user names of authors, a column <code>user_random</code> with randomized tokens for user names, and one or more <code>rev*</code> columns that specify review assignments as values of the vector <code>user_random</code>.</p></td>
+      <th>team</th>
+      <td><p>Character. Slug or name of team to add.</p></td>
     </tr>
     <tr>
-      <th>prefix</th>
-      <td><p>Character. Common repository name prefix.</p></td>
+      <th>permission</th>
+      <td><p>Character. Permission to be granted to a user or team for repo, defaults to "push".</p></td>
     </tr>
     <tr>
-      <th>suffix</th>
-      <td><p>Character. Common repository name suffix.</p></td>
+      <th>team_type</th>
+      <td><p>Character. Either "slug" if the team names are slugs or "name" if full team names are provided.</p></td>
     </tr>
     <tr>
-      <th>verbose</th>
-      <td><p>Logical. Whether information about label creation should be given, defaults to <code>FALSE</code>. Issues can still be created even labels were not applied to a particular repository.</p></td>
+      <th>user</th>
+      <td><p>Character. One or more GitHub usernames.</p></td>
     </tr>
     <tr>
-      <th>show_label_result</th>
-      <td><p>Logical. Whether a tibble with details on the creation of labels should be returned, defaults to <code>FALSE</code>.</p></td>
+      <th>include_admins</th>
+      <td><p>Logical. If <code>FALSE</code>, user names of users with Admin rights are not included, defaults to <code>TRUE</code>.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Permissions can be set to any of the following:</p><ul>
+<li><p><code>"pull"</code> - can pull, but not push to or administer this repository.</p></li>
+<li><p><code>"push"</code> - can pull and push, but not administer this repository.</p></li>
+<li><p><code>"admin"</code> - can pull, push and administer this repository.</p></li>
+<li><p><code>"maintain"</code> - Recommended for project managers who need to manage the repository without access to sensitive or destructive actions.</p></li>
+<li><p><code>"triage"</code> - Recommended for contributors who need to proactively manage issues and pull requests without write access.</p></li>
+</ul>
+
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other peer review functions: 
-<code><a href='peer_assign.html'>peer_assign</a>()</code>,
-<code><a href='peer_file_add_aut.html'>peer_file_add_aut</a>()</code>,
-<code><a href='peer_file_add_rev.html'>peer_file_add_rev</a>()</code>,
-<code><a href='peer_form_create_rating.html'>peer_form_create_rating</a>()</code>,
-<code><a href='peer_form_create_review.html'>peer_form_create_review</a>()</code>,
-<code><a href='peer_return.html'>peer_return</a>()</code>,
-<code><a href='peer_roster_create.html'>peer_roster_create</a>()</code>,
-<code><a href='peer_score_rating.html'>peer_score_rating</a>()</code>,
-<code><a href='peer_score_review.html'>peer_score_review</a>()</code></p></div>
+    <div class='dont-index'><p><a href='repo_core'>Repo - Core Functions</a>, <a href='repo_stats'>Repo - Stats Functions</a>,
+<a href='repo_file'>Repo - File Functions</a>, <a href='repo_user'>Repo - User Functions</a>,
+<a href='repo_notification'>Repo - Notification Functions</a>, <code><a href='repo_style.html'>repo_style()</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
-<span class='fu'>peer_init</span>(<span class='kw'>org</span> <span class='kw'>=</span> <span class='st'>"ghclass-test"</span>, <span class='kw'>roster</span> <span class='kw'>=</span> <span class='st'>"roster_test"</span>, <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>"hw2-"</span>)</div><div class='output co'>#&gt; <span class='message'>Cannot locate file <span style='color: #0000BB;'>roster_test</span><span></span></div><div class='output co'>#&gt; <span class='error'>Error: </span></div><div class='input'># }
+    <pre class="examples"><div class='input'># \dontrun{
 
-</div></span></pre>
+# }
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

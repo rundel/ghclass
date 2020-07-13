@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Initiate peer review repositories — peer_init • ghclass</title>
+<title>GitHub API related tools — github • ghclass</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,14 @@
 
 
 
-<meta property="og:title" content="Initiate peer review repositories — peer_init" />
-<meta property="og:description" content="peer_init() initiates peer review repositories. It creates a review repository for each user, adds users to their respective repositories, and applies peer review labels to all repositories (i.e. assignment and review repositories)." />
+<meta property="og:title" content="GitHub API related tools — github" />
+<meta property="og:description" content="github_whoami returns the login of the authenticated user.
+github_get_api_limit / github_set_api_limit - get and set the limit of results to return from
+the GitHub API.
+github_get_token returns the user's GitHub personal access token (PAT).
+github_set_token defines the user's GitHub PAT by setting the GITHUB_PAT enivronmental variable. This value can then
+github_reset_token removes the value stored in the GITHUB_PAT environmental variable.
+github_test_token checks if a PAT is valid by attempting to authenticate with the GitHub API" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -119,71 +125,82 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Initiate peer review repositories</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/peer_init.R'><code>R/peer_init.R</code></a></small>
-    <div class="hidden name"><code>peer_init.Rd</code></div>
+    <h1>GitHub API related tools</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/github.R'><code>R/github.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/github_api_limit.R'><code>R/github_api_limit.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/github_token.R'><code>R/github_token.R</code></a>, and 1 more</small>
+    <div class="hidden name"><code>github.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>peer_init()</code> initiates peer review repositories. It creates a review repository for each user, adds users to their respective repositories, and applies peer review labels to all repositories (i.e. assignment and review repositories).</p>
+    <p><code>github_whoami</code> returns the login of the authenticated user.</p>
+<p><code>github_get_api_limit</code> / <code>github_set_api_limit</code> - get and set the limit of results to return from
+the GitHub API.</p>
+<p><code>github_get_token</code> returns the user's GitHub personal access token (PAT).</p>
+<p><code>github_set_token</code> defines the user's GitHub PAT by setting the <code>GITHUB_PAT</code> enivronmental variable. This value can then</p>
+<p><code>github_reset_token</code> removes the value stored in the <code>GITHUB_PAT</code> environmental variable.</p>
+<p><code>github_test_token</code> checks if a PAT is valid by attempting to authenticate with the GitHub API</p>
     </div>
 
-    <pre class="usage"><span class='fu'>peer_init</span>(
-  <span class='no'>org</span>,
-  <span class='no'>roster</span>,
-  <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>show_label_result</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>github_get_api_limit</span>()
+
+<span class='fu'>github_set_api_limit</span>(<span class='kw'>limit</span> <span class='kw'>=</span> <span class='fl'>1000L</span>)
+
+<span class='fu'>github_get_token</span>()
+
+<span class='fu'>github_set_token</span>(<span class='no'>token</span>)
+
+<span class='fu'>github_reset_token</span>()
+
+<span class='fu'>github_test_token</span>(<span class='kw'>token</span> <span class='kw'>=</span> <span class='fu'>github_get_token</span>())
+
+<span class='fu'>github_whoami</span>(<span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>org</th>
-      <td><p>Character. Name of GitHub Organization.</p></td>
+      <th>limit</th>
+      <td><p>The maximum number of records to return from an API request.</p></td>
     </tr>
     <tr>
-      <th>roster</th>
-      <td><p>Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column <code>user</code> with GitHub user names of authors, a column <code>user_random</code> with randomized tokens for user names, and one or more <code>rev*</code> columns that specify review assignments as values of the vector <code>user_random</code>.</p></td>
+      <th>token</th>
+      <td><p>Character. Either the literal token path, or the path of a file containing the token.</p></td>
     </tr>
     <tr>
-      <th>prefix</th>
-      <td><p>Character. Common repository name prefix.</p></td>
-    </tr>
-    <tr>
-      <th>suffix</th>
-      <td><p>Character. Common repository name suffix.</p></td>
-    </tr>
-    <tr>
-      <th>verbose</th>
-      <td><p>Logical. Whether information about label creation should be given, defaults to <code>FALSE</code>. Issues can still be created even labels were not applied to a particular repository.</p></td>
-    </tr>
-    <tr>
-      <th>show_label_result</th>
-      <td><p>Logical. Whether a tibble with details on the creation of labels should be returned, defaults to <code>FALSE</code>.</p></td>
+      <th>quiet</th>
+      <td><p>Logical. Should status messages be shown.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>This package looks for the personal access token (PAT) in the following places (in order):</p><ul>
+<li><p>Value of <code>GITHUB_PAT</code> environmental variable.</p></li>
+<li><p>Value of <code>GITHUB_TOKEN</code> environmental variable.</p></li>
+<li><p>Contents of <code>~/.github/token</code> file.</p></li>
+</ul>
+
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other peer review functions: 
-<code><a href='peer_assign.html'>peer_assign</a>()</code>,
-<code><a href='peer_file_add_aut.html'>peer_file_add_aut</a>()</code>,
-<code><a href='peer_file_add_rev.html'>peer_file_add_rev</a>()</code>,
-<code><a href='peer_form_create_rating.html'>peer_form_create_rating</a>()</code>,
-<code><a href='peer_form_create_review.html'>peer_form_create_review</a>()</code>,
-<code><a href='peer_return.html'>peer_return</a>()</code>,
-<code><a href='peer_roster_create.html'>peer_roster_create</a>()</code>,
-<code><a href='peer_score_rating.html'>peer_score_rating</a>()</code>,
-<code><a href='peer_score_review.html'>peer_score_review</a>()</code></p></div>
+    <div class='dont-index'><p><a href='repo_details.html'>repo_branches</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
-<span class='fu'>peer_init</span>(<span class='kw'>org</span> <span class='kw'>=</span> <span class='st'>"ghclass-test"</span>, <span class='kw'>roster</span> <span class='kw'>=</span> <span class='st'>"roster_test"</span>, <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>"hw2-"</span>)</div><div class='output co'>#&gt; <span class='message'>Cannot locate file <span style='color: #0000BB;'>roster_test</span><span></span></div><div class='output co'>#&gt; <span class='error'>Error: </span></div><div class='input'># }
-
-</div></span></pre>
+    <pre class="examples"><div class='input'><span class='co'># whoami</span>
+<span class='fu'>github_whoami</span>()</div><div class='output co'>#&gt; [1] "rundel"</div><div class='input'>
+<span class='co'># Set the API request limit</span>
+<span class='fu'>github_get_api_limit</span>()</div><div class='output co'>#&gt; [1] 1000</div><div class='input'><span class='fu'>github_set_api_limit</span>(<span class='fl'>500</span>)
+<span class='fu'>github_get_api_limit</span>()</div><div class='output co'>#&gt; [1] 500</div><div class='input'>
+<span class='co'># Set and get the PAT</span>
+<span class='fu'>github_set_token</span>(<span class='st'>"~/.github/token"</span>)
+<span class='fu'>github_set_token</span>(<span class='st'>"0123456789ABCDEF"</span>)
+<span class='no'>pat</span> <span class='kw'>=</span> <span class='fu'>github_get_token</span>()
+<span class='no'>pat</span></div><div class='output co'>#&gt; [1] "0123456789ABCDEF"</div><div class='input'>
+<span class='co'># Test the PAT</span>
+<span class='fu'>github_reset_token</span>()
+<span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>github_test_token</span>())</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use <span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
+#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; Error : </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>github_test_token</span>(<span class='st'>"bad_token"</span>))</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Your GitHub PAT failed to authenticate.</span></div><div class='output co'>#&gt; <span class='message'>API message: </span><span style='color: #555555;'>Bad credentials</span><span></span></div><div class='output co'>#&gt; <span class='message'>API docs: </span><span style='color: #555555;'>https://developer.github.com/v3</span><span></span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; 
+#&gt; └─GitHub API error (401): 401 Unauthorized
+#&gt;   ├─
+#&gt;   └─</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

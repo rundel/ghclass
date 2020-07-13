@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Initiate peer review repositories — peer_init • ghclass</title>
+<title>GitHub Actions tools — action • ghclass</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,10 @@
 
 
 
-<meta property="og:title" content="Initiate peer review repositories — peer_init" />
-<meta property="og:description" content="peer_init() initiates peer review repositories. It creates a review repository for each user, adds users to their respective repositories, and applies peer review labels to all repositories (i.e. assignment and review repositories)." />
+<meta property="og:title" content="GitHub Actions tools — action" />
+<meta property="og:description" content="action_workflows - returns a data frame containing details on a repositories workflows.
+action_add_badge - Add a GitHub Actions badge to a file.
+action_remove_badge - Remove one or more GitHub Action badges from a file." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -119,69 +121,73 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Initiate peer review repositories</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/peer_init.R'><code>R/peer_init.R</code></a></small>
-    <div class="hidden name"><code>peer_init.Rd</code></div>
+    <h1>GitHub Actions tools</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/action.R'><code>R/action.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/action_add_badge.R'><code>R/action_add_badge.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/action_remove_badge.R'><code>R/action_remove_badge.R</code></a>, and 1 more</small>
+    <div class="hidden name"><code>action.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>peer_init()</code> initiates peer review repositories. It creates a review repository for each user, adds users to their respective repositories, and applies peer review labels to all repositories (i.e. assignment and review repositories).</p>
+    <p><code>action_workflows</code> - returns a data frame containing details on a repositories workflows.</p>
+<p><code>action_add_badge</code> - Add a GitHub Actions badge to a file.</p>
+<p><code>action_remove_badge</code> - Remove one or more GitHub Action badges from a file.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>peer_init</span>(
-  <span class='no'>org</span>,
-  <span class='no'>roster</span>,
-  <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>show_label_result</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>action_add_badge</span>(
+  <span class='no'>repo</span>,
+  <span class='kw'>workflow</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>where</span> <span class='kw'>=</span> <span class='st'>"^."</span>,
+  <span class='kw'>line_padding</span> <span class='kw'>=</span> <span class='st'>"\n\n\n"</span>,
+  <span class='kw'>file</span> <span class='kw'>=</span> <span class='st'>"README.md"</span>
+)
+
+<span class='fu'>action_remove_badge</span>(<span class='no'>repo</span>, <span class='kw'>workflow_pat</span> <span class='kw'>=</span> <span class='st'>".*?"</span>, <span class='kw'>file</span> <span class='kw'>=</span> <span class='st'>"README.md"</span>)
+
+<span class='fu'>action_workflows</span>(<span class='no'>repo</span>, <span class='kw'>full</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>org</th>
-      <td><p>Character. Name of GitHub Organization.</p></td>
+      <th>repo</th>
+      <td><p>Character. Address of repository in <code>owner/name</code> format.</p></td>
     </tr>
     <tr>
-      <th>roster</th>
-      <td><p>Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column <code>user</code> with GitHub user names of authors, a column <code>user_random</code> with randomized tokens for user names, and one or more <code>rev*</code> columns that specify review assignments as values of the vector <code>user_random</code>.</p></td>
+      <th>workflow</th>
+      <td><p>Character. Name of the workflow located in <code>.github/workflows/</code>.</p></td>
     </tr>
     <tr>
-      <th>prefix</th>
-      <td><p>Character. Common repository name prefix.</p></td>
+      <th>where</th>
+      <td><p>Character. Regex pattern of where to insert the badge, defaults
+to the beginning of the README</p></td>
     </tr>
     <tr>
-      <th>suffix</th>
-      <td><p>Character. Common repository name suffix.</p></td>
+      <th>line_padding</th>
+      <td><p>Character. What should be added to the end of the link,
+defaults to sufficient new lines to add a blank line after the badge.</p></td>
     </tr>
     <tr>
-      <th>verbose</th>
-      <td><p>Logical. Whether information about label creation should be given, defaults to <code>FALSE</code>. Issues can still be created even labels were not applied to a particular repository.</p></td>
+      <th>file</th>
+      <td><p>Character. Target file to be modified, defaults to <code>README.md</code>.#'</p></td>
     </tr>
     <tr>
-      <th>show_label_result</th>
-      <td><p>Logical. Whether a tibble with details on the creation of labels should be returned, defaults to <code>FALSE</code>.</p></td>
+      <th>workflow_pat</th>
+      <td><p>Character. Name of the workflow badge to be removed, or a regex pattern
+that matches the workflow name.</p></td>
+    </tr>
+    <tr>
+      <th>full</th>
+      <td><p>Logical. Should all workflow columns be returned</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Other peer review functions: 
-<code><a href='peer_assign.html'>peer_assign</a>()</code>,
-<code><a href='peer_file_add_aut.html'>peer_file_add_aut</a>()</code>,
-<code><a href='peer_file_add_rev.html'>peer_file_add_rev</a>()</code>,
-<code><a href='peer_form_create_rating.html'>peer_form_create_rating</a>()</code>,
-<code><a href='peer_form_create_review.html'>peer_form_create_review</a>()</code>,
-<code><a href='peer_return.html'>peer_return</a>()</code>,
-<code><a href='peer_roster_create.html'>peer_roster_create</a>()</code>,
-<code><a href='peer_score_rating.html'>peer_score_rating</a>()</code>,
-<code><a href='peer_score_review.html'>peer_score_review</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
-<span class='fu'>peer_init</span>(<span class='kw'>org</span> <span class='kw'>=</span> <span class='st'>"ghclass-test"</span>, <span class='kw'>roster</span> <span class='kw'>=</span> <span class='st'>"roster_test"</span>, <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>"hw2-"</span>)</div><div class='output co'>#&gt; <span class='message'>Cannot locate file <span style='color: #0000BB;'>roster_test</span><span></span></div><div class='output co'>#&gt; <span class='error'>Error: </span></div><div class='input'># }
+<span class='fu'>action_workflows</span>(<span class='st'>"rundel/ghclass"</span>)</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 2 x 4</span><span>
+#&gt;   name       path                  state badge_url                              
+#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                 </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                                  
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> R-CMD-che… .github/workflows/ch… acti… https://github.com/rundel/ghclass/work…
+#&gt; </span><span style='color: #BCBCBC;'>2</span><span> Render RE… .github/workflows/re… acti… https://github.com/rundel/ghclass/work…</div><div class='input'># }
 
 </div></span></pre>
   </div>

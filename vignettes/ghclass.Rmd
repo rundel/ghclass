@@ -1,7 +1,7 @@
 ---
 title: "Course management with ghclass"
 author: "Mine Çetinkaya-Rundel, Colin Rundel, Therese Anders"
-date: "2020-06-19"
+date: "2020-07-09"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Course management with ghclass}
@@ -95,9 +95,16 @@ You can test that your token is working correctly using the `github_test_token()
 
 ```r
 github_test_token()
-#> ✔ Your github token is functioning correctly.
+#> ✓ Your GitHub PAT authenticated correctly.
 github_test_token("bad token")
-#> ✖ Your github token failed to authenticate.
+#> x Your GitHub PAT failed to authenticate.
+#> API message: Bad credentials
+#> API docs: https://developer.github.com/v3
+#> Missing page:
+#> 
+#> └─ GitHub API error (401): 401 Unauthorized
+#>   ├─ 
+#>   └─
 ```
 
 ## Step-by-step guide
@@ -154,12 +161,12 @@ GitHub organization.
 
 ```r
 org_invite("ghclass-vignette", roster$github)
-#> ✔ Invited user 'ghclass-anya' to org 'ghclass-vignette'.
-#> ✔ Invited user 'ghclass-bruno' to org 'ghclass-vignette'.
-#> ✔ Invited user 'ghclass-celine' to org 'ghclass-vignette'.
-#> ✔ Invited user 'ghclass-diego' to org 'ghclass-vignette'.
-#> ✔ Invited user 'ghclass-elijah' to org 'ghclass-vignette'.
-#> ✔ Invited user 'ghclass-francis' to org 'ghclass-vignette'.
+#> ✓ Invited user 'ghclass-anya' to org 'ghclass-vignette'.
+#> ✓ Invited user 'ghclass-bruno' to org 'ghclass-vignette'.
+#> ✓ Invited user 'ghclass-celine' to org 'ghclass-vignette'.
+#> ✓ Invited user 'ghclass-diego' to org 'ghclass-vignette'.
+#> ✓ Invited user 'ghclass-elijah' to org 'ghclass-vignette'.
+#> ✓ Invited user 'ghclass-francis' to org 'ghclass-vignette'.
 ```
 
 We now need to wait for the students to accept these invitations before they will have access to the organization. We can check the status of these acceptances using the `org_members()` and `org_pending()` to see which students have accepting and have not accepted the invitation.
@@ -199,17 +206,17 @@ We will now create teams which will be used for the first two homework assignmen
 
 ```r
 team_create("ghclass-vignette", roster$hw1)
-#> ✔ Created team 'hw1-team01' in org 'ghclass-vignette'.
-#> ✔ Created team 'hw1-team02' in org 'ghclass-vignette'.
-#> ✔ Created team 'hw1-team03' in org 'ghclass-vignette'.
+#> ✓ Created team 'hw1-team01' in org 'ghclass-vignette'.
+#> ✓ Created team 'hw1-team02' in org 'ghclass-vignette'.
+#> ✓ Created team 'hw1-team03' in org 'ghclass-vignette'.
 ```
 
 
 ```r
 team_create("ghclass-vignette", team = c("team01", "team02", "team03"), prefix = "hw2-")
-#> ✔ Created team 'hw2-team01' in org 'ghclass-vignette'.
-#> ✔ Created team 'hw2-team02' in org 'ghclass-vignette'.
-#> ✔ Created team 'hw2-team03' in org 'ghclass-vignette'.
+#> ✓ Created team 'hw2-team01' in org 'ghclass-vignette'.
+#> ✓ Created team 'hw2-team02' in org 'ghclass-vignette'.
+#> ✓ Created team 'hw2-team03' in org 'ghclass-vignette'.
 ```
 
 Once the teams are created we can then add the students to these teams.
@@ -217,19 +224,19 @@ Once the teams are created we can then add the students to these teams.
 
 ```r
 team_invite(org = "ghclass-vignette", user = roster$github, team = roster$hw1)
-#> ✔ Added user 'ghclass-anya' to team 'hw1-team01'.
-#> ✔ Added user 'ghclass-diego' to team 'hw1-team01'.
-#> ✔ Added user 'ghclass-bruno' to team 'hw1-team02'.
-#> ✔ Added user 'ghclass-elijah' to team 'hw1-team02'.
-#> ✔ Added user 'ghclass-celine' to team 'hw1-team03'.
-#> ✔ Added user 'ghclass-francis' to team 'hw1-team03'.
+#> ✓ Added user 'ghclass-anya' to team 'hw1-team01'.
+#> ✓ Added user 'ghclass-bruno' to team 'hw1-team02'.
+#> ✓ Added user 'ghclass-celine' to team 'hw1-team03'.
+#> ✓ Added user 'ghclass-diego' to team 'hw1-team01'.
+#> ✓ Added user 'ghclass-elijah' to team 'hw1-team02'.
+#> ✓ Added user 'ghclass-francis' to team 'hw1-team03'.
 team_invite(org = "ghclass-vignette", user = roster$github, team = roster$hw2)
-#> ✔ Added user 'ghclass-anya' to team 'hw2-team01'.
-#> ✔ Added user 'ghclass-elijah' to team 'hw2-team01'.
-#> ✔ Added user 'ghclass-bruno' to team 'hw2-team02'.
-#> ✔ Added user 'ghclass-francis' to team 'hw2-team02'.
-#> ✔ Added user 'ghclass-celine' to team 'hw2-team03'.
-#> ✔ Added user 'ghclass-diego' to team 'hw2-team03'.
+#> ✓ Added user 'ghclass-anya' to team 'hw2-team01'.
+#> ✓ Added user 'ghclass-bruno' to team 'hw2-team02'.
+#> ✓ Added user 'ghclass-celine' to team 'hw2-team03'.
+#> ✓ Added user 'ghclass-diego' to team 'hw2-team03'.
+#> ✓ Added user 'ghclass-elijah' to team 'hw2-team01'.
+#> ✓ Added user 'ghclass-francis' to team 'hw2-team02'.
 ```
 
 Also if we happen to try to invite students to a team that does not exist yet, then helpfully `team_invite` will create the team for you and then invite the students. This behavior is governed by the `create_missing_teams` parameter, which is `TRUE` by default.
@@ -237,15 +244,72 @@ Also if we happen to try to invite students to a team that does not exist yet, t
 
 ```r
 team_invite("ghclass-vignette", roster$github, roster$hw3)
-#> ✔ Created team 'hw3-team01' in org 'ghclass-vignette'.
-#> ✔ Created team 'hw3-team02' in org 'ghclass-vignette'.
-#> ✔ Created team 'hw3-team03' in org 'ghclass-vignette'.
-#> ✔ Added user 'ghclass-anya' to team 'hw3-team01'.
-#> ✔ Added user 'ghclass-francis' to team 'hw3-team01'.
-#> ✔ Added user 'ghclass-bruno' to team 'hw3-team02'.
-#> ✔ Added user 'ghclass-diego' to team 'hw3-team02'.
-#> ✔ Added user 'ghclass-celine' to team 'hw3-team03'.
-#> ✔ Added user 'ghclass-elijah' to team 'hw3-team03'.
+#> x Failed to add user 'ghclass-anya' to team 'hw3-team01'.
+#> API message: Not Found
+#> API docs:
+#> https://developer.github.com/v3/teams/members/#add-or-update-team-membership
+#> Missing page:
+#> https://api.github.com/orgs/ghclass-vignette/teams/hw3-team01/memberships/ghclass-anya
+#> 
+#> └─ GitHub API error (404): 404 Not Found
+#>   ├─ 
+#>   ├─ 
+#>   └─
+#> x Failed to add user 'ghclass-bruno' to team 'hw3-team02'.
+#> API message: Not Found
+#> API docs:
+#> https://developer.github.com/v3/teams/members/#add-or-update-team-membership
+#> Missing page:
+#> https://api.github.com/orgs/ghclass-vignette/teams/hw3-team02/memberships/ghclass-bruno
+#> 
+#> └─ GitHub API error (404): 404 Not Found
+#>   ├─ 
+#>   ├─ 
+#>   └─
+#> x Failed to add user 'ghclass-celine' to team 'hw3-team03'.
+#> API message: Not Found
+#> API docs:
+#> https://developer.github.com/v3/teams/members/#add-or-update-team-membership
+#> Missing page:
+#> https://api.github.com/orgs/ghclass-vignette/teams/hw3-team03/memberships/ghclass-celine
+#> 
+#> └─ GitHub API error (404): 404 Not Found
+#>   ├─ 
+#>   ├─ 
+#>   └─
+#> x Failed to add user 'ghclass-diego' to team 'hw3-team02'.
+#> API message: Not Found
+#> API docs:
+#> https://developer.github.com/v3/teams/members/#add-or-update-team-membership
+#> Missing page:
+#> https://api.github.com/orgs/ghclass-vignette/teams/hw3-team02/memberships/ghclass-diego
+#> 
+#> └─ GitHub API error (404): 404 Not Found
+#>   ├─ 
+#>   ├─ 
+#>   └─
+#> x Failed to add user 'ghclass-elijah' to team 'hw3-team03'.
+#> API message: Not Found
+#> API docs:
+#> https://developer.github.com/v3/teams/members/#add-or-update-team-membership
+#> Missing page:
+#> https://api.github.com/orgs/ghclass-vignette/teams/hw3-team03/memberships/ghclass-elijah
+#> 
+#> └─ GitHub API error (404): 404 Not Found
+#>   ├─ 
+#>   ├─ 
+#>   └─
+#> x Failed to add user 'ghclass-francis' to team 'hw3-team01'.
+#> API message: Not Found
+#> API docs:
+#> https://developer.github.com/v3/teams/members/#add-or-update-team-membership
+#> Missing page:
+#> https://api.github.com/orgs/ghclass-vignette/teams/hw3-team01/memberships/ghclass-francis
+#> 
+#> └─ GitHub API error (404): 404 Not Found
+#>   ├─ 
+#>   ├─ 
+#>   └─
 ```
 
 
@@ -256,13 +320,14 @@ Now that we have teams within our organization we can now create repos for each 
 
 ```r
 r = repo_create("ghclass-vignette", name = c("team01", "team02","team03"), prefix="hw1-")
-#> ✔ Created repo 'ghclass-vignette/hw1-team01'.
-#> ✔ Created repo 'ghclass-vignette/hw1-team02'.
-#> ✔ Created repo 'ghclass-vignette/hw1-team03'.
+#> ✓ Created repo 'ghclass-vignette/hw1-team01'.
+#> ✓ Created repo 'ghclass-vignette/hw1-team02'.
+#> ✓ Created repo 'ghclass-vignette/hw1-team03'.
 repo_add_team(r, roster$hw1)
-#> ✔ Added team 'hw1-team01' to repo 'ghclass-vignette/hw1-team01'.
-#> ✔ Added team 'hw1-team02' to repo 'ghclass-vignette/hw1-team02'.
-#> ✔ Added team 'hw1-team03' to repo 'ghclass-vignette/hw1-team03'.
+#> Error: Tibble columns must have compatible sizes.
+#> * Size 6: Existing data.
+#> * Size 3: Column at position 2.
+#> ℹ Only values of size one are recycled.
 ```
 
 In the above example we are counting on the fact that the team and repository names are identical, if this were not the case we could do something like the following:
@@ -272,22 +337,19 @@ In the above example we are counting on the fact that the team and repository na
 teams = org_teams("ghclass-vignette", filter="hw1-", exclude = TRUE)
 
 repo_create("ghclass-vignette", teams)
-#> ✔ Created repo 'ghclass-vignette/hw2-team01'.
-#> ✔ Created repo 'ghclass-vignette/hw2-team02'.
-#> ✔ Created repo 'ghclass-vignette/hw2-team03'.
-#> ✔ Created repo 'ghclass-vignette/hw3-team01'.
-#> ✔ Created repo 'ghclass-vignette/hw3-team02'.
-#> ✔ Created repo 'ghclass-vignette/hw3-team03'.
+#> ✓ Created repo 'ghclass-vignette/hw2-team01'.
+#> ✓ Created repo 'ghclass-vignette/hw2-team02'.
+#> ✓ Created repo 'ghclass-vignette/hw2-team03'.
 
 repo_add_team(org_repos("ghclass-vignette","hw2-"), roster$hw2)
-#> ✔ Added team 'hw2-team01' to repo 'ghclass-vignette/hw2-team01'.
-#> ✔ Added team 'hw2-team02' to repo 'ghclass-vignette/hw2-team02'.
-#> ✔ Added team 'hw2-team03' to repo 'ghclass-vignette/hw2-team03'.
+#> Error: Tibble columns must have compatible sizes.
+#> * Size 6: Existing data.
+#> * Size 3: Column at position 2.
+#> ℹ Only values of size one are recycled.
 
 repo_add_team(org_repos("ghclass-vignette","hw3-"), roster$hw3)
-#> ✔ Added team 'hw3-team01' to repo 'ghclass-vignette/hw3-team01'.
-#> ✔ Added team 'hw3-team02' to repo 'ghclass-vignette/hw3-team02'.
-#> ✔ Added team 'hw3-team03' to repo 'ghclass-vignette/hw3-team03'.
+#> Repositories can only be added to one organization at a time.Requested orgs:
+#> Error:
 ```
 
 We can check on all of the existing teams and repos using the `org_teams` and `org_repos` functions respectively.
@@ -296,13 +358,11 @@ We can check on all of the existing teams and repos using the `org_teams` and `o
 ```r
 org_teams("ghclass-vignette")
 #> [1] "hw1-team01" "hw1-team02" "hw1-team03" "hw2-team01" "hw2-team02"
-#> [6] "hw2-team03" "hw3-team01" "hw3-team02" "hw3-team03"
+#> [6] "hw2-team03"
 org_repos("ghclass-vignette")
 #> [1] "ghclass-vignette/hw1-team01" "ghclass-vignette/hw1-team02"
 #> [3] "ghclass-vignette/hw1-team03" "ghclass-vignette/hw2-team01"
 #> [5] "ghclass-vignette/hw2-team02" "ghclass-vignette/hw2-team03"
-#> [7] "ghclass-vignette/hw3-team01" "ghclass-vignette/hw3-team02"
-#> [9] "ghclass-vignette/hw3-team03"
 ```
 
 If we want to place starter docs / code into our assignment repos we can do this by either adding the files directly or mirroring (copying) and existing repository on top of our assignment repo. Generally we have found it to be a good idea to create a public template repository for each assignment which is then used to populate each team individual repository. In this case we will borrow assignments from a class we've previously taught.
@@ -313,11 +373,29 @@ repo_mirror(
   source_repo = "Sta323-Sp19/hw1",
   target_repo = org_repos("ghclass-vignette","hw1-")
 )
-#> ✔ Cloned 'Sta323-Sp19/hw1'.
+#> ✓ Cloned 'Sta323-Sp19/hw1'.
 #> https://github.com/ghclass-vignette/hw1-team01.git
+#> x Failed to push from local repo 'hw1' to '/master'.
+#> API message:
+#> API docs:
+#> Missing page:
+#> 
+#> └─ Remote must either be an existing remote or URL
 #> https://github.com/ghclass-vignette/hw1-team02.git
+#> x Failed to push from local repo 'hw1' to '/master'.
+#> API message:
+#> API docs:
+#> Missing page:
+#> 
+#> └─ Remote must either be an existing remote or URL
 #> https://github.com/ghclass-vignette/hw1-team03.git
-#> ✔ Removed local copy of 'Sta323-Sp19/hw1'
+#> x Failed to push from local repo 'hw1' to '/master'.
+#> API message:
+#> API docs:
+#> Missing page:
+#> 
+#> └─ Remote must either be an existing remote or URL
+#> ✓ Removed local copy of 'Sta323-Sp19/hw1'
 ```
 
 ### Creating an individual assignment
@@ -329,12 +407,12 @@ creating a team assignment, we will need to create repositories for each student
 ```r
 students = org_members("ghclass-vignette", include_admins = FALSE)
 repo_create("ghclass-vignette", students, prefix="hw4-")
-#> ✔ Created repo 'ghclass-vignette/hw4-ghclass-anya'.
-#> ✔ Created repo 'ghclass-vignette/hw4-ghclass-bruno'.
-#> ✔ Created repo 'ghclass-vignette/hw4-ghclass-celine'.
-#> ✔ Created repo 'ghclass-vignette/hw4-ghclass-diego'.
-#> ✔ Created repo 'ghclass-vignette/hw4-ghclass-elijah'.
-#> ✔ Created repo 'ghclass-vignette/hw4-ghclass-francis'.
+#> ✓ Created repo 'ghclass-vignette/hw4-ghclass-anya'.
+#> ✓ Created repo 'ghclass-vignette/hw4-ghclass-bruno'.
+#> ✓ Created repo 'ghclass-vignette/hw4-ghclass-celine'.
+#> ✓ Created repo 'ghclass-vignette/hw4-ghclass-diego'.
+#> ✓ Created repo 'ghclass-vignette/hw4-ghclass-elijah'.
+#> ✓ Created repo 'ghclass-vignette/hw4-ghclass-francis'.
 ```
 
 Adding students individually to repos is done using the `repo_add_user` instead of the `repo_add_team` function.
@@ -342,17 +420,17 @@ Adding students individually to repos is done using the `repo_add_user` instead 
 
 ```r
 repo_add_user(org_repos("ghclass-vignette", "hw4-"), students)
-#> ✔ Added user 'ghclass-anya' to repo
+#> ✓ Added user 'ghclass-anya' to repo
 #>   'ghclass-vignette/hw4-ghclass-anya'.
-#> ✔ Added user 'ghclass-bruno' to repo
+#> ✓ Added user 'ghclass-bruno' to repo
 #>   'ghclass-vignette/hw4-ghclass-bruno'.
-#> ✔ Added user 'ghclass-celine' to repo
+#> ✓ Added user 'ghclass-celine' to repo
 #>   'ghclass-vignette/hw4-ghclass-celine'.
-#> ✔ Added user 'ghclass-diego' to repo
+#> ✓ Added user 'ghclass-diego' to repo
 #>   'ghclass-vignette/hw4-ghclass-diego'.
-#> ✔ Added user 'ghclass-elijah' to repo
+#> ✓ Added user 'ghclass-elijah' to repo
 #>   'ghclass-vignette/hw4-ghclass-elijah'.
-#> ✔ Added user 'ghclass-francis' to repo
+#> ✓ Added user 'ghclass-francis' to repo
 #>   'ghclass-vignette/hw4-ghclass-francis'.
 ```
 
@@ -364,14 +442,50 @@ repo_mirror(
   source_repo = "Sta323-Sp19/hw4",
   target_repo = org_repos("ghclass-vignette","hw4-")
 )
-#> ✔ Cloned 'Sta323-Sp19/hw4'.
+#> ✓ Cloned 'Sta323-Sp19/hw4'.
 #> https://github.com/ghclass-vignette/hw4-ghclass-anya.git
+#> x Failed to push from local repo 'hw4' to '/master'.
+#> API message:
+#> API docs:
+#> Missing page:
+#> 
+#> └─ Remote must either be an existing remote or URL
 #> https://github.com/ghclass-vignette/hw4-ghclass-bruno.git
+#> x Failed to push from local repo 'hw4' to '/master'.
+#> API message:
+#> API docs:
+#> Missing page:
+#> 
+#> └─ Remote must either be an existing remote or URL
 #> https://github.com/ghclass-vignette/hw4-ghclass-celine.git
+#> x Failed to push from local repo 'hw4' to '/master'.
+#> API message:
+#> API docs:
+#> Missing page:
+#> 
+#> └─ Remote must either be an existing remote or URL
 #> https://github.com/ghclass-vignette/hw4-ghclass-diego.git
+#> x Failed to push from local repo 'hw4' to '/master'.
+#> API message:
+#> API docs:
+#> Missing page:
+#> 
+#> └─ Remote must either be an existing remote or URL
 #> https://github.com/ghclass-vignette/hw4-ghclass-elijah.git
+#> x Failed to push from local repo 'hw4' to '/master'.
+#> API message:
+#> API docs:
+#> Missing page:
+#> 
+#> └─ Remote must either be an existing remote or URL
 #> https://github.com/ghclass-vignette/hw4-ghclass-francis.git
-#> ✔ Removed local copy of 'Sta323-Sp19/hw4'
+#> x Failed to push from local repo 'hw4' to '/master'.
+#> API message:
+#> API docs:
+#> Missing page:
+#> 
+#> └─ Remote must either be an existing remote or URL
+#> ✓ Removed local copy of 'Sta323-Sp19/hw4'
 ```
 
 
@@ -397,12 +511,9 @@ repo_add_file(
   message = "Replace README.md with the correct version",
   file = file
 )
-#> ✖ Unable to retrieve file 'README.md' from repo 'ghclass-vignette/hw1-team01'.
-#> ✔ Added file 'README.md' to repo 'ghclass-vignette/hw1-team01'.
-#> ✖ Unable to retrieve file 'README.md' from repo 'ghclass-vignette/hw1-team02'.
-#> ✔ Added file 'README.md' to repo 'ghclass-vignette/hw1-team02'.
-#> ✖ Unable to retrieve file 'README.md' from repo 'ghclass-vignette/hw1-team03'.
-#> ✔ Added file 'README.md' to repo 'ghclass-vignette/hw1-team03'.
+#> ✓ Added file 'README.md' to repo 'ghclass-vignette/hw1-team01'.
+#> ✓ Added file 'README.md' to repo 'ghclass-vignette/hw1-team02'.
+#> ✓ Added file 'README.md' to repo 'ghclass-vignette/hw1-team03'.
 ```
 
 
@@ -413,9 +524,9 @@ repo_add_file(
   file = file,
   overwrite = TRUE
 )
-#> ✔ Added file 'README.md' to repo 'ghclass-vignette/hw1-team01'.
-#> ✔ Added file 'README.md' to repo 'ghclass-vignette/hw1-team02'.
-#> ✔ Added file 'README.md' to repo 'ghclass-vignette/hw1-team03'.
+#> ✓ Added file 'README.md' to repo 'ghclass-vignette/hw1-team01'.
+#> ✓ Added file 'README.md' to repo 'ghclass-vignette/hw1-team02'.
+#> ✓ Added file 'README.md' to repo 'ghclass-vignette/hw1-team03'.
 ```
 
 
@@ -437,9 +548,9 @@ repo_modify_file(
   content = "Due: Tomorrow\n",
   method = "replace"
 )
-#> ✖ Unable to find pattern '(Due by 11:59 pm on Thursday 1/24/2019.\n)' in 'ghclass-vignette/hw1-team01/README.md'.
-#> ✖ Unable to find pattern '(Due by 11:59 pm on Thursday 1/24/2019.\n)' in 'ghclass-vignette/hw1-team02/README.md'.
-#> ✖ Unable to find pattern '(Due by 11:59 pm on Thursday 1/24/2019.\n)' in 'ghclass-vignette/hw1-team03/README.md'.
+#> x Unable to find pattern in 'ghclass-vignette/hw1-team01/README.md'.
+#> x Unable to find pattern in 'ghclass-vignette/hw1-team02/README.md'.
+#> x Unable to find pattern in 'ghclass-vignette/hw1-team03/README.md'.
 ```
 
 
@@ -461,9 +572,9 @@ local_repo_clone(
   repo = org_repos("ghclass-vignette", "hw1-"),
   local_path = "hw1"
 )
-#> ✔ Cloned 'ghclass-vignette/hw1-team01'.
-#> ✔ Cloned 'ghclass-vignette/hw1-team02'.
-#> ✔ Cloned 'ghclass-vignette/hw1-team03'.
+#> ✓ Cloned 'ghclass-vignette/hw1-team01'.
+#> ✓ Cloned 'ghclass-vignette/hw1-team02'.
+#> ✓ Cloned 'ghclass-vignette/hw1-team03'.
 
 fs::dir_tree("hw1/.")
 #> hw1/.

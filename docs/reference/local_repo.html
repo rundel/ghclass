@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Local repository tools — local_repo • ghclass</title>
+<title>Functions for working with local git repositories — local_repo • ghclass</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,15 +46,18 @@
 
 
 
-<meta property="og:title" content="Local repository tools — local_repo" />
-<meta property="og:description" content="The functions provide tools for working with local git repositories, ghclass includes support for following git commands:
-git add = local_repo_add
-git commit = local_repo_commit
-git push = local_repo_push
-git pull = local_repo_pull
-git branch = local_repo_branch
-
-" />
+<meta property="og:title" content="Functions for working with local git repositories — local_repo" />
+<meta property="og:description" content="local_repo_clone - Clones a GitHub repository to a local directory.
+local_repo_add - Equivalent to git add - stages a file in a local repository.
+local_repo_commit - Equivalent to git commit - commits staged files in a local repository.
+local_repo_push - Equivalent to git push - push a local repository.
+local_repo_pull - Equivalent to git pull - pull a local repository.
+local_repo_branch - Equivalent to git branch - create a branch in a local repository.
+local_repo_log - Equivalent to git log - returns a data frame for git log entries.
+local_repo_rename - Rename local directories using a vector of patterns and replacements .
+This is meant to help with renaming student repos to include
+something more useful like Last, First name or a unique identifier
+for the purposes of ordering repository folders." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -105,21 +108,6 @@ git branch = local_repo_branch
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/instructions_students.html">Peer review instructions for students</a>
-    </li>
-    <li>
-      <a href="../articles/peer.html">Peer review with ghclass</a>
-    </li>
-  </ul>
-</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -141,34 +129,42 @@ git branch = local_repo_branch
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Local repository tools</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/local_repo.R'><code>R/local_repo.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/local_repo_add.R'><code>R/local_repo_add.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/local_repo_branch.R'><code>R/local_repo_branch.R</code></a>, and 3 more</small>
+    <h1>Functions for working with local git repositories</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/local_repo.R'><code>R/local_repo.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/local_repo_add.R'><code>R/local_repo_add.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/local_repo_branch.R'><code>R/local_repo_branch.R</code></a>, and 6 more</small>
     <div class="hidden name"><code>local_repo.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>The functions provide tools for working with local git repositories, ghclass includes support for following git commands:</p><ul>
-<li><p>git add = <code>local_repo_add</code></p></li>
-<li><p>git commit = <code>local_repo_commit</code></p></li>
-<li><p>git push = <code>local_repo_push</code></p></li>
-<li><p>git pull = <code>local_repo_pull</code></p></li>
-<li><p>git branch = <code>local_repo_branch</code></p></li>
-</ul>
-
+    <p><code>local_repo_clone</code> - Clones a GitHub repository to a local directory.</p>
+<p><code>local_repo_add</code> - Equivalent to <code>git add</code> - stages a file in a local repository.</p>
+<p><code>local_repo_commit</code> - Equivalent to <code>git commit</code> - commits staged files in a local repository.</p>
+<p><code>local_repo_push</code> - Equivalent to <code>git push</code> - push a local repository.</p>
+<p><code>local_repo_pull</code> - Equivalent to <code>git pull</code> - pull a local repository.</p>
+<p><code>local_repo_branch</code> - Equivalent to <code>git branch</code> - create a branch in a local repository.</p>
+<p><code>local_repo_log</code> - Equivalent to <code>git log</code> - returns a data frame for git log entries.</p>
+<p><code>local_repo_rename</code> - Rename local directories using a vector of patterns and replacements .
+This is meant to help with renaming student repos to include
+something more useful like <code>Last, First name</code> or a unique identifier
+for the purposes of ordering repository folders.</p>
     </div>
 
     <pre class="usage"><span class='fu'>local_repo_add</span>(<span class='no'>repo_dir</span>, <span class='kw'>files</span> <span class='kw'>=</span> <span class='st'>"."</span>)
 
 <span class='fu'>local_repo_branch</span>(<span class='no'>repo_dir</span>, <span class='no'>branch</span>)
 
-<span class='fu'>local_repo_commit</span>(<span class='no'>repo_dir</span>, <span class='no'>message</span>)
-
-<span class='fu'>local_repo_pull</span>(
-  <span class='no'>repo_dir</span>,
-  <span class='kw'>remote</span> <span class='kw'>=</span> <span class='st'>"origin"</span>,
+<span class='fu'>local_repo_clone</span>(
+  <span class='no'>repo</span>,
+  <span class='kw'>local_path</span> <span class='kw'>=</span> <span class='st'>"."</span>,
   <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>,
+  <span class='kw'>mirror</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )
+
+<span class='fu'>local_repo_commit</span>(<span class='no'>repo_dir</span>, <span class='no'>message</span>)
+
+<span class='fu'>local_repo_log</span>(<span class='no'>repo_dir</span>, <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>100</span>)
+
+<span class='fu'>local_repo_pull</span>(<span class='no'>repo_dir</span>, <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>local_repo_push</span>(
   <span class='no'>repo_dir</span>,
@@ -178,14 +174,16 @@ git branch = local_repo_branch
   <span class='kw'>prompt</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>mirror</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)</pre>
+)
+
+<span class='fu'>local_repo_rename</span>(<span class='no'>repo_dir</span>, <span class='no'>pattern</span>, <span class='no'>replacement</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>repo_dir</th>
-      <td><p>Vector of repo directories or a single directory containing one or more repos.</p></td>
+      <td><p>Character. Vector of repo directories or a single directory containing one or more repos.</p></td>
     </tr>
     <tr>
       <th>files</th>
@@ -196,16 +194,32 @@ git branch = local_repo_branch
       <td><p>Repository branch to use.</p></td>
     </tr>
     <tr>
-      <th>message</th>
-      <td><p>Commit message</p></td>
+      <th>repo</th>
+      <td><p>GitHub repo address with the form <code>owner/name</code>.</p></td>
     </tr>
     <tr>
-      <th>remote</th>
-      <td><p>Repository remote to use.</p></td>
+      <th>local_path</th>
+      <td><p>Local directory to store cloned repos.</p></td>
+    </tr>
+    <tr>
+      <th>mirror</th>
+      <td><p>Equivalent to <code>--mirror</code></p></td>
     </tr>
     <tr>
       <th>verbose</th>
       <td><p>Display verbose output.</p></td>
+    </tr>
+    <tr>
+      <th>message</th>
+      <td><p>Commit message</p></td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td><p>Maximum number of log entries to retrieve per repo.</p></td>
+    </tr>
+    <tr>
+      <th>remote</th>
+      <td><p>Repository remote to use.</p></td>
     </tr>
     <tr>
       <th>force</th>
@@ -216,24 +230,48 @@ git branch = local_repo_branch
       <td><p>Prompt before force push?</p></td>
     </tr>
     <tr>
-      <th>mirror</th>
-      <td><p>Equivalent to <code>--mirror</code></p></td>
+      <th>pattern</th>
+      <td><p>Character. One or more regexp patterns to match to directory names.</p></td>
+    </tr>
+    <tr>
+      <th>replacement</th>
+      <td><p>Character.  One or more text strings containing the replacement value for matched patterns.</p></td>
     </tr>
     </table>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>g</span> <span class='kw'>=</span> <span class='fu'><a href='org_repos.html'>org_repos</a></span>(<span class='st'>"Sta323-Sp18"</span>,<span class='st'>"hw3-"</span>)
-<span class='fu'><a href='local_repo_clone.html'>local_repo_clone</a></span>(<span class='no'>g</span>, <span class='st'>"hw3"</span>)
+    <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
+<span class='no'>repo</span> <span class='kw'>=</span> <span class='fu'><a href='repo_core.html'>repo_create</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"local_repo_test"</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use <span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
+#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
+#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to create repo </span><span style='color: #0000BB;'>'ghclass-test/local_repo_test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; 
+#&gt; └─</div><div class='input'>
+<span class='no'>dir</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"repos"</span>)
+<span class='no'>local_repo</span> <span class='kw'>=</span> <span class='fu'>local_repo_clone</span>(<span class='no'>repo</span>, <span class='no'>dir</span>)
 
-<span class='fu'>local_repo_pull</span>(<span class='no'>g</span>, <span class='st'>"hw3"</span>)
+<span class='fu'>local_repo_log</span>(<span class='no'>dir</span>)</div><div class='output co'>#&gt; data frame with 0 columns and 0 rows</div><div class='input'>
+<span class='co'># Make a local change and push</span>
+<span class='fu'><a href='https://rdrr.io/r/base/writeLines.html'>writeLines</a></span>(<span class='st'>"Hello World"</span>, <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>local_repo</span>, <span class='st'>"hello.txt"</span>))</div><div class='output co'>#&gt; <span class='error'>Error in file(con, "w"): invalid 'description' argument</span></div><div class='input'><span class='fu'>local_repo_add</span>(<span class='no'>local_repo</span>, <span class='st'>"hello.txt"</span>)</div><div class='output co'>#&gt; <span class='message'>Argument </span><span style='color: #0000BB;'>'path'</span><span> must not contain any missing values (</span><span style='color: #0000BB;'>NA</span><span>).</span></div><div class='output co'>#&gt; <span class='error'>Error: </span></div><div class='input'><span class='fu'>local_repo_commit</span>(<span class='no'>local_repo</span>, <span class='st'>"Added hello world"</span>)</div><div class='output co'>#&gt; <span class='message'>Argument </span><span style='color: #0000BB;'>'path'</span><span> must not contain any missing values (</span><span style='color: #0000BB;'>NA</span><span>).</span></div><div class='output co'>#&gt; <span class='error'>Error: </span></div><div class='input'><span class='fu'>local_repo_push</span>(<span class='no'>local_repo</span>)</div><div class='output co'>#&gt; <span class='message'>Argument </span><span style='color: #0000BB;'>'path'</span><span> must not contain any missing values (</span><span style='color: #0000BB;'>NA</span><span>).</span></div><div class='output co'>#&gt; <span class='error'>Error: </span></div><div class='input'>
+<span class='fu'><a href='repo_details.html'>repo_commits</a></span>(<span class='no'>repo</span>)</div><div class='output co'>#&gt; data frame with 0 columns and 0 rows</div><div class='input'>
+<span class='co'># Pulling remote changes</span>
+<span class='fu'><a href='repo_file.html'>repo_modify_file</a></span>(<span class='no'>repo</span>, <span class='st'>"hello.txt"</span>, <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>".*"</span>,  <span class='kw'>content</span> <span class='kw'>=</span> <span class='st'>"!!!"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"after"</span>)
+<span class='fu'>local_repo_pull</span>(<span class='no'>local_repo</span>)</div><div class='output co'>#&gt; <span class='message'>Argument </span><span style='color: #0000BB;'>'path'</span><span> must not contain any missing values (</span><span style='color: #0000BB;'>NA</span><span>).</span></div><div class='output co'>#&gt; <span class='error'>Error: </span></div><div class='input'><span class='fu'>local_repo_log</span>(<span class='no'>dir</span>)</div><div class='output co'>#&gt; data frame with 0 columns and 0 rows</div><div class='input'>
+<span class='fu'><a href='repo_core.html'>repo_delete</a></span>(<span class='st'>"ghclass-test/local_repo_test"</span>, <span class='kw'>prompt</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
+#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to delete repo </span><span style='color: #0000BB;'>'ghclass-test/local_repo_test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; 
+#&gt; └─</div><div class='input'><span class='co'># }</span>
 
-<span class='co'># After Modifying hw3.Rmd</span>
-<span class='fu'>local_repo_add</span>(<span class='st'>"hw3"</span>, <span class='st'>"hw3.Rmd"</span>)
-<span class='fu'>local_repo_commit</span>(<span class='st'>"hw3"</span>, <span class='st'>"Revised homework"</span>)
-<span class='fu'>local_repo_push</span>(<span class='st'>"hw3"</span>)
-}</div></pre>
+<span class='co'># \dontrun{</span>
+<span class='no'>local_repo</span> <span class='kw'>=</span> <span class='fu'>local_repo_clone</span>(<span class='st'>"Sta323-Sp19/hw1"</span>, <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>())</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Cloned </span><span style='color: #0000BB;'>'Sta323-Sp19/hw1'</span><span>.</span></div><div class='input'>
+<span class='no'>repo</span> <span class='kw'>=</span> <span class='fu'><a href='repo_core.html'>repo_create</a></span>(<span class='st'>"ghclass-demo"</span>, <span class='st'>"hw1-mirror"</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
+#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
+#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to create repo </span><span style='color: #0000BB;'>'ghclass-demo/hw1-mirror'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; 
+#&gt; └─</div><div class='input'><span class='no'>repo_url</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"https://github.com/"</span>,<span class='no'>repo</span>,<span class='st'>".git"</span>)
+
+<span class='fu'>local_repo_push</span>(<span class='no'>local_repo</span>, <span class='kw'>remote</span> <span class='kw'>=</span> <span class='no'>repo_url</span>, <span class='kw'>force</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prompt</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>mirror</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to push from local repo </span><span style='color: #0000BB;'>'hw1'</span><span> to</span>
+#&gt; <span class='message'>  </span><span style='color: #0000BB;'>'https://github.com/.git/master'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; 
+#&gt; └─unexpected http status code: 404</div><div class='input'>
+<span class='fu'><a href='repo_core.html'>repo_delete</a></span>(<span class='no'>repo</span>, <span class='kw'>prompt</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='co'># }</span></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

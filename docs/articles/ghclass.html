@@ -56,21 +56,6 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="../articles/instructions_students.html">Peer review instructions for students</a>
-    </li>
-    <li>
-      <a href="../articles/peer.html">Peer review with ghclass</a>
-    </li>
-  </ul>
-</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -89,13 +74,13 @@
 
       
 
-      </header><script src="ghclass_files/header-attrs-2.1/header-attrs.js"></script><div class="row">
+      </header><script src="ghclass_files/header-attrs-2.3/header-attrs.js"></script><script src="ghclass_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Course management with ghclass</h1>
                         <h4 class="author">Mine Çetinkaya-Rundel, Colin Rundel, Therese Anders</h4>
             
-            <h4 class="date">2020-02-04</h4>
+            <h4 class="date">2020-07-09</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/rundel/ghclass/blob/master/vignettes/ghclass.Rmd"><code>vignettes/ghclass.Rmd</code></a></small>
       <div class="hidden name"><code>ghclass.Rmd</code></div>
@@ -138,12 +123,18 @@
 <a href="#authentication" class="anchor"></a>Authentication</h2>
 <p>This package uses tokens for authentication with <a href="https://github.com/settings/tokens">github</a>, these values can be supplied via environmental variables <code>GITHUB_PAT</code> or <code>GITHUB_TOKEN</code> or saved as text in <code>~/.github/token</code>.</p>
 <p>If this is your first time setting up a personal access token (PAT), generate a token in the browser after logging into Github (Settings &gt; Developer Settings &gt; Personal access tokens) or use <a href="https://usethis.r-lib.org/articles/articles/usethis-setup.html#get-and-store-a-github-personal-access-token"><code><a href="https://usethis.r-lib.org/reference/browse_github_token.html">usethis::browse_github_token</a></code></a>.</p>
-<p>You can test that your token is working correctly using the <code><a href="../reference/github_test_token.html">github_test_token()</a></code> function.</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="../reference/github_test_token.html">github_test_token</a></span>()
-<span class="co">#&gt; ✔ Your github token is functioning correctly.</span>
-<span class="fu"><a href="../reference/github_test_token.html">github_test_token</a></span>(<span class="st">"bad token"</span>)
-<span class="co">#&gt; ✖ Your github token failed to authenticate.</span>
-<span class="co">#&gt; </span></pre></body></html></div>
+<p>You can test that your token is working correctly using the <code><a href="../reference/github.html">github_test_token()</a></code> function.</p>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="../reference/github.html">github_test_token</a></span>()
+<span class="co">#&gt; ✓ Your GitHub PAT authenticated correctly.</span>
+<span class="fu"><a href="../reference/github.html">github_test_token</a></span>(<span class="st">"bad token"</span>)
+<span class="co">#&gt; x Your GitHub PAT failed to authenticate.</span>
+<span class="co">#&gt; API message: Bad credentials</span>
+<span class="co">#&gt; API docs: https://developer.github.com/v3</span>
+<span class="co">#&gt; Missing page:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; └─ GitHub API error (401): 401 Unauthorized</span>
+<span class="co">#&gt;   ├─ </span>
+<span class="co">#&gt;   └─</span></pre></body></html></div>
 </div>
 <div id="step-by-step-guide" class="section level2">
 <h2 class="hasAnchor">
@@ -168,26 +159,26 @@
 <span class="co">#&gt; 5 elijah@school.edu  ghclass-elijah  hw1-team02 hw2-team01 hw3-team03</span>
 <span class="co">#&gt; 6 francis@school.edu ghclass-francis hw1-team03 hw2-team02 hw3-team01</span></pre></body></html></div>
 <p>Using the <code>roster</code> data frame, we can then invite the students to the class’ organzation. This will send an email to each student inviting them to join the GitHub organization.</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="../reference/org_invite.html">org_invite</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="no">roster</span>$<span class="no">github</span>)
-<span class="co">#&gt; ✔ Invited user 'ghclass-anya' to org 'ghclass-vignette'.</span>
-<span class="co">#&gt; ✔ Invited user 'ghclass-bruno' to org 'ghclass-vignette'.</span>
-<span class="co">#&gt; ✔ Invited user 'ghclass-celine' to org 'ghclass-vignette'.</span>
-<span class="co">#&gt; ✔ Invited user 'ghclass-diego' to org 'ghclass-vignette'.</span>
-<span class="co">#&gt; ✔ Invited user 'ghclass-elijah' to org 'ghclass-vignette'.</span>
-<span class="co">#&gt; ✔ Invited user 'ghclass-francis' to org 'ghclass-vignette'.</span></pre></body></html></div>
-<p>We now need to wait for the students to accept these invitations before they will have access to the organization. We can check the status of these acceptances using the <code><a href="../reference/org_members.html">org_members()</a></code> and <code><a href="../reference/org_pending.html">org_pending()</a></code> to see which students have accepting and have not accepted the invitation.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="../reference/org_members.html">org_members</a></span>(<span class="st">"ghclass-vignette"</span>)
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="../reference/org.html">org_invite</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="no">roster</span>$<span class="no">github</span>)
+<span class="co">#&gt; ✓ Invited user 'ghclass-anya' to org 'ghclass-vignette'.</span>
+<span class="co">#&gt; ✓ Invited user 'ghclass-bruno' to org 'ghclass-vignette'.</span>
+<span class="co">#&gt; ✓ Invited user 'ghclass-celine' to org 'ghclass-vignette'.</span>
+<span class="co">#&gt; ✓ Invited user 'ghclass-diego' to org 'ghclass-vignette'.</span>
+<span class="co">#&gt; ✓ Invited user 'ghclass-elijah' to org 'ghclass-vignette'.</span>
+<span class="co">#&gt; ✓ Invited user 'ghclass-francis' to org 'ghclass-vignette'.</span></pre></body></html></div>
+<p>We now need to wait for the students to accept these invitations before they will have access to the organization. We can check the status of these acceptances using the <code><a href="../reference/org.html">org_members()</a></code> and <code><a href="../reference/org.html">org_pending()</a></code> to see which students have accepting and have not accepted the invitation.</p>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="../reference/org.html">org_members</a></span>(<span class="st">"ghclass-vignette"</span>)
 <span class="co">#&gt; [1] "mine-cetinkaya-rundel" "rundel"                "thereseanders"</span>
-<span class="fu"><a href="../reference/org_members.html">org_members</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="kw">include_admins</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="fu"><a href="../reference/org.html">org_members</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="kw">include_admins</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 <span class="co">#&gt; character(0)</span>
-<span class="fu"><a href="../reference/org_pending.html">org_pending</a></span>(<span class="st">"ghclass-vignette"</span>)
-<span class="co">#&gt; [1] "ghclass-anya"    "ghclass-bruno"   "ghclass-diego"   "ghclass-elijah"  "ghclass-francis"</span>
-<span class="co">#&gt; [6] "ghclass-celine"</span></pre></body></html></div>
+<span class="fu"><a href="../reference/org.html">org_pending</a></span>(<span class="st">"ghclass-vignette"</span>)
+<span class="co">#&gt; [1] "ghclass-anya"    "ghclass-bruno"   "ghclass-diego"   "ghclass-elijah" </span>
+<span class="co">#&gt; [5] "ghclass-francis" "ghclass-celine"</span></pre></body></html></div>
 <p>If we give things a bit of time, some of the students will have accepted the invitation.</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="../reference/org_members.html">org_members</a></span>(<span class="st">"ghclass-vignette"</span>)
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="../reference/org.html">org_members</a></span>(<span class="st">"ghclass-vignette"</span>)
 <span class="co">#&gt; [1] "ghclass-anya"          "ghclass-celine"        "ghclass-francis"      </span>
 <span class="co">#&gt; [4] "mine-cetinkaya-rundel" "rundel"                "thereseanders"</span>
-<span class="fu"><a href="../reference/org_pending.html">org_pending</a></span>(<span class="st">"ghclass-vignette"</span>)
+<span class="fu"><a href="../reference/org.html">org_pending</a></span>(<span class="st">"ghclass-vignette"</span>)
 <span class="co">#&gt; [1] "ghclass-bruno"  "ghclass-diego"  "ghclass-elijah"</span></pre></body></html></div>
 <p>We can now see that Anya, Celine, and Francis have accepted the invite and we are still waitin on Bruno, Diego, and Elijah. Gentle prodding and reminder emails are often necessary to get all of the students into the organization.</p>
 </div>
@@ -195,125 +186,240 @@
 <h3 class="hasAnchor">
 <a href="#creating-teams" class="anchor"></a>Creating teams</h3>
 <p>We will now create teams which will be used for the first two homework assignments in the class. We can either use the <code>hw1</code> and <code>hw2</code> columns from the <code>roster</code> data frame directly or we can vectorize the process and add either a common prefix or suffix.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="../reference/team_create.html">team_create</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="no">roster</span>$<span class="no">hw1</span>)
-<span class="co">#&gt; ✔ Created team 'hw1-team01' in org 'ghclass-vignette'.</span>
-<span class="co">#&gt; ✔ Created team 'hw1-team02' in org 'ghclass-vignette'.</span>
-<span class="co">#&gt; ✔ Created team 'hw1-team03' in org 'ghclass-vignette'.</span></pre></body></html></div>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="../reference/team_create.html">team_create</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="kw">team</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"team01"</span>, <span class="st">"team02"</span>, <span class="st">"team03"</span>), <span class="kw">prefix</span> <span class="kw">=</span> <span class="st">"hw2-"</span>)
-<span class="co">#&gt; ✔ Created team 'hw2-team01' in org 'ghclass-vignette'.</span>
-<span class="co">#&gt; ✔ Created team 'hw2-team02' in org 'ghclass-vignette'.</span>
-<span class="co">#&gt; ✔ Created team 'hw2-team03' in org 'ghclass-vignette'.</span></pre></body></html></div>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="../reference/team.html">team_create</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="no">roster</span>$<span class="no">hw1</span>)
+<span class="co">#&gt; ✓ Created team 'hw1-team01' in org 'ghclass-vignette'.</span>
+<span class="co">#&gt; ✓ Created team 'hw1-team02' in org 'ghclass-vignette'.</span>
+<span class="co">#&gt; ✓ Created team 'hw1-team03' in org 'ghclass-vignette'.</span></pre></body></html></div>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="../reference/team.html">team_create</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="kw">team</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"team01"</span>, <span class="st">"team02"</span>, <span class="st">"team03"</span>), <span class="kw">prefix</span> <span class="kw">=</span> <span class="st">"hw2-"</span>)
+<span class="co">#&gt; ✓ Created team 'hw2-team01' in org 'ghclass-vignette'.</span>
+<span class="co">#&gt; ✓ Created team 'hw2-team02' in org 'ghclass-vignette'.</span>
+<span class="co">#&gt; ✓ Created team 'hw2-team03' in org 'ghclass-vignette'.</span></pre></body></html></div>
 <p>Once the teams are created we can then add the students to these teams.</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="../reference/team_invite.html">team_invite</a></span>(<span class="kw">org</span> <span class="kw">=</span> <span class="st">"ghclass-vignette"</span>, <span class="kw">user</span> <span class="kw">=</span> <span class="no">roster</span>$<span class="no">github</span>, <span class="kw">team</span> <span class="kw">=</span> <span class="no">roster</span>$<span class="no">hw1</span>)
-<span class="co">#&gt; ✔ Added 'ghclass-anya' to team 'hw1-team01'.</span>
-<span class="co">#&gt; ✔ Added 'ghclass-diego' to team 'hw1-team01'.</span>
-<span class="co">#&gt; ✔ Added 'ghclass-bruno' to team 'hw1-team02'.</span>
-<span class="co">#&gt; ✔ Added 'ghclass-elijah' to team 'hw1-team02'.</span>
-<span class="co">#&gt; ✔ Added 'ghclass-celine' to team 'hw1-team03'.</span>
-<span class="co">#&gt; ✔ Added 'ghclass-francis' to team 'hw1-team03'.</span>
-<span class="fu"><a href="../reference/team_invite.html">team_invite</a></span>(<span class="kw">org</span> <span class="kw">=</span> <span class="st">"ghclass-vignette"</span>, <span class="kw">user</span> <span class="kw">=</span> <span class="no">roster</span>$<span class="no">github</span>, <span class="kw">team</span> <span class="kw">=</span> <span class="no">roster</span>$<span class="no">hw2</span>)
-<span class="co">#&gt; ✔ Added 'ghclass-anya' to team 'hw2-team01'.</span>
-<span class="co">#&gt; ✔ Added 'ghclass-elijah' to team 'hw2-team01'.</span>
-<span class="co">#&gt; ✔ Added 'ghclass-bruno' to team 'hw2-team02'.</span>
-<span class="co">#&gt; ✔ Added 'ghclass-francis' to team 'hw2-team02'.</span>
-<span class="co">#&gt; ✔ Added 'ghclass-celine' to team 'hw2-team03'.</span>
-<span class="co">#&gt; ✔ Added 'ghclass-diego' to team 'hw2-team03'.</span></pre></body></html></div>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="../reference/team.html">team_invite</a></span>(<span class="kw">org</span> <span class="kw">=</span> <span class="st">"ghclass-vignette"</span>, <span class="kw">user</span> <span class="kw">=</span> <span class="no">roster</span>$<span class="no">github</span>, <span class="kw">team</span> <span class="kw">=</span> <span class="no">roster</span>$<span class="no">hw1</span>)
+<span class="co">#&gt; ✓ Added user 'ghclass-anya' to team 'hw1-team01'.</span>
+<span class="co">#&gt; ✓ Added user 'ghclass-bruno' to team 'hw1-team02'.</span>
+<span class="co">#&gt; ✓ Added user 'ghclass-celine' to team 'hw1-team03'.</span>
+<span class="co">#&gt; ✓ Added user 'ghclass-diego' to team 'hw1-team01'.</span>
+<span class="co">#&gt; ✓ Added user 'ghclass-elijah' to team 'hw1-team02'.</span>
+<span class="co">#&gt; ✓ Added user 'ghclass-francis' to team 'hw1-team03'.</span>
+<span class="fu"><a href="../reference/team.html">team_invite</a></span>(<span class="kw">org</span> <span class="kw">=</span> <span class="st">"ghclass-vignette"</span>, <span class="kw">user</span> <span class="kw">=</span> <span class="no">roster</span>$<span class="no">github</span>, <span class="kw">team</span> <span class="kw">=</span> <span class="no">roster</span>$<span class="no">hw2</span>)
+<span class="co">#&gt; ✓ Added user 'ghclass-anya' to team 'hw2-team01'.</span>
+<span class="co">#&gt; ✓ Added user 'ghclass-bruno' to team 'hw2-team02'.</span>
+<span class="co">#&gt; ✓ Added user 'ghclass-celine' to team 'hw2-team03'.</span>
+<span class="co">#&gt; ✓ Added user 'ghclass-diego' to team 'hw2-team03'.</span>
+<span class="co">#&gt; ✓ Added user 'ghclass-elijah' to team 'hw2-team01'.</span>
+<span class="co">#&gt; ✓ Added user 'ghclass-francis' to team 'hw2-team02'.</span></pre></body></html></div>
 <p>Also if we happen to try to invite students to a team that does not exist yet, then helpfully <code>team_invite</code> will create the team for you and then invite the students. This behavior is governed by the <code>create_missing_teams</code> parameter, which is <code>TRUE</code> by default.</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="../reference/team_invite.html">team_invite</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="no">roster</span>$<span class="no">github</span>, <span class="no">roster</span>$<span class="no">hw3</span>)
-<span class="co">#&gt; ✔ Created team 'hw3-team01' in org 'ghclass-vignette'.</span>
-<span class="co">#&gt; ✔ Created team 'hw3-team02' in org 'ghclass-vignette'.</span>
-<span class="co">#&gt; ✔ Created team 'hw3-team03' in org 'ghclass-vignette'.</span>
-<span class="co">#&gt; ✔ Added 'ghclass-anya' to team 'hw3-team01'.</span>
-<span class="co">#&gt; ✔ Added 'ghclass-francis' to team 'hw3-team01'.</span>
-<span class="co">#&gt; ✔ Added 'ghclass-bruno' to team 'hw3-team02'.</span>
-<span class="co">#&gt; ✔ Added 'ghclass-diego' to team 'hw3-team02'.</span>
-<span class="co">#&gt; ✔ Added 'ghclass-celine' to team 'hw3-team03'.</span>
-<span class="co">#&gt; ✔ Added 'ghclass-elijah' to team 'hw3-team03'.</span></pre></body></html></div>
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="../reference/team.html">team_invite</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="no">roster</span>$<span class="no">github</span>, <span class="no">roster</span>$<span class="no">hw3</span>)
+<span class="co">#&gt; x Failed to add user 'ghclass-anya' to team 'hw3-team01'.</span>
+<span class="co">#&gt; API message: Not Found</span>
+<span class="co">#&gt; API docs:</span>
+<span class="co">#&gt; https://developer.github.com/v3/teams/members/#add-or-update-team-membership</span>
+<span class="co">#&gt; Missing page:</span>
+<span class="co">#&gt; https://api.github.com/orgs/ghclass-vignette/teams/hw3-team01/memberships/ghclass-anya</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; └─ GitHub API error (404): 404 Not Found</span>
+<span class="co">#&gt;   ├─ </span>
+<span class="co">#&gt;   ├─ </span>
+<span class="co">#&gt;   └─</span>
+<span class="co">#&gt; x Failed to add user 'ghclass-bruno' to team 'hw3-team02'.</span>
+<span class="co">#&gt; API message: Not Found</span>
+<span class="co">#&gt; API docs:</span>
+<span class="co">#&gt; https://developer.github.com/v3/teams/members/#add-or-update-team-membership</span>
+<span class="co">#&gt; Missing page:</span>
+<span class="co">#&gt; https://api.github.com/orgs/ghclass-vignette/teams/hw3-team02/memberships/ghclass-bruno</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; └─ GitHub API error (404): 404 Not Found</span>
+<span class="co">#&gt;   ├─ </span>
+<span class="co">#&gt;   ├─ </span>
+<span class="co">#&gt;   └─</span>
+<span class="co">#&gt; x Failed to add user 'ghclass-celine' to team 'hw3-team03'.</span>
+<span class="co">#&gt; API message: Not Found</span>
+<span class="co">#&gt; API docs:</span>
+<span class="co">#&gt; https://developer.github.com/v3/teams/members/#add-or-update-team-membership</span>
+<span class="co">#&gt; Missing page:</span>
+<span class="co">#&gt; https://api.github.com/orgs/ghclass-vignette/teams/hw3-team03/memberships/ghclass-celine</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; └─ GitHub API error (404): 404 Not Found</span>
+<span class="co">#&gt;   ├─ </span>
+<span class="co">#&gt;   ├─ </span>
+<span class="co">#&gt;   └─</span>
+<span class="co">#&gt; x Failed to add user 'ghclass-diego' to team 'hw3-team02'.</span>
+<span class="co">#&gt; API message: Not Found</span>
+<span class="co">#&gt; API docs:</span>
+<span class="co">#&gt; https://developer.github.com/v3/teams/members/#add-or-update-team-membership</span>
+<span class="co">#&gt; Missing page:</span>
+<span class="co">#&gt; https://api.github.com/orgs/ghclass-vignette/teams/hw3-team02/memberships/ghclass-diego</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; └─ GitHub API error (404): 404 Not Found</span>
+<span class="co">#&gt;   ├─ </span>
+<span class="co">#&gt;   ├─ </span>
+<span class="co">#&gt;   └─</span>
+<span class="co">#&gt; x Failed to add user 'ghclass-elijah' to team 'hw3-team03'.</span>
+<span class="co">#&gt; API message: Not Found</span>
+<span class="co">#&gt; API docs:</span>
+<span class="co">#&gt; https://developer.github.com/v3/teams/members/#add-or-update-team-membership</span>
+<span class="co">#&gt; Missing page:</span>
+<span class="co">#&gt; https://api.github.com/orgs/ghclass-vignette/teams/hw3-team03/memberships/ghclass-elijah</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; └─ GitHub API error (404): 404 Not Found</span>
+<span class="co">#&gt;   ├─ </span>
+<span class="co">#&gt;   ├─ </span>
+<span class="co">#&gt;   └─</span>
+<span class="co">#&gt; x Failed to add user 'ghclass-francis' to team 'hw3-team01'.</span>
+<span class="co">#&gt; API message: Not Found</span>
+<span class="co">#&gt; API docs:</span>
+<span class="co">#&gt; https://developer.github.com/v3/teams/members/#add-or-update-team-membership</span>
+<span class="co">#&gt; Missing page:</span>
+<span class="co">#&gt; https://api.github.com/orgs/ghclass-vignette/teams/hw3-team01/memberships/ghclass-francis</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; └─ GitHub API error (404): 404 Not Found</span>
+<span class="co">#&gt;   ├─ </span>
+<span class="co">#&gt;   ├─ </span>
+<span class="co">#&gt;   └─</span></pre></body></html></div>
 </div>
 <div id="creating-a-team-assignment" class="section level3">
 <h3 class="hasAnchor">
 <a href="#creating-a-team-assignment" class="anchor"></a>Creating a team assignment</h3>
 <p>Now that we have teams within our organization we can now create repos for each team and each assignment as well as add each team to these repositories (which gives then read and write access).</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">r</span> <span class="kw">=</span> <span class="fu"><a href="../reference/repo_create.html">repo_create</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="kw">name</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"team01"</span>, <span class="st">"team02"</span>,<span class="st">"team03"</span>), <span class="kw">prefix</span><span class="kw">=</span><span class="st">"hw1-"</span>)
-<span class="co">#&gt; ✔ Created repo 'ghclass-vignette/hw1-team01'.</span>
-<span class="co">#&gt; ✔ Created repo 'ghclass-vignette/hw1-team02'.</span>
-<span class="co">#&gt; ✔ Created repo 'ghclass-vignette/hw1-team03'.</span>
-<span class="fu"><a href="../reference/repo_add_team.html">repo_add_team</a></span>(<span class="no">r</span>, <span class="no">roster</span>$<span class="no">hw1</span>)
-<span class="co">#&gt; ✔ Added team 'hw1-team01' to repo 'ghclass-vignette/hw1-team01'.</span>
-<span class="co">#&gt; ✔ Added team 'hw1-team02' to repo 'ghclass-vignette/hw1-team02'.</span>
-<span class="co">#&gt; ✔ Added team 'hw1-team03' to repo 'ghclass-vignette/hw1-team03'.</span></pre></body></html></div>
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">r</span> <span class="kw">=</span> <span class="fu"><a href="../reference/repo_core.html">repo_create</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="kw">name</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"team01"</span>, <span class="st">"team02"</span>,<span class="st">"team03"</span>), <span class="kw">prefix</span><span class="kw">=</span><span class="st">"hw1-"</span>)
+<span class="co">#&gt; ✓ Created repo 'ghclass-vignette/hw1-team01'.</span>
+<span class="co">#&gt; ✓ Created repo 'ghclass-vignette/hw1-team02'.</span>
+<span class="co">#&gt; ✓ Created repo 'ghclass-vignette/hw1-team03'.</span>
+<span class="fu"><a href="../reference/repo_user.html">repo_add_team</a></span>(<span class="no">r</span>, <span class="no">roster</span>$<span class="no">hw1</span>)
+<span class="co">#&gt; Error: Tibble columns must have compatible sizes.</span>
+<span class="co">#&gt; * Size 6: Existing data.</span>
+<span class="co">#&gt; * Size 3: Column at position 2.</span>
+<span class="co">#&gt; ℹ Only values of size one are recycled.</span></pre></body></html></div>
 <p>In the above example we are counting on the fact that the team and repository names are identical, if this were not the case we could do something like the following:</p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">teams</span> <span class="kw">=</span> <span class="fu"><a href="../reference/org_teams.html">org_teams</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="kw">filter</span><span class="kw">=</span><span class="st">"hw1-"</span>, <span class="kw">exclude</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">teams</span> <span class="kw">=</span> <span class="fu"><a href="../reference/org.html">org_teams</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="kw">filter</span><span class="kw">=</span><span class="st">"hw1-"</span>, <span class="kw">exclude</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
 
-<span class="fu"><a href="../reference/repo_create.html">repo_create</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="no">teams</span>)
-<span class="co">#&gt; ✔ Created repo 'ghclass-vignette/hw2-team01'.</span>
-<span class="co">#&gt; ✔ Created repo 'ghclass-vignette/hw2-team02'.</span>
-<span class="co">#&gt; ✔ Created repo 'ghclass-vignette/hw2-team03'.</span>
-<span class="co">#&gt; ✔ Created repo 'ghclass-vignette/hw3-team01'.</span>
-<span class="co">#&gt; ✔ Created repo 'ghclass-vignette/hw3-team02'.</span>
-<span class="co">#&gt; ✔ Created repo 'ghclass-vignette/hw3-team03'.</span>
+<span class="fu"><a href="../reference/repo_core.html">repo_create</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="no">teams</span>)
+<span class="co">#&gt; ✓ Created repo 'ghclass-vignette/hw2-team01'.</span>
+<span class="co">#&gt; ✓ Created repo 'ghclass-vignette/hw2-team02'.</span>
+<span class="co">#&gt; ✓ Created repo 'ghclass-vignette/hw2-team03'.</span>
 
-<span class="fu"><a href="../reference/repo_add_team.html">repo_add_team</a></span>(<span class="fu"><a href="../reference/org_repos.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>,<span class="st">"hw2-"</span>), <span class="no">roster</span>$<span class="no">hw2</span>)
-<span class="co">#&gt; ✔ Added team 'hw2-team01' to repo 'ghclass-vignette/hw2-team01'.</span>
-<span class="co">#&gt; ✔ Added team 'hw2-team02' to repo 'ghclass-vignette/hw2-team02'.</span>
-<span class="co">#&gt; ✔ Added team 'hw2-team03' to repo 'ghclass-vignette/hw2-team03'.</span>
+<span class="fu"><a href="../reference/repo_user.html">repo_add_team</a></span>(<span class="fu"><a href="../reference/org.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>,<span class="st">"hw2-"</span>), <span class="no">roster</span>$<span class="no">hw2</span>)
+<span class="co">#&gt; Error: Tibble columns must have compatible sizes.</span>
+<span class="co">#&gt; * Size 6: Existing data.</span>
+<span class="co">#&gt; * Size 3: Column at position 2.</span>
+<span class="co">#&gt; ℹ Only values of size one are recycled.</span>
 
-<span class="fu"><a href="../reference/repo_add_team.html">repo_add_team</a></span>(<span class="fu"><a href="../reference/org_repos.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>,<span class="st">"hw3-"</span>), <span class="no">roster</span>$<span class="no">hw3</span>)
-<span class="co">#&gt; ✔ Added team 'hw3-team01' to repo 'ghclass-vignette/hw3-team01'.</span>
-<span class="co">#&gt; ✔ Added team 'hw3-team02' to repo 'ghclass-vignette/hw3-team02'.</span>
-<span class="co">#&gt; ✔ Added team 'hw3-team03' to repo 'ghclass-vignette/hw3-team03'.</span></pre></body></html></div>
+<span class="fu"><a href="../reference/repo_user.html">repo_add_team</a></span>(<span class="fu"><a href="../reference/org.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>,<span class="st">"hw3-"</span>), <span class="no">roster</span>$<span class="no">hw3</span>)
+<span class="co">#&gt; Repositories can only be added to one organization at a time.Requested orgs:</span>
+<span class="co">#&gt; Error:</span></pre></body></html></div>
 <p>We can check on all of the existing teams and repos using the <code>org_teams</code> and <code>org_repos</code> functions respectively.</p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="../reference/org_teams.html">org_teams</a></span>(<span class="st">"ghclass-vignette"</span>)
-<span class="co">#&gt; [1] "hw1-team01" "hw1-team02" "hw1-team03" "hw2-team01" "hw2-team02" "hw2-team03" "hw3-team01"</span>
-<span class="co">#&gt; [8] "hw3-team02" "hw3-team03"</span>
-<span class="fu"><a href="../reference/org_repos.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>)
-<span class="co">#&gt; [1] "ghclass-vignette/hw1-team01" "ghclass-vignette/hw1-team02" "ghclass-vignette/hw1-team03"</span>
-<span class="co">#&gt; [4] "ghclass-vignette/hw2-team01" "ghclass-vignette/hw2-team02" "ghclass-vignette/hw2-team03"</span>
-<span class="co">#&gt; [7] "ghclass-vignette/hw3-team01" "ghclass-vignette/hw3-team02" "ghclass-vignette/hw3-team03"</span></pre></body></html></div>
+<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="../reference/org.html">org_teams</a></span>(<span class="st">"ghclass-vignette"</span>)
+<span class="co">#&gt; [1] "hw1-team01" "hw1-team02" "hw1-team03" "hw2-team01" "hw2-team02"</span>
+<span class="co">#&gt; [6] "hw2-team03"</span>
+<span class="fu"><a href="../reference/org.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>)
+<span class="co">#&gt; [1] "ghclass-vignette/hw1-team01" "ghclass-vignette/hw1-team02"</span>
+<span class="co">#&gt; [3] "ghclass-vignette/hw1-team03" "ghclass-vignette/hw2-team01"</span>
+<span class="co">#&gt; [5] "ghclass-vignette/hw2-team02" "ghclass-vignette/hw2-team03"</span></pre></body></html></div>
 <p>If we want to place starter docs / code into our assignment repos we can do this by either adding the files directly or mirroring (copying) and existing repository on top of our assignment repo. Generally we have found it to be a good idea to create a public template repository for each assignment which is then used to populate each team individual repository. In this case we will borrow assignments from a class we’ve previously taught.</p>
-<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="fu"><a href="../reference/repo_mirror.html">repo_mirror</a></span>(
+<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="fu"><a href="../reference/repo_core.html">repo_mirror</a></span>(
   <span class="kw">source_repo</span> <span class="kw">=</span> <span class="st">"Sta323-Sp19/hw1"</span>,
-  <span class="kw">target_repo</span> <span class="kw">=</span> <span class="fu"><a href="../reference/org_repos.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>,<span class="st">"hw1-"</span>)
+  <span class="kw">target_repo</span> <span class="kw">=</span> <span class="fu"><a href="../reference/org.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>,<span class="st">"hw1-"</span>)
 )
-<span class="co">#&gt; ✔ Cloned 'Sta323-Sp19/hw1'.</span>
-<span class="co">#&gt; ✔ Pushed from 'hw1' to 'https://github.com/ghclass-vignette/hw1-team01.git/master'.</span>
-<span class="co">#&gt; ✔ Pushed from 'hw1' to 'https://github.com/ghclass-vignette/hw1-team02.git/master'.</span>
-<span class="co">#&gt; ✔ Pushed from 'hw1' to 'https://github.com/ghclass-vignette/hw1-team03.git/master'.</span>
-<span class="co">#&gt; ✔ Removed local copy of 'Sta323-Sp19/hw1'</span></pre></body></html></div>
+<span class="co">#&gt; ✓ Cloned 'Sta323-Sp19/hw1'.</span>
+<span class="co">#&gt; https://github.com/ghclass-vignette/hw1-team01.git</span>
+<span class="co">#&gt; x Failed to push from local repo 'hw1' to '/master'.</span>
+<span class="co">#&gt; API message:</span>
+<span class="co">#&gt; API docs:</span>
+<span class="co">#&gt; Missing page:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; └─ Remote must either be an existing remote or URL</span>
+<span class="co">#&gt; https://github.com/ghclass-vignette/hw1-team02.git</span>
+<span class="co">#&gt; x Failed to push from local repo 'hw1' to '/master'.</span>
+<span class="co">#&gt; API message:</span>
+<span class="co">#&gt; API docs:</span>
+<span class="co">#&gt; Missing page:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; └─ Remote must either be an existing remote or URL</span>
+<span class="co">#&gt; https://github.com/ghclass-vignette/hw1-team03.git</span>
+<span class="co">#&gt; x Failed to push from local repo 'hw1' to '/master'.</span>
+<span class="co">#&gt; API message:</span>
+<span class="co">#&gt; API docs:</span>
+<span class="co">#&gt; Missing page:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; └─ Remote must either be an existing remote or URL</span>
+<span class="co">#&gt; ✓ Removed local copy of 'Sta323-Sp19/hw1'</span></pre></body></html></div>
 </div>
 <div id="creating-an-individual-assignment" class="section level3">
 <h3 class="hasAnchor">
 <a href="#creating-an-individual-assignment" class="anchor"></a>Creating an individual assignment</h3>
 <p>The process for creating an individual assignment is very similar to that for creating a team assignment, we will need to create repositories for each student and then add them individually to those repos.</p>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">students</span> <span class="kw">=</span> <span class="fu"><a href="../reference/org_members.html">org_members</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="kw">include_admins</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
-<span class="fu"><a href="../reference/repo_create.html">repo_create</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="no">students</span>, <span class="kw">prefix</span><span class="kw">=</span><span class="st">"hw4-"</span>)
-<span class="co">#&gt; ✔ Created repo 'ghclass-vignette/hw4-ghclass-anya'.</span>
-<span class="co">#&gt; ✔ Created repo 'ghclass-vignette/hw4-ghclass-bruno'.</span>
-<span class="co">#&gt; ✔ Created repo 'ghclass-vignette/hw4-ghclass-celine'.</span>
-<span class="co">#&gt; ✔ Created repo 'ghclass-vignette/hw4-ghclass-diego'.</span>
-<span class="co">#&gt; ✔ Created repo 'ghclass-vignette/hw4-ghclass-elijah'.</span>
-<span class="co">#&gt; ✔ Created repo 'ghclass-vignette/hw4-ghclass-francis'.</span></pre></body></html></div>
+<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">students</span> <span class="kw">=</span> <span class="fu"><a href="../reference/org.html">org_members</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="kw">include_admins</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="fu"><a href="../reference/repo_core.html">repo_create</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="no">students</span>, <span class="kw">prefix</span><span class="kw">=</span><span class="st">"hw4-"</span>)
+<span class="co">#&gt; ✓ Created repo 'ghclass-vignette/hw4-ghclass-anya'.</span>
+<span class="co">#&gt; ✓ Created repo 'ghclass-vignette/hw4-ghclass-bruno'.</span>
+<span class="co">#&gt; ✓ Created repo 'ghclass-vignette/hw4-ghclass-celine'.</span>
+<span class="co">#&gt; ✓ Created repo 'ghclass-vignette/hw4-ghclass-diego'.</span>
+<span class="co">#&gt; ✓ Created repo 'ghclass-vignette/hw4-ghclass-elijah'.</span>
+<span class="co">#&gt; ✓ Created repo 'ghclass-vignette/hw4-ghclass-francis'.</span></pre></body></html></div>
 <p>Adding students individually to repos is done using the <code>repo_add_user</code> instead of the <code>repo_add_team</code> function.</p>
-<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu"><a href="../reference/repo_add_user.html">repo_add_user</a></span>(<span class="fu"><a href="../reference/org_repos.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="st">"hw4-"</span>), <span class="no">students</span>)
-<span class="co">#&gt; ✔ Added user 'ghclass-anya' to repo 'ghclass-vignette/hw4-ghclass-anya'.</span>
-<span class="co">#&gt; ✔ Added user 'ghclass-bruno' to repo 'ghclass-vignette/hw4-ghclass-bruno'.</span>
-<span class="co">#&gt; ✔ Added user 'ghclass-celine' to repo 'ghclass-vignette/hw4-ghclass-celine'.</span>
-<span class="co">#&gt; ✔ Added user 'ghclass-diego' to repo 'ghclass-vignette/hw4-ghclass-diego'.</span>
-<span class="co">#&gt; ✔ Added user 'ghclass-elijah' to repo 'ghclass-vignette/hw4-ghclass-elijah'.</span>
-<span class="co">#&gt; ✔ Added user 'ghclass-francis' to repo 'ghclass-vignette/hw4-ghclass-francis'.</span></pre></body></html></div>
+<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu"><a href="../reference/repo_user.html">repo_add_user</a></span>(<span class="fu"><a href="../reference/org.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="st">"hw4-"</span>), <span class="no">students</span>)
+<span class="co">#&gt; ✓ Added user 'ghclass-anya' to repo</span>
+<span class="co">#&gt;   'ghclass-vignette/hw4-ghclass-anya'.</span>
+<span class="co">#&gt; ✓ Added user 'ghclass-bruno' to repo</span>
+<span class="co">#&gt;   'ghclass-vignette/hw4-ghclass-bruno'.</span>
+<span class="co">#&gt; ✓ Added user 'ghclass-celine' to repo</span>
+<span class="co">#&gt;   'ghclass-vignette/hw4-ghclass-celine'.</span>
+<span class="co">#&gt; ✓ Added user 'ghclass-diego' to repo</span>
+<span class="co">#&gt;   'ghclass-vignette/hw4-ghclass-diego'.</span>
+<span class="co">#&gt; ✓ Added user 'ghclass-elijah' to repo</span>
+<span class="co">#&gt;   'ghclass-vignette/hw4-ghclass-elijah'.</span>
+<span class="co">#&gt; ✓ Added user 'ghclass-francis' to repo</span>
+<span class="co">#&gt;   'ghclass-vignette/hw4-ghclass-francis'.</span></pre></body></html></div>
 <p>And once again we can provide template code and documentation using the <code>repo_mirror</code> function.</p>
-<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="fu"><a href="../reference/repo_mirror.html">repo_mirror</a></span>(
+<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="fu"><a href="../reference/repo_core.html">repo_mirror</a></span>(
   <span class="kw">source_repo</span> <span class="kw">=</span> <span class="st">"Sta323-Sp19/hw4"</span>,
-  <span class="kw">target_repo</span> <span class="kw">=</span> <span class="fu"><a href="../reference/org_repos.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>,<span class="st">"hw4-"</span>)
+  <span class="kw">target_repo</span> <span class="kw">=</span> <span class="fu"><a href="../reference/org.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>,<span class="st">"hw4-"</span>)
 )
-<span class="co">#&gt; ✔ Cloned 'Sta323-Sp19/hw4'.</span>
-<span class="co">#&gt; ✔ Pushed from 'hw4' to 'https://github.com/ghclass-vignette/hw4-ghclass-anya.git/master'.</span>
-<span class="co">#&gt; ✔ Pushed from 'hw4' to 'https://github.com/ghclass-vignette/hw4-ghclass-bruno.git/master'.</span>
-<span class="co">#&gt; ✔ Pushed from 'hw4' to 'https://github.com/ghclass-vignette/hw4-ghclass-celine.git/master'.</span>
-<span class="co">#&gt; ✔ Pushed from 'hw4' to 'https://github.com/ghclass-vignette/hw4-ghclass-diego.git/master'.</span>
-<span class="co">#&gt; ✔ Pushed from 'hw4' to 'https://github.com/ghclass-vignette/hw4-ghclass-elijah.git/master'.</span>
-<span class="co">#&gt; ✔ Pushed from 'hw4' to 'https://github.com/ghclass-vignette/hw4-ghclass-francis.git/master'.</span>
-<span class="co">#&gt; ✔ Removed local copy of 'Sta323-Sp19/hw4'</span></pre></body></html></div>
+<span class="co">#&gt; ✓ Cloned 'Sta323-Sp19/hw4'.</span>
+<span class="co">#&gt; https://github.com/ghclass-vignette/hw4-ghclass-anya.git</span>
+<span class="co">#&gt; x Failed to push from local repo 'hw4' to '/master'.</span>
+<span class="co">#&gt; API message:</span>
+<span class="co">#&gt; API docs:</span>
+<span class="co">#&gt; Missing page:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; └─ Remote must either be an existing remote or URL</span>
+<span class="co">#&gt; https://github.com/ghclass-vignette/hw4-ghclass-bruno.git</span>
+<span class="co">#&gt; x Failed to push from local repo 'hw4' to '/master'.</span>
+<span class="co">#&gt; API message:</span>
+<span class="co">#&gt; API docs:</span>
+<span class="co">#&gt; Missing page:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; └─ Remote must either be an existing remote or URL</span>
+<span class="co">#&gt; https://github.com/ghclass-vignette/hw4-ghclass-celine.git</span>
+<span class="co">#&gt; x Failed to push from local repo 'hw4' to '/master'.</span>
+<span class="co">#&gt; API message:</span>
+<span class="co">#&gt; API docs:</span>
+<span class="co">#&gt; Missing page:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; └─ Remote must either be an existing remote or URL</span>
+<span class="co">#&gt; https://github.com/ghclass-vignette/hw4-ghclass-diego.git</span>
+<span class="co">#&gt; x Failed to push from local repo 'hw4' to '/master'.</span>
+<span class="co">#&gt; API message:</span>
+<span class="co">#&gt; API docs:</span>
+<span class="co">#&gt; Missing page:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; └─ Remote must either be an existing remote or URL</span>
+<span class="co">#&gt; https://github.com/ghclass-vignette/hw4-ghclass-elijah.git</span>
+<span class="co">#&gt; x Failed to push from local repo 'hw4' to '/master'.</span>
+<span class="co">#&gt; API message:</span>
+<span class="co">#&gt; API docs:</span>
+<span class="co">#&gt; Missing page:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; └─ Remote must either be an existing remote or URL</span>
+<span class="co">#&gt; https://github.com/ghclass-vignette/hw4-ghclass-francis.git</span>
+<span class="co">#&gt; x Failed to push from local repo 'hw4' to '/master'.</span>
+<span class="co">#&gt; API message:</span>
+<span class="co">#&gt; API docs:</span>
+<span class="co">#&gt; Missing page:</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; └─ Remote must either be an existing remote or URL</span>
+<span class="co">#&gt; ✓ Removed local copy of 'Sta323-Sp19/hw4'</span></pre></body></html></div>
 </div>
 <div id="modifying-repos" class="section level3">
 <h3 class="hasAnchor">
@@ -322,47 +428,41 @@
 <p>You can modify repos after they have been created. This will overwrite existing files with the same name in the repo, so you should be careful not to do this if students have already started working on the repos.</p>
 <div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="no">file</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"README.md"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"ghclass"</span>)
 <span class="no">file</span>
-<span class="co">#&gt; [1] "/Users/rundel/Desktop/Projects/ghclass/inst/README.md"</span>
+<span class="co">#&gt; [1] "/usr/local/lib/R/4.0/site-library/ghclass/README.md"</span>
 
-<span class="fu"><a href="../reference/repo_add_file.html">repo_add_file</a></span>(
-  <span class="fu"><a href="../reference/org_repos.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>,<span class="st">"hw1-"</span>),
+<span class="fu"><a href="../reference/repo_file.html">repo_add_file</a></span>(
+  <span class="fu"><a href="../reference/org.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>,<span class="st">"hw1-"</span>),
   <span class="kw">message</span> <span class="kw">=</span> <span class="st">"Replace README.md with the correct version"</span>,
   <span class="kw">file</span> <span class="kw">=</span> <span class="no">file</span>
 )
-<span class="co">#&gt; ✖ Failed to add file 'README.md' to repo 'ghclass-vignette/hw1-team01', this file already exists.</span>
-<span class="co">#&gt;   File has been modified after initial commit.</span>
-<span class="co">#&gt;   If you want to force add this file, re-run the command with `overwrite = TRUE`.</span>
-<span class="co">#&gt; ✖ Failed to add file 'README.md' to repo 'ghclass-vignette/hw1-team02', this file already exists.</span>
-<span class="co">#&gt;   File has been modified after initial commit.</span>
-<span class="co">#&gt;   If you want to force add this file, re-run the command with `overwrite = TRUE`.</span>
-<span class="co">#&gt; ✖ Failed to add file 'README.md' to repo 'ghclass-vignette/hw1-team03', this file already exists.</span>
-<span class="co">#&gt;   File has been modified after initial commit.</span>
-<span class="co">#&gt;   If you want to force add this file, re-run the command with `overwrite = TRUE`.</span></pre></body></html></div>
-<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="fu"><a href="../reference/repo_add_file.html">repo_add_file</a></span>(
-  <span class="fu"><a href="../reference/org_repos.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>,<span class="st">"hw1-"</span>),
+<span class="co">#&gt; ✓ Added file 'README.md' to repo 'ghclass-vignette/hw1-team01'.</span>
+<span class="co">#&gt; ✓ Added file 'README.md' to repo 'ghclass-vignette/hw1-team02'.</span>
+<span class="co">#&gt; ✓ Added file 'README.md' to repo 'ghclass-vignette/hw1-team03'.</span></pre></body></html></div>
+<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="fu"><a href="../reference/repo_file.html">repo_add_file</a></span>(
+  <span class="fu"><a href="../reference/org.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>,<span class="st">"hw1-"</span>),
   <span class="kw">message</span> <span class="kw">=</span> <span class="st">"Replace README.md with the correct version"</span>,
   <span class="kw">file</span> <span class="kw">=</span> <span class="no">file</span>,
   <span class="kw">overwrite</span> <span class="kw">=</span> <span class="fl">TRUE</span>
 )
-<span class="co">#&gt; ✔ Added file 'README.md' to repo 'ghclass-vignette/hw1-team01'.</span>
-<span class="co">#&gt; ✔ Added file 'README.md' to repo 'ghclass-vignette/hw1-team02'.</span>
-<span class="co">#&gt; ✔ Added file 'README.md' to repo 'ghclass-vignette/hw1-team03'.</span></pre></body></html></div>
-<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>( <span class="fu"><a href="../reference/repo_get_readme.html">repo_get_readme</a></span>(<span class="st">"ghclass-vignette/hw1-team01"</span>) )
+<span class="co">#&gt; ✓ Added file 'README.md' to repo 'ghclass-vignette/hw1-team01'.</span>
+<span class="co">#&gt; ✓ Added file 'README.md' to repo 'ghclass-vignette/hw1-team02'.</span>
+<span class="co">#&gt; ✓ Added file 'README.md' to repo 'ghclass-vignette/hw1-team03'.</span></pre></body></html></div>
+<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>( <span class="fu"><a href="../reference/repo_file.html">repo_get_readme</a></span>(<span class="st">"ghclass-vignette/hw1-team01"</span>) )
 <span class="co">#&gt; ## Homework 01</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; This is the corrected version of the HW01 Readme</span></pre></body></html></div>
 <p>We can also use the function <code>repo_modify_file</code> to make changes to existing files,</p>
-<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="fu"><a href="../reference/repo_modify_file.html">repo_modify_file</a></span>(
-  <span class="kw">repo</span> <span class="kw">=</span> <span class="fu"><a href="../reference/org_repos.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>,<span class="st">"hw1-"</span>),
+<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="fu"><a href="../reference/repo_file.html">repo_modify_file</a></span>(
+  <span class="kw">repo</span> <span class="kw">=</span> <span class="fu"><a href="../reference/org.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>,<span class="st">"hw1-"</span>),
   <span class="kw">path</span> <span class="kw">=</span> <span class="st">"README.md"</span>,
   <span class="kw">pattern</span> <span class="kw">=</span> <span class="st">"Due by 11:59 pm on Thursday 1/24/2019.\n"</span>,
   <span class="kw">content</span> <span class="kw">=</span> <span class="st">"Due: Tomorrow\n"</span>,
   <span class="kw">method</span> <span class="kw">=</span> <span class="st">"replace"</span>
 )
-<span class="co">#&gt; ✖ Unable to find pattern '(Due by 11:59 pm on Thursday 1/24/2019.\n)' in 'ghclass-vignette/hw1-team01/README.md'.</span>
-<span class="co">#&gt; ✖ Unable to find pattern '(Due by 11:59 pm on Thursday 1/24/2019.\n)' in 'ghclass-vignette/hw1-team02/README.md'.</span>
-<span class="co">#&gt; ✖ Unable to find pattern '(Due by 11:59 pm on Thursday 1/24/2019.\n)' in 'ghclass-vignette/hw1-team03/README.md'.</span></pre></body></html></div>
-<div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>( <span class="fu"><a href="../reference/repo_get_readme.html">repo_get_readme</a></span>(<span class="st">"ghclass-vignette/hw1-team01"</span>) )
+<span class="co">#&gt; x Unable to find pattern in 'ghclass-vignette/hw1-team01/README.md'.</span>
+<span class="co">#&gt; x Unable to find pattern in 'ghclass-vignette/hw1-team02/README.md'.</span>
+<span class="co">#&gt; x Unable to find pattern in 'ghclass-vignette/hw1-team03/README.md'.</span></pre></body></html></div>
+<div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>( <span class="fu"><a href="../reference/repo_file.html">repo_get_readme</a></span>(<span class="st">"ghclass-vignette/hw1-team01"</span>) )
 <span class="co">#&gt; ## Homework 01</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; This is the corrected version of the HW01 Readme</span></pre></body></html></div>
@@ -371,37 +471,22 @@
 <h3 class="hasAnchor">
 <a href="#collecting-student-work" class="anchor"></a>Collecting Student Work</h3>
 <p>Eventually the students will be finished with the work and of the assignment deadline will have passed. ghclass makes it easy to collect all of the student work off of GitHub and make it accessible on your local computer for grading.</p>
-<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="../reference/local_repo_clone.html">local_repo_clone</a></span>(
-  <span class="kw">repo</span> <span class="kw">=</span> <span class="fu"><a href="../reference/org_repos.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="st">"hw1-"</span>),
+<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="../reference/local_repo.html">local_repo_clone</a></span>(
+  <span class="kw">repo</span> <span class="kw">=</span> <span class="fu"><a href="../reference/org.html">org_repos</a></span>(<span class="st">"ghclass-vignette"</span>, <span class="st">"hw1-"</span>),
   <span class="kw">local_path</span> <span class="kw">=</span> <span class="st">"hw1"</span>
 )
-<span class="co">#&gt; ✔ Cloned 'ghclass-vignette/hw1-team01'.</span>
-<span class="co">#&gt; ✔ Cloned 'ghclass-vignette/hw1-team02'.</span>
-<span class="co">#&gt; ✔ Cloned 'ghclass-vignette/hw1-team03'.</span>
+<span class="co">#&gt; ✓ Cloned 'ghclass-vignette/hw1-team01'.</span>
+<span class="co">#&gt; ✓ Cloned 'ghclass-vignette/hw1-team02'.</span>
+<span class="co">#&gt; ✓ Cloned 'ghclass-vignette/hw1-team03'.</span>
 
 <span class="kw pkg">fs</span><span class="kw ns">::</span><span class="fu"><a href="http://fs.r-lib.org/reference/dir_tree.html">dir_tree</a></span>(<span class="st">"hw1/."</span>)
 <span class="co">#&gt; hw1/.</span>
 <span class="co">#&gt; ├── hw1-team01</span>
-<span class="co">#&gt; │   ├── README.md</span>
-<span class="co">#&gt; │   ├── fizzbuzz.png</span>
-<span class="co">#&gt; │   ├── hw1.Rmd</span>
-<span class="co">#&gt; │   ├── hw1.Rproj</span>
-<span class="co">#&gt; │   ├── hw1_whitelist.R</span>
-<span class="co">#&gt; │   └── wercker.yml</span>
+<span class="co">#&gt; │   └── README.md</span>
 <span class="co">#&gt; ├── hw1-team02</span>
-<span class="co">#&gt; │   ├── README.md</span>
-<span class="co">#&gt; │   ├── fizzbuzz.png</span>
-<span class="co">#&gt; │   ├── hw1.Rmd</span>
-<span class="co">#&gt; │   ├── hw1.Rproj</span>
-<span class="co">#&gt; │   ├── hw1_whitelist.R</span>
-<span class="co">#&gt; │   └── wercker.yml</span>
+<span class="co">#&gt; │   └── README.md</span>
 <span class="co">#&gt; └── hw1-team03</span>
-<span class="co">#&gt;     ├── README.md</span>
-<span class="co">#&gt;     ├── fizzbuzz.png</span>
-<span class="co">#&gt;     ├── hw1.Rmd</span>
-<span class="co">#&gt;     ├── hw1.Rproj</span>
-<span class="co">#&gt;     ├── hw1_whitelist.R</span>
-<span class="co">#&gt;     └── wercker.yml</span></pre></body></html></div>
+<span class="co">#&gt;     └── README.md</span></pre></body></html></div>
 </div>
 </div>
 <div id="other-suggestions" class="section level2">

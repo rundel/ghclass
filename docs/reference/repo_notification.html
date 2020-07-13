@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Initiate peer review repositories — peer_init • ghclass</title>
+<title>GitHub Repository tools - notification functions — repo_notification • ghclass</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,12 @@
 
 
 
-<meta property="og:title" content="Initiate peer review repositories — peer_init" />
-<meta property="og:description" content="peer_init() initiates peer review repositories. It creates a review repository for each user, adds users to their respective repositories, and applies peer review labels to all repositories (i.e. assignment and review repositories)." />
+<meta property="og:title" content="GitHub Repository tools - notification functions — repo_notification" />
+<meta property="og:description" content="repo_ignore - Ignore a GitHub repository.
+repo_unwatch - Unwatch / unsubscribe from a GitHub repository.
+repo_watch - Watch / subscribe to a GitHub repository.
+repo_watching - Returns a vector of your watched repositories. This should
+match the list at github.com/watching." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -119,71 +123,56 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Initiate peer review repositories</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/peer_init.R'><code>R/peer_init.R</code></a></small>
-    <div class="hidden name"><code>peer_init.Rd</code></div>
+    <h1>GitHub Repository tools - notification functions</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/repo.R'><code>R/repo.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/repo_ignore.R'><code>R/repo_ignore.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/repo_unwatch.R'><code>R/repo_unwatch.R</code></a>, and 2 more</small>
+    <div class="hidden name"><code>repo_notification.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>peer_init()</code> initiates peer review repositories. It creates a review repository for each user, adds users to their respective repositories, and applies peer review labels to all repositories (i.e. assignment and review repositories).</p>
+    <p><code>repo_ignore</code> - Ignore a GitHub repository.</p>
+<p><code>repo_unwatch</code> - Unwatch / unsubscribe from a GitHub repository.</p>
+<p><code>repo_watch</code> - Watch / subscribe to a GitHub repository.</p>
+<p><code>repo_watching</code> - Returns a vector of your watched repositories. This should
+match the list at <a href='https://github.com/watching'>github.com/watching</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>peer_init</span>(
-  <span class='no'>org</span>,
-  <span class='no'>roster</span>,
-  <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>show_label_result</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>repo_ignore</span>(<span class='no'>repo</span>)
+
+<span class='fu'>repo_unwatch</span>(<span class='no'>repo</span>)
+
+<span class='fu'>repo_watch</span>(<span class='no'>repo</span>)
+
+<span class='fu'>repo_watching</span>(<span class='kw'>filter</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>org</th>
-      <td><p>Character. Name of GitHub Organization.</p></td>
+      <th>repo</th>
+      <td><p>github repository address in <code>owner/repo</code> format</p></td>
     </tr>
     <tr>
-      <th>roster</th>
-      <td><p>Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column <code>user</code> with GitHub user names of authors, a column <code>user_random</code> with randomized tokens for user names, and one or more <code>rev*</code> columns that specify review assignments as values of the vector <code>user_random</code>.</p></td>
+      <th>filter</th>
+      <td><p>character, regex pattern for matching (or excluding) repositories.</p></td>
     </tr>
     <tr>
-      <th>prefix</th>
-      <td><p>Character. Common repository name prefix.</p></td>
-    </tr>
-    <tr>
-      <th>suffix</th>
-      <td><p>Character. Common repository name suffix.</p></td>
-    </tr>
-    <tr>
-      <th>verbose</th>
-      <td><p>Logical. Whether information about label creation should be given, defaults to <code>FALSE</code>. Issues can still be created even labels were not applied to a particular repository.</p></td>
-    </tr>
-    <tr>
-      <th>show_label_result</th>
-      <td><p>Logical. Whether a tibble with details on the creation of labels should be returned, defaults to <code>FALSE</code>.</p></td>
+      <th>exclude</th>
+      <td><p>logical, should entries matching the regex be excluded or included.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other peer review functions: 
-<code><a href='peer_assign.html'>peer_assign</a>()</code>,
-<code><a href='peer_file_add_aut.html'>peer_file_add_aut</a>()</code>,
-<code><a href='peer_file_add_rev.html'>peer_file_add_rev</a>()</code>,
-<code><a href='peer_form_create_rating.html'>peer_form_create_rating</a>()</code>,
-<code><a href='peer_form_create_review.html'>peer_form_create_review</a>()</code>,
-<code><a href='peer_return.html'>peer_return</a>()</code>,
-<code><a href='peer_roster_create.html'>peer_roster_create</a>()</code>,
-<code><a href='peer_score_rating.html'>peer_score_rating</a>()</code>,
-<code><a href='peer_score_review.html'>peer_score_review</a>()</code></p></div>
+    <div class='dont-index'><p><a href='repo_core'>Repo - Core Functions</a>, <a href='repo_stats'>Repo - Stats Functions</a>,
+<a href='repo_file'>Repo - File Functions</a>, <a href='repo_user'>Repo - User Functions</a>,
+<a href='repo_notification'>Repo - Notification Functions</a>, <code><a href='repo_style.html'>repo_style()</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
-<span class='fu'>peer_init</span>(<span class='kw'>org</span> <span class='kw'>=</span> <span class='st'>"ghclass-test"</span>, <span class='kw'>roster</span> <span class='kw'>=</span> <span class='st'>"roster_test"</span>, <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>"hw2-"</span>)</div><div class='output co'>#&gt; <span class='message'>Cannot locate file <span style='color: #0000BB;'>roster_test</span><span></span></div><div class='output co'>#&gt; <span class='error'>Error: </span></div><div class='input'># }
+    <pre class="examples"><div class='input'># \dontrun{
 
-</div></span></pre>
+# }
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

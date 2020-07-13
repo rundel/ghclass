@@ -3,7 +3,5 @@ pkgdown: 1.5.1
 pkgdown_sha: ~
 articles:
   ghclass: ghclass.html
-  instructions_students: instructions_students.html
-  peer: peer.html
-last_built: 2020-05-03T21:51Z
+last_built: 2020-07-09T16:41Z
 

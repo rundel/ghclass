@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Initiate peer review repositories — peer_init • ghclass</title>
+<title>Repository branch tools — branch • ghclass</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,9 @@
 
 
 
-<meta property="og:title" content="Initiate peer review repositories — peer_init" />
-<meta property="og:description" content="peer_init() initiates peer review repositories. It creates a review repository for each user, adds users to their respective repositories, and applies peer review labels to all repositories (i.e. assignment and review repositories)." />
+<meta property="og:title" content="Repository branch tools — branch" />
+<meta property="og:description" content="branch_create creates a new branch from an existing GitHub repo.
+branch_delete deletes a branch from an existing GitHub repo." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -119,69 +120,51 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Initiate peer review repositories</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/peer_init.R'><code>R/peer_init.R</code></a></small>
-    <div class="hidden name"><code>peer_init.Rd</code></div>
+    <h1>Repository branch tools</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/branch.R'><code>R/branch.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/branch_create.R'><code>R/branch_create.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/branch_delete.R'><code>R/branch_delete.R</code></a></small>
+    <div class="hidden name"><code>branch.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>peer_init()</code> initiates peer review repositories. It creates a review repository for each user, adds users to their respective repositories, and applies peer review labels to all repositories (i.e. assignment and review repositories).</p>
+    <p><code>branch_create</code> creates a new branch from an existing GitHub repo.</p>
+<p><code>branch_delete</code> deletes a branch from an existing GitHub repo.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>peer_init</span>(
-  <span class='no'>org</span>,
-  <span class='no'>roster</span>,
-  <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>show_label_result</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>branch_create</span>(<span class='no'>repo</span>, <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>, <span class='no'>new_branch</span>)
+
+<span class='fu'>branch_delete</span>(<span class='no'>repo</span>, <span class='no'>branch</span>)
+
+<span class='fu'>branch_remove</span>(<span class='no'>repo</span>, <span class='no'>branch</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>org</th>
-      <td><p>Character. Name of GitHub Organization.</p></td>
+      <th>repo</th>
+      <td><p>Github repository address in <code>owner/repo</code> format.</p></td>
     </tr>
     <tr>
-      <th>roster</th>
-      <td><p>Character. Data frame or file path of roster file with author-reviewer assignments. Must contain a column <code>user</code> with GitHub user names of authors, a column <code>user_random</code> with randomized tokens for user names, and one or more <code>rev*</code> columns that specify review assignments as values of the vector <code>user_random</code>.</p></td>
+      <th>branch</th>
+      <td><p>Repository branch to use.</p></td>
     </tr>
     <tr>
-      <th>prefix</th>
-      <td><p>Character. Common repository name prefix.</p></td>
-    </tr>
-    <tr>
-      <th>suffix</th>
-      <td><p>Character. Common repository name suffix.</p></td>
-    </tr>
-    <tr>
-      <th>verbose</th>
-      <td><p>Logical. Whether information about label creation should be given, defaults to <code>FALSE</code>. Issues can still be created even labels were not applied to a particular repository.</p></td>
-    </tr>
-    <tr>
-      <th>show_label_result</th>
-      <td><p>Logical. Whether a tibble with details on the creation of labels should be returned, defaults to <code>FALSE</code>.</p></td>
+      <th>new_branch</th>
+      <td><p>Name of branch to create.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other peer review functions: 
-<code><a href='peer_assign.html'>peer_assign</a>()</code>,
-<code><a href='peer_file_add_aut.html'>peer_file_add_aut</a>()</code>,
-<code><a href='peer_file_add_rev.html'>peer_file_add_rev</a>()</code>,
-<code><a href='peer_form_create_rating.html'>peer_form_create_rating</a>()</code>,
-<code><a href='peer_form_create_review.html'>peer_form_create_review</a>()</code>,
-<code><a href='peer_return.html'>peer_return</a>()</code>,
-<code><a href='peer_roster_create.html'>peer_roster_create</a>()</code>,
-<code><a href='peer_score_rating.html'>peer_score_rating</a>()</code>,
-<code><a href='peer_score_review.html'>peer_score_review</a>()</code></p></div>
+    <div class='dont-index'><p><a href='repo_details.html'>repo_branches</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
-<span class='fu'>peer_init</span>(<span class='kw'>org</span> <span class='kw'>=</span> <span class='st'>"ghclass-test"</span>, <span class='kw'>roster</span> <span class='kw'>=</span> <span class='st'>"roster_test"</span>, <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>"hw2-"</span>)</div><div class='output co'>#&gt; <span class='message'>Cannot locate file <span style='color: #0000BB;'>roster_test</span><span></span></div><div class='output co'>#&gt; <span class='error'>Error: </span></div><div class='input'># }
+<span class='fu'><a href='repo_core.html'>repo_create</a></span>(<span class='st'>"ghclass-demo"</span>, <span class='st'>"test_branch"</span>, <span class='kw'>auto_init</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'><span style='color: #00BB00;'>✓</span><span> Created repo </span><span style='color: #0000BB;'>'ghclass-demo/test_branch'</span><span>.</span></div><div class='input'>
+<span class='fu'>branch_create</span>(<span class='st'>"ghclass-demo/test_branch"</span>, <span class='kw'>new_branch</span> <span class='kw'>=</span> <span class='st'>"test"</span>)</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Created branch </span><span style='color: #0000BB;'>'test'</span><span> in repo </span><span style='color: #0000BB;'>'ghclass-demo/test_branch'</span><span>.</span></div><div class='input'><span class='fu'><a href='repo_details.html'>repo_branches</a></span>(<span class='st'>"ghclass-demo/test_branch"</span>)
+
+<span class='fu'>branch_delete</span>(<span class='st'>"ghclass-demo/test_branch"</span>, <span class='kw'>branch</span><span class='kw'>=</span><span class='st'>"test"</span>)</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Removed branch </span><span style='color: #0000BB;'>'ghclass-demo/test_branch@test'</span><span>.</span></div><div class='input'><span class='fu'><a href='repo_details.html'>repo_branches</a></span>(<span class='st'>"ghclass-demo/test_branch"</span>)
+
+<span class='fu'><a href='repo_core.html'>repo_delete</a></span>(<span class='st'>"ghclass-demo/test_branch"</span>, <span class='kw'>prompt</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Deleted repo </span><span style='color: #0000BB;'>'ghclass-demo/test_branch'</span><span>.</span></div><div class='input'># }
 
 </div></span></pre>
   </div>

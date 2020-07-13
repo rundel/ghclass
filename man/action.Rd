@@ -47,7 +47,7 @@ that matches the workflow name.}
 }
 \examples{
 \dontrun{
-
+action_workflows("rundel/ghclass")
 }
 
 }
