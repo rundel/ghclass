@@ -31,7 +31,7 @@ org_set_repo_permission = function(org, permission = c("none", "read", "write", 
   arg_is_chr_scalar(org)
   permission = match.arg(permission)
 
-  res = purrr::safely(github_api_org_update(org, default_repository_permission = permission))
+  res = purrr::safely(github_api_org_update)(org, default_repository_permission = permission)
 
   status_msg(
     res,
