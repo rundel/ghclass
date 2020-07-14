@@ -46,7 +46,7 @@ repo_create = function(
     function(repo, exists) {
       if (exists) {
         cli::cli_alert_info("Skipping repo {.val {repo}}, it already exists.")
-        return(NULL)
+        return(repo)
       }
       res = purrr::safely(github_api_org_repo_create)(
         repo,
