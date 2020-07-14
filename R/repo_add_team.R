@@ -25,16 +25,19 @@ repo_add_team = function(
   permission = c("push", "pull", "admin", "maintain", "triage"),
   team_type = c("slug", "name")
 ) {
-  arg_is_chr(repo, team)
+  arg_is_chr(repo, team, allow_empty = FALSE)
   permission = match.arg(permission)
   team_type = match.arg(team_type)
 
   org = unique(get_repo_owner(repo))
 
   if (length(org) != 1) {
-    cli_stop("Repositories can only be added to one organization at a time.",
+    cli_stop("Repositories can only be added to one organization at a time. ",
              "Requested orgs: {.val {org}}")
   }
+
+  repo = unique(repo)
+  team = unique(team)
 
   d = tibble::tibble(team, repo)
   d = dplyr::distinct(d)

@@ -26,7 +26,7 @@ arg_is_pos_int_scalar = function(..., allow_null = FALSE, allow_na = FALSE) {
   arg_is_scalar(..., allow_null = allow_null, allow_na = allow_na)
 }
 
-arg_is_chr = function(..., allow_null = FALSE, allow_na = FALSE) {
+arg_is_chr = function(..., allow_null = FALSE, allow_na = FALSE, allow_empty = TRUE) {
   handle_arg_list(
     ...,
     tests = function(name, value) {
@@ -35,11 +35,14 @@ arg_is_chr = function(..., allow_null = FALSE, allow_na = FALSE) {
 
       if (any(is.na(value)) & !allow_na)
         cli_stop("Argument {.val {name}} must not contain any missing values ({.val {NA}}).")
+
+      if (length(value) == 0 & !allow_empty)
+        cli_stop("Argument {.val {name}} must have length >= 1.")
     }
   )
 }
 
-arg_is_lgl = function(..., allow_null = FALSE, allow_na = FALSE) {
+arg_is_lgl = function(..., allow_null = FALSE, allow_na = FALSE, allow_empty = TRUE) {
   handle_arg_list(
     ...,
     tests = function(name, value) {
@@ -48,6 +51,9 @@ arg_is_lgl = function(..., allow_null = FALSE, allow_na = FALSE) {
 
       if (any(is.na(value)) & !allow_na)
         cli_stop("Argument {.val {name}} must not contain any missing values ({.val {NA}}).")
+
+      if (length(value) == 0 & !allow_empty)
+        cli_stop("Argument {.val {name}} must have length >= 1.")
     }
   )
 }
