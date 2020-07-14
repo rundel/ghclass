@@ -4,7 +4,11 @@
 #' @title GitHub Organization related tools
 #'
 #' @description
-#
+#'
+#' `org_sitrep` - Provides a situation report on a GitHub organization.
+#'
+#' `org_set_repo_permission` - Change the default permission level for org repositories.
+#'
 #' `org_admins` - returns a vector of repository administrators. In the case of a
 #' non-organization owner (e.g. a user account) returns the owner's login.
 #'
