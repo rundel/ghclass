@@ -6,9 +6,9 @@ withr::with_dir(
   here::here("vignettes/"),
   {
     print(getwd())
-    knitr::knit(".raw/ghclass.Rmd", "ghclass.Rmd")
-    knitr::knit(".raw/peer_students.Rmd", "peer_students.Rmd")
-    #knitr::knit(".raw/peer.Rmd", "peer.Rmd")
+    knitr::knit("ghclass.Rmd_raw", "ghclass.Rmd")
+    knitr::knit("peer_students.Rmd_raw", "peer_students.Rmd")
+    #knitr::knit("peer.Rmd_raw", "peer.Rmd")
   }
 )
 

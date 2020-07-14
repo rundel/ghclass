@@ -1,7 +1,7 @@
 ---
 title: "Course management with ghclass"
 author: "Mine Çetinkaya-Rundel, Colin Rundel, Therese Anders"
-date: "2020-07-14"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Course management with ghclass}
@@ -9,29 +9,55 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r include = FALSE, cache = FALSE}
+knitr::opts_chunk$set(
+  out.width = "100%",
+  collapse = TRUE,
+  comment = "#>"
+)
 
+# Turn on ANSI colors
+options(
+  crayon.enabled = TRUE,
+  crayon.colors = 256
+)
 
+crayon::num_colors(forget = TRUE)
 
+asciicast::init_knitr_engine(
+  startup = quote({
+    library(ghclass)
+  }),
+  echo = TRUE,
+  echo_input = FALSE
+)
+```
 
+```{r setup, include=FALSE}
+library(ghclass)
+```
 
+```{r pats, include = FALSE}
+enc = readRDS(here::here("credentials/example_users.enc.rds"))
+key = sodium::sha256(charToRaw(Sys.getenv("GHCLASS_PAT")))
+pats = unserialize( sodium::data_decrypt(enc, key) )
 
-
-
-
-
-```r
-cli::console_width()
-#> [1] 100
+rm(enc, key)
 ```
 
 
-```asciicast
-cli::console_width()
+```{r reset, include = FALSE}
+# Remove all repos, teams, and members
+repos = org_repos("ghclass-vignette")
+teams = org_teams("ghclass-vignette")
+users = org_members("ghclass-vignette", include_admins = FALSE)
+
+repo_delete(repos, prompt = FALSE)
+team_delete("ghclass-vignette", teams, prompt = FALSE)
+org_remove("ghclass-vignette", users, prompt = FALSE)
+
+repo_set_template("Sta323-Sp19/hw1", FALSE)
 ```
-
-
-<img src="figure//unnamed-chunk-3.svg" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" width="100%" />
-
 
 ## Who is this package for?
 
@@ -101,22 +127,14 @@ Personal access tokens) or use
 [`usethis::browse_github_token`](https://usethis.r-lib.org/articles/articles/usethis-setup.html#get-and-store-a-github-personal-access-token).
 
 You can test that your token is working correctly using the `github_test_token()` function. If everything is working correctly you should see something like the following:
-
-```asciicast
+```{asciicast}
 github_test_token()
 ```
 
-
-<img src="figure//unnamed-chunk-4.svg" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" width="100%" />
-
 If your token is not working you will see an error message like this instead:
-
-```asciicast
+```{asciicast}
 github_test_token("bad token")
 ```
-
-
-<img src="figure//unnamed-chunk-5.svg" title="plot of chunk unnamed-chunk-5" alt="plot of chunk unnamed-chunk-5" width="100%" />
 
 ## Step-by-step guide
 
@@ -141,76 +159,54 @@ Give yourself at least a week to be safe.
 Next, collect your students' GitHub usernames. You can do this using your web form tool of choice (e.g. Google Forms, MS Forms, etc.) or via a quiz or survey on your schools LMS. We will assume that you are able to then read in these data into an R data frame.
 
 For example, your roster file might look something like the following:
-
-```asciicast
+```{r message=FALSE}
 roster = readr::read_csv( system.file("roster.csv", package = "ghclass") )
+```
+```{asciicast}
 roster
 ```
-
-
-<img src="figure//unnamed-chunk-6.svg" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" width="100%" />
 Here we are using the student's school email address as a unique identifier, we also have their GitHub username and we have also assigned them to different teams for our three homework assignments.
 
 Using the `roster` data frame, we can then invite the students to the class' organization. Each of these students will be notified via email from GitHub asking them to join the `ghclass-vignette` organization.
 
-
-```asciicast
+```{asciicast}
 org_invite(org = "ghclass-vignette", user = roster$github)
 ```
-
-
-<img src="figure//unnamed-chunk-7.svg" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" width="100%" />
 
 We now need to wait for the students to accept these invitations before they will have access to the organization.
 We can check the status of these acceptances using the `org_members()` and `org_pending()` functions to see which students have accepted or not accepted the invitation.
 
-
-```asciicast
+```{asciicast}
 org_members("ghclass-vignette")
 ```
 
-
-<img src="figure//unnamed-chunk-8.svg" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" width="100%" />
-
-
-```asciicast
+```{asciicast}
 org_members("ghclass-vignette", include_admins = FALSE)
 ```
 
-
-<img src="figure//unnamed-chunk-9.svg" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" width="100%" />
-
-
-```asciicast
+```{asciicast}
 org_pending("ghclass-vignette")
 ```
-
-
-<img src="figure//unnamed-chunk-10.svg" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="100%" />
 
 If we give things a bit of time, some of the students will have accepted the invitation.
 
+```{r include = FALSE}
+ghclass:::org_accept_invite("ghclass-vignette", names(pats)[c(1,3,6)], pats[c(1,3,6)])
+```
 
-
-
-```asciicast
+```{asciicast}
 org_members("ghclass-vignette", include_admins = FALSE)
 ```
 
-
-<img src="figure//unnamed-chunk-12.svg" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" width="100%" />
-
-
-```asciicast
+```{asciicast}
 org_pending("ghclass-vignette")
 ```
 
-
-<img src="figure//unnamed-chunk-13.svg" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="100%" />
-
 We can now see that Anya, Celine, and Francis have accepted the invite and we are still waiting on Bruno, Diego, and Elijah. Gentle prodding and reminder emails are often necessary to get all of the students into the organization.
 
-
+```{r include = FALSE}
+ghclass:::org_accept_invite("ghclass-vignette", names(pats), pats)
+```
 
 ### Preparing an assignment
 
@@ -225,31 +221,22 @@ This is a GitHub specific detail, but doing so makes it much more efficient to c
 We can set this option under the repo's Settings on GitHub, just check the box labeled "Template Repository" on the main settings page, or use the `repo_set_template` function.
 This status can also be checked with ghclass using `repo_is_template`.
 
-
-```asciicast
+```{asciicast}
 repo_is_template("Sta323-Sp19/hw1")
 ```
 
-
-<img src="figure//unnamed-chunk-15.svg" title="plot of chunk unnamed-chunk-15" alt="plot of chunk unnamed-chunk-15" width="100%" />
-
-
-```asciicast
+```{asciicast}
 repo_set_template("Sta323-Sp19/hw1")
 ```
 
-
-<img src="figure//unnamed-chunk-16.svg" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" width="100%" />
-
-
-
-
-```asciicast
-repo_is_template("Sta323-Sp19/hw1")
+```{r include=FALSE}
+# Doesn't change immediately
+Sys.sleep(3)
 ```
 
-
-<img src="figure//unnamed-chunk-18.svg" title="plot of chunk unnamed-chunk-18" alt="plot of chunk unnamed-chunk-18" width="100%" />
+```{asciicast}
+repo_is_template("Sta323-Sp19/hw1")
+```
 
 ### Distributing a team assignment
 
@@ -257,8 +244,7 @@ Once you have created your template repository, it is then straight forward proc
 The recommended process is to use the `org_create_assignment` function, which is a high level function that takes care of each of the underlying steps for you.
 To start we will create the hw1 team-based assignment given the teams in `roster`.
 
-
-```asciicast
+```{asciicast}
 org_create_assignment(
   org = "ghclass-vignette",
   user = roster$github,
@@ -268,9 +254,6 @@ org_create_assignment(
   private = TRUE
 )
 ```
-
-
-<img src="figure//unnamed-chunk-19.svg" title="plot of chunk unnamed-chunk-19" alt="plot of chunk unnamed-chunk-19" width="100%" />
 
 Based on the output we can see that multiple steps are involved in this process:
 
@@ -286,8 +269,7 @@ Based on the output we can see that multiple steps are involved in this process:
 
 If instead of hw1 being a team assignment, we wanted to distribute it as an individual assignment, we can also achieve this using the `org_create_assignment` function by simply excluding the `team` argument (and providing appropriate repo names).
 
-
-```asciicast
+```{asciicast}
 org_create_assignment(
   org = "ghclass-vignette",
   user = roster$github,
@@ -297,30 +279,19 @@ org_create_assignment(
 )
 ```
 
-
-<img src="figure//unnamed-chunk-20.svg" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" width="100%" />
-
 The underlying process here is very similar with the only difference being that we no longer need to create teams and instead add the users directly to the repositories.
 
 ### Listing Repos
 
 Once the repos are created we can interact with them with ghclass, one of the most common needs is simply to list which repos exist within our organization and or selecting some subset of them.
 
-
-```asciicast
+```{asciicast}
 org_repos("ghclass-vignette")
 ```
 
-
-<img src="figure//unnamed-chunk-21.svg" title="plot of chunk unnamed-chunk-21" alt="plot of chunk unnamed-chunk-21" width="100%" />
-
-
-```asciicast
+```{asciicast}
 org_repos("ghclass-vignette", filter="hw1-team")
 ```
-
-
-<img src="figure//unnamed-chunk-22.svg" title="plot of chunk unnamed-chunk-22" alt="plot of chunk unnamed-chunk-22" width="100%" />
 
 
 ### Modifying Repos
@@ -334,8 +305,7 @@ While this process does overwrite existing files in the repo everything is being
 
 Lets assume that we distributed hw1 with the wrong version of the `README.md` included, if we want to replace this with the correct version across all of the hw1 repositories then we could do the following,
 
-
-```asciicast
+```{asciicast}
 file = system.file("README.md", package = "ghclass")
 
 repo_add_file(
@@ -346,22 +316,14 @@ repo_add_file(
 )
 ```
 
-
-<img src="figure//unnamed-chunk-23.svg" title="plot of chunk unnamed-chunk-23" alt="plot of chunk unnamed-chunk-23" width="100%" />
-
 The updated version looks like the following,
-
-```asciicast
+```{asciicast}
 repo_get_readme("ghclass-vignette/hw1-team01", include_details = FALSE)
 ```
 
-
-<img src="figure//unnamed-chunk-24.svg" title="plot of chunk unnamed-chunk-24" alt="plot of chunk unnamed-chunk-24" width="100%" />
-
 We can also use the function `repo_modify_file` to make changes to existing files,
 
-
-```asciicast
+```{asciicast}
 repo_modify_file(
   repo = org_repos("ghclass-vignette","hw1-team"),
   path = "README.md",
@@ -371,41 +333,28 @@ repo_modify_file(
 )
 ```
 
-
-<img src="figure//unnamed-chunk-25.svg" title="plot of chunk unnamed-chunk-25" alt="plot of chunk unnamed-chunk-25" width="100%" />
-
-
-```asciicast
+```{asciicast}
 repo_get_readme("ghclass-vignette/hw1-team01", include_details = FALSE)
 ```
-
-
-<img src="figure//unnamed-chunk-26.svg" title="plot of chunk unnamed-chunk-26" alt="plot of chunk unnamed-chunk-26" width="100%" />
 
 ### Collecting Student Work
 
 Eventually the students will be finished with the work and or the assignment deadline will have passed. ghclass makes it easy to collect all of the student work off of GitHub and make it accessible on your local computer for grading. We make use of the [gert](https://github.com/r-lib/gert) package to provide basic git functionality within ghclass.
 
-
-```asciicast
+```{asciicast}
 local_repo_clone(
   repo = org_repos("ghclass-vignette", "hw1-team"),
   local_path = "hw1"
 )
 ```
 
-
-<img src="figure//unnamed-chunk-27.svg" title="plot of chunk unnamed-chunk-27" alt="plot of chunk unnamed-chunk-27" width="100%" />
-
-
-```asciicast
+```{asciicast}
 fs::dir_tree("hw1/")
 ```
 
-
-<img src="figure//unnamed-chunk-28.svg" title="plot of chunk unnamed-chunk-28" alt="plot of chunk unnamed-chunk-28" width="100%" />
-
-
+```{r include=FALSE}
+unlink("hw1", recursive = TRUE)
+```
 
 ## Other Suggestions
 

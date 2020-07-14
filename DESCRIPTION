@@ -45,7 +45,8 @@ Suggests:
     sodium,
     styler,
     usethis,
-    gert
+    gert,
+    asciicast
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
