@@ -148,11 +148,11 @@ status_msg = function(x, success = NULL, fail = NULL, include_error_msg = TRUE,
 
 
   if (succeeded(x) & !is.null(success)) {
-    cli::cli_alert_success(success, wrap = TRUE, .envir = .envir)
+    cli::cli_alert_success(success, wrap = FALSE, .envir = .envir)
   }
 
   if (failed(x) & !is.null(fail)) {
-    cli::cli_alert_danger(fail, wrap = TRUE, .envir = .envir)
+    cli::cli_alert_danger(fail, wrap = FALSE, .envir = .envir)
     if (include_error_msg) {
       msg = error_msg(x)
       print(error_msg_tree(msg))
