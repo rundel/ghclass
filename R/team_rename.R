@@ -29,7 +29,7 @@ github_api_team_update = function(
 #' @rdname team
 #' @param new_team character, new team name.
 #' @export
-team_rename = function(org, team, new_team, team_type = c("slug", "name")) {
+team_rename = function(org, team, new_team, team_type = c("name", "slug")) {
   arg_is_chr_scalar(org)
   arg_is_chr(team, new_team)
   team_type = match.arg(team_type)

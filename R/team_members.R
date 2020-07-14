@@ -16,7 +16,7 @@ github_api_team_members = function(org, team_slug, role = c("all", "member", "ma
 #' @rdname team
 #' @export
 #'
-team_members = function(org, team = org_teams(org), team_type = c("slug", "name")) {
+team_members = function(org, team = org_teams(org), team_type = c("name", "slug")) {
   arg_is_chr_scalar(org)
   arg_is_chr(team)
   team_type = match.arg(team_type)

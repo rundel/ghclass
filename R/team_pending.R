@@ -11,7 +11,7 @@ github_api_team_pending = function(org, team_slug) {
 #' @rdname team
 #' @export
 #'
-team_pending = function(org, team = org_teams(org), team_type = c("slug", "name")) {
+team_pending = function(org, team = org_teams(org), team_type = c("name", "slug")) {
   arg_is_chr_scalar(org)
   arg_is_chr(team)
   team_type = match.arg(team_type)

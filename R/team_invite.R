@@ -13,7 +13,7 @@ github_api_team_invite = function(org, team_slug, username, role = c("member", "
 
 #' @rdname team
 #' @export
-team_invite = function(org, user, team, team_type = c("slug", "name")) {
+team_invite = function(org, user, team, team_type = c("name", "slug")) {
   arg_is_chr_scalar(org)
   arg_is_chr(user, team)
   team_type = match.arg(team_type)

@@ -10,7 +10,7 @@ github_api_team_delete = function(org, team_slug) {
 #' @rdname team
 #' @export
 #'
-team_delete = function(org, team, team_type = c("slug", "name"), prompt = TRUE) {
+team_delete = function(org, team, team_type = c("name", "slug"), prompt = TRUE) {
 
   arg_is_chr_scalar(org)
   arg_is_chr(team)

@@ -20,7 +20,7 @@ github_api_repo_remove_team = function(
 #' @export
 repo_remove_team = function(
   repo, team,
-  team_type = c("slug", "name")
+  team_type = c("name", "slug")
 ) {
   arg_is_chr(repo, team)
   permission = match.arg(permission)

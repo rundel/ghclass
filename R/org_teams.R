@@ -10,7 +10,7 @@ github_api_org_teams = function(org) {
 #' @param team_type Character. Either "slug" if the team names are slugs or "name" if full team names are provided.
 #' @export
 #'
-org_teams = function(org, filter = NULL, exclude = FALSE, team_type = c("slug","name")) {
+org_teams = function(org, filter = NULL, exclude = FALSE, team_type = c("name", "slug")) {
   arg_is_chr_scalar(org)
   arg_is_chr_scalar(filter, allow_null = TRUE)
   arg_is_lgl_scalar(exclude)

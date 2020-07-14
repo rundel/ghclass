@@ -23,7 +23,7 @@ github_api_team_add = function(
 repo_add_team = function(
   repo, team,
   permission = c("push", "pull", "admin", "maintain", "triage"),
-  team_type = c("slug", "name")
+  team_type = c("name", "slug")
 ) {
   arg_is_chr(repo, team, allow_empty = FALSE)
   permission = match.arg(permission)
