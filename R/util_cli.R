@@ -20,11 +20,20 @@ cli_warn = function(..., .envir = parent.frame()) {
 # Simplified version of usethis::ui_yeah
 cli_yeah = function (..., .envir = parent.frame()) {
   if (!rlang::is_interactive()) {
-    cli_stop("User input required, but session is not interactive.\nQuery: {x}")
+    cli_stop("User input required, but session is not interactive.")
   }
 
   cli::cli_text(..., .envir = .envir)
   opts = c("Yes", "No")
   s = utils::menu(opts)
   s != 0L && opts[[s]] == "Yes"
+}
+
+cli_kv = function(key, value, warning = NULL) {
+  key = cli::col_silver(key)
+  if (is.null(warning)) {
+    cli_glue("{key}: {.val {value}}")
+  } else {
+    cli_glue("{key}: {.val {value}} <- Warning: {warning}")
+  }
 }
