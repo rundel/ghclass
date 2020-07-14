@@ -32,7 +32,7 @@ repo_is_template(repo)
 
 repo_mirror(source_repo, target_repo, overwrite = FALSE, verbose = FALSE)
 
-repo_mirror_template(template_repo, repo, private = TRUE)
+repo_mirror_template(source_repo, target_repo, private = TRUE)
 
 repo_rename(repo, new_repo)
 
@@ -53,8 +53,7 @@ repo_set_template(repo, status = TRUE)
 
 \item{gitignore_template}{Character. \code{.gitignore} language template to use.}
 
-\item{repo}{Character. One or more repository addresses in \code{owner/name} format.
-Note when using template repos these new repositories must \emph{not} exist.}
+\item{repo}{Character. Address of repository in \code{owner/repo} format.}
 
 \item{prompt}{Logical. Should the user be prompted before deleting repositories. Default \code{true}.}
 
@@ -62,15 +61,14 @@ Note when using template repos these new repositories must \emph{not} exist.}
 
 \item{quiet}{Logical. Should details on renamed repositories be printed.}
 
-\item{source_repo}{Character. Address of repository in "owner/name" format.}
+\item{source_repo}{Character. Address of template repository in \code{owner/name} format.}
 
-\item{target_repo}{Character. One or more repository addresses in "owner/name" format.}
+\item{target_repo}{Character. One or more repository addresses in \code{owner/name} format.
+Note when using template repos these new repositories must \emph{not} exist.}
 
 \item{overwrite}{Logical. Should the target repositories be overwritten.}
 
 \item{verbose}{Logical. Display verbose output.}
-
-\item{template_repo}{Character. Address of template repository in \code{owner/name} format.}
 
 \item{new_repo}{Character. New name of repository without the owner.}
 

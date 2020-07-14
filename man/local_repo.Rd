@@ -84,12 +84,11 @@ local_repo_rename(repo_dir, pattern, replacement)
 \item \code{local_repo_pull} - Equivalent to \verb{git pull} - pull a local repository.
 \item \code{local_repo_branch} - Equivalent to \verb{git branch} - create a branch in a local repository.
 \item \code{local_repo_log} - Equivalent to \verb{git log} - returns a data frame for git log entries.
-}
-
-\code{local_repo_rename} - Rename local directories using a vector of patterns and replacements .
+\item \code{local_repo_rename} - Rename local directories using a vector of patterns and replacements .
 This is meant to help with renaming student repos to include
 something more useful like \verb{Last, First name} or a unique identifier
 for the purposes of ordering repository folders.
+}
 }
 \examples{
 \dontrun{
