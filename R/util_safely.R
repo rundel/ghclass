@@ -155,7 +155,7 @@ status_msg = function(x, success = NULL, fail = NULL, include_error_msg = TRUE,
     cli::cli_alert_danger(fail, wrap = FALSE, .envir = .envir)
     if (include_error_msg) {
       msg = error_msg(x)
-      print(error_msg_tree(msg))
+      cli::cat_line(error_msg_tree(msg))
     }
   }
 }
@@ -168,16 +168,16 @@ error_msg_tree = function(msg) {
     id = c("root", "error", "msg", "doc", "404"),
     nodes = I(list("error", attrs, NULL, NULL, NULL)),
     extra = I(list(
-      "\b",
+      "Error Tree",
       msg,
-      cli_glue('API message: {cli::col_grey(attr(msg,"msg"))}'),
-      cli_glue('API docs: {cli::col_grey(attr(msg,"doc"))}'),
-      cli_glue('Missing page: {cli::col_grey(attr(msg,"404"))}')
+      paste0(" ", cli_glue('API message: {cli::col_grey(attr(msg,"msg"))}')),
+      paste0(" ", cli_glue('API docs: {cli::col_grey(attr(msg,"doc"))}')),
+      paste0(" ", cli_glue('Missing page: {cli::col_grey(attr(msg,"404"))}'))
     )),
     stringsAsFactors = FALSE
   )
 
-  cli::tree(d)
+  cli::tree(d)[-1]
 }
 
 
