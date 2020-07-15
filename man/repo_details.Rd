@@ -106,8 +106,3 @@ org_repo_stats("ghclass")
 }
 
 }
-\seealso{
-\href{repo_core}{Repo - Core Functions}, \href{repo_stats}{Repo - Stats Functions},
-\href{repo_file}{Repo - File Functions}, \href{repo_user}{Repo - User Functions},
-\href{repo_notification}{Repo - Notification Functions}, \code{\link[=repo_style]{repo_style()}}
-}

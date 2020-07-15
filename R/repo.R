@@ -65,10 +65,6 @@
 #'  prompt = FALSE
 #' )
 #'
-#' @seealso [Repo - Core Functions](repo_core), [Repo - Stats Functions](repo_stats),
-#' [Repo - File Functions](repo_file), [Repo - User Functions](repo_user),
-#' [Repo - Notification Functions](repo_notification), [repo_style()]
-#'
 NULL
 
 
@@ -108,10 +104,6 @@ NULL
 #'
 #' repo_prs("rundel/ghclass")
 #' }
-#'
-#' @seealso [Repo - Core Functions](repo_core), [Repo - Stats Functions](repo_stats),
-#' [Repo - File Functions](repo_file), [Repo - User Functions](repo_user),
-#' [Repo - Notification Functions](repo_notification), [repo_style()]
 #'
 NULL
 
@@ -171,10 +163,6 @@ NULL
 #' repo_delete(repo, prompt=FALSE)
 #' }
 #'
-#' @seealso [Repo - Core Functions](repo_core), [Repo - Stats Functions](repo_stats),
-#' [Repo - File Functions](repo_file), [Repo - User Functions](repo_user),
-#' [Repo - Notification Functions](repo_notification), [repo_style()]
-#'
 NULL
 
 
@@ -201,10 +189,6 @@ NULL
 #' \dontrun{
 #'
 #' }
-#'
-#' @seealso [Repo - Core Functions](repo_core), [Repo - Stats Functions](repo_stats),
-#' [Repo - File Functions](repo_file), [Repo - User Functions](repo_user),
-#' [Repo - Notification Functions](repo_notification), [repo_style()]
 #'
 NULL
 
@@ -244,9 +228,5 @@ NULL
 #' \dontrun{
 #'
 #' }
-#'
-#' @seealso [Repo - Core Functions](repo_core), [Repo - Stats Functions](repo_stats),
-#' [Repo - File Functions](repo_file), [Repo - User Functions](repo_user),
-#' [Repo - Notification Functions](repo_notification), [repo_style()]
 #'
 NULL

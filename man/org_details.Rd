@@ -47,8 +47,6 @@ for more details.}
 \item{full_repo}{Logical. Should the full repository address be returned (e.g. \code{owner/repo} instead of just \code{repo})?}
 
 \item{team_type}{Character. Either "slug" if the team names are slugs or "name" if full team names are provided.}
-
-\item{user}{Character. GitHub username(s).}
 }
 \description{
 \itemize{

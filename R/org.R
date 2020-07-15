@@ -97,7 +97,6 @@ NULL
 #' basic statistics about those repositories.
 #'
 #' @param org Character. Name of the GitHub organization(s).
-#' @param user Character. GitHub username(s).
 #' @param filter Character. Regular expression pattern for matching (or excluding) results
 #' @param exclude Logical. Should entries matching the regular expression be excluded or included.
 #'
