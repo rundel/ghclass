@@ -5,7 +5,7 @@
 #'
 #' @description
 #'
-#' `pr_create` - create a pull request GitHub from the `base` branch to the `head` branch.
+#' * `pr_create` - create a pull request GitHub from the `base` branch to the `head` branch.
 #'
 #' @param repo Character. Address of one or more repositories in "owner/name" format.
 #' @param title Character. Title of the pull request.

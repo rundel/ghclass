@@ -4,11 +4,11 @@
 #' @title GitHub Actions tools
 #'
 #' @description
-#' `action_workflows` - returns a data frame containing details on a repositories workflows.
+#' * `action_workflows` - returns a data frame containing details on a repositories workflows.
 #'
-#' `action_add_badge` - Add a GitHub Actions badge to a file.
+#' * `action_add_badge` - Add a GitHub Actions badge to a file.
 #'
-#' `action_remove_badge` - Remove one or more GitHub Action badges from a file.
+#' * `action_remove_badge` - Remove one or more GitHub Action badges from a file.
 #'
 #' @param repo Character. Address of repository in `owner/name` format.
 #' @param full Logical. Should all workflow columns be returned

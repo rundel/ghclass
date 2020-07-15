@@ -4,9 +4,9 @@
 #' @title GitHub Issue related tools
 #'
 #' @description
-#' `issue_create` creates an issue for a GitHub repository.
+#' * `issue_create` creates an issue for a GitHub repository.
 #'
-#' `issue_close` closes an issue for a GitHub repository.
+#' * `issue_close` closes an issue for a GitHub repository.
 #
 #' @param repo Character. Address of one or more repositories in `owner/name` format.
 #' @param title Character. Title of the issue.

@@ -5,19 +5,19 @@
 #'
 #' @description
 #'
-#' `team_create` - create teams in a GitHub organization
+#' * `team_create` - create teams in a GitHub organization
 #'
-#' `team_delete` - delete a team from a GitHub organization.
+#' * `team_delete` - delete a team from a GitHub organization.
 #'
-#' `team_rename` - renames an existing team.
+#' * `team_rename` - renames an existing team.
 #'
-#' `team_invite` - add members to GitHub organization team(s).
+#' * `team_invite` - add members to GitHub organization team(s).
 #'
-#' `team_members` - returns a data frame of team members.
+#' * `team_members` - returns a data frame of team members.
 #'
-#' `team_pending` - returns a data frame of pending team members.
+#' * `team_pending` - returns a data frame of pending team members.
 #'
-#' `team_repos` - returns a data frame of teams and their repos.
+#' * `team_repos` - returns a data frame of teams and their repos.
 #'
 #' @param org Character. Name of the GitHub organization.
 #' @param team Character. Name of teams.

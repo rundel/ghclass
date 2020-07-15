@@ -5,32 +5,32 @@
 #'
 #' @description
 #'
-#' `org_sitrep` - Provides a situation report on a GitHub organization.
+#' * `org_sitrep` - Provides a situation report on a GitHub organization.
 #'
-#' `org_set_repo_permission` - Change the default permission level for org repositories.
+#' * `org_set_repo_permission` - Change the default permission level for org repositories.
 #'
-#' `org_admins` - returns a vector of repository administrators. In the case of a
+#' * `org_admins` - returns a vector of repository administrators. In the case of a
 #' non-organization owner (e.g. a user account) returns the owner's login.
 #'
-#' `org_exists` - returns `TRUE` if the organization(s) exist on GitHub and `FALSE` otherwise.
+#' * `org_exists` - returns `TRUE` if the organization(s) exist on GitHub and `FALSE` otherwise.
 #'
-#' `org_invite` - invites user(s) to a GitHub organization.
+#' * `org_invite` - invites user(s) to a GitHub organization.
 #'
-#' `org_remove` - remove user(s) from an organization (and all teams within that organization).
+#' * `org_remove` - remove user(s) from an organization (and all teams within that organization).
 #'
-#' `org_members` - returns a (filtered) vector of organization members.
+#' * `org_members` - returns a (filtered) vector of organization members.
 #'
-#' `org_pending` - returns a (filtered) vector of pending organization members.
+#' * `org_pending` - returns a (filtered) vector of pending organization members.
 #'
-#' `org_repos` - returns a (filtered) vector of organization repositories.
+#' * `org_repos` - returns a (filtered) vector of organization repositories.
 #'
-#' `org_teams` - returns a (filtered) vector of organization teams.
+#' * `org_teams` - returns a (filtered) vector of organization teams.
 #'
-#' `org_team_details` - returns a data frame of all organization teams containing identification and permission details.
+#' * `org_team_details` - returns a data frame of all organization teams containing identification and permission details.
 #'
 #' ## Experimental
 #'
-#' `org_repo_stats` - returns a tibble of repositories belonging to a GitHub organization along with some
+#' * `org_repo_stats` - returns a tibble of repositories belonging to a GitHub organization along with some
 #' basic statistics about those repositories.
 #'
 #' @param org Character. Name of the GitHub organization(s).

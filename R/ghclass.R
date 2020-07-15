@@ -13,6 +13,7 @@
 #'
 #' @docType package
 #' @name ghclass
+#'
 NULL
 
 
