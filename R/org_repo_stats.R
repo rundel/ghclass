@@ -58,7 +58,7 @@ github_api_org_repo_stats = function(org, filter, filter_type, inc_commits, inc_
 
 
 
-#' @rdname org
+#' @rdname org_details
 #'
 #' @param filter_type Character. One or more GitHub search `in` qualifiers.
 #' See [documentation](https://help.github.com/en/articles/searching-for-repositories)

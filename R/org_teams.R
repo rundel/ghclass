@@ -6,7 +6,7 @@ github_api_org_teams = function(org) {
   )
 }
 
-#' @rdname org
+#' @rdname org_details
 #' @param team_type Character. Either "slug" if the team names are slugs or "name" if full team names are provided.
 #' @export
 #'

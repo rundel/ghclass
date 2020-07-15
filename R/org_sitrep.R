@@ -7,7 +7,7 @@ github_api_org = function(org) {
   )
 }
 
-#' @rdname org
+#' @rdname org_perm
 #' @export
 #'
 org_sitrep = function(org) {

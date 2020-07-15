@@ -17,14 +17,7 @@ github_api_org_update = function(
   )
 }
 
-#' @rdname org
-#'
-#' @param permission Default permission level members have for organization repositories:
-#' * read - can pull, but not push to or administer this repository.
-#' * write - can pull and push, but not administer this repository.
-#' * admin - can pull, push, and administer this repository.
-#' * none - no permissions granted by default.
-#'
+#' @rdname org_perm
 #' @export
 #'
 org_set_repo_permission = function(org, permission = c("none", "read", "write", "admin")) {

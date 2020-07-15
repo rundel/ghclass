@@ -9,7 +9,7 @@ github_api_get_org = function(org) {
 }
 
 
-#' @rdname org
+#' @rdname org_details
 #' @export
 #'
 org_exists = function(org) {

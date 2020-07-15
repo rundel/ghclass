@@ -1,4 +1,4 @@
-#' @rdname org
+#' @rdname org_details
 #' @export
 #'
 org_team_details = function(org) {

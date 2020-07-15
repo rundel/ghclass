@@ -7,7 +7,7 @@ github_api_org_members = function(org) {
          .limit = github_get_api_limit())
 }
 
-#' @rdname org
+#' @rdname org_members
 #' @param include_admins Logical. Should admin users be included in the results.
 #' @export
 #'

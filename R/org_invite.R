@@ -11,7 +11,7 @@ github_api_org_invite = function(org, user) {
 }
 
 
-#' @rdname org
+#' @rdname org_members
 #' @export
 #'
 org_invite = function(org, user) {

@@ -6,7 +6,7 @@ github_api_org_admins = function(owner){
          .limit = github_get_api_limit())
 }
 
-#' @rdname org
+#' @rdname org_members
 #' @export
 #'
 org_admins = function(org) {

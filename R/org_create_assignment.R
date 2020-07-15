@@ -1,16 +1,17 @@
-#' Create a team or individual assignment
+#' @title Create a team or individual assignment
 #'
+#' @description
 #' This is a higher level function that combines the following steps:
 #'
-#' 1. Create repos
-#' 2. Create teams and invite students if necessary
-#' 3. Add teams or individuals to the repositories
-#' 4. Mirror a template repository to assignment repositories
+#' * Create repos
+#' * Create teams and invite students if necessary
+#' * Add teams or individuals to the repositories
+#' * Mirror a template repository to assignment repositories
 #'
 #' @param org Character. Name of the GitHub organization.
 #' @param repo Character. Name of the repo(s) for the assignment.
 #' @param user Character. GitHub username(s).
-#' @param team Character. Team names, if `NULL`` an individual assignment will be created.
+#' @param team Character. Team names, if not provided an individual assignment will be created.
 #' @param source_repo Character. Address of the repository to use as a template for all created repos.
 #' @param private Logical. Should the created repositories be private.
 #'

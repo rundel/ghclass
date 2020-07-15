@@ -9,7 +9,7 @@ github_api_org_repos = function(owner) {
   )
 }
 
-#' @rdname org
+#' @rdname org_details
 #' @param full_repo Logical. Should the full repository address be returned (e.g. `owner/repo` instead of just `repo`)?
 #' @export
 #'
