@@ -22,19 +22,19 @@ team_create(
   privacy = c("secret", "closed")
 )
 
-team_delete(org, team, team_type = c("slug", "name"), prompt = TRUE)
+team_delete(org, team, team_type = c("name", "slug"), prompt = TRUE)
 
-team_invite(org, user, team, team_type = c("slug", "name"))
+team_invite(org, user, team, team_type = c("name", "slug"))
 
-team_members(org, team = org_teams(org), team_type = c("slug", "name"))
+team_members(org, team = org_teams(org), team_type = c("name", "slug"))
 
-team_pending(org, team = org_teams(org), team_type = c("slug", "name"))
+team_pending(org, team = org_teams(org), team_type = c("name", "slug"))
 
-team_remove(org, user, team, team_type = c("slug", "name"))
+team_remove(org, user, team, team_type = c("name", "slug"))
 
-team_rename(org, team, new_team, team_type = c("slug", "name"))
+team_rename(org, team, new_team, team_type = c("name", "slug"))
 
-team_repos(org, team = org_teams(org), team_type = c("slug", "name"))
+team_repos(org, team = org_teams(org), team_type = c("name", "slug"))
 }
 \arguments{
 \item{org}{Character. Name of the GitHub organization.}
@@ -58,19 +58,15 @@ and members of a team), default is "closed"}
 \item{new_team}{character, new team name.}
 }
 \description{
-\code{team_create} - create teams in a GitHub organization
-
-\code{team_delete} - delete a team from a GitHub organization.
-
-\code{team_rename} - renames an existing team.
-
-\code{team_invite} - add members to GitHub organization team(s).
-
-\code{team_members} - returns a data frame of team members.
-
-\code{team_pending} - returns a data frame of pending team members.
-
-\code{team_repos} - returns a data frame of teams and their repos.
+\itemize{
+\item \code{team_create} - create teams in a GitHub organization
+\item \code{team_delete} - delete a team from a GitHub organization.
+\item \code{team_rename} - renames an existing team.
+\item \code{team_invite} - add members to GitHub organization team(s).
+\item \code{team_members} - returns a data frame of team members.
+\item \code{team_pending} - returns a data frame of pending team members.
+\item \code{team_repos} - returns a data frame of teams and their repos.
+}
 }
 \examples{
 \dontrun{

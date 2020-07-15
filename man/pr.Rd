@@ -26,7 +26,9 @@ a pull request to one repository that requests a merge to a base of another repo
 (these cannot be merged until allowed by the author).}
 }
 \description{
-\code{pr_create} - create a pull request GitHub from the \code{base} branch to the \code{head} branch.
+\itemize{
+\item \code{pr_create} - create a pull request GitHub from the \code{base} branch to the \code{head} branch.
+}
 }
 \examples{
 \dontrun{

@@ -21,9 +21,10 @@ branch_remove(repo, branch)
 \item{new_branch}{Name of branch to create.}
 }
 \description{
-\code{branch_create} creates a new branch from an existing GitHub repo.
-
-\code{branch_delete} deletes a branch from an existing GitHub repo.
+\itemize{
+\item \code{branch_create} creates a new branch from an existing GitHub repo.
+\item \code{branch_delete} deletes a branch from an existing GitHub repo.
+}
 }
 \examples{
 \dontrun{

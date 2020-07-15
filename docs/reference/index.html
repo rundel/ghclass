@@ -47,7 +47,7 @@
 
 
 <meta property="og:title" content="Function reference" />
-<meta property="og:image" content="/logo.png" />
+<meta property="og:image" content="https://rundel.github.io/ghclass/logo.png" />
 
 
 
@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ghclass</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -96,6 +96,18 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/peer_students.html">Peer review instructions for students</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -132,7 +144,201 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
+          <h2 id="section-github" class="hasAnchor"><a href="#section-github" class="anchor"></a>GitHub</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="github.html">github_get_api_limit()</a></code> <code><a href="github.html">github_set_api_limit()</a></code> <code><a href="github.html">github_get_token()</a></code> <code><a href="github.html">github_set_token()</a></code> <code><a href="github.html">github_reset_token()</a></code> <code><a href="github.html">github_test_token()</a></code> <code><a href="github.html">github_whoami()</a></code> </p>
+        </td>
+        <td><p>GitHub API related tools</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-organization" class="hasAnchor"><a href="#section-organization" class="anchor"></a>Organization</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="org.html">org_admins()</a></code> <code><a href="org.html">org_exists()</a></code> <code><a href="org.html">org_invite()</a></code> <code><a href="org.html">org_members()</a></code> <code><a href="org.html">org_pending()</a></code> <code><a href="org.html">org_remove()</a></code> <code><a href="org.html">org_repo_stats()</a></code> <code><a href="org.html">org_repos()</a></code> <code><a href="org.html">org_sitrep()</a></code> <code><a href="org.html">org_team_details()</a></code> <code><a href="org.html">org_teams()</a></code> <code><a href="org.html">org_set_repo_permission()</a></code> </p>
+        </td>
+        <td><p>GitHub Organization related tools</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="org_create_assignment.html">org_create_assignment()</a></code> </p>
+        </td>
+        <td><p>Create a team or individual assignment</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-repositories" class="hasAnchor"><a href="#section-repositories" class="anchor"></a>Repositories</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="local_repo.html">local_repo_add()</a></code> <code><a href="local_repo.html">local_repo_branch()</a></code> <code><a href="local_repo.html">local_repo_clone()</a></code> <code><a href="local_repo.html">local_repo_commit()</a></code> <code><a href="local_repo.html">local_repo_log()</a></code> <code><a href="local_repo.html">local_repo_pull()</a></code> <code><a href="local_repo.html">local_repo_push()</a></code> <code><a href="local_repo.html">local_repo_rename()</a></code> </p>
+        </td>
+        <td><p>Functions for working with local git repositories</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="repo_core.html">repo_create()</a></code> <code><a href="repo_core.html">repo_delete()</a></code> <code><a href="repo_core.html">repo_exists()</a></code> <code><a href="repo_core.html">repo_is_template()</a></code> <code><a href="repo_core.html">repo_mirror()</a></code> <code><a href="repo_core.html">repo_mirror_template()</a></code> <code><a href="repo_core.html">repo_rename()</a></code> <code><a href="repo_core.html">repo_set_template()</a></code> </p>
+        </td>
+        <td><p>GitHub Repository tools - core functions</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="repo_details.html">repo_branches()</a></code> <code><a href="repo_details.html">repo_clone_url()</a></code> <code><a href="repo_details.html">repo_commits()</a></code> <code><a href="repo_details.html">repo_issues()</a></code> <code><a href="repo_details.html">repo_n_commits()</a></code> <code><a href="repo_details.html">repo_prs()</a></code> </p>
+        </td>
+        <td><p>GitHub Repository tools - repository details</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="repo_file.html">repo_add_file()</a></code> <code><a href="repo_file.html">repo_delete_file()</a></code> <code><a href="repo_file.html">repo_get_file()</a></code> <code><a href="repo_file.html">repo_get_readme()</a></code> <code><a href="repo_file.html">repo_ls()</a></code> <code><a href="repo_file.html">repo_modify_file()</a></code> <code><a href="repo_file.html">repo_put_file()</a></code> </p>
+        </td>
+        <td><p>GitHub Repository tools - file functions</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="repo_notification.html">repo_ignore()</a></code> <code><a href="repo_notification.html">repo_unwatch()</a></code> <code><a href="repo_notification.html">repo_watch()</a></code> <code><a href="repo_notification.html">repo_watching()</a></code> </p>
+        </td>
+        <td><p>GitHub Repository tools - notification functions</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="repo_style.html">repo_style()</a></code> </p>
+        </td>
+        <td><p>Style repository with styler</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="repo_user.html">repo_add_team()</a></code> <code><a href="repo_user.html">repo_add_user()</a></code> <code><a href="repo_user.html">repo_collaborators()</a></code> <code><a href="repo_user.html">repo_contributors()</a></code> <code><a href="repo_user.html">repo_remove_team()</a></code> <code><a href="repo_user.html">repo_remove_user()</a></code> </p>
+        </td>
+        <td><p>GitHub Repository tools - user functions</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-users" class="hasAnchor"><a href="#section-users" class="anchor"></a>Users</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="user.html">user_exists()</a></code> <code><a href="user.html">user_repos()</a></code> <code><a href="user.html">user_type()</a></code> </p>
+        </td>
+        <td><p>GitHub user related tools</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-teams" class="hasAnchor"><a href="#section-teams" class="anchor"></a>Teams</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="team.html">team_create()</a></code> <code><a href="team.html">team_delete()</a></code> <code><a href="team.html">team_invite()</a></code> <code><a href="team.html">team_members()</a></code> <code><a href="team.html">team_pending()</a></code> <code><a href="team.html">team_remove()</a></code> <code><a href="team.html">team_rename()</a></code> <code><a href="team.html">team_repos()</a></code> </p>
+        </td>
+        <td><p>GitHub team related tools</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-issues" class="hasAnchor"><a href="#section-issues" class="anchor"></a>Issues</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="issue.html">issue_close()</a></code> <code><a href="issue.html">issue_create()</a></code> </p>
+        </td>
+        <td><p>GitHub Issue related tools</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-branches" class="hasAnchor"><a href="#section-branches" class="anchor"></a>Branches</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="branch.html">branch_create()</a></code> <code><a href="branch.html">branch_delete()</a></code> <code><a href="branch.html">branch_remove()</a></code> </p>
+        </td>
+        <td><p>Repository branch tools</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-pull-requests" class="hasAnchor"><a href="#section-pull-requests" class="anchor"></a>Pull Requests</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="pr.html">pr_create()</a></code> </p>
+        </td>
+        <td><p>GitHub Pull Request related tools</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-actions" class="hasAnchor"><a href="#section-actions" class="anchor"></a>Actions</h2>
           <p class="section-desc"></p>
         </th>
       </tr>
@@ -147,49 +353,20 @@
           <p><code><a href="action.html">action_add_badge()</a></code> <code><a href="action.html">action_remove_badge()</a></code> <code><a href="action.html">action_workflows()</a></code> </p>
         </td>
         <td><p>GitHub Actions tools</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="branch.html">branch_create()</a></code> <code><a href="branch.html">branch_delete()</a></code> <code><a href="branch.html">branch_remove()</a></code> </p>
-        </td>
-        <td><p>Repository branch tools</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="ghclass.html">ghclass</a></code> </p>
-        </td>
-        <td><p>ghclass: A package for github based classroom and assignment management</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="github.html">github_get_api_limit()</a></code> <code><a href="github.html">github_set_api_limit()</a></code> <code><a href="github.html">github_get_token()</a></code> <code><a href="github.html">github_set_token()</a></code> <code><a href="github.html">github_reset_token()</a></code> <code><a href="github.html">github_test_token()</a></code> <code><a href="github.html">github_whoami()</a></code> </p>
-        </td>
-        <td><p>GitHub API related tools</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="issue.html">issue_close()</a></code> <code><a href="issue.html">issue_create()</a></code> </p>
-        </td>
-        <td><p>GitHub Issue related tools</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="local_repo.html">local_repo_add()</a></code> <code><a href="local_repo.html">local_repo_branch()</a></code> <code><a href="local_repo.html">local_repo_clone()</a></code> <code><a href="local_repo.html">local_repo_commit()</a></code> <code><a href="local_repo.html">local_repo_log()</a></code> <code><a href="local_repo.html">local_repo_pull()</a></code> <code><a href="local_repo.html">local_repo_push()</a></code> <code><a href="local_repo.html">local_repo_rename()</a></code> </p>
-        </td>
-        <td><p>Functions for working with local git repositories</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="org.html">org_admins()</a></code> <code><a href="org.html">org_exists()</a></code> <code><a href="org.html">org_invite()</a></code> <code><a href="org.html">org_members()</a></code> <code><a href="org.html">org_pending()</a></code> <code><a href="org.html">org_remove()</a></code> <code><a href="org.html">org_repo_stats()</a></code> <code><a href="org.html">org_repos()</a></code> <code><a href="org.html">org_team_details()</a></code> <code><a href="org.html">org_teams()</a></code> </p>
-        </td>
-        <td><p>GitHub Organization related tools</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="org_create_assignment.html">org_create_assignment()</a></code> </p>
-        </td>
-        <td><p>Create a team or individual assignment</p></td>
-      </tr><tr>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-peer-review" class="hasAnchor"><a href="#section-peer-review" class="anchor"></a>Peer Review</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
         
         <td>
           <p><code><a href="peer_assign.html">peer_assign()</a></code> </p>
@@ -249,66 +426,6 @@
           <p><code><a href="peer_score_review.html">peer_score_review()</a></code> </p>
         </td>
         <td><p>Collect scores from review forms</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="pr.html">pr_create()</a></code> </p>
-        </td>
-        <td><p>GitHub Pull Request related tools</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="repo_core.html">repo_create()</a></code> <code><a href="repo_core.html">repo_delete()</a></code> <code><a href="repo_core.html">repo_exists()</a></code> <code><a href="repo_core.html">repo_is_template()</a></code> <code><a href="repo_core.html">repo_mirror()</a></code> <code><a href="repo_core.html">repo_mirror_template()</a></code> <code><a href="repo_core.html">repo_rename()</a></code> <code><a href="repo_core.html">repo_set_template()</a></code> </p>
-        </td>
-        <td><p>GitHub Repository tools - core functions</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="repo_details.html">repo_branches()</a></code> <code><a href="repo_details.html">repo_clone_url()</a></code> <code><a href="repo_details.html">repo_commits()</a></code> <code><a href="repo_details.html">repo_issues()</a></code> <code><a href="repo_details.html">repo_n_commits()</a></code> <code><a href="repo_details.html">repo_prs()</a></code> </p>
-        </td>
-        <td><p>GitHub Repository tools - repository details</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="repo_file.html">repo_add_file()</a></code> <code><a href="repo_file.html">repo_delete_file()</a></code> <code><a href="repo_file.html">repo_get_file()</a></code> <code><a href="repo_file.html">repo_get_readme()</a></code> <code><a href="repo_file.html">repo_ls()</a></code> <code><a href="repo_file.html">repo_modify_file()</a></code> <code><a href="repo_file.html">repo_put_file()</a></code> </p>
-        </td>
-        <td><p>GitHub Repository tools - file functions</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="repo_notification.html">repo_ignore()</a></code> <code><a href="repo_notification.html">repo_unwatch()</a></code> <code><a href="repo_notification.html">repo_watch()</a></code> <code><a href="repo_notification.html">repo_watching()</a></code> </p>
-        </td>
-        <td><p>GitHub Repository tools - notification functions</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="repo_style.html">repo_style()</a></code> </p>
-        </td>
-        <td><p>Style repository with styler</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="repo_user.html">repo_add_team()</a></code> <code><a href="repo_user.html">repo_add_user()</a></code> <code><a href="repo_user.html">repo_collaborators()</a></code> <code><a href="repo_user.html">repo_contributors()</a></code> <code><a href="repo_user.html">repo_remove_team()</a></code> <code><a href="repo_user.html">repo_remove_user()</a></code> </p>
-        </td>
-        <td><p>GitHub Repository tools - user functions</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="team.html">team_create()</a></code> <code><a href="team.html">team_delete()</a></code> <code><a href="team.html">team_invite()</a></code> <code><a href="team.html">team_members()</a></code> <code><a href="team.html">team_pending()</a></code> <code><a href="team.html">team_remove()</a></code> <code><a href="team.html">team_rename()</a></code> <code><a href="team.html">team_repos()</a></code> </p>
-        </td>
-        <td><p>GitHub team related tools</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="user.html">user_exists()</a></code> <code><a href="user.html">user_repos()</a></code> <code><a href="user.html">user_type()</a></code> </p>
-        </td>
-        <td><p>GitHub user related tools</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="with_pat.html">with_pat()</a></code> <code><a href="with_pat.html">local_pat()</a></code> </p>
-        </td>
-        <td><p>Use Temporary GitHub Access Token</p></td>
       </tr>
     </tbody>
     </table>
@@ -324,7 +441,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Colin Rundel, Mine Cetinkaya-Rundel.</p>
+  <p>Developed by <a href='https://rundel.github.io'>Colin Rundel</a>, Mine Cetinkaya-Rundel.</p>
 </div>
 
 <div class="pkgdown">

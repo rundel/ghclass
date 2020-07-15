@@ -47,8 +47,12 @@
 
 
 <meta property="og:title" content="Add local files to author-specific folders on reviewers' review repositories — peer_file_add_rev" />
-<meta property="og:description" content="peer_file_add_rev() takes a local file and adds it to author-specific folders on reviewers' repositories. The function's main purpose is to distribute review forms into the correct author-specific folders on reviewers' repositories." />
-<meta property="og:image" content="/logo.png" />
+<meta property="og:description" content="
+
+peer_file_add_rev() takes a local file and adds it to author-specific folders on reviewers' repositories. The function's main purpose is to distribute review forms into the correct author-specific folders on reviewers' repositories.
+
+" />
+<meta property="og:image" content="https://rundel.github.io/ghclass/logo.png" />
 
 
 
@@ -80,7 +84,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ghclass</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -97,6 +101,18 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/peer_students.html">Peer review instructions for students</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -125,7 +141,11 @@
     </div>
 
     <div class="ref-description">
-    <p><code>peer_file_add_rev()</code> takes a local file and adds it to author-specific folders on reviewers' repositories. The function's main purpose is to distribute review forms into the correct author-specific folders on reviewers' repositories.</p>
+    
+<ul>
+<li><p><code>peer_file_add_rev()</code> takes a local file and adds it to author-specific folders on reviewers' repositories. The function's main purpose is to distribute review forms into the correct author-specific folders on reviewers' repositories.</p></li>
+</ul>
+
     </div>
 
     <pre class="usage"><span class='fu'>peer_file_add_rev</span>(
@@ -199,7 +219,7 @@
 <span class='fu'>peer_file_add_rev</span>(<span class='kw'>org</span> <span class='kw'>=</span> <span class='st'>"ghclass-test"</span>,
 <span class='kw'>roster</span> <span class='kw'>=</span> <span class='st'>"hw2_roster_seed12345.csv"</span>,
 <span class='kw'>local_path</span> <span class='kw'>=</span> <span class='st'>"/Users/profx/introstats/hw2/hw2_review.Rmd"</span>,
-<span class='kw'>prefix</span> <span class='kw'>=</span> <span class='no'>prefix</span>)</div><div class='output co'>#&gt; <span class='error'>Error in handle_arg_list(..., tests = function(name, value) {    if (!(is.character(value) | (is.null(value) &amp; allow_null)))         cli_stop("Argument {.val {name}} must be of character type.")    if (any(is.na(value)) &amp; !allow_na)         cli_stop("Argument {.val {name}} must not contain any missing values ({.val {NA}}).")}): object 'prefix' not found</span></div><div class='input'># }
+<span class='kw'>prefix</span> <span class='kw'>=</span> <span class='no'>prefix</span>)</div><div class='output co'>#&gt; <span class='error'>Error in handle_arg_list(..., tests = function(name, value) {    if (!(is.character(value) | (is.null(value) &amp; allow_null)))         cli_stop("Argument {.val {name}} must be of character type.")    if (any(is.na(value)) &amp; !allow_na)         cli_stop("Argument {.val {name}} must not contain any missing values ({.val {NA}}).")    if (length(value) == 0 &amp; !allow_empty)         cli_stop("Argument {.val {name}} must have length &gt;= 1.")}): object 'prefix' not found</span></div><div class='input'># }
 
 </div></pre>
   </div>
@@ -213,7 +233,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Colin Rundel, Mine Cetinkaya-Rundel.</p>
+  <p>Developed by <a href='https://rundel.github.io'>Colin Rundel</a>, Mine Cetinkaya-Rundel.</p>
 </div>
 
 <div class="pkgdown">

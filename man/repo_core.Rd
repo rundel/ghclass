@@ -75,26 +75,21 @@ Note when using template repos these new repositories must \emph{not} exist.}
 \item{status}{Logical. Should the repository be set as a template repository}
 }
 \description{
-\code{repo_create} - create a GitHub repository.
-
-\code{repo_delete} - delete a GitHub repository.
-
-\code{repo_rename} - rename a repository, note that renamed repositories retain their
+\itemize{
+\item \code{repo_create} - create a GitHub repository.
+\item \code{repo_delete} - delete a GitHub repository.
+\item \code{repo_rename} - rename a repository, note that renamed repositories retain their
 unique identifier and can still be accessed via their old names due to
 GitHub re-directing.
-
-\code{repo_exists} - returns \code{TRUE} if the GitHub repository exists. It will also print
+\item \code{repo_exists} - returns \code{TRUE} if the GitHub repository exists. It will also print
 a message if a repository has been renamed, unless \code{quiet = TRUE}.
-
-\code{repo_mirror} mirror the content of a repository to another repository,
+\item \code{repo_mirror} mirror the content of a repository to another repository,
 the target repo must already exist.
-
-\code{repo_mirror_template} - mirror the content of a source template repository to a new repository,
+\item \code{repo_mirror_template} - mirror the content of a source template repository to a new repository,
 the target repo must \emph{not} already exist.
-
-\code{repo_is_template} - returns \code{TRUE} if a repository is a template repo.
-
-\code{repo_set_template} - change the template status of a repository.
+\item \code{repo_is_template} - returns \code{TRUE} if a repository is a template repo.
+\item \code{repo_set_template} - change the template status of a repository.
+}
 }
 \examples{
 \dontrun{

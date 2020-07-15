@@ -77,17 +77,14 @@ Pass in "none" for issues with no assigned user, and "*" for issues assigned to 
 \item{direction}{Character. The direction of the sort. Can be either "asc" or "desc".}
 }
 \description{
-\code{repo_clone_url} - Returns the url, for cloning, a GitHub repo (either ssh or https)
-
-\code{repo_branches} - Returns a (filtered) vector of branch names.
-
-\code{repo_commits} - Returns a tibble of commits to a GitHub repository.
-
-\code{repo_issues} - Returns a tibble of issues for a GitHub repository.
-
-\code{repo_n_commits} - Returns a tibble of the number of commits in a GitHub repository (and branch).
-
-\code{repo_prs} - Returns a tibble of pull requests for a GitHub repository.
+\itemize{
+\item \code{repo_clone_url} - Returns the url, for cloning, a GitHub repo (either ssh or https)
+\item \code{repo_branches} - Returns a (filtered) vector of branch names.
+\item \code{repo_commits} - Returns a tibble of commits to a GitHub repository.
+\item \code{repo_issues} - Returns a tibble of issues for a GitHub repository.
+\item \code{repo_n_commits} - Returns a tibble of the number of commits in a GitHub repository (and branch).
+\item \code{repo_prs} - Returns a tibble of pull requests for a GitHub repository.
+}
 }
 \examples{
 \dontrun{

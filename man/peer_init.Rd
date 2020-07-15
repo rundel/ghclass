@@ -27,7 +27,9 @@ peer_init(
 \item{show_label_result}{Logical. Whether a tibble with details on the creation of labels should be returned, defaults to \code{FALSE}.}
 }
 \description{
-\code{peer_init()} initiates peer review repositories. It creates a review repository for each user, adds users to their respective repositories, and applies peer review labels to all repositories (i.e. assignment and review repositories).
+\itemize{
+\item \code{peer_init()} initiates peer review repositories. It creates a review repository for each user, adds users to their respective repositories, and applies peer review labels to all repositories (i.e. assignment and review repositories).
+}
 }
 \examples{
 \dontrun{

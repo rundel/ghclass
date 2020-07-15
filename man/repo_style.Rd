@@ -34,8 +34,10 @@ until allowed by the author)}
 \item{prompt}{Chacacter. Prompt the user before overwriting an existing branch.}
 }
 \description{
-\code{repo_style} implements "non-invasive pretty-printing of R source code" of .R or .Rmd files
+\itemize{
+\item \code{repo_style} implements "non-invasive pretty-printing of R source code" of .R or .Rmd files
 within a repository using the \code{styler} package and adhering to \code{tidyverse} formatting guidelines.
+}
 }
 \examples{
 \dontrun{

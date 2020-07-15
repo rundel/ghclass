@@ -47,7 +47,9 @@
 
 
 <meta property="og:title" content="GitHub Repository tools - file functions — repo_file" />
-<meta property="og:description" content="repo_add_file - Add / update files in a GitHub repository.
+<meta property="og:description" content="
+
+repo_add_file - Add / update files in a GitHub repository.
 Note that due to time delays in caching, files that have been added
 very recently might not yet be displayed as existing and might accidentally
 be overwritten.
@@ -56,8 +58,10 @@ repo_modify_file - Modify an existing file within a GitHub repository.
 repo_ls - Low level function for listing the files in a GitHub Repository
 repo_put_file - Low level function for adding a file to a Github repository
 repo_get_file - Low level function for retrieving the content of a file from a GitHub Repository
-repo_get_readme - Low level function for retrieving the content of the README.md of a GitHub Repository" />
-<meta property="og:image" content="/logo.png" />
+repo_get_readme - Low level function for retrieving the content of the README.md of a GitHub Repository
+
+" />
+<meta property="og:image" content="https://rundel.github.io/ghclass/logo.png" />
 
 
 
@@ -89,7 +93,7 @@ repo_get_readme - Low level function for retrieving the content of the README.md
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ghclass</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -106,6 +110,18 @@ repo_get_readme - Low level function for retrieving the content of the README.md
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/peer_students.html">Peer review instructions for students</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -134,16 +150,20 @@ repo_get_readme - Low level function for retrieving the content of the README.md
     </div>
 
     <div class="ref-description">
-    <p><code>repo_add_file</code> - Add / update files in a GitHub repository.
+    
+<ul>
+<li><p><code>repo_add_file</code> - Add / update files in a GitHub repository.
 Note that due to time delays in caching, files that have been added
 very recently might not yet be displayed as existing and might accidentally
-be overwritten.</p>
-<p><code>repo_delete_file</code> - Delete a file from a Github repository</p>
-<p><code>repo_modify_file</code> - Modify an existing file within a GitHub repository.</p>
-<p><code>repo_ls</code> - Low level function for listing the files in a GitHub Repository</p>
-<p><code>repo_put_file</code> - Low level function for adding a file to a Github repository</p>
-<p><code>repo_get_file</code> - Low level function for retrieving the content of a file from a GitHub Repository</p>
-<p><code>repo_get_readme</code> - Low level function for retrieving the content of the <code>README.md</code> of a GitHub Repository</p>
+be overwritten.</p></li>
+<li><p><code>repo_delete_file</code> - Delete a file from a Github repository</p></li>
+<li><p><code>repo_modify_file</code> - Modify an existing file within a GitHub repository.</p></li>
+<li><p><code>repo_ls</code> - Low level function for listing the files in a GitHub Repository</p></li>
+<li><p><code>repo_put_file</code> - Low level function for adding a file to a Github repository</p></li>
+<li><p><code>repo_get_file</code> - Low level function for retrieving the content of a file from a GitHub Repository</p></li>
+<li><p><code>repo_get_readme</code> - Low level function for retrieving the content of the <code>README.md</code> of a GitHub Repository</p></li>
+</ul>
+
     </div>
 
     <pre class="usage"><span class='fu'>repo_add_file</span>(
@@ -267,10 +287,9 @@ be overwritten.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
-<span class='no'>repo</span> <span class='kw'>=</span> <span class='fu'><a href='repo_core.html'>repo_create</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"repo_file_test"</span>, <span class='kw'>auto_init</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use <span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
-#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
-#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to create repo </span><span style='color: #0000BB;'>'ghclass-test/repo_file_test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; 
-#&gt; └─</div><div class='input'>
+<span class='no'>repo</span> <span class='kw'>=</span> <span class='fu'><a href='repo_core.html'>repo_create</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"repo_file_test"</span>, <span class='kw'>auto_init</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use <span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
+#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
+#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to create repo </span><span style='color: #0000BB;'>'ghclass-test/repo_file_test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='input'>
 <span class='fu'>repo_ls</span>(<span class='no'>repo</span>, <span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"."</span>)</div><div class='output co'>#&gt; <span class='message'>Argument </span><span style='color: #0000BB;'>'repo'</span><span> must be of length 1.</span></div><div class='output co'>#&gt; <span class='error'>Error: </span></div><div class='input'>
 <span class='fu'>repo_get_readme</span>(<span class='no'>repo</span>, <span class='kw'>include_details</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Argument </span><span style='color: #0000BB;'>'repo'</span><span> must be of length 1.</span></div><div class='output co'>#&gt; <span class='error'>Error: </span></div><div class='input'><span class='fu'>repo_get_file</span>(<span class='no'>repo</span>, <span class='st'>".gitignore"</span>, <span class='kw'>include_details</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Argument </span><span style='color: #0000BB;'>'repo'</span><span> must be of length 1.</span></div><div class='output co'>#&gt; <span class='error'>Error: </span></div><div class='input'>
 <span class='fu'>repo_modify_file</span>(
@@ -295,7 +314,7 @@ be overwritten.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Colin Rundel, Mine Cetinkaya-Rundel.</p>
+  <p>Developed by <a href='https://rundel.github.io'>Colin Rundel</a>, Mine Cetinkaya-Rundel.</p>
 </div>
 
 <div class="pkgdown">

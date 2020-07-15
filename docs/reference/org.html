@@ -47,7 +47,11 @@
 
 
 <meta property="og:title" content="GitHub Organization related tools — org" />
-<meta property="og:description" content="org_admins - returns a vector of repository administrators. In the case of a
+<meta property="og:description" content="
+
+org_sitrep - Provides a situation report on a GitHub organization.
+org_set_repo_permission - Change the default permission level for org repositories.
+org_admins - returns a vector of repository administrators. In the case of a
 non-organization owner (e.g. a user account) returns the owner's login.
 org_exists - returns TRUE if the organization(s) exist on GitHub and FALSE otherwise.
 org_invite - invites user(s) to a GitHub organization.
@@ -56,13 +60,17 @@ org_members - returns a (filtered) vector of organization members.
 org_pending - returns a (filtered) vector of pending organization members.
 org_repos - returns a (filtered) vector of organization repositories.
 org_teams - returns a (filtered) vector of organization teams.
-org_team_details - returns a data frame of all organization teams containing identification and permission details.Experimental
+org_team_details - returns a data frame of all organization teams containing identification and permission details.
+
+Experimental
 
 
 org_repo_stats - returns a tibble of repositories belonging to a GitHub organization along with some
 basic statistics about those repositories.
+
+
 " />
-<meta property="og:image" content="/logo.png" />
+<meta property="og:image" content="https://rundel.github.io/ghclass/logo.png" />
 
 
 
@@ -94,7 +102,7 @@ basic statistics about those repositories.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ghclass</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -111,6 +119,18 @@ basic statistics about those repositories.
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/peer_students.html">Peer review instructions for students</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -134,25 +154,33 @@ basic statistics about those repositories.
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>GitHub Organization related tools</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/org.R'><code>R/org.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/org_admins.R'><code>R/org_admins.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/org_exists.R'><code>R/org_exists.R</code></a>, and 8 more</small>
+    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/org.R'><code>R/org.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/org_admins.R'><code>R/org_admins.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/org_exists.R'><code>R/org_exists.R</code></a>, and 10 more</small>
     <div class="hidden name"><code>org.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>org_admins</code> - returns a vector of repository administrators. In the case of a
-non-organization owner (e.g. a user account) returns the owner's login.</p>
-<p><code>org_exists</code> - returns <code>TRUE</code> if the organization(s) exist on GitHub and <code>FALSE</code> otherwise.</p>
-<p><code>org_invite</code> - invites user(s) to a GitHub organization.</p>
-<p><code>org_remove</code> - remove user(s) from an organization (and all teams within that organization).</p>
-<p><code>org_members</code> - returns a (filtered) vector of organization members.</p>
-<p><code>org_pending</code> - returns a (filtered) vector of pending organization members.</p>
-<p><code>org_repos</code> - returns a (filtered) vector of organization repositories.</p>
-<p><code>org_teams</code> - returns a (filtered) vector of organization teams.</p>
-<p><code>org_team_details</code> - returns a data frame of all organization teams containing identification and permission details.</p><h3>Experimental</h3>
+    
+<ul>
+<li><p><code>org_sitrep</code> - Provides a situation report on a GitHub organization.</p></li>
+<li><p><code>org_set_repo_permission</code> - Change the default permission level for org repositories.</p></li>
+<li><p><code>org_admins</code> - returns a vector of repository administrators. In the case of a
+non-organization owner (e.g. a user account) returns the owner's login.</p></li>
+<li><p><code>org_exists</code> - returns <code>TRUE</code> if the organization(s) exist on GitHub and <code>FALSE</code> otherwise.</p></li>
+<li><p><code>org_invite</code> - invites user(s) to a GitHub organization.</p></li>
+<li><p><code>org_remove</code> - remove user(s) from an organization (and all teams within that organization).</p></li>
+<li><p><code>org_members</code> - returns a (filtered) vector of organization members.</p></li>
+<li><p><code>org_pending</code> - returns a (filtered) vector of pending organization members.</p></li>
+<li><p><code>org_repos</code> - returns a (filtered) vector of organization repositories.</p></li>
+<li><p><code>org_teams</code> - returns a (filtered) vector of organization teams.</p></li>
+<li><p><code>org_team_details</code> - returns a data frame of all organization teams containing identification and permission details.</p></li>
+</ul>
+<h3>Experimental</h3>
 
+<ul>
+<li><p><code>org_repo_stats</code> - returns a tibble of repositories belonging to a GitHub organization along with some
+basic statistics about those repositories.</p></li>
+</ul>
 
-<p><code>org_repo_stats</code> - returns a tibble of repositories belonging to a GitHub organization along with some
-basic statistics about those repositories.</p>
 
     </div>
 
@@ -179,9 +207,13 @@ basic statistics about those repositories.</p>
 
 <span class='fu'>org_repos</span>(<span class='no'>org</span>, <span class='kw'>filter</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>full_repo</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
+<span class='fu'>org_sitrep</span>(<span class='no'>org</span>)
+
 <span class='fu'>org_team_details</span>(<span class='no'>org</span>)
 
-<span class='fu'>org_teams</span>(<span class='no'>org</span>, <span class='kw'>filter</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"slug"</span>, <span class='st'>"name"</span>))</pre>
+<span class='fu'>org_teams</span>(<span class='no'>org</span>, <span class='kw'>filter</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>))
+
+<span class='fu'>org_set_repo_permission</span>(<span class='no'>org</span>, <span class='kw'>permission</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"none"</span>, <span class='st'>"read"</span>, <span class='st'>"write"</span>, <span class='st'>"admin"</span>))</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -236,6 +268,15 @@ for more details.</p></td>
       <th>team_type</th>
       <td><p>Character. Either "slug" if the team names are slugs or "name" if full team names are provided.</p></td>
     </tr>
+    <tr>
+      <th>permission</th>
+      <td><p>Default permission level members have for organization repositories:</p><ul>
+<li><p>read - can pull, but not push to or administer this repository.</p></li>
+<li><p>write - can pull and push, but not administer this repository.</p></li>
+<li><p>admin - can pull, push, and administer this repository.</p></li>
+<li><p>none - no permissions granted by default.</p></li>
+</ul></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
@@ -245,44 +286,38 @@ for more details.</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
 <span class='co'># Org Details</span>
-<span class='fu'>org_admins</span>(<span class='st'>"ghclass-test"</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use <span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
-#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
-#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'>Failed to retrieve admins for org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='error'>Error: </span></div><div class='input'><span class='fu'>org_admins</span>(<span class='st'>"rundel"</span>) <span class='co'># User, not an organization</span></div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
-#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
-#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'>Failed to retrieve admins for org </span><span style='color: #0000BB;'>'rundel'</span><span>.</span></div><div class='output co'>#&gt; <span class='error'>Error: </span></div><div class='input'>
-<span class='fu'>org_exists</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"rundel"</span>,<span class='st'>"ghclass-test"</span>))</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
-#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
-#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; [1] FALSE FALSE</div><div class='input'>
+<span class='fu'>org_admins</span>(<span class='st'>"ghclass-test"</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use <span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
+#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
+#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'>Failed to retrieve admins for org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='error'>Error: </span></div><div class='input'><span class='fu'>org_admins</span>(<span class='st'>"rundel"</span>) <span class='co'># User, not an organization</span></div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
+#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
+#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'>Failed to retrieve admins for org </span><span style='color: #0000BB;'>'rundel'</span><span>.</span></div><div class='output co'>#&gt; <span class='error'>Error: </span></div><div class='input'>
+<span class='fu'>org_exists</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"rundel"</span>,<span class='st'>"ghclass-test"</span>))</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
+#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
+#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; [1] FALSE FALSE</div><div class='input'>
 <span class='co'># Org Membership - Invite, Status, and Remove</span>
 <span class='no'>students</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ghclass-anya"</span>, <span class='st'>"ghclass-bruno"</span>, <span class='st'>"ghclass-celine"</span>,
          <span class='st'>"ghclass-diego"</span>, <span class='st'>"ghclass-elijah"</span>,<span class='st'>"ghclass-francis"</span>)
 <span class='fu'>org_invite</span>(<span class='no'>students</span>)</div><div class='output co'>#&gt; <span class='message'>Argument </span><span style='color: #0000BB;'>'org'</span><span> must be of length 1.</span></div><div class='output co'>#&gt; <span class='error'>Error: </span></div><div class='input'>
-<span class='fu'>org_members</span>(<span class='st'>"ghclass-test"</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
-#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; character(0)</div><div class='input'><span class='fu'>org_pending</span>(<span class='st'>"ghclass-test"</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
-#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to retrieve pending members for org </span><span style='color: #0000BB;'>'ghclass-test'</span><span></span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; 
-#&gt; └─</div><div class='output co'>#&gt; character(0)</div><div class='input'>
-<span class='fu'>org_remove</span>(<span class='st'>"ghclass-test"</span>, <span class='no'>students</span>)</div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir = list(`?` = function(...) stop()), enclos = envir): object 'x' not found</span></div><div class='input'><span class='fu'>org_pending</span>(<span class='st'>"ghclass-test"</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
-#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to retrieve pending members for org </span><span style='color: #0000BB;'>'ghclass-test'</span><span></span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; 
-#&gt; └─</div><div class='output co'>#&gt; character(0)</div><div class='input'>
+<span class='fu'>org_members</span>(<span class='st'>"ghclass-test"</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
+#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; character(0)</div><div class='input'><span class='fu'>org_pending</span>(<span class='st'>"ghclass-test"</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
+#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to retrieve pending members for org </span><span style='color: #0000BB;'>'ghclass-test'</span><span></span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='output co'>#&gt; character(0)</div><div class='input'>
+<span class='fu'>org_remove</span>(<span class='st'>"ghclass-test"</span>, <span class='no'>students</span>)</div><div class='output co'>#&gt; <span class='message'>User input required, but session is not interactive.</span></div><div class='output co'>#&gt; <span class='error'>Error: </span></div><div class='input'><span class='fu'>org_pending</span>(<span class='st'>"ghclass-test"</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
+#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to retrieve pending members for org </span><span style='color: #0000BB;'>'ghclass-test'</span><span></span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='output co'>#&gt; character(0)</div><div class='input'>
 <span class='co'># Org repos and teams</span>
-<span class='fu'>org_repos</span>(<span class='st'>"ghclass-test"</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
-#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'>Organization </span><span style='color: #0000BB;'>'ghclass-test'</span><span> does not exist on GitHub.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to retrieve repos for org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; 
-#&gt; └─</div><div class='input'><span class='fu'>org_repos</span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
-#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'>Organization </span><span style='color: #0000BB;'>'ghclass-test'</span><span> does not exist on GitHub.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to retrieve repos for org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; 
-#&gt; └─</div><div class='input'><span class='fu'>org_teams</span>(<span class='st'>"ghclass-test"</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
-#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to retrieve teams for org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; 
-#&gt; └─</div><div class='output co'>#&gt; character(0)</div><div class='input'>
-<span class='fu'>org_team_details</span>(<span class='st'>"ghclass-test"</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
-#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to retrieve teams for org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; 
-#&gt; └─</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 0 x 5</span><span>
+<span class='fu'>org_repos</span>(<span class='st'>"ghclass-test"</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
+#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'>Organization </span><span style='color: #0000BB;'>'ghclass-test'</span><span> does not exist on GitHub.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to retrieve repos for org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='input'><span class='fu'>org_repos</span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
+#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'>Organization </span><span style='color: #0000BB;'>'ghclass-test'</span><span> does not exist on GitHub.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to retrieve repos for org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='input'><span class='fu'>org_teams</span>(<span class='st'>"ghclass-test"</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
+#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to retrieve teams for org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='output co'>#&gt; character(0)</div><div class='input'>
+<span class='fu'>org_team_details</span>(<span class='st'>"ghclass-test"</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
+#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to retrieve teams for org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 0 x 5</span><span>
 #&gt; </span><span style='color: #949494;'># … with 5 variables: slug </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span style='color: #949494;'>, id </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span style='color: #949494;'>, name </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span style='color: #949494;'>, privacy </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span style='color: #949494;'>,</span><span>
 #&gt; </span><span style='color: #949494;'>#   permission </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span></div><div class='input'><span class='co'># }</span>
 
 <span class='co'># \dontrun{</span>
-<span class='fu'>org_repo_stats</span>(<span class='st'>"ghclass-test"</span>)</div><div class='output co'>#&gt; <span class='message'>This function (</span><span style='color: #0000BB;'>'org_repo_stats'</span><span>) is currently considered experimental. Its</span>
-#&gt; <span class='message'>interface, implementation, and other features may change significantly in</span>
-#&gt; <span class='message'>future versions of the package. Use with caution.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: </span></div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
-#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='error'>Error: </span></div><div class='input'># }
+<span class='fu'>org_repo_stats</span>(<span class='st'>"ghclass-test"</span>)</div><div class='output co'>#&gt; <span class='message'>This function (</span><span style='color: #0000BB;'>'org_repo_stats'</span><span>) is currently considered experimental. Its interface,</span>
+#&gt; <span class='message'>implementation, and other features may change significantly in future versions of the</span>
+#&gt; <span class='message'>package. Use with caution.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: </span></div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
+#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='error'>Error: </span></div><div class='input'># }
 
 </div></span></pre>
   </div>
@@ -296,7 +331,7 @@ for more details.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Colin Rundel, Mine Cetinkaya-Rundel.</p>
+  <p>Developed by <a href='https://rundel.github.io'>Colin Rundel</a>, Mine Cetinkaya-Rundel.</p>
 </div>
 
 <div class="pkgdown">

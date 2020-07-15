@@ -39,7 +39,9 @@ peer_assign(
 \item{overwrite}{Logical. Whether existing files in reviewers' repositories should be overwritten, defaults to \code{FALSE}.}
 }
 \description{
-\code{peer_assign} adds files from authors' repositories to review repositories. The function creates an issue on the reviewers' repositories informing them that the review files are available and creates links to the relevant documents.
+\itemize{
+\item \code{peer_assign} adds files from authors' repositories to review repositories. The function creates an issue on the reviewers' repositories informing them that the review files are available and creates links to the relevant documents.
+}
 }
 \examples{
 \dontrun{

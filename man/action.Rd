@@ -39,11 +39,11 @@ that matches the workflow name.}
 \item{full}{Logical. Should all workflow columns be returned}
 }
 \description{
-\code{action_workflows} - returns a data frame containing details on a repositories workflows.
-
-\code{action_add_badge} - Add a GitHub Actions badge to a file.
-
-\code{action_remove_badge} - Remove one or more GitHub Action badges from a file.
+\itemize{
+\item \code{action_workflows} - returns a data frame containing details on a repositories workflows.
+\item \code{action_add_badge} - Add a GitHub Actions badge to a file.
+\item \code{action_remove_badge} - Remove one or more GitHub Action badges from a file.
+}
 }
 \examples{
 \dontrun{

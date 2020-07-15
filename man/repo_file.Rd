@@ -91,22 +91,18 @@ repo_put_file(
 \item{verbose}{Logical. Should success / failure messages be printed}
 }
 \description{
-\code{repo_add_file} - Add / update files in a GitHub repository.
+\itemize{
+\item \code{repo_add_file} - Add / update files in a GitHub repository.
 Note that due to time delays in caching, files that have been added
 very recently might not yet be displayed as existing and might accidentally
 be overwritten.
-
-\code{repo_delete_file} - Delete a file from a Github repository
-
-\code{repo_modify_file} - Modify an existing file within a GitHub repository.
-
-\code{repo_ls} - Low level function for listing the files in a GitHub Repository
-
-\code{repo_put_file} - Low level function for adding a file to a Github repository
-
-\code{repo_get_file} - Low level function for retrieving the content of a file from a GitHub Repository
-
-\code{repo_get_readme} - Low level function for retrieving the content of the \code{README.md} of a GitHub Repository
+\item \code{repo_delete_file} - Delete a file from a Github repository
+\item \code{repo_modify_file} - Modify an existing file within a GitHub repository.
+\item \code{repo_ls} - Low level function for listing the files in a GitHub Repository
+\item \code{repo_put_file} - Low level function for adding a file to a Github repository
+\item \code{repo_get_file} - Low level function for retrieving the content of a file from a GitHub Repository
+\item \code{repo_get_readme} - Low level function for retrieving the content of the \code{README.md} of a GitHub Repository
+}
 }
 \examples{
 \dontrun{

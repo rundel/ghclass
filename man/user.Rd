@@ -33,12 +33,12 @@ user_type(user)
 (e.g. \code{owner/repo} instead of just \code{repo})?}
 }
 \description{
-\code{user_exists} - returns \code{TRUE} if the username(s) (or organization) exist on GitHub
+\itemize{
+\item \code{user_exists} - returns \code{TRUE} if the username(s) (or organization) exist on GitHub
 and \code{FALSE} otherwise. Note that GitHub considers organizations to be a type of user.
-
-\code{user_repos} - returns a (filtered) vector of repositories belonging to the user.
-
-\code{user_type} - returns a vector of the accounts' types.
+\item \code{user_repos} - returns a (filtered) vector of repositories belonging to the user.
+\item \code{user_type} - returns a vector of the accounts' types.
+}
 }
 \examples{
 \dontrun{

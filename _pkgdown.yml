@@ -1,0 +1,40 @@
+url: https://rundel.github.io/ghclass
+
+authors:
+  Colin Rundel:
+    href: https://rundel.github.io
+  Mine Çetinkaya-Rundel:
+    href: https://mine-cr.com
+
+
+reference:
+  - title: GitHub
+    contents:
+    - starts_with("github_", internal = TRUE)
+  - title: Organizations
+    contents:
+    - starts_with("org_", internal = TRUE)
+  - title: Repositories
+    contents:
+    - starts_with("repo_", internal = TRUE)
+  - title: Users
+    contents:
+    - starts_with("user_", internal = TRUE)
+  - title: Teams
+    contents:
+    - starts_with("team_", internal = TRUE)
+  - title: Issues
+    contents:
+    - starts_with("issue_", internal = TRUE)
+  - title: Branches
+    contents:
+    - starts_with("branch_", internal = TRUE)
+  - title: Pull Requests
+    contents:
+    - starts_with("pr_", internal = TRUE)
+  - title: Actions
+    contents:
+    - starts_with("action_", internal = TRUE)
+  - title: Peer Review
+    contents:
+    - starts_with("peer_", internal = TRUE)

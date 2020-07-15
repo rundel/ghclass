@@ -25,14 +25,13 @@ repo_watching(filter = NULL, exclude = FALSE)
 \item{exclude}{logical, should entries matching the regex be excluded or included.}
 }
 \description{
-\code{repo_ignore} - Ignore a GitHub repository.
-
-\code{repo_unwatch} - Unwatch / unsubscribe from a GitHub repository.
-
-\code{repo_watch} - Watch / subscribe to a GitHub repository.
-
-\code{repo_watching} - Returns a vector of your watched repositories. This should
+\itemize{
+\item \code{repo_ignore} - Ignore a GitHub repository.
+\item \code{repo_unwatch} - Unwatch / unsubscribe from a GitHub repository.
+\item \code{repo_watch} - Watch / subscribe to a GitHub repository.
+\item \code{repo_watching} - Returns a vector of your watched repositories. This should
 match the list at \href{https://github.com/watching}{github.com/watching}.
+}
 }
 \examples{
 \dontrun{

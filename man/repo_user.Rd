@@ -16,7 +16,7 @@ repo_add_team(
   repo,
   team,
   permission = c("push", "pull", "admin", "maintain", "triage"),
-  team_type = c("slug", "name")
+  team_type = c("name", "slug")
 )
 
 repo_add_user(
@@ -29,7 +29,7 @@ repo_collaborators(repo, include_admins = TRUE)
 
 repo_contributors(repo)
 
-repo_remove_team(repo, team, team_type = c("slug", "name"))
+repo_remove_team(repo, team, team_type = c("name", "slug"))
 
 repo_remove_user(repo, user)
 }
@@ -47,12 +47,14 @@ repo_remove_user(repo, user)
 \item{include_admins}{Logical. If \code{FALSE}, user names of users with Admin rights are not included, defaults to \code{TRUE}.}
 }
 \description{
-\code{repo_add_user} - Add a user to a repository
-\code{repo_remove_user} - Remove a user from a repository
-\code{repo_add_team} - Add a team to a repository
-\code{repo_remove_team} - Remove a team from a repository
-\code{repo_collaborators} - Returns a data frame of repos, their collaborators, and their permissions.
-\code{repo_contributors} - Returns a data frame containing details on repository contributor(s).
+\itemize{
+\item \code{repo_add_user} - Add a user to a repository
+\item \code{repo_remove_user} - Remove a user from a repository
+\item \code{repo_add_team} - Add a team to a repository
+\item \code{repo_remove_team} - Remove a team from a repository
+\item \code{repo_collaborators} - Returns a data frame of repos, their collaborators, and their permissions.
+\item \code{repo_contributors} - Returns a data frame containing details on repository contributor(s).
+}
 }
 \details{
 Permissions can be set to any of the following:

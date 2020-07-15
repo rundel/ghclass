@@ -34,18 +34,15 @@ github_whoami(quiet = FALSE)
 \item{quiet}{Logical. Should status messages be shown.}
 }
 \description{
-\code{github_whoami} returns the login of the authenticated user.
-
-\code{github_get_api_limit} / \code{github_set_api_limit} - get and set the limit of results to return from
+\itemize{
+\item \code{github_whoami} returns the login of the authenticated user.
+\item \code{github_get_api_limit} / \code{github_set_api_limit} - get and set the limit of results to return from
 the GitHub API.
-
-\code{github_get_token} returns the user's GitHub personal access token (PAT).
-
-\code{github_set_token} defines the user's GitHub PAT by setting the \code{GITHUB_PAT} enivronmental variable. This value can then
-
-\code{github_reset_token} removes the value stored in the \code{GITHUB_PAT} environmental variable.
-
-\code{github_test_token} checks if a PAT is valid by attempting to authenticate with the GitHub API
+\item \code{github_get_token} returns the user's GitHub personal access token (PAT).
+\item \code{github_set_token} defines the user's GitHub PAT by setting the \code{GITHUB_PAT} enivronmental variable. This value can then
+\item \code{github_reset_token} removes the value stored in the \code{GITHUB_PAT} environmental variable.
+\item \code{github_test_token} checks if a PAT is valid by attempting to authenticate with the GitHub API
+}
 }
 \details{
 This package looks for the personal access token (PAT) in the following places (in order):
@@ -74,7 +71,4 @@ pat
 github_reset_token()
 try(github_test_token())
 try(github_test_token("bad_token"))
-}
-\seealso{
-\link{repo_branches}
 }

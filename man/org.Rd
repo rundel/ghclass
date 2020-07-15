@@ -46,7 +46,7 @@ org_sitrep(org)
 
 org_team_details(org)
 
-org_teams(org, filter = NULL, exclude = FALSE, team_type = c("slug", "name"))
+org_teams(org, filter = NULL, exclude = FALSE, team_type = c("name", "slug"))
 
 org_set_repo_permission(org, permission = c("none", "read", "write", "admin"))
 }
@@ -86,32 +86,25 @@ for more details.}
 }}
 }
 \description{
-\code{org_sitrep} - Provides a situation report on a GitHub organization.
-
-\code{org_set_repo_permission} - Change the default permission level for org repositories.
-
-\code{org_admins} - returns a vector of repository administrators. In the case of a
+\itemize{
+\item \code{org_sitrep} - Provides a situation report on a GitHub organization.
+\item \code{org_set_repo_permission} - Change the default permission level for org repositories.
+\item \code{org_admins} - returns a vector of repository administrators. In the case of a
 non-organization owner (e.g. a user account) returns the owner's login.
-
-\code{org_exists} - returns \code{TRUE} if the organization(s) exist on GitHub and \code{FALSE} otherwise.
-
-\code{org_invite} - invites user(s) to a GitHub organization.
-
-\code{org_remove} - remove user(s) from an organization (and all teams within that organization).
-
-\code{org_members} - returns a (filtered) vector of organization members.
-
-\code{org_pending} - returns a (filtered) vector of pending organization members.
-
-\code{org_repos} - returns a (filtered) vector of organization repositories.
-
-\code{org_teams} - returns a (filtered) vector of organization teams.
-
-\code{org_team_details} - returns a data frame of all organization teams containing identification and permission details.
+\item \code{org_exists} - returns \code{TRUE} if the organization(s) exist on GitHub and \code{FALSE} otherwise.
+\item \code{org_invite} - invites user(s) to a GitHub organization.
+\item \code{org_remove} - remove user(s) from an organization (and all teams within that organization).
+\item \code{org_members} - returns a (filtered) vector of organization members.
+\item \code{org_pending} - returns a (filtered) vector of pending organization members.
+\item \code{org_repos} - returns a (filtered) vector of organization repositories.
+\item \code{org_teams} - returns a (filtered) vector of organization teams.
+\item \code{org_team_details} - returns a data frame of all organization teams containing identification and permission details.
+}
 \subsection{Experimental}{
-
-\code{org_repo_stats} - returns a tibble of repositories belonging to a GitHub organization along with some
+\itemize{
+\item \code{org_repo_stats} - returns a tibble of repositories belonging to a GitHub organization along with some
 basic statistics about those repositories.
+}
 }
 }
 \examples{

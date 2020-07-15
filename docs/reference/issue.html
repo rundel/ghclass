@@ -47,9 +47,13 @@
 
 
 <meta property="og:title" content="GitHub Issue related tools — issue" />
-<meta property="og:description" content="issue_create creates an issue for a GitHub repository.
-issue_close closes an issue for a GitHub repository." />
-<meta property="og:image" content="/logo.png" />
+<meta property="og:description" content="
+
+issue_create creates an issue for a GitHub repository.
+issue_close closes an issue for a GitHub repository.
+
+" />
+<meta property="og:image" content="https://rundel.github.io/ghclass/logo.png" />
 
 
 
@@ -81,7 +85,7 @@ issue_close closes an issue for a GitHub repository." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ghclass</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -98,6 +102,18 @@ issue_close closes an issue for a GitHub repository." />
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/peer_students.html">Peer review instructions for students</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -126,8 +142,12 @@ issue_close closes an issue for a GitHub repository." />
     </div>
 
     <div class="ref-description">
-    <p><code>issue_create</code> creates an issue for a GitHub repository.</p>
-<p><code>issue_close</code> closes an issue for a GitHub repository.</p>
+    
+<ul>
+<li><p><code>issue_create</code> creates an issue for a GitHub repository.</p></li>
+<li><p><code>issue_close</code> closes an issue for a GitHub repository.</p></li>
+</ul>
+
     </div>
 
     <pre class="usage"><span class='fu'>issue_close</span>(<span class='no'>repo</span>, <span class='no'>number</span>)
@@ -169,38 +189,32 @@ issue_close closes an issue for a GitHub repository." />
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
-<span class='fu'><a href='repo_core.html'>repo_create</a></span>(<span class='st'>"ghclass-test"</span>,<span class='st'>"test_issue"</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use <span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
-#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
-#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to create repo </span><span style='color: #0000BB;'>'ghclass-test/test_issue'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; 
-#&gt; └─</div><div class='input'>
+<span class='fu'><a href='repo_core.html'>repo_create</a></span>(<span class='st'>"ghclass-test"</span>,<span class='st'>"test_issue"</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use <span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
+#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
+#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to create repo </span><span style='color: #0000BB;'>'ghclass-test/test_issue'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='input'>
 <span class='fu'>issue_create</span>(
   <span class='st'>"ghclass-test/test_issue"</span>,
   <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>"Issue 1"</span>,
   <span class='kw'>body</span> <span class='kw'>=</span> <span class='st'>"This is an issue"</span>
- )</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
-#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to create issue </span><span style='color: #0000BB;'>'Issue 1'</span><span> for repo </span><span style='color: #0000BB;'>'ghclass-test/test_issue'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; 
-#&gt; └─</div><div class='input'>
+ )</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
+#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to create issue </span><span style='color: #0000BB;'>'Issue 1'</span><span> for repo </span><span style='color: #0000BB;'>'ghclass-test/test_issue'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='input'>
 <span class='fu'>issue_create</span>(
   <span class='st'>"ghclass-test/test_issue"</span>,
   <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>"Issue 2"</span>, <span class='kw'>body</span> <span class='kw'>=</span> <span class='st'>"This is also issue"</span>,
   <span class='kw'>label</span> <span class='kw'>=</span> <span class='st'>"Important"</span>
-)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
-#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to create issue </span><span style='color: #0000BB;'>'Issue 2'</span><span> for repo </span><span style='color: #0000BB;'>'ghclass-test/test_issue'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; 
-#&gt; └─</div><div class='input'>
+)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
+#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to create issue </span><span style='color: #0000BB;'>'Issue 2'</span><span> for repo </span><span style='color: #0000BB;'>'ghclass-test/test_issue'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='input'>
 <span class='fu'>issue_create</span>(
   <span class='st'>"ghclass-test/test_issue"</span>,
   <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>"Issue 3"</span>, <span class='kw'>body</span> <span class='kw'>=</span> <span class='st'>"This is also issue"</span>,
   <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Important"</span>, <span class='st'>"Super Important"</span>),
   <span class='kw'>assignees</span> <span class='kw'>=</span> <span class='st'>"rundel"</span>
-)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
-#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to create issue </span><span style='color: #0000BB;'>'Issue 3'</span><span> for repo </span><span style='color: #0000BB;'>'ghclass-test/test_issue'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; 
-#&gt; └─</div><div class='input'>
-<span class='fu'>issue_close</span>(<span class='st'>"ghclass-test/test_issue"</span>, <span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
-#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to close issue </span><span style='color: #0000BB;'>'#1'</span><span> for repo </span><span style='color: #0000BB;'>'ghclass-test/test_issue'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; 
-#&gt; └─</div><div class='input'>
-<span class='fu'><a href='repo_core.html'>repo_delete</a></span>(<span class='st'>"ghclass-test/test_issue"</span>, <span class='kw'>prompt</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
-#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to delete repo </span><span style='color: #0000BB;'>'ghclass-test/test_issue'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; 
-#&gt; └─</div><div class='input'># }
+)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
+#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to create issue </span><span style='color: #0000BB;'>'Issue 3'</span><span> for repo </span><span style='color: #0000BB;'>'ghclass-test/test_issue'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='input'>
+<span class='fu'>issue_close</span>(<span class='st'>"ghclass-test/test_issue"</span>, <span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
+#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to close issue </span><span style='color: #0000BB;'>'#1'</span><span> for repo </span><span style='color: #0000BB;'>'ghclass-test/test_issue'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='input'>
+<span class='fu'><a href='repo_core.html'>repo_delete</a></span>(<span class='st'>"ghclass-test/test_issue"</span>, <span class='kw'>prompt</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
+#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to delete repo </span><span style='color: #0000BB;'>'ghclass-test/test_issue'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='input'># }
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -213,7 +227,7 @@ issue_close closes an issue for a GitHub repository." />
 
       <footer>
       <div class="copyright">
-  <p>Developed by Colin Rundel, Mine Cetinkaya-Rundel.</p>
+  <p>Developed by <a href='https://rundel.github.io'>Colin Rundel</a>, Mine Cetinkaya-Rundel.</p>
 </div>
 
 <div class="pkgdown">

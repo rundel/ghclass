@@ -47,14 +47,18 @@
 
 
 <meta property="og:title" content="GitHub API related tools — github" />
-<meta property="og:description" content="github_whoami returns the login of the authenticated user.
+<meta property="og:description" content="
+
+github_whoami returns the login of the authenticated user.
 github_get_api_limit / github_set_api_limit - get and set the limit of results to return from
 the GitHub API.
 github_get_token returns the user's GitHub personal access token (PAT).
 github_set_token defines the user's GitHub PAT by setting the GITHUB_PAT enivronmental variable. This value can then
 github_reset_token removes the value stored in the GITHUB_PAT environmental variable.
-github_test_token checks if a PAT is valid by attempting to authenticate with the GitHub API" />
-<meta property="og:image" content="/logo.png" />
+github_test_token checks if a PAT is valid by attempting to authenticate with the GitHub API
+
+" />
+<meta property="og:image" content="https://rundel.github.io/ghclass/logo.png" />
 
 
 
@@ -86,7 +90,7 @@ github_test_token checks if a PAT is valid by attempting to authenticate with th
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ghclass</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -103,6 +107,18 @@ github_test_token checks if a PAT is valid by attempting to authenticate with th
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/peer_students.html">Peer review instructions for students</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -131,13 +147,17 @@ github_test_token checks if a PAT is valid by attempting to authenticate with th
     </div>
 
     <div class="ref-description">
-    <p><code>github_whoami</code> returns the login of the authenticated user.</p>
-<p><code>github_get_api_limit</code> / <code>github_set_api_limit</code> - get and set the limit of results to return from
-the GitHub API.</p>
-<p><code>github_get_token</code> returns the user's GitHub personal access token (PAT).</p>
-<p><code>github_set_token</code> defines the user's GitHub PAT by setting the <code>GITHUB_PAT</code> enivronmental variable. This value can then</p>
-<p><code>github_reset_token</code> removes the value stored in the <code>GITHUB_PAT</code> environmental variable.</p>
-<p><code>github_test_token</code> checks if a PAT is valid by attempting to authenticate with the GitHub API</p>
+    
+<ul>
+<li><p><code>github_whoami</code> returns the login of the authenticated user.</p></li>
+<li><p><code>github_get_api_limit</code> / <code>github_set_api_limit</code> - get and set the limit of results to return from
+the GitHub API.</p></li>
+<li><p><code>github_get_token</code> returns the user's GitHub personal access token (PAT).</p></li>
+<li><p><code>github_set_token</code> defines the user's GitHub PAT by setting the <code>GITHUB_PAT</code> enivronmental variable. This value can then</p></li>
+<li><p><code>github_reset_token</code> removes the value stored in the <code>GITHUB_PAT</code> environmental variable.</p></li>
+<li><p><code>github_test_token</code> checks if a PAT is valid by attempting to authenticate with the GitHub API</p></li>
+</ul>
+
     </div>
 
     <pre class="usage"><span class='fu'>github_get_api_limit</span>()
@@ -196,11 +216,10 @@ the GitHub API.</p>
 <span class='no'>pat</span></div><div class='output co'>#&gt; [1] "0123456789ABCDEF"</div><div class='input'>
 <span class='co'># Test the PAT</span>
 <span class='fu'>github_reset_token</span>()
-<span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>github_test_token</span>())</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use <span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the</span>
-#&gt; <span class='message'></span><span style='color: #00BB00;'>GITHUB_PAT</span><span> environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; Error : </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>github_test_token</span>(<span class='st'>"bad_token"</span>))</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Your GitHub PAT failed to authenticate.</span></div><div class='output co'>#&gt; <span class='message'>API message: </span><span style='color: #555555;'>Bad credentials</span><span></span></div><div class='output co'>#&gt; <span class='message'>API docs: </span><span style='color: #555555;'>https://developer.github.com/v3</span><span></span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; 
-#&gt; └─GitHub API error (401): 401 Unauthorized
-#&gt;   ├─
-#&gt;   └─</div></span></pre>
+<span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>github_test_token</span>())</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use <span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
+#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; Error : </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>github_test_token</span>(<span class='st'>"bad_token"</span>))</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Your GitHub PAT failed to authenticate.</span></div><div class='output co'>#&gt; <span class='message'>API message: </span><span style='color: #555555;'>Bad credentials</span><span></span></div><div class='output co'>#&gt; <span class='message'>API docs: </span><span style='color: #555555;'>https://developer.github.com/v3</span><span></span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─GitHub API error (401): 401 Unauthorized
+#&gt;   ├─ 
+#&gt;   └─ </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -212,7 +231,7 @@ the GitHub API.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Colin Rundel, Mine Cetinkaya-Rundel.</p>
+  <p>Developed by <a href='https://rundel.github.io'>Colin Rundel</a>, Mine Cetinkaya-Rundel.</p>
 </div>
 
 <div class="pkgdown">

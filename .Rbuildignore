@@ -11,3 +11,6 @@ credentials/
 .github/
 README.Rmd
 pkgdown/
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

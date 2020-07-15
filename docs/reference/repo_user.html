@@ -47,13 +47,17 @@
 
 
 <meta property="og:title" content="GitHub Repository tools - user functions — repo_user" />
-<meta property="og:description" content="repo_add_user - Add a user to a repository
+<meta property="og:description" content="
+
+repo_add_user - Add a user to a repository
 repo_remove_user - Remove a user from a repository
 repo_add_team - Add a team to a repository
 repo_remove_team - Remove a team from a repository
 repo_collaborators - Returns a data frame of repos, their collaborators, and their permissions.
-repo_contributors - Returns a data frame containing details on repository contributor(s)." />
-<meta property="og:image" content="/logo.png" />
+repo_contributors - Returns a data frame containing details on repository contributor(s).
+
+" />
+<meta property="og:image" content="https://rundel.github.io/ghclass/logo.png" />
 
 
 
@@ -85,7 +89,7 @@ repo_contributors - Returns a data frame containing details on repository contri
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ghclass</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -102,6 +106,18 @@ repo_contributors - Returns a data frame containing details on repository contri
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/peer_students.html">Peer review instructions for students</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -130,19 +146,23 @@ repo_contributors - Returns a data frame containing details on repository contri
     </div>
 
     <div class="ref-description">
-    <p><code>repo_add_user</code> - Add a user to a repository
-<code>repo_remove_user</code> - Remove a user from a repository
-<code>repo_add_team</code> - Add a team to a repository
-<code>repo_remove_team</code> - Remove a team from a repository
-<code>repo_collaborators</code> - Returns a data frame of repos, their collaborators, and their permissions.
-<code>repo_contributors</code> - Returns a data frame containing details on repository contributor(s).</p>
+    
+<ul>
+<li><p><code>repo_add_user</code> - Add a user to a repository</p></li>
+<li><p><code>repo_remove_user</code> - Remove a user from a repository</p></li>
+<li><p><code>repo_add_team</code> - Add a team to a repository</p></li>
+<li><p><code>repo_remove_team</code> - Remove a team from a repository</p></li>
+<li><p><code>repo_collaborators</code> - Returns a data frame of repos, their collaborators, and their permissions.</p></li>
+<li><p><code>repo_contributors</code> - Returns a data frame containing details on repository contributor(s).</p></li>
+</ul>
+
     </div>
 
     <pre class="usage"><span class='fu'>repo_add_team</span>(
   <span class='no'>repo</span>,
   <span class='no'>team</span>,
   <span class='kw'>permission</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"push"</span>, <span class='st'>"pull"</span>, <span class='st'>"admin"</span>, <span class='st'>"maintain"</span>, <span class='st'>"triage"</span>),
-  <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"slug"</span>, <span class='st'>"name"</span>)
+  <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>)
 )
 
 <span class='fu'>repo_add_user</span>(
@@ -155,7 +175,7 @@ repo_contributors - Returns a data frame containing details on repository contri
 
 <span class='fu'>repo_contributors</span>(<span class='no'>repo</span>)
 
-<span class='fu'>repo_remove_team</span>(<span class='no'>repo</span>, <span class='no'>team</span>, <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"slug"</span>, <span class='st'>"name"</span>))
+<span class='fu'>repo_remove_team</span>(<span class='no'>repo</span>, <span class='no'>team</span>, <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>))
 
 <span class='fu'>repo_remove_user</span>(<span class='no'>repo</span>, <span class='no'>user</span>)</pre>
 
@@ -221,7 +241,7 @@ repo_contributors - Returns a data frame containing details on repository contri
 
       <footer>
       <div class="copyright">
-  <p>Developed by Colin Rundel, Mine Cetinkaya-Rundel.</p>
+  <p>Developed by <a href='https://rundel.github.io'>Colin Rundel</a>, Mine Cetinkaya-Rundel.</p>
 </div>
 
 <div class="pkgdown">
