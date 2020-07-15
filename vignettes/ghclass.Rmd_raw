@@ -27,6 +27,7 @@ crayon::num_colors(forget = TRUE)
 asciicast::init_knitr_engine(
   startup = quote({
     library(ghclass)
+    roster = readr::read_csv( system.file("roster.csv", package = "ghclass") )
   }),
   echo = TRUE,
   echo_input = FALSE
@@ -57,6 +58,7 @@ team_delete("ghclass-vignette", teams, prompt = FALSE)
 org_remove("ghclass-vignette", users, prompt = FALSE)
 
 repo_set_template("Sta323-Sp19/hw1", FALSE)
+org_set_repo_permission("ghclass-vignette", "read")
 ```
 
 ## Who is this package for?
@@ -153,6 +155,26 @@ All of this is an optional step, but one that many will want to do.
 Approval is usually very quick, but it is not soemthing you would want to do the night before classes begin.
 Give yourself at least a week to be safe.
 
+### Permissions
+
+By default, each new GitHub organization defaults to repositories being readable by all members, regardless of whether they are private or public. This is clearly undesirable for most classroom settings. We can get a quick snapshot of our organization using the `org_sitrep` function which reports on this permission as well as other important details.
+
+```{asciicast}
+org_sitrep("ghclass-vignette")
+```
+
+We can see that this function indicates that the current default repository permission settings is "read" and provides a helpful warning that this enables members to view all repositories.
+This permission can easily be addressed within the Organization Settings page under Member privileges. Alternatively, we can also use ghclass to change this directly with `org_set_repo_permission`
+
+```{asciicast}
+org_set_repo_permission("ghclass-vignette", permission = "none")
+```
+
+After changing this setting we can once again check the org's sitrep and see that the warning is now resolved.
+
+```{asciicast}
+org_sitrep("ghclass-vignette")
+```
 
 ### Adding students to the organization
 
