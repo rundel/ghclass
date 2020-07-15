@@ -109,6 +109,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -156,14 +159,35 @@
       <tr>
         
         <td>
-          <p><code><a href="github.html">github_get_api_limit()</a></code> <code><a href="github.html">github_set_api_limit()</a></code> <code><a href="github.html">github_get_token()</a></code> <code><a href="github.html">github_set_token()</a></code> <code><a href="github.html">github_reset_token()</a></code> <code><a href="github.html">github_test_token()</a></code> <code><a href="github.html">github_whoami()</a></code> </p>
+          <p><code><a href="github_api_limit.html">github_get_api_limit()</a></code> <code><a href="github_api_limit.html">github_set_api_limit()</a></code> </p>
         </td>
-        <td><p>GitHub API related tools</p></td>
+        <td><p>Tools for limiting gh's GitHub api requests.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="github_token.html">github_get_token()</a></code> <code><a href="github_token.html">github_set_token()</a></code> <code><a href="github_token.html">github_reset_token()</a></code> <code><a href="github_token.html">github_test_token()</a></code> </p>
+        </td>
+        <td><p>Tools for handling GitHub personal access tokens (PAT)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="github_whoami.html">github_whoami()</a></code> </p>
+        </td>
+        <td><p>Returns the login of the authenticated user (based on the current PAT).</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="github_with_pat.html">with_pat()</a></code> <code><a href="github_with_pat.html">local_pat()</a></code> </p>
+        </td>
+        <td><p>withr-like functions to use a temporary PAT
+
+Temporarily change the <code>GITHUB_PAT</code> environmental variable for
+GitHub authentication. Based on the <code>withr</code> interface.</p></td>
       </tr>
     </tbody><tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-organization" class="hasAnchor"><a href="#section-organization" class="anchor"></a>Organization</h2>
+          <h2 id="section-local-repositories" class="hasAnchor"><a href="#section-local-repositories" class="anchor"></a>Local Repositories</h2>
           <p class="section-desc"></p>
         </th>
       </tr>
@@ -175,15 +199,52 @@
       <tr>
         
         <td>
-          <p><code><a href="org.html">org_admins()</a></code> <code><a href="org.html">org_exists()</a></code> <code><a href="org.html">org_invite()</a></code> <code><a href="org.html">org_members()</a></code> <code><a href="org.html">org_pending()</a></code> <code><a href="org.html">org_remove()</a></code> <code><a href="org.html">org_repo_stats()</a></code> <code><a href="org.html">org_repos()</a></code> <code><a href="org.html">org_sitrep()</a></code> <code><a href="org.html">org_team_details()</a></code> <code><a href="org.html">org_teams()</a></code> <code><a href="org.html">org_set_repo_permission()</a></code> </p>
+          <p><code><a href="local_repo.html">local_repo_add()</a></code> <code><a href="local_repo.html">local_repo_branch()</a></code> <code><a href="local_repo.html">local_repo_clone()</a></code> <code><a href="local_repo.html">local_repo_commit()</a></code> <code><a href="local_repo.html">local_repo_log()</a></code> <code><a href="local_repo.html">local_repo_pull()</a></code> <code><a href="local_repo.html">local_repo_push()</a></code> </p>
         </td>
-        <td><p>GitHub Organization related tools</p></td>
+        <td><p>Functions for managing local git repositories</p></td>
       </tr><tr>
+        
+        <td>
+          <p><code><a href="local_repo_rename.html">local_repo_rename()</a></code> </p>
+        </td>
+        <td><p>Rename local directories using a vector of patterns and replacements.</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-organizations" class="hasAnchor"><a href="#section-organizations" class="anchor"></a>Organizations</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
         
         <td>
           <p><code><a href="org_create_assignment.html">org_create_assignment()</a></code> </p>
         </td>
         <td><p>Create a team or individual assignment</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="org_details.html">org_exists()</a></code> <code><a href="org_details.html">org_repo_stats()</a></code> <code><a href="org_details.html">org_repos()</a></code> <code><a href="org_details.html">org_team_details()</a></code> <code><a href="org_details.html">org_teams()</a></code> </p>
+        </td>
+        <td><p>Obtain details on an organization's repos and teams</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="org_members.html">org_admins()</a></code> <code><a href="org_members.html">org_invite()</a></code> <code><a href="org_members.html">org_members()</a></code> <code><a href="org_members.html">org_pending()</a></code> <code><a href="org_members.html">org_remove()</a></code> </p>
+        </td>
+        <td><p>Tools for managing organization membership</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="org_perm.html">org_sitrep()</a></code> <code><a href="org_perm.html">org_set_repo_permission()</a></code> </p>
+        </td>
+        <td><p>Organization permissions</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -200,9 +261,9 @@
       <tr>
         
         <td>
-          <p><code><a href="local_repo.html">local_repo_add()</a></code> <code><a href="local_repo.html">local_repo_branch()</a></code> <code><a href="local_repo.html">local_repo_clone()</a></code> <code><a href="local_repo.html">local_repo_commit()</a></code> <code><a href="local_repo.html">local_repo_log()</a></code> <code><a href="local_repo.html">local_repo_pull()</a></code> <code><a href="local_repo.html">local_repo_push()</a></code> <code><a href="local_repo.html">local_repo_rename()</a></code> </p>
+          <p><code><a href="local_repo.html">local_repo_add()</a></code> <code><a href="local_repo.html">local_repo_branch()</a></code> <code><a href="local_repo.html">local_repo_clone()</a></code> <code><a href="local_repo.html">local_repo_commit()</a></code> <code><a href="local_repo.html">local_repo_log()</a></code> <code><a href="local_repo.html">local_repo_pull()</a></code> <code><a href="local_repo.html">local_repo_push()</a></code> </p>
         </td>
-        <td><p>Functions for working with local git repositories</p></td>
+        <td><p>Functions for managing local git repositories</p></td>
       </tr><tr>
         
         <td>
@@ -274,9 +335,15 @@
       <tr>
         
         <td>
-          <p><code><a href="team.html">team_create()</a></code> <code><a href="team.html">team_delete()</a></code> <code><a href="team.html">team_invite()</a></code> <code><a href="team.html">team_members()</a></code> <code><a href="team.html">team_pending()</a></code> <code><a href="team.html">team_remove()</a></code> <code><a href="team.html">team_rename()</a></code> <code><a href="team.html">team_repos()</a></code> </p>
+          <p><code><a href="team.html">team_create()</a></code> <code><a href="team.html">team_delete()</a></code> <code><a href="team.html">team_rename()</a></code> </p>
         </td>
-        <td><p>GitHub team related tools</p></td>
+        <td><p>Create, delete, and rename teams within an organization</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="team_members.html">team_invite()</a></code> <code><a href="team_members.html">team_members()</a></code> <code><a href="team_members.html">team_pending()</a></code> <code><a href="team_members.html">team_remove()</a></code> <code><a href="team_members.html">team_repos()</a></code> </p>
+        </td>
+        <td><p>Tools for inviting, removing, and managing members of an organization team</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -314,7 +381,7 @@
         <td>
           <p><code><a href="branch.html">branch_create()</a></code> <code><a href="branch.html">branch_delete()</a></code> <code><a href="branch.html">branch_remove()</a></code> </p>
         </td>
-        <td><p>Repository branch tools</p></td>
+        <td><p>Create and delete branches in a repository</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -350,9 +417,15 @@
       <tr>
         
         <td>
-          <p><code><a href="action.html">action_add_badge()</a></code> <code><a href="action.html">action_remove_badge()</a></code> <code><a href="action.html">action_workflows()</a></code> </p>
+          <p><code><a href="action.html">action_workflows()</a></code> </p>
         </td>
-        <td><p>GitHub Actions tools</p></td>
+        <td><p>Return a data frame containing details on a repository workflows.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="action_badge.html">action_add_badge()</a></code> <code><a href="action_badge.html">action_remove_badge()</a></code> </p>
+        </td>
+        <td><p>Add or remove GitHub Actions badges from a repository</p></td>
       </tr>
     </tbody><tbody>
       <tr>

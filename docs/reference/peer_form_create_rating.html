@@ -47,11 +47,7 @@
 
 
 <meta property="og:title" content="Create author rating form — peer_form_create_rating" />
-<meta property="og:description" content="
-
-peer_form_create_rating creates a short feedback form for authors to rate the feedback they got from reviewers. The rating categories are based on Reily, K. and P. Ludford Finnerty,  and L. Terveen (2009): Two Peers Are Better Than One: Aggregating Peer Reviews for Computing Assignments is Surprisingly Accurate. In Proceedings of the ACM 2009 International Conference on Supporting Group Work. GROUP’09, May 10–13, 2009, Sanibel Island, Florida, USA.
-
-" />
+<meta property="og:description" content="peer_form_create_rating creates a short feedback form for authors to rate the feedback they got from reviewers. The rating categories are based on Reily, K. and P. Ludford Finnerty,  and L. Terveen (2009): Two Peers Are Better Than One: Aggregating Peer Reviews for Computing Assignments is Surprisingly Accurate. In Proceedings of the ACM 2009 International Conference on Supporting Group Work. GROUP’09, May 10–13, 2009, Sanibel Island, Florida, USA." />
 <meta property="og:image" content="https://rundel.github.io/ghclass/logo.png" />
 
 
@@ -114,6 +110,9 @@ peer_form_create_rating creates a short feedback form for authors to rate the fe
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -141,11 +140,7 @@ peer_form_create_rating creates a short feedback form for authors to rate the fe
     </div>
 
     <div class="ref-description">
-    
-<ul>
-<li><p><code>peer_form_create_rating</code> creates a short feedback form for authors to rate the feedback they got from reviewers. The rating categories are based on Reily, K. and P. Ludford Finnerty,  and L. Terveen (2009): Two Peers Are Better Than One: Aggregating Peer Reviews for Computing Assignments is Surprisingly Accurate. In <em>Proceedings of the ACM 2009 International Conference on Supporting Group Work</em>. GROUP’09, May 10–13, 2009, Sanibel Island, Florida, USA.</p></li>
-</ul>
-
+    <p><code>peer_form_create_rating</code> creates a short feedback form for authors to rate the feedback they got from reviewers. The rating categories are based on Reily, K. and P. Ludford Finnerty,  and L. Terveen (2009): Two Peers Are Better Than One: Aggregating Peer Reviews for Computing Assignments is Surprisingly Accurate. In <em>Proceedings of the ACM 2009 International Conference on Supporting Group Work</em>. GROUP’09, May 10–13, 2009, Sanibel Island, Florida, USA.</p>
     </div>
 
     <pre class="usage"><span class='fu'>peer_form_create_rating</span>(
@@ -205,10 +200,9 @@ peer_form_create_rating creates a short feedback form for authors to rate the fe
 <code><a href='peer_score_review.html'>peer_score_review</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
-<span class='fu'>peer_form_create_rating</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"accuracy"</span>, <span class='st'>"fairness"</span>))</div><div class='output co'>#&gt; <span class='message'><span style='color: #BB0000;'>x</span><span> File </span><span style='color: #0000BB;'>'feedback_blank_rating.Rmd'</span><span> already exists. If you want to force save this file, re-run the command with </span><span style='color: #262626;background-color: #DADADA;'>`overwrite = TRUE`</span><span>.</span></div><div class='input'># }
-
-</div></span></pre>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'>peer_form_create_rating</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"accuracy"</span>, <span class='st'>"fairness"</span>))
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

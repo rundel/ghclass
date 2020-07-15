@@ -47,11 +47,7 @@
 
 
 <meta property="og:title" content="Assign file to reviewers — peer_assign" />
-<meta property="og:description" content="
-
-peer_assign adds files from authors' repositories to review repositories. The function creates an issue on the reviewers' repositories informing them that the review files are available and creates links to the relevant documents.
-
-" />
+<meta property="og:description" content="peer_assign adds files from authors' repositories to review repositories. The function creates an issue on the reviewers' repositories informing them that the review files are available and creates links to the relevant documents." />
 <meta property="og:image" content="https://rundel.github.io/ghclass/logo.png" />
 
 
@@ -114,6 +110,9 @@ peer_assign adds files from authors' repositories to review repositories. The fu
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -141,11 +140,7 @@ peer_assign adds files from authors' repositories to review repositories. The fu
     </div>
 
     <div class="ref-description">
-    
-<ul>
-<li><p><code>peer_assign</code> adds files from authors' repositories to review repositories. The function creates an issue on the reviewers' repositories informing them that the review files are available and creates links to the relevant documents.</p></li>
-</ul>
-
+    <p><code>peer_assign</code> adds files from authors' repositories to review repositories. The function creates an issue on the reviewers' repositories informing them that the review files are available and creates links to the relevant documents.</p>
     </div>
 
     <pre class="usage"><span class='fu'>peer_assign</span>(
@@ -220,16 +215,15 @@ peer_assign adds files from authors' repositories to review repositories. The fu
 <code><a href='peer_score_review.html'>peer_score_review</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='fu'>peer_assign</span>(
 <span class='kw'>org</span> <span class='kw'>=</span> <span class='st'>"ghclass-test"</span>,
 <span class='kw'>roster</span> <span class='kw'>=</span> <span class='st'>"hw2_roster_seed12345.csv"</span>,
 <span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"hw2_task.Rmd"</span>, <span class='st'>"iris_data.csv"</span>),
 <span class='kw'>form_review</span> <span class='kw'>=</span> <span class='st'>"hw2_review.Rmd"</span>,
 <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>"hw2-"</span>
-)</div><div class='output co'>#&gt; <span class='error'>Error in peer_assign(org = "ghclass-test", roster = "hw2_roster_seed12345.csv",     path = c("hw2_task.Rmd", "iris_data.csv"), form_review = "hw2_review.Rmd",     prefix = "hw2-"): unused argument (form_review = "hw2_review.Rmd")</span></div><div class='input'># }
-
-</div></pre>
+)
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

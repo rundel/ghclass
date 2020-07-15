@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get team members — team_members • ghclass</title>
+<title>Tools for inviting, removing, and managing members of an organization team — team_members • ghclass</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,9 +46,17 @@
 
 
 
-<meta property="og:title" content="Get team members — team_members" />
-<meta property="og:description" content="team_members returns a data frame of teams and their members." />
-<meta property="og:image" content="/logo.png" />
+<meta property="og:title" content="Tools for inviting, removing, and managing members of an organization team — team_members" />
+<meta property="og:description" content="
+
+team_invite - add members to team(s).
+team_remove - remove members from team(s).
+team_members - returns a data frame of team members.
+team_pending - returns a data frame of pending team members.
+team_repos - returns a data frame of teams and their repos.
+
+" />
+<meta property="og:image" content="https://rundel.github.io/ghclass/logo.png" />
 
 
 
@@ -80,7 +88,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ghclass</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -106,12 +114,12 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/instructions_students.html">Peer review instructions for students</a>
-    </li>
-    <li>
-      <a href="../articles/peer.html">Peer review with ghclass</a>
+      <a href="../articles/peer_students.html">Peer review instructions for students</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -134,34 +142,67 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get team members</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/team_members.R'><code>R/team_members.R</code></a></small>
+    <h1>Tools for inviting, removing, and managing members of an organization team</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/team.R'><code>R/team.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/team_invite.R'><code>R/team_invite.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/team_members.R'><code>R/team_members.R</code></a>, and 3 more</small>
     <div class="hidden name"><code>team_members.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>team_members</code> returns a data frame of teams and their members.</p>
+    
+<ul>
+<li><p><code>team_invite</code> - add members to team(s).</p></li>
+<li><p><code>team_remove</code> - remove members from team(s).</p></li>
+<li><p><code>team_members</code> - returns a data frame of team members.</p></li>
+<li><p><code>team_pending</code> - returns a data frame of pending team members.</p></li>
+<li><p><code>team_repos</code> - returns a data frame of teams and their repos.</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>team_members</span>(<span class='no'>org</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='fu'><a href='org_teams.html'>org_teams</a></span>(<span class='no'>org</span>))</pre>
+    <pre class="usage"><span class='fu'><a href='team.html'>team_invite</a></span>(<span class='no'>org</span>, <span class='no'>user</span>, <span class='no'>team</span>, <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>))
+
+<span class='fu'><a href='team.html'>team_members</a></span>(<span class='no'>org</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='fu'><a href='org.html'>org_teams</a></span>(<span class='no'>org</span>), <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>))
+
+<span class='fu'><a href='team.html'>team_pending</a></span>(<span class='no'>org</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='fu'><a href='org.html'>org_teams</a></span>(<span class='no'>org</span>), <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>))
+
+<span class='fu'><a href='team.html'>team_remove</a></span>(<span class='no'>org</span>, <span class='no'>user</span>, <span class='no'>team</span>, <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>))
+
+<span class='fu'><a href='team.html'>team_repos</a></span>(<span class='no'>org</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='fu'><a href='org.html'>org_teams</a></span>(<span class='no'>org</span>), <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>))</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>org</th>
-      <td><p>character, name of the GitHub organization.</p></td>
+      <td><p>Character. Name of the GitHub organization.</p></td>
+    </tr>
+    <tr>
+      <th>user</th>
+      <td><p>Character. One or more GitHub users to invite.</p></td>
     </tr>
     <tr>
       <th>team</th>
-      <td><p>character or data frame, listing one or more team</p></td>
+      <td><p>Character. Name of teams.</p></td>
+    </tr>
+    <tr>
+      <th>team_type</th>
+      <td><p>Character. Either "slug" if the team names are slugs or "name" if full team names are provided.</p></td>
     </tr>
     </table>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'>team_members</span>(<span class='st'>"ghclass-test"</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"team01"</span>,<span class='st'>"team02"</span>))
+<span class='fu'><a href='team.html'>team_create</a></span>(<span class='st'>"ghclass-test"</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"hw1-team01"</span>,<span class='st'>"hw1-team02"</span>))
+
+<span class='fu'><a href='team.html'>team_invite</a></span>(<span class='st'>"ghclass-test"</span>, <span class='kw'>user</span> <span class='kw'>=</span> <span class='st'>"rundel"</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"hw1-team01"</span>, <span class='st'>"hw1-team02"</span>, <span class='st'>"missing_team"</span>))
+<span class='fu'><a href='team.html'>team_remove</a></span>(<span class='st'>"ghclass-test"</span>, <span class='kw'>user</span> <span class='kw'>=</span> <span class='st'>"rundel"</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='st'>"hw1-team01"</span>)
+
+<span class='fu'><a href='team.html'>team_members</a></span>(<span class='st'>"ghclass-test"</span>, <span class='fu'><a href='org.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>))
+<span class='fu'><a href='team.html'>team_pending</a></span>(<span class='st'>"ghclass-test"</span>, <span class='fu'><a href='org.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>))
+<span class='fu'><a href='team.html'>team_repos</a></span>(<span class='st'>"ghclass-test"</span>, <span class='fu'><a href='org.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>))
+
+<span class='fu'><a href='team.html'>team_delete</a></span>(<span class='st'>"ghclass-test"</span>, <span class='fu'><a href='org.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>), <span class='kw'>prompt</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -174,7 +215,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Colin Rundel, Mine Cetinkaya-Rundel.</p>
+  <p>Developed by <a href='https://rundel.github.io'>Colin Rundel</a>, Mine Cetinkaya-Rundel.</p>
 </div>
 
 <div class="pkgdown">

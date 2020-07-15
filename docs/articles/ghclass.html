@@ -68,6 +68,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -135,11 +138,11 @@
 <a href="#authentication" class="anchor"></a>Authentication</h2>
 <p>This package uses GitHub personal access tokens for authentication with <a href="https://github.com/settings/tokens">GitHub</a>, these values can be supplied via environmental variables <code>GITHUB_PAT</code> or <code>GITHUB_TOKEN</code> or saved as text in <code>~/.github/token</code>.</p>
 <p>If this is your first time setting up a personal access token (PAT), generate a token in the browser after logging into Github (Settings &gt; Developer Settings &gt; Personal access tokens) or use <a href="https://usethis.r-lib.org/articles/articles/usethis-setup.html#get-and-store-a-github-personal-access-token"><code><a href="https://usethis.r-lib.org/reference/browse_github_token.html">usethis::browse_github_token</a></code></a>.</p>
-<p>You can test that your token is working correctly using the <code><a href="../reference/github.html">github_test_token()</a></code> function. If everything is working correctly you should see something like the following:</p>
-<pre class="asciicast"><code><a href="../reference/github.html">github_test_token()</a></code></pre>
+<p>You can test that your token is working correctly using the <code><a href="../reference/github_token.html">github_test_token()</a></code> function. If everything is working correctly you should see something like the following:</p>
+<pre class="asciicast"><code><a href="../reference/github_token.html">github_test_token()</a></code></pre>
 <p><img src="figure/unnamed-chunk-2.svg" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" width="100%"></p>
 <p>If your token is not working you will see an error message like this instead:</p>
-<pre class="asciicast"><code><a href="../reference/github.html">github_test_token("bad token")</a></code></pre>
+<pre class="asciicast"><code><a href="../reference/github_token.html">github_test_token("bad token")</a></code></pre>
 <p><img src="figure/unnamed-chunk-3.svg" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" width="100%"></p>
 </div>
 <div id="step-by-step-guide" class="section level2">

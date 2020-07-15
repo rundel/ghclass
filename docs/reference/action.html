@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>GitHub Actions tools — action • ghclass</title>
+<title>Return a data frame containing details on a repository workflows. — action • ghclass</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,14 +46,8 @@
 
 
 
-<meta property="og:title" content="GitHub Actions tools — action" />
-<meta property="og:description" content="
-
-action_workflows - returns a data frame containing details on a repositories workflows.
-action_add_badge - Add a GitHub Actions badge to a file.
-action_remove_badge - Remove one or more GitHub Action badges from a file.
-
-" />
+<meta property="og:title" content="Return a data frame containing details on a repository workflows. — action" />
+<meta property="og:description" content="Return a data frame containing details on a repository workflows." />
 <meta property="og:image" content="https://rundel.github.io/ghclass/logo.png" />
 
 
@@ -116,6 +110,9 @@ action_remove_badge - Remove one or more GitHub Action badges from a file.
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -137,32 +134,16 @@ action_remove_badge - Remove one or more GitHub Action badges from a file.
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>GitHub Actions tools</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/action.R'><code>R/action.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/action_add_badge.R'><code>R/action_add_badge.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/action_remove_badge.R'><code>R/action_remove_badge.R</code></a>, and 1 more</small>
+    <h1>Return a data frame containing details on a repository workflows.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/action_workflows.R'><code>R/action_workflows.R</code></a></small>
     <div class="hidden name"><code>action.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    
-<ul>
-<li><p><code>action_workflows</code> - returns a data frame containing details on a repositories workflows.</p></li>
-<li><p><code>action_add_badge</code> - Add a GitHub Actions badge to a file.</p></li>
-<li><p><code>action_remove_badge</code> - Remove one or more GitHub Action badges from a file.</p></li>
-</ul>
-
+    <p>Return a data frame containing details on a repository workflows.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>action_add_badge</span>(
-  <span class='no'>repo</span>,
-  <span class='kw'>workflow</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>where</span> <span class='kw'>=</span> <span class='st'>"^."</span>,
-  <span class='kw'>line_padding</span> <span class='kw'>=</span> <span class='st'>"\n\n\n"</span>,
-  <span class='kw'>file</span> <span class='kw'>=</span> <span class='st'>"README.md"</span>
-)
-
-<span class='fu'>action_remove_badge</span>(<span class='no'>repo</span>, <span class='kw'>workflow_pat</span> <span class='kw'>=</span> <span class='st'>".*?"</span>, <span class='kw'>file</span> <span class='kw'>=</span> <span class='st'>"README.md"</span>)
-
-<span class='fu'>action_workflows</span>(<span class='no'>repo</span>, <span class='kw'>full</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>action_workflows</span>(<span class='no'>repo</span>, <span class='kw'>full</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -172,29 +153,6 @@ action_remove_badge - Remove one or more GitHub Action badges from a file.
       <td><p>Character. Address of repository in <code>owner/name</code> format.</p></td>
     </tr>
     <tr>
-      <th>workflow</th>
-      <td><p>Character. Name of the workflow located in <code>.github/workflows/</code>.</p></td>
-    </tr>
-    <tr>
-      <th>where</th>
-      <td><p>Character. Regex pattern of where to insert the badge, defaults
-to the beginning of the README</p></td>
-    </tr>
-    <tr>
-      <th>line_padding</th>
-      <td><p>Character. What should be added to the end of the link,
-defaults to sufficient new lines to add a blank line after the badge.</p></td>
-    </tr>
-    <tr>
-      <th>file</th>
-      <td><p>Character. Target file to be modified, defaults to <code>README.md</code>.#'</p></td>
-    </tr>
-    <tr>
-      <th>workflow_pat</th>
-      <td><p>Character. Name of the workflow badge to be removed, or a regex pattern
-that matches the workflow name.</p></td>
-    </tr>
-    <tr>
       <th>full</th>
       <td><p>Logical. Should all workflow columns be returned</p></td>
     </tr>
@@ -202,14 +160,9 @@ that matches the workflow name.</p></td>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
-<span class='fu'>action_workflows</span>(<span class='st'>"rundel/ghclass"</span>)</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 2 x 4</span><span>
-#&gt;   name       path                  state badge_url                              
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                 </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                                  
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> R-CMD-che… .github/workflows/ch… acti… https://github.com/rundel/ghclass/work…
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> Render RE… .github/workflows/re… acti… https://github.com/rundel/ghclass/work…</div><div class='input'># }
-
-</div></span></pre>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'>action_workflows</span>(<span class='st'>"rundel/ghclass"</span>)
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

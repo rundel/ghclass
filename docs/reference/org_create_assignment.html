@@ -47,7 +47,13 @@
 
 
 <meta property="og:title" content="Create a team or individual assignment — org_create_assignment" />
-<meta property="og:description" content="This is a higher level function that combines the following steps:" />
+<meta property="og:description" content="This is a higher level function that combines the following steps:
+Create repos
+Create teams and invite students if necessary
+Add teams or individuals to the repositories
+Mirror a template repository to assignment repositories
+
+" />
 <meta property="og:image" content="https://rundel.github.io/ghclass/logo.png" />
 
 
@@ -110,6 +116,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -137,7 +146,13 @@
     </div>
 
     <div class="ref-description">
-    <p>This is a higher level function that combines the following steps:</p>
+    <p>This is a higher level function that combines the following steps:</p><ul>
+<li><p>Create repos</p></li>
+<li><p>Create teams and invite students if necessary</p></li>
+<li><p>Add teams or individuals to the repositories</p></li>
+<li><p>Mirror a template repository to assignment repositories</p></li>
+</ul>
+
     </div>
 
     <pre class="usage"><span class='fu'>org_create_assignment</span>(
@@ -166,7 +181,7 @@
     </tr>
     <tr>
       <th>team</th>
-      <td><p>Character. Team names, if `NULL`` an individual assignment will be created.</p></td>
+      <td><p>Character. Team names, if not provided an individual assignment will be created.</p></td>
     </tr>
     <tr>
       <th>source_repo</th>
@@ -177,16 +192,6 @@
       <td><p>Logical. Should the created repositories be private.</p></td>
     </tr>
     </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    
-<ol>
-<li><p>Create repos</p></li>
-<li><p>Create teams and invite students if necessary</p></li>
-<li><p>Add teams or individuals to the repositories</p></li>
-<li><p>Mirror a template repository to assignment repositories</p></li>
-</ol>
 
 
   </div>

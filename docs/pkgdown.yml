@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   ghclass: ghclass.html
   peer_students: peer_students.html
-last_built: 2020-07-15T09:50Z
+last_built: 2020-07-15T11:09Z
 urls:
   reference: https://rundel.github.io/ghclass/reference
   article: https://rundel.github.io/ghclass/articles

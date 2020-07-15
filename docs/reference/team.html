@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>GitHub team related tools — team • ghclass</title>
+<title>Create, delete, and rename teams within an organization — team • ghclass</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,16 +46,12 @@
 
 
 
-<meta property="og:title" content="GitHub team related tools — team" />
+<meta property="og:title" content="Create, delete, and rename teams within an organization — team" />
 <meta property="og:description" content="
 
 team_create - create teams in a GitHub organization
 team_delete - delete a team from a GitHub organization.
-team_rename - renames an existing team.
-team_invite - add members to GitHub organization team(s).
-team_members - returns a data frame of team members.
-team_pending - returns a data frame of pending team members.
-team_repos - returns a data frame of teams and their repos.
+team_rename - rename an existing team
 
 " />
 <meta property="og:image" content="https://rundel.github.io/ghclass/logo.png" />
@@ -120,6 +116,9 @@ team_repos - returns a data frame of teams and their repos.
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -141,8 +140,8 @@ team_repos - returns a data frame of teams and their repos.
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>GitHub team related tools</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/team.R'><code>R/team.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/team_create.R'><code>R/team_create.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/team_delete.R'><code>R/team_delete.R</code></a>, and 6 more</small>
+    <h1>Create, delete, and rename teams within an organization</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/team.R'><code>R/team.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/team_create.R'><code>R/team_create.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/team_delete.R'><code>R/team_delete.R</code></a>, and 1 more</small>
     <div class="hidden name"><code>team.Rd</code></div>
     </div>
 
@@ -151,11 +150,7 @@ team_repos - returns a data frame of teams and their repos.
 <ul>
 <li><p><code>team_create</code> - create teams in a GitHub organization</p></li>
 <li><p><code>team_delete</code> - delete a team from a GitHub organization.</p></li>
-<li><p><code>team_rename</code> - renames an existing team.</p></li>
-<li><p><code>team_invite</code> - add members to GitHub organization team(s).</p></li>
-<li><p><code>team_members</code> - returns a data frame of team members.</p></li>
-<li><p><code>team_pending</code> - returns a data frame of pending team members.</p></li>
-<li><p><code>team_repos</code> - returns a data frame of teams and their repos.</p></li>
+<li><p><code>team_rename</code> - rename an existing team</p></li>
 </ul>
 
     </div>
@@ -170,17 +165,7 @@ team_repos - returns a data frame of teams and their repos.
 
 <span class='fu'>team_delete</span>(<span class='no'>org</span>, <span class='no'>team</span>, <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>), <span class='kw'>prompt</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'>team_invite</span>(<span class='no'>org</span>, <span class='no'>user</span>, <span class='no'>team</span>, <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>))
-
-<span class='fu'>team_members</span>(<span class='no'>org</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='fu'><a href='org.html'>org_teams</a></span>(<span class='no'>org</span>), <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>))
-
-<span class='fu'>team_pending</span>(<span class='no'>org</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='fu'><a href='org.html'>org_teams</a></span>(<span class='no'>org</span>), <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>))
-
-<span class='fu'>team_remove</span>(<span class='no'>org</span>, <span class='no'>user</span>, <span class='no'>team</span>, <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>))
-
-<span class='fu'>team_rename</span>(<span class='no'>org</span>, <span class='no'>team</span>, <span class='no'>new_team</span>, <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>))
-
-<span class='fu'>team_repos</span>(<span class='no'>org</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='fu'><a href='org.html'>org_teams</a></span>(<span class='no'>org</span>), <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>))</pre>
+<span class='fu'>team_rename</span>(<span class='no'>org</span>, <span class='no'>team</span>, <span class='no'>new_team</span>, <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>))</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -216,10 +201,6 @@ and members of a team), default is "closed"</p></td>
       <td><p>Logical. Should the user be prompted before deleting team. Default <code>true</code>.</p></td>
     </tr>
     <tr>
-      <th>user</th>
-      <td><p>Character. One or more GitHub usernames to invite.</p></td>
-    </tr>
-    <tr>
       <th>new_team</th>
       <td><p>character, new team name.</p></td>
     </tr>
@@ -227,28 +208,19 @@ and members of a team), default is "closed"</p></td>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
-<span class='fu'>team_delete</span>(<span class='st'>"ghclass-test"</span>, <span class='fu'><a href='org.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>), <span class='kw'>prompt</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use <span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
-#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to retrieve teams for org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
-#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to retrieve teams for org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='input'><span class='fu'>team_create</span>(<span class='st'>"ghclass-test"</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"hw1-team01"</span>,<span class='st'>"hw1-team02"</span>))</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
-#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to retrieve teams for org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
-#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to create team </span><span style='color: #0000BB;'>'hw1-team01'</span><span> in org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
-#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to create team </span><span style='color: #0000BB;'>'hw1-team02'</span><span> in org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='input'><span class='fu'>team_rename</span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-team02"</span>, <span class='st'>"hw1-team03"</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
-#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to retrieve teams for org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='input'><span class='fu'><a href='org.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
-#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to retrieve teams for org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='output co'>#&gt; character(0)</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'>team_create</span>(<span class='st'>"ghclass-test"</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"hw1-team01"</span>,<span class='st'>"hw1-team02"</span>))
+<span class='fu'><a href='org.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>)
 
-<span class='fu'>team_invite</span>(<span class='st'>"ghclass-test"</span>, <span class='kw'>user</span> <span class='kw'>=</span> <span class='st'>"rundel"</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"hw1-team01"</span>, <span class='st'>"hw1-team03"</span>, <span class='st'>"missing_team"</span>))</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
-#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to retrieve teams for org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to find team </span><span style='color: #0000BB;'>NA</span><span> in org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to find team </span><span style='color: #0000BB;'>NA</span><span> in org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to find team </span><span style='color: #0000BB;'>NA</span><span> in org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='input'><span class='fu'>team_remove</span>(<span class='st'>"ghclass-test"</span>, <span class='kw'>user</span> <span class='kw'>=</span> <span class='st'>"rundel"</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='st'>"hw1-team01"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: the condition has length &gt; 1 and only the first element will be used</span></div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
-#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to retrieve teams for org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Team </span><span style='color: #0000BB;'>NA</span><span> does not exist in org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='input'>
-<span class='fu'>team_members</span>(<span class='st'>"ghclass-test"</span>, <span class='fu'><a href='org.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>))</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
-#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to retrieve teams for org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
-#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to retrieve teams for org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='output co'>#&gt; data frame with 0 columns and 0 rows</div><div class='input'><span class='fu'>team_pending</span>(<span class='st'>"ghclass-test"</span>, <span class='fu'><a href='org.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>))</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
-#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to retrieve teams for org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
-#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to retrieve teams for org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='output co'>#&gt; data frame with 0 columns and 0 rows</div><div class='input'><span class='fu'>team_repos</span>(<span class='st'>"ghclass-test"</span>, <span class='fu'><a href='org.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>))</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
-#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to retrieve teams for org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
-#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to retrieve teams for org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='output co'>#&gt; data frame with 0 columns and 0 rows</div><div class='input'># }
+<span class='fu'>team_rename</span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-team02"</span>, <span class='st'>"hw1-team03"</span>)
+<span class='fu'><a href='org.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>)
 
-</div></span></pre>
+<span class='fu'>team_delete</span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-team01"</span>, <span class='kw'>prompt</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'><a href='org.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>)
+
+<span class='co'># Cleanup</span>
+<span class='fu'>team_delete</span>(<span class='st'>"ghclass-test"</span>, <span class='fu'><a href='org.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>), <span class='kw'>prompt</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

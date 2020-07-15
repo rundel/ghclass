@@ -47,11 +47,7 @@
 
 
 <meta property="og:title" content="Create reviewer feedback form — peer_form_create_review" />
-<meta property="og:description" content="
-
-peer_form_create_review creates blank feedback forms for reviewers based on the user-specified number of questions.
-
-" />
+<meta property="og:description" content="peer_form_create_review creates blank feedback forms for reviewers based on the user-specified number of questions." />
 <meta property="og:image" content="https://rundel.github.io/ghclass/logo.png" />
 
 
@@ -114,6 +110,9 @@ peer_form_create_review creates blank feedback forms for reviewers based on the 
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -141,11 +140,7 @@ peer_form_create_review creates blank feedback forms for reviewers based on the 
     </div>
 
     <div class="ref-description">
-    
-<ul>
-<li><p><code>peer_form_create_review</code> creates blank feedback forms for reviewers based on the user-specified number of questions.</p></li>
-</ul>
-
+    <p><code>peer_form_create_review</code> creates blank feedback forms for reviewers based on the user-specified number of questions.</p>
     </div>
 
     <pre class="usage"><span class='fu'>peer_form_create_review</span>(
@@ -205,10 +200,9 @@ peer_form_create_review creates blank feedback forms for reviewers based on the 
 <code><a href='peer_score_review.html'>peer_score_review</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
-<span class='fu'>peer_form_create_review</span>(<span class='fl'>5</span>, <span class='st'>"Reviewer feedback for HW2"</span>, <span class='st'>"rfeedback_hw2_blank"</span>)</div><div class='output co'>#&gt; <span class='message'><span style='color: #BB0000;'>x</span><span> File </span><span style='color: #0000BB;'>'rfeedback_hw2_blank.Rmd'</span><span> already exists. If you want to force save this file, re-run the command with </span><span style='color: #262626;background-color: #DADADA;'>`overwrite = TRUE`</span><span>.</span></div><div class='input'># }
-
-</div></span></pre>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'>peer_form_create_review</span>(<span class='fl'>5</span>, <span class='st'>"Reviewer feedback for HW2"</span>, <span class='st'>"rfeedback_hw2_blank"</span>)
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

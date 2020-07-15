@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Functions for working with local git repositories — local_repo • ghclass</title>
+<title>Functions for managing local git repositories — local_repo • ghclass</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,7 @@
 
 
 
-<meta property="og:title" content="Functions for working with local git repositories — local_repo" />
+<meta property="og:title" content="Functions for managing local git repositories — local_repo" />
 <meta property="og:description" content="
 
 local_repo_clone - Clones a GitHub repository to a local directory.
@@ -56,10 +56,6 @@ local_repo_push - Equivalent to git push - push a local repository.
 local_repo_pull - Equivalent to git pull - pull a local repository.
 local_repo_branch - Equivalent to git branch - create a branch in a local repository.
 local_repo_log - Equivalent to git log - returns a data frame for git log entries.
-local_repo_rename - Rename local directories using a vector of patterns and replacements .
-This is meant to help with renaming student repos to include
-something more useful like Last, First name or a unique identifier
-for the purposes of ordering repository folders.
 
 " />
 <meta property="og:image" content="https://rundel.github.io/ghclass/logo.png" />
@@ -124,6 +120,9 @@ for the purposes of ordering repository folders.
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -145,8 +144,8 @@ for the purposes of ordering repository folders.
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Functions for working with local git repositories</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/local_repo.R'><code>R/local_repo.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/local_repo_add.R'><code>R/local_repo_add.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/local_repo_branch.R'><code>R/local_repo_branch.R</code></a>, and 6 more</small>
+    <h1>Functions for managing local git repositories</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/local_repo.R'><code>R/local_repo.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/local_repo_add.R'><code>R/local_repo_add.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/local_repo_branch.R'><code>R/local_repo_branch.R</code></a>, and 5 more</small>
     <div class="hidden name"><code>local_repo.Rd</code></div>
     </div>
 
@@ -160,10 +159,6 @@ for the purposes of ordering repository folders.
 <li><p><code>local_repo_pull</code> - Equivalent to <code>git pull</code> - pull a local repository.</p></li>
 <li><p><code>local_repo_branch</code> - Equivalent to <code>git branch</code> - create a branch in a local repository.</p></li>
 <li><p><code>local_repo_log</code> - Equivalent to <code>git log</code> - returns a data frame for git log entries.</p></li>
-<li><p><code>local_repo_rename</code> - Rename local directories using a vector of patterns and replacements .
-This is meant to help with renaming student repos to include
-something more useful like <code>Last, First name</code> or a unique identifier
-for the purposes of ordering repository folders.</p></li>
 </ul>
 
     </div>
@@ -194,16 +189,14 @@ for the purposes of ordering repository folders.</p></li>
   <span class='kw'>prompt</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>mirror</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)
-
-<span class='fu'>local_repo_rename</span>(<span class='no'>repo_dir</span>, <span class='no'>pattern</span>, <span class='no'>replacement</span>)</pre>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>repo_dir</th>
-      <td><p>Character. Vector of repo directories or a single directory containing one or more repos.</p></td>
+      <td><p>Vector of repo directories or a single directory containing one or more repos.</p></td>
     </tr>
     <tr>
       <th>files</th>
@@ -249,36 +242,36 @@ for the purposes of ordering repository folders.</p></li>
       <th>prompt</th>
       <td><p>Prompt before force push?</p></td>
     </tr>
-    <tr>
-      <th>pattern</th>
-      <td><p>Character. One or more regexp patterns to match to directory names.</p></td>
-    </tr>
-    <tr>
-      <th>replacement</th>
-      <td><p>Character.  One or more text strings containing the replacement value for matched patterns.</p></td>
-    </tr>
     </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>All of these functions depend on the gert library being installed.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
-<span class='no'>repo</span> <span class='kw'>=</span> <span class='fu'><a href='repo_core.html'>repo_create</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"local_repo_test"</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use <span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
-#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
-#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to create repo </span><span style='color: #0000BB;'>'ghclass-test/local_repo_test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='no'>repo</span> <span class='kw'>=</span> <span class='fu'><a href='repo_core.html'>repo_create</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"local_repo_test"</span>)
+
 <span class='no'>dir</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"repos"</span>)
 <span class='no'>local_repo</span> <span class='kw'>=</span> <span class='fu'>local_repo_clone</span>(<span class='no'>repo</span>, <span class='no'>dir</span>)
 
-<span class='fu'>local_repo_log</span>(<span class='no'>dir</span>)</div><div class='output co'>#&gt; data frame with 0 columns and 0 rows</div><div class='input'>
+<span class='fu'>local_repo_log</span>(<span class='no'>dir</span>)
+
 <span class='co'># Make a local change and push</span>
-<span class='fu'><a href='https://rdrr.io/r/base/writeLines.html'>writeLines</a></span>(<span class='st'>"Hello World"</span>, <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>local_repo</span>, <span class='st'>"hello.txt"</span>))</div><div class='output co'>#&gt; <span class='error'>Error in file(con, "w"): invalid 'description' argument</span></div><div class='input'><span class='fu'>local_repo_add</span>(<span class='no'>local_repo</span>, <span class='st'>"hello.txt"</span>)</div><div class='output co'>#&gt; <span class='message'>Argument </span><span style='color: #0000BB;'>'path'</span><span> must not contain any missing values (</span><span style='color: #0000BB;'>NA</span><span>).</span></div><div class='output co'>#&gt; <span class='error'>Error: </span></div><div class='input'><span class='fu'>local_repo_commit</span>(<span class='no'>local_repo</span>, <span class='st'>"Added hello world"</span>)</div><div class='output co'>#&gt; <span class='message'>Argument </span><span style='color: #0000BB;'>'path'</span><span> must not contain any missing values (</span><span style='color: #0000BB;'>NA</span><span>).</span></div><div class='output co'>#&gt; <span class='error'>Error: </span></div><div class='input'><span class='fu'>local_repo_push</span>(<span class='no'>local_repo</span>)</div><div class='output co'>#&gt; <span class='message'>Argument </span><span style='color: #0000BB;'>'path'</span><span> must not contain any missing values (</span><span style='color: #0000BB;'>NA</span><span>).</span></div><div class='output co'>#&gt; <span class='error'>Error: </span></div><div class='input'>
-<span class='fu'><a href='repo_details.html'>repo_commits</a></span>(<span class='no'>repo</span>)</div><div class='output co'>#&gt; data frame with 0 columns and 0 rows</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/writeLines.html'>writeLines</a></span>(<span class='st'>"Hello World"</span>, <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>local_repo</span>, <span class='st'>"hello.txt"</span>))
+<span class='fu'>local_repo_add</span>(<span class='no'>local_repo</span>, <span class='st'>"hello.txt"</span>)
+<span class='fu'>local_repo_commit</span>(<span class='no'>local_repo</span>, <span class='st'>"Added hello world"</span>)
+<span class='fu'>local_repo_push</span>(<span class='no'>local_repo</span>)
+
+<span class='fu'><a href='repo_details.html'>repo_commits</a></span>(<span class='no'>repo</span>)
+
 <span class='co'># Pulling remote changes</span>
 <span class='fu'><a href='repo_file.html'>repo_modify_file</a></span>(<span class='no'>repo</span>, <span class='st'>"hello.txt"</span>, <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>".*"</span>,  <span class='kw'>content</span> <span class='kw'>=</span> <span class='st'>"!!!"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"after"</span>)
-<span class='fu'>local_repo_pull</span>(<span class='no'>local_repo</span>)</div><div class='output co'>#&gt; <span class='message'>Argument </span><span style='color: #0000BB;'>'path'</span><span> must not contain any missing values (</span><span style='color: #0000BB;'>NA</span><span>).</span></div><div class='output co'>#&gt; <span class='error'>Error: </span></div><div class='input'><span class='fu'>local_repo_log</span>(<span class='no'>dir</span>)</div><div class='output co'>#&gt; data frame with 0 columns and 0 rows</div><div class='input'>
-<span class='fu'><a href='repo_core.html'>repo_delete</a></span>(<span class='st'>"ghclass-test/local_repo_test"</span>, <span class='kw'>prompt</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Unable to locate a github token, please use </span><span style='color: #262626;background-color: #DADADA;'>`github_set_token()`</span><span> or define the </span><span style='color: #00BB00;'>GITHUB_PAT</span><span></span>
-#&gt; <span class='message'>environmental variable in your </span><span style='color: #0000BB;'>.Renviron</span><span> file.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Failed to delete repo </span><span style='color: #0000BB;'>'ghclass-test/local_repo_test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message:</span></div><div class='output co'>#&gt; <span class='message'>API docs:</span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─</div><div class='input'># }
+<span class='fu'>local_repo_pull</span>(<span class='no'>local_repo</span>)
+<span class='fu'>local_repo_log</span>(<span class='no'>dir</span>)
 
-</div></span></pre>
+<span class='fu'><a href='repo_core.html'>repo_delete</a></span>(<span class='st'>"ghclass-test/local_repo_test"</span>, <span class='kw'>prompt</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

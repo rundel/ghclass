@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Rename local directories using a vector of patterns and replacements — local_repo_rename • ghclass</title>
+<title>Rename local directories using a vector of patterns and replacements. — local_repo_rename • ghclass</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,11 +46,11 @@
 
 
 
-<meta property="og:title" content="Rename local directories using a vector of patterns and replacements — local_repo_rename" />
-<meta property="og:description" content="This is particularly helpful for renaming student repos to include
-something more useful like Last, First name or netid so that
-folder ordering matches student ordering within your LMS." />
-<meta property="og:image" content="/logo.png" />
+<meta property="og:title" content="Rename local directories using a vector of patterns and replacements. — local_repo_rename" />
+<meta property="og:description" content="This function is meant to help with renaming local student repos to include
+something more useful like Last, First name or a unique identifier
+for the purposes of ordering repository folders." />
+<meta property="og:image" content="https://rundel.github.io/ghclass/logo.png" />
 
 
 
@@ -82,7 +82,7 @@ folder ordering matches student ordering within your LMS." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ghclass</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -108,12 +108,12 @@ folder ordering matches student ordering within your LMS." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/instructions_students.html">Peer review instructions for students</a>
-    </li>
-    <li>
-      <a href="../articles/peer.html">Peer review with ghclass</a>
+      <a href="../articles/peer_students.html">Peer review instructions for students</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -136,18 +136,18 @@ folder ordering matches student ordering within your LMS." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Rename local directories using a vector of patterns and replacements</h1>
+    <h1>Rename local directories using a vector of patterns and replacements.</h1>
     <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/local_repo_rename.R'><code>R/local_repo_rename.R</code></a></small>
     <div class="hidden name"><code>local_repo_rename.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This is particularly helpful for renaming student repos to include
-something more useful like <code>Last, First name</code> or <code>netid</code> so that
-folder ordering matches student ordering within your LMS.</p>
+    <p>This function is meant to help with renaming local student repos to include
+something more useful like <code>Last, First name</code> or a unique identifier
+for the purposes of ordering repository folders.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>local_repo_rename</span>(<span class='no'>repo_dir</span>, <span class='no'>pattern</span>, <span class='no'>replacement</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='local_repo.html'>local_repo_rename</a></span>(<span class='no'>repo_dir</span>, <span class='no'>pattern</span>, <span class='no'>replacement</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -178,7 +178,7 @@ folder ordering matches student ordering within your LMS.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Colin Rundel, Mine Cetinkaya-Rundel.</p>
+  <p>Developed by <a href='https://rundel.github.io'>Colin Rundel</a>, Mine Cetinkaya-Rundel.</p>
 </div>
 
 <div class="pkgdown">

@@ -110,6 +110,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -192,14 +195,13 @@
 <code><a href='peer_score_rating.html'>peer_score_rating</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='fu'>peer_score_review</span>(
 <span class='kw'>org</span> <span class='kw'>=</span> <span class='st'>"ghclass-test"</span>,
 <span class='kw'>roster</span> <span class='kw'>=</span> <span class='st'>"hw2_roster_seed12345.csv"</span>,
 <span class='kw'>form_review</span> <span class='kw'>=</span> <span class='st'>"hw2_review.Rmd"</span>,
-<span class='kw'>prefix</span> <span class='kw'>=</span> <span class='no'>prefix</span>)</div><div class='output co'>#&gt; <span class='error'>Error in handle_arg_list(..., tests = function(name, value) {    if (!(is.character(value) | (is.null(value) &amp; allow_null)))         cli_stop("Argument {.val {name}} must be of character type.")    if (any(is.na(value)) &amp; !allow_na)         cli_stop("Argument {.val {name}} must not contain any missing values ({.val {NA}}).")    if (length(value) == 0 &amp; !allow_empty)         cli_stop("Argument {.val {name}} must have length &gt;= 1.")}): object 'prefix' not found</span></div><div class='input'># }
-
-</div></pre>
+<span class='kw'>prefix</span> <span class='kw'>=</span> <span class='no'>prefix</span>)
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

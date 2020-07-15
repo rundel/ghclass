@@ -10,31 +10,34 @@ authors:
 reference:
   - title: GitHub
     contents:
-    - starts_with("github_", internal = TRUE)
+    - starts_with("github_")
+  - title: Local Repositories
+    contents:
+    - starts_with("local_repo_")
   - title: Organizations
     contents:
-    - starts_with("org_", internal = TRUE)
+    - starts_with("org_")
   - title: Repositories
     contents:
-    - starts_with("repo_", internal = TRUE)
+    - starts_with("repo_")
   - title: Users
     contents:
-    - starts_with("user_", internal = TRUE)
+    - starts_with("user_")
   - title: Teams
     contents:
-    - starts_with("team_", internal = TRUE)
+    - starts_with("team_")
   - title: Issues
     contents:
-    - starts_with("issue_", internal = TRUE)
+    - starts_with("issue_")
   - title: Branches
     contents:
-    - starts_with("branch_", internal = TRUE)
+    - starts_with("branch_")
   - title: Pull Requests
     contents:
-    - starts_with("pr_", internal = TRUE)
+    - starts_with("pr_")
   - title: Actions
     contents:
-    - starts_with("action_", internal = TRUE)
+    - starts_with("action_")
   - title: Peer Review
     contents:
-    - starts_with("peer_", internal = TRUE)
+    - starts_with("peer_")
