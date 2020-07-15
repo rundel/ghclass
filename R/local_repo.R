@@ -1,7 +1,7 @@
 #' @name local_repo
 #' @rdname local_repo
 #'
-#' @title Functions for working with local git repositories
+#' @title Functions for managing local git repositories
 #'
 #' @description
 #'
@@ -19,11 +19,6 @@
 #'
 #' * `local_repo_log` - Equivalent to `git log` - returns a data frame for git log entries.
 #'
-#' * `local_repo_rename` - Rename local directories using a vector of patterns and replacements .
-#' This is meant to help with renaming student repos to include
-#' something more useful like `Last, First name` or a unique identifier
-#' for the purposes of ordering repository folders.
-#'
 #' @param repo_dir Vector of repo directories or a single directory containing one or more repos.
 #' @param files Files to be staged
 #' @param message Commit message
@@ -33,6 +28,8 @@
 #' @param force Force push?
 #' @param prompt Prompt before force push?
 #' @param verbose Display verbose output.
+#'
+#' @details All of these functions depend on the gert library being installed.
 #'
 #' @examples
 #' \dontrun{

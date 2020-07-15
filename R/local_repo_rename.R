@@ -1,4 +1,8 @@
-#' @rdname local_repo
+#' @title Rename local directories using a vector of patterns and replacements.
+#'
+#' @description  This function is meant to help with renaming local student repos to include
+#' something more useful like `Last, First name` or a unique identifier
+#' for the purposes of ordering repository folders.
 #'
 #' @param repo_dir Character. Vector of repo directories or a single directory containing one or more repos.
 #' @param pattern Character. One or more regexp patterns to match to directory names.

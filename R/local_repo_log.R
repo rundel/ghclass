@@ -1,6 +1,5 @@
-#' @param max Maximum number of log entries to retrieve per repo.
-#'
 #' @rdname local_repo
+#' @param max Maximum number of log entries to retrieve per repo.
 #' @export
 #'
 local_repo_log = function(repo_dir, max = 100) {
