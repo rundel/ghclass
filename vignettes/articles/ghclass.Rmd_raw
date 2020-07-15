@@ -157,7 +157,34 @@ Give yourself at least a week to be safe.
 
 ### Permissions
 
-By default, each new GitHub organization defaults to repositories being readable by all members, regardless of whether they are private or public. This is clearly undesirable for most classroom settings. We can get a quick snapshot of our organization using the `org_sitrep` function which reports on this permission as well as other important details.
+By default, each new GitHub organization defaults to repositories being readable by all members, regardless of whether they are private or public. This is clearly undesirable for most classroom settings.
+
+Individual-level permissions can be set via the "People" tab on the
+organization page. We recommend the course instructor to be the owner of the
+organization and teaching assistants to receive admin privileges. Students
+should receive member privileges.
+
+Github allows further permissions for accessing and changing repositories to be
+set for each individual member or at the organization-level (under Settings >
+Member Privileges). We suggest the organization-level settings below.
+
+*Member repository permissions*
+
+* Base permissions: None
+* Repository creation (both Public and Private): Disabled
+* Repository forking: Disabled
+
+*Admin repository permissions*
+
+* Repository visibility change: Disabled
+* Repository deletion and transfer: Disabled
+* Issue deletion: Disabled
+
+*Member team permissions*
+
+* Allow members to create teams: Disabled
+
+We can get a quick snapshot of our organization using the `org_sitrep` function which reports on this permission as well as other important details.
 
 ```{asciicast}
 org_sitrep("ghclass-vignette")
@@ -178,7 +205,7 @@ org_sitrep("ghclass-vignette")
 
 ### Adding students to the organization
 
-Next, collect your students' GitHub usernames. You can do this using your web form tool of choice (e.g. Google Forms, MS Forms, etc.) or via a quiz or survey on your schools LMS. We will assume that you are able to then read in these data into an R data frame.
+Next, collect your students' GitHub usernames. You can do this using your web form tool of choice (e.g. Google Forms, MS Forms, etc.) or via a quiz or survey on your school's learning management system (LMS). We will assume that you are able to then read in these data into an R data frame.
 
 For example, your roster file might look something like the following:
 ```{r message=FALSE}
@@ -210,7 +237,7 @@ org_members("ghclass-vignette", include_admins = FALSE)
 org_pending("ghclass-vignette")
 ```
 
-If we give things a bit of time, some of the students will have accepted the invitation.
+After some time, some of the students will have accepted the invitation.
 
 ```{r include = FALSE}
 ghclass:::org_accept_invite("ghclass-vignette", names(pats)[c(1,3,6)], pats[c(1,3,6)])
@@ -235,12 +262,12 @@ ghclass:::org_accept_invite("ghclass-vignette", names(pats), pats)
 As described above, ghclass uses a workflow where each team or individual is given access to a single repo for each assignment.
 To create these repositories we use a single template repository which contains all of the files necessary for the assignment.
 Generally, this will consist of things like a `README.md` with instructions, a scaffolded `Rmd` or `R` file where the students will enter their answers, and any other necessary support files (e.g. data, images, support scripts, etc.).
-For an example of such a repository you can take a look at [hw1](https://github.com/sta323-sp19/hw1) from a Statisical Computing course offered at Duke in the Spring of 2019.
+For an example of such a repository you can take a look at [hw1](https://github.com/sta323-sp19/hw1) from a Statistical Computing course offered at Duke in the Spring of 2019.
 Note that this repository is public and viewable by anyone, but this is not necessary for your template repository.
 
 Once you have created the repository and are ready to distribute it to students there is one more suggest step - setting the repo's template status to `TRUE`.
 This is a GitHub specific detail, but doing so makes it much more efficient to create copies of the repo for your students.
-We can set this option under the repo's Settings on GitHub, just check the box labeled "Template Repository" on the main settings page, or use the `repo_set_template` function.
+We can set this option under the repo's Settings on GitHub, just check the box labelled "Template Repository" on the main settings page, or use the `repo_set_template` function.
 This status can also be checked with ghclass using `repo_is_template`.
 
 ```{asciicast}
@@ -377,35 +404,6 @@ fs::dir_tree("hw1/")
 ```{r include=FALSE}
 unlink("hw1", recursive = TRUE)
 ```
-
-## Other Suggestions
-
-### Managing repository permissions
-
-Individual-level permissions can be set via the "People" tab on the
-organization page. We recommend the course instructor to be the owner of the
-organization and teaching assistants to receive admin privileges. Students
-should receive member privileges.
-
-Github allows further permissions for accessing and changing repositories to be
-set for each individual member or at the organization-level (under Settings >
-Member Privileges). We suggest the organization-level settings below.
-
-*Member repository permissions*
-
-* Base permissions: None
-* Repository creation (both Public and Private): Disabled
-* Repository forking: Disabled
-
-*Admin repository permissions*
-
-* Repository visibility change: Disabled
-* Repository deletion and transfer: Disabled
-* Issue deletion: Disabled
-
-*Member team permissions*
-
-* Allow members to create teams: Disabled
 
 
 ## FAQ
