@@ -56,18 +56,6 @@
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="articles/articles/peer_students.html">Peer review instructions for students</a>
-    </li>
-  </ul>
-</li>
 <li>
   <a href="news/index.html">Changelog</a>
 </li>
@@ -100,11 +88,17 @@
 <div id="tools-for-managing-github-class-organization-accounts" class="section level2">
 <h2 class="hasAnchor">
 <a href="#tools-for-managing-github-class-organization-accounts" class="anchor"></a>Tools for managing github class organization accounts</h2>
-<p>This package is for everyone! But really, if you’re an instructor who uses GitHub for your class management, e.g. students submit assignments via GitHub repos, this package is definitely for you! The package also assumes that you’re an R user, and you probably teach R as well, though that’s not a requirement since this package is all about setting up repositories with the right permissions, not what your students put in those repositories.</p>
+<p>This R package is designed to enable instructors to efficiently manage their courses on GitHub. It has a wide range of functionality for managing organizations, teams, repositories, and users on GitHub and helps automate most of the tedious and repetitive tasks around creating and distributing assignments.</p>
 <p>Install the development version package from GitHub:</p>
 <div class="sourceCode" id="cb1"><pre class="r"><span class="co"># install.packages("remotes")</span>
 <span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"rundel/ghclass"</span>)</pre></div>
-<p>See package vignette for details on how to use the package.</p>
+<p>See package <a href="https://rundel.github.io/ghclass/articles/ghclass.html">vignette</a> for details on how to use the package.</p>
+</div>
+<div id="peer-review" class="section level2">
+<h2 class="hasAnchor">
+<a href="#peer-review" class="anchor"></a>Peer Review</h2>
+<p>In order to speed up the process of getting this package submitted to CRAN we have decided to move the peer review functionality to the <code>peer_review</code> branch for the time being. This functionality will be included in the CRAN release as soon as possible, hopefully in the next, v0.2.1, release. If you were using this functionality and need access to a version of ghclass with it then you can install this branch using:</p>
+<div class="sourceCode" id="cb2"><pre class="r"><span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"rundel/ghclass@peer_review"</span>)</pre></div>
 </div>
 </div>
   </div>
