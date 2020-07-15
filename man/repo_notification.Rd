@@ -35,7 +35,9 @@ match the list at \href{https://github.com/watching}{github.com/watching}.
 }
 \examples{
 \dontrun{
-
+repo_ignore("Sta323-Sp19/hw1")
+repo_unwatch("rundel/ghclass")
+repo_watch("rundel/ghclass")
 }
 
 }

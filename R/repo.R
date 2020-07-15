@@ -187,7 +187,9 @@ NULL
 #'
 #' @examples
 #' \dontrun{
-#'
+#' repo_ignore("Sta323-Sp19/hw1")
+#' repo_unwatch("rundel/ghclass")
+#' repo_watch("rundel/ghclass")
 #' }
 #'
 NULL
@@ -226,7 +228,23 @@ NULL
 #'
 #' @examples
 #' \dontrun{
+#' repo = repo_create("ghclass-test", "hw1")
+#' team_create("ghclass-test", "team_awesome")
 #'
+#' repo_add_user(repo, "rundel")
+#' repo_add_team(repo, "team_awesome")
+#'
+#' repo_remove_team(repo, "team_awesome")
+#'
+#' repo_modi
+#'
+#' repo_collaborators(repo)
+#'
+#' repo_contributors(repo)
+#' repo_contributors("rundel/ghclass")
+#'
+#' # Cleanup
+#' repo_delete(repo, prompt=FALSE)
 #' }
 #'
 NULL
