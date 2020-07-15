@@ -5,7 +5,7 @@
 \alias{branch_create}
 \alias{branch_delete}
 \alias{branch_remove}
-\title{Repository branch tools}
+\title{Create and delete branches in a repository}
 \usage{
 branch_create(repo, branch = "master", new_branch)
 
@@ -22,8 +22,9 @@ branch_remove(repo, branch)
 }
 \description{
 \itemize{
-\item \code{branch_create} creates a new branch from an existing GitHub repo.
-\item \code{branch_delete} deletes a branch from an existing GitHub repo.
+\item \code{branch_create} - creates a new branch from an existing GitHub repo.
+\item \code{branch_delete} - deletes a branch from an existing GitHub repo.
+\item \code{branch_remove} - previous name of \code{branch_delete}, deprecated.
 }
 }
 \examples{

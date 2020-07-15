@@ -20,7 +20,7 @@ org_create_assignment(
 
 \item{user}{Character. GitHub username(s).}
 
-\item{team}{Character. Team names, if `NULL`` an individual assignment will be created.}
+\item{team}{Character. Team names, if not provided an individual assignment will be created.}
 
 \item{source_repo}{Character. Address of the repository to use as a template for all created repos.}
 
@@ -28,9 +28,7 @@ org_create_assignment(
 }
 \description{
 This is a higher level function that combines the following steps:
-}
-\details{
-\enumerate{
+\itemize{
 \item Create repos
 \item Create teams and invite students if necessary
 \item Add teams or individuals to the repositories

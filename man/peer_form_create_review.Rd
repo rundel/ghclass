@@ -30,9 +30,7 @@ peer_form_create_review(
 \item{double_blind}{Logical. If \code{double_blind = TRUE}, the YAML will contain an \code{author} field, defaults to \code{TRUE}.}
 }
 \description{
-\itemize{
-\item \code{peer_form_create_review} creates blank feedback forms for reviewers based on the user-specified number of questions.
-}
+\code{peer_form_create_review} creates blank feedback forms for reviewers based on the user-specified number of questions.
 }
 \examples{
 \dontrun{

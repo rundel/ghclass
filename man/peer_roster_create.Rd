@@ -20,11 +20,9 @@ in the current working directory, defaults to TRUE.}
 \item{dir}{Character. Directory where the peer review roster will be written if \code{write_csv = TRUE}.}
 }
 \description{
-\itemize{
-\item \code{peer_roster_create} creates data frame of random assignments of author files to
+\code{peer_roster_create} creates data frame of random assignments of author files to
 reviewers. By default, the output is saved to a \code{.csv} file in the current working
 directory that incorporates the current date and random seed as part of the file name.
-}
 }
 \examples{
 \dontrun{

@@ -42,10 +42,8 @@ peer_return(
 \item{overwrite}{Logical. Whether existing files in reviewers' repositories should be overwritten, defaults to \code{FALSE}.}
 }
 \description{
-#' * \code{peer_assign} adds files from authors' repositories to review repositories. The function creates an issue on the reviewers' repositories informing them that the review files are available and creates links to the relevant documents.
-\itemize{
-\item \code{peer_return()} returns the review files from reviewers' review repositories to authors' repositories. The function i) adds empty rating form (if specified via \code{local_path_rating}), ii) moves completed review (if specified via \code{form_review}) from reviewer to author, iii) moves assignment files from reviewer to author (if specified via \code{path} and changed by reviewer), and iv) opens an issue on authors' repositories informing them about the added files.
-}
+#' \code{peer_assign} adds files from authors' repositories to review repositories. The function creates an issue on the reviewers' repositories informing them that the review files are available and creates links to the relevant documents.
+\code{peer_return()} returns the review files from reviewers' review repositories to authors' repositories. The function i) adds empty rating form (if specified via \code{local_path_rating}), ii) moves completed review (if specified via \code{form_review}) from reviewer to author, iii) moves assignment files from reviewer to author (if specified via \code{path} and changed by reviewer), and iv) opens an issue on authors' repositories informing them about the added files.
 }
 \examples{
 \dontrun{

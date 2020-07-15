@@ -36,9 +36,7 @@ peer_file_add_rev(
 \item{verbose}{Logical. Should success/failure messages be printed, defaults to \code{TRUE}.}
 }
 \description{
-\itemize{
-\item \code{peer_file_add_rev()} takes a local file and adds it to author-specific folders on reviewers' repositories. The function's main purpose is to distribute review forms into the correct author-specific folders on reviewers' repositories.
-}
+\code{peer_file_add_rev()} takes a local file and adds it to author-specific folders on reviewers' repositories. The function's main purpose is to distribute review forms into the correct author-specific folders on reviewers' repositories.
 }
 \examples{
 \dontrun{

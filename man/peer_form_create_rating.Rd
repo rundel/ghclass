@@ -30,9 +30,7 @@ peer_form_create_rating(
 \item{allow_comment}{Logical. Should optional comment field be included? Defaults to \code{FALSE}.}
 }
 \description{
-\itemize{
-\item \code{peer_form_create_rating} creates a short feedback form for authors to rate the feedback they got from reviewers. The rating categories are based on Reily, K. and P. Ludford Finnerty,  and L. Terveen (2009): Two Peers Are Better Than One: Aggregating Peer Reviews for Computing Assignments is Surprisingly Accurate. In \emph{Proceedings of the ACM 2009 International Conference on Supporting Group Work}. GROUP’09, May 10–13, 2009, Sanibel Island, Florida, USA.
-}
+\code{peer_form_create_rating} creates a short feedback form for authors to rate the feedback they got from reviewers. The rating categories are based on Reily, K. and P. Ludford Finnerty,  and L. Terveen (2009): Two Peers Are Better Than One: Aggregating Peer Reviews for Computing Assignments is Surprisingly Accurate. In \emph{Proceedings of the ACM 2009 International Conference on Supporting Group Work}. GROUP’09, May 10–13, 2009, Sanibel Island, Florida, USA.
 }
 \examples{
 \dontrun{

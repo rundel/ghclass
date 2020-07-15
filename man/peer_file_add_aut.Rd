@@ -39,9 +39,7 @@ peer_file_add_aut(
 \item{verbose}{Logical. Should success/failure messages be printed, defaults to \code{TRUE}.}
 }
 \description{
-\itemize{
-\item \code{peer_file_add_aut()} takes a local file and adds it to reviewer-specific folders on authors' repositories. The function's main purpose is to distribute rating forms into the reviewer-specific folders on authors' repositories.
-}
+\code{peer_file_add_aut()} takes a local file and adds it to reviewer-specific folders on authors' repositories. The function's main purpose is to distribute rating forms into the reviewer-specific folders on authors' repositories.
 }
 \examples{
 \dontrun{
