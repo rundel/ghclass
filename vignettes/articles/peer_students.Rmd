@@ -2,7 +2,7 @@
 title: "Peer review instructions for students"
 output: rmarkdown::html_vignette
 author: "Therese Anders and Mine Çetinkaya-Rundel"
-date: "2020-07-14"
+date: "2020-07-16"
 vignette: >
   %\VignetteIndexEntry{Peer review instructions for students}
   %\VignetteEngine{knitr::rmarkdown}
