@@ -159,15 +159,15 @@ team_repos - returns a data frame of teams and their repos.
 
     </div>
 
-    <pre class="usage"><span class='fu'><a href='team.html'>team_invite</a></span>(<span class='no'>org</span>, <span class='no'>user</span>, <span class='no'>team</span>, <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>))
+    <pre class="usage"><span class='fu'>team_invite</span>(<span class='no'>org</span>, <span class='no'>user</span>, <span class='no'>team</span>, <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>))
 
-<span class='fu'><a href='team.html'>team_members</a></span>(<span class='no'>org</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='fu'><a href='org.html'>org_teams</a></span>(<span class='no'>org</span>), <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>))
+<span class='fu'>team_members</span>(<span class='no'>org</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='fu'><a href='org_details.html'>org_teams</a></span>(<span class='no'>org</span>), <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>))
 
-<span class='fu'><a href='team.html'>team_pending</a></span>(<span class='no'>org</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='fu'><a href='org.html'>org_teams</a></span>(<span class='no'>org</span>), <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>))
+<span class='fu'>team_pending</span>(<span class='no'>org</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='fu'><a href='org_details.html'>org_teams</a></span>(<span class='no'>org</span>), <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>))
 
-<span class='fu'><a href='team.html'>team_remove</a></span>(<span class='no'>org</span>, <span class='no'>user</span>, <span class='no'>team</span>, <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>))
+<span class='fu'>team_remove</span>(<span class='no'>org</span>, <span class='no'>user</span>, <span class='no'>team</span>, <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>))
 
-<span class='fu'><a href='team.html'>team_repos</a></span>(<span class='no'>org</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='fu'><a href='org.html'>org_teams</a></span>(<span class='no'>org</span>), <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>))</pre>
+<span class='fu'>team_repos</span>(<span class='no'>org</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='fu'><a href='org_details.html'>org_teams</a></span>(<span class='no'>org</span>), <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>))</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -195,14 +195,14 @@ team_repos - returns a data frame of teams and their repos.
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='fu'><a href='team.html'>team_create</a></span>(<span class='st'>"ghclass-test"</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"hw1-team01"</span>,<span class='st'>"hw1-team02"</span>))
 
-<span class='fu'><a href='team.html'>team_invite</a></span>(<span class='st'>"ghclass-test"</span>, <span class='kw'>user</span> <span class='kw'>=</span> <span class='st'>"rundel"</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"hw1-team01"</span>, <span class='st'>"hw1-team02"</span>, <span class='st'>"missing_team"</span>))
-<span class='fu'><a href='team.html'>team_remove</a></span>(<span class='st'>"ghclass-test"</span>, <span class='kw'>user</span> <span class='kw'>=</span> <span class='st'>"rundel"</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='st'>"hw1-team01"</span>)
+<span class='fu'>team_invite</span>(<span class='st'>"ghclass-test"</span>, <span class='kw'>user</span> <span class='kw'>=</span> <span class='st'>"rundel"</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"hw1-team01"</span>, <span class='st'>"hw1-team02"</span>, <span class='st'>"missing_team"</span>))
+<span class='fu'>team_remove</span>(<span class='st'>"ghclass-test"</span>, <span class='kw'>user</span> <span class='kw'>=</span> <span class='st'>"rundel"</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='st'>"hw1-team01"</span>)
 
-<span class='fu'><a href='team.html'>team_members</a></span>(<span class='st'>"ghclass-test"</span>, <span class='fu'><a href='org.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>))
-<span class='fu'><a href='team.html'>team_pending</a></span>(<span class='st'>"ghclass-test"</span>, <span class='fu'><a href='org.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>))
-<span class='fu'><a href='team.html'>team_repos</a></span>(<span class='st'>"ghclass-test"</span>, <span class='fu'><a href='org.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>))
+<span class='fu'>team_members</span>(<span class='st'>"ghclass-test"</span>, <span class='fu'><a href='org_details.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>))
+<span class='fu'>team_pending</span>(<span class='st'>"ghclass-test"</span>, <span class='fu'><a href='org_details.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>))
+<span class='fu'>team_repos</span>(<span class='st'>"ghclass-test"</span>, <span class='fu'><a href='org_details.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>))
 
-<span class='fu'><a href='team.html'>team_delete</a></span>(<span class='st'>"ghclass-test"</span>, <span class='fu'><a href='org.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>), <span class='kw'>prompt</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'><a href='team.html'>team_delete</a></span>(<span class='st'>"ghclass-test"</span>, <span class='fu'><a href='org_details.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>), <span class='kw'>prompt</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
