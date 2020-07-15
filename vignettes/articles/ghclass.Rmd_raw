@@ -13,7 +13,8 @@ vignette: >
 knitr::opts_chunk$set(
   out.width = "100%",
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  cache = TRUE
 )
 
 # Turn on ANSI colors
@@ -61,11 +62,16 @@ repo_set_template("Sta323-Sp19/hw1", FALSE)
 org_set_repo_permission("ghclass-vignette", "read")
 ```
 
+## What is ghclass?
+
+ghclass is an R package that is designed to enable instructors to efficiently manage their courses on GitHub. It has a wide range of functionality for managing organizations, teams, repositories, and users on GitHub and helps automate most of the tedious and repetitive tasks around creating and distributing assignments.
+
 ## Who is this package for?
 
 This package is for everyone!
 But really, if you're an instructor who uses GitHub for your class management, e.g. students submit assignments via GitHub repos, this package is definitely for you!
-The package also assumes that you're  an R user, and you probably teach R as well, though that's not a requirement since this package is all about setting up repositories with the right permissions, not what your students put in those repositories.
+The package also assumes that you're famliar with R, but teaching with R is not a requirement since this package is entirely agnostic to the contents of your repositories.
+
 (If you're a Python user, see [this post](https://ubc-mds.github.io/2017-08-24-teaching-with-github/) for a Python based alternative.)
 
 ## What is this vignette about?
@@ -129,12 +135,12 @@ Personal access tokens) or use
 [`usethis::browse_github_token`](https://usethis.r-lib.org/articles/articles/usethis-setup.html#get-and-store-a-github-personal-access-token).
 
 You can test that your token is working correctly using the `github_test_token()` function. If everything is working correctly you should see something like the following:
-```{asciicast}
+```{asciicast test_token}
 github_test_token()
 ```
 
 If your token is not working you will see an error message like this instead:
-```{asciicast}
+```{asciicast bad_token}
 github_test_token("bad token")
 ```
 
@@ -186,20 +192,20 @@ Member Privileges). We suggest the organization-level settings below.
 
 We can get a quick snapshot of our organization using the `org_sitrep` function which reports on this permission as well as other important details.
 
-```{asciicast}
+```{asciicast sitrep}
 org_sitrep("ghclass-vignette")
 ```
 
 We can see that this function indicates that the current default repository permission settings is "read" and provides a helpful warning that this enables members to view all repositories.
 This permission can easily be addressed within the Organization Settings page under Member privileges. Alternatively, we can also use ghclass to change this directly with `org_set_repo_permission`
 
-```{asciicast}
+```{asciicast set_perm}
 org_set_repo_permission("ghclass-vignette", permission = "none")
 ```
 
 After changing this setting we can once again check the org's sitrep and see that the warning is now resolved.
 
-```{asciicast}
+```{asciicast sitrep2}
 org_sitrep("ghclass-vignette")
 ```
 
@@ -211,29 +217,29 @@ For example, your roster file might look something like the following:
 ```{r message=FALSE}
 roster = readr::read_csv( system.file("roster.csv", package = "ghclass") )
 ```
-```{asciicast}
+```{asciicast roster}
 roster
 ```
 Here we are using the student's school email address as a unique identifier, we also have their GitHub username and we have also assigned them to different teams for our three homework assignments.
 
 Using the `roster` data frame, we can then invite the students to the class' organization. Each of these students will be notified via email from GitHub asking them to join the `ghclass-vignette` organization.
 
-```{asciicast}
+```{asciicast invite}
 org_invite(org = "ghclass-vignette", user = roster$github)
 ```
 
 We now need to wait for the students to accept these invitations before they will have access to the organization.
 We can check the status of these acceptances using the `org_members()` and `org_pending()` functions to see which students have accepted or not accepted the invitation.
 
-```{asciicast}
+```{asciicast members}
 org_members("ghclass-vignette")
 ```
 
-```{asciicast}
+```{asciicast members2}
 org_members("ghclass-vignette", include_admins = FALSE)
 ```
 
-```{asciicast}
+```{asciicast pending}
 org_pending("ghclass-vignette")
 ```
 
@@ -243,11 +249,11 @@ After some time, some of the students will have accepted the invitation.
 ghclass:::org_accept_invite("ghclass-vignette", names(pats)[c(1,3,6)], pats[c(1,3,6)])
 ```
 
-```{asciicast}
+```{asciicast members3}
 org_members("ghclass-vignette", include_admins = FALSE)
 ```
 
-```{asciicast}
+```{asciicast pending2}
 org_pending("ghclass-vignette")
 ```
 
@@ -270,11 +276,11 @@ This is a GitHub specific detail, but doing so makes it much more efficient to c
 We can set this option under the repo's Settings on GitHub, just check the box labelled "Template Repository" on the main settings page, or use the `repo_set_template` function.
 This status can also be checked with ghclass using `repo_is_template`.
 
-```{asciicast}
+```{asciicast is_template}
 repo_is_template("Sta323-Sp19/hw1")
 ```
 
-```{asciicast}
+```{asciicast set_template}
 repo_set_template("Sta323-Sp19/hw1")
 ```
 
@@ -283,7 +289,7 @@ repo_set_template("Sta323-Sp19/hw1")
 Sys.sleep(3)
 ```
 
-```{asciicast}
+```{asciicast is_template2}
 repo_is_template("Sta323-Sp19/hw1")
 ```
 
@@ -293,7 +299,7 @@ Once you have created your template repository, it is then straight forward proc
 The recommended process is to use the `org_create_assignment` function, which is a high level function that takes care of each of the underlying steps for you.
 To start we will create the hw1 team-based assignment given the teams in `roster`.
 
-```{asciicast}
+```{asciicast create_team_assign}
 org_create_assignment(
   org = "ghclass-vignette",
   user = roster$github,
@@ -318,7 +324,7 @@ Based on the output we can see that multiple steps are involved in this process:
 
 If instead of hw1 being a team assignment, we wanted to distribute it as an individual assignment, we can also achieve this using the `org_create_assignment` function by simply excluding the `team` argument (and providing appropriate repo names).
 
-```{asciicast}
+```{asciicast create_ind_assign}
 org_create_assignment(
   org = "ghclass-vignette",
   user = roster$github,
@@ -334,11 +340,11 @@ The underlying process here is very similar with the only difference being that 
 
 Once the repos are created we can interact with them with ghclass, one of the most common needs is simply to list which repos exist within our organization and or selecting some subset of them.
 
-```{asciicast}
+```{asciicast repos}
 org_repos("ghclass-vignette")
 ```
 
-```{asciicast}
+```{asciicast repos_filter}
 org_repos("ghclass-vignette", filter="hw1-team")
 ```
 
@@ -354,7 +360,7 @@ While this process does overwrite existing files in the repo everything is being
 
 Lets assume that we distributed hw1 with the wrong version of the `README.md` included, if we want to replace this with the correct version across all of the hw1 repositories then we could do the following,
 
-```{asciicast}
+```{asciicast add_file}
 file = system.file("README.md", package = "ghclass")
 
 repo_add_file(
@@ -366,13 +372,13 @@ repo_add_file(
 ```
 
 The updated version looks like the following,
-```{asciicast}
+```{asciicast get_readme}
 repo_get_readme("ghclass-vignette/hw1-team01", include_details = FALSE)
 ```
 
 We can also use the function `repo_modify_file` to make changes to existing files,
 
-```{asciicast}
+```{asciicast modify_file}
 repo_modify_file(
   repo = org_repos("ghclass-vignette","hw1-team"),
   path = "README.md",
@@ -382,7 +388,7 @@ repo_modify_file(
 )
 ```
 
-```{asciicast}
+```{asciicast get_readme2}
 repo_get_readme("ghclass-vignette/hw1-team01", include_details = FALSE)
 ```
 
@@ -390,14 +396,14 @@ repo_get_readme("ghclass-vignette/hw1-team01", include_details = FALSE)
 
 Eventually the students will be finished with the work and or the assignment deadline will have passed. ghclass makes it easy to collect all of the student work off of GitHub and make it accessible on your local computer for grading. We make use of the [gert](https://github.com/r-lib/gert) package to provide basic git functionality within ghclass.
 
-```{asciicast}
+```{asciicast local_clone}
 local_repo_clone(
   repo = org_repos("ghclass-vignette", "hw1-team"),
   local_path = "hw1"
 )
 ```
 
-```{asciicast}
+```{asciicast dir}
 fs::dir_tree("hw1/")
 ```
 
@@ -408,28 +414,24 @@ unlink("hw1", recursive = TRUE)
 
 ## FAQ
 
-1. Do I really need private repositories for my students' assignments? I don't
-care if they see each others' work.
-
+1. Do I really need private repositories for my students' assignments?\
+\
 You might not care, but the law might. For example, in the United States, FERPA
 regulations stipulate that student information should be kept private. If you
 use public repositories, anyone can find out who is enrolled in your course.
 Additionally, you will likely be using GitHub issues for providing feedback on
 the students' work, and potentially even mention their grade in a given
-assignment. This information should not be publicly available to anyone.
-
+assignment. This information should not be publicly available to anyone.\
+\
 Also, your students may not want their coursework to be publicly available.
 They are bound to make mistakes as they learn and it should be up to them
 whether they want those to be a piece of their public profile on GitHub.
 
-2. Why not use [GitHub Classroom](https://classroom.github.com/)?
-
-At some level this is a matter of preference, but there are a few
-functionalities here that are not present in GitHub Classroom:
-
-- Pre-defined teams -- as opposed to relying on students to pick their team when
-creating their assignment repo.
-- Command-line interface -- if you like writing R code to solve your problems
+2. Why not use [GitHub Classroom](https://classroom.github.com/)? \
+\
+Actually you don't have to choose between ghclass and GitHub Classroom, your workflow can use either or both - they are just different interfaces to the same underlying API. Generally, it is mostly a matter of preference, but there are a couple of features in ghclass that are not present in GitHub Classroom:
+    - Instructor defined teams -- GitHub Classrooom asks students to choose their teammates when creating their repository.
+    - Editing existing repositories -- being able to push changes to student repositories after an assignment is released can be quite valuable.
+    - Command-line interface -- if you like writing R code to solve your problems
 this may be a better fit for you as it provides a greater level of control and
 more flexibility.
-- Actually you don't have to choose between ghclass and [GitHub Classroom](https://classroom.github.com/), your workflow might involve using both.

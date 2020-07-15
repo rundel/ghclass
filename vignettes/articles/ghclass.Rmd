@@ -18,11 +18,16 @@ vignette: >
 
 
 
+## What is ghclass?
+
+ghclass is an R package that is designed to enable instructors to efficiently manage their courses on GitHub. It has a wide range of functionality for managing organizations, teams, repositories, and users on GitHub and helps automate most of the tedious and repetitive tasks around creating and distributing assignments.
+
 ## Who is this package for?
 
 This package is for everyone!
 But really, if you're an instructor who uses GitHub for your class management, e.g. students submit assignments via GitHub repos, this package is definitely for you!
-The package also assumes that you're  an R user, and you probably teach R as well, though that's not a requirement since this package is all about setting up repositories with the right permissions, not what your students put in those repositories.
+The package also assumes that you're famliar with R, but teaching with R is not a requirement since this package is entirely agnostic to the contents of your repositories.
+
 (If you're a Python user, see [this post](https://ubc-mds.github.io/2017-08-24-teaching-with-github/) for a Python based alternative.)
 
 ## What is this vignette about?
@@ -92,7 +97,7 @@ github_test_token()
 ```
 
 
-<img src="figure//unnamed-chunk-7.svg" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" width="100%" />
+<img src="figure//test_token.svg" title="plot of chunk test_token" alt="plot of chunk test_token" width="100%" />
 
 If your token is not working you will see an error message like this instead:
 
@@ -101,7 +106,7 @@ github_test_token("bad token")
 ```
 
 
-<img src="figure//unnamed-chunk-8.svg" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" width="100%" />
+<img src="figure//bad_token.svg" title="plot of chunk bad_token" alt="plot of chunk bad_token" width="100%" />
 
 ## Step-by-step guide
 
@@ -157,7 +162,7 @@ org_sitrep("ghclass-vignette")
 ```
 
 
-<img src="figure//unnamed-chunk-9.svg" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" width="100%" />
+<img src="figure//sitrep.svg" title="plot of chunk sitrep" alt="plot of chunk sitrep" width="100%" />
 
 We can see that this function indicates that the current default repository permission settings is "read" and provides a helpful warning that this enables members to view all repositories.
 This permission can easily be addressed within the Organization Settings page under Member privileges. Alternatively, we can also use ghclass to change this directly with `org_set_repo_permission`
@@ -168,7 +173,7 @@ org_set_repo_permission("ghclass-vignette", permission = "none")
 ```
 
 
-<img src="figure//unnamed-chunk-10.svg" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="100%" />
+<img src="figure//set_perm.svg" title="plot of chunk set_perm" alt="plot of chunk set_perm" width="100%" />
 
 After changing this setting we can once again check the org's sitrep and see that the warning is now resolved.
 
@@ -178,7 +183,7 @@ org_sitrep("ghclass-vignette")
 ```
 
 
-<img src="figure//unnamed-chunk-11.svg" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" width="100%" />
+<img src="figure//sitrep2.svg" title="plot of chunk sitrep2" alt="plot of chunk sitrep2" width="100%" />
 
 ### Adding students to the organization
 
@@ -195,7 +200,7 @@ roster
 ```
 
 
-<img src="figure//unnamed-chunk-13.svg" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="100%" />
+<img src="figure//roster.svg" title="plot of chunk roster" alt="plot of chunk roster" width="100%" />
 Here we are using the student's school email address as a unique identifier, we also have their GitHub username and we have also assigned them to different teams for our three homework assignments.
 
 Using the `roster` data frame, we can then invite the students to the class' organization. Each of these students will be notified via email from GitHub asking them to join the `ghclass-vignette` organization.
@@ -206,7 +211,7 @@ org_invite(org = "ghclass-vignette", user = roster$github)
 ```
 
 
-<img src="figure//unnamed-chunk-14.svg" title="plot of chunk unnamed-chunk-14" alt="plot of chunk unnamed-chunk-14" width="100%" />
+<img src="figure//invite.svg" title="plot of chunk invite" alt="plot of chunk invite" width="100%" />
 
 We now need to wait for the students to accept these invitations before they will have access to the organization.
 We can check the status of these acceptances using the `org_members()` and `org_pending()` functions to see which students have accepted or not accepted the invitation.
@@ -217,7 +222,7 @@ org_members("ghclass-vignette")
 ```
 
 
-<img src="figure//unnamed-chunk-15.svg" title="plot of chunk unnamed-chunk-15" alt="plot of chunk unnamed-chunk-15" width="100%" />
+<img src="figure//members.svg" title="plot of chunk members" alt="plot of chunk members" width="100%" />
 
 
 ```asciicast
@@ -225,7 +230,7 @@ org_members("ghclass-vignette", include_admins = FALSE)
 ```
 
 
-<img src="figure//unnamed-chunk-16.svg" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" width="100%" />
+<img src="figure//members2.svg" title="plot of chunk members2" alt="plot of chunk members2" width="100%" />
 
 
 ```asciicast
@@ -233,7 +238,7 @@ org_pending("ghclass-vignette")
 ```
 
 
-<img src="figure//unnamed-chunk-17.svg" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" width="100%" />
+<img src="figure//pending.svg" title="plot of chunk pending" alt="plot of chunk pending" width="100%" />
 
 After some time, some of the students will have accepted the invitation.
 
@@ -245,7 +250,7 @@ org_members("ghclass-vignette", include_admins = FALSE)
 ```
 
 
-<img src="figure//unnamed-chunk-19.svg" title="plot of chunk unnamed-chunk-19" alt="plot of chunk unnamed-chunk-19" width="100%" />
+<img src="figure//members3.svg" title="plot of chunk members3" alt="plot of chunk members3" width="100%" />
 
 
 ```asciicast
@@ -253,7 +258,7 @@ org_pending("ghclass-vignette")
 ```
 
 
-<img src="figure//unnamed-chunk-20.svg" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" width="100%" />
+<img src="figure//pending2.svg" title="plot of chunk pending2" alt="plot of chunk pending2" width="100%" />
 
 We can now see that Anya, Celine, and Francis have accepted the invite and we are still waiting on Bruno, Diego, and Elijah. Gentle prodding and reminder emails are often necessary to get all of the students into the organization.
 
@@ -278,7 +283,7 @@ repo_is_template("Sta323-Sp19/hw1")
 ```
 
 
-<img src="figure//unnamed-chunk-22.svg" title="plot of chunk unnamed-chunk-22" alt="plot of chunk unnamed-chunk-22" width="100%" />
+<img src="figure//is_template.svg" title="plot of chunk is_template" alt="plot of chunk is_template" width="100%" />
 
 
 ```asciicast
@@ -286,7 +291,7 @@ repo_set_template("Sta323-Sp19/hw1")
 ```
 
 
-<img src="figure//unnamed-chunk-23.svg" title="plot of chunk unnamed-chunk-23" alt="plot of chunk unnamed-chunk-23" width="100%" />
+<img src="figure//set_template.svg" title="plot of chunk set_template" alt="plot of chunk set_template" width="100%" />
 
 
 
@@ -296,7 +301,7 @@ repo_is_template("Sta323-Sp19/hw1")
 ```
 
 
-<img src="figure//unnamed-chunk-25.svg" title="plot of chunk unnamed-chunk-25" alt="plot of chunk unnamed-chunk-25" width="100%" />
+<img src="figure//is_template2.svg" title="plot of chunk is_template2" alt="plot of chunk is_template2" width="100%" />
 
 ### Distributing a team assignment
 
@@ -317,7 +322,7 @@ org_create_assignment(
 ```
 
 
-<img src="figure//unnamed-chunk-26.svg" title="plot of chunk unnamed-chunk-26" alt="plot of chunk unnamed-chunk-26" width="100%" />
+<img src="figure//create_team_assign.svg" title="plot of chunk create_team_assign" alt="plot of chunk create_team_assign" width="100%" />
 
 Based on the output we can see that multiple steps are involved in this process:
 
@@ -345,7 +350,7 @@ org_create_assignment(
 ```
 
 
-<img src="figure//unnamed-chunk-27.svg" title="plot of chunk unnamed-chunk-27" alt="plot of chunk unnamed-chunk-27" width="100%" />
+<img src="figure//create_ind_assign.svg" title="plot of chunk create_ind_assign" alt="plot of chunk create_ind_assign" width="100%" />
 
 The underlying process here is very similar with the only difference being that we no longer need to create teams and instead add the users directly to the repositories.
 
@@ -359,7 +364,7 @@ org_repos("ghclass-vignette")
 ```
 
 
-<img src="figure//unnamed-chunk-28.svg" title="plot of chunk unnamed-chunk-28" alt="plot of chunk unnamed-chunk-28" width="100%" />
+<img src="figure//repos.svg" title="plot of chunk repos" alt="plot of chunk repos" width="100%" />
 
 
 ```asciicast
@@ -367,7 +372,7 @@ org_repos("ghclass-vignette", filter="hw1-team")
 ```
 
 
-<img src="figure//unnamed-chunk-29.svg" title="plot of chunk unnamed-chunk-29" alt="plot of chunk unnamed-chunk-29" width="100%" />
+<img src="figure//repos_filter.svg" title="plot of chunk repos_filter" alt="plot of chunk repos_filter" width="100%" />
 
 
 ### Modifying Repos
@@ -394,7 +399,7 @@ repo_add_file(
 ```
 
 
-<img src="figure//unnamed-chunk-30.svg" title="plot of chunk unnamed-chunk-30" alt="plot of chunk unnamed-chunk-30" width="100%" />
+<img src="figure//add_file.svg" title="plot of chunk add_file" alt="plot of chunk add_file" width="100%" />
 
 The updated version looks like the following,
 
@@ -403,7 +408,7 @@ repo_get_readme("ghclass-vignette/hw1-team01", include_details = FALSE)
 ```
 
 
-<img src="figure//unnamed-chunk-31.svg" title="plot of chunk unnamed-chunk-31" alt="plot of chunk unnamed-chunk-31" width="100%" />
+<img src="figure//get_readme.svg" title="plot of chunk get_readme" alt="plot of chunk get_readme" width="100%" />
 
 We can also use the function `repo_modify_file` to make changes to existing files,
 
@@ -419,7 +424,7 @@ repo_modify_file(
 ```
 
 
-<img src="figure//unnamed-chunk-32.svg" title="plot of chunk unnamed-chunk-32" alt="plot of chunk unnamed-chunk-32" width="100%" />
+<img src="figure//modify_file.svg" title="plot of chunk modify_file" alt="plot of chunk modify_file" width="100%" />
 
 
 ```asciicast
@@ -427,7 +432,7 @@ repo_get_readme("ghclass-vignette/hw1-team01", include_details = FALSE)
 ```
 
 
-<img src="figure//unnamed-chunk-33.svg" title="plot of chunk unnamed-chunk-33" alt="plot of chunk unnamed-chunk-33" width="100%" />
+<img src="figure//get_readme2.svg" title="plot of chunk get_readme2" alt="plot of chunk get_readme2" width="100%" />
 
 ### Collecting Student Work
 
@@ -442,7 +447,7 @@ local_repo_clone(
 ```
 
 
-<img src="figure//unnamed-chunk-34.svg" title="plot of chunk unnamed-chunk-34" alt="plot of chunk unnamed-chunk-34" width="100%" />
+<img src="figure//local_clone.svg" title="plot of chunk local_clone" alt="plot of chunk local_clone" width="100%" />
 
 
 ```asciicast
@@ -450,35 +455,31 @@ fs::dir_tree("hw1/")
 ```
 
 
-<img src="figure//unnamed-chunk-35.svg" title="plot of chunk unnamed-chunk-35" alt="plot of chunk unnamed-chunk-35" width="100%" />
+<img src="figure//dir.svg" title="plot of chunk dir" alt="plot of chunk dir" width="100%" />
 
 
 
 
 ## FAQ
 
-1. Do I really need private repositories for my students' assignments? I don't
-care if they see each others' work.
-
+1. Do I really need private repositories for my students' assignments?\
+\
 You might not care, but the law might. For example, in the United States, FERPA
 regulations stipulate that student information should be kept private. If you
 use public repositories, anyone can find out who is enrolled in your course.
 Additionally, you will likely be using GitHub issues for providing feedback on
 the students' work, and potentially even mention their grade in a given
-assignment. This information should not be publicly available to anyone.
-
+assignment. This information should not be publicly available to anyone.\
+\
 Also, your students may not want their coursework to be publicly available.
 They are bound to make mistakes as they learn and it should be up to them
 whether they want those to be a piece of their public profile on GitHub.
 
-2. Why not use [GitHub Classroom](https://classroom.github.com/)?
-
-At some level this is a matter of preference, but there are a few
-functionalities here that are not present in GitHub Classroom:
-
-- Pre-defined teams -- as opposed to relying on students to pick their team when
-creating their assignment repo.
-- Command-line interface -- if you like writing R code to solve your problems
+2. Why not use [GitHub Classroom](https://classroom.github.com/)? \
+\
+Actually you don't have to choose between ghclass and GitHub Classroom, your workflow can use either or both - they are just different interfaces to the same underlying API. Generally, it is mostly a matter of preference, but there are a couple of features in ghclass that are not present in GitHub Classroom:
+    - Instructor defined teams -- GitHub Classrooom asks students to choose their teammates when creating their repository.
+    - Editing existing repositories -- being able to push changes to student repositories after an assignment is released can be quite valuable.
+    - Command-line interface -- if you like writing R code to solve your problems
 this may be a better fit for you as it provides a greater level of control and
 more flexibility.
-- Actually you don't have to choose between ghclass and [GitHub Classroom](https://classroom.github.com/), your workflow might involve using both.
