@@ -1,12 +1,14 @@
 #' @name branch
 #' @rdname branch
 #'
-#' @title Repository branch tools
+#' @title Create and delete branches in a repository
 #'
 #' @description
-#' * `branch_create` creates a new branch from an existing GitHub repo.
+#' * `branch_create` - creates a new branch from an existing GitHub repo.
 #'
-#' * `branch_delete` deletes a branch from an existing GitHub repo.
+#' * `branch_delete` - deletes a branch from an existing GitHub repo.
+#'
+#' * `branch_remove` - previous name of `branch_delete`, deprecated.
 #'
 # #' * `branch_protect` / `branch_unprotect` either add or remove protections from the specified branch. See
 # #' <https://help.github.com/en/articles/about-protected-branches> for more details
