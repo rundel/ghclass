@@ -23,7 +23,6 @@ repo_remove_team = function(
   team_type = c("name", "slug")
 ) {
   arg_is_chr(repo, team)
-  permission = match.arg(permission)
   team_type = match.arg(team_type)
 
   org = unique(get_repo_owner(repo))
