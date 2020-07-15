@@ -8,7 +8,7 @@ github_api_team_pending = function(org, team_slug) {
   )
 }
 
-#' @rdname team
+#' @rdname team_members
 #' @export
 #'
 team_pending = function(org, team = org_teams(org), team_type = c("name", "slug")) {

@@ -13,7 +13,7 @@ github_api_team_members = function(org, team_slug, role = c("all", "member", "ma
 
 # TODO - good candidate for v4 upgrade
 
-#' @rdname team
+#' @rdname team_members
 #' @export
 #'
 team_members = function(org, team = org_teams(org), team_type = c("name", "slug")) {

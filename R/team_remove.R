@@ -8,7 +8,7 @@ github_api_team_remove = function(org, team_slug, username) {
   )
 }
 
-#' @rdname team
+#' @rdname team_members
 #' @export
 team_remove = function(org, user, team, team_type = c("name", "slug")) {
 
