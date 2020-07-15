@@ -5,9 +5,12 @@ github_api_whoami = function() {
   )
 }
 
-#' @rdname github
+#' Returns the login of the authenticated user (based on the current PAT).
 #'
 #' @param quiet Logical. Should status messages be shown.
+#'
+#' @examples
+#' github_whoami()
 #'
 #' @export
 #'

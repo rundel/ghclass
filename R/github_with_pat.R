@@ -1,4 +1,7 @@
-#' Use Temporary GitHub Access Token
+#' @name github_with_pat
+#' @rdname github_with_pat
+#'
+#' @title withr-like functions to use a temporary PAT
 #'
 #' Temporarily change the `GITHUB_PAT` environmental variable for
 #' GitHub authentication. Based on the `withr` interface.
@@ -7,9 +10,11 @@
 #' @param code Code to execute with the temporary token
 #' @param .local_envir The environment to use for scoping.
 #'
-#' @details if `NA` is used the `GITHUB_PAT` environment variable will be unset.
+#' @details if `new = NA` is used the `GITHUB_PAT` environment variable will be unset.
 #'
+NULL
 
+#' @rdname github_with_pat
 #' @export
 #'
 with_pat = function(new, code) {
@@ -17,7 +22,7 @@ with_pat = function(new, code) {
   withr::with_envvar(c("GITHUB_PAT" = new), code, action = "replace")
 }
 
-#' @rdname with_pat
+#' @rdname github_with_pat
 #' @export
 #'
 local_pat = function(new, .local_envir = parent.frame()) {

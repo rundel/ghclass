@@ -1,4 +1,42 @@
-#' @rdname github
+#' @name github_token
+#' @rdname github_token
+#'
+#' @title Tools for handling GitHub personal access tokens (PAT)
+#'
+#' @description
+#' * `github_get_token` - returns the user's GitHub personal access token (PAT).
+#'
+#' * `github_set_token` - defines the user's GitHub PAT by setting the `GITHUB_PAT` enivronmental variable. This value can then
+#'
+#' * `github_reset_token` - removes the value stored in the `GITHUB_PAT` environmental variable.
+#'
+#' * `github_test_token` - checks if a PAT is valid by attempting to authenticate with the GitHub API
+#'
+#' @param token Character. Either the literal token path, or the path to a file containing the token.
+#'
+#' @details
+#' This package looks for the personal access token (PAT) in the following places (in order):
+#' * Value of `GITHUB_PAT` environmental variable.
+#' * Value of `GITHUB_TOKEN` environmental variable.
+#' * Contents of `~/.github/token` file.
+#'
+#' @examples
+#' # Set and get the PAT
+#' github_set_token("~/.github/token")
+#' github_set_token("0123456789ABCDEF")
+#' pat = github_get_token()
+#' pat
+#'
+#' # Test the PAT
+#' github_reset_token()
+#' try(github_test_token())
+#' try(github_test_token("bad_token"))
+
+NULL
+
+
+
+#' @rdname github_token
 #' @export
 #'
 github_get_token = function() {
@@ -20,9 +58,7 @@ github_get_token = function() {
   ) )
 }
 
-#' @param token Character. Either the literal token path, or the path of a file containing the token.
-#'
-#' @rdname github
+#' @rdname github_token
 #' @export
 #'
 github_set_token = function(token) {
@@ -36,14 +72,14 @@ github_set_token = function(token) {
   Sys.setenv(GITHUB_PAT = token)
 }
 
-#' @rdname github
+#' @rdname github_token
 #' @export
 #'
 github_reset_token = function() {
   Sys.unsetenv("GITHUB_PAT")
 }
 
-#' @rdname github
+#' @rdname github_token
 #' @export
 #'
 github_test_token = function(token = github_get_token()) {
