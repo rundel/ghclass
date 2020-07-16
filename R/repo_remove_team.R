@@ -54,8 +54,8 @@ repo_remove_team = function(
 
       status_msg(
         res,
-        "Added team {.val {team}} to repo {.val {repo}} with {.val {permission}} access.",
-        "Failed to add team {.val {team}} to repo {.val {repo}}."
+        "Removed team {.val {team}} from repo {.val {repo}}.",
+        "Failed to remove team {.val {team}} from repo {.val {repo}}."
       )
     }
   )

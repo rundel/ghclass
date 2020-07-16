@@ -20,19 +20,21 @@ team_invite = function(org, user, team, team_type = c("name", "slug")) {
 
 
   if (team_type == "name")
-    team = team_slug_lookup(org, team)
+    slug = team_slug_lookup(org, team)
+  else
+    slug = team
 
-  check_team_slug(team)
+  check_team_slug(slug)
 
-  r = purrr::map2(
-    user, team,
-    function(user, team) {
-      if (is.na(team)) {
-        cli::cli_alert_danger("Failed to find team {.val {team}} in org {.val {org}}.")
+  r = purrr::pmap(
+    tibble::tibble(user, team, slug),
+    function(user, team, slug) {
+      if (is.na(slug)) {
+        cli::cli_alert_danger("Team {.val {team}} does not exist in org {.val {org}}.")
         return(NULL)
       }
 
-      res = purrr::safely(github_api_team_invite)(org, team, user)
+      res = purrr::safely(github_api_team_invite)(org, slug, user)
 
       status_msg(
         res,

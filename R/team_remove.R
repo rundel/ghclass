@@ -11,24 +11,26 @@ github_api_team_remove = function(org, team_slug, username) {
 #' @rdname team_members
 #' @export
 team_remove = function(org, user, team, team_type = c("name", "slug")) {
-
   arg_is_chr_scalar(org)
   arg_is_chr(user, team)
+  team_type = match.arg(team_type)
 
   if (team_type == "name")
-    team = team_slug_lookup(org, team)
+    slug = team_slug_lookup(org, team)
+  else
+    slug = team
 
-  check_team_slug(team)
+  check_team_slug(slug)
 
-  r = purrr::map2(
-    user, team,
-    function(user, team) {
-      if (is.na(team)) {
+  r = purrr::pmap(
+    tibble::tibble(user, team, slug),
+    function(user, team, slug) {
+      if (is.na(slug)) {
         cli::cli_alert_danger("Team {.val {team}} does not exist in org {.val {org}}.")
         return(NULL)
       }
 
-      res = purrr::safely(github_api_team_remove)(org, team, user)
+      res = purrr::safely(github_api_team_remove)(org, slug, user)
 
       status_msg(
         res,
