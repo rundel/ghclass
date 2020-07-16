@@ -1,39 +1,29 @@
 github_api_repo_rename = function(repo, new_name){
-  gh::gh(
-    "PATCH /repos/:owner/:repo",
+  ghclass_api_v3_req(
+    endpoint = "PATCH /repos/:owner/:repo",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
-    name = new_name,
-    .token = github_get_token()
+    name = new_name
   )
 }
 
-#' Rename repository
-#'
-#' `repo_rename` renames repositories. Use with caution as repositories retain their
-#' unique identifier upon renaming and can be accessed under their old names due to
-#' GitHub re-directing.
-#'
-#' @param repo Character. Address of repository in "owner/name" format.
-#' @param new_name Character. New name of repository in the "name" format.
-#'
-#' @examples
-#' \dontrun{
-#' repo_rename("ghclass-test/hw1", "homework1")
-#' }
-#'
+#' @rdname repo_core
+#' @param new_repo Character. New name of repository without the owner.
 #' @export
 #'
-repo_rename = function(repo, new_name) {
-  arg_is_chr(repo, new_name)
+repo_rename = function(repo, new_repo) {
+  arg_is_chr(repo, new_repo)
 
   purrr::walk2(
-    repo, new_name,
-    function(repo, new_name) {
+    repo, new_repo,
+    function(repo, new_repo) {
+      res = purrr::safely(github_api_repo_rename)(repo, new_repo)
+      new_full = paste0(get_repo_owner(repo), "/", new_repo)
+
       status_msg(
-        purrr::safely(github_api_repo_rename)(repo, new_name),
-        glue::glue("Renamed repo {usethis::ui_value(repo)} to {usethis::ui_value(new_name)}."),
-        glue::glue("Failed to rename repo {usethis::ui_value(repo)} to {usethis::ui_value(new_name)}.")
+        res,
+        "Renamed repo {.val {repo}} to {.val {new_full}}.",
+        "Failed to rename repo {.val {repo}} to {.val {new_full}}."
       )
     }
   )

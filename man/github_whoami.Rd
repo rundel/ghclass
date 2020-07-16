@@ -2,12 +2,15 @@
 % Please edit documentation in R/github_whoami.R
 \name{github_whoami}
 \alias{github_whoami}
-\title{Get github login}
+\title{Returns the login of the authenticated user (based on the current PAT).}
 \usage{
-github_whoami()
+github_whoami(quiet = FALSE)
+}
+\arguments{
+\item{quiet}{Logical. Should status messages be shown.}
 }
 \description{
-\code{github_whoami} returns the login of the authenticated user.
+Returns the login of the authenticated user (based on the current PAT).
 }
 \examples{
 \dontrun{

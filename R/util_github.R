@@ -1,10 +1,9 @@
 github_api_repo_tree = function(repo, sha = "master") {
-  gh::gh(
-    "GET /repos/:owner/:repo/git/trees/:sha?recursive=1",
+  ghclass_api_v3_req(
+    endpoint = "GET /repos/:owner/:repo/git/trees/:sha?recursive=1",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
-    sha = sha,
-    .token = github_get_token()
+    sha = sha
   )
 }
 
@@ -14,10 +13,10 @@ repo_files = function(repo, branch = "master") {
     function(repo, branch) {
 
       res = purrr::safely(github_api_repo_tree)(repo, branch)
+      repo_txt = format_repo(repo, branch)
 
       if (failed(res)) {
-        r = usethis::ui_value(format_repo(repo, branch))
-        usethis::ui_oops("Failed to retrieve files for repo {r}")
+        cli::cli_alert_danger("Failed to retrieve files for repo {.val {repo_txt}}")
         return(NULL)
       }
 
@@ -29,11 +28,10 @@ repo_files = function(repo, branch = "master") {
 github_api_org_accept_invite = function(org, token) {
   arg_is_chr_scalar(org, token)
 
-  gh::gh(
-    "PATCH /user/memberships/orgs/:org",
+  ghclass_api_v3_req(
+    endpoint = "PATCH /user/memberships/orgs/:org",
     org = org,
-    state = "active",
-    .token = token
+    state = "active"
   )
 }
 
@@ -47,27 +45,20 @@ org_accept_invite = function(org, user, pat) {
 
       status_msg(
         res,
-        glue::glue("Accepted {usethis::ui_value(user)}s invite to org {usethis::ui_value(org)}."),
-        glue::glue("Failed to accept {usethis::ui_value(user)}s invite to org {usethis::ui_value(org)}.")
+        "Accepted {.val {user}}s invite to org {.val {org}}.",
+        "Failed to accept {.val {user}}s invite to org {.val {org}}."
       )
     }
   )
 }
 
 # Extracts base64 encoded content from files
-extract_content = function(repo, path, file, include_details = TRUE) {
-  if (is.null(file)) {
-    usethis::ui_oops( paste(
-      "Unable to retrieve file {usethis::ui_value(path)}",
-      "from repo {usethis::ui_value(repo)}."
-    ) )
-    return(invisible(NULL))
-  }
-  if (is.null(file[["content"]])) {
-    usethis::ui_oops( paste(
-      "Unable to retrieve {usethis::ui_value(path)} in",
-      "repo {usethis::ui_value(repo)} is not a file."
-    ) )
+extract_content = function(repo, path, file, include_details = TRUE, quiet = FALSE) {
+  if (is.null(file) | is.null(file[["content"]])) {
+    if (!quiet)
+      cli::cli_alert_danger(
+        "Unable to retrieve file {.val {path}} from repo {.val {repo}}."
+      )
     return(invisible(NULL))
   }
 
@@ -83,9 +74,10 @@ extract_content = function(repo, path, file, include_details = TRUE) {
 }
 
 github_api_code_search = function(query) {
-  gh::gh("GET /search/code", q = query,
-         .token = github_get_token(),
-         .limit = github_get_api_limit())
+  ghclass_api_v3_req(
+    endpoint = "GET /search/code",
+    q = query
+  )
 }
 
 
@@ -106,7 +98,7 @@ find_file = function(repo, file, verbose = TRUE){
         if(res[["total_count"]] > 0){
           purrr::map_chr(res[["items"]], "path")
         } else if (verbose){
-          usethis::ui_oops("Cannot find file {usethis::ui_value(file)} on {usethis::ui_value(repo)}.")
+          cli::cli_alert_danger("Cannot find file {.val {file}} on {.val {repo}}.")
         }
       }
     )
@@ -133,4 +125,40 @@ check_file_modification = function(repo, path, branch = "master"){
 
 response_status = function(x) {
   attr(x, "response")[["status"]]
+}
+
+# Modified from gh:::gh_set_verb
+endpoint_verb = function(x) {
+  if (!nzchar(x))
+    return(NA)
+
+  if (grepl("^/", x) || grepl("^http", x)) {
+     method = "GET"
+  } else {
+    method = gsub("^([^/ ]+)\\s+.*$", "\\1", x)
+  }
+
+  stopifnot(method %in% c("GET", "POST", "PATCH", "PUT", "DELETE"))
+
+  method
+}
+
+
+ghclass_api_v3_req = function(endpoint, ...) {
+  method = endpoint_verb(endpoint)
+  if (method == "GET") {
+    limit = github_get_api_limit()
+  } else { # Some non-GET methods don't like having a limit set
+    limit = NULL
+  }
+
+  suppressMessages(
+    gh::gh(
+      endpoint = endpoint,
+      ...,
+      .limit = limit,
+      .token = github_get_token()
+      # .progress = FALSE # TODO - giving an error for some reason
+    )
+  )
 }

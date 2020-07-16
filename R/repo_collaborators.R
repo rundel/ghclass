@@ -1,39 +1,17 @@
 github_api_repo_collaborators = function(repo) {
-  gh::gh(
-    "GET /repos/:owner/:repo/collaborators",
+  ghclass_api_v3_req(
+    endpoint = "GET /repos/:owner/:repo/collaborators",
     owner = get_repo_owner(repo),
-    repo = get_repo_name(repo),
-    .token = github_get_token(),
-    .limit = github_get_api_limit()
+    repo = get_repo_name(repo)
   )
 }
 
-#' List collaborator(s)
-#'
-#' `repo_collaborators` Returns a vector of collaborator user names. Users with admin rights are by default excluded.
-#'
-#' @param repo Character. Address of one or more repositories in `owner/name` format.
-#' @param include_admins Logical. If `FALSE`, user names of users with Admin rights are not included, defaults to `TRUE`.
-#'
-#' @return A tibble with two columns, `repo` and `username`.
-#'
-#' @examples
-#' \dontrun{
-#' repo_collaborators("ghclass-test/test2")
-#' }
-#'
+
+#' @rdname repo_user
 #' @export
 #'
 repo_collaborators = function(repo, include_admins = TRUE) {
-
   arg_is_chr(repo)
-
-  org = unique(get_repo_owner(repo))
-  stopifnot(length(org) == 1)
-
-  admin = character()
-  if (!include_admins)
-    admin = org_admins(org)
 
   purrr::map_dfr(
     repo,
@@ -41,7 +19,7 @@ repo_collaborators = function(repo, include_admins = TRUE) {
       res = purrr::safely(github_api_repo_collaborators)(repo)
       status_msg(
         res,
-        fail = glue::glue("Failed to retrieve collaborators for {usethis::ui_value(repo)}.")
+        fail = "Failed to retrieve collaborators for {.val {repo}}."
       )
 
       collabs = result(res)
@@ -49,16 +27,25 @@ repo_collaborators = function(repo, include_admins = TRUE) {
       d = if (empty_result(collabs)) {
         tibble::tibble(
           repo = character(),
-          username = character()
+          username = character(),
+          pull  = logical(),
+          push  = logical(),
+          admin = logical()
         )
       } else {
         tibble::tibble(
           repo = repo,
-          username = purrr::map_chr(collabs, "login")
+          username = purrr::map_chr(collabs, "login"),
+          pull  = purrr::map_lgl(collabs, c("permissions", "pull")),
+          push  = purrr::map_lgl(collabs, c("permissions", "push")),
+          admin = purrr::map_lgl(collabs, c("permissions", "admin"))
         )
       }
 
-      d[!d[["username"]] %in% admin, ]
+      if (!include_admins)
+        d = dplyr::filter(d, !.data$admin)
+
+      d
     }
   )
 }

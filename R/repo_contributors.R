@@ -1,51 +1,28 @@
 github_api_repo_contributors = function(repo) {
-  gh::gh(
-    "GET /repos/:owner/:repo/stats/contributors",
+  ghclass_api_v3_req(
+    endpoint = "GET /repos/:owner/:repo/stats/contributors",
     owner = get_repo_owner(repo),
-    repo = get_repo_name(repo),
-    .token = github_get_token(),
-    .limit = github_get_api_limit()
+    repo = get_repo_name(repo)
   )
 }
 
-#' Get repository contributor(s)
-#'
-#' `repo_contributors` Returns a data frame containing statistics on contributor(s) to the provided repositories.
-#'
-#' @param repo Character. Address of one or more repositories in `owner/name` format.
-#' @param include_admins Logical. If `FALSE`, usernames of users with Admin rights are excluded, defaults to `TRUE`.
-#'
-#' @return A tibble.
-#'
-#' @examples
-#' \dontrun{
-#' repo_contributors("ghclass-test/test")
-#' }
-#'
+#' @rdname repo_user
 #' @export
 #'
-repo_contributors = function(repo, include_admins = TRUE) {
+repo_contributors = function(repo) {
 
   arg_is_chr(repo)
   repo = unique(repo)
 
-  admins = character()
-
-  if (!include_admins) {
-    org = unique(get_repo_owner(repo))
-    stopifnot(length(org) == 1)
-    admins = org_admins(org)
-  }
-
   purrr::map_dfr(
     repo,
     function(repo) {
-
       # Calculating these stats can take some time, initial request will begin the calculation
       # and return a 202, we wait n seconds and try again. Timeout after m seconds.
-
       res = purrr::safely(
         function() {
+          # TODO - fix me, oh god it is terrible
+
           for(i in 1:10) {
             r = github_api_repo_contributors(repo)
 
@@ -56,13 +33,13 @@ repo_contributors = function(repo, include_admins = TRUE) {
             Sys.sleep(1)
           }
 
-          usethis::ui_stop("Timeout, no response within 10 seconds.")
+          cli_stop("Timeout, no response within 10 seconds.")
         }
       )()
 
       status_msg(
         res,
-        fail = glue::glue("Failed to retrieve contributors for {usethis::ui_value(repo)}.")
+        fail = "Failed to retrieve contributors for {.val {repo}}."
       )
 
       contribs = result(res)
@@ -80,8 +57,6 @@ repo_contributors = function(repo, include_admins = TRUE) {
           commits = purrr::map_int(contribs, "total")
         )
       }
-
-      d[!d[["username"]] %in% admins, ]
     }
   )
 }

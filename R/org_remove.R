@@ -1,21 +1,25 @@
+# Remove org and team membership
 github_api_org_remove = function(org, user) {
-  gh::gh(
-    "DELETE /orgs/:org/members/:username",
+  ghclass_api_v3_req(
+    endpoint = "DELETE /orgs/:org/members/:username",
     org = org,
-    username = user,
-    .token = github_get_token()
+    username = user
   )
 }
 
-#' Remove a member from an organization
-#'
-#' `org_remove` removes a user from the organization and all teams within that organzation.
-#'
-#' @param org Character. Name of the GitHub organization.
-#' @param user Character. Name of one or more GitHub users.
-#' @param prompt Logical. Should the user be prompted before deleting repositories. Default `true`.
-#'
+# Only remove membership
+github_api_org_remove_membership = function(org, user) {
+  ghclass_api_v3_req(
+    "DELETE /orgs/:org/memberships/:username",
+    org = org,
+    username = user
+  )
+}
 
+# TODO - think about removing (or not) team membership
+
+#' @rdname org_members
+#' @param prompt Logical. Prompt before removing member from organization.
 #' @export
 #'
 org_remove = function(org, user, prompt = TRUE) {
@@ -25,24 +29,30 @@ org_remove = function(org, user, prompt = TRUE) {
   arg_is_lgl_scalar(prompt)
 
   if (prompt) {
-    delete = usethis::ui_yeah( paste(
-      "This command will delete the following users:",
-      "{usethis::ui_value(user)} from org {usethis::ui_value(org)}."
-    ) )
+    delete = cli_yeah(
+      "Org {.val {org}} will have the following {cli::qty(user)} user{?s} removed: ",
+      "{.val {user}}"
+    )
     if (!delete) {
       return(invisible())
     }
   }
 
-  purrr::walk(
-    user,
-    function(user) {
-      res = purrr::safely(github_api_org_remove)(org, user)
+  pending = user %in% org_pending(org)
 
+  purrr::walk2(
+    user, pending,
+    function(user, pending) {
+      if (pending)
+        res = purrr::safely(github_api_org_remove_membership)(org, user)
+      else
+        res = purrr::safely(github_api_org_remove)(org, user)
+
+      type = ternary(pending, "pending user", "user")
       status_msg(
         res,
-        glue::glue("Removed user {usethis::ui_value(user)} from org {usethis::ui_value(org)}."),
-        glue::glue("Failed to remove user {usethis::ui_value(user)} from org {usethis::ui_value(org)}.")
+        "Removed {type} {.val {user}} from org {.val {org}}.",
+        "Failed to remove {type} {.val {user}} from org {.val {org}}."
       )
     }
   )

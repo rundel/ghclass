@@ -1,6 +1,12 @@
-#' Get github login
+github_api_whoami = function() {
+  ghclass_api_v3_req(
+    endpoint = "GET /user"
+  )
+}
+
+#' Returns the login of the authenticated user (based on the current PAT).
 #'
-#' `github_whoami` returns the login of the authenticated user.
+#' @param quiet Logical. Should status messages be shown.
 #'
 #' @examples
 #' \dontrun{
@@ -8,7 +14,16 @@
 #' }
 #'
 #' @export
+#'
+github_whoami = function(quiet = FALSE) {
+  res = purrr::safely(github_api_whoami)()
 
-github_whoami = function() {
-  gh::gh_whoami()[["login"]]
+  if (!quiet) {
+    status_msg(
+      res,
+      fail = "Failed to retrieve whoami results."
+    )
+  }
+
+  result(res)[["login"]]
 }

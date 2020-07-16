@@ -8,22 +8,12 @@ read_bin_file = function(x) {
 }
 
 
-#' Add files to a repo
+#' @rdname repo_file
 #'
-#' `repo_add_file` uses the GitHub API to add/update files in an existing repo on GitHub. Note that due to time delays in caching, files that have been added very recently might not yet be displayed as existing and might accidentally be overwritten.
-#'
-#' @param repo Character. Address of repository in "owner/name" format.
 #' @param file Character. Local file path(s) of file or files to be added.
-#' @param message Character. Commit message. If not provided, a custom character string will be created, in the form of "Added file(s): filename(s)". If this custom message character length exceeds 50, it will be shortened to "Added file(s)".
 #' @param repo_folder Character. Name of folder on repository to save the file(s) to. If the folder does not exist on the repository, it will be created.
-#' @param branch Character. Name of branch to use, defaults to "master".
 #' @param preserve_path Logical. Should the local relative path be preserved.
 #' @param overwrite Logical. Should existing file or files with same name be overwritten, defaults to FALSE.
-#'
-#' @examples
-#' \dontrun{
-#' repo_add_file("rundel/ghclass", "./DESCRIPTION", "Update DESCRIPTION")
-#' }
 #'
 #' @export
 #'
@@ -34,9 +24,9 @@ repo_add_file = function(repo, file, message = NULL, repo_folder = NULL, branch 
   arg_is_chr_scalar(repo_folder, message, allow_null = TRUE)
   arg_is_lgl_scalar(preserve_path, overwrite)
 
-  file_status = fs::file_exists(file)
-  if (any(!file_status))
-    usethis::ui_stop("Unable to locate the following file(s): {usethis::ui_value(file[!file_status])}")
+  missing_files = file[!fs::file_exists(file)]
+  if (length(missing_files) != 0)
+    cli_stop("Unable to locate the following file{?s}: {.val {missing_files}}")
 
   if (is.character(file) & (length(file) > 1))
     file = list(file)
@@ -66,12 +56,9 @@ repo_add_file = function(repo, file, message = NULL, repo_folder = NULL, branch 
             )
           } else {
 
-            usethis::ui_oops( paste(
-              'Failed to add file {usethis::ui_value(gh_path)} to repo {usethis::ui_value(repo)}, this file already exists.\n',
-              if (check_file_modification(repo, gh_path, branch)) {
-                'File has been modified after initial commit.\n'
-              },
-              'If you want to force add this file, re-run the command with {usethis::ui_code("overwrite = TRUE")}.'
+            cli::cli_alert_danger( c(
+              "Failed to add file {.val {gh_path}} to repo {.val {repo}}, this file already exists. ",
+              "If you want to force add this file, re-run the command with {.code overwrite = TRUE}."
             ) )
           }
         }

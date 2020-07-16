@@ -1,30 +1,18 @@
 github_api_org_invite = function(org, user) {
   arg_is_chr_scalar(org, user)
 
-  gh::gh(
-    "PUT /orgs/:org/memberships/:username",
+  ghclass_api_v3_req(
+    endpoint = "PUT /orgs/:org/memberships/:username",
     org = org,
     username = user,
-    role = "member",
-    .token = github_get_token()
+    role = "member"
   )
 }
 
 
-#' Invite user(s)
-#'
-#' `org_invite` invites user(s) to your organization.
-#'
-#' @param org Character. Name of the GitHub organization.
-#' @param user Character, character vector, or list. Listing one or more user names.
-#'
-#' @examples
-#' \dontrun{
-#' user = c("Alice","Bob","Carol","Dave","Eve")
-#' org_invite("Sta523-Fa17", user)
-#' }
-#'
+#' @rdname org_members
 #' @export
+#'
 org_invite = function(org, user) {
   arg_is_chr_scalar(org)
   arg_is_chr(user)
@@ -37,16 +25,16 @@ org_invite = function(org, user) {
     user,
     function(user) {
       if (user %in% member) {
-        usethis::ui_info("User {usethis::ui_value(user)} is already a member of org {usethis::ui_value(org)}.")
+        cli::cli_alert_info("User {.val {user}} is already a member of org {.val {org}}.")
       } else if (user %in% pending) {
-        usethis::ui_info("User {usethis::ui_value(user)} is already a pending member of org {usethis::ui_value(org)}.")
+        cli::cli_alert_info("User {.val {user}} is already a pending member of org {.val {org}}.")
       } else {
         res = purrr::safely(github_api_org_invite)(org, user)
 
         status_msg(
           res,
-          glue::glue("Invited user {usethis::ui_value(user)} to org {usethis::ui_value(org)}."),
-          glue::glue("Failed to invite user {usethis::ui_value(user)} to org {usethis::ui_value(org)}: does not exist.")
+          "Invited user {.val {user}} to org {.val {org}}.",
+          "Failed to invite user {.val {user}} to org {.val {org}}: does not exist."
         )
       }
     }

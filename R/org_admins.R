@@ -1,23 +1,12 @@
 github_api_org_admins = function(owner){
-  gh::gh("GET /orgs/:owner/members",
-         owner = owner,
-         role = "admin",
-         .token = github_get_token(),
-         .limit = github_get_api_limit())
+  ghclass_api_v3_req(
+    endpoint = "GET /orgs/:owner/members",
+    owner = owner,
+    role = "admin"
+  )
 }
 
-#' List repository administrators
-#'
-#' @param org Character. Name of a GitHub organization.
-#'
-#' @examples
-#' \dontrun{
-#' org_admins("ghclass-test")
-#' org_admins("rundel")
-#' }
-#'
-#' @return A character vector of repository administrators.
-#'
+#' @rdname org_members
 #' @export
 #'
 org_admins = function(org) {
@@ -31,7 +20,7 @@ org_admins = function(org) {
       return(org)
     }
 
-    usethis::ui_stop(glue::glue("Failed to retrieve admins for org {usethis::ui_value(org)}."))
+    cli_stop("Failed to retrieve admins for org {.val {org}}.")
   } else {
     purrr::map_chr(result(res), "login")
   }

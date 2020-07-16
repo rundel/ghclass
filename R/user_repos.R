@@ -1,41 +1,21 @@
 github_api_user_repos = function(owner, type) {
   arg_is_chr_scalar(owner)
 
-  gh::gh(
-    "GET /users/:owner/repos",
+  ghclass_api_v3_req(
+    endpoint = "GET /users/:owner/repos",
     owner = owner,
-    type = type,
-    .token = github_get_token(),
-    .limit = github_get_api_limit()
+    type = type
   )
 }
 
 github_api_your_repos = function(type) {
-  gh::gh(
-    "GET /user/repos",
-    type = type,
-    .token = github_get_token(),
-    .limit = github_get_api_limit()
+  ghclass_api_v3_req(
+    endpoint = "GET /user/repos",
+    type = type
   )
 }
 
-#' Get user's repository
-#'
-#' `user_repos` returns a (filtered) vector of repositories belonging to a GitHub user.
-#'
-#' @param user Character. Username of the GitHub user.
-#' @param type Characer. Can be one of "all", "owner", "public", "private", "member".
-#' @param filter Character. Regular expression pattern for matching (or excluding) repositories.
-#' @param exclude Logical. Should entries matching the regular expression in `filter` be excluded or included?
-#' @param full_repo Logical. Should the full repository address be returned (e.g. `owner/name` instead of just `repo`)?
-#'
-#'
-#' @examples
-#' \dontrun{
-#' user_repos("rundel")
-#' user_repos("rundel", "ghclass")
-#' }
-#'
+#' @rdname user
 #' @export
 #'
 user_repos = function(user, type = c("owner", "all", "public", "private", "member"),
@@ -56,7 +36,7 @@ user_repos = function(user, type = c("owner", "all", "public", "private", "membe
     }
   )()
 
-  status_msg(res, fail = "Failed to retrieve repos for user {usethis::ui_value(user)}.")
+  status_msg(res, fail = "Failed to retrieve repos for user {.val {user}}.")
 
   if (failed(res))
     return(invisible(NULL))

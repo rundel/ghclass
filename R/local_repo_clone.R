@@ -1,22 +1,12 @@
-#' @title Local repository tools
-#'
-#' @description Clones repositories from GitHub to a local directory.
+#' @rdname local_repo
 #'
 #' @param repo GitHub repo address with the form `owner/name`.
 #' @param local_path Local directory to store cloned repos.
-#' @param branch Repository branch to use.
-#' @param mirror Use equivalent of `--mirror` when cloning.
-#' @param verbose Display verbose output.
-#'
-#' @examples
-#' \dontrun{
-#' g = org_repos("Sta323-Sp18","hw3-")
-#' local_repo_clone(g, "hw3")
-#' }
 #'
 #' @aliases repo_clone
 #'
 #' @export
+#'
 local_repo_clone = function(repo, local_path=".", branch = "master", mirror = FALSE, verbose = FALSE) {
   require_gert()
 
@@ -44,15 +34,19 @@ local_repo_clone = function(repo, local_path=".", branch = "master", mirror = FA
 
       status_msg(
         res,
-        glue::glue("Cloned {usethis::ui_value(fmt_repo)}."),
-        glue::glue("Failed to clone {usethis::ui_value(fmt_repo)}.")
+        "Cloned {.val {fmt_repo}}.",
+        "Failed to clone {.val {fmt_repo}}."
       )
 
-      res
+      # TODO - think about should this be NULL or NA
+      ternary(succeeded(res), dir, NULL)
     }
   )
 
-  invisible(res)
+  dirs = purrr::flatten_chr(res)
+  names(dirs) = repo
+
+  invisible(dirs)
 }
 
 #' @export

@@ -47,8 +47,14 @@
 
 
 <meta property="og:title" content="Create a team or individual assignment — org_create_assignment" />
-<meta property="og:description" content="This is a higher level function that combines the following steps:" />
-<meta property="og:image" content="/logo.png" />
+<meta property="og:description" content="This is a higher level function that combines the following steps:
+Create repos
+Create teams and invite students if necessary
+Add teams or individuals to the repositories
+Mirror a template repository to assignment repositories
+
+" />
+<meta property="og:image" content="https://rundel.github.io/ghclass/logo.png" />
 
 
 
@@ -80,7 +86,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ghclass</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -93,25 +99,13 @@
   </a>
 </li>
 <li>
-  <a href="../articles/ghclass.html">Get started</a>
+  <a href="../articles/articles/ghclass.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/instructions_students.html">Peer review instructions for students</a>
-    </li>
-    <li>
-      <a href="../articles/peer.html">Peer review with ghclass</a>
-    </li>
-  </ul>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -140,7 +134,13 @@
     </div>
 
     <div class="ref-description">
-    <p>This is a higher level function that combines the following steps:</p>
+    <p>This is a higher level function that combines the following steps:</p><ul>
+<li><p>Create repos</p></li>
+<li><p>Create teams and invite students if necessary</p></li>
+<li><p>Add teams or individuals to the repositories</p></li>
+<li><p>Mirror a template repository to assignment repositories</p></li>
+</ul>
+
     </div>
 
     <pre class="usage"><span class='fu'>org_create_assignment</span>(
@@ -169,7 +169,7 @@
     </tr>
     <tr>
       <th>team</th>
-      <td><p>Character. Team names, if `NULL`` an individual assignment will be created.</p></td>
+      <td><p>Character. Team names, if not provided an individual assignment will be created.</p></td>
     </tr>
     <tr>
       <th>source_repo</th>
@@ -180,16 +180,6 @@
       <td><p>Logical. Should the created repositories be private.</p></td>
     </tr>
     </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    
-<ol>
-<li><p>Create repos</p></li>
-<li><p>Create teams and invite students if necessary</p></li>
-<li><p>Add teams or individuals to the repositories</p></li>
-<li><p>Mirror a template repository to assignment repositories</p></li>
-</ol>
 
 
   </div>
@@ -203,7 +193,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Colin Rundel, Mine Cetinkaya-Rundel.</p>
+  <p>Developed by <a href='https://rundel.github.io'>Colin Rundel</a>, Mine Cetinkaya-Rundel.</p>
 </div>
 
 <div class="pkgdown">

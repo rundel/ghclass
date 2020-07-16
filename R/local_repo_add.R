@@ -1,5 +1,6 @@
 #' @rdname local_repo
 #' @export
+#'
 local_repo_add = function(repo_dir, files = ".") {
   require_gert()
   arg_is_chr(repo_dir, files)
@@ -19,8 +20,8 @@ local_repo_add = function(repo_dir, files = ".") {
       repo = fs::path_file(dir)
       status_msg(
         res,
-        glue::glue("Added files {usethis::ui_value(files)} to {usethis::ui_value(repo)}."),
-        glue::glue("Failed to add files {usethis::ui_value(files)} to {usethis::ui_value(repo)}.")
+        "Added files {.val {files}} to {.val {repo}}.",
+        "Failed to add files {.val {files}} to {.val {repo}}."
       )
 
       res

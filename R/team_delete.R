@@ -1,53 +1,51 @@
-github_api_team_delete = function(team_id) {
-  gh::gh("DELETE /teams/:team_id",
-         team_id = team_id,
-         .token = github_get_token())
+github_api_team_delete = function(org, team_slug) {
+  ghclass_api_v3_req(
+    endpoint = "DELETE /orgs/:org/teams/:team_slug",
+    org = org,
+    team_slug = team_slug
+  )
 }
 
-#' Delete team
-#'
-#' `team_delete` deletes an existing team from a GitHub organization.
-#'
-#' @param org Character. Name of the GitHub organization.
-#' @param team Character. Name of the GitHub team within that organization.
-#' @param prompt Logical. Should the user be prompted before deleting repositories. Default `true`.
-#'
+#' @rdname team
 #' @export
 #'
-team_delete = function(org, team, prompt = TRUE) {
+team_delete = function(org, team, team_type = c("name", "slug"), prompt = TRUE) {
 
   arg_is_chr_scalar(org)
-  arg_is_chr(team, allow_null = TRUE)
+  arg_is_chr(team)
   arg_is_lgl_scalar(prompt)
+  team_type = match.arg(team_type)
 
   if (prompt) {
-    delete = usethis::ui_yeah( paste(
-      "This command will delete the following teams permanently:",
-      "{usethis::ui_value(team)}."
-    ) )
+    delete = cli_yeah("This command will delete the following teams permanently: {.val {team}}.")
     if (!delete) {
       return(invisible())
     }
   }
 
-  team = team_id_lookup(team, org)
+  if (team_type == "name")
+    team = team_slug_lookup(org, team)
 
-  purrr::pwalk(
+  check_team_slug(team)
+
+  r = purrr::map(
     team,
-    function(team, id) {
+    function(team) {
 
-      if (is.na(id)) {
-        usethis::ui_oops("Team {usethis::ui_value(team)} does not exist in org {usethis::ui_value(org)}.")
+      if (is.na(team)) {
+        cli::cli_alert_danger("Team {.val {team}} does not exist in org {.val {org}}.")
         return()
       }
 
-      res = purrr::safely(github_api_team_delete)(id)
+      res = purrr::safely(github_api_team_delete)(org, team)
 
       status_msg(
         res,
-        glue::glue("Deleted team {usethis::ui_value(team)} from org {usethis::ui_value(org)}."),
-        glue::glue("Failed to delete team {usethis::ui_value(team)} from org {usethis::ui_value(org)}.")
+        "Deleted team {.val {team}} from org {.val {org}}.",
+        "Failed to delete team {.val {team}} from org {.val {org}}."
       )
     }
   )
+
+  invisible(r)
 }

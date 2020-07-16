@@ -45,28 +45,20 @@
 
 
 github_api_repo_commits = function(repo, sha=NULL, path=NULL, author=NULL, since=NULL, until=NULL) {
-  args = list(
+  ghclass_api_v3_req(
     endpoint = "GET /repos/:owner/:repo/commits",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
-    .token = github_get_token()
+    sha = sha,
+    path = path,
+    author = author,
+    since = since,
+    until = until
   )
-
-  args[["sha"]] = sha
-  args[["path"]] = path
-  args[["author"]] = author
-  args[["since"]] = since
-  args[["until"]] = until
-
-  do.call(gh::gh, args)
 }
 
-#' Get repository commits
+#' @rdname repo_details
 #'
-#' `repo_commits` returns a tibble of repositories belonging to a GitHub organization along with some
-#' basic statistics about those repositories.
-#'
-#' @param repo   Character. Address of repository in `owner/name` format.
 #' @param branch Character.	Branch to list commits from.
 #' @param sha	   Character.	SHA to start listing commits from.
 #' @param path	 Character.	Only commits containing this file path will be returned.
@@ -74,11 +66,6 @@ github_api_repo_commits = function(repo, sha=NULL, path=NULL, author=NULL, since
 #' @param since	 Character.	Only commits after this date will be returned, expects `YYYY-MM-DDTHH:MM:SSZ` format.
 #' @param until	 Character.	Only commits before this date will be returned, expects `YYYY-MM-DDTHH:MM:SSZ` format.
 #' @param quiet  Logical. Should an error message be printed if the repo does not exist.
-#'Character.
-#' @examples
-#' \dontrun{
-#' org_repo_stats("ghclass")
-#' }
 #'
 #' @export
 #'
@@ -104,7 +91,7 @@ repo_commits = function(repo, branch = "master", sha = branch, path = NULL,
       if (!quiet) {
         status_msg(
           res,
-          fail = glue::glue("Failed to retrieve commits from {usethis::ui_value(repo)}.")
+          fail = "Failed to retrieve commits from {.val {repo}}."
         )
       }
 
@@ -113,18 +100,18 @@ repo_commits = function(repo, branch = "master", sha = branch, path = NULL,
       if (empty_result(commits)) {
         tibble::tibble(
           repo  = character(),
+          login = character(),
           name  = character(),
           email = character(),
-          login = character(),
           date  = as.POSIXct(character()),
           msg   = character()
         )
       } else {
         tibble::tibble(
           repo  = repo,
+          login = purrr::map_chr(commits, c("author", "login"), .default = NA),
           name  = purrr::map_chr(commits, c("commit", "author","name"), .default = NA),
           email = purrr::map_chr(commits, c("commit", "author","email"), .default = NA),
-          login = purrr::map_chr(commits, c("author", "login"), .default = NA),
           date  = lubridate::ymd_hms(
             purrr::map_chr(commits, c("commit", "author", "date"), .default = NA)
           ),

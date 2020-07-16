@@ -1,5 +1,6 @@
 #' @rdname local_repo
 #' @export
+#'
 local_repo_push = function(repo_dir, remote = "origin", branch = "master",
                            force = FALSE, prompt = TRUE, mirror = FALSE,
                            verbose = FALSE) {
@@ -13,16 +14,15 @@ local_repo_push = function(repo_dir, remote = "origin", branch = "master",
   res = purrr::pmap(
     list(dir, remote, branch),
     function(dir, remote, branch) {
+      repo = fs::path_file(dir)
+      ref = paste(remote, branch, sep="/")
 
       run = TRUE
       if (prompt & force) {
         remotes = gert::git_remote_list(repo_dir)
         repo = remotes$url[remotes$name == remote]
 
-        run = usethis::ui_yeah( paste(
-          "This command will overwrite the branch",
-          "{usethis::ui_value(branch)} from repo {usethis::ui_value(repo)}."
-        ) )
+        run = cli_yeah("This command will overwrite the branch {.val {branch}} from repo {.val {repo}}.")
       }
 
       if (run) {
@@ -33,15 +33,13 @@ local_repo_push = function(repo_dir, remote = "origin", branch = "master",
           verbose = verbose
         )
       } else {
-        res = purrr::safely(usethis::ui_stop)("User canceled (force push) overwrite of branch.")
+        cli::cli_alert_danger("User canceled force push (overwrite) of {.val {ref}}")
       }
 
-      repo = fs::path_file(dir)
-      ref = paste(remote, branch, sep="/")
       status_msg(
         res,
-        glue::glue("Pushed from {usethis::ui_value(fs::path_file(repo))} to {usethis::ui_value(ref)}."),
-        glue::glue("Failed to push from {usethis::ui_value(repo)} to {usethis::ui_value(ref)}.")
+        "Pushed from local repo {.val {fs::path_file(repo)}} to {.val {ref}}.",
+        "Failed to push from local repo {.val {repo}} to {.val {ref}}."
       )
 
       res

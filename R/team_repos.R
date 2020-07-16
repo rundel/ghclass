@@ -1,46 +1,41 @@
-github_api_team_repos = function(team_id) {
-  gh::gh(
-    "GET /teams/:id/repos",
-    id=team_id,
-    .token = github_get_token(),
-    .limit = github_get_api_limit()
+github_api_team_repos = function(org, team_slug) {
+  ghclass_api_v3_req(
+    endpoint = "GET /orgs/:org/teams/:team_slug/repos",
+    team_slug = team_slug
   )
 }
 
-#' Get teams' repos
-#'
-#' `team_repos` returns a (filtered) data frame of teams and their repos.
-#'
-#' @param org character, name of the GitHub organization.
-#' @param team character or data frame, listing one or more team
-#'
-#' @examples
-#' \dontrun{
-#' team_repos("ghclass",c("team01","team02"))
-#' }
-#'
+
+#' @rdname team_members
 #' @export
 #'
-team_repos = function(org, team) {
+team_repos = function(org, team = org_teams(org), team_type = c("name", "slug")) {
   arg_is_chr_scalar(org)
   arg_is_chr(team)
+  team_type = match.arg(team_type)
 
-  team = team_id_lookup(team, org)
+  if (team_type == "name")
+    team = team_slug_lookup(org, team)
 
-  purrr::pmap_dfr(
+  check_team_slug(team)
+
+  purrr::map_dfr(
     team,
-    function(team, id) {
-      res = purrr::safely(github_api_team_repos)(id)
+    function(team) {
+      if (is.na(team))
+        res = NULL
+      else
+        res = purrr::safely(github_api_team_repos)(org, team)
 
-      if (succeeded(res) & !empty_result(result(res))) {
-        tibble::tibble(
-          team = team,
-          repo = purrr::map_chr(result(res), "full_name")
-        )
-      } else {
+      if (failed(res) | empty_result(res)) {
         tibble::tibble(
           team = character(),
           repo = character()
+        )
+      } else {
+        tibble::tibble(
+          team = team,
+          repo = purrr::map_chr(result(res), "full_name")
         )
       }
     }

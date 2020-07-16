@@ -1,26 +1,13 @@
 github_api_repo_watching = function() {
-  gh::gh(
-    "GET /user/subscriptions",
-    .token = github_get_token(),
-    .limit = github_get_api_limit()
+  ghclass_api_v3_req(
+    endpoint = "GET /user/subscriptions"
   )
 }
 
-#' Get watched repos
-#'
-#' Returns all of the authenticated user's watched repositories. This should
-#' match the list at [github.com/watching](https://github.com/watching).
-#' The function can also filter the results for matching (or excluding)
-#' repositories.
+#' @rdname repo_notification
 #'
 #' @param filter character, regex pattern for matching (or excluding) repositories.
 #' @param exclude logical, should entries matching the regex be excluded or included.
-#'
-#' @examples
-#' \dontrun{
-#' repo_watching()
-#' repo_watching("hw1")
-#' }
 #'
 #' @export
 #'

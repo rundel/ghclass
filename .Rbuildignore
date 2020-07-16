@@ -10,3 +10,9 @@ credentials/
 .pre-commit-config.yaml
 .github/
 README.Rmd
+pkgdown/
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+vignettes/articles/
+Makefile

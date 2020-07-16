@@ -1,10 +1,18 @@
-#' Change the template status of a GitHub repository
-#'
-#' `repo_set_template` returns TRUE if the github repository is a template repository.
-#'
-#' @param repo Character. Address of repository in "owner/name" format.
+github_api_repo_edit = function(repo, ...) {
+  arg_is_chr_scalar(repo)
+
+  ghclass_api_v3_req(
+    endpoint = "PATCH /repos/:owner/:repo",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    ...,
+    # Needed for template repos
+    .send_headers = c(Accept = "application/vnd.github.baptiste-preview+json")
+  )
+}
+
+#' @rdname repo_core
 #' @param status Logical. Should the repository be set as a template repository
-#'
 #' @export
 #'
 repo_set_template = function(repo, status = TRUE) {
@@ -19,11 +27,8 @@ repo_set_template = function(repo, status = TRUE) {
       res = purrr::safely(github_api_repo_edit)(repo, is_template = status)
       status_msg(
         res,
-        glue::glue( paste0(
-          "Changed the template status of repo {usethis::ui_value(repo)} ",
-          "to {usethis::ui_value(status)}."
-        ) ),
-        glue::glue("Failed to change template status of repo {usethis::ui_value(repo)}.")
+        "Changed the template status of repo {.val {repo}} to {.val {status}}.",
+        "Failed to change template status of repo {.val {repo}}."
       )
     }
   )

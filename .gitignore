@@ -7,3 +7,5 @@ inst/doc
 .DS_Store
 doc
 Meta
+vignettes/articles/cache/
+docs

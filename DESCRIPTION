@@ -1,6 +1,6 @@
 Package: ghclass
-Title: Tools for managing classes with github
-Version: 0.1.0
+Title: Tools for Managing Classes on GitHub
+Version: 0.2.0
 Authors@R: 
     c(person(given = "Colin",
              family = "Rundel",
@@ -14,7 +14,11 @@ Authors@R:
              family = "Anders",
              role = "ctb",
              email = "tanders@usc.edu"))
-Description: Tools for managing classes with github.
+Description: This  package is designed to enable instructors to 
+    efficiently manage their courses on GitHub. It has a wide range 
+    of functionality for managing organizations, teams, repositories, 
+    and users on GitHub and helps automate most of the tedious and 
+    repetitive tasks around creating and distributing assignments.
 License: GPL-3 + file LICENSE
 URL: https://github.com/rundel/ghclass
 BugReports: https://github.com/rundel/ghclass/issues
@@ -22,32 +26,29 @@ Depends:
     R (>= 3.4.0)
 Imports: 
     base64enc,
-    crayon,
     fs,
-    gert (>= 0.3),
     gh,
     glue,
     httr,
     lubridate,
     purrr,
-    readr,
     rlang,
-    stats,
     tibble,
-    tidyr,
-    usethis,
     whisker,
     withr,
-    yaml,
-    dplyr
+    dplyr,
+    cli
 Suggests: 
     here,
     knitr,
     rmarkdown,
     sodium,
-    styler
+    styler,
+    usethis,
+    gert,
+    asciicast,
+    readr
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.0
-VignetteBuilder: knitr
+RoxygenNote: 7.1.1

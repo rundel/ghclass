@@ -1,25 +1,13 @@
 github_api_repo_unwatch = function(repo){
-  gh::gh(
-    "DELETE /repos/:owner/:repo/subscription",
+  ghclass_api_v3_req(
+    endpoint = "DELETE /repos/:owner/:repo/subscription",
     owner = get_repo_owner(repo),
-    repo = get_repo_name(repo),
-    .token = github_get_token()
+    repo = get_repo_name(repo)
   )
 
 }
 
-#' Unwatch repository
-#'
-#' Unwatches / unsubscribes from the provided GitHub repositories.
-#'
-#' @param repo github repository address in `owner/repo` format
-#'
-#' @examples
-#' \dontrun{
-#' repo_unwatch()
-#' repo_unwatch("Sta523-Fa15/hw1-Tim")
-#' }
-#'
+#' @rdname repo_notification
 #' @export
 #'
 repo_unwatch = function(repo) {
@@ -32,8 +20,8 @@ repo_unwatch = function(repo) {
 
       status_msg(
         res,
-        glue::glue("Unwatched {usethis::ui_value(repo)}."),
-        glue::glue("Failed to unwatch {usethis::ui_value(repo)}.")
+        "Unwatched repo {.val {repo}}.",
+        "Failed to unwatch repo {.val {repo}}."
       )
     }
   )

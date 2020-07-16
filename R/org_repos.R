@@ -1,30 +1,14 @@
 github_api_org_repos = function(owner) {
   arg_is_chr_scalar(owner)
 
-  gh::gh(
-    "GET /orgs/:owner/repos",
-    owner = owner,
-    .token = github_get_token(),
-    .limit = github_get_api_limit()
+  ghclass_api_v3_req(
+    endpoint = "GET /orgs/:owner/repos",
+    owner = owner
   )
 }
 
-#' Get organization repository
-#'
-#' `org_repos` returns a (filtered) vector of repositories belonging to a GitHub organization.
-#'
-#' @param org Character. Name of the GitHub organization.
-#' @param filter Character. Regular expression pattern for matching (or excluding) repositories.
-#' @param exclude Logical. Should entries matching the regular expression in `filter` be excluded or included?
-#' @param full_repo Logical. Should the full repository address be returned (e.g. `owner/name` instead of just `repo`)?
-#'
-#'
-#' @examples
-#' \dontrun{
-#' org_repos("ghclass")
-#' org_repos("ghclass", "hw1-")
-#' }
-#'
+#' @rdname org_details
+#' @param full_repo Logical. Should the full repository address be returned (e.g. `owner/repo` instead of just `repo`)?
 #' @export
 #'
 org_repos = function(org, filter = NULL, exclude = FALSE, full_repo = TRUE) {
@@ -37,27 +21,20 @@ org_repos = function(org, filter = NULL, exclude = FALSE, full_repo = TRUE) {
       type = user_type(org)
 
       if (is.na(type)) {
-        usethis::ui_stop( paste(
-          "Organization {usethis::ui_value(org)} does not exist on GitHub."
-        ) )
+        cli_stop("Organization {.val {org}} does not exist on GitHub.")
       } else if (type == "Organization") {
         github_api_org_repos(org)
       } else if (type == "User") {
-        usethis::ui_stop( paste(
-          "{usethis::ui_value(org)} is a user not an organization.",
-          "Use {usethis::ui_code('user_repos')} instead."
-        ) )
+        cli_stop("{.val {org}} is a user not an organization. Use {.fun user_repos} instead.")
       } else {
-        usethis::ui_stop( paste(
-          "{usethis::ui_value(org)} has unknown type {usethis::ui_value(type)}."
-        ) )
+        cli_stop("{.val {org}} has unknown type {.val {type}}.")
       }
     }
   )()
 
   status_msg(
     res,
-    fail = glue::glue("Failed to retrieve repos for org {usethis::ui_value(org)}.")
+    fail = "Failed to retrieve repos for org {.val {org}}."
   )
 
   if (failed(res) | empty_result(res))

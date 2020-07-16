@@ -1,26 +1,14 @@
 github_api_get_org = function(org) {
   arg_is_chr_scalar(org)
 
-  gh::gh(
-    "/orgs/:org",
-    org = org,
-    .token = github_get_token()
+  ghclass_api_v3_req(
+    endpoint = "/orgs/:org",
+    org = org
   )
 }
 
-#' Check if organization exists
-#'
-#' `org_exists` returns TRUE if the supplied org(s) exist on GitHub and FALSE otherwise.
-#'
-#' @param org Character. Organization name to be checked.
-#'
-#' @return Vector of logical values
-#'
-#' @examples
-#' \dontrun{
-#' org_exists(c("rundel","ghclass-demo"))
-#' }
-#'
+
+#' @rdname org_details
 #' @export
 #'
 org_exists = function(org) {

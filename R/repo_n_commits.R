@@ -24,18 +24,11 @@ github_api_repo_n_commits = function(repo, branch) {
 
 
 
-#' Get repository commit count
-#'
-#' `repo_n_commits` returns a tibble of repositories and the number of commits in a given branch.
+#' @rdname repo_details
 #'
 #' @param repo   Character. Address of repository in `owner/name` format.
 #' @param branch Character.	Branch to list commits from.
 #' @param quiet  Logical. Should an error message be printed if a repo does not exist.
-#'
-#' @examples
-#' \dontrun{
-#' repo_n_commits("rundel/ghclass")
-#' }
 #'
 #' @export
 #'
@@ -48,17 +41,20 @@ repo_n_commits = function(repo, branch = "master", quiet = FALSE) {
       res = github_api_repo_n_commits(repo, branch)
 
       if (!is.null(res[["errors"]]) & !quiet) {
-        # FIXME - work on a staus_msg_v4 function
-        # FIXME - retieve error message from graphql response
+        # TODO - work on a status_msg_v4 function
+        # TODO - retrieve error message from graphql response
 
-        usethis::ui_oops(
-          glue::glue("Failed to retrieve commits for {usethis::ui_value(repo)}.")
+        cli::cli_alert_danger("Failed to retrieve commits for {.val {repo}}.")
+
+        tibble::tibble(
+          repo = repo,
+          branch = branch,
+          n = NA_integer_
         )
-
-        tibble::tibble(repo = repo,  n = NA_integer_)
       } else {
         tibble::tibble(
           repo = purrr::pluck(res, "data", "repository", "nameWithOwner"),
+          branch = branch,
           n    = purrr::pluck(res, "data", "repository", "object","history", "totalCount", .default=0)
         )
       }

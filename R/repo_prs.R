@@ -1,22 +1,17 @@
 github_api_repo_prs = function(repo, state) {
   arg_is_chr_scalar(repo, state)
 
-  gh::gh(
-    "GET /repos/:owner/:repo/pulls",
+  ghclass_api_v3_req(
+    endpoint = "GET /repos/:owner/:repo/pulls",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
-    state = state,
-    .token = github_get_token(),
-    .limit = github_get_api_limit()
+    state = state
   )
 }
 
 
-#' Get repository pull requests
+#' @rdname repo_details
 #'
-#' `repo_prs` returns a data fram of repository pull requests.
-#'
-#' @param repo Character. Address of repository in `owner/name` format.
 #' @param state Character. Pull request state.
 #' @export
 #'

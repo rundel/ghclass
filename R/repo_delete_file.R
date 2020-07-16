@@ -1,5 +1,15 @@
-github_api_repo_delete_file = function(repo, path, message, sha, branch) {
-  gh::gh(
+github_api_repo_delete_file = function(repo, path, message, sha = NULL, branch = "master") {
+
+  if (is.null(sha)) {
+    cur_file = repo_get_file(repo, path, branch, quiet = TRUE)
+    sha = attr(cur_file, "sha")
+  }
+
+  if (is.null(sha)) {
+    cli_stop("Unable to locate file using the given path.")
+  }
+
+  ghclass_api_v3_req(
     "DELETE /repos/:owner/:repo/contents/:path",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
@@ -11,12 +21,7 @@ github_api_repo_delete_file = function(repo, path, message, sha, branch) {
 }
 
 
-#' Function for deleting files from a Github repository
-#'
-#' @param repo Character. Address of repository in `owner/name` format.
-#' @param path Character. File path within the repository.
-#' @param message Character. Commit message. If not provided, a custom character string will be created.
-#' @param branch Character. Name of branch to use, defaults to "master".
+#' @rdname repo_file
 #'
 #' @export
 #'
@@ -30,29 +35,18 @@ repo_delete_file = function(repo, path, message = NULL, branch = "master") {
     list(repo, path, branch),
     function(repo, path, branch) {
       if (is.null(message))
-        message = glue::glue("Deleting file: {path}")
+        message = cli_glue("Deleting file {path}")
 
       res = purrr::safely(
         function() {
-          sha = withr::with_options(
-            list(usethis.quiet = TRUE),
-            {
-              cur_file = repo_get_file(repo, path, branch)
-              if (is.null(cur_file)) {
-                usethis::ui_stop("Unable to find file {usethis::ui_value(format_repo(repo, branch, path))}.")
-              }
-              attr(cur_file, "sha")
-            }
-          )
-
-          github_api_repo_delete_file(repo, path, message, sha, branch)
+          github_api_repo_delete_file(repo, path, message, branch = branch)
         }
       )()
 
       status_msg(
         res,
-        glue::glue("Deleted file {usethis::ui_value(path)} from repo {usethis::ui_value(repo)}."),
-        glue::glue("Failed to delete file {usethis::ui_value(path)} from repo {usethis::ui_value(repo)}.")
+        "Deleted file {.file {path}} from repo {.val {repo}}.",
+        "Failed to delete file {.file {path}} from repo {.val {repo}}."
       )
 
       res

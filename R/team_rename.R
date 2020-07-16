@@ -1,49 +1,51 @@
-github_api_team_rename = function(id, new_name) {
-  gh::gh(
-    "PATCH /teams/:team_id",
-    team_id = id,
-    name = new_name,
-    .token = github_get_token()
+github_api_team_update = function(
+  org, team_slug,
+  name = NULL, description = NULL,
+  privacy = NULL, permission = NULL, parent_team_id = NULL
+) {
+  ghclass_api_v3_req(
+    endpoint = "PATCH /orgs/:org/teams/:team_slug",
+    org = org,
+    team_slug = team_slug,
+    name = name,
+    description = description,
+    privacy = privacy,
+    permission = permission,
+    parent_team_id = parent_team_id
   )
 }
 
 
-#' Rename existing team(s)
-#'
-#' `team_rename` renames an existing team within the given GitHub organization.
-#'
-#' @param org character, name of the GitHub organization
-#' @param team character, one or more existing team names
-#' @param new_team character, one or more new team names
-#'
-#' @examples
-#' \dontrun{
-#' team_rename("ghclass-test", "hw1-team01", "hw01-team01")
-#' }
-#'
+#' @rdname team
+#' @param new_team character, new team name.
 #' @export
-team_rename = function(org, team, new_team) {
+team_rename = function(org, team, new_team, team_type = c("name", "slug")) {
   arg_is_chr_scalar(org)
+  arg_is_chr(team, new_team)
+  team_type = match.arg(team_type)
 
-  d = tibble::tibble(
-    team = team,
-    new_team = new_team
-  )
+  if (team_type == "name") {
+    slug = team_slug_lookup(org, team)
+  } else {
+    slug = team
+  }
 
-  d = team_id_lookup(d, org)
+  check_team_slug(slug)
 
   purrr::pwalk(
-    d,
-    function(team, id, new_team) {
+    tibble::tibble(team, slug, new_team),
+    function(team, slug, new_team) {
+      if (is.na(slug)) {
+        cli::cli_alert_danger("Team {.val {team}} does not exist.")
+        return()
+      }
 
-      if (missing_team(team, id, org)) return()
-
-      res = purrr::safely(github_api_team_rename)(id, new_team)
+      res = purrr::safely(github_api_team_update)(org, slug, name = new_team)
 
       status_msg(
         res,
-        glue::glue("Renamed team {usethis::ui_value(team)} to {usethis::ui_value(new_team)}."),
-        glue::glue("Failed to rename team {usethis::ui_value(team)} to {usethis::ui_value(new_team)}.")
+        "Renamed team {.val {team}} to {.val {new_team}}.",
+        "Failed to rename team {.val {team}} to {.val {new_team}}."
       )
     }
   )

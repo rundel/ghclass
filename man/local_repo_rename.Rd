@@ -2,7 +2,7 @@
 % Please edit documentation in R/local_repo_rename.R
 \name{local_repo_rename}
 \alias{local_repo_rename}
-\title{Rename local directories using a vector of patterns and replacements}
+\title{Rename local directories using a vector of patterns and replacements.}
 \usage{
 local_repo_rename(repo_dir, pattern, replacement)
 }
@@ -14,7 +14,7 @@ local_repo_rename(repo_dir, pattern, replacement)
 \item{replacement}{Character.  One or more text strings containing the replacement value for matched patterns.}
 }
 \description{
-This is particularly helpful for renaming student repos to include
-something more useful like \verb{Last, First name} or \code{netid} so that
-folder ordering matches student ordering within your LMS.
+This function is meant to help with renaming local student repos to include
+something more useful like \verb{Last, First name} or a unique identifier
+for the purposes of ordering repository folders.
 }

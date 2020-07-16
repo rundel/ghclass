@@ -1,25 +1,12 @@
 github_api_org_pending = function(owner){
   arg_is_chr_scalar(owner)
-  gh::gh("GET /orgs/:owner/invitations",
-         owner = owner,
-         .token = github_get_token(),
-         .limit = github_get_api_limit())
+  ghclass_api_v3_req(
+    endpoint = "GET /orgs/:owner/invitations",
+    owner = owner
+  )
 }
 
-
-#' Get pending organization members
-#'
-#' `org_pending` returns a (filtered) vector of pending organization memebers.
-#'
-#' @param org Character. Name of the GitHub organization.
-#' @param filter Character. Regular expression pattern for matching (or excluding) repos.
-#' @param exclude Logical. Should entries matching the regular expression be excluded or included.
-#'
-#' @examples
-#' \dontrun{
-#' org_pending("ghclass")
-#' }
-#'
+#' @rdname org_members
 #' @export
 #'
 org_pending = function(org, filter = NULL, exclude = FALSE) {
@@ -29,7 +16,7 @@ org_pending = function(org, filter = NULL, exclude = FALSE) {
   res = purrr::safely(github_api_org_pending)(org)
   status_msg(
     res,
-    fail = glue::glue("Failed to retrieve pending members for org {usethis::ui_value(org)}")
+    fail = "Failed to retrieve pending members for org {.val {org}}"
   )
 
   invite = purrr::map(result(res), "login")
