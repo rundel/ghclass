@@ -28,14 +28,10 @@ Imports:
     httr,
     lubridate,
     purrr,
-    readr,
     rlang,
-    stats,
     tibble,
-    tidyr,
     whisker,
     withr,
-    yaml,
     dplyr,
     cli
 Suggests: 
@@ -46,7 +42,8 @@ Suggests:
     styler,
     usethis,
     gert,
-    asciicast
+    asciicast,
+    readr
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
