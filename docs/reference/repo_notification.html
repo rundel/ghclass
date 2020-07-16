@@ -131,7 +131,7 @@ match the list at github.com/watching.
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>GitHub Repository tools - notification functions</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/repo.R'><code>R/repo.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/repo_ignore.R'><code>R/repo_ignore.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/repo_unwatch.R'><code>R/repo_unwatch.R</code></a>, and 2 more</small>
+    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/repo.R'><code>R/repo.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/repo_unwatch.R'><code>R/repo_unwatch.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/repo_watch.R'><code>R/repo_watch.R</code></a>, and 1 more</small>
     <div class="hidden name"><code>repo_notification.Rd</code></div>
     </div>
 
@@ -147,11 +147,11 @@ match the list at <a href='https://github.com/watching'>github.com/watching</a>.
 
     </div>
 
-    <pre class="usage"><span class='fu'>repo_ignore</span>(<span class='no'>repo</span>)
-
-<span class='fu'>repo_unwatch</span>(<span class='no'>repo</span>)
+    <pre class="usage"><span class='fu'>repo_unwatch</span>(<span class='no'>repo</span>)
 
 <span class='fu'>repo_watch</span>(<span class='no'>repo</span>)
+
+<span class='fu'>repo_ignore</span>(<span class='no'>repo</span>)
 
 <span class='fu'>repo_watching</span>(<span class='kw'>filter</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
@@ -174,11 +174,12 @@ match the list at <a href='https://github.com/watching'>github.com/watching</a>.
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'>repo_ignore</span>(<span class='st'>"Sta323-Sp19/hw1"</span>)
-<span class='fu'>repo_unwatch</span>(<span class='st'>"rundel/ghclass"</span>)
-<span class='fu'>repo_watch</span>(<span class='st'>"rundel/ghclass"</span>)
-}</div></pre>
+    <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
+<span class='fu'>repo_ignore</span>(<span class='st'>"Sta323-Sp19/hw1"</span>)</div><div class='output co'>#&gt; <span class='message'><span style='color: #00BB00;'>✔</span><span> Ignored repo </span><span style='color: #0000BB;'>'Sta323-Sp19/hw1'</span><span>.</span></div><div class='input'>
+<span class='fu'>repo_unwatch</span>(<span class='st'>"rundel/ghclass"</span>)</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✔</span><span> Unwatched repo </span><span style='color: #0000BB;'>'rundel/ghclass'</span><span>.</span></div><div class='input'>
+<span class='fu'>repo_watch</span>(<span class='st'>"rundel/ghclass"</span>)</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✔</span><span> Watched </span><span style='color: #0000BB;'>'rundel/ghclass'</span><span>.</span></div><div class='input'># }
+
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

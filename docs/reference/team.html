@@ -196,19 +196,21 @@ and members of a team), default is "closed"</p></td>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'>team_create</span>(<span class='st'>"ghclass-test"</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"hw1-team01"</span>,<span class='st'>"hw1-team02"</span>))
-<span class='fu'><a href='org_details.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>)
-
-<span class='fu'>team_rename</span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-team02"</span>, <span class='st'>"hw1-team03"</span>)
-<span class='fu'><a href='org_details.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>)
-
-<span class='fu'>team_delete</span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-team01"</span>, <span class='kw'>prompt</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='fu'><a href='org_details.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>)
+    <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
+<span class='fu'>team_create</span>(<span class='st'>"ghclass-test"</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"hw1-team01"</span>,<span class='st'>"hw1-team02"</span>))</div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span><span> Skipping existing teams: </span><span style='color: #0000BB;'>'hw1-team01'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✔</span><span> Created team </span><span style='color: #0000BB;'>'hw1-team02'</span><span> in org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='input'>
+<span class='fu'><a href='org_details.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>)</div><div class='output co'>#&gt; [1] "hw1-team01" "hw1-team02" "hw1-team03"</div><div class='input'>
+<span class='fu'>team_rename</span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-team02"</span>, <span class='st'>"hw1-team03"</span>)</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>✖</span><span> Failed to rename team </span><span style='color: #0000BB;'>'hw1-team02'</span><span> to </span><span style='color: #0000BB;'>'hw1-team03'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>API message: </span><span style='color: #555555;'>Not Found</span><span></span></div><div class='output co'>#&gt; <span class='message'>API docs: </span><span style='color: #555555;'>https://developer.github.com/v3/teams/#edit-team</span><span></span></div><div class='output co'>#&gt; <span class='message'>Missing page: </span><span style='color: #555555;'>https://api.github.com/orgs/ghclass-test/teams/hw1-team02</span><span></span></div><div class='output co'>#&gt; └─GitHub API error (404): 404 Not Found
+#&gt;   ├─ 
+#&gt;   ├─ 
+#&gt;   └─ </div><div class='input'>
+<span class='fu'><a href='org_details.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>)</div><div class='output co'>#&gt; [1] "hw1-team01" "hw1-team02" "hw1-team03"</div><div class='input'>
+<span class='fu'>team_delete</span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-team01"</span>, <span class='kw'>prompt</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✔</span><span> Deleted team </span><span style='color: #0000BB;'>'hw1-team01'</span><span> from org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='input'>
+<span class='fu'><a href='org_details.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>)</div><div class='output co'>#&gt; [1] "hw1-team02" "hw1-team03"</div><div class='input'>
 
 <span class='co'># Cleanup</span>
-<span class='fu'>team_delete</span>(<span class='st'>"ghclass-test"</span>, <span class='fu'><a href='org_details.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>), <span class='kw'>prompt</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-}</div></pre>
+<span class='fu'>team_delete</span>(<span class='st'>"ghclass-test"</span>, <span class='fu'><a href='org_details.html'>org_teams</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"hw1-"</span>), <span class='kw'>prompt</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✔</span><span> Deleted team </span><span style='color: #0000BB;'>'hw1-team02'</span><span> from org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✔</span><span> Deleted team </span><span style='color: #0000BB;'>'hw1-team03'</span><span> from org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='input'># }
+
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
