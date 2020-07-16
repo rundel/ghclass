@@ -127,15 +127,38 @@ response_status = function(x) {
   attr(x, "response")[["status"]]
 }
 
+# Modified from gh:::gh_set_verb
+endpoint_verb = function(x) {
+  if (!nzchar(x))
+    return(NA)
+
+  if (grepl("^/", x) || grepl("^http", x)) {
+     method = "GET"
+  } else {
+    method = gsub("^([^/ ]+)\\s+.*$", "\\1", x)
+  }
+
+  stopifnot(method %in% c("GET", "POST", "PATCH", "PUT", "DELETE"))
+
+  method
+}
+
 
 ghclass_api_v3_req = function(endpoint, ...) {
+  method = endpoint_verb(endpoint)
+  if (method == "GET") {
+    limit = github_get_api_limit()
+  } else { # Some non-GET methods don't like having a limit set
+    limit = NULL
+  }
+
   suppressMessages(
     gh::gh(
       endpoint = endpoint,
       ...,
-      .limit = github_get_api_limit(),
-      .token = github_get_token(),
-      .progress = TRUE # TODO - FALSE was giving an error
+      .limit = limit,
+      .token = github_get_token()
+      # .progress = FALSE # TODO - giving an error for some reason
     )
   )
 }
