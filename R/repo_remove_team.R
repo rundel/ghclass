@@ -46,11 +46,10 @@ repo_remove_team = function(
       if (is.na(team))
         return()
 
-      res = purrr::safely(github_api_team_add)(
+      res = purrr::safely(github_api_repo_remove_team)(
         org = org,
         team_slug = team,
-        repo = repo,
-        permission = permission
+        repo = repo
       )
 
       status_msg(
