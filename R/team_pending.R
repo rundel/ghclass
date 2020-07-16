@@ -1,10 +1,8 @@
 github_api_team_pending = function(org, team_slug) {
-  gh::gh(
-    "GET /orgs/:org/teams/:team_slug/invitations",
+  ghclass_api_v3_req(
+    endpoint = "GET /orgs/:org/teams/:team_slug/invitations",
     org = org,
-    team_slug = team_slug,
-    .token = github_get_token(),
-    .limit = github_get_api_limit()
+    team_slug = team_slug
   )
 }
 

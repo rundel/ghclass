@@ -1,8 +1,9 @@
 github_api_repo_delete = function(repo) {
-  gh::gh("DELETE /repos/:owner/:repo",
-         owner = get_repo_owner(repo),
-         repo = get_repo_name(repo),
-         .token = github_get_token())
+  ghclass_api_v3_req(
+    endpoint = "DELETE /repos/:owner/:repo",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo)
+  )
 }
 
 #' @rdname repo_core

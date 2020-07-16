@@ -9,7 +9,7 @@ github_api_repo_delete_file = function(repo, path, message, sha = NULL, branch =
     cli_stop("Unable to locate file using the given path.")
   }
 
-  gh::gh(
+  ghclass_api_v3_req(
     "DELETE /repos/:owner/:repo/contents/:path",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),

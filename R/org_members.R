@@ -1,10 +1,10 @@
 github_api_org_members = function(org) {
   arg_is_chr_scalar(org)
 
-  gh::gh("GET /orgs/:org/members",
-         org = org,
-         .token = github_get_token(),
-         .limit = github_get_api_limit())
+  ghclass_api_v3_req(
+    endpoint = "GET /orgs/:org/members",
+    org = org()
+  )
 }
 
 #' @rdname org_members

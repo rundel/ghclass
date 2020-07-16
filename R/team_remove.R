@@ -1,10 +1,9 @@
 github_api_team_remove = function(org, team_slug, username) {
-  gh::gh(
-    "DELETE /orgs/:org/teams/:team_slug/memberships/:username",
+  ghclass_api_v3_req(
+    endpoint = "DELETE /orgs/:org/teams/:team_slug/memberships/:username",
     org = org,
     team_slug = team_slug,
-    username = username,
-    .token = github_get_token()
+    username = username
   )
 }
 

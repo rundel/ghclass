@@ -1,7 +1,6 @@
 github_api_whoami = function() {
-  gh::gh(
-    "GET /user",
-    .token = github_get_token()
+  ghclass_api_v3_req(
+    endpoint = "GET /user"
   )
 }
 

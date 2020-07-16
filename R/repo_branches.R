@@ -1,10 +1,8 @@
 github_api_repo_branches = function(repo) {
-  gh::gh(
-    "GET /repos/:owner/:repo/branches",
+  ghclass_api_v3_req(
+    endpoint = "GET /repos/:owner/:repo/branches",
     owner = get_repo_owner(repo),
-    repo = get_repo_name(repo),
-    .token = github_get_token(),
-    .limit=github_get_api_limit()
+    repo = get_repo_name(repo)
   )
 }
 

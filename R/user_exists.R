@@ -1,10 +1,9 @@
 github_api_get_user = function(user) {
   arg_is_chr_scalar(user)
 
-  gh::gh(
-    "/users/:username",
-    username = user,
-    .token = github_get_token()
+  ghclass_api_v3_req(
+    endpoint = "/users/:username",
+    username = user
   )
 }
 

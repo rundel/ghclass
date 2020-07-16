@@ -1,9 +1,8 @@
 github_api_team_delete = function(org, team_slug) {
-  gh::gh(
-    "DELETE /orgs/:org/teams/:team_slug",
+  ghclass_api_v3_req(
+    endpoint = "DELETE /orgs/:org/teams/:team_slug",
     org = org,
-    team_slug = team_slug,
-    .token = github_get_token()
+    team_slug = team_slug
   )
 }
 

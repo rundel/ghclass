@@ -1,21 +1,17 @@
 github_api_user_repos = function(owner, type) {
   arg_is_chr_scalar(owner)
 
-  gh::gh(
-    "GET /users/:owner/repos",
+  ghclass_api_v3_req(
+    endpoint = "GET /users/:owner/repos",
     owner = owner,
-    type = type,
-    .token = github_get_token(),
-    .limit = github_get_api_limit()
+    type = type
   )
 }
 
 github_api_your_repos = function(type) {
-  gh::gh(
-    "GET /user/repos",
-    type = type,
-    .token = github_get_token(),
-    .limit = github_get_api_limit()
+  ghclass_api_v3_req(
+    endpoint = "GET /user/repos",
+    type = type
   )
 }
 

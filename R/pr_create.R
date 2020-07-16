@@ -1,6 +1,6 @@
 github_api_pr_create = function(repo, head, base, title, body, draft = TRUE){
-  gh::gh(
-    "POST /repos/:owner/:repo/pulls",
+  ghclass_api_v3_req(
+    endpoint = "POST /repos/:owner/:repo/pulls",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
     head = head,
@@ -8,7 +8,6 @@ github_api_pr_create = function(repo, head, base, title, body, draft = TRUE){
     title = title,
     body = body,
     draft = draft,
-    .token = github_get_token(),
     .send_headers = c(Accept = "application/vnd.github.shadow-cat-preview+json")
   )
 }

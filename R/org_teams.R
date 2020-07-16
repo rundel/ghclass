@@ -1,8 +1,7 @@
 github_api_org_teams = function(org) {
-  gh::gh(
-    "GET /orgs/:org/teams", org=org,
-    .token = github_get_token(),
-    .limit=github_get_api_limit()
+  ghclass_api_v3_req(
+    endpoint = "GET /orgs/:org/teams", 
+    org = org
   )
 }
 

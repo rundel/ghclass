@@ -45,20 +45,16 @@
 
 
 github_api_repo_commits = function(repo, sha=NULL, path=NULL, author=NULL, since=NULL, until=NULL) {
-  args = list(
+  ghclass_api_v3_req(
     endpoint = "GET /repos/:owner/:repo/commits",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
-    .token = github_get_token()
+    sha = sha,
+    path = path,
+    author = author,
+    since = since,
+    until = until
   )
-
-  args[["sha"]] = sha
-  args[["path"]] = path
-  args[["author"]] = author
-  args[["since"]] = since
-  args[["until"]] = until
-
-  do.call(gh::gh, args)
 }
 
 #' @rdname repo_details

@@ -1,10 +1,9 @@
 github_api_get_org = function(org) {
   arg_is_chr_scalar(org)
 
-  gh::gh(
-    "/orgs/:org",
-    org = org,
-    .token = github_get_token()
+  ghclass_api_v3_req(
+    endpoint = "/orgs/:org",
+    org = org
   )
 }
 

@@ -1,20 +1,18 @@
 # Remove org and team membership
 github_api_org_remove = function(org, user) {
-  gh::gh(
-    "DELETE /orgs/:org/members/:username",
+  ghclass_api_v3_req(
+    endpoint = "DELETE /orgs/:org/members/:username",
     org = org,
-    username = user,
-    .token = github_get_token()
+    username = user
   )
 }
 
 # Only remove membership
 github_api_org_remove_membership = function(org, user) {
-  gh::gh(
+  ghclass_api_v3_req(
     "DELETE /orgs/:org/memberships/:username",
     org = org,
-    username = user,
-    .token = github_get_token()
+    username = user
   )
 }
 

@@ -1,13 +1,11 @@
 github_api_team_members = function(org, team_slug, role = c("all", "member", "maintainer")) {
   role = match.arg(role)
 
-  gh::gh(
-    "GET /orgs/:org/teams/:team_slug/members",
+  ghclass_api_v3_req(
+    endpoint = "GET /orgs/:org/teams/:team_slug/members",
     org = org,
     team_slug = team_slug,
-    role = role,
-    .token = github_get_token(),
-    .limit = github_get_api_limit()
+    role = role
   )
 }
 

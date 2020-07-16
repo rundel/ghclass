@@ -1,15 +1,13 @@
 github_api_repo_put_file = function(repo, path, content, message, branch, sha = NULL) {
-  args = list(
+  ghclass_api_v3_req(
     endpoint = "PUT /repos/:owner/:repo/contents/:path",
     owner = get_repo_owner(repo), repo = get_repo_name(repo),
     path = path,
     content = base64enc::base64encode(content),
-    message = message, branch = branch,
-    .token = github_get_token()
+    message = message, 
+    branch = branch,
+    sha = sha
   )
-  args[["sha"]] = sha
-
-  do.call(gh::gh, args)
 }
 
 #' @rdname repo_file
@@ -58,15 +56,14 @@ peer_github_api_repo_put_file = function(repo, path, content, message, branch, s
     owner = get_repo_owner(repo), repo = get_repo_name(repo),
     path = path,
     content = base64enc::base64encode(content),
-    message = message, branch = branch,
-    .token = github_get_token()
+    message = message, branch = branch
   )
 
   if (!is.null(sha)) {
     args[["sha"]] = sha
   }
 
-  do.call(gh::gh, args)
+  do.call(ghclass_api_v3_req, args)
 }
 
 

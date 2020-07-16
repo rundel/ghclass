@@ -1,10 +1,9 @@
 github_api_branch_get_ref = function(repo, branch="master") {
-  gh::gh(
-    "GET /repos/:owner/:repo/commits/:ref",
+  ghclass_api_v3_req(
+    endpoint = "GET /repos/:owner/:repo/commits/:ref",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
-    ref = paste0("heads/", branch),
-    .token = github_get_token()
+    ref = paste0("heads/", branch)
   )
 
 }
@@ -23,13 +22,12 @@ get_branch_ref = function(repo, branch) {
 github_api_branch_create = function(repo, branch, new_branch) {
   head = get_branch_ref(repo, branch)
 
-  gh::gh(
+  ghclass_api_v3_req(
     "POST /repos/:owner/:repo/git/refs",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
     ref = paste0("refs/heads/", new_branch),
-    sha = head[["sha"]],
-    .token = github_get_token()
+    sha = head[["sha"]]
   )
 }
 

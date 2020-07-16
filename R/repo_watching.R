@@ -1,8 +1,6 @@
 github_api_repo_watching = function() {
-  gh::gh(
-    "GET /user/subscriptions",
-    .token = github_get_token(),
-    .limit = github_get_api_limit()
+  ghclass_api_v3_req(
+    endpoint = "GET /user/subscriptions"
   )
 }
 

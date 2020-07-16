@@ -1,13 +1,12 @@
 github_api_issue_create = function(repo, title, body, labels, assignees){
-  gh::gh(
-    "POST /repos/:owner/:repo/issues",
+  ghclass_api_v3_req(
+    endpoint = "POST /repos/:owner/:repo/issues",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
     title = title,
     body = body,
     labels = I(labels),
-    assignees = I(assignees),
-    .token = github_get_token()
+    assignees = I(assignees)
   )
 }
 

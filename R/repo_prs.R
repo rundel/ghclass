@@ -1,13 +1,11 @@
 github_api_repo_prs = function(repo, state) {
   arg_is_chr_scalar(repo, state)
 
-  gh::gh(
-    "GET /repos/:owner/:repo/pulls",
+  ghclass_api_v3_req(
+    endpoint = "GET /repos/:owner/:repo/pulls",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
-    state = state,
-    .token = github_get_token(),
-    .limit = github_get_api_limit()
+    state = state
   )
 }
 

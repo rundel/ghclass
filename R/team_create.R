@@ -1,8 +1,7 @@
 github_api_team_create = function(org, name, privacy) {
-  gh::gh(
-    "POST /orgs/:org/teams",
-    org=org, name=name, privacy=privacy,
-    .token = github_get_token()
+  ghclass_api_v3_req(
+    endpoint = "POST /orgs/:org/teams",
+    org=org, name=name, privacy=privacy
   )
 }
 

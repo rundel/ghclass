@@ -1,13 +1,12 @@
 github_api_team_invite = function(org, team_slug, username, role = c("member", "maintainer")) {
   role = match.arg(role)
 
-  gh::gh(
-    "PUT /orgs/:org/teams/:team_slug/memberships/:username",
+  ghclass_api_v3_req(
+    endpoint = "PUT /orgs/:org/teams/:team_slug/memberships/:username",
     org = org,
     team_slug = team_slug,
     username = username,
-    role = role,
-    .token = github_get_token()
+    role = role
   )
 }
 

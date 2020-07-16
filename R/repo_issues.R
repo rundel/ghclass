@@ -13,8 +13,8 @@ github_api_repo_issues = function(
   sort = match.arg(sort)
   direction = match.arg(direction)
 
-  gh::gh(
-    "GET /repos/:owner/:repo/issues",
+  ghclass_api_v3_req(
+    endpoint = "GET /repos/:owner/:repo/issues",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
     state = state,
@@ -24,8 +24,7 @@ github_api_repo_issues = function(
     labels = labels,
     sort = sort,
     direction = direction,
-    since = since,
-    .token = github_get_token()
+    since = since
   )
 }
 

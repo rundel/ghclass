@@ -1,13 +1,11 @@
 github_api_repo_get_readme = function(repo, branch) {
   arg_is_chr_scalar(repo, branch)
 
-  gh::gh(
-    "GET /repos/:owner/:repo/readme",
+  ghclass_api_v3_req(
+    endpoint = "GET /repos/:owner/:repo/readme",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
-    ref = branch,
-    .token = github_get_token(),
-    .limit = github_get_api_limit()
+    ref = branch
   )
 }
 

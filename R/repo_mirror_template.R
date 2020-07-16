@@ -1,12 +1,11 @@
 github_api_repo_mirror_template = function(source_repo, repo, private){
-  gh::gh(
-    "POST /repos/:template_owner/:template_repo/generate",
+  ghclass_api_v3_req(
+    endpoint = "POST /repos/:template_owner/:template_repo/generate",
     template_owner = get_repo_owner(source_repo),
     template_repo = get_repo_name(source_repo),
     owner = get_repo_owner(repo),
     name = get_repo_name(repo),
     private = private,
-    .token = github_get_token(),
     .send_headers = c(Accept = "application/vnd.github.baptiste-preview+json")
   )
 }

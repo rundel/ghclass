@@ -1,9 +1,9 @@
 github_api_org_admins = function(owner){
-  gh::gh("GET /orgs/:owner/members",
-         owner = owner,
-         role = "admin",
-         .token = github_get_token(),
-         .limit = github_get_api_limit())
+  ghclass_api_v3_req(
+    endpoint = "GET /orgs/:owner/members",
+    owner = owner,
+    role = "admin"
+  )
 }
 
 #' @rdname org_members

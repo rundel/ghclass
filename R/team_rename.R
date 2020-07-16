@@ -1,9 +1,8 @@
 github_api_team_rename = function(id, new_name) {
-  gh::gh(
-    "PATCH /teams/:team_id",
+  ghclass_api_v3_req(
+    endpoint = "PATCH /teams/:team_id",
     team_id = id,
-    name = new_name,
-    .token = github_get_token()
+    name = new_name
   )
 }
 
@@ -12,16 +11,15 @@ github_api_team_update = function(
   name = NULL, description = NULL,
   privacy = NULL, permission = NULL, parent_team_id = NULL
 ) {
-  gh::gh(
-    "PATCH /orgs/:org/teams/:team_slug",
+  ghclass_api_v3_req(
+    endpoint = "PATCH /orgs/:org/teams/:team_slug",
     org = org,
     team_slug = team_slug,
     name = name,
     description = description,
     privacy = privacy,
     permission = permission,
-    parent_team_id = parent_team_id,
-    .token = github_get_token()
+    parent_team_id = parent_team_id
   )
 }
 

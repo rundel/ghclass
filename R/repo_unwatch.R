@@ -1,9 +1,8 @@
 github_api_repo_unwatch = function(repo){
-  gh::gh(
-    "DELETE /repos/:owner/:repo/subscription",
+  ghclass_api_v3_req(
+    endpoint = "DELETE /repos/:owner/:repo/subscription",
     owner = get_repo_owner(repo),
-    repo = get_repo_name(repo),
-    .token = github_get_token()
+    repo = get_repo_name(repo)
   )
 
 }

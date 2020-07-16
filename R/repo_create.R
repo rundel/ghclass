@@ -1,11 +1,12 @@
 github_api_org_repo_create = function(repo, private, auto_init, gitignore_template){
-  gh::gh("POST /orgs/:owner/repos",
-         owner = get_repo_owner(repo),
-         name = get_repo_name(repo),
-         private = private,
-         auto_init = auto_init,
-         gitignore_template = gitignore_template,
-         .token = github_get_token())
+  ghclass_api_v3_req(
+    endpoint = "POST /orgs/:owner/repos",
+    owner = get_repo_owner(repo),
+    name = get_repo_name(repo),
+    private = private,
+    auto_init = auto_init,
+    gitignore_template = gitignore_template
+  )
 }
 
 #' @rdname repo_core

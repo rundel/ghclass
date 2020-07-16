@@ -1,12 +1,11 @@
 github_api_org_invite = function(org, user) {
   arg_is_chr_scalar(org, user)
 
-  gh::gh(
-    "PUT /orgs/:org/memberships/:username",
+  ghclass_api_v3_req(
+    endpoint = "PUT /orgs/:org/memberships/:username",
     org = org,
     username = user,
-    role = "member",
-    .token = github_get_token()
+    role = "member"
   )
 }
 

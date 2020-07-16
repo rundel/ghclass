@@ -1,8 +1,7 @@
 github_api_org = function(org) {
-  gh::gh(
-    "GET /orgs/:org",
+  ghclass_api_v3_req(
+    endpoint = "GET /orgs/:org",
     org = org,
-    .token = github_get_token(),
     .send_headers = c(Accept = "application/vnd.github.surtur-preview+json")
   )
 }

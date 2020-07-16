@@ -4,14 +4,13 @@ github_api_team_add = function(
 ){
   permission = match.arg(permission)
 
-  gh::gh(
-    "PUT /orgs/:org/teams/:team_slug/repos/:owner/:repo",
+  ghclass_api_v3_req(
+    endpoint = "PUT /orgs/:org/teams/:team_slug/repos/:owner/:repo",
     org = org,
     team_slug = team_slug,
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
-    permission = permission,
-    .token = github_get_token()
+    permission = permission
   )
 }
 

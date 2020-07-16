@@ -1,10 +1,9 @@
 github_api_repo_tree = function(repo, sha = "master") {
-  gh::gh(
-    "GET /repos/:owner/:repo/git/trees/:sha?recursive=1",
+  ghclass_api_v3_req(
+    endpoint = "GET /repos/:owner/:repo/git/trees/:sha?recursive=1",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
-    sha = sha,
-    .token = github_get_token()
+    sha = sha
   )
 }
 
@@ -29,11 +28,10 @@ repo_files = function(repo, branch = "master") {
 github_api_org_accept_invite = function(org, token) {
   arg_is_chr_scalar(org, token)
 
-  gh::gh(
-    "PATCH /user/memberships/orgs/:org",
+  ghclass_api_v3_req(
+    endpoint = "PATCH /user/memberships/orgs/:org",
     org = org,
-    state = "active",
-    .token = token
+    state = "active"
   )
 }
 
@@ -76,9 +74,10 @@ extract_content = function(repo, path, file, include_details = TRUE, quiet = FAL
 }
 
 github_api_code_search = function(query) {
-  gh::gh("GET /search/code", q = query,
-         .token = github_get_token(),
-         .limit = github_get_api_limit())
+  ghclass_api_v3_req(
+    endpoint = "GET /search/code",
+    q = query
+  )
 }
 
 
@@ -126,4 +125,15 @@ check_file_modification = function(repo, path, branch = "master"){
 
 response_status = function(x) {
   attr(x, "response")[["status"]]
+}
+
+
+ghclass_api_v3_req = function(endpoint, ...) {
+  ghclass_api_v3_req(
+    endpoint = endpoint,
+    ...,
+    .limit = github_get_api_limit(),
+    .token = github_get_token(),
+    .progress = FALSE
+  )
 }

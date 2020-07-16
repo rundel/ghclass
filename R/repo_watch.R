@@ -5,13 +5,12 @@ github_api_repo_subscribe = function(repo, subscribed, ignored){
   if (subscribed == ignored)
     cli_stop("{.code subscribed != ignored} must be true")
 
-  gh::gh(
-    "PUT /repos/:owner/:repo/subscription",
+  ghclass_api_v3_req(
+    endpoint = "PUT /repos/:owner/:repo/subscription",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
     subscribed = subscribed,
     ignored = ignored,
-    .token = github_get_token()
   )
 }
 

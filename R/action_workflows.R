@@ -1,10 +1,8 @@
 github_api_action_workflows = function(repo) {
-  gh::gh(
-    "GET /repos/:owner/:repo/actions/workflows",
+  ghclass_api_v3_req(
+    endpoint = "GET /repos/:owner/:repo/actions/workflows",
     owner = get_repo_owner(repo),
-    repo = get_repo_name(repo),
-    .token = github_get_token(),
-    .limit = github_get_api_limit()
+    repo = get_repo_name(repo)
   )
 }
 

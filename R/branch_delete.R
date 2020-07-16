@@ -1,10 +1,9 @@
 github_api_branch_delete = function(repo, branch) {
-  gh::gh(
-    "DELETE /repos/:owner/:repo/git/refs/:ref",
+  ghclass_api_v3_req(
+    endpoint = "DELETE /repos/:owner/:repo/git/refs/:ref",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
-    ref = paste0("heads/", branch),
-    .token = github_get_token()
+    ref = paste0("heads/", branch)
   )
 }
 

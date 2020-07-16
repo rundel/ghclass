@@ -1,5 +1,5 @@
 # github_api_branch_protect = function(repo, branch) {
-#   gh::gh(
+#   ghclass_api_v3_req(
 #     "PUT /repos/:owner/:repo/branches/:branch/protection",
 #     owner = get_repo_owner(repo),
 #     repo = get_repo_name(repo),
@@ -16,7 +16,7 @@
 # }
 #
 # github_api_branch_unprotect = function(repo, branch) {
-#   gh::gh(
+#   ghclass_api_v3_req(
 #     "DELETE /repos/:owner/:repo/branches/:branch/protection",
 #     owner = get_repo_owner(repo),
 #     repo = get_repo_name(repo),

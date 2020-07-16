@@ -1,10 +1,9 @@
 github_api_repo_rename = function(repo, new_name){
-  gh::gh(
-    "PATCH /repos/:owner/:repo",
+  ghclass_api_v3_req(
+    endpoint = "PATCH /repos/:owner/:repo",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
-    name = new_name,
-    .token = github_get_token()
+    name = new_name
   )
 }
 

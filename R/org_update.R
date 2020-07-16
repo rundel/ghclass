@@ -5,14 +5,13 @@ github_api_org_update = function(
   members_can_create_private_repositories = NULL,
   members_can_create_public_repositories = NULL
 ) {
-  gh::gh(
-    "PATCH /orgs/:org",
+  ghclass_api_v3_req(
+    endpoint = "PATCH /orgs/:org",
     org = org,
     default_repository_permission = default_repository_permission,
     members_can_create_repositories = members_can_create_repositories,
     members_can_create_private_repositories = members_can_create_private_repositories,
     members_can_create_public_repositories  = members_can_create_public_repositories,
-    .token = github_get_token(),
     .send_headers = c(Accept = "application/vnd.github.surtur-preview+json")
   )
 }
