@@ -67,12 +67,6 @@ github_api_repo_commits = function(repo, sha=NULL, path=NULL, author=NULL, since
 #' @param until	 Character.	Only commits before this date will be returned, expects `YYYY-MM-DDTHH:MM:SSZ` format.
 #' @param quiet  Logical. Should an error message be printed if the repo does not exist.
 #'
-#'
-#' @examples
-#' \dontrun{
-#' org_repo_stats("ghclass")
-#' }
-#'
 #' @export
 #'
 
