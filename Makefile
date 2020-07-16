@@ -6,6 +6,10 @@ docs:
 pkgdown:
 	Rscript -e "pkgdown::build_site(run_dont_run = TRUE, new_process = FALSE)"
 
+pkgdown_quick:
+	Rscript -e "pkgdown::build_site()"
+
+
 articles:
 	Rscript vignettes/articles/precompile.R
 
