@@ -15,3 +15,4 @@ pkgdown/
 ^docs$
 ^pkgdown$
 vignettes/articles/
+Makefile
