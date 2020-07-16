@@ -1,8 +1,9 @@
 #' @name github_with_pat
 #' @rdname github_with_pat
 #'
-#' @title withr-like functions to use a temporary PAT
+#' @title `withr`-like functions for temporary personal access token
 #'
+#' @description
 #' Temporarily change the `GITHUB_PAT` environmental variable for
 #' GitHub authentication. Based on the `withr` interface.
 #'

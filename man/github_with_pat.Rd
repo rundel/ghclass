@@ -4,10 +4,7 @@
 \alias{github_with_pat}
 \alias{with_pat}
 \alias{local_pat}
-\title{withr-like functions to use a temporary PAT
-
-Temporarily change the \code{GITHUB_PAT} environmental variable for
-GitHub authentication. Based on the \code{withr} interface.}
+\title{\code{withr}-like functions for temporary personal access token}
 \usage{
 with_pat(new, code)
 
@@ -21,8 +18,6 @@ local_pat(new, .local_envir = parent.frame())
 \item{.local_envir}{The environment to use for scoping.}
 }
 \description{
-withr-like functions to use a temporary PAT
-
 Temporarily change the \code{GITHUB_PAT} environmental variable for
 GitHub authentication. Based on the \code{withr} interface.
 }

@@ -49,13 +49,17 @@ and members of a team), default is "closed"}
 \examples{
 \dontrun{
 team_create("ghclass-test",c("hw1-team01","hw1-team02"))
+
 org_teams("ghclass-test", "hw1-")
 
 team_rename("ghclass-test", "hw1-team02", "hw1-team03")
+
 org_teams("ghclass-test", "hw1-")
 
 team_delete("ghclass-test", "hw1-team01", prompt = FALSE)
+
 org_teams("ghclass-test", "hw1-")
+
 
 # Cleanup
 team_delete("ghclass-test", org_teams("ghclass-test", "hw1-"), prompt = FALSE)

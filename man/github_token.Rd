@@ -36,14 +36,15 @@ This package looks for the personal access token (PAT) in the following places (
 }
 }
 \examples{
-# Set and get the PAT
-github_set_token("~/.github/token")
-github_set_token("0123456789ABCDEF")
-pat = github_get_token()
-pat
+\dontrun{
+github_test_token()
 
-# Test the PAT
-github_reset_token()
-try(github_test_token())
-try(github_test_token("bad_token"))
+pat = github_get_token()
+
+github_set_token("bad_token")
+github_test_token()
+
+github_set_token(pat)
+}
+
 }

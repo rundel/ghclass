@@ -14,7 +14,9 @@
 #'
 #' @examples
 #' github_get_api_limit()
+#'
 #' github_set_api_limit(500)
+#'
 #' github_get_api_limit()
 NULL
 

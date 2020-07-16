@@ -32,31 +32,43 @@
 #' @examples
 #' \dontrun{
 #' repo_create("ghclass-test", "repo_test")
+#'
 #' repo_exists("ghclass-test/repo_test")
 #'
 #' repo_rename("ghclass-test/repo_test", "repo_test_new")
 #'
+#'
 #' # The new repo exists
 #' repo_exists("ghclass-test/repo_test_new")
+#'
 #' # The old repo forwards to the new repo
 #' repo_exists("ghclass-test/repo_test")
+#'
+#'
 #' # Check for the redirect by setting `strict = TRUE`
 #' repo_exists("ghclass-test/repo_test", strict = TRUE)
 #'
+#'
 #' # The prefered way of copying a repo is by making the source a template
 #' repo_is_template("ghclass-test/repo_test_new")
+#'
 #' repo_set_template("ghclass-test/repo_test_new")
+#'
 #' repo_is_template("ghclass-test/repo_test_new")
+#'
 #'
 #' # Given a template repo we can then directly copy the repo on GitHub
 #' repo_mirror_template("ghclass-test/repo_test_new", "ghclass-test/repo_test_copy")
+#'
 #' repo_exists("ghclass-test/repo_test_copy")
+#'
 #'
 #' # When not using a template you must create the repo first
 #' repo_create("ghclass-test", "repo_test_copy2")
+#'
 #' repo_mirror("ghclass-test/repo_test_new", "ghclass-test/repo_test_copy2")
+#'
 #' repo_exists("ghclass-test/repo_test_copy2")
-#' }
 #'
 #' repo_delete(
 #'  c("ghclass-test/repo_test_new",
@@ -64,6 +76,9 @@
 #'    "ghclass-test/repo_test_copy2"),
 #'  prompt = FALSE
 #' )
+#'
+#' }
+#'
 #'
 NULL
 
@@ -147,6 +162,7 @@ NULL
 #' repo_ls(repo, path = ".")
 #'
 #' repo_get_readme(repo, include_details = FALSE)
+#'
 #' repo_get_file(repo, ".gitignore", include_details = FALSE)
 #'
 #' repo_modify_file(
@@ -156,6 +172,7 @@ NULL
 #' repo_get_readme(repo, include_details = FALSE)
 #'
 #' repo_add_file(repo, file = system.file("DESCRIPTION", package="ghclass"))
+#'
 #' repo_get_file(repo, "DESCRIPTION", include_details = FALSE)
 #'
 #' repo_delete_file(repo, "DESCRIPTION")
@@ -188,7 +205,9 @@ NULL
 #' @examples
 #' \dontrun{
 #' repo_ignore("Sta323-Sp19/hw1")
+#'
 #' repo_unwatch("rundel/ghclass")
+#'
 #' repo_watch("rundel/ghclass")
 #' }
 #'
@@ -229,14 +248,14 @@ NULL
 #' @examples
 #' \dontrun{
 #' repo = repo_create("ghclass-test", "hw1")
+#'
 #' team_create("ghclass-test", "team_awesome")
 #'
 #' repo_add_user(repo, "rundel")
+#'
 #' repo_add_team(repo, "team_awesome")
 #'
 #' repo_remove_team(repo, "team_awesome")
-#'
-#' repo_modi
 #'
 #' repo_collaborators(repo)
 #'

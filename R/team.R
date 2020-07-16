@@ -25,13 +25,17 @@
 #' @examples
 #' \dontrun{
 #' team_create("ghclass-test",c("hw1-team01","hw1-team02"))
+#'
 #' org_teams("ghclass-test", "hw1-")
 #'
 #' team_rename("ghclass-test", "hw1-team02", "hw1-team03")
+#'
 #' org_teams("ghclass-test", "hw1-")
 #'
 #' team_delete("ghclass-test", "hw1-team01", prompt = FALSE)
+#'
 #' org_teams("ghclass-test", "hw1-")
+#'
 #'
 #' # Cleanup
 #' team_delete("ghclass-test", org_teams("ghclass-test", "hw1-"), prompt = FALSE)
@@ -68,12 +72,17 @@ NULL
 #' team_create("ghclass-test",c("hw1-team01","hw1-team02"))
 #'
 #' team_invite("ghclass-test", user = "rundel", team = c("hw1-team01", "hw1-team02", "missing_team"))
-#' team_remove("ghclass-test", user = "rundel", team = "hw1-team01")
+#'
+#' team_remove("ghclass-test", user = "rundel", team = c("hw1-team01", "missing_team"))
 #'
 #' team_members("ghclass-test", org_teams("ghclass-test", "hw1-"))
+#'
 #' team_pending("ghclass-test", org_teams("ghclass-test", "hw1-"))
+#'
 #' team_repos("ghclass-test", org_teams("ghclass-test", "hw1-"))
 #'
+#'
+#' # Cleanup
 #' team_delete("ghclass-test", org_teams("ghclass-test", "hw1-"), prompt = FALSE)
 #' }
 #'

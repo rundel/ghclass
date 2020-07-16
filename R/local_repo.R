@@ -42,15 +42,20 @@
 #'
 #' # Make a local change and push
 #' writeLines("Hello World", file.path(local_repo, "hello.txt"))
+#'
 #' local_repo_add(local_repo, "hello.txt")
+#'
 #' local_repo_commit(local_repo, "Added hello world")
+#'
 #' local_repo_push(local_repo)
 #'
 #' repo_commits(repo)
 #'
 #' # Pulling remote changes
 #' repo_modify_file(repo, "hello.txt", pattern = ".*",  content = "!!!", method = "after")
+#'
 #' local_repo_pull(local_repo)
+#'
 #' local_repo_log(dir)
 #'
 #' repo_delete("ghclass-test/local_repo_test", prompt=FALSE)

@@ -13,11 +13,6 @@
 #' @param tag_collaborators Logical. If TRUE, a message with the repository collaborators is displayed.
 #' @param prompt Chacacter. Prompt the user before overwriting an existing branch.
 #'
-#' @examples
-#' \dontrun{
-#' style_repo("Sta523-Fa17/base_hw1", files = c("hw1_sample.Rmd"))
-#' }
-#'
 #' @export
 #'
 repo_style = function(repo, files = c("*.R", "*.Rmd"), branch = "styler", base = "master",

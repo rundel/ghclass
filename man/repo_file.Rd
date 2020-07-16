@@ -111,6 +111,7 @@ repo = repo_create("ghclass-test", "repo_file_test", auto_init=TRUE)
 repo_ls(repo, path = ".")
 
 repo_get_readme(repo, include_details = FALSE)
+
 repo_get_file(repo, ".gitignore", include_details = FALSE)
 
 repo_modify_file(
@@ -120,6 +121,7 @@ repo_modify_file(
 repo_get_readme(repo, include_details = FALSE)
 
 repo_add_file(repo, file = system.file("DESCRIPTION", package="ghclass"))
+
 repo_get_file(repo, "DESCRIPTION", include_details = FALSE)
 
 repo_delete_file(repo, "DESCRIPTION")

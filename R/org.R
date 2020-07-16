@@ -21,6 +21,7 @@
 #' org_sitrep("ghclass-test")
 #'
 #' org_set_repo_permission("ghclass-test", "read")
+#'
 #' org_sitrep("ghclass-test")
 #'
 #' # Cleanup
@@ -57,18 +58,22 @@ NULL
 #' \dontrun{
 #' # Org Details
 #' org_admins("ghclass-test")
+#'
 #' org_admins("rundel") # User, not an organization
 #'
 #'
 #'# Org Membership - Invite, Status, and Remove
 #' students = c("ghclass-anya", "ghclass-bruno", "ghclass-celine",
 #'              "ghclass-diego", "ghclass-elijah","ghclass-francis")
-#' org_invite(students)
+#'
+#' org_invite("ghclass-test", students)
 #'
 #' org_members("ghclass-test")
+#'
 #' org_pending("ghclass-test")
 #'
-#' org_remove("ghclass-test", students)
+#' org_remove("ghclass-test", students, prompt = FALSE)
+#'
 #' org_pending("ghclass-test")
 #' }
 #'
@@ -104,11 +109,13 @@ NULL
 #' \dontrun{
 #' # Org repos and teams
 #' org_repos("ghclass-test")
+#'
 #' org_repos("ghclass-test", filter = "hw1-")
 #'
 #' org_repo_stats("ghclass-test")
 #'
 #' org_teams("ghclass-test")
+#'
 #' org_team_details("ghclass-test")
 #' }
 #'

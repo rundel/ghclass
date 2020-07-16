@@ -10,7 +10,9 @@ github_api_whoami = function() {
 #' @param quiet Logical. Should status messages be shown.
 #'
 #' @examples
+#' \dontrun{
 #' github_whoami()
+#' }
 #'
 #' @export
 #'

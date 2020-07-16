@@ -32,6 +32,7 @@ org_set_repo_permission(org, permission = c("none", "read", "write", "admin"))
 org_sitrep("ghclass-test")
 
 org_set_repo_permission("ghclass-test", "read")
+
 org_sitrep("ghclass-test")
 
 # Cleanup

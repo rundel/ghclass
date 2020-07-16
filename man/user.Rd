@@ -45,7 +45,9 @@ and \code{FALSE} otherwise. Note that GitHub considers organizations to be a typ
 user_exists(c("rundel", "ghclass-test", "hopefullydoesnotexist"))
 
 user_repos("rundel", type = "public", filter = "ghclass")
+
 user_repos("ghclass-test")
+
 org_repos("ghclass-test")
 
 user_type(c("rundel", "ghclass-test"))

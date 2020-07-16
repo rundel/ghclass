@@ -46,18 +46,22 @@ non-organization owner (e.g. a user account) returns the owner's login.
 \dontrun{
 # Org Details
 org_admins("ghclass-test")
+
 org_admins("rundel") # User, not an organization
 
 
 # Org Membership - Invite, Status, and Remove
 students = c("ghclass-anya", "ghclass-bruno", "ghclass-celine",
              "ghclass-diego", "ghclass-elijah","ghclass-francis")
-org_invite(students)
+
+org_invite("ghclass-test", students)
 
 org_members("ghclass-test")
+
 org_pending("ghclass-test")
 
-org_remove("ghclass-test", students)
+org_remove("ghclass-test", students, prompt = FALSE)
+
 org_pending("ghclass-test")
 }
 

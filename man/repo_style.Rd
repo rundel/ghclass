@@ -39,9 +39,3 @@ until allowed by the author)}
 within a repository using the \code{styler} package and adhering to \code{tidyverse} formatting guidelines.
 }
 }
-\examples{
-\dontrun{
-style_repo("Sta523-Fa17/base_hw1", files = c("hw1_sample.Rmd"))
-}
-
-}

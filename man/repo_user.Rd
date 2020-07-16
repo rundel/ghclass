@@ -69,14 +69,14 @@ Permissions can be set to any of the following:
 \examples{
 \dontrun{
 repo = repo_create("ghclass-test", "hw1")
+
 team_create("ghclass-test", "team_awesome")
 
 repo_add_user(repo, "rundel")
+
 repo_add_team(repo, "team_awesome")
 
 repo_remove_team(repo, "team_awesome")
-
-repo_modi
 
 repo_collaborators(repo)
 

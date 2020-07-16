@@ -13,6 +13,8 @@ github_whoami(quiet = FALSE)
 Returns the login of the authenticated user (based on the current PAT).
 }
 \examples{
+\dontrun{
 github_whoami()
+}
 
 }
