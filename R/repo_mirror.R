@@ -13,6 +13,8 @@ repo_mirror = function(source_repo, target_repo, overwrite=FALSE, verbose=FALSE)
   arg_is_chr(target_repo)
   arg_is_lgl_scalar(overwrite, verbose)
 
+  .Deprecated("repo_mirror_template", package = "ghclass")
+
   withr::local_dir(tempdir())
   dir = file.path(getwd(), get_repo_name(source_repo))
   unlink(dir, recursive = TRUE) # Make sure the source repo local folder does not exist
