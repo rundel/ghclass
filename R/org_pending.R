@@ -2,7 +2,7 @@ github_api_org_pending = function(owner){
   arg_is_chr_scalar(owner)
   ghclass_api_v3_req(
     endpoint = "GET /orgs/:owner/invitations",
-    owner = owner()
+    owner = owner
   )
 }
 
