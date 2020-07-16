@@ -124,18 +124,10 @@ repo_mirror_template("ghclass-test/repo_test_new", "ghclass-test/repo_test_copy"
 
 repo_exists("ghclass-test/repo_test_copy")
 
-
-# When not using a template you must create the repo first
-repo_create("ghclass-test", "repo_test_copy2")
-
-repo_mirror("ghclass-test/repo_test_new", "ghclass-test/repo_test_copy2")
-
-repo_exists("ghclass-test/repo_test_copy2")
-
+# Cleanup
 repo_delete(
  c("ghclass-test/repo_test_new",
-   "ghclass-test/repo_test_copy",
-   "ghclass-test/repo_test_copy2"),
+   "ghclass-test/repo_test_copy"),
  prompt = FALSE
 )
 

@@ -101,8 +101,4 @@ repo_n_commits("rundel/ghclass")
 repo_prs("rundel/ghclass")
 }
 
-\dontrun{
-org_repo_stats("ghclass")
-}
-
 }

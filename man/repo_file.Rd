@@ -118,6 +118,7 @@ repo_modify_file(
   repo, path = "README.md", pattern = "repo_file_test",
   content = "\n\nHello world!\n", method = "after"
 )
+
 repo_get_readme(repo, include_details = FALSE)
 
 repo_add_file(repo, file = system.file("DESCRIPTION", package="ghclass"))

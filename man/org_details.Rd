@@ -65,15 +65,9 @@ org_repos("ghclass-test")
 
 org_repos("ghclass-test", filter = "hw1-")
 
-org_repo_stats("ghclass-test")
-
 org_teams("ghclass-test")
 
 org_team_details("ghclass-test")
-}
-
-\dontrun{
-org_repo_stats("ghclass-test")
 }
 
 }
