@@ -3,7 +3,7 @@ github_api_org_members = function(org) {
 
   ghclass_api_v3_req(
     endpoint = "GET /orgs/:org/members",
-    org = org()
+    org = org
   )
 }
 

@@ -10,8 +10,7 @@
 #     restrictions = list(
 #       users = list(),
 #       teams = list()
-#     ),
-#     .token = github_get_token()
+#     )
 #   )
 # }
 #
@@ -20,8 +19,7 @@
 #     "DELETE /repos/:owner/:repo/branches/:branch/protection",
 #     owner = get_repo_owner(repo),
 #     repo = get_repo_name(repo),
-#     branch = branch,
-#     .token = github_get_token()
+#     branch = branch
 #   )
 # }
 #

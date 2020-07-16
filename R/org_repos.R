@@ -25,7 +25,7 @@ org_repos = function(org, filter = NULL, exclude = FALSE, full_repo = TRUE) {
       } else if (type == "Organization") {
         github_api_org_repos(org)
       } else if (type == "User") {
-        cli_stop("{.val {org}} is a user not an organization. Use {.field user_repos)} instead.")
+        cli_stop("{.val {org}} is a user not an organization. Use {.fun user_repos} instead.")
       } else {
         cli_stop("{.val {org}} has unknown type {.val {type}}.")
       }

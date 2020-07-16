@@ -129,11 +129,13 @@ response_status = function(x) {
 
 
 ghclass_api_v3_req = function(endpoint, ...) {
-  ghclass_api_v3_req(
-    endpoint = endpoint,
-    ...,
-    .limit = github_get_api_limit(),
-    .token = github_get_token(),
-    .progress = FALSE
+  suppressMessages(
+    gh::gh(
+      endpoint = endpoint,
+      ...,
+      .limit = github_get_api_limit(),
+      .token = github_get_token(),
+      .progress = TRUE # TODO - FALSE was giving an error
+    )
   )
 }

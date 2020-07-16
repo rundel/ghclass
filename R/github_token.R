@@ -88,7 +88,7 @@ github_test_token = function(token = github_get_token()) {
   if (file.exists(token))
     token = readLines(token, warn=FALSE)
 
-  res = purrr::safely(ghclass_api_v3_req)("/user", .token=token)
+  res = purrr::safely(ghclass_api_v3_req)("/user")
 
   status_msg(
     res,
