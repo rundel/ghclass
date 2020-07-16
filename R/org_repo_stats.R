@@ -67,11 +67,6 @@ github_api_org_repo_stats = function(org, filter, filter_type, inc_commits, inc_
 #' @param inc_issues Logical. Include issue statistics
 #' @param inc_prs Logical. Include pull request statistics
 #'
-#' @examples
-#' \dontrun{
-#' org_repo_stats("ghclass-test")
-#' }
-#'
 #' @export
 #'
 org_repo_stats = function(org, filter = "", filter_type="in:name", inc_commits = TRUE, inc_issues = TRUE, inc_prs = TRUE) {
