@@ -1,11 +1,3 @@
-github_api_team_rename = function(id, new_name) {
-  ghclass_api_v3_req(
-    endpoint = "PATCH /teams/:team_id",
-    team_id = id,
-    name = new_name
-  )
-}
-
 github_api_team_update = function(
   org, team_slug,
   name = NULL, description = NULL,
@@ -32,18 +24,23 @@ team_rename = function(org, team, new_team, team_type = c("name", "slug")) {
   arg_is_chr(team, new_team)
   team_type = match.arg(team_type)
 
-  if (team_type == "name")
-    team = team_slug_lookup(org, team)
+  if (team_type == "name") {
+    slug = team_slug_lookup(org, team)
+  } else {
+    slug = team
+  }
 
-  check_team_slug(team)
+  check_team_slug(slug)
 
-  purrr::walk2(
-    team, new_team,
-    function(team, new_team) {
-      if (is.na(team))
+  purrr::pwalk(
+    tibble::tibble(team, slug, new_team),
+    function(team, slug, new_team) {
+      if (is.na(slug)) {
+        cli::cli_alert_danger("Team {.val {team}} does not exist.")
         return()
+      }
 
-      res = purrr::safely(github_api_team_update)(org, team, name = new_team)
+      res = purrr::safely(github_api_team_update)(org, slug, name = new_team)
 
       status_msg(
         res,
