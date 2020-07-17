@@ -28,10 +28,13 @@ repo_files = function(repo, branch = "master") {
 github_api_org_accept_invite = function(org, token) {
   arg_is_chr_scalar(org, token)
 
-  ghclass_api_v3_req(
-    endpoint = "PATCH /user/memberships/orgs/:org",
-    org = org,
-    state = "active"
+  with_pat(
+    token,
+    ghclass_api_v3_req(
+      endpoint = "PATCH /user/memberships/orgs/:org",
+      org = org,
+      state = "active"
+    )
   )
 }
 
