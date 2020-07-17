@@ -24,3 +24,9 @@ GitHub authentication. Based on the \code{withr} interface.
 \details{
 if \code{new = NA} is used the \code{GITHUB_PAT} environment variable will be unset.
 }
+\examples{
+\dontrun{
+with_pat("1234", print(github_get_token()))
+}
+
+}

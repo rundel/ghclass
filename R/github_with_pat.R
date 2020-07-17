@@ -13,6 +13,11 @@
 #'
 #' @details if `new = NA` is used the `GITHUB_PAT` environment variable will be unset.
 #'
+#' @examples
+#' \dontrun{
+#' with_pat("1234", print(github_get_token()))
+#' }
+#'
 NULL
 
 #' @rdname github_with_pat
@@ -20,7 +25,13 @@ NULL
 #'
 with_pat = function(new, code) {
   arg_is_chr_scalar(new)
-  withr::with_envvar(c("GITHUB_PAT" = new), code, action = "replace")
+  names(new) = "GITHUB_PAT"
+
+  withr::with_envvar(
+    new = new,
+    code = code,
+    action = "replace"
+  )
 }
 
 #' @rdname github_with_pat
@@ -28,8 +39,13 @@ with_pat = function(new, code) {
 #'
 local_pat = function(new, .local_envir = parent.frame()) {
   arg_is_chr_scalar(new)
-  withr::local_envvar(c("GITHUB_PAT" = new), action = "replace",
-                      .local_envir = .local_envir)
+  names(new) = "GITHUB_PAT"
+
+  withr::local_envvar(
+    new = new,
+    action = "replace",
+    .local_envir = .local_envir
+  )
 }
 
 
