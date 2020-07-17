@@ -16,3 +16,4 @@ pkgdown/
 ^pkgdown$
 vignettes/articles/
 Makefile
+^cran-comments\.md$
