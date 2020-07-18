@@ -6,7 +6,7 @@
 #' @description
 #' * `github_get_token` - returns the user's GitHub personal access token (PAT).
 #'
-#' * `github_set_token` - defines the user's GitHub PAT by setting the `GITHUB_PAT` enivronmental variable. This value can then
+#' * `github_set_token` - defines the user's GitHub PAT by setting the `GITHUB_PAT` environmental variable. This value can then
 #'
 #' * `github_reset_token` - removes the value stored in the `GITHUB_PAT` environmental variable.
 #'

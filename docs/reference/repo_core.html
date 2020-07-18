@@ -283,7 +283,7 @@ Note when using template repos these new repositories must <em>not</em> exist.</
 
 <span class='co'># Given a template repo we can then directly copy the repo on GitHub</span>
 <span class='fu'>repo_mirror_template</span>(<span class='st'>"ghclass-test/repo_test_new"</span>, <span class='st'>"ghclass-test/repo_test_copy"</span>)</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Mirrored repo </span><span style='color: #0000BB;'>'ghclass-test/repo_test_new'</span><span> to repo </span><span style='color: #0000BB;'>'ghclass-test/repo_test_copy'</span><span>.</span></div><div class='input'>
-<span class='fu'>repo_exists</span>(<span class='st'>"ghclass-test/repo_test_copy"</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='fu'>repo_exists</span>(<span class='st'>"ghclass-test/repo_test_copy"</span>)</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'>
 <span class='co'># Cleanup</span>
 <span class='fu'>repo_delete</span>(
  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ghclass-test/repo_test_new"</span>,

@@ -7,9 +7,9 @@
 status](https://github.com/rundel/ghclass/workflows/R-CMD-check/badge.svg)](https://github.com/rundel/ghclass/actions?query=workflow%3AR-CMD-check)
 <!-- badges: end -->
 
-## Tools for managing github class organization accounts
+## Tools for managing GitHub class organization accounts
 
-This package is designed to enable instructors to efficiently manage
+This R package is designed to enable instructors to efficiently manage
 their courses on GitHub. It has a wide range of functionality for
 managing organizations, teams, repositories, and users on GitHub and
 helps automate most of the tedious and repetitive tasks around creating

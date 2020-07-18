@@ -11,7 +11,7 @@
 #' @param draft Logical. Should the pull request be created as a draft pull request? (Draft PRs cannot be merged
 #'   until allowed by the author)
 #' @param tag_collaborators Logical. If TRUE, a message with the repository collaborators is displayed.
-#' @param prompt Chacacter. Prompt the user before overwriting an existing branch.
+#' @param prompt Character. Prompt the user before overwriting an existing branch.
 #'
 #' @export
 #'

@@ -18,7 +18,7 @@ repo_ignore(repo)
 repo_watching(filter = NULL, exclude = FALSE)
 }
 \arguments{
-\item{repo}{github repository address in \code{owner/repo} format}
+\item{repo}{repository address in \code{owner/repo} format}
 
 \item{filter}{character, regex pattern for matching (or excluding) repositories.}
 

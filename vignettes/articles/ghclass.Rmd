@@ -1,7 +1,7 @@
 ---
 title: "Course management with ghclass"
 author: "Mine Çetinkaya-Rundel, Colin Rundel, Therese Anders"
-date: "2020-07-17"
+date: "2020-07-18"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Course management with ghclass}
@@ -26,7 +26,7 @@ ghclass is an R package that is designed to enable instructors to efficiently ma
 
 This package is for everyone!
 But really, if you're an instructor who uses GitHub for your class management, e.g. students submit assignments via GitHub repos, this package is definitely for you!
-The package also assumes that you're famliar with R, but teaching with R is not a requirement since this package is entirely agnostic to the contents of your repositories.
+The package also assumes that you're familiar with R, but teaching with R is not a requirement since this package is entirely agnostic to the contents of your repositories.
 
 (If you're a Python user, see [this post](https://ubc-mds.github.io/2017-08-24-teaching-with-github/) for a Python based alternative.)
 
@@ -122,7 +122,7 @@ The list of the available benefits for teachers is provided in the [teacher tool
 Of particular note is the availability of [GitHub swag](https://education.github.com/toolbox/redeem/github-swag) for your students and [free GitHub Teams plans for academic organizations](https://education.github.com/toolbox/redeem/github-org-upgrades) and a free [GitHub Pro plan for educators](https://github.com/settings/billing).
 
 All of this is an optional step, but one that many will want to do.
-Approval is usually very quick, but it is not soemthing you would want to do the night before classes begin.
+Approval is usually very quick, but it is not something you would want to do the night before classes begin.
 Give yourself at least a week to be safe.
 
 ### Permissions
@@ -478,7 +478,7 @@ whether they want those to be a piece of their public profile on GitHub.
 2. Why not use [GitHub Classroom](https://classroom.github.com/)? \
 \
 Actually you don't have to choose between ghclass and GitHub Classroom, your workflow can use either or both - they are just different interfaces to the same underlying API. Generally, it is mostly a matter of preference, but there are a couple of features in ghclass that are not present in GitHub Classroom:
-    - Instructor defined teams -- GitHub Classrooom asks students to choose their teammates when creating their repository.
+    - Instructor defined teams -- GitHub Classroom asks students to choose their teammates when creating their repository.
     - Editing existing repositories -- being able to push changes to student repositories after an assignment is released can be quite valuable.
     - Command-line interface -- if you like writing R code to solve your problems
 this may be a better fit for you as it provides a greater level of control and

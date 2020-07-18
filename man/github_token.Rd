@@ -22,7 +22,7 @@ github_test_token(token = github_get_token())
 \description{
 \itemize{
 \item \code{github_get_token} - returns the user's GitHub personal access token (PAT).
-\item \code{github_set_token} - defines the user's GitHub PAT by setting the \code{GITHUB_PAT} enivronmental variable. This value can then
+\item \code{github_set_token} - defines the user's GitHub PAT by setting the \code{GITHUB_PAT} environmental variable. This value can then
 \item \code{github_reset_token} - removes the value stored in the \code{GITHUB_PAT} environmental variable.
 \item \code{github_test_token} - checks if a PAT is valid by attempting to authenticate with the GitHub API
 }

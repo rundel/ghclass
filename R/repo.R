@@ -192,7 +192,7 @@ NULL
 #' * `repo_watching` - Returns a vector of your watched repositories. This should
 #' match the list at [github.com/watching](https://github.com/watching).
 #'
-#' @param repo github repository address in `owner/repo` format
+#' @param repo repository address in `owner/repo` format
 #'
 #'
 #' @examples

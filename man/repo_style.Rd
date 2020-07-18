@@ -31,7 +31,7 @@ until allowed by the author)}
 
 \item{tag_collaborators}{Logical. If TRUE, a message with the repository collaborators is displayed.}
 
-\item{prompt}{Chacacter. Prompt the user before overwriting an existing branch.}
+\item{prompt}{Character. Prompt the user before overwriting an existing branch.}
 }
 \description{
 \itemize{
