@@ -6,6 +6,17 @@ authors:
   Mine Çetinkaya-Rundel:
     href: https://mine-cr.com
 
+navbar:
+  type: default
+  left:
+  - icon: fa-home fa-lg
+    href: index.html
+  - text: Introduction
+    href: articles/articles/ghclass.html
+  - text: Reference
+    href: reference/index.html
+  - text: "Change log"
+    href: news/index.html
 
 reference:
   - title: GitHub
