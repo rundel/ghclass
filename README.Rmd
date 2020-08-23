@@ -19,7 +19,7 @@ Install the development version package from GitHub:
 remotes::install_github("rundel/ghclass")
 ```
 
-See package [vignette](https://rundel.github.io/ghclass/articles/ghclass.html) for details on how to use the package.
+See package [vignette](https://rundel.github.io/ghclass/articles/articles/ghclass.html) for details on how to use the package.
 
 
 ## Peer Review

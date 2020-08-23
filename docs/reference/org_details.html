@@ -97,18 +97,18 @@ basic statistics about those repositories.
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="../articles/articles/ghclass.html">Get started</a>
+  <a href="../articles/articles/ghclass.html">Introduction</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">Changelog</a>
+  <a href="../news/index.html">Change log</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -211,19 +211,16 @@ for more details.</p></td>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'># Org repos and teams</span>
 <span class='fu'>org_repos</span>(<span class='st'>"ghclass-test"</span>)
 
 <span class='fu'>org_repos</span>(<span class='st'>"ghclass-test"</span>, <span class='kw'>filter</span> <span class='kw'>=</span> <span class='st'>"hw1-"</span>)
 
-<span class='fu'>org_teams</span>(<span class='st'>"ghclass-test"</span>)</div><div class='output co'>#&gt; [1] "team_awesome"</div><div class='input'>
-<span class='fu'>org_team_details</span>(<span class='st'>"ghclass-test"</span>)</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 1 x 5</span><span>
-#&gt;   slug              id name         privacy permission
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> team_awesome 3</span><span style='text-decoration: underline;'>948</span><span>465 team_awesome secret  pull      </div><div class='input'># }
+<span class='fu'>org_teams</span>(<span class='st'>"ghclass-test"</span>)
 
-</div></span></pre>
+<span class='fu'>org_team_details</span>(<span class='st'>"ghclass-test"</span>)
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -97,18 +97,18 @@ repo_prs - Returns a tibble of pull requests for a GitHub repository.
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="../articles/articles/ghclass.html">Get started</a>
+  <a href="../articles/articles/ghclass.html">Introduction</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">Changelog</a>
+  <a href="../news/index.html">Change log</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -252,49 +252,19 @@ Pass in "none" for issues with no assigned user, and "*" for issues assigned to 
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
-<span class='fu'>repo_clone_url</span>(<span class='st'>"rundel/ghclass"</span>)</div><div class='output co'>#&gt; [1] "https://github.com/rundel/ghclass.git"</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'>repo_clone_url</span>(<span class='st'>"rundel/ghclass"</span>)
+
 <span class='fu'>repo_branches</span>(<span class='st'>"rundel/ghclass"</span>)
 
-<span class='fu'>repo_commits</span>(<span class='st'>"rundel/ghclass"</span>)</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 500 x 6</span><span>
-#&gt;    repo     login name    email    date                msg                      
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;dttm&gt;</span><span>              </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                    
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> rundel/… rund… Colin … rundel@… 2020-07-17 </span><span style='color: #949494;'>14:39:00</span><span> </span><span style='color: #949494;'>"</span><span>Update pkgdown</span><span style='color: #949494;'>"</span><span>         
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> rundel/… rund… Colin … rundel@… 2020-07-17 </span><span style='color: #949494;'>14:32:55</span><span> </span><span style='color: #949494;'>"</span><span>Update docs and vignett…
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> rundel/… rund… Colin … rundel@… 2020-07-17 </span><span style='color: #949494;'>09:40:10</span><span> </span><span style='color: #949494;'>"</span><span>Merge branch 'master' o…
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> rundel/… rund… Colin … rundel@… 2020-07-17 </span><span style='color: #949494;'>09:38:15</span><span> </span><span style='color: #949494;'>"</span><span>Check lengths and purge…
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> rundel/… rund… Colin … rundel@… 2020-07-17 </span><span style='color: #949494;'>09:37:36</span><span> </span><span style='color: #949494;'>"</span><span>cran comment draft</span><span style='color: #949494;'>"</span><span>     
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> rundel/… rund… Colin … rundel@… 2020-07-17 </span><span style='color: #949494;'>09:37:27</span><span> </span><span style='color: #949494;'>"</span><span>Use student's pat to ac…
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> rundel/… rund… Colin … rundel@… 2020-07-17 </span><span style='color: #949494;'>09:37:12</span><span> </span><span style='color: #949494;'>"</span><span>Fix bug where with_pat …
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> rundel/… rund… Colin … rundel@… 2020-07-16 </span><span style='color: #949494;'>22:45:15</span><span> </span><span style='color: #949494;'>"</span><span>Merge pull request #108…
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> rundel/… rund… Colin … rundel@… 2020-07-16 </span><span style='color: #949494;'>13:46:55</span><span> </span><span style='color: #949494;'>"</span><span>Update description</span><span style='color: #949494;'>"</span><span>     
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> rundel/… rund… Colin … rundel@… 2020-07-16 </span><span style='color: #949494;'>13:34:38</span><span> </span><span style='color: #949494;'>"</span><span>Clean up R CMD check --…
-#&gt; </span><span style='color: #949494;'># … with 490 more rows</span><span></div><div class='input'>
-<span class='fu'>repo_issues</span>(<span class='st'>"rundel/ghclass"</span>)</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Retrieved issues for repo </span><span style='color: #0000BB;'>'rundel/ghclass'</span><span>.</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 26 x 10</span><span>
-#&gt;    repo  number title state comments created             updated            
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dttm&gt;</span><span>              </span><span style='color: #949494;font-style: italic;'>&lt;dttm&gt;</span><span>             
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> rund…    106 New … open         0 2020-04-08 </span><span style='color: #949494;'>00:10:38</span><span> 2020-04-08 </span><span style='color: #949494;'>00:10:38</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> rund…    105 Peer… open         0 2020-03-30 </span><span style='color: #949494;'>10:06:30</span><span> 2020-03-30 </span><span style='color: #949494;'>10:06:30</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> rund…    103 org_… open         1 2020-02-15 </span><span style='color: #949494;'>17:07:29</span><span> 2020-02-17 </span><span style='color: #949494;'>11:31:14</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> rund…     97 Test… open         1 2020-01-31 </span><span style='color: #949494;'>00:57:02</span><span> 2020-02-11 </span><span style='color: #949494;'>13:13:38</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> rund…     95 org_… open         1 2020-01-28 </span><span style='color: #949494;'>19:35:58</span><span> 2020-01-28 </span><span style='color: #949494;'>19:41:12</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> rund…     89 `pee… open         0 2019-11-06 </span><span style='color: #949494;'>23:53:04</span><span> 2019-11-06 </span><span style='color: #949494;'>23:53:04</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> rund…     88 `org… open         0 2019-11-06 </span><span style='color: #949494;'>20:25:22</span><span> 2019-11-06 </span><span style='color: #949494;'>20:25:22</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> rund…     87 `pee… open         0 2019-11-03 </span><span style='color: #949494;'>15:51:44</span><span> 2019-11-06 </span><span style='color: #949494;'>23:49:11</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> rund…     86 `pee… open         0 2019-11-02 </span><span style='color: #949494;'>14:38:09</span><span> 2019-11-02 </span><span style='color: #949494;'>14:38:09</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> rund…     85 Anon… open         0 2019-11-02 </span><span style='color: #949494;'>14:36:44</span><span> 2019-11-02 </span><span style='color: #949494;'>14:36:44</span><span>
-#&gt; </span><span style='color: #949494;'># … with 16 more rows, and 3 more variables: closed </span><span style='color: #949494;font-style: italic;'>&lt;dttm&gt;</span><span style='color: #949494;'>, created_by </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span style='color: #949494;'>,</span><span>
-#&gt; </span><span style='color: #949494;'>#   assignees </span><span style='color: #949494;font-style: italic;'>&lt;list&gt;</span><span></div><div class='input'>
-<span class='fu'>repo_n_commits</span>(<span class='st'>"rundel/ghclass"</span>)</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 1 x 3</span><span>
-#&gt;   repo           branch     n
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> rundel/ghclass master   959</div><div class='input'>
-<span class='fu'>repo_prs</span>(<span class='st'>"rundel/ghclass"</span>)</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 1 x 7</span><span>
-#&gt;   repo          pr       id title                        state base_ref head_ref
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                        </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> rundel/gh…   106   4.01</span><span style='color: #949494;'>e</span><span>8 New steps to apply for GH o… open  master   patch-1 </div><div class='input'># }
+<span class='fu'>repo_commits</span>(<span class='st'>"rundel/ghclass"</span>)
 
-</div></span></pre>
+<span class='fu'>repo_issues</span>(<span class='st'>"rundel/ghclass"</span>)
+
+<span class='fu'>repo_n_commits</span>(<span class='st'>"rundel/ghclass"</span>)
+
+<span class='fu'>repo_prs</span>(<span class='st'>"rundel/ghclass"</span>)
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
