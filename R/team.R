@@ -79,10 +79,15 @@ NULL
 #'
 #' team_pending("ghclass-test", org_teams("ghclass-test", "hw1-"))
 #'
+#' # Add team repo
+#' repo_create("ghclass-test", name = "hw1-team02")
+#' repo_add_team("ghclass-test/hw1-team02", team = "hw1-team02")
+#'
 #' team_repos("ghclass-test", org_teams("ghclass-test", "hw1-"))
 #'
 #'
 #' # Cleanup
+#' repo_delete("ghclass-test/hw1-team02", prompt = FALSE)
 #' team_delete("ghclass-test", org_teams("ghclass-test", "hw1-"), prompt = FALSE)
 #' }
 #'
