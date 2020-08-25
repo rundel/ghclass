@@ -1,6 +1,7 @@
 github_api_team_repos = function(org, team_slug) {
   ghclass_api_v3_req(
     endpoint = "GET /orgs/:org/teams/:team_slug/repos",
+    org = org,
     team_slug = team_slug
   )
 }
