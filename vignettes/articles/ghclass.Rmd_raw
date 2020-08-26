@@ -47,7 +47,6 @@ pats = unserialize( sodium::data_decrypt(enc, key) )
 rm(enc, key)
 ```
 
-
 ```{r reset, include = FALSE}
 # Remove all repos, teams, and members
 repos = org_repos("ghclass-vignette")

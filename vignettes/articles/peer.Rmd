@@ -2,87 +2,24 @@
 title: "Peer review with ghclass"
 output: rmarkdown::html_vignette
 author: "Therese Anders and Mine Çetinkaya-Rundel"
-date: "`r Sys.Date()`"
+date: "2020-08-26"
 vignette: >
   %\VignetteIndexEntry{Peer review with ghclass}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-```{css echo=FALSE}
-h1.title {
-  font-size: 38px;
-  color: #581845;
-}
-h1 { /* Header 1 */
-  font-size: 26px;
-  color: #581845;
-}
-h2 { /* Header 2 */
-    font-size: 20px;
-  color: #900C3F;
-}
-h3 { /* Header 3 */
-  font-size: 14px;
-  color: #C70039;
-}
-```
 
-```{r include = FALSE, cache = FALSE}
-knitr::opts_chunk$set(
-  out.width = "100%",
-  collapse = TRUE,
-  comment = "#>"
-)
 
-# Turn on ANSI colors
-options(
-  crayon.enabled = TRUE,
-  crayon.colors = 256
-)
 
-crayon::num_colors(forget = TRUE)
 
-asciicast::init_knitr_engine(
-  startup = quote({
-    library(ghclass)
-  }),
-  echo = TRUE,
-  echo_input = FALSE
-)
-```
 
-```{r setup, include=FALSE}
-library(ghclass)
-```
 
-```{r pats, include = FALSE}
-roster = readr::read_csv( system.file("roster.csv", package = "ghclass") )
-enc = readRDS(here::here("credentials/example_users.enc.rds"))
-key = sodium::sha256(charToRaw(Sys.getenv("GHCLASS_PAT")))
-pats = unserialize( sodium::data_decrypt(enc, key) )
 
-rm(enc, key)
-```
 
-```{r reset, include = FALSE}
-# Remove all repos, teams, and members
-repos = org_repos("ghclass-vignette")
-teams = org_teams("ghclass-vignette")
-users = org_members("ghclass-vignette", include_admins = FALSE)
 
-repo_delete(repos, prompt = FALSE)
-team_delete("ghclass-vignette", teams, prompt = FALSE)
-org_remove("ghclass-vignette", users, prompt = FALSE)
 
-repo_set_template("Sta323-Sp19/hw1", TRUE)
-org_set_repo_permission("ghclass-vignette", "none")
-```
 
-```{r invite, include = FALSE}
-org_invite("ghclass-vignette", roster$github)
-ghclass:::org_accept_invite("ghclass-vignette", names(pats), pats)
-```
 
 
 
@@ -92,18 +29,20 @@ For more information on the pedagogy of peer review in undergraduate courses, se
 # Before peer review
 
 The peer review process is initiated after a regular assignment has been distributed to students.
-Below, we run through a quick example of how to set up a fictional assignment "hw2" for four students using the `org_create_assignment()` function.
-For a more detailed description of how to set up student repositories in a GitHub Organization,  see the `ghclass` ["Getting started" vignette](ghclass.html).
+Below, we run through a quick example of how to set up a fictional assignment "hw2" for four students using the `create_repo()` function.
+For a more detailed description of how to set up student repositories in a GitHub Organization,  see the `ghclass` ["Get started" vignette](https://rundel.github.io/ghclass/articles/ghclass.html).
 
-```{asciicast peer_create_assign}
+
+```asciicast
 students = c("ghclass-anya", "ghclass-bruno", "ghclass-celine", "ghclass-diego")
 repos = paste0("hw1-", students)
 
-org_create_assignment(
-  org = "ghclass-vignette", repo = repos, user = students,
-  source_repo = "Sta323-Sp19/hw1"
-)
+org_create_assignment("ghclass-vignette", repo = repos, user = students,
+                      source_repo = "Sta323-Sp19/hw1")
 ```
+
+
+<img src="figure//peer_create_assign.svg" title="plot of chunk peer_create_assign" alt="plot of chunk peer_create_assign" width="100%" />
 
 # Step-by-step guide to peer review
 
@@ -113,9 +52,7 @@ The peer review process with `ghclass` has three stages.
 2. **Assign review**: Create and customize review forms, distribute review forms and authors' assignments to reviewers, students complete review.
 3. **Return review & rating**: Create rating form, return review to authors, optional: students rate reviews.
 
-```{r, out.width = "500px", echo = FALSE}
-knitr::include_graphics("imgs/sequence.png")
-```
+<img src="imgs/sequence.png" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" width="500px" />
 
 
 ## Initiation
@@ -142,10 +79,14 @@ The roster file will contain the following columns:
 
 We recommend for instructors to create a new roster file (with a new random seed) for each assignment to prevent the same pairings of students reviewing each others work over and over throughout the course. For the purpose of demonstration, below we save the roster in a data frame called `roster_test`.
 
-```{asciicast peer_roster_create}
+
+```asciicast
 roster = peer_roster_create(n_rev = 2, user = students, seed = 123, write_csv = FALSE)
 roster
 ```
+
+
+<img src="figure//peer_roster_create.svg" title="plot of chunk peer_roster_create" alt="plot of chunk peer_roster_create" width="100%" />
 
 ### Create review repositories
 
@@ -153,9 +94,13 @@ The `peer_init()` function initiates peer review repositories for each user. Thi
 `peer_init()` creates a review repository for each user, adds users to the respective repositories, and applies peer review labels to all repositories (i.e. assignment and review repositories).
 The repositories are identified via the tag "-review" being automatically added to the instructor-specified `prefix` or `suffix` parameters.
 
-```{asciicast peer_init}
+
+```asciicast
 peer_init(org = "ghclass-vignette", roster = roster, prefix = "hw1-")
 ```
+
+
+<img src="figure//peer_init.svg" title="plot of chunk peer_init" alt="plot of chunk peer_init" width="100%" />
 
 ## Assign reviewers
 
@@ -173,9 +118,13 @@ By default, the files contain an `author` field in the YAML header to prompt rev
 Keeping reviewers non-anonymous (as opposed to authors) is likely to discourage overly harsh or rude reviews.
 If reviewers should instead stay anonymous, setting `double_blind = TRUE` will remove this field.
 
-```{asciicast peer_form, eval = FALSE}
+
+```asciicast
 peer_form_create_review(n = 2, double_blind = TRUE, fname = "feedback_blank_review")
 ```
+
+
+<img src="figure//peer_form.svg" title="plot of chunk peer_form" alt="plot of chunk peer_form" width="100%" />
 
 The blank form is saved in the working directory, unless otherwise specified. The instructor can then customize the questions to be answered by reviewers.
 
@@ -195,7 +144,8 @@ You may instruct students to close the issue to signal that they completed the a
 
 <!-- TODO - fix from here on -->
 
-```{r peer_assign, eval=FALSE}
+
+```r
 peer_assign(
   org = "ghclass-vignette",
   roster = roster,
@@ -213,7 +163,8 @@ To ensure that the process of moving files from authors' to reviewers' repositor
 `peer_score_review()` collects the scores given by reviewers to authors.
 We recommend keeping the default setting of `write_csv = TRUE` to save the output as a `.csv` file in the working directory.
 
-```{r peer_score_review, eval = FALSE}
+
+```r
 peer_score_review(
   org = "ghclass-vignette",
   roster = roster_test,
@@ -241,7 +192,8 @@ The rating categories can be adjusted via the `category` parameter.
 By default, the resulting `.Rmd` file is saved in the working directory.
 Customization of this form is possible, but not necessary.
 
-```{r peer_form_create_rating, eval = FALSE}
+
+```r
 peer_form_create_rating(fname = "hw2_rating",
                         category = c("accuracy", "fairness"))
 ```
@@ -281,7 +233,8 @@ Only select files will be moved and saved in reviewer-specific folders on author
 Please not that the `peer_return()` function is relatively costly in terms of calls to the API.
 Instructors are advised to select only the most relevant files in this step, for example the review feedback form and comments made by the reviewer on authors' original files.
 
-```{r peer_return, eval = FALSE}
+
+```r
 peer_return(
   org = "ghclass-vignette",
   roster = roster_test,
@@ -298,7 +251,8 @@ peer_return(
 We use `peer_score_rating()` to collect the ratings given by authors on reviewers' feedback.
 We recommend keeping the default setting of `write_csv = TRUE` to save the output as a `.csv` file.
 
-```{r peer_score_rating, eval = FALSE}
+
+```r
 peer_score_rating(
   org = org,
   roster = roster_test,
@@ -312,19 +266,7 @@ The output data frame will replicate the roster and add columns for each reviewe
 Scores are listed by the role that a reviewer had for the author rating the review, and coded by the randomized user names.
 In the example below, user `bruno-ghclass` gave `anya-ghclass` ratings 4 and 3 for their review (Anya was reviewer 1 for Bruno); user `diego-ghclass` gave `anya-ghclass` rating 2 and 1 for their review (Anya was reviewer 2 for Diego).
 
-```{asciicast scores_aut, echo = FALSE}
-user = c("anya-ghclass", "bruno-ghclass", "celine-ghclass", "diego-ghclass")
-scores_aut = peer_roster_create(2, user, seed = 123, write_csv = FALSE)
-scores_aut$rev1_c1 = NA
-scores_aut$rev1_c2 = NA
-scores_aut$rev2_c1 = NA
-scores_aut$rev2_c2 = NA
-scores_aut$rev1_c1[scores_aut$user == "anya-ghclass"] <- 4
-scores_aut$rev1_c2[scores_aut$user == "anya-ghclass"] <- 3
-scores_aut$rev2_c1[scores_aut$user == "anya-ghclass"] <- 2
-scores_aut$rev2_c2[scores_aut$user == "anya-ghclass"] <- 1
-scores_aut
-```
+<img src="figure//scores_aut.svg" title="plot of chunk scores_aut" alt="plot of chunk scores_aut" width="100%" />
 
 ## Issues and recommendations
 
