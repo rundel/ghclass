@@ -1,3 +1,5 @@
+# ghclass (development version)
+
 # ghclass 0.2.0
 
 * First official release of ghclass
