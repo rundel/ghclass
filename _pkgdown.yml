@@ -15,6 +15,12 @@ navbar:
     href: articles/articles/ghclass.html
   - text: Reference
     href: reference/index.html
+  - text: Articles
+    menu:
+    - text: "Peer review - Introduction"
+      href: articles/articles/peer.html
+    - text: "Peer review - Student Guide"
+      href: articles/articles/peer_students.html
   - text: "Change log"
     href: news/index.html
 

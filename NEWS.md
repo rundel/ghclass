@@ -1,5 +1,7 @@
 # ghclass (development version)
 
+* Reintroducing peer review functionality
+
 # ghclass 0.2.0
 
 * First official release of ghclass
