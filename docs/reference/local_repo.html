@@ -90,7 +90,7 @@ local_repo_log - Equivalent to git log - returns a data frame for git log entrie
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ghclass</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9000</span>
       </span>
     </div>
 
@@ -107,6 +107,21 @@ local_repo_log - Equivalent to git log - returns a data frame for git log entrie
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/articles/peer.html">Peer review - Introduction</a>
+    </li>
+    <li>
+      <a href="../articles/articles/peer_students.html">Peer review - Student Guide</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Change log</a>
@@ -237,37 +252,34 @@ local_repo_log - Equivalent to git log - returns a data frame for git log entrie
     <p>All of these functions depend on the gert library being installed.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
-<span class='no'>repo</span> <span class='kw'>=</span> <span class='fu'><a href='repo_core.html'>repo_create</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"local_repo_test"</span>)</div><div class='output co'>#&gt; <span class='message'><span style='color: #00BB00;'>✓</span><span> Created repo </span><span style='color: #0000BB;'>'ghclass-test/local_repo_test'</span><span>.</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='no'>repo</span> <span class='kw'>=</span> <span class='fu'><a href='repo_core.html'>repo_create</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"local_repo_test"</span>)
+
 <span class='no'>dir</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"repos"</span>)
-<span class='no'>local_repo</span> <span class='kw'>=</span> <span class='fu'>local_repo_clone</span>(<span class='no'>repo</span>, <span class='no'>dir</span>)</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Cloned </span><span style='color: #0000BB;'>'ghclass-test/local_repo_test'</span><span>.</span></div><div class='input'>
-<span class='fu'>local_repo_log</span>(<span class='no'>dir</span>)</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 1 x 7</span><span>
-#&gt;   repo               commit     author   time                files merge message
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;fs::path&gt;</span><span>         </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;dttm&gt;</span><span>              </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;lgl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>  
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> </span><span style='color: #0000BB;background-color: #00BB00;'>/private/var/fold</span><span>… e0a3cbb11… Colin R… 2020-08-25 </span><span style='color: #949494;'>11:58:58</span><span>     1 FALSE Initia…</div><div class='input'>
+<span class='no'>local_repo</span> <span class='kw'>=</span> <span class='fu'>local_repo_clone</span>(<span class='no'>repo</span>, <span class='no'>dir</span>)
+
+<span class='fu'>local_repo_log</span>(<span class='no'>dir</span>)
+
 <span class='co'># Make a local change and push</span>
 <span class='fu'><a href='https://rdrr.io/r/base/writeLines.html'>writeLines</a></span>(<span class='st'>"Hello World"</span>, <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>local_repo</span>, <span class='st'>"hello.txt"</span>))
 
-<span class='fu'>local_repo_add</span>(<span class='no'>local_repo</span>, <span class='st'>"hello.txt"</span>)</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Added files </span><span style='color: #0000BB;'>'hello.txt'</span><span> to </span><span style='color: #0000BB;'>'local_repo_test'</span><span>.</span></div><div class='input'>
-<span class='fu'>local_repo_commit</span>(<span class='no'>local_repo</span>, <span class='st'>"Added hello world"</span>)</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Committed changes to </span><span style='color: #0000BB;'>'local_repo_test'</span><span>.</span></div><div class='input'>
-<span class='fu'>local_repo_push</span>(<span class='no'>local_repo</span>)</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Pushed from local repo </span><span style='color: #0000BB;'>'local_repo_test'</span><span> to </span><span style='color: #0000BB;'>'origin/master'</span><span>.</span></div><div class='input'>
-<span class='fu'><a href='repo_details.html'>repo_commits</a></span>(<span class='no'>repo</span>)</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 2 x 6</span><span>
-#&gt;   repo               login  name      email      date                msg        
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>              </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;dttm&gt;</span><span>              </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> ghclass-test/loca… rundel Colin Ru… rundel@gm… 2020-08-25 </span><span style='color: #949494;'>10:59:01</span><span> Added hell…
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> ghclass-test/loca… rundel Colin Ru… rundel@gm… 2020-08-25 </span><span style='color: #949494;'>10:58:58</span><span> Initial co…</div><div class='input'>
-<span class='co'># Pulling remote changes</span>
-<span class='fu'><a href='repo_file.html'>repo_modify_file</a></span>(<span class='no'>repo</span>, <span class='st'>"hello.txt"</span>, <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>".*"</span>,  <span class='kw'>content</span> <span class='kw'>=</span> <span class='st'>"!!!"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"after"</span>)</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Modified file </span><span style='color: #0000BB;'>'ghclass-test/local_repo_test/hello.txt'</span><span>.</span></div><div class='input'>
-<span class='fu'>local_repo_pull</span>(<span class='no'>local_repo</span>)</div><div class='output co'>#&gt; <span class='message'>Performing fast-foward merge, no commit needed</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Pulled to local repo </span><span style='color: #0000BB;'>'local_repo_test'</span><span>.</span></div><div class='input'>
-<span class='fu'>local_repo_log</span>(<span class='no'>dir</span>)</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 3 x 7</span><span>
-#&gt;   repo              commit     author   time                files merge message 
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;fs::path&gt;</span><span>        </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;dttm&gt;</span><span>              </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;lgl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> </span><span style='color: #0000BB;background-color: #00BB00;'>/private/var/fol</span><span>… e548ac1b7… Colin R… 2020-08-25 </span><span style='color: #949494;'>11:59:06</span><span>     1 FALSE </span><span style='color: #949494;'>"</span><span>Modifi…
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> </span><span style='color: #0000BB;background-color: #00BB00;'>/private/var/fol</span><span>… 19f374deb… Colin R… 2020-08-25 </span><span style='color: #949494;'>11:59:01</span><span>     1 FALSE </span><span style='color: #949494;'>"</span><span>Added …
-#&gt; </span><span style='color: #BCBCBC;'>3</span><span> </span><span style='color: #0000BB;background-color: #00BB00;'>/private/var/fol</span><span>… e0a3cbb11… Colin R… 2020-08-25 </span><span style='color: #949494;'>11:58:58</span><span>     1 FALSE </span><span style='color: #949494;'>"</span><span>Initia…</div><div class='input'>
-<span class='fu'><a href='repo_core.html'>repo_delete</a></span>(<span class='st'>"ghclass-test/local_repo_test"</span>, <span class='kw'>prompt</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Deleted repo </span><span style='color: #0000BB;'>'ghclass-test/local_repo_test'</span><span>.</span></div><div class='input'># }
+<span class='fu'>local_repo_add</span>(<span class='no'>local_repo</span>, <span class='st'>"hello.txt"</span>)
 
-</div></span></pre>
+<span class='fu'>local_repo_commit</span>(<span class='no'>local_repo</span>, <span class='st'>"Added hello world"</span>)
+
+<span class='fu'>local_repo_push</span>(<span class='no'>local_repo</span>)
+
+<span class='fu'><a href='repo_details.html'>repo_commits</a></span>(<span class='no'>repo</span>)
+
+<span class='co'># Pulling remote changes</span>
+<span class='fu'><a href='repo_file.html'>repo_modify_file</a></span>(<span class='no'>repo</span>, <span class='st'>"hello.txt"</span>, <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>".*"</span>,  <span class='kw'>content</span> <span class='kw'>=</span> <span class='st'>"!!!"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"after"</span>)
+
+<span class='fu'>local_repo_pull</span>(<span class='no'>local_repo</span>)
+
+<span class='fu'>local_repo_log</span>(<span class='no'>dir</span>)
+
+<span class='fu'><a href='repo_core.html'>repo_delete</a></span>(<span class='st'>"ghclass-test/local_repo_test"</span>, <span class='kw'>prompt</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

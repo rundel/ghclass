@@ -87,7 +87,7 @@ github_test_token - checks if a PAT is valid by attempting to authenticate with 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ghclass</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9000</span>
       </span>
     </div>
 
@@ -104,6 +104,21 @@ github_test_token - checks if a PAT is valid by attempting to authenticate with 
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/articles/peer.html">Peer review - Introduction</a>
+    </li>
+    <li>
+      <a href="../articles/articles/peer_students.html">Peer review - Student Guide</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Change log</a>
@@ -172,16 +187,16 @@ github_test_token - checks if a PAT is valid by attempting to authenticate with 
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
-<span class='fu'>github_test_token</span>()</div><div class='output co'>#&gt; <span class='message'><span style='color: #00BB00;'>✓</span><span> Your GitHub PAT authenticated correctly.</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'>github_test_token</span>()
+
 <span class='no'>pat</span> <span class='kw'>=</span> <span class='fu'>github_get_token</span>()
 
 <span class='fu'>github_set_token</span>(<span class='st'>"bad_token"</span>)
-<span class='fu'>github_test_token</span>()</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Your GitHub PAT failed to authenticate.</span></div><div class='output co'>#&gt; <span class='message'>API message: </span><span style='color: #555555;'>Bad credentials</span><span></span></div><div class='output co'>#&gt; <span class='message'>API docs: </span><span style='color: #555555;'>https://docs.github.com/rest</span><span></span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─GitHub API error (401): 401 Unauthorized
-#&gt;   ├─ 
-#&gt;   └─ </div><div class='input'>
+<span class='fu'>github_test_token</span>()
+
 <span class='fu'>github_set_token</span>(<span class='no'>pat</span>)
-<span class='co'># }</span></div></span></pre>
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

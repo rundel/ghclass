@@ -2,8 +2,12 @@ pandoc: 2.10.1
 pkgdown: 1.5.1
 pkgdown_sha: ~
 articles:
+  feedback_blank_review: articles/feedback_blank_review.html
   ghclass: articles/ghclass.html
-last_built: 2020-08-25T10:58Z
+  hw2_rating: articles/hw2_rating.html
+  peer: articles/peer.html
+  peer_students: articles/peer_students.html
+last_built: 2020-08-26T14:40Z
 urls:
   reference: https://rundel.github.io/ghclass/reference
   article: https://rundel.github.io/ghclass/articles

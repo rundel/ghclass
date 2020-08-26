@@ -46,6 +46,36 @@
     <loc>https://rundel.github.io/ghclass/reference/org_perm.html</loc>
   </url>
   <url>
+    <loc>https://rundel.github.io/ghclass/reference/peer_assign.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/ghclass/reference/peer_file_add_aut.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/ghclass/reference/peer_file_add_rev.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/ghclass/reference/peer_form_create_rating.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/ghclass/reference/peer_form_create_review.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/ghclass/reference/peer_init.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/ghclass/reference/peer_return.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/ghclass/reference/peer_roster_create.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/ghclass/reference/peer_score_rating.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/ghclass/reference/peer_score_review.html</loc>
+  </url>
+  <url>
     <loc>https://rundel.github.io/ghclass/reference/pr.html</loc>
   </url>
   <url>
@@ -76,6 +106,18 @@
     <loc>https://rundel.github.io/ghclass/reference/user.html</loc>
   </url>
   <url>
+    <loc>https://rundel.github.io/ghclass/articles/articles/feedback_blank_review.html</loc>
+  </url>
+  <url>
     <loc>https://rundel.github.io/ghclass/articles/articles/ghclass.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/ghclass/articles/articles/hw2_rating.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/ghclass/articles/articles/peer.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/ghclass/articles/articles/peer_students.html</loc>
   </url>
 </urlset>
