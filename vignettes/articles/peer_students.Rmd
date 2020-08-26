@@ -2,43 +2,19 @@
 title: "Peer review instructions for students"
 output: rmarkdown::html_vignette
 author: "Therese Anders and Mine Çetinkaya-Rundel"
-date: "`r Sys.Date()`"
+date: "2020-08-26"
 vignette: >
   %\VignetteIndexEntry{Peer review instructions for students}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include=FALSE}
-params = list(
-  course = "Peer review 101, Summer 2019",
-  org = "ghclass-test"
-)
-
-options(knitr.graphics.error = FALSE)
-```
 
 
-```{css echo=FALSE}
-h1.title {
-  font-size: 38px;
-  color: #581845;
-}
-h1 { /* Header 1 */
-  font-size: 26px;
-  color: #581845;
-}
-h2 { /* Header 2 */
-    font-size: 20px;
-  color: #900C3F;
-}
-h3 { /* Header 3 */
-  font-size: 14px;
-  color: #C70039;
-}
-```
 
-Welcome to `r params$course`! This course uses GitHub as a platform to submit your assignments and to give/receive feedback from your peers. Please read the instructions below.
+
+
+Welcome to Peer review 101, Summer 2019! This course uses GitHub as a platform to submit your assignments and to give/receive feedback from your peers. Please read the instructions below.
 
 ## Before the start of the assignment
 ### Create GitHub account
@@ -48,10 +24,10 @@ If you do not have one already, please create a free [GitHub account](https://gi
 Please enter your GitHub username to the list provided by your instructor.
 
 ### Accept invitation to class organization
-Your instructor will add you to the ``r params$org`` organization on Github. You will receive an invitation to join to the email address you specified when creating your GitHub account. Please accept the invitation to join the ``r params$org`` organization.
+Your instructor will add you to the `ghclass-test` organization on Github. You will receive an invitation to join to the email address you specified when creating your GitHub account. Please accept the invitation to join the `ghclass-test` organization.
 
 ## Assignment
-Your instructor will create a private repository on the ``r params$org`` organization and place the assignment files into this repository. The repository might be called something like ``r paste0(params$org, "/hw1-username")``.
+Your instructor will create a private repository on the `ghclass-test` organization and place the assignment files into this repository. The repository might be called something like `ghclass-test/hw1-username`.
 
 To start the assignment, please complete the following steps:
 
@@ -65,18 +41,14 @@ To start the assignment, please complete the following steps:
 - <span style="color:#C70039">Don't change file names:</span> Please do not change the names of files in your repository.
 
 ## Review
-Once the assignment is complete, the review process begins. Your instructor will create a second repository for you, named something like ``r paste0(params$org, "/hw1-review-username")``.
+Once the assignment is complete, the review process begins. Your instructor will create a second repository for you, named something like `ghclass-test/hw1-review-username`.
 
-```{r, out.width = "650px", echo = FALSE}
-knitr::include_graphics("imgs/screen_repos.jpg")
-```
+<img src="imgs/screen_repos.jpg" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" width="650px" />
 
 
 The new repository contains folders for each of your peers' assignments you are asked to review. Each folder also contains a review form for you to fill out.
 
-```{r, out.width = "650px", echo = FALSE}
-knitr::include_graphics("imgs/screen_review.jpg")
-```
+<img src="imgs/screen_review.jpg" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" width="650px" />
 
 You instructor will open an issue in this new repository with a check list of tasks to complete. You will go through the following steps:
 
@@ -115,9 +87,7 @@ params:
 ## Engage with feedback
 When review process is complete, your instructor will pass your peers' feedback back to your assignment repository. Each reviewer's feedback will be saved in a separate folder, for example called `rev1` for reviewer 1's feeback, `rev2` for reviewer 2's feedback, and so on.
 
-```{r, out.width = "650px", echo = FALSE}
-knitr::include_graphics("imgs/screen_rating.jpg")
-```
+<img src="imgs/screen_rating.jpg" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" width="650px" />
 
 
 To finish the assignment, please complete the following steps:
