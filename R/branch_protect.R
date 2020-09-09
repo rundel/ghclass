@@ -25,7 +25,7 @@
 #
 #
 #
-# branch_protect = function(repo, branch = "master") {
+# branch_protect = function(repo, branch) {
 #   arg_is_chr(repo, branch)
 #
 #   purrr::walk2(
@@ -44,7 +44,7 @@
 #   )
 # }
 #
-# branch_unprotect = function(repo, branch = "master") {
+# branch_unprotect = function(repo, branch) {
 #   arg_is_chr(repo, branch)
 #
 #   purrr::walk2(

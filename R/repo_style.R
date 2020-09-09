@@ -15,7 +15,7 @@
 #'
 #' @export
 #'
-repo_style = function(repo, files = c("*.R", "*.Rmd"), branch = "styler", base = "master",
+repo_style = function(repo, files = c("*.R", "*.Rmd"), branch = "styler", base,
                       create_pull_request = TRUE, draft = TRUE, tag_collaborators = TRUE,
                       prompt = TRUE) {
   require_styler()

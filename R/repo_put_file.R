@@ -1,10 +1,10 @@
-github_api_repo_put_file = function(repo, path, content, message, branch, sha = NULL) {
+github_api_repo_put_file = function(repo, path, content, message, branch = NULL, sha = NULL) {
   ghclass_api_v3_req(
     endpoint = "PUT /repos/:owner/:repo/contents/:path",
     owner = get_repo_owner(repo), repo = get_repo_name(repo),
     path = path,
     content = base64enc::base64encode(content),
-    message = message, 
+    message = message,
     branch = branch,
     sha = sha
   )
@@ -17,10 +17,10 @@ github_api_repo_put_file = function(repo, path, content, message, branch, sha = 
 #'
 #' @export
 #'
-repo_put_file = function(repo, path, content, message = NULL, branch = "master", verbose = TRUE) {
+repo_put_file = function(repo, path, content, message = NULL, branch = NULL, verbose = TRUE) {
 
-  arg_is_chr_scalar(repo, path, branch)
-  arg_is_chr_scalar(message, allow_null = TRUE)
+  arg_is_chr_scalar(repo, path)
+  arg_is_chr_scalar(message, branch, allow_null = TRUE)
 
   if (is.null(message))
     message = cli_glue("Adding file {path}")
@@ -68,9 +68,9 @@ peer_github_api_repo_put_file = function(repo, path, content, message, branch, s
 
 
 
-peer_repo_put_file = function(repo, path, content, message = NULL, branch = "master", sha, verbose = TRUE) {
-  arg_is_chr_scalar(repo, path, branch)
-  arg_is_chr_scalar(message, sha, allow_null = TRUE)
+peer_repo_put_file = function(repo, path, content, message = NULL, branch = NULL, sha, verbose = TRUE) {
+  arg_is_chr_scalar(repo, path)
+  arg_is_chr_scalar(branch, message, sha, allow_null = TRUE)
 
   if (is.null(message))
     message = cli_glue("Adding file: {path}")

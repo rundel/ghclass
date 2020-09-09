@@ -16,7 +16,7 @@ github_api_pr_create = function(repo, head, base, title, body, draft = TRUE){
 #'
 #' @export
 #'
-pr_create = function(repo, title, head, base = "master", body = "", draft = FALSE) {
+pr_create = function(repo, title, head, base, body = "", draft = FALSE) {
 
   arg_is_chr(repo, title, base, head, body)
   arg_is_lgl(draft)

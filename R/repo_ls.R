@@ -4,7 +4,7 @@
 #'
 #' @export
 #'
-repo_ls = function(repo, path = ".", branch = "master", full_path = FALSE) {
+repo_ls = function(repo, path = ".", branch = NULL, full_path = FALSE) {
   arg_is_chr_scalar(repo, path, branch)
   arg_is_lgl_scalar(full_path)
 

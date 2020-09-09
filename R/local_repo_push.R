@@ -1,7 +1,7 @@
 #' @rdname local_repo
 #' @export
 #'
-local_repo_push = function(repo_dir, remote = "origin", branch = "master",
+local_repo_push = function(repo_dir, remote = "origin", branch,
                            force = FALSE, prompt = TRUE, mirror = FALSE,
                            verbose = FALSE) {
   require_gert()
