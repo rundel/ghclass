@@ -17,7 +17,7 @@ repo_clone_url(repo, type = c("https", "ssh"))
 
 repo_commits(
   repo,
-  branch = "master",
+  branch = NULL,
   sha = branch,
   path = NULL,
   author = NULL,
@@ -38,7 +38,7 @@ repo_issues(
   since = NULL
 )
 
-repo_n_commits(repo, branch = "master", quiet = FALSE)
+repo_n_commits(repo, branch, quiet = FALSE)
 
 repo_prs(repo, state = c("open", "closed", "all"))
 }
@@ -96,7 +96,7 @@ repo_commits("rundel/ghclass")
 
 repo_issues("rundel/ghclass")
 
-repo_n_commits("rundel/ghclass")
+repo_n_commits("rundel/ghclass", branch = "master")
 
 repo_prs("rundel/ghclass")
 }

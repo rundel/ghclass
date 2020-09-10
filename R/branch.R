@@ -24,7 +24,7 @@
 #' \dontrun{
 #' repo_create("ghclass-test", "test_branch", auto_init=TRUE)
 #'
-#' branch_create("ghclass-test/test_branch", new_branch = "test")
+#' branch_create("ghclass-test/test_branch", branch = "main", new_branch = "test")
 #' repo_branches("ghclass-test/test_branch")
 #'
 #' branch_delete("ghclass-test/test_branch", branch="test")

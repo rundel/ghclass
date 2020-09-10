@@ -5,7 +5,8 @@
 #' @export
 #'
 repo_ls = function(repo, path = ".", branch = NULL, full_path = FALSE) {
-  arg_is_chr_scalar(repo, path, branch)
+  arg_is_chr_scalar(repo, path)
+  arg_is_chr_scalar(branch, allow_null = TRUE)
   arg_is_lgl_scalar(full_path)
 
   res = purrr::safely(github_api_repo_get_file)(repo, path, branch)
@@ -15,7 +16,7 @@ repo_ls = function(repo, path = ".", branch = NULL, full_path = FALSE) {
 
     cli_stop(
       "Failed to retrieve path {.val {path}} in repo {.val {repo}}.",
-      " ({.val status})"
+      " ({.val {status}})"
     )
   }
   files = purrr::map_chr(result(res), "path")

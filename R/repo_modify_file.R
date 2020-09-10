@@ -22,7 +22,7 @@ repo_modify_file = function(repo, path, pattern, content, method = c("replace", 
   purrr::pwalk(
     list(repo, path, pattern, content, message, branch),
     function(repo, path, pattern, content, message, branch) {
-      cur_content = repo_get_file(repo = repo, path = path, branch = branch)
+      cur_content = repo_get_file(repo = repo, path = path, branch = branch, quiet = TRUE)
 
       repo_txt = format_repo(repo, branch, path)
 

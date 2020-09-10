@@ -14,6 +14,7 @@ org_exists(org)
 
 org_repo_stats(
   org,
+  branch,
   filter = "",
   filter_type = "in:name",
   inc_commits = TRUE,

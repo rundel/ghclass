@@ -18,24 +18,18 @@ repo_add_file(
   file,
   message = NULL,
   repo_folder = NULL,
-  branch = "master",
+  branch = NULL,
   preserve_path = FALSE,
   overwrite = FALSE
 )
 
-repo_delete_file(repo, path, message = NULL, branch = "master")
+repo_delete_file(repo, path, message = NULL, branch = NULL)
 
-repo_get_file(
-  repo,
-  path,
-  branch = "master",
-  quiet = FALSE,
-  include_details = TRUE
-)
+repo_get_file(repo, path, branch = NULL, quiet = FALSE, include_details = TRUE)
 
-repo_get_readme(repo, branch = "master", include_details = TRUE)
+repo_get_readme(repo, branch = NULL, include_details = TRUE)
 
-repo_ls(repo, path = ".", branch = "master", full_path = FALSE)
+repo_ls(repo, path = ".", branch = NULL, full_path = FALSE)
 
 repo_modify_file(
   repo,
@@ -45,7 +39,7 @@ repo_modify_file(
   method = c("replace", "before", "after"),
   all = FALSE,
   message = "Modified content",
-  branch = "master"
+  branch = NULL
 )
 
 repo_put_file(
@@ -53,7 +47,7 @@ repo_put_file(
   path,
   content,
   message = NULL,
-  branch = "master",
+  branch = NULL,
   verbose = TRUE
 )
 }
@@ -66,7 +60,7 @@ repo_put_file(
 
 \item{repo_folder}{Character. Name of folder on repository to save the file(s) to. If the folder does not exist on the repository, it will be created.}
 
-\item{branch}{Character. Name of branch to use, defaults to "master".}
+\item{branch}{Character. Name of branch to use.}
 
 \item{preserve_path}{Logical. Should the local relative path be preserved.}
 

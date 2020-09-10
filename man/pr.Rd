@@ -5,7 +5,7 @@
 \alias{pr_create}
 \title{GitHub Pull Request related tools}
 \usage{
-pr_create(repo, title, head, base = "master", body = "", draft = FALSE)
+pr_create(repo, title, head, base, body = "", draft = FALSE)
 }
 \arguments{
 \item{repo}{Character. Address of one or more repositories in "owner/name" format.}
@@ -34,12 +34,12 @@ a pull request to one repository that requests a merge to a base of another repo
 \dontrun{
 repo_create("ghclass-test", "test_pr", auto_init=TRUE)
 
-branch_create("ghclass-test/test_pr", new_branch = "test")
+branch_create("ghclass-test/test_pr", branch = "main", new_branch = "test")
 
 repo_modify_file("ghclass-test/test_pr", "README.md", pattern = "test_pr",
                  content = "Hello", method = "after", branch = "test")
 
-pr_create("ghclass-test/test_pr", "merge", "test")
+pr_create("ghclass-test/test_pr", title = "merge", head = "test", base = "main")
 
 repo_delete("ghclass-test/test_pr", prompt = FALSE)
 }

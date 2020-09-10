@@ -10,7 +10,8 @@
 local_repo_clone = function(repo, local_path=".", branch = NULL, mirror = FALSE, verbose = FALSE) {
   require_gert()
 
-  arg_is_chr(repo, branch)
+  arg_is_chr(repo)
+  arg_is_chr(branch, allow_null=TRUE)
   arg_is_chr_scalar(local_path)
   arg_is_lgl_scalar(mirror, verbose)
 

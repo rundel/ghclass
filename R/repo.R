@@ -107,7 +107,7 @@ NULL
 #'
 #' repo_issues("rundel/ghclass")
 #'
-#' repo_n_commits("rundel/ghclass")
+#' repo_n_commits("rundel/ghclass", branch = "master")
 #'
 #' repo_prs("rundel/ghclass")
 #' }

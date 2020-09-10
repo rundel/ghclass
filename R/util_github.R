@@ -1,5 +1,9 @@
-github_api_repo_tree = function(repo, sha) {
-  arg_is_chr_scalar(repo, sha)
+github_api_repo_tree = function(repo, sha = NULL) {
+  arg_is_chr_scalar(repo)
+  arg_is_chr_scalar(sha, allow_null = TRUE)
+
+  if (is.null(sha))
+    sha = "HEAD"
 
   ghclass_api_v3_req(
     endpoint = "GET /repos/:owner/:repo/git/trees/:sha?recursive=1",
@@ -9,8 +13,12 @@ github_api_repo_tree = function(repo, sha) {
   )
 }
 
-repo_files = function(repo, branch) {
-  arg_is_chr(repo, branch)
+repo_files = function(repo, branch = NULL) {
+  arg_is_chr(repo)
+  arg_is_chr(branch, allow_null = TRUE)
+
+  if (is.null(branch))
+    branch = list(NULL)
 
   purrr::map2_dfr(
     repo, branch,
@@ -113,8 +121,9 @@ find_file = function(repo, file, verbose = TRUE){
 }
 
 
-file_exists = function(repo, path, branch){
-  arg_is_chr(repo, path, branch)
+file_exists = function(repo, path, branch = NULL){
+  arg_is_chr(repo, path)
+  arg_is_chr(branch, allow_null = TRUE)
 
   files = repo_files(repo, branch)
 

@@ -7,7 +7,7 @@
 \alias{branch_remove}
 \title{Create and delete branches in a repository}
 \usage{
-branch_create(repo, branch = "master", new_branch)
+branch_create(repo, branch, new_branch)
 
 branch_delete(repo, branch)
 
@@ -31,7 +31,7 @@ branch_remove(repo, branch)
 \dontrun{
 repo_create("ghclass-test", "test_branch", auto_init=TRUE)
 
-branch_create("ghclass-test/test_branch", new_branch = "test")
+branch_create("ghclass-test/test_branch", branch = "main", new_branch = "test")
 repo_branches("ghclass-test/test_branch")
 
 branch_delete("ghclass-test/test_branch", branch="test")
