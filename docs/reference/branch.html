@@ -143,11 +143,11 @@ branch_remove - previous name of branch_delete, deprecated.
 
     </div>
 
-    <pre class="usage"><span class='fu'>branch_create</span>(<span class='no'>repo</span>, <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>, <span class='no'>new_branch</span>)
+    <pre class="usage"><span class='fu'>branch_create</span>(<span class='kw'>repo</span>, <span class='kw'>branch</span>, <span class='kw'>new_branch</span>)
 
-<span class='fu'>branch_delete</span>(<span class='no'>repo</span>, <span class='no'>branch</span>)
+<span class='fu'>branch_delete</span>(<span class='kw'>repo</span>, <span class='kw'>branch</span>)
 
-<span class='fu'>branch_remove</span>(<span class='no'>repo</span>, <span class='no'>branch</span>)</pre>
+<span class='fu'>branch_remove</span>(<span class='kw'>repo</span>, <span class='kw'>branch</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -172,12 +172,16 @@ branch_remove - previous name of branch_delete, deprecated.
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
-<span class='fu'><a href='repo_core.html'>repo_create</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"test_branch"</span>, <span class='kw'>auto_init</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'><span style='color: #00BB00;'>✓</span><span> Created repo </span><span style='color: #0000BB;'>'ghclass-test/test_branch'</span><span>.</span></div><div class='input'>
-<span class='fu'>branch_create</span>(<span class='st'>"ghclass-test/test_branch"</span>, <span class='kw'>new_branch</span> <span class='kw'>=</span> <span class='st'>"test"</span>)</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Created branch </span><span style='color: #0000BB;'>'test'</span><span> in repo </span><span style='color: #0000BB;'>'ghclass-test/test_branch'</span><span>.</span></div><div class='input'><span class='fu'><a href='repo_details.html'>repo_branches</a></span>(<span class='st'>"ghclass-test/test_branch"</span>)
-
-<span class='fu'>branch_delete</span>(<span class='st'>"ghclass-test/test_branch"</span>, <span class='kw'>branch</span><span class='kw'>=</span><span class='st'>"test"</span>)</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Removed branch </span><span style='color: #0000BB;'>'ghclass-test/test_branch@test'</span><span>.</span></div><div class='input'><span class='fu'><a href='repo_details.html'>repo_branches</a></span>(<span class='st'>"ghclass-test/test_branch"</span>)
-
-<span class='fu'><a href='repo_core.html'>repo_delete</a></span>(<span class='st'>"ghclass-test/test_branch"</span>, <span class='kw'>prompt</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Deleted repo </span><span style='color: #0000BB;'>'ghclass-test/test_branch'</span><span>.</span></div><div class='input'># }
+<span class='fu'><a href='repo_core.html'>repo_create</a></span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"test_branch"</span>, auto_init=<span class='fl'>TRUE</span>)
+</div><div class='output co'>#&gt; <span class='message'><span style='color: #00BB00;'>✓</span><span> Created repo </span><span style='color: #0000BB;'>'ghclass-test/test_branch'</span><span>.</span></div><div class='input'>
+<span class='fu'>branch_create</span>(<span class='st'>"ghclass-test/test_branch"</span>, branch = <span class='st'>"main"</span>, new_branch = <span class='st'>"test"</span>)
+</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Created branch </span><span style='color: #0000BB;'>'test'</span><span> in repo </span><span style='color: #0000BB;'>'ghclass-test/test_branch'</span><span>.</span></div><div class='input'><span class='fu'><a href='repo_details.html'>repo_branches</a></span>(<span class='st'>"ghclass-test/test_branch"</span>)
+</div><div class='output co'>#&gt; [1] "main" "test"</div><div class='input'>
+<span class='fu'>branch_delete</span>(<span class='st'>"ghclass-test/test_branch"</span>, branch=<span class='st'>"test"</span>)
+</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Removed branch </span><span style='color: #0000BB;'>'ghclass-test/test_branch@test'</span><span>.</span></div><div class='input'><span class='fu'><a href='repo_details.html'>repo_branches</a></span>(<span class='st'>"ghclass-test/test_branch"</span>)
+</div><div class='output co'>#&gt; [1] "main"</div><div class='input'>
+<span class='fu'><a href='repo_core.html'>repo_delete</a></span>(<span class='st'>"ghclass-test/test_branch"</span>, prompt = <span class='fl'>FALSE</span>)
+</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Deleted repo </span><span style='color: #0000BB;'>'ghclass-test/test_branch'</span><span>.</span></div><div class='input'><span class='co'># }</span>
 
 </div></span></pre>
   </div>
@@ -195,7 +199,7 @@ branch_remove - previous name of branch_delete, deprecated.
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

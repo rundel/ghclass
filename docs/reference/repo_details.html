@@ -149,36 +149,36 @@ repo_prs - Returns a tibble of pull requests for a GitHub repository.
 
     </div>
 
-    <pre class="usage"><span class='fu'>repo_branches</span>(<span class='no'>repo</span>)
+    <pre class="usage"><span class='fu'>repo_branches</span>(<span class='kw'>repo</span>)
 
-<span class='fu'>repo_clone_url</span>(<span class='no'>repo</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"https"</span>, <span class='st'>"ssh"</span>))
+<span class='fu'>repo_clone_url</span>(<span class='kw'>repo</span>, type = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"https"</span>, <span class='st'>"ssh"</span>))
 
 <span class='fu'>repo_commits</span>(
-  <span class='no'>repo</span>,
-  <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>,
-  <span class='kw'>sha</span> <span class='kw'>=</span> <span class='no'>branch</span>,
-  <span class='kw'>path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>author</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>since</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>until</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='kw'>repo</span>,
+  branch = <span class='kw'>NULL</span>,
+  sha = <span class='kw'>branch</span>,
+  path = <span class='kw'>NULL</span>,
+  author = <span class='kw'>NULL</span>,
+  since = <span class='kw'>NULL</span>,
+  until = <span class='kw'>NULL</span>,
+  quiet = <span class='fl'>FALSE</span>
 )
 
 <span class='fu'>repo_issues</span>(
-  <span class='no'>repo</span>,
-  <span class='kw'>state</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"open"</span>, <span class='st'>"closed"</span>, <span class='st'>"all"</span>),
-  <span class='kw'>assignee</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>creator</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>mentioned</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>labels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>sort</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"created"</span>, <span class='st'>"updated"</span>, <span class='st'>"comments"</span>),
-  <span class='kw'>direction</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"desc"</span>, <span class='st'>"asc"</span>),
-  <span class='kw'>since</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+  <span class='kw'>repo</span>,
+  state = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"open"</span>, <span class='st'>"closed"</span>, <span class='st'>"all"</span>),
+  assignee = <span class='kw'>NULL</span>,
+  creator = <span class='kw'>NULL</span>,
+  mentioned = <span class='kw'>NULL</span>,
+  labels = <span class='kw'>NULL</span>,
+  sort = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"created"</span>, <span class='st'>"updated"</span>, <span class='st'>"comments"</span>),
+  direction = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"desc"</span>, <span class='st'>"asc"</span>),
+  since = <span class='kw'>NULL</span>
 )
 
-<span class='fu'>repo_n_commits</span>(<span class='no'>repo</span>, <span class='kw'>branch</span> <span class='kw'>=</span> <span class='st'>"master"</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>repo_n_commits</span>(<span class='kw'>repo</span>, <span class='kw'>branch</span>, quiet = <span class='fl'>FALSE</span>)
 
-<span class='fu'>repo_prs</span>(<span class='no'>repo</span>, <span class='kw'>state</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"open"</span>, <span class='st'>"closed"</span>, <span class='st'>"all"</span>))</pre>
+<span class='fu'>repo_prs</span>(<span class='kw'>repo</span>, state = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"open"</span>, <span class='st'>"closed"</span>, <span class='st'>"all"</span>))</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -253,24 +253,27 @@ Pass in "none" for issues with no assigned user, and "*" for issues assigned to 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
-<span class='fu'>repo_clone_url</span>(<span class='st'>"rundel/ghclass"</span>)</div><div class='output co'>#&gt; [1] "https://github.com/rundel/ghclass.git"</div><div class='input'>
+<span class='fu'>repo_clone_url</span>(<span class='st'>"rundel/ghclass"</span>)
+</div><div class='output co'>#&gt; [1] "https://github.com/rundel/ghclass.git"</div><div class='input'>
 <span class='fu'>repo_branches</span>(<span class='st'>"rundel/ghclass"</span>)
-
-<span class='fu'>repo_commits</span>(<span class='st'>"rundel/ghclass"</span>)</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 500 x 6</span><span>
+</div><div class='output co'>#&gt; [1] "master_to_main"  "master"          "peer_review"     "with_deprecated"</div><div class='input'>
+<span class='fu'>repo_commits</span>(<span class='st'>"rundel/ghclass"</span>)
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 500 x 6</span><span>
 #&gt;    repo     login  name    email         date                msg                
 #&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>         </span><span style='color: #949494;font-style: italic;'>&lt;dttm&gt;</span><span>              </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>              
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> rundel/… rundel Colin … rundel@gmail… 2020-08-25 </span><span style='color: #949494;'>10:55:46</span><span> Merge branch 'mast…
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> rundel/… rundel Colin … rundel@gmail… 2020-08-25 </span><span style='color: #949494;'>10:55:43</span><span> Update example to …
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> rundel/… rundel Colin … rundel@gmail… 2020-08-25 </span><span style='color: #949494;'>10:55:29</span><span> Fix bug with api c…
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> rundel/… rundel Colin … rundel@gmail… 2020-08-25 </span><span style='color: #949494;'>10:48:06</span><span> Include example ru…
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> rundel/… </span><span style='color: #BB0000;'>NA</span><span>     runner  runner@Mac-1… 2020-08-23 </span><span style='color: #949494;'>15:54:43</span><span> Re-build README.Rmd
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> rundel/… rundel Colin … rundel@gmail… 2020-08-23 </span><span style='color: #949494;'>15:53:32</span><span> Update pkgdown site
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> rundel/… rundel Colin … rundel@gmail… 2020-08-23 </span><span style='color: #949494;'>15:53:26</span><span> Tweak pkgdown sett…
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> rundel/… rundel Colin … rundel@gmail… 2020-07-18 </span><span style='color: #949494;'>14:03:26</span><span> Fix spelling issues
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> rundel/… rundel Colin … rundel@gmail… 2020-07-17 </span><span style='color: #949494;'>14:39:00</span><span> Update pkgdown     
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> rundel/… rundel Colin … rundel@gmail… 2020-07-17 </span><span style='color: #949494;'>14:32:55</span><span> Update docs and vi…
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> rundel/… rundel Colin … rundel@gmail… 2020-08-25 </span><span style='color: #949494;'>11:01:12</span><span> Include updated te…
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> rundel/… rundel Colin … rundel@gmail… 2020-08-25 </span><span style='color: #949494;'>10:55:46</span><span> Merge branch 'mast…
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> rundel/… rundel Colin … rundel@gmail… 2020-08-25 </span><span style='color: #949494;'>10:55:43</span><span> Update example to …
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> rundel/… rundel Colin … rundel@gmail… 2020-08-25 </span><span style='color: #949494;'>10:55:29</span><span> Fix bug with api c…
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> rundel/… rundel Colin … rundel@gmail… 2020-08-25 </span><span style='color: #949494;'>10:48:06</span><span> Include example ru…
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> rundel/… </span><span style='color: #BB0000;'>NA</span><span>     runner  runner@Mac-1… 2020-08-23 </span><span style='color: #949494;'>15:54:43</span><span> Re-build README.Rmd
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> rundel/… rundel Colin … rundel@gmail… 2020-08-23 </span><span style='color: #949494;'>15:53:32</span><span> Update pkgdown site
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> rundel/… rundel Colin … rundel@gmail… 2020-08-23 </span><span style='color: #949494;'>15:53:26</span><span> Tweak pkgdown sett…
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> rundel/… rundel Colin … rundel@gmail… 2020-07-18 </span><span style='color: #949494;'>14:03:26</span><span> Fix spelling issues
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span> rundel/… rundel Colin … rundel@gmail… 2020-07-17 </span><span style='color: #949494;'>14:39:00</span><span> Update pkgdown     
 #&gt; </span><span style='color: #949494;'># … with 490 more rows</span><span></div><div class='input'>
-<span class='fu'>repo_issues</span>(<span class='st'>"rundel/ghclass"</span>)</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Retrieved issues for repo </span><span style='color: #0000BB;'>'rundel/ghclass'</span><span>.</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 26 x 10</span><span>
+<span class='fu'>repo_issues</span>(<span class='st'>"rundel/ghclass"</span>)
+</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Retrieved issues for repo </span><span style='color: #0000BB;'>'rundel/ghclass'</span><span>.</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 26 x 10</span><span>
 #&gt;    repo  number title state comments created             updated            
 #&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dttm&gt;</span><span>              </span><span style='color: #949494;font-style: italic;'>&lt;dttm&gt;</span><span>             
 #&gt; </span><span style='color: #BCBCBC;'> 1</span><span> rund…    106 New … open         0 2020-04-08 </span><span style='color: #949494;'>00:10:38</span><span> 2020-04-08 </span><span style='color: #949494;'>00:10:38</span><span>
@@ -285,14 +288,16 @@ Pass in "none" for issues with no assigned user, and "*" for issues assigned to 
 #&gt; </span><span style='color: #BCBCBC;'>10</span><span> rund…     85 Anon… open         0 2019-11-02 </span><span style='color: #949494;'>14:36:44</span><span> 2019-11-02 </span><span style='color: #949494;'>14:36:44</span><span>
 #&gt; </span><span style='color: #949494;'># … with 16 more rows, and 3 more variables: closed </span><span style='color: #949494;font-style: italic;'>&lt;dttm&gt;</span><span style='color: #949494;'>, created_by </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span style='color: #949494;'>,</span><span>
 #&gt; </span><span style='color: #949494;'>#   assignees </span><span style='color: #949494;font-style: italic;'>&lt;list&gt;</span><span></div><div class='input'>
-<span class='fu'>repo_n_commits</span>(<span class='st'>"rundel/ghclass"</span>)</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 1 x 3</span><span>
+<span class='fu'>repo_n_commits</span>(<span class='st'>"rundel/ghclass"</span>, branch = <span class='st'>"master"</span>)
+</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 1 x 3</span><span>
 #&gt;   repo           branch     n
 #&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> rundel/ghclass master   967</div><div class='input'>
-<span class='fu'>repo_prs</span>(<span class='st'>"rundel/ghclass"</span>)</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 1 x 7</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> rundel/ghclass master   968</div><div class='input'>
+<span class='fu'>repo_prs</span>(<span class='st'>"rundel/ghclass"</span>)
+</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 1 x 7</span><span>
 #&gt;   repo          pr       id title                        state base_ref head_ref
 #&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                        </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> rundel/gh…   106   4.01</span><span style='color: #949494;'>e</span><span>8 New steps to apply for GH o… open  master   patch-1 </div><div class='input'># }
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> rundel/gh…   106   4.01</span><span style='color: #949494;'>e</span><span>8 New steps to apply for GH o… open  master   patch-1 </div><div class='input'><span class='co'># }</span>
 
 </div></span></pre>
   </div>
@@ -310,7 +315,7 @@ Pass in "none" for issues with no assigned user, and "*" for issues assigned to 
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>
