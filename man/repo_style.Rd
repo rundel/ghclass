@@ -8,7 +8,7 @@ repo_style(
   repo,
   files = c("*.R", "*.Rmd"),
   branch = "styler",
-  base = "master",
+  base,
   create_pull_request = TRUE,
   draft = TRUE,
   tag_collaborators = TRUE,

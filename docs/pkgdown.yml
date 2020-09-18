@@ -1,9 +1,8 @@
 pandoc: 2.10.1
-pkgdown: 1.5.1
+pkgdown: 1.6.0
 pkgdown_sha: ~
-articles:
-  ghclass: articles/ghclass.html
-last_built: 2020-08-25T10:58Z
+articles: []
+last_built: 2020-09-10T14:14Z
 urls:
   reference: https://rundel.github.io/ghclass/reference
   article: https://rundel.github.io/ghclass/articles

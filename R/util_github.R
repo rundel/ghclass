@@ -1,4 +1,10 @@
-github_api_repo_tree = function(repo, sha = "master") {
+github_api_repo_tree = function(repo, sha = NULL) {
+  arg_is_chr_scalar(repo)
+  arg_is_chr_scalar(sha, allow_null = TRUE)
+
+  if (is.null(sha))
+    sha = "HEAD"
+
   ghclass_api_v3_req(
     endpoint = "GET /repos/:owner/:repo/git/trees/:sha?recursive=1",
     owner = get_repo_owner(repo),
@@ -7,7 +13,13 @@ github_api_repo_tree = function(repo, sha = "master") {
   )
 }
 
-repo_files = function(repo, branch = "master") {
+repo_files = function(repo, branch = NULL) {
+  arg_is_chr(repo)
+  arg_is_chr(branch, allow_null = TRUE)
+
+  if (is.null(branch))
+    branch = list(NULL)
+
   purrr::map2_dfr(
     repo, branch,
     function(repo, branch) {
@@ -109,7 +121,9 @@ find_file = function(repo, file, verbose = TRUE){
 }
 
 
-file_exists = function(repo, path, branch = "master"){
+file_exists = function(repo, path, branch = NULL){
+  arg_is_chr(repo, path)
+  arg_is_chr(branch, allow_null = TRUE)
 
   files = repo_files(repo, branch)
 
@@ -119,8 +133,8 @@ file_exists = function(repo, path, branch = "master"){
 
 
 
-check_file_modification = function(repo, path, branch = "master"){
-  arg_is_chr_scalar(repo, branch, path)
+check_file_modification = function(repo, path, branch){
+  arg_is_chr_scalar(repo, path, branch)
   commits = repo_commits(repo, branch = branch, path = path)
   nrow(commits) > 1
 }

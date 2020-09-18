@@ -17,10 +17,11 @@ read_bin_file = function(x) {
 #'
 #' @export
 #'
-repo_add_file = function(repo, file, message = NULL, repo_folder = NULL, branch = "master",
+repo_add_file = function(repo, file, message = NULL, repo_folder = NULL, branch = NULL,
                          preserve_path = FALSE, overwrite = FALSE) {
 
-  arg_is_chr(repo, file, branch)
+  arg_is_chr(repo, file)
+  arg_is_chr(branch, allow_null=TRUE)
   arg_is_chr_scalar(repo_folder, message, allow_null = TRUE)
   arg_is_lgl_scalar(preserve_path, overwrite)
 
@@ -30,6 +31,9 @@ repo_add_file = function(repo, file, message = NULL, repo_folder = NULL, branch 
 
   if (is.character(file) & (length(file) > 1))
     file = list(file)
+
+  if (is.null(branch))
+    branch = list(NULL)
 
   purrr::pwalk(
     list(repo, file, branch),

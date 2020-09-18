@@ -20,7 +20,7 @@ repo_prs = function(repo, state = c("open","closed","all")) {
   arg_is_chr(repo)
   arg_is_chr_scalar(state)
 
-
+  # TODO - check on id?
 
   purrr::map_dfr(
     repo,

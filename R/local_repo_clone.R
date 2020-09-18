@@ -7,14 +7,15 @@
 #'
 #' @export
 #'
-local_repo_clone = function(repo, local_path=".", branch = "master", mirror = FALSE, verbose = FALSE) {
+local_repo_clone = function(repo, local_path=".", branch = NULL, mirror = FALSE, verbose = FALSE) {
   require_gert()
 
-  arg_is_chr(repo, branch)
+  arg_is_chr(repo)
+  arg_is_chr(branch, allow_null=TRUE)
   arg_is_chr_scalar(local_path)
   arg_is_lgl_scalar(mirror, verbose)
 
-  if (mirror) # If mirroring then branch should not be set
+  if (is.null(branch) || mirror) # If mirroring then branch should not be set
     branch = list(NULL)
 
   local_path = fs::path_expand(local_path)
@@ -50,6 +51,6 @@ local_repo_clone = function(repo, local_path=".", branch = "master", mirror = FA
 }
 
 #' @export
-repo_clone = function(repo, local_path="./", branch = "master", verbose = FALSE) {
+repo_clone = function(repo, local_path="./", branch = NULL, verbose = FALSE) {
   local_repo_clone(repo=repo, local_path=local_path, branch=branch, verbose=verbose)
 }

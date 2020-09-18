@@ -32,7 +32,7 @@ github_api_repo_n_commits = function(repo, branch) {
 #'
 #' @export
 #'
-repo_n_commits = function(repo, branch = "master", quiet = FALSE) {
+repo_n_commits = function(repo, branch, quiet = FALSE) {
   arg_is_chr(repo, branch)
 
   purrr::map2_dfr(

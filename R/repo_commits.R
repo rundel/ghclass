@@ -1,4 +1,4 @@
-# github_api_repo_commits_v4 = function(repo, branch = "master") {
+# github_api_repo_commits_v4 = function(repo, branch) {
 #   arg_is_chr_scalar(repo, branch)
 #
 #   owner = get_repo_owner(repo)
@@ -70,12 +70,11 @@ github_api_repo_commits = function(repo, sha=NULL, path=NULL, author=NULL, since
 #' @export
 #'
 
-repo_commits = function(repo, branch = "master", sha = branch, path = NULL,
+repo_commits = function(repo, branch = NULL, sha = branch, path = NULL,
                         author = NULL, since = NULL, until = NULL, quiet = FALSE) {
 
   arg_is_chr(repo)
-  arg_is_chr_scalar(branch, sha)
-  arg_is_chr_scalar(path, author, since, until, allow_null = TRUE)
+  arg_is_chr_scalar(branch, sha, path, author, since, until, allow_null = TRUE)
   arg_is_lgl_scalar(quiet)
 
   purrr::map_dfr(

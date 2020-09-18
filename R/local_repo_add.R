@@ -17,6 +17,8 @@ local_repo_add = function(repo_dir, files = ".") {
         files = files, repo = dir
       )
 
+      # TODO - handle the case where there are 0 additions
+
       repo = fs::path_file(dir)
       status_msg(
         res,

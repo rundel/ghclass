@@ -149,22 +149,23 @@ basic statistics about those repositories.</p></li>
 
     </div>
 
-    <pre class="usage"><span class='fu'>org_exists</span>(<span class='no'>org</span>)
+    <pre class="usage"><span class='fu'>org_exists</span>(<span class='kw'>org</span>)
 
 <span class='fu'>org_repo_stats</span>(
-  <span class='no'>org</span>,
-  <span class='kw'>filter</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>filter_type</span> <span class='kw'>=</span> <span class='st'>"in:name"</span>,
-  <span class='kw'>inc_commits</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>inc_issues</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>inc_prs</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+  <span class='kw'>org</span>,
+  <span class='kw'>branch</span>,
+  filter = <span class='st'>""</span>,
+  filter_type = <span class='st'>"in:name"</span>,
+  inc_commits = <span class='fl'>TRUE</span>,
+  inc_issues = <span class='fl'>TRUE</span>,
+  inc_prs = <span class='fl'>TRUE</span>
 )
 
-<span class='fu'>org_repos</span>(<span class='no'>org</span>, <span class='kw'>filter</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>full_repo</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>org_repos</span>(<span class='kw'>org</span>, filter = <span class='kw'>NULL</span>, exclude = <span class='fl'>FALSE</span>, full_repo = <span class='fl'>TRUE</span>)
 
-<span class='fu'>org_team_details</span>(<span class='no'>org</span>)
+<span class='fu'>org_team_details</span>(<span class='kw'>org</span>)
 
-<span class='fu'>org_teams</span>(<span class='no'>org</span>, <span class='kw'>filter</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>team_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>))</pre>
+<span class='fu'>org_teams</span>(<span class='kw'>org</span>, filter = <span class='kw'>NULL</span>, exclude = <span class='fl'>FALSE</span>, team_type = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"name"</span>, <span class='st'>"slug"</span>))</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -213,13 +214,17 @@ for more details.</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
 <span class='co'># Org repos and teams</span>
-<span class='fu'>org_repos</span>(<span class='st'>"ghclass-test"</span>)</div><div class='output co'>#&gt; [1] "ghclass-test/hw1-team02"</div><div class='input'>
-<span class='fu'>org_repos</span>(<span class='st'>"ghclass-test"</span>, <span class='kw'>filter</span> <span class='kw'>=</span> <span class='st'>"hw1-"</span>)</div><div class='output co'>#&gt; [1] "ghclass-test/hw1-team02"</div><div class='input'>
-<span class='fu'>org_teams</span>(<span class='st'>"ghclass-test"</span>)</div><div class='output co'>#&gt; [1] "team_awesome"</div><div class='input'>
-<span class='fu'>org_team_details</span>(<span class='st'>"ghclass-test"</span>)</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 1 x 5</span><span>
+<span class='fu'>org_repos</span>(<span class='st'>"ghclass-test"</span>)
+
+<span class='fu'>org_repos</span>(<span class='st'>"ghclass-test"</span>, filter = <span class='st'>"hw1-"</span>)
+
+<span class='fu'>org_teams</span>(<span class='st'>"ghclass-test"</span>)
+</div><div class='output co'>#&gt; [1] "team_awesome"</div><div class='input'>
+<span class='fu'>org_team_details</span>(<span class='st'>"ghclass-test"</span>)
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 1 x 5</span><span>
 #&gt;   slug              id name         privacy permission
 #&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> team_awesome 3</span><span style='text-decoration: underline;'>948</span><span>465 team_awesome secret  pull      </div><div class='input'># }
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> team_awesome 3</span><span style='text-decoration: underline;'>948</span><span>465 team_awesome secret  pull      </div><div class='input'><span class='co'># }</span>
 
 </div></span></pre>
   </div>
@@ -237,7 +242,7 @@ for more details.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

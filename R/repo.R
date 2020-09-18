@@ -107,7 +107,7 @@ NULL
 #'
 #' repo_issues("rundel/ghclass")
 #'
-#' repo_n_commits("rundel/ghclass")
+#' repo_n_commits("rundel/ghclass", branch = "master")
 #'
 #' repo_prs("rundel/ghclass")
 #' }
@@ -143,7 +143,7 @@ NULL
 #' @param repo Character. Address of repository in `owner/name` format.
 #' @param path Character. File's path within the repository.
 #' @param message Character. Commit message.
-#' @param branch Character. Name of branch to use, defaults to "master".
+#' @param branch Character. Name of branch to use.
 #' @param quiet Logical. Should status messages be printed.
 #' @param include_details Logical. Should file details be attached as attributes.
 #'

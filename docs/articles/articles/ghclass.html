@@ -83,7 +83,7 @@
       <h1 data-toc-skip>Course management with ghclass</h1>
                         <h4 class="author">Mine Çetinkaya-Rundel, Colin Rundel, Therese Anders</h4>
             
-            <h4 class="date">2020-07-18</h4>
+            <h4 class="date">2020-09-10</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/rundel/ghclass/blob/master/vignettes/articles/ghclass.Rmd"><code>vignettes/articles/ghclass.Rmd</code></a></small>
       <div class="hidden name"><code>ghclass.Rmd</code></div>
@@ -131,7 +131,7 @@
 <h2 class="hasAnchor">
 <a href="#authentication" class="anchor"></a>Authentication</h2>
 <p>This package uses GitHub personal access tokens for authentication with <a href="https://github.com/settings/tokens">GitHub</a>, these values can be supplied via environmental variables <code>GITHUB_PAT</code> or <code>GITHUB_TOKEN</code> or saved as text in <code>~/.github/token</code>.</p>
-<p>If this is your first time setting up a personal access token (PAT), generate a token in the browser after logging into Github (Settings &gt; Developer Settings &gt; Personal access tokens) or use <a href="https://usethis.r-lib.org/articles/articles/usethis-setup.html#get-and-store-a-github-personal-access-token"><code><a href="https://usethis.r-lib.org/reference/browse_github_token.html">usethis::browse_github_token</a></code></a>.</p>
+<p>If this is your first time setting up a personal access token (PAT), generate a token in the browser after logging into Github (Settings &gt; Developer Settings &gt; Personal access tokens) or use <a href="https://usethis.r-lib.org/articles/articles/usethis-setup.html#get-and-store-a-github-personal-access-token"><code>usethis::browse_github_token</code></a>.</p>
 <p>You can test that your token is working correctly using the <code><a href="../../reference/github_token.html">github_test_token()</a></code> function. If everything is working correctly you should see something like the following:</p>
 <pre class="asciicast"><code><a href="../../reference/github_token.html">github_test_token()</a></code></pre>
 <p><img src="figure/test_token.svg" title="plot of chunk test_token" alt="plot of chunk test_token" width="100%"></p>
@@ -183,7 +183,9 @@
 <a href="#adding-students-to-the-organization" class="anchor"></a>Adding students to the organization</h3>
 <p>Next, collect your students’ GitHub usernames. You can do this using your web form tool of choice (e.g. Google Forms, MS Forms, etc.) or via a quiz or survey on your school’s learning management system (LMS). We will assume that you are able to then read in these data into an R data frame.</p>
 <p>For example, your roster file might look something like the following:</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">roster</span> <span class="kw">=</span> <span class="kw pkg">readr</span><span class="kw ns">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"roster.csv"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"ghclass"</span>) )</pre></body></html></div>
+<div class="sourceCode" id="cb6"><pre class="downlit">
+<span class="kw">roster</span> <span class="op">=</span> <span class="kw">readr</span>::<span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"roster.csv"</span>, package = <span class="st">"ghclass"</span>) )
+</pre></div>
 <pre class="asciicast"><code>roster</code></pre>
 <p><img src="figure/roster.svg" title="plot of chunk roster" alt="plot of chunk roster" width="100%"> Here we are using the student’s school email address as a unique identifier, we also have their GitHub username and we have also assigned them to different teams for our three homework assignments.</p>
 <p>Using the <code>roster</code> data frame, we can then invite the students to the class’ organization. Each of these students will be notified via email from GitHub asking them to join the <code>ghclass-vignette</code> organization.</p>
@@ -337,7 +339,7 @@ Actually you don’t have to choose between ghclass and GitHub Classroom, your w
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

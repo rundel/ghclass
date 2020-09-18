@@ -1,4 +1,4 @@
-github_api_org_repo_stats = function(org, filter, filter_type, inc_commits, inc_issues, inc_prs) {
+github_api_org_repo_stats = function(org, branch, filter, filter_type, inc_commits, inc_issues, inc_prs) {
   filter_type = paste(filter_type, collapse = ",")
 
   query = '
@@ -15,7 +15,7 @@ github_api_org_repo_stats = function(org, filter, filter_type, inc_commits, inc_
               nameWithOwner
               isPrivate
               {{#inc_commits}}
-              object(expression: "master") {
+              object(expression: "{{branch}}") {
                 ... on Commit {
                   history {
                     totalCount
@@ -69,14 +69,17 @@ github_api_org_repo_stats = function(org, filter, filter_type, inc_commits, inc_
 #'
 #' @export
 #'
-org_repo_stats = function(org, filter = "", filter_type="in:name", inc_commits = TRUE, inc_issues = TRUE, inc_prs = TRUE) {
+org_repo_stats = function(org, branch, filter = "", filter_type="in:name", inc_commits = TRUE, inc_issues = TRUE, inc_prs = TRUE) {
   flag_experimental()
 
   arg_is_chr_scalar(org, filter)
+  if (inc_commits)
+    arg_is_chr_scalar(branch)
+
   arg_is_chr(org, filter_type)
   arg_is_lgl_scalar(inc_commits, inc_issues, inc_prs)
 
-  pages = github_api_org_repo_stats(org, filter, filter_type, inc_commits, inc_issues, inc_prs)
+  pages = github_api_org_repo_stats(org, branch, filter, filter_type, inc_commits, inc_issues, inc_prs)
 
   purrr::map_dfr(
     pages,
@@ -84,13 +87,14 @@ org_repo_stats = function(org, filter = "", filter_type="in:name", inc_commits =
       repos = purrr::pluck(page, "data", "search", "edges")
 
       df = tibble::tibble(
-        repo          = purrr::map_chr(repos, c("node", "nameWithOwner")),
-        private       = purrr::map_lgl(repos, c("node", "isPrivate"))
+        repo    = purrr::map_chr(repos, c("node", "nameWithOwner")),
+        private = purrr::map_lgl(repos, c("node", "isPrivate"))
       )
 
       if (inc_commits) {
+        df$branch      = branch
         df$commits     = purrr::map_int(repos, c("node", "object", "history", "totalCount"), .default=NA)
-        #df$last_push   = lubridate::ymd_hms(purrr::map_chr(repos, c("node", "pushedAt")))
+        #df$last_push  = lubridate::ymd_hms(purrr::map_chr(repos, c("node", "pushedAt")))
         df$last_update = lubridate::ymd_hms(purrr::map_chr(repos, c("node", "updatedAt")))
       }
 

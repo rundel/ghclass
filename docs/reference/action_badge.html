@@ -142,14 +142,14 @@ action_remove_badge - Remove one or more GitHub Action badges from a file.
     </div>
 
     <pre class="usage"><span class='fu'>action_add_badge</span>(
-  <span class='no'>repo</span>,
-  <span class='kw'>workflow</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>where</span> <span class='kw'>=</span> <span class='st'>"^."</span>,
-  <span class='kw'>line_padding</span> <span class='kw'>=</span> <span class='st'>"\n\n\n"</span>,
-  <span class='kw'>file</span> <span class='kw'>=</span> <span class='st'>"README.md"</span>
+  <span class='kw'>repo</span>,
+  workflow = <span class='kw'>NULL</span>,
+  where = <span class='st'>"^."</span>,
+  line_padding = <span class='st'>"\n\n\n"</span>,
+  file = <span class='st'>"README.md"</span>
 )
 
-<span class='fu'>action_remove_badge</span>(<span class='no'>repo</span>, <span class='kw'>workflow_pat</span> <span class='kw'>=</span> <span class='st'>".*?"</span>, <span class='kw'>file</span> <span class='kw'>=</span> <span class='st'>"README.md"</span>)</pre>
+<span class='fu'>action_remove_badge</span>(<span class='kw'>repo</span>, workflow_pat = <span class='st'>".*?"</span>, file = <span class='st'>"README.md"</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -198,7 +198,7 @@ that matches the workflow name.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

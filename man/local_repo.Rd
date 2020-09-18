@@ -21,7 +21,7 @@ local_repo_branch(repo_dir, branch)
 local_repo_clone(
   repo,
   local_path = ".",
-  branch = "master",
+  branch = NULL,
   mirror = FALSE,
   verbose = FALSE
 )
@@ -30,12 +30,12 @@ local_repo_commit(repo_dir, message)
 
 local_repo_log(repo_dir, max = 100)
 
-local_repo_pull(repo_dir, branch = "master", verbose = FALSE)
+local_repo_pull(repo_dir, verbose = FALSE)
 
 local_repo_push(
   repo_dir,
   remote = "origin",
-  branch = "master",
+  branch = NULL,
   force = FALSE,
   prompt = TRUE,
   mirror = FALSE,

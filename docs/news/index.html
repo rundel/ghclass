@@ -134,6 +134,7 @@
 <li><p>Major cleanup and rewrite of many functions</p></li>
 <li><p>Basic support for GitHub actions added</p></li>
 <li><p><code>peer_*</code> functions are moved to the peer_review branch for now, coming back in 0.2.1. See README for details if you need them before the next release.</p></li>
+<li><p>The use of “master” as the default value for branch arguments has been removed across the package. Most functions with a branch argument will continue to function in the same way and will use whatever is defined as the default branch for that repository. In a small handful of cases where the API does not allow this, the argument will now require the user to provide an explicit value. These changes were made in anticipation of GitHub moving the default branch from “master” to “main” in October (see <a href="https://github.com/github/renaming" class="uri">https://github.com/github/renaming</a> for details).</p></li>
 </ul>
 </div>
   </div>
@@ -153,7 +154,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

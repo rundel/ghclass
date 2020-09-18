@@ -22,7 +22,7 @@ repo_branches = function(repo) {
   if (failed(res) | empty_result(res)) {
     character()
   } else {
-    teams = purrr::map_chr(result(res), "name")
+    purrr::map_chr(result(res), "name")
   }
 }
 

@@ -1,4 +1,4 @@
-github_api_branch_get_ref = function(repo, branch="master") {
+github_api_branch_get_ref = function(repo, branch) {
   ghclass_api_v3_req(
     endpoint = "GET /repos/:owner/:repo/commits/:ref",
     owner = get_repo_owner(repo),
@@ -38,7 +38,7 @@ github_api_branch_create = function(repo, branch, new_branch) {
 #' @rdname branch
 #' @export
 #'
-branch_create = function(repo, branch = "master", new_branch) {
+branch_create = function(repo, branch, new_branch) {
   arg_is_chr(repo, branch, new_branch)
 
   purrr::pwalk(

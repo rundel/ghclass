@@ -1,5 +1,6 @@
-github_api_repo_get_readme = function(repo, branch) {
-  arg_is_chr_scalar(repo, branch)
+github_api_repo_get_readme = function(repo, branch = NULL) {
+  arg_is_chr_scalar(repo)
+  arg_is_chr_scalar(branch, allow_null=TRUE)
 
   ghclass_api_v3_req(
     endpoint = "GET /repos/:owner/:repo/readme",
@@ -13,8 +14,9 @@ github_api_repo_get_readme = function(repo, branch) {
 #'
 #' @export
 #'
-repo_get_readme = function(repo, branch = "master", include_details = TRUE) {
-  arg_is_chr_scalar(repo, branch)
+repo_get_readme = function(repo, branch = NULL, include_details = TRUE) {
+  arg_is_chr_scalar(repo)
+  arg_is_chr_scalar(branch, allow_null=TRUE)
 
   file = purrr::possibly(github_api_repo_get_readme, NULL)(repo, branch)
   extract_content(repo, path = "README.md", file = file, include_details = include_details)

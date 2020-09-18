@@ -1,4 +1,4 @@
-github_api_repo_delete_file = function(repo, path, message, sha = NULL, branch = "master") {
+github_api_repo_delete_file = function(repo, path, message, sha = NULL, branch = NULL) {
 
   if (is.null(sha)) {
     cur_file = repo_get_file(repo, path, branch, quiet = TRUE)
@@ -25,11 +25,13 @@ github_api_repo_delete_file = function(repo, path, message, sha = NULL, branch =
 #'
 #' @export
 #'
-repo_delete_file = function(repo, path, message = NULL, branch = "master") {
-
-  arg_is_chr(repo, path, branch)
+repo_delete_file = function(repo, path, message = NULL, branch = NULL) {
+  arg_is_chr(repo, path)
+  arg_is_chr(branch, allow_null = TRUE)
   arg_is_chr_scalar(message, allow_null = TRUE)
 
+  if (is.null(branch))
+    branch = list(NULL)
 
   invisible(purrr::pmap(
     list(repo, path, branch),
