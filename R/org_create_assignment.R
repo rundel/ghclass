@@ -42,7 +42,14 @@ org_create_assignment = function(org, repo, user, team = NULL, source_repo = NUL
   } else {
     repo_create(org, repo, private = private)
     if (!is.null(source_repo)) {
-      repo_mirror(source_repo, repos, overwrite = TRUE)
+
+      cli_warn(
+        "Creating assignments from non-template repositories is deprecated, ",
+        "and will be removed in a future version of this package.\n",
+        "The repo {.val {source_repo}} can be made into a template repo using the {.fun repo_set_template} function."
+      )
+
+      repo_mirror(source_repo, repos, overwrite = TRUE, warn = FALSE)
     }
   }
 

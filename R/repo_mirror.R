@@ -4,11 +4,12 @@
 #' @param target_repo Character. One or more repository addresses in "owner/name" format.
 #' @param overwrite Logical. Should the target repositories be overwritten.
 #' @param verbose Logical. Display verbose output.
+#' @param warn Logical. Warn the user about the function being deprecated.
 #'
 #' @export
 #'
 
-repo_mirror = function(source_repo, target_repo, overwrite=FALSE, verbose=FALSE) {
+repo_mirror = function(source_repo, target_repo, overwrite=FALSE, verbose=FALSE, warn=TRUE) {
   arg_is_chr_scalar(source_repo)
   arg_is_chr(target_repo)
   arg_is_lgl_scalar(overwrite, verbose)
