@@ -163,29 +163,35 @@ the target repo must <em>not</em> already exist.</p></li>
 
     </div>
 
-    <pre class="usage"><span class='fu'>repo_create</span>(
-  <span class='kw'>org</span>,
-  <span class='kw'>name</span>,
-  prefix = <span class='st'>""</span>,
-  suffix = <span class='st'>""</span>,
-  private = <span class='fl'>TRUE</span>,
-  auto_init = <span class='fl'>FALSE</span>,
-  gitignore_template = <span class='st'>"R"</span>
-)
+    <pre class="usage"><span class='fu'>repo_create</span><span class='op'>(</span>
+  <span class='va'>org</span>,
+  <span class='va'>name</span>,
+  prefix <span class='op'>=</span> <span class='st'>""</span>,
+  suffix <span class='op'>=</span> <span class='st'>""</span>,
+  private <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  auto_init <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  gitignore_template <span class='op'>=</span> <span class='st'>"R"</span>
+<span class='op'>)</span>
 
-<span class='fu'>repo_delete</span>(<span class='kw'>repo</span>, prompt = <span class='fl'>TRUE</span>)
+<span class='fu'>repo_delete</span><span class='op'>(</span><span class='va'>repo</span>, prompt <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
-<span class='fu'>repo_exists</span>(<span class='kw'>repo</span>, strict = <span class='fl'>FALSE</span>, quiet = <span class='fl'>FALSE</span>)
+<span class='fu'>repo_exists</span><span class='op'>(</span><span class='va'>repo</span>, strict <span class='op'>=</span> <span class='cn'>FALSE</span>, quiet <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
-<span class='fu'>repo_is_template</span>(<span class='kw'>repo</span>)
+<span class='fu'>repo_is_template</span><span class='op'>(</span><span class='va'>repo</span><span class='op'>)</span>
 
-<span class='fu'>repo_mirror</span>(<span class='kw'>source_repo</span>, <span class='kw'>target_repo</span>, overwrite = <span class='fl'>FALSE</span>, verbose = <span class='fl'>FALSE</span>)
+<span class='fu'>repo_mirror</span><span class='op'>(</span>
+  <span class='va'>source_repo</span>,
+  <span class='va'>target_repo</span>,
+  overwrite <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  warn <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span>
 
-<span class='fu'>repo_mirror_template</span>(<span class='kw'>source_repo</span>, <span class='kw'>target_repo</span>, private = <span class='fl'>TRUE</span>)
+<span class='fu'>repo_mirror_template</span><span class='op'>(</span><span class='va'>source_repo</span>, <span class='va'>target_repo</span>, private <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
-<span class='fu'>repo_rename</span>(<span class='kw'>repo</span>, <span class='kw'>new_repo</span>)
+<span class='fu'>repo_rename</span><span class='op'>(</span><span class='va'>repo</span>, <span class='va'>new_repo</span><span class='op'>)</span>
 
-<span class='fu'>repo_set_template</span>(<span class='kw'>repo</span>, status = <span class='fl'>TRUE</span>)</pre>
+<span class='fu'>repo_set_template</span><span class='op'>(</span><span class='va'>repo</span>, status <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -252,6 +258,10 @@ Note when using template repos these new repositories must <em>not</em> exist.</
       <td><p>Logical. Display verbose output.</p></td>
     </tr>
     <tr>
+      <th>warn</th>
+      <td><p>Logical. Warn the user about the function being deprecated.</p></td>
+    </tr>
+    <tr>
       <th>new_repo</th>
       <td><p>Character. New name of repository without the owner.</p></td>
     </tr>
@@ -264,43 +274,43 @@ Note when using template repos these new repositories must <em>not</em> exist.</
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
-<span class='fu'>repo_create</span>(<span class='st'>"ghclass-test"</span>, <span class='st'>"repo_test"</span>)
+<span class='fu'>repo_create</span><span class='op'>(</span><span class='st'>"ghclass-test"</span>, <span class='st'>"repo_test"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'><span style='color: #00BB00;'>✓</span><span> Created repo </span><span style='color: #0000BB;'>'ghclass-test/repo_test'</span><span>.</span></div><div class='input'>
-<span class='fu'>repo_exists</span>(<span class='st'>"ghclass-test/repo_test"</span>)
+<span class='fu'>repo_exists</span><span class='op'>(</span><span class='st'>"ghclass-test/repo_test"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
-<span class='fu'>repo_rename</span>(<span class='st'>"ghclass-test/repo_test"</span>, <span class='st'>"repo_test_new"</span>)
+<span class='fu'>repo_rename</span><span class='op'>(</span><span class='st'>"ghclass-test/repo_test"</span>, <span class='st'>"repo_test_new"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Renamed repo </span><span style='color: #0000BB;'>'ghclass-test/repo_test'</span><span> to </span><span style='color: #0000BB;'>'ghclass-test/repo_test_new'</span><span>.</span></div><div class='input'>
 
 <span class='co'># The new repo exists</span>
-<span class='fu'>repo_exists</span>(<span class='st'>"ghclass-test/repo_test_new"</span>)
+<span class='fu'>repo_exists</span><span class='op'>(</span><span class='st'>"ghclass-test/repo_test_new"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 <span class='co'># The old repo forwards to the new repo</span>
-<span class='fu'>repo_exists</span>(<span class='st'>"ghclass-test/repo_test"</span>)
+<span class='fu'>repo_exists</span><span class='op'>(</span><span class='st'>"ghclass-test/repo_test"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 
 <span class='co'># Check for the redirect by setting `strict = TRUE`</span>
-<span class='fu'>repo_exists</span>(<span class='st'>"ghclass-test/repo_test"</span>, strict = <span class='fl'>TRUE</span>)
+<span class='fu'>repo_exists</span><span class='op'>(</span><span class='st'>"ghclass-test/repo_test"</span>, strict <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] FALSE</div><div class='input'>
 
 <span class='co'># The prefered way of copying a repo is by making the source a template</span>
-<span class='fu'>repo_is_template</span>(<span class='st'>"ghclass-test/repo_test_new"</span>)
+<span class='fu'>repo_is_template</span><span class='op'>(</span><span class='st'>"ghclass-test/repo_test_new"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] FALSE</div><div class='input'>
-<span class='fu'>repo_set_template</span>(<span class='st'>"ghclass-test/repo_test_new"</span>)
+<span class='fu'>repo_set_template</span><span class='op'>(</span><span class='st'>"ghclass-test/repo_test_new"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Changed the template status of repo </span><span style='color: #0000BB;'>'ghclass-test/repo_test_new'</span><span> to </span><span style='color: #0000BB;'>TRUE</span><span>.</span></div><div class='input'>
-<span class='fu'>repo_is_template</span>(<span class='st'>"ghclass-test/repo_test_new"</span>)
+<span class='fu'>repo_is_template</span><span class='op'>(</span><span class='st'>"ghclass-test/repo_test_new"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 
 <span class='co'># Given a template repo we can then directly copy the repo on GitHub</span>
-<span class='fu'>repo_mirror_template</span>(<span class='st'>"ghclass-test/repo_test_new"</span>, <span class='st'>"ghclass-test/repo_test_copy"</span>)
+<span class='fu'>repo_mirror_template</span><span class='op'>(</span><span class='st'>"ghclass-test/repo_test_new"</span>, <span class='st'>"ghclass-test/repo_test_copy"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Mirrored repo </span><span style='color: #0000BB;'>'ghclass-test/repo_test_new'</span><span> to repo </span><span style='color: #0000BB;'>'ghclass-test/repo_test_copy'</span><span>.</span></div><div class='input'>
-<span class='fu'>repo_exists</span>(<span class='st'>"ghclass-test/repo_test_copy"</span>)
+<span class='fu'>repo_exists</span><span class='op'>(</span><span class='st'>"ghclass-test/repo_test_copy"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 <span class='co'># Cleanup</span>
-<span class='fu'>repo_delete</span>(
- <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ghclass-test/repo_test_new"</span>,
-   <span class='st'>"ghclass-test/repo_test_copy"</span>),
- prompt = <span class='fl'>FALSE</span>
-)
+<span class='fu'>repo_delete</span><span class='op'>(</span>
+ <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ghclass-test/repo_test_new"</span>,
+   <span class='st'>"ghclass-test/repo_test_copy"</span><span class='op'>)</span>,
+ prompt <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Deleted repo </span><span style='color: #0000BB;'>'ghclass-test/repo_test_new'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Deleted repo </span><span style='color: #0000BB;'>'ghclass-test/repo_test_copy'</span><span>.</span></div><div class='input'>
 <span class='co'># }</span>
 
@@ -321,7 +331,7 @@ Note when using template repos these new repositories must <em>not</em> exist.</
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -145,13 +145,13 @@ github_test_token - checks if a PAT is valid by attempting to authenticate with 
 
     </div>
 
-    <pre class="usage"><span class='fu'>github_get_token</span>()
+    <pre class="usage"><span class='fu'>github_get_token</span><span class='op'>(</span><span class='op'>)</span>
 
-<span class='fu'>github_set_token</span>(<span class='kw'>token</span>)
+<span class='fu'>github_set_token</span><span class='op'>(</span><span class='va'>token</span><span class='op'>)</span>
 
-<span class='fu'>github_reset_token</span>()
+<span class='fu'>github_reset_token</span><span class='op'>(</span><span class='op'>)</span>
 
-<span class='fu'>github_test_token</span>(token = <span class='fu'>github_get_token</span>())</pre>
+<span class='fu'>github_test_token</span><span class='op'>(</span>token <span class='op'>=</span> <span class='fu'>github_get_token</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -173,16 +173,16 @@ github_test_token - checks if a PAT is valid by attempting to authenticate with 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
-<span class='fu'>github_test_token</span>()
+<span class='fu'>github_test_token</span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'><span style='color: #00BB00;'>✓</span><span> Your GitHub PAT authenticated correctly.</span></div><div class='input'>
-<span class='kw'>pat</span> <span class='op'>=</span> <span class='fu'>github_get_token</span>()
+<span class='va'>pat</span> <span class='op'>=</span> <span class='fu'>github_get_token</span><span class='op'>(</span><span class='op'>)</span>
 
-<span class='fu'>github_set_token</span>(<span class='st'>"bad_token"</span>)
-<span class='fu'>github_test_token</span>()
+<span class='fu'>github_set_token</span><span class='op'>(</span><span class='st'>"bad_token"</span><span class='op'>)</span>
+<span class='fu'>github_test_token</span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Your GitHub PAT failed to authenticate.</span></div><div class='output co'>#&gt; <span class='message'>API message: </span><span style='color: #555555;'>Bad credentials</span><span></span></div><div class='output co'>#&gt; <span class='message'>API docs: </span><span style='color: #555555;'>https://docs.github.com/rest</span><span></span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─GitHub API error (401): 401 Unauthorized
 #&gt;   ├─ 
 #&gt;   └─ </div><div class='input'>
-<span class='fu'>github_set_token</span>(<span class='kw'>pat</span>)
+<span class='fu'>github_set_token</span><span class='op'>(</span><span class='va'>pat</span><span class='op'>)</span>
 <span class='co'># }</span>
 
 </div></span></pre>
@@ -201,7 +201,7 @@ github_test_token - checks if a PAT is valid by attempting to authenticate with 
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

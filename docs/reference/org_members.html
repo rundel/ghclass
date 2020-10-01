@@ -149,15 +149,15 @@ non-organization owner (e.g. a user account) returns the owner's login.</p></li>
 
     </div>
 
-    <pre class="usage"><span class='fu'>org_admins</span>(<span class='kw'>org</span>)
+    <pre class="usage"><span class='fu'>org_admins</span><span class='op'>(</span><span class='va'>org</span><span class='op'>)</span>
 
-<span class='fu'>org_invite</span>(<span class='kw'>org</span>, <span class='kw'>user</span>)
+<span class='fu'>org_invite</span><span class='op'>(</span><span class='va'>org</span>, <span class='va'>user</span><span class='op'>)</span>
 
-<span class='fu'>org_members</span>(<span class='kw'>org</span>, filter = <span class='kw'>NULL</span>, exclude = <span class='fl'>FALSE</span>, include_admins = <span class='fl'>TRUE</span>)
+<span class='fu'>org_members</span><span class='op'>(</span><span class='va'>org</span>, filter <span class='op'>=</span> <span class='cn'>NULL</span>, exclude <span class='op'>=</span> <span class='cn'>FALSE</span>, include_admins <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
-<span class='fu'>org_pending</span>(<span class='kw'>org</span>, filter = <span class='kw'>NULL</span>, exclude = <span class='fl'>FALSE</span>)
+<span class='fu'>org_pending</span><span class='op'>(</span><span class='va'>org</span>, filter <span class='op'>=</span> <span class='cn'>NULL</span>, exclude <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
-<span class='fu'>org_remove</span>(<span class='kw'>org</span>, <span class='kw'>user</span>, prompt = <span class='fl'>TRUE</span>)</pre>
+<span class='fu'>org_remove</span><span class='op'>(</span><span class='va'>org</span>, <span class='va'>user</span>, prompt <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -192,25 +192,25 @@ non-organization owner (e.g. a user account) returns the owner's login.</p></li>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
 <span class='co'># Org Details</span>
-<span class='fu'>org_admins</span>(<span class='st'>"ghclass-test"</span>)
+<span class='fu'>org_admins</span><span class='op'>(</span><span class='st'>"ghclass-test"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] "mine-cetinkaya-rundel" "rundel"                "thereseanders"        </div><div class='input'>
-<span class='fu'>org_admins</span>(<span class='st'>"rundel"</span>) <span class='co'># User, not an organization</span>
+<span class='fu'>org_admins</span><span class='op'>(</span><span class='st'>"rundel"</span><span class='op'>)</span> <span class='co'># User, not an organization</span>
 </div><div class='output co'>#&gt; [1] "rundel"</div><div class='input'>
 
 <span class='co'># Org Membership - Invite, Status, and Remove</span>
-<span class='kw'>students</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ghclass-anya"</span>, <span class='st'>"ghclass-bruno"</span>, <span class='st'>"ghclass-celine"</span>,
-             <span class='st'>"ghclass-diego"</span>, <span class='st'>"ghclass-elijah"</span>,<span class='st'>"ghclass-francis"</span>)
+<span class='va'>students</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ghclass-anya"</span>, <span class='st'>"ghclass-bruno"</span>, <span class='st'>"ghclass-celine"</span>,
+             <span class='st'>"ghclass-diego"</span>, <span class='st'>"ghclass-elijah"</span>,<span class='st'>"ghclass-francis"</span><span class='op'>)</span>
 
-<span class='fu'>org_invite</span>(<span class='st'>"ghclass-test"</span>, <span class='kw'>students</span>)
+<span class='fu'>org_invite</span><span class='op'>(</span><span class='st'>"ghclass-test"</span>, <span class='va'>students</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'><span style='color: #00BB00;'>✓</span><span> Invited user </span><span style='color: #0000BB;'>'ghclass-anya'</span><span> to org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Invited user </span><span style='color: #0000BB;'>'ghclass-bruno'</span><span> to org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Invited user </span><span style='color: #0000BB;'>'ghclass-celine'</span><span> to org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Invited user </span><span style='color: #0000BB;'>'ghclass-diego'</span><span> to org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Invited user </span><span style='color: #0000BB;'>'ghclass-elijah'</span><span> to org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Invited user </span><span style='color: #0000BB;'>'ghclass-francis'</span><span> to org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='input'>
-<span class='fu'>org_members</span>(<span class='st'>"ghclass-test"</span>)
+<span class='fu'>org_members</span><span class='op'>(</span><span class='st'>"ghclass-test"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] "mine-cetinkaya-rundel" "rundel"                "thereseanders"        </div><div class='input'>
-<span class='fu'>org_pending</span>(<span class='st'>"ghclass-test"</span>)
+<span class='fu'>org_pending</span><span class='op'>(</span><span class='st'>"ghclass-test"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] "ghclass-anya"    "ghclass-bruno"   "ghclass-diego"   "ghclass-elijah" 
 #&gt; [5] "ghclass-francis" "ghclass-celine" </div><div class='input'>
-<span class='fu'>org_remove</span>(<span class='st'>"ghclass-test"</span>, <span class='kw'>students</span>, prompt = <span class='fl'>FALSE</span>)
+<span class='fu'>org_remove</span><span class='op'>(</span><span class='st'>"ghclass-test"</span>, <span class='va'>students</span>, prompt <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Removed pending user </span><span style='color: #0000BB;'>'ghclass-anya'</span><span> from org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Removed pending user </span><span style='color: #0000BB;'>'ghclass-bruno'</span><span> from org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Removed pending user </span><span style='color: #0000BB;'>'ghclass-celine'</span><span> from org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Removed pending user </span><span style='color: #0000BB;'>'ghclass-diego'</span><span> from org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Removed pending user </span><span style='color: #0000BB;'>'ghclass-elijah'</span><span> from org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Removed pending user </span><span style='color: #0000BB;'>'ghclass-francis'</span><span> from org </span><span style='color: #0000BB;'>'ghclass-test'</span><span>.</span></div><div class='input'>
-<span class='fu'>org_pending</span>(<span class='st'>"ghclass-test"</span>)
+<span class='fu'>org_pending</span><span class='op'>(</span><span class='st'>"ghclass-test"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; character(0)</div><div class='input'><span class='co'># }</span>
 
 </div></span></pre>
@@ -229,7 +229,7 @@ non-organization owner (e.g. a user account) returns the owner's login.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
