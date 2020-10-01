@@ -31,7 +31,7 @@ repo_add_team = function(
   org = unique(get_repo_owner(repo))
 
   if (length(org) != 1) {
-    cli_stop("Repositories can only be added to one organization at a time. ",
+    cli_stop("Permissions can only be changed for one organization at a time. ",
              "Requested orgs: {.val {org}}")
   }
 
@@ -61,9 +61,26 @@ repo_add_team = function(
 
       status_msg(
         res,
-        "Added team {.val {team}} to repo {.val {repo}} with {.val {permission}} access.",
-        "Failed to add team {.val {team}} to repo {.val {repo}}."
+        "Team {.val {team}} given {.val {permission}} access to repo {.val {repo}}",
+        "Failed to give team {.val {team}} {.val {permission}} access to repo {.val {repo}}."
       )
     }
+  )
+}
+
+#' @rdname repo_user
+#' @export
+#'
+repo_team_permission = function(
+  repo, team,
+  permission = c("push", "pull", "admin", "maintain", "triage"),
+  team_type = c("name", "slug")
+) {
+  arg_is_chr(repo, team, allow_empty = FALSE)
+  permission = match.arg(permission)
+  team_type = match.arg(team_type)
+
+  repo_add_team(
+    repo = repo, team = team, permission = permission, team_type = team_type
   )
 }

@@ -5,7 +5,9 @@
 \name{repo_user}
 \alias{repo_user}
 \alias{repo_add_team}
+\alias{repo_team_permission}
 \alias{repo_add_user}
+\alias{repo_user_permission}
 \alias{repo_collaborators}
 \alias{repo_contributors}
 \alias{repo_remove_team}
@@ -19,7 +21,20 @@ repo_add_team(
   team_type = c("name", "slug")
 )
 
+repo_team_permission(
+  repo,
+  team,
+  permission = c("push", "pull", "admin", "maintain", "triage"),
+  team_type = c("name", "slug")
+)
+
 repo_add_user(
+  repo,
+  user,
+  permission = c("push", "pull", "admin", "maintain", "triage")
+)
+
+repo_user_permission(
   repo,
   user,
   permission = c("push", "pull", "admin", "maintain", "triage")
@@ -52,6 +67,8 @@ repo_remove_user(repo, user)
 \item \code{repo_remove_user} - Remove a user from a repository
 \item \code{repo_add_team} - Add a team to a repository
 \item \code{repo_remove_team} - Remove a team from a repository
+\item \code{repo_user_permission} - Change a collaborator's permissions for a repository
+\item \code{repo_team_permission} - Change a team's permissions for a repository
 \item \code{repo_collaborators} - Returns a data frame of repos, their collaborators, and their permissions.
 \item \code{repo_contributors} - Returns a data frame containing details on repository contributor(s).
 }

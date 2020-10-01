@@ -30,7 +30,13 @@ repo_exists(repo, strict = FALSE, quiet = FALSE)
 
 repo_is_template(repo)
 
-repo_mirror(source_repo, target_repo, overwrite = FALSE, verbose = FALSE)
+repo_mirror(
+  source_repo,
+  target_repo,
+  overwrite = FALSE,
+  verbose = FALSE,
+  warn = TRUE
+)
 
 repo_mirror_template(source_repo, target_repo, private = TRUE)
 
@@ -69,6 +75,8 @@ Note when using template repos these new repositories must \emph{not} exist.}
 \item{overwrite}{Logical. Should the target repositories be overwritten.}
 
 \item{verbose}{Logical. Display verbose output.}
+
+\item{warn}{Logical. Warn the user about the function being deprecated.}
 
 \item{new_repo}{Character. New name of repository without the owner.}
 

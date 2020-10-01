@@ -218,6 +218,8 @@ NULL
 #' * `repo_remove_user` - Remove a user from a repository
 #' * `repo_add_team` - Add a team to a repository
 #' * `repo_remove_team` - Remove a team from a repository
+#' * `repo_user_permission` - Change a collaborator's permissions for a repository
+#' * `repo_team_permission` - Change a team's permissions for a repository
 #' * `repo_collaborators` - Returns a data frame of repos, their collaborators, and their permissions.
 #' * `repo_contributors` - Returns a data frame containing details on repository contributor(s).
 #'
