@@ -83,7 +83,7 @@
       <h1 data-toc-skip>Course management with ghclass</h1>
                         <h4 class="author">Mine Çetinkaya-Rundel, Colin Rundel, Therese Anders</h4>
             
-            <h4 class="date">2020-09-10</h4>
+            <h4 class="date">2020-10-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/rundel/ghclass/blob/master/vignettes/articles/ghclass.Rmd"><code>vignettes/articles/ghclass.Rmd</code></a></small>
       <div class="hidden name"><code>ghclass.Rmd</code></div>
@@ -317,6 +317,16 @@ Actually you don’t have to choose between ghclass and GitHub Classroom, your w
 <li>Instructor defined teams – GitHub Classroom asks students to choose their teammates when creating their repository.</li>
 <li>Editing existing repositories – being able to push changes to student repositories after an assignment is released can be quite valuable.</li>
 <li>Command-line interface – if you like writing R code to solve your problems this may be a better fit for you as it provides a greater level of control and more flexibility.</li>
+</ul>
+</li>
+<li>
+<p>Does the default branch of my repository matter (<code>master</code> vs <code>main</code>)?<br><br>
+Yes and no - recently, GitHub has announced that they will be changing the default branch for all new repositories on their platform to <code>main</code> from <code>master</code>. Details on this change and the timeline for implementation are available <a href="https://github.com/github/renaming">here</a>. In anticipation of these changes we have updated <code>ghclass</code> to support alternative default branch names across the entire package. For the vast majority of use cases you will not see any differences as the GitHub API and/or Git will already use the default branch without any additional specification. In a small number of cases a branch name is required, in which case the package no longer provides a default and you will be prompted to provide that argument. Hopefully these changes will have a minimal impact on our users in terms of both backwards and forwards compatibility.<br><br>
+A couple other quick points about this change:</p>
+<ul>
+<li>The default GitHub behavior is expected to change in mid-October 2020, existing repositories and organizations will not be affected.</li>
+<li>Currently, our recommendation is if your classroom org is already using <code>master</code> to leave it as is, particularly for repos already distributed to students.</li>
+<li>For new classroom orgs, before the change, you can make the change organization wide under <code>Org &gt; Settings &gt; Repository Defaults &gt; Repository default branch</code>. Note that this will only affect newly created repositories, not existing repositories.</li>
 </ul>
 </li>
 </ol>

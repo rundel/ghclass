@@ -29,3 +29,7 @@ In order to speed up the process of getting this package submitted to CRAN we ha
 ``` r
 remotes::install_github("rundel/ghclass@peer_review")
 ```
+
+## GitHub & default branches
+
+Recently, GitHub has announced that they will be changing the default branch for all new repositories on their platform to `main` from `master`. Details on this change and the timeline for implementation are available [here](https://github.com/github/renaming). In anticipation of these changes we have updated `ghclass` to support alternative default branch names across the entire package. See the FAQ in the Getting Started vignette for more details.

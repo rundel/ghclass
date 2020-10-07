@@ -435,3 +435,12 @@ Actually you don't have to choose between ghclass and GitHub Classroom, your wor
     - Command-line interface -- if you like writing R code to solve your problems
 this may be a better fit for you as it provides a greater level of control and
 more flexibility.
+
+3. Does the default branch of my repository matter (`master` vs `main`)? \
+\
+Yes and no - recently, GitHub has announced that they will be changing the default branch for all new repositories on their platform to `main` from `master`. Details on this change and the timeline for implementation are available [here](https://github.com/github/renaming). In anticipation of these changes we have updated `ghclass` to support alternative default branch names across the entire package. For the vast majority of use cases you will not see any differences as the GitHub API and/or Git will already use the default branch without any additional specification. In a small number of cases a branch name is required, in which case the package no longer provides a default value and you will be prompted to specify that argument. Hopefully these changes will have a minimal impact on our users in terms of both backwards and forwards compatibility.\
+\
+A couple other quick points about this change:
+    - The default GitHub behavior is expected to change in mid-October 2020, existing repositories and organizations will not be affected.
+    - Currently, our recommendation is if your classroom org is already using `master` to leave it as is, particularly for repos already distributed to students. GitHub will be providing migration tools later in the year which hopefully will be useful for migrating your entire organization.
+    - For new classroom orgs, before the GitHub wide change, you can choose a new default branch name organization wide under `Org > Settings > Repository Defaults > Repository default branch`. Note that this will only affect newly created repositories, not existing repositories.
