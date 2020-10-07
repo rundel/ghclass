@@ -31,7 +31,7 @@ action_workflows = function(repo, full = FALSE) {
     fail = "Failed to retrieve workflows for repo {.val {repo}}."
   )
 
-  if (failed(res) | empty_result(res)) {
+  if (failed(res) || empty_result(res) || result(res)[["total_count"]] == 0) {
     d = tibble::tibble(
       id         = integer(),
       node_id    = character(),
