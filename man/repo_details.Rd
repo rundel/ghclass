@@ -38,7 +38,7 @@ repo_issues(
   since = NULL
 )
 
-repo_n_commits(repo, branch, quiet = FALSE)
+repo_n_commits(repo, quiet = FALSE)
 
 repo_prs(repo, state = c("open", "closed", "all"))
 }

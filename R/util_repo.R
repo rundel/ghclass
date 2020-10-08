@@ -63,3 +63,19 @@ format_repo = function(repo, branch = NULL, path = NULL) {
   repo
 }
 
+repo_default_branch = function(repo) {
+  arg_is_chr(repo)
+
+  purrr::map_chr(
+    repo,
+    function(repo) {
+      r = purrr::safely(github_api_repo)(repo)
+
+      if (succeeded(r)) {
+        result(r)[["default_branch"]]
+      } else {
+        NA_character_
+      }
+    }
+  )
+}

@@ -17,14 +17,18 @@ repo_mirror = function(source_repo, target_repo, overwrite=FALSE, verbose=FALSE,
   if (warn)
     .Deprecated("repo_mirror_template", package = "ghclass")
 
+
   withr::local_dir(tempdir())
-  dir = file.path(getwd(), get_repo_name(source_repo))
+
+  tmpdir = getwd()
+
+  dir = file.path(tmpdir, get_repo_name(source_repo))
   unlink(dir, recursive = TRUE) # Make sure the source repo local folder does not exist
 
   repos = repo_n_commits(target_repo, quiet = TRUE) %>%
     dplyr::select(.data$repo, .data$n)
 
-  local_repo_clone(source_repo, getwd(), mirror = TRUE, verbose = verbose)
+  local_repo_clone(source_repo, tmpdir, mirror = TRUE, verbose = verbose)
 
   warned = FALSE
 
