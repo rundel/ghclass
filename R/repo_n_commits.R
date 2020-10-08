@@ -1,15 +1,18 @@
-github_api_repo_n_commits = function(repo, branch) {
+github_api_repo_n_commits = function(repo) {
   org = get_repo_owner(repo)
-  name = get_repo_name(repo)
+  repo = get_repo_name(repo)
 
   query = '
     query {
-      repository(owner:"{{org}}", name:"{{name}}") {
+      repository(owner:"{{org}}", name:"{{repo}}") {
         nameWithOwner
-        object(expression:"{{branch}}") {
-          ... on Commit {
-            history {
-              totalCount
+        defaultBranchRef {
+          name
+          target {
+            ... on Commit {
+              history {
+                totalCount
+              }
             }
           }
         }
@@ -27,35 +30,35 @@ github_api_repo_n_commits = function(repo, branch) {
 #' @rdname repo_details
 #'
 #' @param repo   Character. Address of repository in `owner/name` format.
-#' @param branch Character.	Branch to list commits from.
 #' @param quiet  Logical. Should an error message be printed if a repo does not exist.
 #'
 #' @export
 #'
-repo_n_commits = function(repo, branch, quiet = FALSE) {
-  arg_is_chr(repo, branch)
+repo_n_commits = function(repo, quiet = FALSE) {
+  arg_is_chr(repo)
 
-  purrr::map2_dfr(
-    repo, branch,
-    function(repo, branch) {
-      res = github_api_repo_n_commits(repo, branch)
+  purrr::map_dfr(
+    repo,
+    function(repo) {
+      res = github_api_repo_n_commits(repo)
 
-      if (!is.null(res[["errors"]]) & !quiet) {
+      if (!is.null(res[["errors"]])) {
         # TODO - work on a status_msg_v4 function
         # TODO - retrieve error message from graphql response
 
-        cli::cli_alert_danger("Failed to retrieve commits for {.val {repo}}.")
+        if (!quiet)
+          cli::cli_alert_danger("Failed to retrieve commits for {.val {repo}}.")
 
         tibble::tibble(
           repo = repo,
-          branch = branch,
+          branch = NA_character_,
           n = NA_integer_
         )
       } else {
         tibble::tibble(
           repo = purrr::pluck(res, "data", "repository", "nameWithOwner"),
-          branch = branch,
-          n    = purrr::pluck(res, "data", "repository", "object","history", "totalCount", .default=0)
+          branch = purrr::pluck(res, "data", "repository", "defaultBranchRef", "name", .default=NA_character_),
+          n = purrr::pluck(res, "data", "repository", "defaultBranchRef", "target", "history", "totalCount", .default=0)
         )
       }
     }
