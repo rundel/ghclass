@@ -14,6 +14,8 @@ repo_mirror = function(source_repo, target_repo, overwrite=FALSE, verbose=FALSE,
   arg_is_chr(target_repo)
   arg_is_lgl_scalar(overwrite, verbose)
 
+  target_repo = unique(target_repo)
+
   if (warn)
     .Deprecated("repo_mirror_template", package = "ghclass")
 
