@@ -27,9 +27,9 @@ org_create_assignment = function(org, repo, user, team = NULL, source_repo = NUL
   arg_is_chr_scalar(source_repo, allow_null = TRUE)
   arg_is_lgl_scalar(private)
 
-  repos = paste0(org, "/", repo)
+  repo_full = paste0(org, "/", repo)
 
-  existing = repo_exists(repos)
+  existing = repo_exists(repo_full)
   if (any(existing)) {
     cli_stop(
       "The following repo{?s} already exist{?s/}: {.val {repos[existing]}}. ",
@@ -42,14 +42,13 @@ org_create_assignment = function(org, repo, user, team = NULL, source_repo = NUL
   } else {
     repo_create(org, repo, private = private)
     if (!is.null(source_repo)) {
-
       cli_warn(
         "Creating assignments from non-template repositories is deprecated, ",
         "and will be removed in a future version of this package.\n",
         "The repo {.val {source_repo}} can be made into a template repo using the {.fun repo_set_template} function."
       )
 
-      repo_mirror(source_repo, repos, overwrite = TRUE, warn = FALSE)
+      repo_mirror(source_repo, repo_full, overwrite = TRUE, warn = FALSE)
     }
   }
 
