@@ -22,7 +22,10 @@ local_repo_push = function(repo_dir, remote = "origin", branch = NULL,
         branch = gert::git_info(repo = dir)$shorthand
 
       repo = fs::path_file(dir)
-      ref = paste(remote, branch, sep="/")
+      if (is.na(branch))
+        ref = remote
+      else
+        ref = paste(remote, branch, sep="/")
 
       run = TRUE
       if (prompt & force) {
