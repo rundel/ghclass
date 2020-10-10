@@ -98,6 +98,8 @@ NULL
 #'
 #' * `org_repos` - returns a (filtered) vector of organization repositories.
 #'
+#' * `org_repo_search` - search for repositories within an organization (preferred for large organizations).
+#'
 #' * `org_repo_stats` - returns a tibble of repositories belonging to a GitHub organization along with some
 #' basic statistics about those repositories.
 #'
