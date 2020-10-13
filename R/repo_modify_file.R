@@ -50,7 +50,9 @@ repo_modify_file = function(repo, path, pattern, content, method = c("replace", 
           return(NULL)
         }
 
-        res = repo_put_file(repo, path, new_content, message, branch, verbose = FALSE)
+        res = repo_put_file(repo = repo, path = path, content = new_content,
+                            message = message, branch = branch, verbose = FALSE)
+
 
         status_msg(
           res,
