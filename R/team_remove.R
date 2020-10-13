@@ -22,7 +22,7 @@ team_remove = function(org, user, team, team_type = c("name", "slug")) {
   check_team_slug(slug)
 
   r = purrr::pmap(
-    tibble::tibble(user, team, slug),
+    unique( tibble::tibble(user, team, slug) ),
     function(user, team, slug) {
       if (is.na(slug)) {
         cli::cli_alert_danger("Team {.val {team}} does not exist in org {.val {org}}.")
