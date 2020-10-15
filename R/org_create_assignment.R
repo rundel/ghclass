@@ -32,13 +32,13 @@ org_create_assignment = function(org, repo, user, team = NULL, source_repo = NUL
   existing = repo_exists(repo_full)
   if (any(existing)) {
     cli_stop(
-      "The following repo{?s} already exist{?s/}: {.val {repos[existing]}}. ",
+      "The following repo{?s} already exist{?s/}: {.val {repo_full[existing]}}. ",
       "Delete these repo{?s} or use an alternative method to create the assignment."
     )
   }
 
   if (!is.null(source_repo) && repo_is_template(source_repo)) {
-    repo_mirror_template(source_repo, repos, private = private)
+    repo_mirror_template(source_repo, repo_full, private = private)
   } else {
     repo_create(org, repo, private = private)
     if (!is.null(source_repo)) {
