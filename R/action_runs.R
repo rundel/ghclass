@@ -44,7 +44,6 @@ action_runs = function(repo) {
   } else if (empty_result(res) || result(res)[["total_count"]] == 0) {
     tibble::tibble(
       name = character(),
-      id = integer(),
       branch = character(),
       commit = character(),
       event = character(),
