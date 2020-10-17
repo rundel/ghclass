@@ -56,13 +56,13 @@ action_runs = function(repo) {
     runs = result(res)[["workflow_runs"]]
     workflows = action_workflows(repo)[,c("name", "id")]
     run_df = tibble::tibble(
-      workflow_id = purrr::map_int(runs, "workflow_id"),
-      branch = purrr::map_chr(runs, "head_branch"),
-      commit = purrr::map_chr(runs, "head_sha"),
-      event  = purrr::map_chr(runs, "event"),
-      status = purrr::map_chr(runs, "status"),
-      result = purrr::map_chr(runs, "conclusion"),
-      created = purrr::map_chr(runs, "created_at") %>% lubridate::ymd_hms()
+      workflow_id = purrr::map_int(runs, "workflow_id", .default = NA),
+      branch = purrr::map_chr(runs, "head_branch", .default = NA),
+      commit = purrr::map_chr(runs, "head_sha", .default = NA),
+      event  = purrr::map_chr(runs, "event", .default = NA),
+      status = purrr::map_chr(runs, "status", .default = NA),
+      result = purrr::map_chr(runs, "conclusion", .default = NA),
+      created = purrr::map_chr(runs, "created_at", .default = NA) %>% lubridate::ymd_hms()
     )
 
     dplyr::full_join(
