@@ -70,6 +70,6 @@ action_runs = function(repo) {
       run_df,
       by = c("id" = "workflow_id")
     ) %>%
-      select(-id)
+      dplyr::select(-id)
   }
 }
