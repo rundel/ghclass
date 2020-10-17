@@ -161,11 +161,10 @@ endpoint_verb = function(x) {
 }
 
 
-ghclass_api_v3_req = function(endpoint, ...) {
+ghclass_api_v3_req = function(endpoint, ..., limit = github_get_api_limit()) {
   method = endpoint_verb(endpoint)
-  if (method == "GET") {
-    limit = github_get_api_limit()
-  } else { # Some non-GET methods don't like having a limit set
+
+  if (method != "GET") { # Some non-GET methods don't like having a limit set
     limit = NULL
   }
 
