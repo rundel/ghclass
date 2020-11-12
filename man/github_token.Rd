@@ -14,10 +14,12 @@ github_set_token(token)
 
 github_reset_token()
 
-github_test_token(token = github_get_token())
+github_test_token(token = github_get_token(), quiet = FALSE)
 }
 \arguments{
 \item{token}{Character. Either the literal token path, or the path to a file containing the token.}
+
+\item{quiet}{Logical. Should the status result be printed.}
 }
 \description{
 \itemize{
