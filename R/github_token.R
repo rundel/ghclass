@@ -14,6 +14,8 @@
 #'
 #' @param token Character. Either the literal token path, or the path to a file containing the token.
 #'
+#' @param quiet Logical. Should the status result be printed.
+#'
 #' @details
 #' This package looks for the personal access token (PAT) in the following places (in order):
 #' * Value of `GITHUB_PAT` environmental variable.
@@ -82,7 +84,7 @@ github_reset_token = function() {
 #' @rdname github_token
 #' @export
 #'
-github_test_token = function(token = github_get_token()) {
+github_test_token = function(token = github_get_token(), quiet = FALSE) {
   arg_is_chr_scalar(token)
 
   if (file.exists(token))
@@ -90,9 +92,13 @@ github_test_token = function(token = github_get_token()) {
 
   res = purrr::safely(gh::gh)("/user", .token = token)
 
-  status_msg(
-    res,
-    "Your GitHub PAT authenticated correctly.",
-    "Your GitHub PAT failed to authenticate.",
-  )
+  if (!quiet) {
+    status_msg(
+      res,
+      "Your GitHub PAT authenticated correctly.",
+      "Your GitHub PAT failed to authenticate.",
+    )
+  }
+
+  invisible(succeeded(res))
 }
