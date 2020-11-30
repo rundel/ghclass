@@ -34,6 +34,6 @@ cli_kv = function(key, value, warning = NULL) {
   if (is.null(warning)) {
     cli_glue("{key}: {.val {value}}")
   } else {
-    cli_glue("{key}: {.val {value}} <- Warning: {warning}")
+    cli_glue("{key}: {.val {value}} <- {.strong {cli::col_red('Warning:')}} {cli::col_red(warning)}")
   }
 }
