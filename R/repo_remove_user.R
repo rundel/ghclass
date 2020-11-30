@@ -1,10 +1,9 @@
-github_api_repo_remove_user = function(repo, username, permission){
+github_api_repo_remove_user = function(repo, username){
   ghclass_api_v3_req(
     endpoint = "DELETE /repos/:owner/:repo/collaborators/:username",
     owner = get_repo_owner(repo),
     repo = get_repo_name(repo),
-    username = username,
-    permission = permission
+    username = username
   )
 }
 
