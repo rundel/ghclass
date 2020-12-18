@@ -1,5 +1,10 @@
 # ghclass (development version)
 
+# ghclass 0.2.0.9000
+
+* improved action support with `action_runs()` and `action_status()`
+
+
 # ghclass 0.2.0
 
 * First official release of ghclass

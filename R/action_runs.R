@@ -1,5 +1,5 @@
 github_api_action_runs = function(
-  repo, actor = NULL, string = NULL, event = NULL, status = NULL
+  repo, actor = NULL, string = NULL, event = NULL, status = NULL, limit = 30
 ) {
   arg_is_chr_scalar(repo)
   arg_is_chr_scalar(actor, string, event, status, allow_null = TRUE)
@@ -11,7 +11,8 @@ github_api_action_runs = function(
     actor	= actor,
     string = string,
     event = event,
-    status = status
+    status = status,
+    limit = limit
   )
 }
 
@@ -21,6 +22,7 @@ github_api_action_runs = function(
 #' @title Return a data frame containing details on a repository workflow runs.
 #'
 #' @param repo Character. Address of repository in `owner/name` format.
+#' @param limit Numeric. Maximum number of workflow runs to return.
 #'
 #' @examples
 #' \dontrun{
@@ -29,10 +31,11 @@ github_api_action_runs = function(
 #'
 #' @export
 #'
-action_runs = function(repo) {
+action_runs = function(repo, limit = 30) {
   arg_is_chr_scalar(repo)
+  arg_is_pos_int_scalar(limit)
 
-  res = purrr::safely(github_api_action_runs)(repo)
+  res = purrr::safely(github_api_action_runs)(repo, limit = limit)
 
   status_msg(
     res,
