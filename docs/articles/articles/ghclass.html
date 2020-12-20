@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../../index.html">ghclass</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9000</span>
       </span>
     </div>
 
@@ -46,7 +46,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -63,7 +63,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/rundel/ghclass/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -77,13 +77,13 @@
 
       
 
-      </header><script src="ghclass_files/header-attrs-2.4/header-attrs.js"></script><div class="row">
+      </header><script src="ghclass_files/header-attrs-2.6/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Course management with ghclass</h1>
                         <h4 class="author">Mine Çetinkaya-Rundel, Colin Rundel, Therese Anders</h4>
             
-            <h4 class="date">2020-10-07</h4>
+            <h4 class="date">2020-12-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/rundel/ghclass/blob/master/vignettes/articles/ghclass.Rmd"><code>vignettes/articles/ghclass.Rmd</code></a></small>
       <div class="hidden name"><code>ghclass.Rmd</code></div>
@@ -133,11 +133,16 @@
 <p>This package uses GitHub personal access tokens for authentication with <a href="https://github.com/settings/tokens">GitHub</a>, these values can be supplied via environmental variables <code>GITHUB_PAT</code> or <code>GITHUB_TOKEN</code> or saved as text in <code>~/.github/token</code>.</p>
 <p>If this is your first time setting up a personal access token (PAT), generate a token in the browser after logging into Github (Settings &gt; Developer Settings &gt; Personal access tokens) or use <a href="https://usethis.r-lib.org/articles/articles/usethis-setup.html#get-and-store-a-github-personal-access-token"><code>usethis::browse_github_token</code></a>.</p>
 <p>You can test that your token is working correctly using the <code><a href="../../reference/github_token.html">github_test_token()</a></code> function. If everything is working correctly you should see something like the following:</p>
-<pre class="asciicast"><code><a href="../../reference/github_token.html">github_test_token()</a></code></pre>
-<p><img src="figure/test_token.svg" title="plot of chunk test_token" alt="plot of chunk test_token" width="100%"></p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../../reference/github_token.html">github_test_token</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre class="fansi"><code>#&gt; <span style="color: #00BB00;">✓</span><span> Your GitHub PAT authenticated correctly.</span></code></pre>
 <p>If your token is not working you will see an error message like this instead:</p>
-<pre class="asciicast"><code><a href="../../reference/github_token.html">github_test_token("bad token")</a></code></pre>
-<p><img src="figure/bad_token.svg" title="plot of chunk bad_token" alt="plot of chunk bad_token" width="100%"></p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../../reference/github_token.html">github_test_token</a></span><span class="op">(</span><span class="st">"bad token"</span><span class="op">)</span></code></pre></div>
+<pre class="fansi"><code>#&gt; <span style="color: #BB0000;">x</span><span> Your GitHub PAT failed to authenticate.
+#&gt; └─GitHub API error (401): 401 Unauthorized
+#&gt;   ├─ API message: </span><span style="color: #555555;">Bad credentials</span><span>
+#&gt;   └─ API docs: </span><span style="color: #555555;">https://docs.github.com/rest</span></code></pre>
 </div>
 <div id="step-by-step-guide" class="section level2">
 <h2 class="hasAnchor">
@@ -169,39 +174,81 @@
 <li>Allow members to create teams: Disabled</li>
 </ul>
 <p>We can get a quick snapshot of our organization using the <code>org_sitrep</code> function which reports on this permission as well as other important details.</p>
-<pre class="asciicast"><code><a href="../../reference/org_perm.html">org_sitrep("ghclass-vignette")</a></code></pre>
-<p><img src="figure/sitrep.svg" title="plot of chunk sitrep" alt="plot of chunk sitrep" width="100%"></p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../../reference/org_perm.html">org_sitrep</a></span><span class="op">(</span><span class="st">"ghclass-vignette"</span><span class="op">)</span></code></pre></div>
+<pre class="fansi"><code>#&gt; 
+#&gt; <span style="color: #00BBBB;">──</span><span> </span><span style="font-weight: bold;">ghclass-vignette sitrep:</span><span> </span><span style="color: #00BBBB;">─────────────────────────────────────────────────────────────────</span><span>
+#&gt; ● </span><span style="color: #555555;">Admins</span><span>: </span><span style="color: #0000BB;">'mine-cetinkaya-rundel'</span><span>, </span><span style="color: #0000BB;">'rundel'</span><span>, and </span><span style="color: #0000BB;">'thereseanders'</span><span>
+#&gt; ● </span><span style="color: #555555;">Members</span><span>: </span><span style="color: #0000BB;">0</span><span>
+#&gt; ● </span><span style="color: #555555;">Public repos</span><span>: </span><span style="color: #0000BB;">0</span><span>
+#&gt; ● </span><span style="color: #555555;">Private repos</span><span>: </span><span style="color: #0000BB;">0</span><span>
+#&gt; ● </span><span style="color: #555555;">Default repository permission</span><span>: </span><span style="color: #0000BB;">'read'</span><span> &lt;- </span><span style="color: #BB0000;font-weight: bold;">Warning:</span><span> </span><span style="color: #BB0000;">members can currently view </span><span style="color: #BB0000;font-style: italic;">all</span><span> </span><span style="color: #BB0000;">repos</span><span>
+#&gt;   </span><span style="color: #BB0000;">in this org.</span><span>
+#&gt; ● </span><span style="color: #555555;">Members can create public repos</span><span>: </span><span style="color: #0000BB;">TRUE</span><span>
+#&gt; ● </span><span style="color: #555555;">Members can create private repos</span><span>: </span><span style="color: #0000BB;">TRUE</span></code></pre>
 <p>We can see that this function indicates that the current default repository permission settings is “read” and provides a helpful warning that this enables members to view all repositories. This permission can easily be addressed within the Organization Settings page under Member privileges. Alternatively, we can also use ghclass to change this directly with <code>org_set_repo_permission</code></p>
-<pre class="asciicast"><code><a href="../../reference/org_perm.html">org_set_repo_permission("ghclass-vignette", permission = "none")</a></code></pre>
-<p><img src="figure/set_perm.svg" title="plot of chunk set_perm" alt="plot of chunk set_perm" width="100%"></p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../../reference/org_perm.html">org_set_repo_permission</a></span><span class="op">(</span><span class="st">"ghclass-vignette"</span>, permission <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></code></pre></div>
+<pre class="fansi"><code>#&gt; <span style="color: #00BB00;">✓</span><span> Set org </span><span style="color: #0000BB;">'ghclass-vignette'</span><span>'s repo permissions to </span><span style="color: #0000BB;">'none'</span><span>.</span></code></pre>
 <p>After changing this setting we can once again check the org’s sitrep and see that the warning is now resolved.</p>
-<pre class="asciicast"><code><a href="../../reference/org_perm.html">org_sitrep("ghclass-vignette")</a></code></pre>
-<p><img src="figure/sitrep2.svg" title="plot of chunk sitrep2" alt="plot of chunk sitrep2" width="100%"></p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../../reference/org_perm.html">org_sitrep</a></span><span class="op">(</span><span class="st">"ghclass-vignette"</span><span class="op">)</span></code></pre></div>
+<pre class="fansi"><code>#&gt; 
+#&gt; <span style="color: #00BBBB;">──</span><span> </span><span style="font-weight: bold;">ghclass-vignette sitrep:</span><span> </span><span style="color: #00BBBB;">─────────────────────────────────────────────────────────────────</span><span>
+#&gt; ● </span><span style="color: #555555;">Admins</span><span>: </span><span style="color: #0000BB;">'mine-cetinkaya-rundel'</span><span>, </span><span style="color: #0000BB;">'rundel'</span><span>, and </span><span style="color: #0000BB;">'thereseanders'</span><span>
+#&gt; ● </span><span style="color: #555555;">Members</span><span>: </span><span style="color: #0000BB;">0</span><span>
+#&gt; ● </span><span style="color: #555555;">Public repos</span><span>: </span><span style="color: #0000BB;">0</span><span>
+#&gt; ● </span><span style="color: #555555;">Private repos</span><span>: </span><span style="color: #0000BB;">0</span><span>
+#&gt; ● </span><span style="color: #555555;">Default repository permission</span><span>: </span><span style="color: #0000BB;">'none'</span><span>
+#&gt; ● </span><span style="color: #555555;">Members can create public repos</span><span>: </span><span style="color: #0000BB;">TRUE</span><span>
+#&gt; ● </span><span style="color: #555555;">Members can create private repos</span><span>: </span><span style="color: #0000BB;">TRUE</span></code></pre>
 </div>
 <div id="adding-students-to-the-organization" class="section level3">
 <h3 class="hasAnchor">
 <a href="#adding-students-to-the-organization" class="anchor"></a>Adding students to the organization</h3>
 <p>Next, collect your students’ GitHub usernames. You can do this using your web form tool of choice (e.g. Google Forms, MS Forms, etc.) or via a quiz or survey on your school’s learning management system (LMS). We will assume that you are able to then read in these data into an R data frame.</p>
 <p>For example, your roster file might look something like the following:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="va">roster</span> <span class="op">=</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"roster.csv"</span>, package <span class="op">=</span> <span class="st">"ghclass"</span><span class="op">)</span> <span class="op">)</span></pre></div>
-<pre class="asciicast"><code>roster</code></pre>
-<p><img src="figure/roster.svg" title="plot of chunk roster" alt="plot of chunk roster" width="100%"> Here we are using the student’s school email address as a unique identifier, we also have their GitHub username and we have also assigned them to different teams for our three homework assignments.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">roster</span> <span class="op">=</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"roster.csv"</span>, package <span class="op">=</span> <span class="st">"ghclass"</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">roster</span></code></pre></div>
+<pre class="fansi"><code>#&gt; <span style="color: #949494;"># A tibble: 6 x 5</span><span>
+#&gt;   email              github          hw1        hw2        hw3       
+#&gt;   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>              </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>           </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>      </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>      </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>     
+#&gt; </span><span style="color: #BCBCBC;">1</span><span> anya@school.edu    ghclass-anya    hw1-team01 hw2-team01 hw3-team01
+#&gt; </span><span style="color: #BCBCBC;">2</span><span> bruno@school.edu   ghclass-bruno   hw1-team02 hw2-team02 hw3-team02
+#&gt; </span><span style="color: #BCBCBC;">3</span><span> celine@school.edu  ghclass-celine  hw1-team03 hw2-team03 hw3-team03
+#&gt; </span><span style="color: #BCBCBC;">4</span><span> diego@school.edu   ghclass-diego   hw1-team01 hw2-team03 hw3-team02
+#&gt; </span><span style="color: #BCBCBC;">5</span><span> elijah@school.edu  ghclass-elijah  hw1-team02 hw2-team01 hw3-team03
+#&gt; </span><span style="color: #BCBCBC;">6</span><span> francis@school.edu ghclass-francis hw1-team03 hw2-team02 hw3-team01</span></code></pre>
+<p>Here we are using the student’s school email address as a unique identifier, we also have their GitHub username and we have also assigned them to different teams for our three homework assignments.</p>
 <p>Using the <code>roster</code> data frame, we can then invite the students to the class’ organization. Each of these students will be notified via email from GitHub asking them to join the <code>ghclass-vignette</code> organization.</p>
-<pre class="asciicast"><code><a href="../../reference/org_members.html">org_invite(org = "ghclass-vignette", user = roster$github)</a></code></pre>
-<p><img src="figure/invite.svg" title="plot of chunk invite" alt="plot of chunk invite" width="100%"></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../../reference/org_members.html">org_invite</a></span><span class="op">(</span>org <span class="op">=</span> <span class="st">"ghclass-vignette"</span>, user <span class="op">=</span> <span class="va">roster</span><span class="op">$</span><span class="va">github</span><span class="op">)</span></code></pre></div>
+<pre class="fansi"><code>#&gt; <span style="color: #00BB00;">✓</span><span> Invited user </span><span style="color: #0000BB;">'ghclass-anya'</span><span> to org </span><span style="color: #0000BB;">'ghclass-vignette'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Invited user </span><span style="color: #0000BB;">'ghclass-bruno'</span><span> to org </span><span style="color: #0000BB;">'ghclass-vignette'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Invited user </span><span style="color: #0000BB;">'ghclass-celine'</span><span> to org </span><span style="color: #0000BB;">'ghclass-vignette'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Invited user </span><span style="color: #0000BB;">'ghclass-diego'</span><span> to org </span><span style="color: #0000BB;">'ghclass-vignette'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Invited user </span><span style="color: #0000BB;">'ghclass-elijah'</span><span> to org </span><span style="color: #0000BB;">'ghclass-vignette'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Invited user </span><span style="color: #0000BB;">'ghclass-francis'</span><span> to org </span><span style="color: #0000BB;">'ghclass-vignette'</span><span>.</span></code></pre>
 <p>We now need to wait for the students to accept these invitations before they will have access to the organization. We can check the status of these acceptances using the <code><a href="../../reference/org_members.html">org_members()</a></code> and <code><a href="../../reference/org_members.html">org_pending()</a></code> functions to see which students have accepted or not accepted the invitation.</p>
-<pre class="asciicast"><code><a href="../../reference/org_members.html">org_members("ghclass-vignette")</a></code></pre>
-<p><img src="figure/members.svg" title="plot of chunk members" alt="plot of chunk members" width="100%"></p>
-<pre class="asciicast"><code><a href="../../reference/org_members.html">org_members("ghclass-vignette", include_admins = FALSE)</a></code></pre>
-<p><img src="figure/members2.svg" title="plot of chunk members2" alt="plot of chunk members2" width="100%"></p>
-<pre class="asciicast"><code><a href="../../reference/org_members.html">org_pending("ghclass-vignette")</a></code></pre>
-<p><img src="figure/pending.svg" title="plot of chunk pending" alt="plot of chunk pending" width="100%"></p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../../reference/org_members.html">org_members</a></span><span class="op">(</span><span class="st">"ghclass-vignette"</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt; [1] "mine-cetinkaya-rundel" "rundel"                "thereseanders"</code></pre>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../../reference/org_members.html">org_members</a></span><span class="op">(</span><span class="st">"ghclass-vignette"</span>, include_admins <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt; character(0)</code></pre>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../../reference/org_members.html">org_pending</a></span><span class="op">(</span><span class="st">"ghclass-vignette"</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt; [1] "ghclass-anya"    "ghclass-bruno"   "ghclass-diego"   "ghclass-elijah" 
+#&gt; [5] "ghclass-francis" "ghclass-celine"</code></pre>
 <p>After some time, some of the students will have accepted the invitation.</p>
-<pre class="asciicast"><code><a href="../../reference/org_members.html">org_members("ghclass-vignette", include_admins = FALSE)</a></code></pre>
-<p><img src="figure/members3.svg" title="plot of chunk members3" alt="plot of chunk members3" width="100%"></p>
-<pre class="asciicast"><code><a href="../../reference/org_members.html">org_pending("ghclass-vignette")</a></code></pre>
-<p><img src="figure/pending2.svg" title="plot of chunk pending2" alt="plot of chunk pending2" width="100%"></p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../../reference/org_members.html">org_members</a></span><span class="op">(</span><span class="st">"ghclass-vignette"</span>, include_admins <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt; [1] "ghclass-anya"    "ghclass-celine"  "ghclass-francis"</code></pre>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../../reference/org_members.html">org_pending</a></span><span class="op">(</span><span class="st">"ghclass-vignette"</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt; [1] "ghclass-bruno"  "ghclass-diego"  "ghclass-elijah"</code></pre>
 <p>We can now see that Anya, Celine, and Francis have accepted the invite and we are still waiting on Bruno, Diego, and Elijah. Gentle prodding and reminder emails are often necessary to get all of the students into the organization.</p>
 </div>
 <div id="preparing-an-assignment" class="section level3">
@@ -209,26 +256,44 @@
 <a href="#preparing-an-assignment" class="anchor"></a>Preparing an assignment</h3>
 <p>As described above, ghclass uses a workflow where each team or individual is given access to a single repo for each assignment. To create these repositories we use a single template repository which contains all of the files necessary for the assignment. Generally, this will consist of things like a <code>README.md</code> with instructions, a scaffolded <code>Rmd</code> or <code>R</code> file where the students will enter their answers, and any other necessary support files (e.g. data, images, support scripts, etc.). For an example of such a repository you can take a look at <a href="https://github.com/sta323-sp19/hw1">hw1</a> from a Statistical Computing course offered at Duke in the Spring of 2019. Note that this repository is public and viewable by anyone, but this is not necessary for your template repository.</p>
 <p>Once you have created the repository and are ready to distribute it to students there is one more suggest step - setting the repo’s template status to <code>TRUE</code>. This is a GitHub specific detail, but doing so makes it much more efficient to create copies of the repo for your students. We can set this option under the repo’s Settings on GitHub, just check the box labelled “Template Repository” on the main settings page, or use the <code>repo_set_template</code> function. This status can also be checked with ghclass using <code>repo_is_template</code>.</p>
-<pre class="asciicast"><code><a href="../../reference/repo_core.html">repo_is_template("Sta323-Sp19/hw1")</a></code></pre>
-<p><img src="figure/is_template.svg" title="plot of chunk is_template" alt="plot of chunk is_template" width="100%"></p>
-<pre class="asciicast"><code><a href="../../reference/repo_core.html">repo_set_template("Sta323-Sp19/hw1")</a></code></pre>
-<p><img src="figure/set_template.svg" title="plot of chunk set_template" alt="plot of chunk set_template" width="100%"></p>
-<pre class="asciicast"><code><a href="../../reference/repo_core.html">repo_is_template("Sta323-Sp19/hw1")</a></code></pre>
-<p><img src="figure/is_template2.svg" title="plot of chunk is_template2" alt="plot of chunk is_template2" width="100%"></p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../../reference/repo_core.html">repo_is_template</a></span><span class="op">(</span><span class="st">"Sta323-Sp19/hw1"</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt; [1] FALSE</code></pre>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../../reference/repo_core.html">repo_set_template</a></span><span class="op">(</span><span class="st">"Sta323-Sp19/hw1"</span><span class="op">)</span></code></pre></div>
+<pre class="fansi"><code>#&gt; <span style="color: #00BB00;">✓</span><span> Changed the template status of repo </span><span style="color: #0000BB;">'Sta323-Sp19/hw1'</span><span> to </span><span style="color: #0000BB;">TRUE</span><span>.</span></code></pre>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../../reference/repo_core.html">repo_is_template</a></span><span class="op">(</span><span class="st">"Sta323-Sp19/hw1"</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt; [1] TRUE</code></pre>
 </div>
 <div id="distributing-a-team-assignment" class="section level3">
 <h3 class="hasAnchor">
 <a href="#distributing-a-team-assignment" class="anchor"></a>Distributing a team assignment</h3>
 <p>Once you have created your template repository, it is then straight forward process to create the team or individual repositories for your students. The recommended process is to use the <code>org_create_assignment</code> function, which is a high level function that takes care of each of the underlying steps for you. To start we will create the hw1 team-based assignment given the teams in <code>roster</code>.</p>
-<pre class="asciicast"><code><a href="../../reference/org_create_assignment.html">org_create_assignment(
-  org = "ghclass-vignette",
-  user = roster$github,
-  repo = roster$hw1,
-  team = roster$hw1,
-  source_repo = "Sta323-Sp19/hw1",
-  private = TRUE
-)</a></code></pre>
-<p><img src="figure/create_team_assign.svg" title="plot of chunk create_team_assign" alt="plot of chunk create_team_assign" width="100%"></p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../../reference/org_create_assignment.html">org_create_assignment</a></span><span class="op">(</span>
+  org <span class="op">=</span> <span class="st">"ghclass-vignette"</span>,
+  user <span class="op">=</span> <span class="va">roster</span><span class="op">$</span><span class="va">github</span>,
+  repo <span class="op">=</span> <span class="va">roster</span><span class="op">$</span><span class="va">hw1</span>,
+  team <span class="op">=</span> <span class="va">roster</span><span class="op">$</span><span class="va">hw1</span>,
+  source_repo <span class="op">=</span> <span class="st">"Sta323-Sp19/hw1"</span>,
+  private <span class="op">=</span> <span class="cn">TRUE</span>
+<span class="op">)</span></code></pre></div>
+<pre class="fansi"><code>#&gt; <span style="color: #00BB00;">✓</span><span> Mirrored repo </span><span style="color: #0000BB;">'Sta323-Sp19/hw1'</span><span> to repo </span><span style="color: #0000BB;">'ghclass-vignette/hw1-team01'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Mirrored repo </span><span style="color: #0000BB;">'Sta323-Sp19/hw1'</span><span> to repo </span><span style="color: #0000BB;">'ghclass-vignette/hw1-team02'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Mirrored repo </span><span style="color: #0000BB;">'Sta323-Sp19/hw1'</span><span> to repo </span><span style="color: #0000BB;">'ghclass-vignette/hw1-team03'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Created team </span><span style="color: #0000BB;">'hw1-team01'</span><span> in org </span><span style="color: #0000BB;">'ghclass-vignette'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Created team </span><span style="color: #0000BB;">'hw1-team02'</span><span> in org </span><span style="color: #0000BB;">'ghclass-vignette'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Created team </span><span style="color: #0000BB;">'hw1-team03'</span><span> in org </span><span style="color: #0000BB;">'ghclass-vignette'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Added user </span><span style="color: #0000BB;">'ghclass-anya'</span><span> to team </span><span style="color: #0000BB;">'hw1-team01'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Added user </span><span style="color: #0000BB;">'ghclass-bruno'</span><span> to team </span><span style="color: #0000BB;">'hw1-team02'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Added user </span><span style="color: #0000BB;">'ghclass-celine'</span><span> to team </span><span style="color: #0000BB;">'hw1-team03'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Added user </span><span style="color: #0000BB;">'ghclass-diego'</span><span> to team </span><span style="color: #0000BB;">'hw1-team01'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Added user </span><span style="color: #0000BB;">'ghclass-elijah'</span><span> to team </span><span style="color: #0000BB;">'hw1-team02'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Added user </span><span style="color: #0000BB;">'ghclass-francis'</span><span> to team </span><span style="color: #0000BB;">'hw1-team03'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Team </span><span style="color: #0000BB;">'hw1-team01-1'</span><span> given </span><span style="color: #0000BB;">'push'</span><span> access to repo </span><span style="color: #0000BB;">'ghclass-vignette/hw1-team01'</span><span>
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Team </span><span style="color: #0000BB;">'hw1-team02'</span><span> given </span><span style="color: #0000BB;">'push'</span><span> access to repo </span><span style="color: #0000BB;">'ghclass-vignette/hw1-team02'</span><span>
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Team </span><span style="color: #0000BB;">'hw1-team03'</span><span> given </span><span style="color: #0000BB;">'push'</span><span> access to repo </span><span style="color: #0000BB;">'ghclass-vignette/hw1-team03'</span></code></pre>
 <p>Based on the output we can see that multiple steps are involved in this process:</p>
 <ol style="list-style-type: decimal">
 <li><p>The repositories are created by mirroring the contents of “Sta323-Sp19/hw1” into the new repositories. The names of these repositories are given by the <code>repo</code> argument, and in this case match the team names.</p></li>
@@ -241,24 +306,47 @@
 <h3 class="hasAnchor">
 <a href="#distributing-an-individual-assignment" class="anchor"></a>Distributing an individual assignment</h3>
 <p>If instead of hw1 being a team assignment, we wanted to distribute it as an individual assignment, we can also achieve this using the <code>org_create_assignment</code> function by simply excluding the <code>team</code> argument (and providing appropriate repo names).</p>
-<pre class="asciicast"><code><a href="../../reference/org_create_assignment.html">org_create_assignment(
-  org = "ghclass-vignette",
-  user = roster$github,
-  repo = paste0("hw1-ind-", roster$github),
-  source_repo = "Sta323-Sp19/hw1",
-  private = TRUE
-)</a></code></pre>
-<p><img src="figure/create_ind_assign.svg" title="plot of chunk create_ind_assign" alt="plot of chunk create_ind_assign" width="100%"></p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../../reference/org_create_assignment.html">org_create_assignment</a></span><span class="op">(</span>
+  org <span class="op">=</span> <span class="st">"ghclass-vignette"</span>,
+  user <span class="op">=</span> <span class="va">roster</span><span class="op">$</span><span class="va">github</span>,
+  repo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"hw1-ind-"</span>, <span class="va">roster</span><span class="op">$</span><span class="va">github</span><span class="op">)</span>,
+  source_repo <span class="op">=</span> <span class="st">"Sta323-Sp19/hw1"</span>,
+  private <span class="op">=</span> <span class="cn">TRUE</span>
+<span class="op">)</span></code></pre></div>
+<pre class="fansi"><code>#&gt; <span style="color: #00BB00;">✓</span><span> Mirrored repo </span><span style="color: #0000BB;">'Sta323-Sp19/hw1'</span><span> to repo </span><span style="color: #0000BB;">'ghclass-vignette/hw1-ind-ghclass-anya'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Mirrored repo </span><span style="color: #0000BB;">'Sta323-Sp19/hw1'</span><span> to repo </span><span style="color: #0000BB;">'ghclass-vignette/hw1-ind-ghclass-bruno'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Mirrored repo </span><span style="color: #0000BB;">'Sta323-Sp19/hw1'</span><span> to repo </span><span style="color: #0000BB;">'ghclass-vignette/hw1-ind-ghclass-celine'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Mirrored repo </span><span style="color: #0000BB;">'Sta323-Sp19/hw1'</span><span> to repo </span><span style="color: #0000BB;">'ghclass-vignette/hw1-ind-ghclass-diego'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Mirrored repo </span><span style="color: #0000BB;">'Sta323-Sp19/hw1'</span><span> to repo </span><span style="color: #0000BB;">'ghclass-vignette/hw1-ind-ghclass-elijah'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Mirrored repo </span><span style="color: #0000BB;">'Sta323-Sp19/hw1'</span><span> to repo </span><span style="color: #0000BB;">'ghclass-vignette/hw1-ind-ghclass-francis'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> User </span><span style="color: #0000BB;">'ghclass-anya'</span><span> given </span><span style="color: #0000BB;">'push'</span><span> access to repo </span><span style="color: #0000BB;">'ghclass-vignette/hw1-ind-ghclass-anya'</span><span>
+#&gt; </span><span style="color: #00BB00;">✓</span><span> User </span><span style="color: #0000BB;">'ghclass-bruno'</span><span> given </span><span style="color: #0000BB;">'push'</span><span> access to repo </span><span style="color: #0000BB;">'ghclass-vignette/hw1-ind-ghclass-bruno'</span><span>
+#&gt; </span><span style="color: #00BB00;">✓</span><span> User </span><span style="color: #0000BB;">'ghclass-celine'</span><span> given </span><span style="color: #0000BB;">'push'</span><span> access to repo </span><span style="color: #0000BB;">'ghclass-vignette/hw1-ind-ghclass-celine'</span><span>
+#&gt; </span><span style="color: #00BB00;">✓</span><span> User </span><span style="color: #0000BB;">'ghclass-diego'</span><span> given </span><span style="color: #0000BB;">'push'</span><span> access to repo </span><span style="color: #0000BB;">'ghclass-vignette/hw1-ind-ghclass-diego'</span><span>
+#&gt; </span><span style="color: #00BB00;">✓</span><span> User </span><span style="color: #0000BB;">'ghclass-elijah'</span><span> given </span><span style="color: #0000BB;">'push'</span><span> access to repo </span><span style="color: #0000BB;">'ghclass-vignette/hw1-ind-ghclass-elijah'</span><span>
+#&gt; </span><span style="color: #00BB00;">✓</span><span> User </span><span style="color: #0000BB;">'ghclass-francis'</span><span> given </span><span style="color: #0000BB;">'push'</span><span> access to repo </span><span style="color: #0000BB;">'ghclass-vignette/hw1-ind-ghclass-francis'</span></code></pre>
 <p>The underlying process here is very similar with the only difference being that we no longer need to create teams and instead add the users directly to the repositories.</p>
 </div>
 <div id="listing-repos" class="section level3">
 <h3 class="hasAnchor">
 <a href="#listing-repos" class="anchor"></a>Listing Repos</h3>
 <p>Once the repos are created we can interact with them with ghclass, one of the most common needs is simply to list which repos exist within our organization and or selecting some subset of them.</p>
-<pre class="asciicast"><code><a href="../../reference/org_details.html">org_repos("ghclass-vignette")</a></code></pre>
-<p><img src="figure/repos.svg" title="plot of chunk repos" alt="plot of chunk repos" width="100%"></p>
-<pre class="asciicast"><code><a href="../../reference/org_details.html">org_repos("ghclass-vignette", filter="hw1-team")</a></code></pre>
-<p><img src="figure/repos_filter.svg" title="plot of chunk repos_filter" alt="plot of chunk repos_filter" width="100%"></p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../../reference/org_details.html">org_repos</a></span><span class="op">(</span><span class="st">"ghclass-vignette"</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt; [1] "ghclass-vignette/hw1-team01"             
+#&gt; [2] "ghclass-vignette/hw1-team02"             
+#&gt; [3] "ghclass-vignette/hw1-team03"             
+#&gt; [4] "ghclass-vignette/hw1-ind-ghclass-anya"   
+#&gt; [5] "ghclass-vignette/hw1-ind-ghclass-bruno"  
+#&gt; [6] "ghclass-vignette/hw1-ind-ghclass-celine" 
+#&gt; [7] "ghclass-vignette/hw1-ind-ghclass-diego"  
+#&gt; [8] "ghclass-vignette/hw1-ind-ghclass-elijah" 
+#&gt; [9] "ghclass-vignette/hw1-ind-ghclass-francis"</code></pre>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../../reference/org_details.html">org_repos</a></span><span class="op">(</span><span class="st">"ghclass-vignette"</span>, filter<span class="op">=</span><span class="st">"hw1-team"</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt; [1] "ghclass-vignette/hw1-team01" "ghclass-vignette/hw1-team02"
+#&gt; [3] "ghclass-vignette/hw1-team03"</code></pre>
 </div>
 <div id="modifying-repos" class="section level3">
 <h3 class="hasAnchor">
@@ -266,41 +354,74 @@
 <p>Mirroring repos is somewhat heavy handed, since it forces the target repo to be identical to the source repo. In some cases we only want to add or modify a single file in the repository. Most often this occurs after distributing an assignment and discovering that there is an issue with the instructions, the data, etc.</p>
 <p>ghclass allows you to automate the process of adding, modifying, or replacing files across repos after they have been created. While this process does overwrite existing files in the repo everything is being done within the context of git and changes can be rolled back or merged if they conflict.</p>
 <p>Lets assume that we distributed hw1 with the wrong version of the <code>README.md</code> included, if we want to replace this with the correct version across all of the hw1 repositories then we could do the following,</p>
-<pre class="asciicast"><code>file = system.file("README.md", package = "ghclass")
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">file</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"README.md"</span>, package <span class="op">=</span> <span class="st">"ghclass"</span><span class="op">)</span>
 
-repo_add_file(
-  org_repos("ghclass-vignette","hw1-team"),
-  message = "Replace README.md with the correct version",
-  file = file,
-  overwrite = TRUE
-)</code></pre>
-<p><img src="figure/add_file.svg" title="plot of chunk add_file" alt="plot of chunk add_file" width="100%"></p>
+<span class="fu"><a href="../../reference/repo_file.html">repo_add_file</a></span><span class="op">(</span>
+  <span class="fu"><a href="../../reference/org_details.html">org_repos</a></span><span class="op">(</span><span class="st">"ghclass-vignette"</span>,<span class="st">"hw1-team"</span><span class="op">)</span>,
+  message <span class="op">=</span> <span class="st">"Replace README.md with the correct version"</span>,
+  file <span class="op">=</span> <span class="va">file</span>,
+  overwrite <span class="op">=</span> <span class="cn">TRUE</span>
+<span class="op">)</span></code></pre></div>
+<pre class="fansi"><code>#&gt; <span style="color: #00BB00;">✓</span><span> Added file </span><span style="color: #0000BB;">'README.md'</span><span> to repo </span><span style="color: #0000BB;">'ghclass-vignette/hw1-team01'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Added file </span><span style="color: #0000BB;">'README.md'</span><span> to repo </span><span style="color: #0000BB;">'ghclass-vignette/hw1-team02'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Added file </span><span style="color: #0000BB;">'README.md'</span><span> to repo </span><span style="color: #0000BB;">'ghclass-vignette/hw1-team03'</span><span>.</span></code></pre>
 <p>The updated version looks like the following,</p>
-<pre class="asciicast"><code><a href="../../reference/repo_file.html">repo_get_readme("ghclass-vignette/hw1-team01", include_details = FALSE)</a></code></pre>
-<p><img src="figure/get_readme.svg" title="plot of chunk get_readme" alt="plot of chunk get_readme" width="100%"></p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../../reference/repo_file.html">repo_get_readme</a></span><span class="op">(</span><span class="st">"ghclass-vignette/hw1-team01"</span>, include_details <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt; [1] "## Homework 01\n\nThis is the corrected version of the HW01 Readme\n"</code></pre>
 <p>We can also use the function <code>repo_modify_file</code> to make changes to existing files,</p>
-<pre class="asciicast"><code><a href="../../reference/repo_file.html">repo_modify_file(
-  repo = org_repos("ghclass-vignette","hw1-team"),
-  path = "README.md",
-  pattern = "## Homework 01\n\n",
-  content = "Due: Tomorrow\n",
-  method = "after"
-)</a></code></pre>
-<p><img src="figure/modify_file.svg" title="plot of chunk modify_file" alt="plot of chunk modify_file" width="100%"></p>
-<pre class="asciicast"><code><a href="../../reference/repo_file.html">repo_get_readme("ghclass-vignette/hw1-team01", include_details = FALSE)</a></code></pre>
-<p><img src="figure/get_readme2.svg" title="plot of chunk get_readme2" alt="plot of chunk get_readme2" width="100%"></p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../../reference/repo_file.html">repo_modify_file</a></span><span class="op">(</span>
+  repo <span class="op">=</span> <span class="fu"><a href="../../reference/org_details.html">org_repos</a></span><span class="op">(</span><span class="st">"ghclass-vignette"</span>,<span class="st">"hw1-team"</span><span class="op">)</span>,
+  path <span class="op">=</span> <span class="st">"README.md"</span>,
+  pattern <span class="op">=</span> <span class="st">"## Homework 01\n\n"</span>,
+  content <span class="op">=</span> <span class="st">"Due: Tomorrow\n"</span>,
+  method <span class="op">=</span> <span class="st">"after"</span>
+<span class="op">)</span></code></pre></div>
+<pre class="fansi"><code>#&gt; <span style="color: #00BB00;">✓</span><span> Modified file </span><span style="color: #0000BB;">'ghclass-vignette/hw1-team01/README.md'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Modified file </span><span style="color: #0000BB;">'ghclass-vignette/hw1-team02/README.md'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Modified file </span><span style="color: #0000BB;">'ghclass-vignette/hw1-team03/README.md'</span><span>.</span></code></pre>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../../reference/repo_file.html">repo_get_readme</a></span><span class="op">(</span><span class="st">"ghclass-vignette/hw1-team01"</span>, include_details <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt; [1] "## Homework 01\n\nDue: Tomorrow\nThis is the corrected version of the HW01 Readme\n"</code></pre>
 </div>
 <div id="collecting-student-work" class="section level3">
 <h3 class="hasAnchor">
 <a href="#collecting-student-work" class="anchor"></a>Collecting Student Work</h3>
 <p>Eventually the students will be finished with the work and or the assignment deadline will have passed. ghclass makes it easy to collect all of the student work off of GitHub and make it accessible on your local computer for grading. We make use of the <a href="https://github.com/r-lib/gert">gert</a> package to provide basic git functionality within ghclass.</p>
-<pre class="asciicast"><code><a href="../../reference/local_repo.html">local_repo_clone(
-  repo = org_repos("ghclass-vignette", "hw1-team"),
-  local_path = "hw1"
-)</a></code></pre>
-<p><img src="figure/local_clone.svg" title="plot of chunk local_clone" alt="plot of chunk local_clone" width="100%"></p>
-<pre class="asciicast"><code><a href="http://fs.r-lib.org/reference/dir_tree.html">fs::dir_tree("hw1/")</a></code></pre>
-<p><img src="figure/dir.svg" title="plot of chunk dir" alt="plot of chunk dir" width="100%"></p>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../../reference/local_repo.html">local_repo_clone</a></span><span class="op">(</span>
+  repo <span class="op">=</span> <span class="fu"><a href="../../reference/org_details.html">org_repos</a></span><span class="op">(</span><span class="st">"ghclass-vignette"</span>, <span class="st">"hw1-team"</span><span class="op">)</span>,
+  local_path <span class="op">=</span> <span class="st">"hw1"</span>
+<span class="op">)</span></code></pre></div>
+<pre class="fansi"><code>#&gt; <span style="color: #00BB00;">✓</span><span> Cloned </span><span style="color: #0000BB;">'ghclass-vignette/hw1-team01'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Cloned </span><span style="color: #0000BB;">'ghclass-vignette/hw1-team02'</span><span>.
+#&gt; </span><span style="color: #00BB00;">✓</span><span> Cloned </span><span style="color: #0000BB;">'ghclass-vignette/hw1-team03'</span><span>.</span></code></pre>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="http://fs.r-lib.org/reference/dir_tree.html">dir_tree</a></span><span class="op">(</span><span class="st">"hw1/"</span><span class="op">)</span></code></pre></div>
+<pre class="fansi"><code>#&gt; <span style="color: #0000BB;font-weight: bold;">hw1/</span><span>
+#&gt; ├── </span><span style="color: #0000BB;font-weight: bold;">hw1-team01</span><span>
+#&gt; │   ├── README.md
+#&gt; │   ├── </span><span style="color: #BB00BB;font-weight: bold;">fizzbuzz.png</span><span>
+#&gt; │   ├── </span><span style="color: #00BB00;">hw1.Rmd</span><span>
+#&gt; │   ├── hw1.Rproj
+#&gt; │   ├── </span><span style="color: #00BB00;">hw1_whitelist.R</span><span>
+#&gt; │   └── wercker.yml
+#&gt; ├── </span><span style="color: #0000BB;font-weight: bold;">hw1-team02</span><span>
+#&gt; │   ├── README.md
+#&gt; │   ├── </span><span style="color: #BB00BB;font-weight: bold;">fizzbuzz.png</span><span>
+#&gt; │   ├── </span><span style="color: #00BB00;">hw1.Rmd</span><span>
+#&gt; │   ├── hw1.Rproj
+#&gt; │   ├── </span><span style="color: #00BB00;">hw1_whitelist.R</span><span>
+#&gt; │   └── wercker.yml
+#&gt; └── </span><span style="color: #0000BB;font-weight: bold;">hw1-team03</span><span>
+#&gt;     ├── README.md
+#&gt;     ├── </span><span style="color: #BB00BB;font-weight: bold;">fizzbuzz.png</span><span>
+#&gt;     ├── </span><span style="color: #00BB00;">hw1.Rmd</span><span>
+#&gt;     ├── hw1.Rproj
+#&gt;     ├── </span><span style="color: #00BB00;">hw1_whitelist.R</span><span>
+#&gt;     └── wercker.yml</span></code></pre>
 </div>
 </div>
 <div id="faq" class="section level2">
@@ -321,12 +442,12 @@ Actually you don’t have to choose between ghclass and GitHub Classroom, your w
 </li>
 <li>
 <p>Does the default branch of my repository matter (<code>master</code> vs <code>main</code>)?<br><br>
-Yes and no - recently, GitHub has announced that they will be changing the default branch for all new repositories on their platform to <code>main</code> from <code>master</code>. Details on this change and the timeline for implementation are available <a href="https://github.com/github/renaming">here</a>. In anticipation of these changes we have updated <code>ghclass</code> to support alternative default branch names across the entire package. For the vast majority of use cases you will not see any differences as the GitHub API and/or Git will already use the default branch without any additional specification. In a small number of cases a branch name is required, in which case the package no longer provides a default and you will be prompted to provide that argument. Hopefully these changes will have a minimal impact on our users in terms of both backwards and forwards compatibility.<br><br>
+Yes and no - recently, GitHub has announced that they will be changing the default branch for all new repositories on their platform to <code>main</code> from <code>master</code>. Details on this change and the timeline for implementation are available <a href="https://github.com/github/renaming">here</a>. In anticipation of these changes we have updated <code>ghclass</code> to support alternative default branch names across the entire package. For the vast majority of use cases you will not see any differences as the GitHub API and/or Git will already use the default branch without any additional specification. In a small number of cases a branch name is required, in which case the package no longer provides a default value and you will be prompted to specify that argument. Hopefully these changes will have a minimal impact on our users in terms of both backwards and forwards compatibility.<br><br>
 A couple other quick points about this change:</p>
 <ul>
 <li>The default GitHub behavior is expected to change in mid-October 2020, existing repositories and organizations will not be affected.</li>
-<li>Currently, our recommendation is if your classroom org is already using <code>master</code> to leave it as is, particularly for repos already distributed to students.</li>
-<li>For new classroom orgs, before the change, you can make the change organization wide under <code>Org &gt; Settings &gt; Repository Defaults &gt; Repository default branch</code>. Note that this will only affect newly created repositories, not existing repositories.</li>
+<li>Currently, our recommendation is if your classroom org is already using <code>master</code> to leave it as is, particularly for repos already distributed to students. GitHub will be providing migration tools later in the year which hopefully will be useful for migrating your entire organization.</li>
+<li>For new classroom orgs, before the GitHub wide change, you can choose a new default branch name organization wide under <code>Org &gt; Settings &gt; Repository Defaults &gt; Repository default branch</code>. Note that this will only affect newly created repositories, not existing repositories.</li>
 </ul>
 </li>
 </ol>

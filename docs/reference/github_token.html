@@ -87,7 +87,7 @@ github_test_token - checks if a PAT is valid by attempting to authenticate with 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ghclass</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9000</span>
       </span>
     </div>
 
@@ -95,7 +95,7 @@ github_test_token - checks if a PAT is valid by attempting to authenticate with 
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -112,7 +112,7 @@ github_test_token - checks if a PAT is valid by attempting to authenticate with 
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/rundel/ghclass/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -179,9 +179,9 @@ github_test_token - checks if a PAT is valid by attempting to authenticate with 
 
 <span class='fu'>github_set_token</span><span class='op'>(</span><span class='st'>"bad_token"</span><span class='op'>)</span>
 <span class='fu'>github_test_token</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Your GitHub PAT failed to authenticate.</span></div><div class='output co'>#&gt; <span class='message'>API message: </span><span style='color: #555555;'>Bad credentials</span><span></span></div><div class='output co'>#&gt; <span class='message'>API docs: </span><span style='color: #555555;'>https://docs.github.com/rest</span><span></span></div><div class='output co'>#&gt; <span class='message'>Missing page:</span></div><div class='output co'>#&gt; └─GitHub API error (401): 401 Unauthorized
-#&gt;   ├─ 
-#&gt;   └─ </div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> Your GitHub PAT failed to authenticate.</span></div><div class='output co'>#&gt; └─GitHub API error (401): 401 Unauthorized
+#&gt;   ├─ API message: </span><span style='color: #555555;'>Bad credentials</span><span>
+#&gt;   └─ API docs: </span><span style='color: #555555;'>https://docs.github.com/rest</span><span></div><div class='input'>
 <span class='fu'>github_set_token</span><span class='op'>(</span><span class='va'>pat</span><span class='op'>)</span>
 <span class='co'># }</span>
 

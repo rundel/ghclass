@@ -53,6 +53,7 @@ org_exists - returns TRUE if the organization(s) exist on GitHub and FALSE other
 org_teams - returns a (filtered) vector of organization teams.
 org_team_details - returns a data frame of all organization teams containing identification and permission details.
 org_repos - returns a (filtered) vector of organization repositories.
+org_repo_search - search for repositories within an organization (preferred for large organizations).
 org_repo_stats - returns a tibble of repositories belonging to a GitHub organization along with some
 basic statistics about those repositories.
 
@@ -89,7 +90,7 @@ basic statistics about those repositories.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ghclass</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9000</span>
       </span>
     </div>
 
@@ -97,7 +98,7 @@ basic statistics about those repositories.
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -114,7 +115,7 @@ basic statistics about those repositories.
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/rundel/ghclass/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -132,7 +133,7 @@ basic statistics about those repositories.
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Obtain details on an organization's repos and teams</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/org.R'><code>R/org.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/org_exists.R'><code>R/org_exists.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/org_repo_stats.R'><code>R/org_repo_stats.R</code></a>, and 3 more</small>
+    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/org.R'><code>R/org.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/org_exists.R'><code>R/org_exists.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/org_repo_search.R'><code>R/org_repo_search.R</code></a>, and 4 more</small>
     <div class="hidden name"><code>org_details.Rd</code></div>
     </div>
 
@@ -143,6 +144,7 @@ basic statistics about those repositories.
 <li><p><code>org_teams</code> - returns a (filtered) vector of organization teams.</p></li>
 <li><p><code>org_team_details</code> - returns a data frame of all organization teams containing identification and permission details.</p></li>
 <li><p><code>org_repos</code> - returns a (filtered) vector of organization repositories.</p></li>
+<li><p><code>org_repo_search</code> - search for repositories within an organization (preferred for large organizations).</p></li>
 <li><p><code>org_repo_stats</code> - returns a tibble of repositories belonging to a GitHub organization along with some
 basic statistics about those repositories.</p></li>
 </ul>
@@ -150,6 +152,8 @@ basic statistics about those repositories.</p></li>
     </div>
 
     <pre class="usage"><span class='fu'>org_exists</span><span class='op'>(</span><span class='va'>org</span><span class='op'>)</span>
+
+<span class='fu'>org_repo_search</span><span class='op'>(</span><span class='va'>org</span>, <span class='va'>name</span>, extra <span class='op'>=</span> <span class='st'>""</span>, full_repo <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
 <span class='fu'>org_repo_stats</span><span class='op'>(</span>
   <span class='va'>org</span>,
@@ -173,6 +177,20 @@ basic statistics about those repositories.</p></li>
     <tr>
       <th>org</th>
       <td><p>Character. Name of the GitHub organization(s).</p></td>
+    </tr>
+    <tr>
+      <th>name</th>
+      <td><p>Character. Full or partial repo name to search for within the org</p></td>
+    </tr>
+    <tr>
+      <th>extra</th>
+      <td><p>Character. Any additional search qualifiers, see
+<a href='https://docs.github.com/en/free-pro-team@latest/github/searching-for-information-on-github/searching-for-repositories'>Searching for repositories</a>
+for details.</p></td>
+    </tr>
+    <tr>
+      <th>full_repo</th>
+      <td><p>Logical. Should the full repository address be returned (e.g. <code>owner/repo</code> instead of just <code>repo</code>)?</p></td>
     </tr>
     <tr>
       <th>filter</th>
@@ -199,10 +217,6 @@ for more details.</p></td>
     <tr>
       <th>exclude</th>
       <td><p>Logical. Should entries matching the regular expression be excluded or included.</p></td>
-    </tr>
-    <tr>
-      <th>full_repo</th>
-      <td><p>Logical. Should the full repository address be returned (e.g. <code>owner/repo</code> instead of just <code>repo</code>)?</p></td>
     </tr>
     <tr>
       <th>team_type</th>

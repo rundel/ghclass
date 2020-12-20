@@ -93,7 +93,7 @@ repo_get_readme - Low level function for retrieving the content of the README.md
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ghclass</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9000</span>
       </span>
     </div>
 
@@ -101,7 +101,7 @@ repo_get_readme - Low level function for retrieving the content of the README.md
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -118,7 +118,7 @@ repo_get_readme - Low level function for retrieving the content of the README.md
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/rundel/ghclass/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -283,11 +283,11 @@ be overwritten.</p></li>
 <span class='fu'>repo_get_readme</span><span class='op'>(</span><span class='va'>repo</span>, include_details <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] "# repo_file_test\n\nHello world!\n"</div><div class='input'>
 <span class='fu'>repo_add_file</span><span class='op'>(</span><span class='va'>repo</span>, file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"DESCRIPTION"</span>, package<span class='op'>=</span><span class='st'>"ghclass"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Adding file DESCRIPTION</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Added file </span><span style='color: #0000BB;'>'DESCRIPTION'</span><span> to repo </span><span style='color: #0000BB;'>'ghclass-test/repo_file_test'</span><span>.</span></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Added file </span><span style='color: #0000BB;'>'DESCRIPTION'</span><span> to repo </span><span style='color: #0000BB;'>'ghclass-test/repo_file_test'</span><span>.</span></div><div class='input'>
 <span class='fu'>repo_get_file</span><span class='op'>(</span><span class='va'>repo</span>, <span class='st'>"DESCRIPTION"</span>, include_details <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "Package: ghclass\nTitle: Tools for Managing Classes on GitHub\nVersion: 0.2.0\nAuthors@R: \n    c(person(given = \"Colin\",\n             family = \"Rundel\",\n             role = c(\"aut\", \"cre\"),\n             email = \"rundel@gmail.com\"),\n      person(given = \"Mine\",\n             family = \"Cetinkaya-Rundel\",\n             role = \"aut\",\n             email = \"mine@rstudio.com\"),\n      person(given = \"Therese\",\n             family = \"Anders\",\n             role = \"ctb\",\n             email = \"tanders@usc.edu\"))\nDescription: This  package is designed to enable instructors to \n    efficiently manage their courses on GitHub. It has a wide range \n    of functionality for managing organizations, teams, repositories, \n    and users on GitHub and helps automate most of the tedious and \n    repetitive tasks around creating and distributing assignments.\nLicense: GPL-3 + file LICENSE\nURL: https://github.com/rundel/ghclass\nBugReports: https://github.com/rundel/ghclass/issues\nDepends: R (&gt;= 3.4.0)\nImports: base64enc, fs, gh, glue, httr, lubridate, purrr, rlang,\n        tibble, whisker, withr, dplyr, cli\nSuggests: here, knitr, rmarkdown, sodium, styler, usethis, gert,\n        asciicast, readr\nEncoding: UTF-8\nLazyData: true\nRoxygen: list(markdown = TRUE)\nRoxygenNote: 7.1.1\nAuthor: Colin Rundel [aut, cre],\n  Mine Cetinkaya-Rundel [aut],\n  Therese Anders [ctb]\nMaintainer: Colin Rundel &lt;rundel@gmail.com&gt;\nBuilt: R 4.0.2; ; 2020-10-09 19:04:13 UTC; unix\n"</div><div class='input'>
+</div><div class='output co'>#&gt; [1] "Package: ghclass\nTitle: Tools for Managing Classes on GitHub\nVersion: 0.2.0.9000\nAuthors@R: \n    c(person(given = \"Colin\",\n             family = \"Rundel\",\n             role = c(\"aut\", \"cre\"),\n             email = \"rundel@gmail.com\"),\n      person(given = \"Mine\",\n             family = \"Cetinkaya-Rundel\",\n             role = \"aut\",\n             email = \"mine@rstudio.com\"),\n      person(given = \"Therese\",\n             family = \"Anders\",\n             role = \"ctb\",\n             email = \"tanders@usc.edu\"))\nDescription: This  package is designed to enable instructors to \n    efficiently manage their courses on GitHub. It has a wide range \n    of functionality for managing organizations, teams, repositories, \n    and users on GitHub and helps automate most of the tedious and \n    repetitive tasks around creating and distributing assignments.\nLicense: GPL-3 + file LICENSE\nURL: https://github.com/rundel/ghclass\nBugReports: https://github.com/rundel/ghclass/issues\nDepends: R (&gt;= 3.4.0)\nImports: base64enc, fs, gh, glue, httr, lubridate, purrr, rlang,\n        tibble, whisker, withr, dplyr, cli\nSuggests: here, knitr, rmarkdown, sodium, styler, usethis, gert,\n        asciicast, readr\nEncoding: UTF-8\nLazyData: true\nRoxygen: list(markdown = TRUE)\nRoxygenNote: 7.1.1\nAuthor: Colin Rundel [aut, cre],\n  Mine Cetinkaya-Rundel [aut],\n  Therese Anders [ctb]\nMaintainer: Colin Rundel &lt;rundel@gmail.com&gt;\nBuilt: R 4.0.3; ; 2020-12-20 12:46:12 UTC; unix\n"</div><div class='input'>
 <span class='fu'>repo_delete_file</span><span class='op'>(</span><span class='va'>repo</span>, <span class='st'>"DESCRIPTION"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Deleting file DESCRIPTION</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Deleted file </span><span style='color: #0000BB;'>DESCRIPTION</span><span> from repo </span><span style='color: #0000BB;'>'ghclass-test/repo_file_test'</span><span>.</span></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Deleted file </span><span style='color: #0000BB;'>DESCRIPTION</span><span> from repo </span><span style='color: #0000BB;'>'ghclass-test/repo_file_test'</span><span>.</span></div><div class='input'>
 <span class='fu'><a href='repo_core.html'>repo_delete</a></span><span class='op'>(</span><span class='va'>repo</span>, prompt<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Deleted repo </span><span style='color: #0000BB;'>'ghclass-test/repo_file_test'</span><span>.</span></div><div class='input'><span class='co'># }</span>
 

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Return a data frame containing details on a repository workflows. — action • ghclass</title>
+<title>Retrieve information about GitHub Actions workflows and their runs. — action • ghclass</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,14 @@
 
 
 
-<meta property="og:title" content="Return a data frame containing details on a repository workflows. — action" />
-<meta property="og:description" content="Return a data frame containing details on a repository workflows." />
+<meta property="og:title" content="Retrieve information about GitHub Actions workflows and their runs. — action" />
+<meta property="og:description" content="
+
+action_workflows - retrieve details on repo workflows.
+action_runs - retrieve details on repo workflow runs.
+action_status - retrieve details on most recent workflow runs.
+
+" />
 <meta property="og:image" content="https://rundel.github.io/ghclass/logo.png" />
 
 
@@ -80,7 +86,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ghclass</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9000</span>
       </span>
     </div>
 
@@ -88,7 +94,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -105,7 +111,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/rundel/ghclass/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,16 +128,26 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Return a data frame containing details on a repository workflows.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/action_workflows.R'><code>R/action_workflows.R</code></a></small>
+    <h1>Retrieve information about GitHub Actions workflows and their runs.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rundel/ghclass/blob/master/R/action.R'><code>R/action.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/action_runs.R'><code>R/action_runs.R</code></a>, <a href='https://github.com/rundel/ghclass/blob/master/R/action_status.R'><code>R/action_status.R</code></a>, and 1 more</small>
     <div class="hidden name"><code>action.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Return a data frame containing details on a repository workflows.</p>
+    
+<ul>
+<li><p><code>action_workflows</code> - retrieve details on repo workflows.</p></li>
+<li><p><code>action_runs</code> - retrieve details on repo workflow runs.</p></li>
+<li><p><code>action_status</code> - retrieve details on most recent workflow runs.</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>action_workflows</span><span class='op'>(</span><span class='va'>repo</span>, full <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>action_runs</span><span class='op'>(</span><span class='va'>repo</span>, limit <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span>
+
+<span class='fu'>action_status</span><span class='op'>(</span><span class='va'>repo</span>, branch <span class='op'>=</span> <span class='cn'>NULL</span>, before <span class='op'>=</span> <span class='cn'>NULL</span>, limit <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span>
+
+<span class='fu'>action_workflows</span><span class='op'>(</span><span class='va'>repo</span>, full <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -141,8 +157,21 @@
       <td><p>Character. Address of repository in <code>owner/name</code> format.</p></td>
     </tr>
     <tr>
+      <th>limit</th>
+      <td><p>Numeric. Maximum number of workflow runs to return.</p></td>
+    </tr>
+    <tr>
+      <th>branch</th>
+      <td><p>Character. Vector of branches to report. Default <code>NULL</code>, returns all branches.</p></td>
+    </tr>
+    <tr>
+      <th>before</th>
+      <td><p>Datetime. Remove all runs created after this timestamp.
+Character values are converted using <code><a href='http://lubridate.tidyverse.org/reference/ymd_hms.html'>lubridate::ymd_hms()</a></code>.</p></td>
+    </tr>
+    <tr>
       <th>full</th>
-      <td><p>Logical. Should all workflow columns be returned</p></td>
+      <td><p>Logical. Should all workflow columns be returned. Default <code>FALSE</code>.</p></td>
     </tr>
     </table>
 
@@ -150,11 +179,39 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
 <span class='fu'>action_workflows</span><span class='op'>(</span><span class='st'>"rundel/ghclass"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 2 x 4</span><span>
-#&gt;   name       path                  state badge_url                              
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                 </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                                  
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> R-CMD-che… .github/workflows/ch… acti… https://github.com/rundel/ghclass/work…
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> Render RE… .github/workflows/re… acti… https://github.com/rundel/ghclass/work…</div><div class='input'><span class='co'># }</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 2 x 5</span><span>
+#&gt;   name          id path                state badge_url                          
+#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>               </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                              
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> R-CMD-ch… </span><span style='text-decoration: underline;'>493</span><span>339 .github/workflows/… acti… https://github.com/rundel/ghclass/…
+#&gt; </span><span style='color: #BCBCBC;'>2</span><span> Render R… </span><span style='text-decoration: underline;'>493</span><span>364 .github/workflows/… acti… https://github.com/rundel/ghclass/…</div><div class='input'>
+<span class='fu'>action_runs</span><span class='op'>(</span><span class='st'>"rundel/ghclass"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 50 x 7</span><span>
+#&gt;    name     branch   commit             event status  result created            
+#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>              </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;dttm&gt;</span><span>             
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> R-CMD-c… master   e194ada1b371d2102… push  comple… succe… 2020-12-18 </span><span style='color: #949494;'>13:19:55</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> R-CMD-c… master   3d42f7caabeb45548… push  comple… succe… 2020-12-01 </span><span style='color: #949494;'>16:43:19</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> R-CMD-c… master   e0fcbc2cffb134f38… push  comple… succe… 2020-11-30 </span><span style='color: #949494;'>11:48:52</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> R-CMD-c… github_… d8db12141fe53a381… push  comple… failu… 2020-11-12 </span><span style='color: #949494;'>22:14:45</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> R-CMD-c… github_… be816dd78ff19741b… push  comple… failu… 2020-11-12 </span><span style='color: #949494;'>22:14:07</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> R-CMD-c… master   be816dd78ff19741b… push  comple… succe… 2020-10-17 </span><span style='color: #949494;'>23:01:15</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> R-CMD-c… master   2710c94143ae10ac8… push  comple… succe… 2020-10-17 </span><span style='color: #949494;'>22:23:57</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> R-CMD-c… master   7a9ec036bd01757ab… push  comple… succe… 2020-10-17 </span><span style='color: #949494;'>22:21:20</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> R-CMD-c… master   3f07954ebe2bb6c5a… push  comple… succe… 2020-10-17 </span><span style='color: #949494;'>22:11:04</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span> R-CMD-c… master   545c74dfcc72426b9… push  comple… succe… 2020-10-15 </span><span style='color: #949494;'>23:17:14</span><span>
+#&gt; </span><span style='color: #949494;'># … with 40 more rows</span><span></div><div class='input'>
+<span class='fu'>action_status</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"rundel/ghclass"</span>, <span class='st'>"rundel/parsermd"</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 9 x 5</span><span>
+#&gt;   repo            name          branch         result  created            
+#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>           </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>         </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;dttm&gt;</span><span>             
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> rundel/ghclass  R-CMD-check   master         success 2020-12-18 </span><span style='color: #949494;'>13:19:55</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>2</span><span> rundel/ghclass  R-CMD-check   github_sitrep  failure 2020-11-12 </span><span style='color: #949494;'>22:14:45</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>3</span><span> rundel/ghclass  R-CMD-check   gert_update    success 2020-10-07 </span><span style='color: #949494;'>11:57:42</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>4</span><span> rundel/ghclass  R-CMD-check   master_to_main success 2020-09-23 </span><span style='color: #949494;'>11:09:59</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>5</span><span> rundel/ghclass  R-CMD-check   peer_review    success 2020-08-26 </span><span style='color: #949494;'>14:43:41</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>6</span><span> rundel/ghclass  R-CMD-check   usethis_to_cli success 2020-07-16 </span><span style='color: #949494;'>13:47:23</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>7</span><span> rundel/ghclass  Render README master         success 2020-10-07 </span><span style='color: #949494;'>12:25:44</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>8</span><span> rundel/ghclass  Render README peer_review    success 2020-08-26 </span><span style='color: #949494;'>14:43:41</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>9</span><span> rundel/parsermd pkgdown       master         success 2020-12-14 </span><span style='color: #949494;'>14:17:49</span><span></div><div class='input'><span class='co'># }</span>
 
 </div></span></pre>
   </div>
