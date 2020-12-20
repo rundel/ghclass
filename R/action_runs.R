@@ -19,19 +19,12 @@ github_api_action_runs = function(
 #' @name action
 #' @rdname action
 #'
-#' @title Return a data frame containing details on a repository workflow runs.
-#'
 #' @param repo Character. Address of repository in `owner/name` format.
-#' @param limit Numeric. Maximum number of workflow runs to return.
-#'
-#' @examples
-#' \dontrun{
-#' action_runs("rundel/ghclass")
-#' }
+#' @param limit Numeric. Maximum number of workflow runs to return. Defualt `50`.
 #'
 #' @export
 #'
-action_runs = function(repo, limit = 30) {
+action_runs = function(repo, limit = 50) {
   arg_is_chr_scalar(repo)
   arg_is_pos_int_scalar(limit)
 

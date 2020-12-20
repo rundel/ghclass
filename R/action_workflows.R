@@ -9,15 +9,8 @@ github_api_action_workflows = function(repo) {
 #' @name action
 #' @rdname action
 #'
-#' @title Return a data frame containing details on a repository workflows.
-#'
 #' @param repo Character. Address of repository in `owner/name` format.
-#' @param full Logical. Should all workflow columns be returned
-#'
-#' @examples
-#' \dontrun{
-#' action_workflows("rundel/ghclass")
-#' }
+#' @param full Logical. Should all workflow columns be returned. Default `FALSE`.
 #'
 #' @export
 #'

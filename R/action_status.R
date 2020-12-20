@@ -1,19 +1,11 @@
 #' @name action
 #' @rdname action
 #'
-#' @title Return a data frame with the status of the most recent workflow runs for each repo.
-#'
 #' @param repo Character. Address of repository in `owner/name` format.
-#' @param branch Character. Vector of branches to report.
-#' @param before Datetime. Filter all runs created after this timestamp.
+#' @param branch Character. Vector of branches to report. Default `NULL`, returns all branches.
+#' @param before Datetime. Remove all runs created after this timestamp.
 #' Character values are converted using `lubridate::ymd_hms()`.
-#' @param limit Numeric. Maximum number of workflow runs to return. If runs are
-#' missing try increasing this limit, if performance is slow try decreasing it.
-#'
-#' @examples
-#' \dontrun{
-#' action_status(c("rundel/ghclass", "rundel/parsermd"))
-#' }
+#' @param limit Numeric. Maximum number of workflow runs to return.
 #'
 #' @export
 #'
