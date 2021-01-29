@@ -9,7 +9,7 @@ local_repo_add = function(repo_dir, files = ".") {
   res = purrr::map(
     repo_dir,
     function(dir) {
-      if (files == ".") {
+      if (identical(files, ".")) {
         files = gert::git_status(repo = dir)[["file"]]
       }
 
