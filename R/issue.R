@@ -4,16 +4,18 @@
 #' @title GitHub Issue related tools
 #'
 #' @description
-#' * `issue_create` creates an issue for a GitHub repository.
+#' * `issue_create` creates a new issue.
 #'
-#' * `issue_close` closes an issue for a GitHub repository.
-#
+#' * `issue_close` closes an existing issue.
+#'
+#' * `issue_edit` edits the properties of an existing issue.
+#'
 #' @param repo Character. Address of one or more repositories in `owner/name` format.
 #' @param title Character. Title of the issue.
 #' @param body Character. Content of the issue.
 #' @param labels Character. Vector of the labels to associate with this issue
 #' @param assignees Character. Vector of logins for users assigned to the issue.
-#' @param number Integer. GitHub issue number of the issue.
+#' @param number Integer. GitHub issue number.
 #'
 #' @seealso [repo_issues]
 #'
@@ -41,6 +43,14 @@
 #' )
 #'
 #' issue_close("ghclass-test/test_issue", 1)
+#'
+#' issue_edit(
+#'   "ghclass-test/test_issue", 2,
+#'   title = "New issue 2 title!",
+#'   body = "Replacement body text"
+#' )
+#'
+#' ghclass::repo_issues("ghclass-test/test_issue")
 #'
 #' repo_delete("ghclass-test/test_issue", prompt=FALSE)
 #' }
