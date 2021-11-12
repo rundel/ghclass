@@ -1,31 +1,12 @@
-github_api_repo_contributors = function(repo, timeout = 10, wait = 0.5) {
+github_api_repo_contributors = function(repo) {
   owner = get_repo_owner(repo)
   repo = get_repo_name(repo)
 
-  make_req = function() {
-    ghclass_api_v3_req(
-      endpoint = "GET /repos/:owner/:repo/stats/contributors",
-      owner = owner,
-      repo = repo
-    )
-  }
-
-  start = Sys.time()
-
-  # Calculating these stats can take some time, initial request will begin the calculation
-  # and return a 202, we wait n seconds and try again. Timeout after m seconds.
-
-  while(difftime(Sys.time(), start, units = "secs") < timeout) {
-    r = make_req()
-
-    if (response_status(r) == "200 OK") {
-      return(r)
-    }
-
-    Sys.sleep(wait)
-  }
-
-  cli_stop("Timeout - no response within {timeout} seconds.")
+  ghclass_api_v3_req(
+    endpoint = "GET /repos/:owner/:repo/stats/contributors",
+    owner = owner,
+    repo = repo
+  )
 }
 
 #' @rdname repo_user
@@ -65,10 +46,10 @@ repo_contributors = function(repo) {
             function(cont) {
               dplyr::bind_rows(cont$weeks) %>%
               dplyr::transmute(
-                week = lubridate::as_datetime(w),
-                additions = a,
-                deletions = d,
-                commits = c
+                week = lubridate::as_datetime(.data$w),
+                additions = .data$a,
+                deletions = .data$d,
+                commits = .data$c
               )
             }
           )
