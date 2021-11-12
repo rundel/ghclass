@@ -1,4 +1,4 @@
-github_api_org_repo_stats = function(org, branch, filter, filter_type, inc_commits, inc_issues, inc_prs) {
+github_api_org_repo_stats = function(org, branch = NULL, filter = "", filter_type="in:name", inc_commits = TRUE, inc_issues = TRUE, inc_prs = TRUE) {
   filter_type = paste(filter_type, collapse = ",")
 
   query = '
@@ -15,6 +15,7 @@ github_api_org_repo_stats = function(org, branch, filter, filter_type, inc_commi
               nameWithOwner
               isPrivate
               {{#inc_commits}}
+              {{#branch}}
               object(expression: "{{branch}}") {
                 ... on Commit {
                   history {
@@ -22,6 +23,19 @@ github_api_org_repo_stats = function(org, branch, filter, filter_type, inc_commi
                   }
                 }
               }
+              {{/branch}}
+              {{^branch}}
+              defaultBranchRef {
+                name
+                target {
+                  ... on Commit {
+                    history {
+                      totalCount
+                    }
+                  }
+                }
+              }
+              {{/branch}}
               pushedAt
               updatedAt
               {{/inc_commits}}
@@ -60,21 +74,21 @@ github_api_org_repo_stats = function(org, branch, filter, filter_type, inc_commi
 
 #' @rdname org_details
 #'
+#' @param branch Character. The branch to use for counting commits, if `NULL` then each repo's default branch is used.
 #' @param filter_type Character. One or more GitHub search `in` qualifiers.
 #' See [documentation](https://help.github.com/en/articles/searching-for-repositories)
 #' for more details.
-#' @param inc_commits Logical. Include commit statistics
-#' @param inc_issues Logical. Include issue statistics
-#' @param inc_prs Logical. Include pull request statistics
+#' @param inc_commits Logical. Include commit statistics (`branch`, `commits`, `last_update`)
+#' @param inc_issues Logical. Include issue statistics (`open_issues`, `closed_issues`)
+#' @param inc_prs Logical. Include pull request statistics (`open_prs`, `merged_prs`, `closed_prs`)
 #'
 #' @export
 #'
-org_repo_stats = function(org, branch, filter = "", filter_type="in:name", inc_commits = TRUE, inc_issues = TRUE, inc_prs = TRUE) {
-  flag_experimental()
+org_repo_stats = function(org, branch = NULL, filter = "", filter_type="in:name", inc_commits = TRUE, inc_issues = TRUE, inc_prs = TRUE) {
+  warn_experimental()
 
   arg_is_chr_scalar(org, filter)
-  if (inc_commits)
-    arg_is_chr_scalar(branch)
+  arg_is_chr_scalar(branch, allow_null = TRUE)
 
   arg_is_chr(org, filter_type)
   arg_is_lgl_scalar(inc_commits, inc_issues, inc_prs)
@@ -92,8 +106,14 @@ org_repo_stats = function(org, branch, filter = "", filter_type="in:name", inc_c
       )
 
       if (inc_commits) {
-        df$branch      = branch
-        df$commits     = purrr::map_int(repos, c("node", "object", "history", "totalCount"), .default=NA)
+        if (is.null(branch)) {
+          df$branch  = purrr::map_chr(repos, c("node", "defaultBranchRef", "name"), .default = NA_character_)
+          df$commits = purrr::map_int(repos, c("node", "defaultBranchRef", "target", "history", "totalCount"), .default=NA_integer_)
+        } else {
+          df$branch  = branch
+          df$commits = purrr::map_int(repos, c("node", "object", "history", "totalCount"), .default=NA_integer_)
+        }
+
         #df$last_push  = lubridate::ymd_hms(purrr::map_chr(repos, c("node", "pushedAt")))
         df$last_update = lubridate::ymd_hms(purrr::map_chr(repos, c("node", "updatedAt")))
       }
