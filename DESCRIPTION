@@ -46,7 +46,6 @@ Suggests:
     styler,
     usethis,
     gert,
-    asciicast,
     readr,
     gitcreds
 Encoding: UTF-8
