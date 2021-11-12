@@ -32,21 +32,21 @@ action_status = function(repo, branch = NULL, before = NULL, limit = 50) {
 
   if (!is.null(branch)) {
     br = branch
-    res = dplyr::filter(res, branch %in% br | is.na(branch))
+    res = dplyr::filter(res, .data$branch %in% br | is.na(.data$branch))
   }
 
   to_report = res %>%
-    dplyr::select(repo, name, branch) %>%
+    dplyr::select("repo", "name", "branch") %>%
     dplyr::distinct()
 
   res = res %>%
-    dplyr::group_by(repo, name, branch) %>%
-    dplyr::arrange(dplyr::desc(created)) %>%
+    dplyr::group_by(.data$repo, .data$name, .data$branch) %>%
+    dplyr::arrange(dplyr::desc(.data$created)) %>%
     dplyr::slice(1) %>%
-    dplyr::select(repo, name, branch, result, created)
+    dplyr::select("repo", "name", "branch", "result", "created")
 
   if (!is.null(before))
-    res = dplyr::filter(res, created < before)
+    res = dplyr::filter(res, .data$created < before)
 
   dplyr::full_join(
     to_report, res, by = c("repo", "name", "branch")
