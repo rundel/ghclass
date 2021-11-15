@@ -8,17 +8,19 @@ authors:
 
 template:
   bootstrap: 5
+  bootswatch: litera
+  bslib:
+    primary: "#000000"
+    h2-font-size: "1.8rem"
 
 navbar:
   type: default
   left:
-  - icon: fa-home fa-lg
-    href: index.html
   - text: Introduction
     href: articles/articles/ghclass.html
   - text: Reference
     href: reference/index.html
-  - text: "Change log"
+  - text: News
     href: news/index.html
 
 reference:

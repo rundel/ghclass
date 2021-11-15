@@ -29,19 +29,13 @@ branch_remove - previous name of branch_delete, deprecated.
 
     <div id="navbar" class="collapse navbar-collapse ms-2">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li class="nav-item">
   <a class="nav-link" href="../articles/articles/ghclass.html">Introduction</a>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item">
-  <a class="nav-link" href="../news/index.html">Change log</a>
+  <a class="nav-link" href="../news/index.html">News</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -102,12 +96,20 @@ branch_remove - previous name of branch_delete, deprecated.
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Created repo <span style="color: #0000BB;">"ghclass-test/test_branch"</span>.</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">branch_create</span><span class="op">(</span><span class="st">"ghclass-test/test_branch"</span>, branch <span class="op">=</span> <span class="st">"main"</span>, new_branch <span class="op">=</span> <span class="st">"test"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Created branch <span style="color: #0000BB;">"test"</span> in repo <span style="color: #0000BB;">"ghclass-test/test_branch"</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Failed to retrieve branches for repo <span style="color: #0000BB;">"ghclass-test/test_branch"</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └─GitHub API error (404): </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ├─ API message: <span style="color: #555555;">Not Found</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ├─ API docs: <span style="color: #555555;">https://docs.github.com/rest/reference/repos#list-branches</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   └─ Missing page: <span style="color: #555555;">https://api.github.com/repos/ghclass-test/test_branch/branche</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Failed to create branch, <span style="color: #0000BB;">"ghclass-test/test_branch@main"</span> does not exist.</span>
 <span class="r-in"><span class="fu"><a href="repo_details.html">repo_branches</a></span><span class="op">(</span><span class="st">"ghclass-test/test_branch"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "main" "test"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "main"</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">branch_delete</span><span class="op">(</span><span class="st">"ghclass-test/test_branch"</span>, branch<span class="op">=</span><span class="st">"test"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Removed branch <span style="color: #0000BB;">"ghclass-test/test_branch@test"</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Failed to remove branch <span style="color: #0000BB;">"ghclass-test/test_branch@test"</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └─GitHub API error (409): </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ├─ API message: <span style="color: #555555;">Git Repository is empty.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   └─ API docs: <span style="color: #555555;">https://docs.github.com/rest/reference/git#delete-a-reference</span></span>
 <span class="r-in"><span class="fu"><a href="repo_details.html">repo_branches</a></span><span class="op">(</span><span class="st">"ghclass-test/test_branch"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "main"</span>
 <span class="r-in"></span>

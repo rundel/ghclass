@@ -35,19 +35,13 @@ repo_prs - Returns a tibble of pull requests for a GitHub repository.
 
     <div id="navbar" class="collapse navbar-collapse ms-2">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li class="nav-item">
   <a class="nav-link" href="../articles/articles/ghclass.html">Introduction</a>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item">
-  <a class="nav-link" href="../news/index.html">Change log</a>
+  <a class="nav-link" href="../news/index.html">News</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -166,16 +160,16 @@ Pass in "none" for issues with no assigned user, and "*" for issues assigned to 
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 500 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    repo           login  name         email            date                msg  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-15 <span style="color: #949494;">15:14:29</span> <span style="color: #949494;">"</span>Mer…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-15 <span style="color: #949494;">15:04:48</span> <span style="color: #949494;">"</span>Ver…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-15 <span style="color: #949494;">15:02:39</span> <span style="color: #949494;">"</span>Fix…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-14 <span style="color: #949494;">00:27:09</span> <span style="color: #949494;">"</span>upd…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-12 <span style="color: #949494;">22:04:38</span> <span style="color: #949494;">"</span>Fix…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-12 <span style="color: #949494;">21:53:39</span> <span style="color: #949494;">"</span>Fix…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-12 <span style="color: #949494;">21:53:30</span> <span style="color: #949494;">"</span>Sta…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-12 <span style="color: #949494;">21:29:41</span> <span style="color: #949494;">"</span>Not…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-12 <span style="color: #949494;">21:27:23</span> <span style="color: #949494;">"</span>Imp…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-12 <span style="color: #949494;">20:35:12</span> <span style="color: #949494;">"</span>Add…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-15 <span style="color: #949494;">15:30:34</span> <span style="color: #949494;">"</span>ref…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-15 <span style="color: #949494;">15:14:29</span> <span style="color: #949494;">"</span>Mer…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-15 <span style="color: #949494;">15:04:48</span> <span style="color: #949494;">"</span>Ver…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-15 <span style="color: #949494;">15:02:39</span> <span style="color: #949494;">"</span>Fix…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-14 <span style="color: #949494;">00:27:09</span> <span style="color: #949494;">"</span>upd…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-12 <span style="color: #949494;">22:04:38</span> <span style="color: #949494;">"</span>Fix…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-12 <span style="color: #949494;">21:53:39</span> <span style="color: #949494;">"</span>Fix…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-12 <span style="color: #949494;">21:53:30</span> <span style="color: #949494;">"</span>Sta…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-12 <span style="color: #949494;">21:29:41</span> <span style="color: #949494;">"</span>Not…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-12 <span style="color: #949494;">21:27:23</span> <span style="color: #949494;">"</span>Imp…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 490 more rows</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">repo_issues</span><span class="op">(</span><span class="st">"rundel/ghclass"</span><span class="op">)</span></span>

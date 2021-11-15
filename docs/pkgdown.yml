@@ -3,7 +3,7 @@ pkgdown: 1.9000.9000.9000
 pkgdown_sha: 0bc5310814c9c7781c315f7f5c3f6e97a3135540
 articles:
   ghclass: articles/ghclass.html
-last_built: 2021-11-15T15:27Z
+last_built: 2021-11-15T15:56Z
 urls:
   reference: https://rundel.github.io/ghclass/reference
   article: https://rundel.github.io/ghclass/articles

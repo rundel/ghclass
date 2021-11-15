@@ -49,19 +49,13 @@ repo_set_template - change the template status of a repository.
 
     <div id="navbar" class="collapse navbar-collapse ms-2">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li class="nav-item">
   <a class="nav-link" href="../articles/articles/ghclass.html">Introduction</a>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item">
-  <a class="nav-link" href="../news/index.html">Change log</a>
+  <a class="nav-link" href="../news/index.html">News</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -191,7 +185,7 @@ Note when using template repos these new repositories must <em>not</em> exist.</
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># The new repo exists</span></span>
 <span class="r-in"><span class="fu">repo_exists</span><span class="op">(</span><span class="st">"ghclass-test/repo_test_new"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># The old repo forwards to the new repo</span></span>
 <span class="r-in"><span class="fu">repo_exists</span><span class="op">(</span><span class="st">"ghclass-test/repo_test"</span><span class="op">)</span></span>
@@ -200,23 +194,38 @@ Note when using template repos these new repositories must <em>not</em> exist.</
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Check for the redirect by setting `strict = TRUE`</span></span>
 <span class="r-in"><span class="fu">repo_exists</span><span class="op">(</span><span class="st">"ghclass-test/repo_test"</span>, strict <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># The prefered way of copying a repo is by making the source a template</span></span>
 <span class="r-in"><span class="fu">repo_is_template</span><span class="op">(</span><span class="st">"ghclass-test/repo_test_new"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Failed to retrieve repo <span style="color: #0000BB;">"ghclass-test/repo_test_new"</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └─GitHub API error (404): </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ├─ API message: <span style="color: #555555;">Not Found</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ├─ API docs: <span style="color: #555555;">https://docs.github.com/rest/reference/repos#get-a-repository</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   └─ Missing page: <span style="color: #555555;">https://api.github.com/repos/ghclass-test/repo_test_new?per_p</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">repo_set_template</span><span class="op">(</span><span class="st">"ghclass-test/repo_test_new"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Changed the template status of repo <span style="color: #0000BB;">"ghclass-test/repo_test_new"</span> to <span style="color: #0000BB;">TRUE</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Failed to change template status of repo <span style="color: #0000BB;">"ghclass-test/repo_test_new"</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └─GitHub API error (404): </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ├─ API message: <span style="color: #555555;">Not Found</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ├─ API docs: <span style="color: #555555;">https://docs.github.com/rest/reference/repos#update-a-repository</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   └─ Missing page: <span style="color: #555555;">https://api.github.com/repos/ghclass-test/repo_test_new</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">repo_is_template</span><span class="op">(</span><span class="st">"ghclass-test/repo_test_new"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Failed to retrieve repo <span style="color: #0000BB;">"ghclass-test/repo_test_new"</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └─GitHub API error (404): </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ├─ API message: <span style="color: #555555;">Not Found</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ├─ API docs: <span style="color: #555555;">https://docs.github.com/rest/reference/repos#get-a-repository</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   └─ Missing page: <span style="color: #555555;">https://api.github.com/repos/ghclass-test/repo_test_new?per_p</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
 <span class="r-in"></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Given a template repo we can then directly copy the repo on GitHub</span></span>
 <span class="r-in"><span class="fu">repo_mirror_template</span><span class="op">(</span><span class="st">"ghclass-test/repo_test_new"</span>, <span class="st">"ghclass-test/repo_test_copy"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Mirrored repo <span style="color: #0000BB;">"ghclass-test/repo_test_new"</span> to repo <span style="color: #0000BB;">"ghclass-test/repo_test_copy"</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Failed to mirror repo <span style="color: #0000BB;">"ghclass-test/repo_test_new"</span> to repo <span style="color: #0000BB;">"ghclass-test/repo_test_copy"</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └─Cannot mirror (template) to repo <span style="color: #0000BB;">"ghclass-test/repo_test_copy"</span> because this re</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">repo_exists</span><span class="op">(</span><span class="st">"ghclass-test/repo_test_copy"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
@@ -227,7 +236,11 @@ Note when using template repos these new repositories must <em>not</em> exist.</
 <span class="r-in">   <span class="st">"ghclass-test/repo_test_copy"</span><span class="op">)</span>,</span>
 <span class="r-in"> prompt <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Deleted repo <span style="color: #0000BB;">"ghclass-test/repo_test_new"</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Failed to delete repo <span style="color: #0000BB;">"ghclass-test/repo_test_new"</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └─GitHub API error (404): </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ├─ API message: <span style="color: #555555;">Not Found</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ├─ API docs: <span style="color: #555555;">https://docs.github.com/rest/reference/repos#delete-a-repository</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   └─ Missing page: <span style="color: #555555;">https://api.github.com/repos/ghclass-test/repo_test_new</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Deleted repo <span style="color: #0000BB;">"ghclass-test/repo_test_copy"</span>.</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># }</span></span>

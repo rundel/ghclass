@@ -25,19 +25,13 @@ pr_create - create a pull request GitHub from the base branch to the head branch
 
     <div id="navbar" class="collapse navbar-collapse ms-2">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li class="nav-item">
   <a class="nav-link" href="../articles/articles/ghclass.html">Introduction</a>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item">
-  <a class="nav-link" href="../news/index.html">Change log</a>
+  <a class="nav-link" href="../news/index.html">News</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -103,14 +97,18 @@ a pull request to one repository that requests a merge to a base of another repo
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Created repo <span style="color: #0000BB;">"ghclass-test/test_pr"</span>.</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu"><a href="branch.html">branch_create</a></span><span class="op">(</span><span class="st">"ghclass-test/test_pr"</span>, branch <span class="op">=</span> <span class="st">"main"</span>, new_branch <span class="op">=</span> <span class="st">"test"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Created branch <span style="color: #0000BB;">"test"</span> in repo <span style="color: #0000BB;">"ghclass-test/test_pr"</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Failed to create branch <span style="color: #0000BB;">"test"</span> in repo <span style="color: #0000BB;">"ghclass-test/test_pr"</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └─Unable to locate branch <span style="color: #0000BB;">"ghclass-test/test_pr@main"</span>.</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu"><a href="repo_file.html">repo_modify_file</a></span><span class="op">(</span><span class="st">"ghclass-test/test_pr"</span>, <span class="st">"README.md"</span>, pattern <span class="op">=</span> <span class="st">"test_pr"</span>,</span>
 <span class="r-in">                 content <span class="op">=</span> <span class="st">"Hello"</span>, method <span class="op">=</span> <span class="st">"after"</span>, branch <span class="op">=</span> <span class="st">"test"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Modified file <span style="color: #0000BB;">"ghclass-test/test_pr@test/README.md"</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Unable to retrieve <span style="color: #0000BB;">"ghclass-test/test_pr@test/README.md"</span>.</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">pr_create</span><span class="op">(</span><span class="st">"ghclass-test/test_pr"</span>, title <span class="op">=</span> <span class="st">"merge"</span>, head <span class="op">=</span> <span class="st">"test"</span>, base <span class="op">=</span> <span class="st">"main"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Created pull request for <span style="color: #0000BB;">"ghclass-test/test_pr (main &lt;- test)"</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Failed create pull request for <span style="color: #0000BB;">"ghclass-test/test_pr (main &lt;- test)"</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └─GitHub API error (422): </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ├─ API message: <span style="color: #555555;">Validation Failed</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   └─ API docs: <span style="color: #555555;">https://docs.github.com/rest/reference/pulls#create-a-pull-reques</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu"><a href="repo_core.html">repo_delete</a></span><span class="op">(</span><span class="st">"ghclass-test/test_pr"</span>, prompt <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Deleted repo <span style="color: #0000BB;">"ghclass-test/test_pr"</span>.</span>

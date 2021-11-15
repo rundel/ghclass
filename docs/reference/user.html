@@ -31,19 +31,13 @@ user_type - returns a vector of the accounts' types.
 
     <div id="navbar" class="collapse navbar-collapse ms-2">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li class="nav-item">
   <a class="nav-link" href="../articles/articles/ghclass.html">Introduction</a>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item">
-  <a class="nav-link" href="../news/index.html">Change log</a>
+  <a class="nav-link" href="../news/index.html">News</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -119,6 +113,7 @@ and <code>FALSE</code> otherwise. Note that GitHub considers organizations to be
 <span class="r-out co"><span class="r-pr">#&gt;</span> character(0)</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu"><a href="org_details.html">org_repos</a></span><span class="op">(</span><span class="st">"ghclass-test"</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ghclass-test/repo_test_new"</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">user_type</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rundel"</span>, <span class="st">"ghclass-test"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "User"         "Organization"</span>

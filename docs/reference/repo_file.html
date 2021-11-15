@@ -43,19 +43,13 @@ repo_get_readme - Low level function for retrieving the content of the README.md
 
     <div id="navbar" class="collapse navbar-collapse ms-2">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li class="nav-item">
   <a class="nav-link" href="../articles/articles/ghclass.html">Introduction</a>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item">
-  <a class="nav-link" href="../news/index.html">Change log</a>
+  <a class="nav-link" href="../news/index.html">News</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -177,28 +171,29 @@ be overwritten.</p></li>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Created repo <span style="color: #0000BB;">"ghclass-test/repo_file_test"</span>.</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">repo_ls</span><span class="op">(</span><span class="va">repo</span>, path <span class="op">=</span> <span class="st">"."</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ".gitignore" "README.md" </span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> Failed to retrieve path <span style="color: #0000BB;">"."</span> in repo <span style="color: #0000BB;">"ghclass-test/repo_file_test"</span>. ()</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">repo_get_readme</span><span class="op">(</span><span class="va">repo</span>, include_details <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# repo_file_test"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Unable to retrieve file <span style="color: #0000BB;">"README.md"</span> from repo <span style="color: #0000BB;">"ghclass-test/repo_file_test"</span>.</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">repo_get_file</span><span class="op">(</span><span class="va">repo</span>, <span class="st">".gitignore"</span>, include_details <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# History files\n.Rhistory\n.Rapp.history\n\n# Session Data files\n.RData\n\n# User-specific files\n.Ruserdata\n\n# Example code in package build process\n*-Ex.R\n\n# Output files from R CMD build\n/*.tar.gz\n\n# Output files from R CMD check\n/*.Rcheck/\n\n# RStudio files\n.Rproj.user/\n\n# produced vignettes\nvignettes/*.html\nvignettes/*.pdf\n\n# OAuth2 token, see https://github.com/hadley/httr/releases/tag/v0.3\n.httr-oauth\n\n# knitr and R markdown default cache directories\n*_cache/\n/cache/\n\n# Temporary files created by R markdown\n*.utf8.md\n*.knit.md\n\n# R Environment Variables\n.Renviron\n"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Unable to retrieve file <span style="color: #0000BB;">".gitignore"</span> from repo <span style="color: #0000BB;">"ghclass-test/repo_file_test"</span>.</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">repo_modify_file</span><span class="op">(</span></span>
 <span class="r-in">  <span class="va">repo</span>, path <span class="op">=</span> <span class="st">"README.md"</span>, pattern <span class="op">=</span> <span class="st">"repo_file_test"</span>,</span>
 <span class="r-in">  content <span class="op">=</span> <span class="st">"\n\nHello world!\n"</span>, method <span class="op">=</span> <span class="st">"after"</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Modified file <span style="color: #0000BB;">"ghclass-test/repo_file_test/README.md"</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Unable to retrieve <span style="color: #0000BB;">"ghclass-test/repo_file_test/README.md"</span>.</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">repo_get_readme</span><span class="op">(</span><span class="va">repo</span>, include_details <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# repo_file_test\n\nHello world!\n"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Unable to retrieve file <span style="color: #0000BB;">"README.md"</span> from repo <span style="color: #0000BB;">"ghclass-test/repo_file_test"</span>.</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">repo_add_file</span><span class="op">(</span><span class="va">repo</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"DESCRIPTION"</span>, package<span class="op">=</span><span class="st">"ghclass"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Failed to retrieve files for repo <span style="color: #0000BB;">"ghclass-test/repo_file_test"</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Added file <span style="color: #0000BB;">"DESCRIPTION"</span> to repo <span style="color: #0000BB;">"ghclass-test/repo_file_test"</span>.</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">repo_get_file</span><span class="op">(</span><span class="va">repo</span>, <span class="st">"DESCRIPTION"</span>, include_details <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Package: ghclass\nTitle: Tools for Managing Classes on GitHub\nVersion: 0.2.1\nAuthors@R: \n    c(person(given = \"Colin\",\n             family = \"Rundel\",\n             role = c(\"aut\", \"cre\"),\n             email = \"rundel@gmail.com\"),\n      person(given = \"Mine\",\n             family = \"Cetinkaya-Rundel\",\n             role = \"aut\",\n             email = \"mine@rstudio.com\"),\n      person(given = \"Therese\",\n             family = \"Anders\",\n             role = \"ctb\",\n             email = \"tanders@usc.edu\"))\nDescription: This  package is designed to enable instructors to \n    efficiently manage their courses on GitHub. It has a wide range \n    of functionality for managing organizations, teams, repositories, \n    and users on GitHub and helps automate most of the tedious and \n    repetitive tasks around creating and distributing assignments.\nLicense: GPL-3 + file LICENSE\nURL: https://github.com/rundel/ghclass\nBugReports: https://github.com/rundel/ghclass/issues\nDepends: R (&gt;= 3.4.0)\nImports: base64enc, fs, gh, glue, httr, lubridate, purrr, rlang,\n        tibble, whisker, withr, dplyr, cli (&gt;= 3.0.0)\nSuggests: here, knitr, rmarkdown, sodium, styler, usethis, gert, readr,\n        gitcreds\nEncoding: UTF-8\nLazyData: true\nRoxygen: list(markdown = TRUE)\nRoxygenNote: 7.1.2\nAuthor: Colin Rundel [aut, cre],\n  Mine Cetinkaya-Rundel [aut],\n  Therese Anders [ctb]\nMaintainer: Colin Rundel &lt;rundel@gmail.com&gt;\nBuilt: R 4.1.2; ; 2021-11-15 15:27:38 UTC; unix\n"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Package: ghclass\nTitle: Tools for Managing Classes on GitHub\nVersion: 0.2.1\nAuthors@R: \n    c(person(given = \"Colin\",\n             family = \"Rundel\",\n             role = c(\"aut\", \"cre\"),\n             email = \"rundel@gmail.com\"),\n      person(given = \"Mine\",\n             family = \"Cetinkaya-Rundel\",\n             role = \"aut\",\n             email = \"mine@rstudio.com\"),\n      person(given = \"Therese\",\n             family = \"Anders\",\n             role = \"ctb\",\n             email = \"tanders@usc.edu\"))\nDescription: This  package is designed to enable instructors to \n    efficiently manage their courses on GitHub. It has a wide range \n    of functionality for managing organizations, teams, repositories, \n    and users on GitHub and helps automate most of the tedious and \n    repetitive tasks around creating and distributing assignments.\nLicense: GPL-3 + file LICENSE\nURL: https://github.com/rundel/ghclass\nBugReports: https://github.com/rundel/ghclass/issues\nDepends: R (&gt;= 3.4.0)\nImports: base64enc, fs, gh, glue, httr, lubridate, purrr, rlang,\n        tibble, whisker, withr, dplyr, cli (&gt;= 3.0.0)\nSuggests: here, knitr, rmarkdown, sodium, styler, usethis, gert, readr,\n        gitcreds\nEncoding: UTF-8\nLazyData: true\nRoxygen: list(markdown = TRUE)\nRoxygenNote: 7.1.2\nAuthor: Colin Rundel [aut, cre],\n  Mine Cetinkaya-Rundel [aut],\n  Therese Anders [ctb]\nMaintainer: Colin Rundel &lt;rundel@gmail.com&gt;\nBuilt: R 4.1.2; ; 2021-11-15 15:56:33 UTC; unix\n"</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">repo_delete_file</span><span class="op">(</span><span class="va">repo</span>, <span class="st">"DESCRIPTION"</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Deleted file <span style="color: #0000BB;">DESCRIPTION</span> from repo <span style="color: #0000BB;">"ghclass-test/repo_file_test"</span>.</span>

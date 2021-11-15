@@ -37,19 +37,13 @@ basic statistics about those repositories.
 
     <div id="navbar" class="collapse navbar-collapse ms-2">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li class="nav-item">
   <a class="nav-link" href="../articles/articles/ghclass.html">Introduction</a>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item">
-  <a class="nav-link" href="../news/index.html">Change log</a>
+  <a class="nav-link" href="../news/index.html">News</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -144,21 +138,19 @@ for more details.</p></dd>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \dontrun{</span></span>
 <span class="r-in"><span class="co"># Org repos and teams</span></span>
 <span class="r-in"><span class="fu">org_repos</span><span class="op">(</span><span class="st">"ghclass-test"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ghclass-test/hw1-team02"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ghclass-test/repo_test_copy" "ghclass-test/hw1-team02"    </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">org_repos</span><span class="op">(</span><span class="st">"ghclass-test"</span>, filter <span class="op">=</span> <span class="st">"hw1-"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ghclass-test/hw1-team02"</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">org_teams</span><span class="op">(</span><span class="st">"ghclass-test"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "hw1-team01"   "hw1-team02"   "team_awesome"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "team_awesome"</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">org_team_details</span><span class="op">(</span><span class="st">"ghclass-test"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   slug              id name         privacy permission</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> hw1-team01   5<span style="text-decoration: underline;">376</span>890 hw1-team01   secret  pull      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> hw1-team02   5<span style="text-decoration: underline;">376</span>891 hw1-team02   secret  pull      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> team_awesome 5<span style="text-decoration: underline;">376</span>839 team_awesome secret  pull      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> team_awesome 5<span style="text-decoration: underline;">376</span>839 team_awesome secret  pull      </span>
 <span class="r-in"><span class="co"># }</span></span>
 <span class="r-in"></span>
 </code></pre></div>
