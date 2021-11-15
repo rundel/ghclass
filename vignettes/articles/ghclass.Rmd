@@ -1,7 +1,7 @@
 ---
 title: "Course management with ghclass"
 author: "Mine Çetinkaya-Rundel, Colin Rundel, Therese Anders"
-date: "2020-12-01"
+date: "2021-11-15"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Course management with ghclass}
@@ -101,7 +101,7 @@ You can test that your token is working correctly using the `github_test_token()
 github_test_token()
 ```
 
-<PRE class="fansi"><CODE>#&gt; <span style='color: #00BB00;'>✓</span><span> Your GitHub PAT authenticated correctly.</span></CODE></PRE>
+<PRE class="fansi"><CODE>#&gt; <span style='color: #00BB00;'>✓</span> Your GitHub PAT authenticated correctly.</CODE></PRE>
 
 
 If your token is not working you will see an error message like this instead:
@@ -110,10 +110,12 @@ If your token is not working you will see an error message like this instead:
 github_test_token("bad token")
 ```
 
-<PRE class="fansi"><CODE>#&gt; <span style='color: #BB0000;'>x</span><span> Your GitHub PAT failed to authenticate.
-#&gt; └─GitHub API error (401): 401 Unauthorized
-#&gt;   ├─ API message: </span><span style='color: #555555;'>Bad credentials</span><span>
-#&gt;   └─ API docs: </span><span style='color: #555555;'>https://docs.github.com/rest</span></CODE></PRE>
+<PRE class="fansi"><CODE>#&gt; Warning in gh_auth(x$token %||% gh_token(x$api_url)): Token contains whitespace
+#&gt; characters
+#&gt; <span style='color: #BB0000;'>x</span> Your GitHub PAT failed to authenticate.
+#&gt; └─GitHub API error (401): 
+#&gt;   ├─ API message: <span style='color: #555555;'>Bad credentials</span>
+#&gt;   └─ API docs: <span style='color: #555555;'>https://docs.github.com/rest</span></CODE></PRE>
 
 
 ## Step-by-step guide
@@ -170,15 +172,15 @@ org_sitrep("ghclass-vignette")
 ```
 
 <PRE class="fansi"><CODE>#&gt; 
-#&gt; <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>ghclass-vignette sitrep:</span><span> </span><span style='color: #00BBBB;'>─────────────────────────────────────────────────────────────────</span><span>
-#&gt; ● </span><span style='color: #555555;'>Admins</span><span>: </span><span style='color: #0000BB;'>'mine-cetinkaya-rundel'</span><span>, </span><span style='color: #0000BB;'>'rundel'</span><span>, and </span><span style='color: #0000BB;'>'thereseanders'</span><span>
-#&gt; ● </span><span style='color: #555555;'>Members</span><span>: </span><span style='color: #0000BB;'>0</span><span>
-#&gt; ● </span><span style='color: #555555;'>Public repos</span><span>: </span><span style='color: #0000BB;'>0</span><span>
-#&gt; ● </span><span style='color: #555555;'>Private repos</span><span>: </span><span style='color: #0000BB;'>0</span><span>
-#&gt; ● </span><span style='color: #555555;'>Default repository permission</span><span>: </span><span style='color: #0000BB;'>'read'</span><span> &lt;- </span><span style='color: #BB0000;font-weight: bold;'>Warning:</span><span> </span><span style='color: #BB0000;'>members can currently view </span><span style='color: #BB0000;font-style: italic;'>all</span><span> </span><span style='color: #BB0000;'>repos</span><span>
-#&gt;   </span><span style='color: #BB0000;'>in this org.</span><span>
-#&gt; ● </span><span style='color: #555555;'>Members can create public repos</span><span>: </span><span style='color: #0000BB;'>TRUE</span><span>
-#&gt; ● </span><span style='color: #555555;'>Members can create private repos</span><span>: </span><span style='color: #0000BB;'>TRUE</span></CODE></PRE>
+#&gt; <span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>ghclass-vignette sitrep:</span> <span style='color: #00BBBB;'>─────────────────────────────────────────────────────────────</span>
+#&gt; • <span style='color: #555555;'>Admins</span>: <span style='color: #0000BB;'>&quot;mine-cetinkaya-rundel&quot;</span>, <span style='color: #0000BB;'>&quot;rundel&quot;</span>, and <span style='color: #0000BB;'>&quot;thereseanders&quot;</span>
+#&gt; • <span style='color: #555555;'>Members</span>: <span style='color: #0000BB;'>0</span>
+#&gt; • <span style='color: #555555;'>Public repos</span>: <span style='color: #0000BB;'>0</span>
+#&gt; • <span style='color: #555555;'>Private repos</span>: <span style='color: #0000BB;'>0</span>
+#&gt; • <span style='color: #555555;'>Default repository permission</span>: <span style='color: #0000BB;'>&quot;read&quot;</span> &lt;- <span style='color: #BB0000; font-weight: bold;'>Warning:</span> <span style='color: #BB0000;'>members can currently view </span><span style='color: #BB0000; font-style: italic;'>all</span> <span style='color: #BB0000;'>repos</span>
+#&gt; <span style='color: #BB0000;'>in this org.</span>
+#&gt; • <span style='color: #555555;'>Members can create public repos</span>: <span style='color: #0000BB;'>TRUE</span>
+#&gt; • <span style='color: #555555;'>Members can create private repos</span>: <span style='color: #0000BB;'>TRUE</span></CODE></PRE>
 
 
 We can see that this function indicates that the current default repository permission settings is "read" and provides a helpful warning that this enables members to view all repositories.
@@ -189,7 +191,7 @@ This permission can easily be addressed within the Organization Settings page un
 org_set_repo_permission("ghclass-vignette", permission = "none")
 ```
 
-<PRE class="fansi"><CODE>#&gt; <span style='color: #00BB00;'>✓</span><span> Set org </span><span style='color: #0000BB;'>'ghclass-vignette'</span><span>'s repo permissions to </span><span style='color: #0000BB;'>'none'</span><span>.</span></CODE></PRE>
+<PRE class="fansi"><CODE>#&gt; <span style='color: #00BB00;'>✓</span> Set org <span style='color: #0000BB;'>&quot;ghclass-vignette&quot;</span>&#039;s repo permissions to <span style='color: #0000BB;'>&quot;none&quot;</span>.</CODE></PRE>
 
 
 After changing this setting we can once again check the org's sitrep and see that the warning is now resolved.
@@ -200,14 +202,14 @@ org_sitrep("ghclass-vignette")
 ```
 
 <PRE class="fansi"><CODE>#&gt; 
-#&gt; <span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>ghclass-vignette sitrep:</span><span> </span><span style='color: #00BBBB;'>─────────────────────────────────────────────────────────────────</span><span>
-#&gt; ● </span><span style='color: #555555;'>Admins</span><span>: </span><span style='color: #0000BB;'>'mine-cetinkaya-rundel'</span><span>, </span><span style='color: #0000BB;'>'rundel'</span><span>, and </span><span style='color: #0000BB;'>'thereseanders'</span><span>
-#&gt; ● </span><span style='color: #555555;'>Members</span><span>: </span><span style='color: #0000BB;'>0</span><span>
-#&gt; ● </span><span style='color: #555555;'>Public repos</span><span>: </span><span style='color: #0000BB;'>0</span><span>
-#&gt; ● </span><span style='color: #555555;'>Private repos</span><span>: </span><span style='color: #0000BB;'>0</span><span>
-#&gt; ● </span><span style='color: #555555;'>Default repository permission</span><span>: </span><span style='color: #0000BB;'>'none'</span><span>
-#&gt; ● </span><span style='color: #555555;'>Members can create public repos</span><span>: </span><span style='color: #0000BB;'>TRUE</span><span>
-#&gt; ● </span><span style='color: #555555;'>Members can create private repos</span><span>: </span><span style='color: #0000BB;'>TRUE</span></CODE></PRE>
+#&gt; <span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>ghclass-vignette sitrep:</span> <span style='color: #00BBBB;'>─────────────────────────────────────────────────────────────</span>
+#&gt; • <span style='color: #555555;'>Admins</span>: <span style='color: #0000BB;'>&quot;mine-cetinkaya-rundel&quot;</span>, <span style='color: #0000BB;'>&quot;rundel&quot;</span>, and <span style='color: #0000BB;'>&quot;thereseanders&quot;</span>
+#&gt; • <span style='color: #555555;'>Members</span>: <span style='color: #0000BB;'>0</span>
+#&gt; • <span style='color: #555555;'>Public repos</span>: <span style='color: #0000BB;'>0</span>
+#&gt; • <span style='color: #555555;'>Private repos</span>: <span style='color: #0000BB;'>0</span>
+#&gt; • <span style='color: #555555;'>Default repository permission</span>: <span style='color: #0000BB;'>&quot;none&quot;</span>
+#&gt; • <span style='color: #555555;'>Members can create public repos</span>: <span style='color: #0000BB;'>TRUE</span>
+#&gt; • <span style='color: #555555;'>Members can create private repos</span>: <span style='color: #0000BB;'>TRUE</span></CODE></PRE>
 
 
 ### Adding students to the organization
@@ -224,15 +226,15 @@ roster = readr::read_csv( system.file("roster.csv", package = "ghclass") )
 roster
 ```
 
-<PRE class="fansi"><CODE>#&gt; <span style='color: #949494;'># A tibble: 6 x 5</span><span>
+<PRE class="fansi"><CODE>#&gt; <span style='color: #555555;'># A tibble: 6 × 5</span>
 #&gt;   email              github          hw1        hw2        hw3       
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>              </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>           </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> anya@school.edu    ghclass-anya    hw1-team01 hw2-team01 hw3-team01
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> bruno@school.edu   ghclass-bruno   hw1-team02 hw2-team02 hw3-team02
-#&gt; </span><span style='color: #BCBCBC;'>3</span><span> celine@school.edu  ghclass-celine  hw1-team03 hw2-team03 hw3-team03
-#&gt; </span><span style='color: #BCBCBC;'>4</span><span> diego@school.edu   ghclass-diego   hw1-team01 hw2-team03 hw3-team02
-#&gt; </span><span style='color: #BCBCBC;'>5</span><span> elijah@school.edu  ghclass-elijah  hw1-team02 hw2-team01 hw3-team03
-#&gt; </span><span style='color: #BCBCBC;'>6</span><span> francis@school.edu ghclass-francis hw1-team03 hw2-team02 hw3-team01</span></CODE></PRE>
+#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>              <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>           <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>     
+#&gt; <span style='color: #555555;'>1</span> anya@school.edu    ghclass-anya    hw1-team01 hw2-team01 hw3-team01
+#&gt; <span style='color: #555555;'>2</span> bruno@school.edu   ghclass-bruno   hw1-team02 hw2-team02 hw3-team02
+#&gt; <span style='color: #555555;'>3</span> celine@school.edu  ghclass-celine  hw1-team03 hw2-team03 hw3-team03
+#&gt; <span style='color: #555555;'>4</span> diego@school.edu   ghclass-diego   hw1-team01 hw2-team03 hw3-team02
+#&gt; <span style='color: #555555;'>5</span> elijah@school.edu  ghclass-elijah  hw1-team02 hw2-team01 hw3-team03
+#&gt; <span style='color: #555555;'>6</span> francis@school.edu ghclass-francis hw1-team03 hw2-team02 hw3-team01</CODE></PRE>
 
 Here we are using the student's school email address as a unique identifier, we also have their GitHub username and we have also assigned them to different teams for our three homework assignments.
 
@@ -243,12 +245,12 @@ Using the `roster` data frame, we can then invite the students to the class' org
 org_invite(org = "ghclass-vignette", user = roster$github)
 ```
 
-<PRE class="fansi"><CODE>#&gt; <span style='color: #00BB00;'>✓</span><span> Invited user </span><span style='color: #0000BB;'>'ghclass-anya'</span><span> to org </span><span style='color: #0000BB;'>'ghclass-vignette'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Invited user </span><span style='color: #0000BB;'>'ghclass-bruno'</span><span> to org </span><span style='color: #0000BB;'>'ghclass-vignette'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Invited user </span><span style='color: #0000BB;'>'ghclass-celine'</span><span> to org </span><span style='color: #0000BB;'>'ghclass-vignette'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Invited user </span><span style='color: #0000BB;'>'ghclass-diego'</span><span> to org </span><span style='color: #0000BB;'>'ghclass-vignette'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Invited user </span><span style='color: #0000BB;'>'ghclass-elijah'</span><span> to org </span><span style='color: #0000BB;'>'ghclass-vignette'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Invited user </span><span style='color: #0000BB;'>'ghclass-francis'</span><span> to org </span><span style='color: #0000BB;'>'ghclass-vignette'</span><span>.</span></CODE></PRE>
+<PRE class="fansi"><CODE>#&gt; <span style='color: #00BB00;'>✓</span> Invited user <span style='color: #0000BB;'>&quot;ghclass-anya&quot;</span> to org <span style='color: #0000BB;'>&quot;ghclass-vignette&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Invited user <span style='color: #0000BB;'>&quot;ghclass-bruno&quot;</span> to org <span style='color: #0000BB;'>&quot;ghclass-vignette&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Invited user <span style='color: #0000BB;'>&quot;ghclass-celine&quot;</span> to org <span style='color: #0000BB;'>&quot;ghclass-vignette&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Invited user <span style='color: #0000BB;'>&quot;ghclass-diego&quot;</span> to org <span style='color: #0000BB;'>&quot;ghclass-vignette&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Invited user <span style='color: #0000BB;'>&quot;ghclass-elijah&quot;</span> to org <span style='color: #0000BB;'>&quot;ghclass-vignette&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Invited user <span style='color: #0000BB;'>&quot;ghclass-francis&quot;</span> to org <span style='color: #0000BB;'>&quot;ghclass-vignette&quot;</span>.</CODE></PRE>
 
 
 We now need to wait for the students to accept these invitations before they will have access to the organization.
@@ -347,7 +349,7 @@ repo_is_template("Sta323-Sp19/hw1")
 repo_set_template("Sta323-Sp19/hw1")
 ```
 
-<PRE class="fansi"><CODE>#&gt; <span style='color: #00BB00;'>✓</span><span> Changed the template status of repo </span><span style='color: #0000BB;'>'Sta323-Sp19/hw1'</span><span> to </span><span style='color: #0000BB;'>TRUE</span><span>.</span></CODE></PRE>
+<PRE class="fansi"><CODE>#&gt; <span style='color: #00BB00;'>✓</span> Changed the template status of repo <span style='color: #0000BB;'>&quot;Sta323-Sp19/hw1&quot;</span> to <span style='color: #0000BB;'>TRUE</span>.</CODE></PRE>
 
 
 
@@ -381,21 +383,21 @@ org_create_assignment(
 )
 ```
 
-<PRE class="fansi"><CODE>#&gt; <span style='color: #00BB00;'>✓</span><span> Mirrored repo </span><span style='color: #0000BB;'>'Sta323-Sp19/hw1'</span><span> to repo </span><span style='color: #0000BB;'>'ghclass-vignette/hw1-team01'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Mirrored repo </span><span style='color: #0000BB;'>'Sta323-Sp19/hw1'</span><span> to repo </span><span style='color: #0000BB;'>'ghclass-vignette/hw1-team02'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Mirrored repo </span><span style='color: #0000BB;'>'Sta323-Sp19/hw1'</span><span> to repo </span><span style='color: #0000BB;'>'ghclass-vignette/hw1-team03'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Created team </span><span style='color: #0000BB;'>'hw1-team01'</span><span> in org </span><span style='color: #0000BB;'>'ghclass-vignette'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Created team </span><span style='color: #0000BB;'>'hw1-team02'</span><span> in org </span><span style='color: #0000BB;'>'ghclass-vignette'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Created team </span><span style='color: #0000BB;'>'hw1-team03'</span><span> in org </span><span style='color: #0000BB;'>'ghclass-vignette'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Added user </span><span style='color: #0000BB;'>'ghclass-anya'</span><span> to team </span><span style='color: #0000BB;'>'hw1-team01'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Added user </span><span style='color: #0000BB;'>'ghclass-bruno'</span><span> to team </span><span style='color: #0000BB;'>'hw1-team02'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Added user </span><span style='color: #0000BB;'>'ghclass-celine'</span><span> to team </span><span style='color: #0000BB;'>'hw1-team03'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Added user </span><span style='color: #0000BB;'>'ghclass-diego'</span><span> to team </span><span style='color: #0000BB;'>'hw1-team01'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Added user </span><span style='color: #0000BB;'>'ghclass-elijah'</span><span> to team </span><span style='color: #0000BB;'>'hw1-team02'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Added user </span><span style='color: #0000BB;'>'ghclass-francis'</span><span> to team </span><span style='color: #0000BB;'>'hw1-team03'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Team </span><span style='color: #0000BB;'>'hw1-team01-1'</span><span> given </span><span style='color: #0000BB;'>'push'</span><span> access to repo </span><span style='color: #0000BB;'>'ghclass-vignette/hw1-team01'</span><span>
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Team </span><span style='color: #0000BB;'>'hw1-team02'</span><span> given </span><span style='color: #0000BB;'>'push'</span><span> access to repo </span><span style='color: #0000BB;'>'ghclass-vignette/hw1-team02'</span><span>
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Team </span><span style='color: #0000BB;'>'hw1-team03'</span><span> given </span><span style='color: #0000BB;'>'push'</span><span> access to repo </span><span style='color: #0000BB;'>'ghclass-vignette/hw1-team03'</span></CODE></PRE>
+<PRE class="fansi"><CODE>#&gt; <span style='color: #00BB00;'>✓</span> Mirrored repo <span style='color: #0000BB;'>&quot;Sta323-Sp19/hw1&quot;</span> to repo <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-team01&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Mirrored repo <span style='color: #0000BB;'>&quot;Sta323-Sp19/hw1&quot;</span> to repo <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-team02&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Mirrored repo <span style='color: #0000BB;'>&quot;Sta323-Sp19/hw1&quot;</span> to repo <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-team03&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Created team <span style='color: #0000BB;'>&quot;hw1-team01&quot;</span> in org <span style='color: #0000BB;'>&quot;ghclass-vignette&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Created team <span style='color: #0000BB;'>&quot;hw1-team02&quot;</span> in org <span style='color: #0000BB;'>&quot;ghclass-vignette&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Created team <span style='color: #0000BB;'>&quot;hw1-team03&quot;</span> in org <span style='color: #0000BB;'>&quot;ghclass-vignette&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Added user <span style='color: #0000BB;'>&quot;ghclass-anya&quot;</span> to team <span style='color: #0000BB;'>&quot;hw1-team01&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Added user <span style='color: #0000BB;'>&quot;ghclass-bruno&quot;</span> to team <span style='color: #0000BB;'>&quot;hw1-team02&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Added user <span style='color: #0000BB;'>&quot;ghclass-celine&quot;</span> to team <span style='color: #0000BB;'>&quot;hw1-team03&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Added user <span style='color: #0000BB;'>&quot;ghclass-diego&quot;</span> to team <span style='color: #0000BB;'>&quot;hw1-team01&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Added user <span style='color: #0000BB;'>&quot;ghclass-elijah&quot;</span> to team <span style='color: #0000BB;'>&quot;hw1-team02&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Added user <span style='color: #0000BB;'>&quot;ghclass-francis&quot;</span> to team <span style='color: #0000BB;'>&quot;hw1-team03&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Team <span style='color: #0000BB;'>&quot;hw1-team01-1&quot;</span> given <span style='color: #0000BB;'>&quot;push&quot;</span> access to repo <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-team01&quot;</span>
+#&gt; <span style='color: #00BB00;'>✓</span> Team <span style='color: #0000BB;'>&quot;hw1-team02&quot;</span> given <span style='color: #0000BB;'>&quot;push&quot;</span> access to repo <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-team02&quot;</span>
+#&gt; <span style='color: #00BB00;'>✓</span> Team <span style='color: #0000BB;'>&quot;hw1-team03&quot;</span> given <span style='color: #0000BB;'>&quot;push&quot;</span> access to repo <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-team03&quot;</span></CODE></PRE>
 
 
 Based on the output we can see that multiple steps are involved in this process:
@@ -423,18 +425,18 @@ org_create_assignment(
 )
 ```
 
-<PRE class="fansi"><CODE>#&gt; <span style='color: #00BB00;'>✓</span><span> Mirrored repo </span><span style='color: #0000BB;'>'Sta323-Sp19/hw1'</span><span> to repo </span><span style='color: #0000BB;'>'ghclass-vignette/hw1-ind-ghclass-anya'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Mirrored repo </span><span style='color: #0000BB;'>'Sta323-Sp19/hw1'</span><span> to repo </span><span style='color: #0000BB;'>'ghclass-vignette/hw1-ind-ghclass-bruno'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Mirrored repo </span><span style='color: #0000BB;'>'Sta323-Sp19/hw1'</span><span> to repo </span><span style='color: #0000BB;'>'ghclass-vignette/hw1-ind-ghclass-celine'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Mirrored repo </span><span style='color: #0000BB;'>'Sta323-Sp19/hw1'</span><span> to repo </span><span style='color: #0000BB;'>'ghclass-vignette/hw1-ind-ghclass-diego'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Mirrored repo </span><span style='color: #0000BB;'>'Sta323-Sp19/hw1'</span><span> to repo </span><span style='color: #0000BB;'>'ghclass-vignette/hw1-ind-ghclass-elijah'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Mirrored repo </span><span style='color: #0000BB;'>'Sta323-Sp19/hw1'</span><span> to repo </span><span style='color: #0000BB;'>'ghclass-vignette/hw1-ind-ghclass-francis'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> User </span><span style='color: #0000BB;'>'ghclass-anya'</span><span> given </span><span style='color: #0000BB;'>'push'</span><span> access to repo </span><span style='color: #0000BB;'>'ghclass-vignette/hw1-ind-ghclass-anya'</span><span>
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> User </span><span style='color: #0000BB;'>'ghclass-bruno'</span><span> given </span><span style='color: #0000BB;'>'push'</span><span> access to repo </span><span style='color: #0000BB;'>'ghclass-vignette/hw1-ind-ghclass-bruno'</span><span>
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> User </span><span style='color: #0000BB;'>'ghclass-celine'</span><span> given </span><span style='color: #0000BB;'>'push'</span><span> access to repo </span><span style='color: #0000BB;'>'ghclass-vignette/hw1-ind-ghclass-celine'</span><span>
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> User </span><span style='color: #0000BB;'>'ghclass-diego'</span><span> given </span><span style='color: #0000BB;'>'push'</span><span> access to repo </span><span style='color: #0000BB;'>'ghclass-vignette/hw1-ind-ghclass-diego'</span><span>
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> User </span><span style='color: #0000BB;'>'ghclass-elijah'</span><span> given </span><span style='color: #0000BB;'>'push'</span><span> access to repo </span><span style='color: #0000BB;'>'ghclass-vignette/hw1-ind-ghclass-elijah'</span><span>
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> User </span><span style='color: #0000BB;'>'ghclass-francis'</span><span> given </span><span style='color: #0000BB;'>'push'</span><span> access to repo </span><span style='color: #0000BB;'>'ghclass-vignette/hw1-ind-ghclass-francis'</span></CODE></PRE>
+<PRE class="fansi"><CODE>#&gt; <span style='color: #00BB00;'>✓</span> Mirrored repo <span style='color: #0000BB;'>&quot;Sta323-Sp19/hw1&quot;</span> to repo <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-ind-ghclass-anya&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Mirrored repo <span style='color: #0000BB;'>&quot;Sta323-Sp19/hw1&quot;</span> to repo <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-ind-ghclass-bruno&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Mirrored repo <span style='color: #0000BB;'>&quot;Sta323-Sp19/hw1&quot;</span> to repo <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-ind-ghclass-celine&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Mirrored repo <span style='color: #0000BB;'>&quot;Sta323-Sp19/hw1&quot;</span> to repo <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-ind-ghclass-diego&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Mirrored repo <span style='color: #0000BB;'>&quot;Sta323-Sp19/hw1&quot;</span> to repo <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-ind-ghclass-elijah&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Mirrored repo <span style='color: #0000BB;'>&quot;Sta323-Sp19/hw1&quot;</span> to repo <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-ind-ghclass-francis&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> User <span style='color: #0000BB;'>&quot;ghclass-anya&quot;</span> given <span style='color: #0000BB;'>&quot;push&quot;</span> access to repo <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-ind-ghclass-anya&quot;</span>
+#&gt; <span style='color: #00BB00;'>✓</span> User <span style='color: #0000BB;'>&quot;ghclass-bruno&quot;</span> given <span style='color: #0000BB;'>&quot;push&quot;</span> access to repo <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-ind-ghclass-bruno&quot;</span>
+#&gt; <span style='color: #00BB00;'>✓</span> User <span style='color: #0000BB;'>&quot;ghclass-celine&quot;</span> given <span style='color: #0000BB;'>&quot;push&quot;</span> access to repo <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-ind-ghclass-celine&quot;</span>
+#&gt; <span style='color: #00BB00;'>✓</span> User <span style='color: #0000BB;'>&quot;ghclass-diego&quot;</span> given <span style='color: #0000BB;'>&quot;push&quot;</span> access to repo <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-ind-ghclass-diego&quot;</span>
+#&gt; <span style='color: #00BB00;'>✓</span> User <span style='color: #0000BB;'>&quot;ghclass-elijah&quot;</span> given <span style='color: #0000BB;'>&quot;push&quot;</span> access to repo <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-ind-ghclass-elijah&quot;</span>
+#&gt; <span style='color: #00BB00;'>✓</span> User <span style='color: #0000BB;'>&quot;ghclass-francis&quot;</span> given <span style='color: #0000BB;'>&quot;push&quot;</span> access to repo <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-ind-ghclass-francis&quot;</span></CODE></PRE>
 
 
 The underlying process here is very similar with the only difference being that we no longer need to create teams and instead add the users directly to the repositories.
@@ -449,14 +451,10 @@ org_repos("ghclass-vignette")
 ```
 
 ```
-#> [1] "ghclass-vignette/hw1-team01"             
-#> [2] "ghclass-vignette/hw1-team02"             
-#> [3] "ghclass-vignette/hw1-team03"             
-#> [4] "ghclass-vignette/hw1-ind-ghclass-anya"   
-#> [5] "ghclass-vignette/hw1-ind-ghclass-bruno"  
-#> [6] "ghclass-vignette/hw1-ind-ghclass-celine" 
-#> [7] "ghclass-vignette/hw1-ind-ghclass-diego"  
-#> [8] "ghclass-vignette/hw1-ind-ghclass-elijah" 
+#> [1] "ghclass-vignette/hw1-team01"              "ghclass-vignette/hw1-team02"             
+#> [3] "ghclass-vignette/hw1-team03"              "ghclass-vignette/hw1-ind-ghclass-anya"   
+#> [5] "ghclass-vignette/hw1-ind-ghclass-bruno"   "ghclass-vignette/hw1-ind-ghclass-celine" 
+#> [7] "ghclass-vignette/hw1-ind-ghclass-diego"   "ghclass-vignette/hw1-ind-ghclass-elijah" 
 #> [9] "ghclass-vignette/hw1-ind-ghclass-francis"
 ```
 
@@ -498,9 +496,9 @@ repo_add_file(
 )
 ```
 
-<PRE class="fansi"><CODE>#&gt; <span style='color: #00BB00;'>✓</span><span> Added file </span><span style='color: #0000BB;'>'README.md'</span><span> to repo </span><span style='color: #0000BB;'>'ghclass-vignette/hw1-team01'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Added file </span><span style='color: #0000BB;'>'README.md'</span><span> to repo </span><span style='color: #0000BB;'>'ghclass-vignette/hw1-team02'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Added file </span><span style='color: #0000BB;'>'README.md'</span><span> to repo </span><span style='color: #0000BB;'>'ghclass-vignette/hw1-team03'</span><span>.</span></CODE></PRE>
+<PRE class="fansi"><CODE>#&gt; <span style='color: #00BB00;'>✓</span> Added file <span style='color: #0000BB;'>&quot;README.md&quot;</span> to repo <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-team01&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Added file <span style='color: #0000BB;'>&quot;README.md&quot;</span> to repo <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-team02&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Added file <span style='color: #0000BB;'>&quot;README.md&quot;</span> to repo <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-team03&quot;</span>.</CODE></PRE>
 
 
 The updated version looks like the following,
@@ -528,9 +526,9 @@ repo_modify_file(
 )
 ```
 
-<PRE class="fansi"><CODE>#&gt; <span style='color: #00BB00;'>✓</span><span> Modified file </span><span style='color: #0000BB;'>'ghclass-vignette/hw1-team01/README.md'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Modified file </span><span style='color: #0000BB;'>'ghclass-vignette/hw1-team02/README.md'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Modified file </span><span style='color: #0000BB;'>'ghclass-vignette/hw1-team03/README.md'</span><span>.</span></CODE></PRE>
+<PRE class="fansi"><CODE>#&gt; <span style='color: #00BB00;'>✓</span> Modified file <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-team01/README.md&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Modified file <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-team02/README.md&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Modified file <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-team03/README.md&quot;</span>.</CODE></PRE>
 
 
 
@@ -556,9 +554,9 @@ local_repo_clone(
 )
 ```
 
-<PRE class="fansi"><CODE>#&gt; <span style='color: #00BB00;'>✓</span><span> Cloned </span><span style='color: #0000BB;'>'ghclass-vignette/hw1-team01'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Cloned </span><span style='color: #0000BB;'>'ghclass-vignette/hw1-team02'</span><span>.
-#&gt; </span><span style='color: #00BB00;'>✓</span><span> Cloned </span><span style='color: #0000BB;'>'ghclass-vignette/hw1-team03'</span><span>.</span></CODE></PRE>
+<PRE class="fansi"><CODE>#&gt; <span style='color: #00BB00;'>✓</span> Cloned <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-team01&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Cloned <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-team02&quot;</span>.
+#&gt; <span style='color: #00BB00;'>✓</span> Cloned <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-team03&quot;</span>.</CODE></PRE>
 
 
 
@@ -566,28 +564,28 @@ local_repo_clone(
 fs::dir_tree("hw1/")
 ```
 
-<PRE class="fansi"><CODE>#&gt; <span style='color: #0000BB;font-weight: bold;'>hw1/</span><span>
-#&gt; ├── </span><span style='color: #0000BB;font-weight: bold;'>hw1-team01</span><span>
+<PRE class="fansi"><CODE>#&gt; <span style='color: #0000BB; font-weight: bold;'>hw1/</span>
+#&gt; ├── <span style='color: #0000BB; font-weight: bold;'>hw1-team01</span>
 #&gt; │   ├── README.md
-#&gt; │   ├── </span><span style='color: #BB00BB;font-weight: bold;'>fizzbuzz.png</span><span>
-#&gt; │   ├── </span><span style='color: #00BB00;'>hw1.Rmd</span><span>
+#&gt; │   ├── <span style='color: #BB00BB; font-weight: bold;'>fizzbuzz.png</span>
+#&gt; │   ├── <span style='color: #00BB00;'>hw1.Rmd</span>
 #&gt; │   ├── hw1.Rproj
-#&gt; │   ├── </span><span style='color: #00BB00;'>hw1_whitelist.R</span><span>
+#&gt; │   ├── <span style='color: #00BB00;'>hw1_whitelist.R</span>
 #&gt; │   └── wercker.yml
-#&gt; ├── </span><span style='color: #0000BB;font-weight: bold;'>hw1-team02</span><span>
+#&gt; ├── <span style='color: #0000BB; font-weight: bold;'>hw1-team02</span>
 #&gt; │   ├── README.md
-#&gt; │   ├── </span><span style='color: #BB00BB;font-weight: bold;'>fizzbuzz.png</span><span>
-#&gt; │   ├── </span><span style='color: #00BB00;'>hw1.Rmd</span><span>
+#&gt; │   ├── <span style='color: #BB00BB; font-weight: bold;'>fizzbuzz.png</span>
+#&gt; │   ├── <span style='color: #00BB00;'>hw1.Rmd</span>
 #&gt; │   ├── hw1.Rproj
-#&gt; │   ├── </span><span style='color: #00BB00;'>hw1_whitelist.R</span><span>
+#&gt; │   ├── <span style='color: #00BB00;'>hw1_whitelist.R</span>
 #&gt; │   └── wercker.yml
-#&gt; └── </span><span style='color: #0000BB;font-weight: bold;'>hw1-team03</span><span>
+#&gt; └── <span style='color: #0000BB; font-weight: bold;'>hw1-team03</span>
 #&gt;     ├── README.md
-#&gt;     ├── </span><span style='color: #BB00BB;font-weight: bold;'>fizzbuzz.png</span><span>
-#&gt;     ├── </span><span style='color: #00BB00;'>hw1.Rmd</span><span>
+#&gt;     ├── <span style='color: #BB00BB; font-weight: bold;'>fizzbuzz.png</span>
+#&gt;     ├── <span style='color: #00BB00;'>hw1.Rmd</span>
 #&gt;     ├── hw1.Rproj
-#&gt;     ├── </span><span style='color: #00BB00;'>hw1_whitelist.R</span><span>
-#&gt;     └── wercker.yml</span></CODE></PRE>
+#&gt;     ├── <span style='color: #00BB00;'>hw1_whitelist.R</span>
+#&gt;     └── wercker.yml</CODE></PRE>
 
 
 

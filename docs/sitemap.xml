@@ -1,7 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://rundel.github.io/ghclass/404.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/ghclass/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/ghclass/LICENSE.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/ghclass/articles/articles/ghclass.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/ghclass/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/ghclass/authors.html</loc>
+  </url>
+  <url>
     <loc>https://rundel.github.io/ghclass/index.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/ghclass/news/index.html</loc>
   </url>
   <url>
     <loc>https://rundel.github.io/ghclass/reference/action.html</loc>
@@ -16,6 +37,9 @@
     <loc>https://rundel.github.io/ghclass/reference/github_api_limit.html</loc>
   </url>
   <url>
+    <loc>https://rundel.github.io/ghclass/reference/github_orgs.html</loc>
+  </url>
+  <url>
     <loc>https://rundel.github.io/ghclass/reference/github_token.html</loc>
   </url>
   <url>
@@ -23,6 +47,9 @@
   </url>
   <url>
     <loc>https://rundel.github.io/ghclass/reference/github_with_pat.html</loc>
+  </url>
+  <url>
+    <loc>https://rundel.github.io/ghclass/reference/index.html</loc>
   </url>
   <url>
     <loc>https://rundel.github.io/ghclass/reference/issue.html</loc>
@@ -74,8 +101,5 @@
   </url>
   <url>
     <loc>https://rundel.github.io/ghclass/reference/user.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/articles/articles/ghclass.html</loc>
   </url>
 </urlset>

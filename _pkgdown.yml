@@ -6,6 +6,9 @@ authors:
   Mine Çetinkaya-Rundel:
     href: https://mine-cr.com
 
+template:
+  bootstrap: 5
+
 navbar:
   type: default
   left:
@@ -49,6 +52,3 @@ reference:
   - title: Actions
     contents:
     - starts_with("action_")
-  - title: Peer Review
-    contents:
-    - starts_with("peer_")
