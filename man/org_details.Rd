@@ -17,7 +17,7 @@ org_repo_search(org, name, extra = "", full_repo = TRUE)
 
 org_repo_stats(
   org,
-  branch,
+  branch = NULL,
   filter = "",
   filter_type = "in:name",
   inc_commits = TRUE,
@@ -42,17 +42,19 @@ for details.}
 
 \item{full_repo}{Logical. Should the full repository address be returned (e.g. \code{owner/repo} instead of just \code{repo})?}
 
+\item{branch}{Character. The branch to use for counting commits, if \code{NULL} then each repo's default branch is used.}
+
 \item{filter}{Character. Regular expression pattern for matching (or excluding) results}
 
 \item{filter_type}{Character. One or more GitHub search \verb{in} qualifiers.
 See \href{https://help.github.com/en/articles/searching-for-repositories}{documentation}
 for more details.}
 
-\item{inc_commits}{Logical. Include commit statistics}
+\item{inc_commits}{Logical. Include commit statistics (\code{branch}, \code{commits}, \code{last_update})}
 
-\item{inc_issues}{Logical. Include issue statistics}
+\item{inc_issues}{Logical. Include issue statistics (\code{open_issues}, \code{closed_issues})}
 
-\item{inc_prs}{Logical. Include pull request statistics}
+\item{inc_prs}{Logical. Include pull request statistics (\code{open_prs}, \code{merged_prs}, \code{closed_prs})}
 
 \item{exclude}{Logical. Should entries matching the regular expression be excluded or included.}
 

@@ -1,9 +1,14 @@
-# ghclass (development version)
-
-# ghclass 0.2.0.9000
+# ghclass 0.2.1
 
 * improved action support with `action_runs()` and `action_status()`
 
+* revised how GitHub PATs are handled - now uses `gitcreds` by way of ` gh::gh_token()`
+
+* users are now warned about PATs in `.Renviron` a-la `usethis:::scold_for_renviron()`
+
+* Added version dependency on `cli` 3.0.0
+
+* Added support for default branches with `org_repo_stats()`
 
 # ghclass 0.2.0
 
