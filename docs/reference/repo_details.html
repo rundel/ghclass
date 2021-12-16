@@ -21,14 +21,16 @@ repo_prs - Returns a tibble of pull requests for a GitHub repository.
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body>
-    <a href="#container" class="visually-hidden-focusable">Skip to contents</a>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
     <nav class="navbar fixed-top navbar-default navbar-expand-lg bg-light"><div class="container">
+    
     <a class="navbar-brand me-2" href="../index.html">ghclass</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
+    
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -53,11 +55,12 @@ repo_prs - Returns a tibble of pull requests for a GitHub repository.
   </a>
 </li>
       </ul></div>
+
+    
   </div>
-</nav><div class="container template-reference-topic" id="container">
+</nav><div class="container template-reference-topic">
 <div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>GitHub Repository tools - repository details</h1>
       <small class="dont-index">Source: <a href="https://github.com/rundel/ghclass/blob/HEAD/R/repo.R" class="external-link"><code>R/repo.R</code></a>, <a href="https://github.com/rundel/ghclass/blob/HEAD/R/repo_branches.R" class="external-link"><code>R/repo_branches.R</code></a>, <a href="https://github.com/rundel/ghclass/blob/HEAD/R/repo_clone_url.R" class="external-link"><code>R/repo_clone_url.R</code></a>, and 4 more</small>
       <div class="d-none name"><code>repo_details.Rd</code></div>
@@ -73,9 +76,9 @@ repo_prs - Returns a tibble of pull requests for a GitHub repository.
 <li><p><code>repo_prs</code> - Returns a tibble of pull requests for a GitHub repository.</p></li>
 </ul></div>
 
-    <div class="ref-usage section level2 sourceCode">
-    <h2>Usage</h2>
-    <pre class="sourceCode r"><code><span class="fu">repo_branches</span><span class="op">(</span><span class="va">repo</span><span class="op">)</span>
+    <div class="section level2">
+    <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">repo_branches</span><span class="op">(</span><span class="va">repo</span><span class="op">)</span>
 
 <span class="fu">repo_clone_url</span><span class="op">(</span><span class="va">repo</span>, type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"https"</span>, <span class="st">"ssh"</span><span class="op">)</span><span class="op">)</span>
 
@@ -104,10 +107,9 @@ repo_prs - Returns a tibble of pull requests for a GitHub repository.
 
 <span class="fu">repo_n_commits</span><span class="op">(</span><span class="va">repo</span>, quiet <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
-<span class="fu">repo_prs</span><span class="op">(</span><span class="va">repo</span>, state <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"open"</span>, <span class="st">"closed"</span>, <span class="st">"all"</span><span class="op">)</span><span class="op">)</span></code></pre>
+<span class="fu">repo_prs</span><span class="op">(</span><span class="va">repo</span>, state <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"open"</span>, <span class="st">"closed"</span>, <span class="st">"all"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
     </div>
 
-    <div id="ref-sections">
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>repo</dt>
@@ -144,11 +146,10 @@ Pass in "none" for issues with no assigned user, and "*" for issues assigned to 
 <dt>direction</dt>
 <dd><p>Character. The direction of the sort. Can be either "asc" or "desc".</p></dd>
 </dl></div>
-    </div>
 
-    <div id="examples">
-    <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \dontrun{</span></span>
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \dontrun{</span></span>
 <span class="r-in"><span class="fu">repo_clone_url</span><span class="op">(</span><span class="st">"rundel/ghclass"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "https://github.com/rundel/ghclass.git"</span>
 <span class="r-in"></span>
@@ -160,16 +161,16 @@ Pass in "none" for issues with no assigned user, and "*" for issues assigned to 
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 500 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    repo           login  name         email            date                msg  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-15 <span style="color: #949494;">15:30:34</span> <span style="color: #949494;">"</span>ref…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-15 <span style="color: #949494;">15:14:29</span> <span style="color: #949494;">"</span>Mer…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-15 <span style="color: #949494;">15:04:48</span> <span style="color: #949494;">"</span>Ver…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-15 <span style="color: #949494;">15:02:39</span> <span style="color: #949494;">"</span>Fix…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-14 <span style="color: #949494;">00:27:09</span> <span style="color: #949494;">"</span>upd…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-12 <span style="color: #949494;">22:04:38</span> <span style="color: #949494;">"</span>Fix…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-12 <span style="color: #949494;">21:53:39</span> <span style="color: #949494;">"</span>Fix…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-12 <span style="color: #949494;">21:53:30</span> <span style="color: #949494;">"</span>Sta…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-12 <span style="color: #949494;">21:29:41</span> <span style="color: #949494;">"</span>Not…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-12 <span style="color: #949494;">21:27:23</span> <span style="color: #949494;">"</span>Imp…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-12-16 <span style="color: #949494;">19:11:17</span> <span style="color: #949494;">"</span>Fix…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-15 <span style="color: #949494;">15:58:07</span> <span style="color: #949494;">"</span>Min…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-15 <span style="color: #949494;">15:30:34</span> <span style="color: #949494;">"</span>ref…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-15 <span style="color: #949494;">15:14:29</span> <span style="color: #949494;">"</span>Mer…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-15 <span style="color: #949494;">15:04:48</span> <span style="color: #949494;">"</span>Ver…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-15 <span style="color: #949494;">15:02:39</span> <span style="color: #949494;">"</span>Fix…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-14 <span style="color: #949494;">00:27:09</span> <span style="color: #949494;">"</span>upd…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-12 <span style="color: #949494;">22:04:38</span> <span style="color: #949494;">"</span>Fix…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-12 <span style="color: #949494;">21:53:39</span> <span style="color: #949494;">"</span>Fix…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> rundel/ghclass rundel Colin Rundel rundel@gmail.com 2021-11-12 <span style="color: #949494;">21:53:30</span> <span style="color: #949494;">"</span>Sta…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 490 more rows</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">repo_issues</span><span class="op">(</span><span class="st">"rundel/ghclass"</span><span class="op">)</span></span>
@@ -202,11 +203,8 @@ Pass in "none" for issues with no assigned user, and "*" for issues assigned to 
 <span class="r-in"></span>
 </code></pre></div>
     </div>
-  </div>
-  <div class="col-md-3" id="pkgdown-sidebar">
-    <nav id="toc"><h2>On this page</h2>
-    </nav></div>
-</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
@@ -214,7 +212,7 @@ Pass in "none" for issues with no assigned user, and "*" for issues assigned to 
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.9000.</p>
 </div>
 
     </footer></div>

@@ -15,14 +15,16 @@ branch_remove - previous name of branch_delete, deprecated.
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body>
-    <a href="#container" class="visually-hidden-focusable">Skip to contents</a>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
     <nav class="navbar fixed-top navbar-default navbar-expand-lg bg-light"><div class="container">
+    
     <a class="navbar-brand me-2" href="../index.html">ghclass</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
+    
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -47,11 +49,12 @@ branch_remove - previous name of branch_delete, deprecated.
   </a>
 </li>
       </ul></div>
+
+    
   </div>
-</nav><div class="container template-reference-topic" id="container">
+</nav><div class="container template-reference-topic">
 <div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Create and delete branches in a repository</h1>
       <small class="dont-index">Source: <a href="https://github.com/rundel/ghclass/blob/HEAD/R/branch.R" class="external-link"><code>R/branch.R</code></a>, <a href="https://github.com/rundel/ghclass/blob/HEAD/R/branch_create.R" class="external-link"><code>R/branch_create.R</code></a>, <a href="https://github.com/rundel/ghclass/blob/HEAD/R/branch_delete.R" class="external-link"><code>R/branch_delete.R</code></a></small>
       <div class="d-none name"><code>branch.Rd</code></div>
@@ -64,20 +67,19 @@ branch_remove - previous name of branch_delete, deprecated.
 <li><p><code>branch_remove</code> - previous name of <code>branch_delete</code>, deprecated.</p></li>
 </ul></div>
 
-    <div class="ref-usage section level2 sourceCode">
-    <h2>Usage</h2>
-    <pre class="sourceCode r"><code><span class="fu">branch_create</span><span class="op">(</span><span class="va">repo</span>, <span class="va">branch</span>, <span class="va">new_branch</span><span class="op">)</span>
+    <div class="section level2">
+    <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">branch_create</span><span class="op">(</span><span class="va">repo</span>, <span class="va">branch</span>, <span class="va">new_branch</span><span class="op">)</span>
 
 <span class="fu">branch_delete</span><span class="op">(</span><span class="va">repo</span>, <span class="va">branch</span><span class="op">)</span>
 
-<span class="fu">branch_remove</span><span class="op">(</span><span class="va">repo</span>, <span class="va">branch</span><span class="op">)</span></code></pre>
+<span class="fu">branch_remove</span><span class="op">(</span><span class="va">repo</span>, <span class="va">branch</span><span class="op">)</span></code></pre></div>
     </div>
 
-    <div id="ref-sections">
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>repo</dt>
-<dd><p>Github repository address in <code>owner/repo</code> format.</p></dd>
+<dd><p>GitHub repository address in <code>owner/repo</code> format.</p></dd>
 <dt>branch</dt>
 <dd><p>Repository branch to use.</p></dd>
 <dt>new_branch</dt>
@@ -87,28 +89,23 @@ branch_remove - previous name of branch_delete, deprecated.
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><a href="repo_details.html">repo_branches</a></p></div>
     </div>
-    </div>
 
-    <div id="examples">
-    <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \dontrun{</span></span>
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \dontrun{</span></span>
 <span class="r-in"><span class="fu"><a href="repo_core.html">repo_create</a></span><span class="op">(</span><span class="st">"ghclass-test"</span>, <span class="st">"test_branch"</span>, auto_init<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Created repo <span style="color: #0000BB;">"ghclass-test/test_branch"</span>.</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">branch_create</span><span class="op">(</span><span class="st">"ghclass-test/test_branch"</span>, branch <span class="op">=</span> <span class="st">"main"</span>, new_branch <span class="op">=</span> <span class="st">"test"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Failed to retrieve branches for repo <span style="color: #0000BB;">"ghclass-test/test_branch"</span>.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> └─GitHub API error (404): </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ├─ API message: <span style="color: #555555;">Not Found</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ├─ API docs: <span style="color: #555555;">https://docs.github.com/rest/reference/repos#list-branches</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   └─ Missing page: <span style="color: #555555;">https://api.github.com/repos/ghclass-test/test_branch/branche</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Failed to create branch, <span style="color: #0000BB;">"ghclass-test/test_branch@main"</span> does not exist.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Failed to create branch <span style="color: #0000BB;">"test"</span> in repo <span style="color: #0000BB;">"ghclass-test/test_branch"</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └─Unable to locate branch <span style="color: #0000BB;">"ghclass-test/test_branch@main"</span>.</span>
 <span class="r-in"><span class="fu"><a href="repo_details.html">repo_branches</a></span><span class="op">(</span><span class="st">"ghclass-test/test_branch"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "main"</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">branch_delete</span><span class="op">(</span><span class="st">"ghclass-test/test_branch"</span>, branch<span class="op">=</span><span class="st">"test"</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Failed to remove branch <span style="color: #0000BB;">"ghclass-test/test_branch@test"</span>.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> └─GitHub API error (409): </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ├─ API message: <span style="color: #555555;">Git Repository is empty.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └─GitHub API error (422): </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ├─ API message: <span style="color: #555555;">Reference does not exist</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   └─ API docs: <span style="color: #555555;">https://docs.github.com/rest/reference/git#delete-a-reference</span></span>
 <span class="r-in"><span class="fu"><a href="repo_details.html">repo_branches</a></span><span class="op">(</span><span class="st">"ghclass-test/test_branch"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "main"</span>
@@ -119,11 +116,8 @@ branch_remove - previous name of branch_delete, deprecated.
 <span class="r-in"></span>
 </code></pre></div>
     </div>
-  </div>
-  <div class="col-md-3" id="pkgdown-sidebar">
-    <nav id="toc"><h2>On this page</h2>
-    </nav></div>
-</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
@@ -131,7 +125,7 @@ branch_remove - previous name of branch_delete, deprecated.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.9000.</p>
 </div>
 
     </footer></div>

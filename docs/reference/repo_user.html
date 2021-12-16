@@ -25,14 +25,16 @@ repo_contributors - Returns a data frame containing details on repository contri
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body>
-    <a href="#container" class="visually-hidden-focusable">Skip to contents</a>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
     <nav class="navbar fixed-top navbar-default navbar-expand-lg bg-light"><div class="container">
+    
     <a class="navbar-brand me-2" href="../index.html">ghclass</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
+    
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -57,11 +59,12 @@ repo_contributors - Returns a data frame containing details on repository contri
   </a>
 </li>
       </ul></div>
+
+    
   </div>
-</nav><div class="container template-reference-topic" id="container">
+</nav><div class="container template-reference-topic">
 <div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>GitHub Repository tools - user functions</h1>
       <small class="dont-index">Source: <a href="https://github.com/rundel/ghclass/blob/HEAD/R/repo.R" class="external-link"><code>R/repo.R</code></a>, <a href="https://github.com/rundel/ghclass/blob/HEAD/R/repo_add_team.R" class="external-link"><code>R/repo_add_team.R</code></a>, <a href="https://github.com/rundel/ghclass/blob/HEAD/R/repo_add_user.R" class="external-link"><code>R/repo_add_user.R</code></a>, and 4 more</small>
       <div class="d-none name"><code>repo_user.Rd</code></div>
@@ -79,9 +82,9 @@ repo_contributors - Returns a data frame containing details on repository contri
 <li><p><code>repo_contributors</code> - Returns a data frame containing details on repository contributor(s).</p></li>
 </ul></div>
 
-    <div class="ref-usage section level2 sourceCode">
-    <h2>Usage</h2>
-    <pre class="sourceCode r"><code><span class="fu">repo_add_team</span><span class="op">(</span>
+    <div class="section level2">
+    <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">repo_add_team</span><span class="op">(</span>
   <span class="va">repo</span>,
   <span class="va">team</span>,
   permission <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"push"</span>, <span class="st">"pull"</span>, <span class="st">"admin"</span>, <span class="st">"maintain"</span>, <span class="st">"triage"</span><span class="op">)</span>,
@@ -113,10 +116,9 @@ repo_contributors - Returns a data frame containing details on repository contri
 
 <span class="fu">repo_remove_team</span><span class="op">(</span><span class="va">repo</span>, <span class="va">team</span>, team_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"name"</span>, <span class="st">"slug"</span><span class="op">)</span><span class="op">)</span>
 
-<span class="fu">repo_remove_user</span><span class="op">(</span><span class="va">repo</span>, <span class="va">user</span><span class="op">)</span></code></pre>
+<span class="fu">repo_remove_user</span><span class="op">(</span><span class="va">repo</span>, <span class="va">user</span><span class="op">)</span></code></pre></div>
     </div>
 
-    <div id="ref-sections">
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>repo</dt>
@@ -140,11 +142,10 @@ repo_contributors - Returns a data frame containing details on repository contri
 <li><p><code>"maintain"</code> - Recommended for project managers who need to manage the repository without access to sensitive or destructive actions.</p></li>
 <li><p><code>"triage"</code> - Recommended for contributors who need to proactively manage issues and pull requests without write access.</p></li>
 </ul></div>
-    </div>
 
-    <div id="examples">
-    <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \dontrun{</span></span>
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \dontrun{</span></span>
 <span class="r-in"><span class="va">repo</span> <span class="op">=</span> <span class="fu"><a href="repo_core.html">repo_create</a></span><span class="op">(</span><span class="st">"ghclass-test"</span>, <span class="st">"hw1"</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Created repo <span style="color: #0000BB;">"ghclass-test/hw1"</span>.</span>
 <span class="r-in"></span>
@@ -152,7 +153,11 @@ repo_contributors - Returns a data frame containing details on repository contri
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Skipping existing teams: <span style="color: #0000BB;">"team_awesome"</span>.</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">repo_add_user</span><span class="op">(</span><span class="va">repo</span>, <span class="st">"rundel"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> User <span style="color: #0000BB;">"rundel"</span> given <span style="color: #0000BB;">"push"</span> access to repo <span style="color: #0000BB;">"ghclass-test/hw1"</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Failed to give user <span style="color: #0000BB;">"rundel"</span> <span style="color: #0000BB;">"push"</span> access to repo <span style="color: #0000BB;">"ghclass-test/hw1"</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └─GitHub API error (404): </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ├─ API message: <span style="color: #555555;">Not Found</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ├─ API docs: <span style="color: #555555;">https://docs.github.com/rest/reference/repos#add-a-repository-col</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   └─ Missing page: <span style="color: #555555;">https://api.github.com/repos/ghclass-test/hw1/collaborators/r</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">repo_add_team</span><span class="op">(</span><span class="va">repo</span>, <span class="st">"team_awesome"</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Team <span style="color: #0000BB;">"team_awesome"</span> given <span style="color: #0000BB;">"push"</span> access to repo <span style="color: #0000BB;">"ghclass-test/hw1"</span></span>
@@ -169,21 +174,18 @@ repo_contributors - Returns a data frame containing details on repository contri
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> ghclass-test/hw1 thereseanders         TRUE  TRUE  TRUE </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">repo_contributors</span><span class="op">(</span><span class="va">repo</span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Failed to retrieve contributors for <span style="color: #0000BB;">"ghclass-test/hw1"</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> └─GitHub API error (404): </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ├─ API message: <span style="color: #555555;">Not Found</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ├─ API docs: <span style="color: #555555;">https://docs.github.com/rest/reference/repos#get-all-contributor-</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   └─ Missing page: <span style="color: #555555;">https://api.github.com/repos/ghclass-test/hw1/stats/contribut</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 0 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 4 variables: repo &lt;chr&gt;, username &lt;chr&gt;, commits &lt;int&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   weekly_stats &lt;list&gt;</span></span>
 <span class="r-in"><span class="fu">repo_contributors</span><span class="op">(</span><span class="st">"rundel/ghclass"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 8 × 4</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   repo           username              commits weekly_stats      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> rundel/ghclass rudeboybert                 2 <span style="color: #949494;">&lt;tibble [272 × 4]&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> rundel/ghclass pat-s                       1 <span style="color: #949494;">&lt;tibble [272 × 4]&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> rundel/ghclass finnlindgren                1 <span style="color: #949494;">&lt;tibble [272 × 4]&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> rundel/ghclass merliseclyde               10 <span style="color: #949494;">&lt;tibble [272 × 4]&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> rundel/ghclass rundel                    716 <span style="color: #949494;">&lt;tibble [272 × 4]&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> rundel/ghclass thereseanders             131 <span style="color: #949494;">&lt;tibble [272 × 4]&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> rundel/ghclass davidkane9                  1 <span style="color: #949494;">&lt;tibble [272 × 4]&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> rundel/ghclass mine-cetinkaya-rundel      43 <span style="color: #949494;">&lt;tibble [272 × 4]&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 0 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 4 variables: repo &lt;chr&gt;, username &lt;chr&gt;, commits &lt;int&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   weekly_stats &lt;list&gt;</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Cleanup</span></span>
 <span class="r-in"><span class="fu"><a href="repo_core.html">repo_delete</a></span><span class="op">(</span><span class="va">repo</span>, prompt<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
@@ -192,11 +194,8 @@ repo_contributors - Returns a data frame containing details on repository contri
 <span class="r-in"></span>
 </code></pre></div>
     </div>
-  </div>
-  <div class="col-md-3" id="pkgdown-sidebar">
-    <nav id="toc"><h2>On this page</h2>
-    </nav></div>
-</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
@@ -204,7 +203,7 @@ repo_contributors - Returns a data frame containing details on repository contri
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.9000.</p>
 </div>
 
     </footer></div>

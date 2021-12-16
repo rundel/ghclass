@@ -15,14 +15,16 @@ action_status - retrieve details on most recent workflow runs.
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body>
-    <a href="#container" class="visually-hidden-focusable">Skip to contents</a>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
     <nav class="navbar fixed-top navbar-default navbar-expand-lg bg-light"><div class="container">
+    
     <a class="navbar-brand me-2" href="../index.html">ghclass</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
+    
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -47,11 +49,12 @@ action_status - retrieve details on most recent workflow runs.
   </a>
 </li>
       </ul></div>
+
+    
   </div>
-</nav><div class="container template-reference-topic" id="container">
+</nav><div class="container template-reference-topic">
 <div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Retrieve information about GitHub Actions workflows and their runs.</h1>
       <small class="dont-index">Source: <a href="https://github.com/rundel/ghclass/blob/HEAD/R/action.R" class="external-link"><code>R/action.R</code></a>, <a href="https://github.com/rundel/ghclass/blob/HEAD/R/action_runs.R" class="external-link"><code>R/action_runs.R</code></a>, <a href="https://github.com/rundel/ghclass/blob/HEAD/R/action_status.R" class="external-link"><code>R/action_status.R</code></a>, and 1 more</small>
       <div class="d-none name"><code>action.Rd</code></div>
@@ -64,16 +67,15 @@ action_status - retrieve details on most recent workflow runs.
 <li><p><code>action_status</code> - retrieve details on most recent workflow runs.</p></li>
 </ul></div>
 
-    <div class="ref-usage section level2 sourceCode">
-    <h2>Usage</h2>
-    <pre class="sourceCode r"><code><span class="fu">action_runs</span><span class="op">(</span><span class="va">repo</span>, limit <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>
+    <div class="section level2">
+    <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">action_runs</span><span class="op">(</span><span class="va">repo</span>, limit <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>
 
 <span class="fu">action_status</span><span class="op">(</span><span class="va">repo</span>, branch <span class="op">=</span> <span class="cn">NULL</span>, before <span class="op">=</span> <span class="cn">NULL</span>, limit <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>
 
-<span class="fu">action_workflows</span><span class="op">(</span><span class="va">repo</span>, full <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre>
+<span class="fu">action_workflows</span><span class="op">(</span><span class="va">repo</span>, full <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
     </div>
 
-    <div id="ref-sections">
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>repo</dt>
@@ -88,19 +90,11 @@ Character values are converted using <code><a href="https://lubridate.tidyverse.
 <dt>full</dt>
 <dd><p>Logical. Should all workflow columns be returned. Default <code>FALSE</code>.</p></dd>
 </dl></div>
-    </div>
 
-    <div id="examples">
-    <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \dontrun{</span></span>
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \dontrun{</span></span>
 <span class="r-in"><span class="fu">action_workflows</span><span class="op">(</span><span class="st">"rundel/ghclass"</span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span><span style="color: #0000BB;">/Users/rundel/.Renviron</span> defines environment variables: <span style="color: #0000BB;">"GITHUB_PAT"</span> and</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">"GITHUB_TOKEN"</span>.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> This is no longer considered a best practice, and it is recommended that you</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   instead use <span style="color: #262626; background-color: #DADADA;">`gitcreds::gitcreds_set()`</span> to securely store your PAT. Existing</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   environement variables can be removed from <span style="color: #0000BB;">.Renviron</span> using</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   <span style="color: #262626; background-color: #DADADA;">`usethis::edit_r_environ()`</span>.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">This warning is displayed once per session.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   name              id path                                 state  badge_url    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        </span>
@@ -111,23 +105,23 @@ Character values are converted using <code><a href="https://lubridate.tidyverse.
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 50 × 7</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    name        branch  commit          event   status result created            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> R-CMD-check master  c329751dd92b57… push    compl… succe… 2021-11-15 <span style="color: #949494;">15:30:38</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> R-CMD-check master  2952bf7fc365e0… push    compl… succe… 2021-11-15 <span style="color: #949494;">15:14:31</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> R-CMD-check pat_fix 4199b75734949d… pull_r… compl… failu… 2021-11-15 <span style="color: #949494;">15:14:26</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> R-CMD-check 0.2.0   dd13462da3c362… push    compl… succe… 2021-11-15 <span style="color: #949494;">15:13:08</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> R-CMD-check pat_fix 4199b75734949d… push    compl… succe… 2021-11-15 <span style="color: #949494;">15:05:15</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> R-CMD-check pat_fix b16ca7509fa7de… push    compl… succe… 2021-11-15 <span style="color: #949494;">14:58:04</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> R-CMD-check pat_fix a426c736bcfee7… push    compl… succe… 2021-11-12 <span style="color: #949494;">22:04:43</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> R-CMD-check testing dd13462da3c362… push    compl… succe… 2021-11-12 <span style="color: #949494;">21:55:45</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> R-CMD-check pat_fix bdfe1b90cd3a37… push    compl… succe… 2021-11-12 <span style="color: #949494;">21:53:44</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> R-CMD-check pat_fix 0e6525cdf6471b… push    compl… succe… 2021-11-12 <span style="color: #949494;">20:35:22</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> R-CMD-check master  e93049ada25836… push    compl… succe… 2021-12-16 <span style="color: #949494;">19:11:23</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> R-CMD-check master  26369871366c18… push    compl… succe… 2021-11-15 <span style="color: #949494;">15:58:12</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> R-CMD-check master  c329751dd92b57… push    compl… succe… 2021-11-15 <span style="color: #949494;">15:30:38</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> R-CMD-check master  2952bf7fc365e0… push    compl… succe… 2021-11-15 <span style="color: #949494;">15:14:31</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> R-CMD-check pat_fix 4199b75734949d… pull_r… compl… failu… 2021-11-15 <span style="color: #949494;">15:14:26</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> R-CMD-check 0.2.0   dd13462da3c362… push    compl… succe… 2021-11-15 <span style="color: #949494;">15:13:08</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> R-CMD-check pat_fix 4199b75734949d… push    compl… succe… 2021-11-15 <span style="color: #949494;">15:05:15</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> R-CMD-check pat_fix b16ca7509fa7de… push    compl… succe… 2021-11-15 <span style="color: #949494;">14:58:04</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> R-CMD-check pat_fix a426c736bcfee7… push    compl… succe… 2021-11-12 <span style="color: #949494;">22:04:43</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> R-CMD-check testing dd13462da3c362… push    compl… succe… 2021-11-12 <span style="color: #949494;">21:55:45</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 40 more rows</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">action_status</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rundel/ghclass"</span>, <span class="st">"rundel/parsermd"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 20 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 19 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    repo            name          branch               result created            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> rundel/ghclass  R-CMD-check   master               succe… 2021-11-15 <span style="color: #949494;">15:30:38</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> rundel/ghclass  R-CMD-check   master               succe… 2021-12-16 <span style="color: #949494;">19:11:23</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> rundel/ghclass  R-CMD-check   pat_fix              failu… 2021-11-15 <span style="color: #949494;">15:14:26</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> rundel/ghclass  R-CMD-check   0.2.0                succe… 2021-11-15 <span style="color: #949494;">15:13:08</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> rundel/ghclass  R-CMD-check   testing              succe… 2021-11-12 <span style="color: #949494;">21:55:45</span></span>
@@ -139,23 +133,19 @@ Character values are converted using <code><a href="https://lubridate.tidyverse.
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> rundel/ghclass  R-CMD-check   peer_review          succe… 2020-08-26 <span style="color: #949494;">14:43:41</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> rundel/ghclass  Render README 0.2.0                succe… 2021-11-15 <span style="color: #949494;">15:13:08</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> rundel/ghclass  Render README master               succe… 2020-10-07 <span style="color: #949494;">12:25:44</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> rundel/ghclass  Render README peer_review          succe… 2020-08-26 <span style="color: #949494;">14:43:41</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> rundel/parsermd R-CMD-check   master               succe… 2021-09-05 <span style="color: #949494;">15:57:09</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> rundel/parsermd R-CMD-check   unnamed-chunks       succe… 2021-07-12 <span style="color: #949494;">14:55:42</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span> rundel/parsermd R-CMD-check   patch-3              succe… 2021-05-24 <span style="color: #949494;">07:37:41</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">17</span> rundel/parsermd R-CMD-check   patch-2              succe… 2021-05-24 <span style="color: #949494;">07:28:52</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">18</span> rundel/parsermd R-CMD-check   solaris              succe… 2021-05-20 <span style="color: #949494;">10:19:46</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">19</span> rundel/parsermd R-CMD-check   patch-1              failu… 2021-05-17 <span style="color: #949494;">11:00:03</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">20</span> rundel/parsermd pkgdown       master               succe… 2021-09-05 <span style="color: #949494;">15:57:09</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> rundel/parsermd R-CMD-check   master               succe… 2021-09-05 <span style="color: #949494;">15:57:09</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> rundel/parsermd R-CMD-check   unnamed-chunks       succe… 2021-07-12 <span style="color: #949494;">14:55:42</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> rundel/parsermd R-CMD-check   patch-3              succe… 2021-05-24 <span style="color: #949494;">07:37:41</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span> rundel/parsermd R-CMD-check   patch-2              succe… 2021-05-24 <span style="color: #949494;">07:28:52</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">17</span> rundel/parsermd R-CMD-check   solaris              succe… 2021-05-20 <span style="color: #949494;">10:19:46</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">18</span> rundel/parsermd R-CMD-check   patch-1              failu… 2021-05-17 <span style="color: #949494;">11:00:03</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">19</span> rundel/parsermd pkgdown       master               succe… 2021-09-05 <span style="color: #949494;">15:57:09</span></span>
 <span class="r-in"><span class="co"># }</span></span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
-  </div>
-  <div class="col-md-3" id="pkgdown-sidebar">
-    <nav id="toc"><h2>On this page</h2>
-    </nav></div>
-</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
@@ -163,7 +153,7 @@ Character values are converted using <code><a href="https://lubridate.tidyverse.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.9000.</p>
 </div>
 
     </footer></div>

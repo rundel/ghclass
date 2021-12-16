@@ -16,7 +16,7 @@ github_api_v4_graphql = function(query, vars = list()) {
   code = httr::status_code(req)
 
   if (code >= 300) {
-    cli_stop("Github API v4 error code ({code}) - {res[['message']]}")
+    cli_stop("GitHub API v4 error code ({code}) - {res[['message']]}")
   }
 
   res

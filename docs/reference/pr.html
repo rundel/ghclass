@@ -11,14 +11,16 @@ pr_create - create a pull request GitHub from the base branch to the head branch
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body>
-    <a href="#container" class="visually-hidden-focusable">Skip to contents</a>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
     <nav class="navbar fixed-top navbar-default navbar-expand-lg bg-light"><div class="container">
+    
     <a class="navbar-brand me-2" href="../index.html">ghclass</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
+    
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -43,11 +45,12 @@ pr_create - create a pull request GitHub from the base branch to the head branch
   </a>
 </li>
       </ul></div>
+
+    
   </div>
-</nav><div class="container template-reference-topic" id="container">
+</nav><div class="container template-reference-topic">
 <div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>GitHub Pull Request related tools</h1>
       <small class="dont-index">Source: <a href="https://github.com/rundel/ghclass/blob/HEAD/R/pr.R" class="external-link"><code>R/pr.R</code></a>, <a href="https://github.com/rundel/ghclass/blob/HEAD/R/pr_create.R" class="external-link"><code>R/pr_create.R</code></a></small>
       <div class="d-none name"><code>pr.Rd</code></div>
@@ -58,12 +61,11 @@ pr_create - create a pull request GitHub from the base branch to the head branch
 <ul><li><p><code>pr_create</code> - create a pull request GitHub from the <code>base</code> branch to the <code>head</code> branch.</p></li>
 </ul></div>
 
-    <div class="ref-usage section level2 sourceCode">
-    <h2>Usage</h2>
-    <pre class="sourceCode r"><code><span class="fu">pr_create</span><span class="op">(</span><span class="va">repo</span>, <span class="va">title</span>, <span class="va">head</span>, <span class="va">base</span>, body <span class="op">=</span> <span class="st">""</span>, draft <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre>
+    <div class="section level2">
+    <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">pr_create</span><span class="op">(</span><span class="va">repo</span>, <span class="va">title</span>, <span class="va">head</span>, <span class="va">base</span>, body <span class="op">=</span> <span class="st">""</span>, draft <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
     </div>
 
-    <div id="ref-sections">
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>repo</dt>
@@ -88,38 +90,30 @@ a pull request to one repository that requests a merge to a base of another repo
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><a href="repo_details.html">repo_issues</a></p></div>
     </div>
-    </div>
 
-    <div id="examples">
-    <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \dontrun{</span></span>
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \dontrun{</span></span>
 <span class="r-in"><span class="fu"><a href="repo_core.html">repo_create</a></span><span class="op">(</span><span class="st">"ghclass-test"</span>, <span class="st">"test_pr"</span>, auto_init<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Created repo <span style="color: #0000BB;">"ghclass-test/test_pr"</span>.</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu"><a href="branch.html">branch_create</a></span><span class="op">(</span><span class="st">"ghclass-test/test_pr"</span>, branch <span class="op">=</span> <span class="st">"main"</span>, new_branch <span class="op">=</span> <span class="st">"test"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Failed to create branch <span style="color: #0000BB;">"test"</span> in repo <span style="color: #0000BB;">"ghclass-test/test_pr"</span>.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> └─Unable to locate branch <span style="color: #0000BB;">"ghclass-test/test_pr@main"</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Created branch <span style="color: #0000BB;">"test"</span> in repo <span style="color: #0000BB;">"ghclass-test/test_pr"</span>.</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu"><a href="repo_file.html">repo_modify_file</a></span><span class="op">(</span><span class="st">"ghclass-test/test_pr"</span>, <span class="st">"README.md"</span>, pattern <span class="op">=</span> <span class="st">"test_pr"</span>,</span>
 <span class="r-in">                 content <span class="op">=</span> <span class="st">"Hello"</span>, method <span class="op">=</span> <span class="st">"after"</span>, branch <span class="op">=</span> <span class="st">"test"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Unable to retrieve <span style="color: #0000BB;">"ghclass-test/test_pr@test/README.md"</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Modified file <span style="color: #0000BB;">"ghclass-test/test_pr@test/README.md"</span>.</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">pr_create</span><span class="op">(</span><span class="st">"ghclass-test/test_pr"</span>, title <span class="op">=</span> <span class="st">"merge"</span>, head <span class="op">=</span> <span class="st">"test"</span>, base <span class="op">=</span> <span class="st">"main"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Failed create pull request for <span style="color: #0000BB;">"ghclass-test/test_pr (main &lt;- test)"</span>.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> └─GitHub API error (422): </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ├─ API message: <span style="color: #555555;">Validation Failed</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   └─ API docs: <span style="color: #555555;">https://docs.github.com/rest/reference/pulls#create-a-pull-reques</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Created pull request for <span style="color: #0000BB;">"ghclass-test/test_pr (main &lt;- test)"</span>.</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu"><a href="repo_core.html">repo_delete</a></span><span class="op">(</span><span class="st">"ghclass-test/test_pr"</span>, prompt <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Deleted repo <span style="color: #0000BB;">"ghclass-test/test_pr"</span>.</span>
 <span class="r-in"><span class="co"># }</span></span>
 </code></pre></div>
     </div>
-  </div>
-  <div class="col-md-3" id="pkgdown-sidebar">
-    <nav id="toc"><h2>On this page</h2>
-    </nav></div>
-</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
@@ -127,7 +121,7 @@ a pull request to one repository that requests a merge to a base of another repo
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.9000.</p>
 </div>
 
     </footer></div>

@@ -14,7 +14,7 @@
 # #' <https://help.github.com/en/articles/about-protected-branches> for more details
 # #' on what this changes.
 #'
-#' @param repo Github repository address in `owner/repo` format.
+#' @param repo GitHub repository address in `owner/repo` format.
 #' @param branch Repository branch to use.
 #' @param new_branch Name of branch to create.
 #'

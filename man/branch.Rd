@@ -14,7 +14,7 @@ branch_delete(repo, branch)
 branch_remove(repo, branch)
 }
 \arguments{
-\item{repo}{Github repository address in \code{owner/repo} format.}
+\item{repo}{GitHub repository address in \code{owner/repo} format.}
 
 \item{branch}{Repository branch to use.}
 

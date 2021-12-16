@@ -127,13 +127,13 @@ NULL
 #' very recently might not yet be displayed as existing and might accidentally
 #' be overwritten.
 #'
-#' * `repo_delete_file` - Delete a file from a Github repository
+#' * `repo_delete_file` - Delete a file from a GitHub repository
 #'
 #' * `repo_modify_file` - Modify an existing file within a GitHub repository.
 #'
 #' * `repo_ls` - Low level function for listing the files in a GitHub Repository
 #'
-#' * `repo_put_file` - Low level function for adding a file to a Github repository
+#' * `repo_put_file` - Low level function for adding a file to a GitHub repository
 #'
 #' * `repo_get_file` - Low level function for retrieving the content of a file from a GitHub Repository
 #'
