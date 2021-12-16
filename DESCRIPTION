@@ -14,11 +14,11 @@ Authors@R:
              family = "Anders",
              role = "ctb",
              email = "tanders@usc.edu"))
-Description: This  package is designed to enable instructors to 
-    efficiently manage their courses on GitHub. It has a wide range 
-    of functionality for managing organizations, teams, repositories, 
-    and users on GitHub and helps automate most of the tedious and 
-    repetitive tasks around creating and distributing assignments.
+Description: Interface for the GitHub API that enables efficient 
+    management of courses on GitHub. It has a functionality for 
+    managing organizations, teams, repositories, and users on GitHub 
+    and helps automate most of the tedious and repetitive tasks 
+    around creating and distributing assignments.
 License: GPL-3 + file LICENSE
 URL: https://github.com/rundel/ghclass
 BugReports: https://github.com/rundel/ghclass/issues
