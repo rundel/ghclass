@@ -19,7 +19,7 @@ Description: Interface for the GitHub API that enables efficient
     managing organizations, teams, repositories, and users on GitHub 
     and helps automate most of the tedious and repetitive tasks 
     around creating and distributing assignments.
-License: GPL-3 + file LICENSE
+License: GPL-3
 URL: https://github.com/rundel/ghclass
 BugReports: https://github.com/rundel/ghclass/issues
 Depends: 
