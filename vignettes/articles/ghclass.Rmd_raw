@@ -397,19 +397,23 @@ repo_get_readme("ghclass-vignette/hw1-team01", include_details = FALSE)
 
 Eventually the students will be finished with the work and or the assignment deadline will have passed. ghclass makes it easy to collect all of the student work off of GitHub and make it accessible on your local computer for grading. We make use of the [gert](https://github.com/r-lib/gert) package to provide basic git functionality within ghclass.
 
+```{r repo_dir}
+repo_dir = file.path(tempdir(), "hw1")
+```
+
 ```{r local_clone}
 local_repo_clone(
   repo = org_repos("ghclass-vignette", "hw1-team"),
-  local_path = "hw1"
+  local_path = repo_dir
 )
 ```
 
 ```{r dir}
-fs::dir_tree("hw1/")
+fs::dir_tree(repo_dir)
 ```
 
 ```{r include=FALSE}
-unlink("hw1", recursive = TRUE)
+unlink(repo_dir, recursive = TRUE)
 ```
 
 
