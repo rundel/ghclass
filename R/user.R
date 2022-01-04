@@ -5,12 +5,12 @@
 #'
 #' @description
 #'
-#' * `user_exists` - returns `TRUE` if the username(s) (or organization) exist on GitHub
+#' * `user_exists()` - returns `TRUE` if the username(s) (or organization) exist on GitHub
 #' and `FALSE` otherwise. Note that GitHub considers organizations to be a type of user.
 #'
-#' * `user_repos` - returns a (filtered) vector of repositories belonging to the user.
+#' * `user_repos()` - returns a (filtered) vector of repositories belonging to the user.
 #'
-#' * `user_type` - returns a vector of the accounts' types.
+#' * `user_type()` - returns a vector of the accounts' types.
 #'
 #' @param user Character. GitHub username(s).
 #' @param type Character. Can be one of "all", "owner", "public", "private", "member".
@@ -19,6 +19,9 @@
 #' @param full_repo Logical. Should the full repository address be returned
 #' (e.g. `owner/repo` instead of just `repo`)?
 #'
+#' @return `user_exists()` returns a logical vector.
+#'
+#' `user_repos()` and `user_type()` retrun a character vector.
 #'
 #' @examples
 #' \dontrun{
