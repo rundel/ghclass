@@ -163,6 +163,8 @@ status_msg = function(x, success = NULL, fail = NULL, include_error_msg = TRUE,
       cli::cat_line(error_msg_tree(msg))
     }
   }
+
+  invisible(x)
 }
 
 error_msg_tree = function(msg) {
