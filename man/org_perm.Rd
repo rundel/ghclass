@@ -21,10 +21,15 @@ org_set_repo_permission(org, permission = c("none", "read", "write", "admin"))
 \item none - no permissions granted by default.
 }}
 }
+\value{
+\code{org_sitep()} invisibly returns the \code{org} argument.
+
+\code{org_set_repo_permission()} invisibly return a the result of the relevant GitHub API call.
+}
 \description{
 \itemize{
-\item \code{org_sitrep} - Provides a situation report on a GitHub organization.
-\item \code{org_set_repo_permission} - Change the default permission level for org repositories.
+\item \code{org_sitrep()} - Provides a situation report on a GitHub organization.
+\item \code{org_set_repo_permission()} - Change the default permission level for org repositories.
 }
 }
 \examples{

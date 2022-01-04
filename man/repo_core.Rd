@@ -82,21 +82,28 @@ Note when using template repos these new repositories must \emph{not} exist.}
 
 \item{status}{Logical. Should the repository be set as a template repository}
 }
+\value{
+\code{repo_create()} returns a character vector of created repos (in \code{owner/repo} format)
+
+\code{repo_exists()} and \code{repo_is_template()} both return a logical vector.
+
+All other functions invisibly return a list containing the results of the relevant GitHub API calls.
+}
 \description{
 \itemize{
-\item \code{repo_create} - create a GitHub repository.
-\item \code{repo_delete} - delete a GitHub repository.
-\item \code{repo_rename} - rename a repository, note that renamed repositories retain their
+\item \code{repo_create()} - create a GitHub repository.
+\item \code{repo_delete()} - delete a GitHub repository.
+\item \code{repo_rename()} - rename a repository, note that renamed repositories retain their
 unique identifier and can still be accessed via their old names due to
 GitHub re-directing.
-\item \code{repo_exists} - returns \code{TRUE} if the GitHub repository exists. It will also print
+\item \code{repo_exists()} - returns \code{TRUE} if the GitHub repository exists. It will also print
 a message if a repository has been renamed, unless \code{quiet = TRUE}.
-\item \code{repo_mirror} mirror the content of a repository to another repository,
+\item \code{repo_mirror()} - mirror the content of a repository to another repository,
 the target repo must already exist.
-\item \code{repo_mirror_template} - mirror the content of a source template repository to a new repository,
+\item \code{repo_mirror_template()} - mirror the content of a source template repository to a new repository,
 the target repo must \emph{not} already exist.
-\item \code{repo_is_template} - returns \code{TRUE} if a repository is a template repo.
-\item \code{repo_set_template} - change the template status of a repository.
+\item \code{repo_is_template()} - returns \code{TRUE} if a repository is a template repo.
+\item \code{repo_set_template()} - change the template status of a repository.
 }
 }
 \examples{

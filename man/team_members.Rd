@@ -28,13 +28,19 @@ team_repos(org, team = org_teams(org), team_type = c("name", "slug"))
 
 \item{team_type}{Character. Either "slug" if the team names are slugs or "name" if full team names are provided.}
 }
+\value{
+\code{team_members()}, \code{team_pending()}, and \code{team_repos()} all return a tibble.
+
+\code{team_invite()} and \code{team_remove()} invisibly return a list containing the results
+of the relevant GitHub API calls.
+}
 \description{
 \itemize{
-\item \code{team_invite} - add members to team(s).
-\item \code{team_remove} - remove members from team(s).
-\item \code{team_members} - returns a data frame of team members.
-\item \code{team_pending} - returns a data frame of pending team members.
-\item \code{team_repos} - returns a data frame of teams and their repos.
+\item \code{team_invite()} - add members to team(s).
+\item \code{team_remove()} - remove members from team(s).
+\item \code{team_members()} - returns a tibble of team members.
+\item \code{team_pending()} - returns a tibble of pending team members.
+\item \code{team_repos()} - returns a tibble of teams and their repos.
 }
 }
 \examples{

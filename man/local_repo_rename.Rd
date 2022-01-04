@@ -13,6 +13,10 @@ local_repo_rename(repo_dir, pattern, replacement)
 
 \item{replacement}{Character.  One or more text strings containing the replacement value for matched patterns.}
 }
+\value{
+Returns a character vector of the new repo directory paths, or \code{NA} if the rename
+failed.
+}
 \description{
 This function is meant to help with renaming local student repos to include
 something more useful like \verb{Last, First name} or a unique identifier

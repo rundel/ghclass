@@ -26,11 +26,16 @@ Character values are converted using \code{lubridate::ymd_hms()}.}
 
 \item{full}{Logical. Should all workflow columns be returned. Default \code{FALSE}.}
 }
+\value{
+\code{action_workflows()}, \code{action_runs()}, and \code{action_status()} all return
+tibbles containing information on requested repos' available workflows,
+recent action runs, and recent action run statuses respectively.
+}
 \description{
 \itemize{
-\item \code{action_workflows} - retrieve details on repo workflows.
-\item \code{action_runs} - retrieve details on repo workflow runs.
-\item \code{action_status} - retrieve details on most recent workflow runs.
+\item \code{action_workflows()} - retrieve details on repo workflows.
+\item \code{action_runs()} - retrieve details on repo workflow runs.
+\item \code{action_status()} - retrieve details on most recent workflow runs.
 }
 }
 \examples{

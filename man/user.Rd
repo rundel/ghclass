@@ -32,12 +32,17 @@ user_type(user)
 \item{full_repo}{Logical. Should the full repository address be returned
 (e.g. \code{owner/repo} instead of just \code{repo})?}
 }
+\value{
+\code{user_exists()} returns a logical vector.
+
+\code{user_repos()} and \code{user_type()} retrun a character vector.
+}
 \description{
 \itemize{
-\item \code{user_exists} - returns \code{TRUE} if the username(s) (or organization) exist on GitHub
+\item \code{user_exists()} - returns \code{TRUE} if the username(s) (or organization) exist on GitHub
 and \code{FALSE} otherwise. Note that GitHub considers organizations to be a type of user.
-\item \code{user_repos} - returns a (filtered) vector of repositories belonging to the user.
-\item \code{user_type} - returns a vector of the accounts' types.
+\item \code{user_repos()} - returns a (filtered) vector of repositories belonging to the user.
+\item \code{user_type()} - returns a vector of the accounts' types.
 }
 }
 \examples{

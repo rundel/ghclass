@@ -32,13 +32,19 @@ org_remove(org, user, prompt = TRUE)
 
 \item{prompt}{Logical. Prompt before removing member from organization.}
 }
+\value{
+\code{org_members()}, \code{org_pending()}, and \code{org_admins} all return a character vector
+of GitHub account names.
+
+\code{org_invite()} and \code{org_remove()} invisibly return a list containing the results of the relevant GitHub API calls.
+}
 \description{
 \itemize{
-\item \code{org_invite} - invites user(s) to a GitHub organization.
-\item \code{org_remove} - remove user(s) from an organization (and all teams within that organization).
-\item \code{org_members} - returns a (filtered) vector of organization members.
-\item \code{org_pending} - returns a (filtered) vector of pending organization members.
-\item \code{org_admins} - returns a vector of repository administrators. In the case of a
+\item \code{org_invite()} - invites user(s) to a GitHub organization.
+\item \code{org_remove()} - remove user(s) from an organization (and all teams within that organization).
+\item \code{org_members()} - returns a (filtered) vector of organization members.
+\item \code{org_pending}() - returns a (filtered) vector of pending organization members.
+\item \code{org_admins()} - returns a vector of repository administrators. In the case of a
 non-organization owner (e.g. a user account) returns the owner's login.
 }
 }

@@ -9,6 +9,9 @@ github_whoami(quiet = FALSE)
 \arguments{
 \item{quiet}{Logical. Should status messages be shown.}
 }
+\value{
+Character value containing user login.
+}
 \description{
 Returns the login of the authenticated user (based on the current PAT).
 }

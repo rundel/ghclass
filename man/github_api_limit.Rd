@@ -13,10 +13,15 @@ github_set_api_limit(limit = 1000L)
 \arguments{
 \item{limit}{The maximum number of records to return from an API request.}
 }
+\value{
+\code{github_get_api_limit()} returns a single integer value.
+
+\code{github_set_api_limit()} invisibily returns the value of the \code{limit} argument.
+}
 \description{
 \itemize{
-\item \code{github_get_api_limit} - returns the current limit on results returned by gh.
-\item \code{github_set_api_limit} - sets a limit on results returned by gh.
+\item \code{github_get_api_limit()} - returns the current limit on results returned by gh.
+\item \code{github_set_api_limit()} - sets a limit on results returned by gh.
 }
 }
 \details{

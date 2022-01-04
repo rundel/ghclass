@@ -31,9 +31,13 @@ to the beginning of the target file.}
 \item{workflow_pat}{Character. Name of the workflow to be removed, or a regex pattern
 that matches the workflow name.}
 }
+\value{
+Both \code{action_add_badge()} and \code{action_remove_badge()} invisibly return a list
+containing the results of the relevant GitHub API call.
+}
 \description{
 \itemize{
-\item \code{action_add_badge} - Add a GitHub Actions badge to a file.
-\item \code{action_remove_badge} - Remove one or more GitHub Action badges from a file.
+\item \code{action_add_badge()} - Add a GitHub Actions badge to a file.
+\item \code{action_remove_badge()} - Remove one or more GitHub Action badges from a file.
 }
 }

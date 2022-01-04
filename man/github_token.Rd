@@ -19,6 +19,16 @@ github_test_token(token = github_get_token())
 \arguments{
 \item{token}{Character. Either the literal token, or the path to a file containing the token.}
 }
+\value{
+\code{github_get_token()} returns the current PAT as a character string with the \code{gh_pat}
+class. See \code{\link[gh:gh_token]{gh::gh_token()}} for additional details.
+
+\code{github_set_token()} and \code{github_reset_token()} return the result of \code{Sys.setenv()} and
+\code{Sys.unsetenv()} respectively.
+
+\code{github_test_token()} invisibly returns a logical value, \code{TRUE} if the test passes,
+\code{FALSE} if not.
+}
 \description{
 \itemize{
 \item \code{github_get_token} - returns the user's GitHub personal access token (PAT).

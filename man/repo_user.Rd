@@ -61,16 +61,21 @@ repo_remove_user(repo, user)
 
 \item{include_admins}{Logical. If \code{FALSE}, user names of users with Admin rights are not included, defaults to \code{TRUE}.}
 }
+\value{
+\code{repo_collaborators()} and \code{repo_contributoes} return a tibble.
+
+All other functions invisibly return a list containing the results of the relevant GitHub API calls.
+}
 \description{
 \itemize{
-\item \code{repo_add_user} - Add a user to a repository
-\item \code{repo_remove_user} - Remove a user from a repository
-\item \code{repo_add_team} - Add a team to a repository
-\item \code{repo_remove_team} - Remove a team from a repository
-\item \code{repo_user_permission} - Change a collaborator's permissions for a repository
-\item \code{repo_team_permission} - Change a team's permissions for a repository
-\item \code{repo_collaborators} - Returns a data frame of repos, their collaborators, and their permissions.
-\item \code{repo_contributors} - Returns a data frame containing details on repository contributor(s).
+\item \code{repo_add_user()} - Add a user to a repository
+\item \code{repo_remove_user()} - Remove a user from a repository
+\item \code{repo_add_team()} - Add a team to a repository
+\item \code{repo_remove_team()} - Remove a team from a repository
+\item \code{repo_user_permission()} - Change a collaborator's permissions for a repository
+\item \code{repo_team_permission()} - Change a team's permissions for a repository
+\item \code{repo_collaborators()} - Returns a data frame of repos, their collaborators, and their permissions.
+\item \code{repo_contributors()} - Returns a data frame containing details on repository contributor(s).
 }
 }
 \details{

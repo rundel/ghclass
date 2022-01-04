@@ -41,6 +41,9 @@ issue_edit(
 \item{milestone}{Character. The number of the milestone to associate this issue with.
 Only users with push access can set the milestone for issues. The milestone is silently dropped otherwise.}
 }
+\value{
+All functions invisibly return a list containing the results of the relevant GitHub API call.
+}
 \description{
 \itemize{
 \item \code{issue_create} creates a new issue.

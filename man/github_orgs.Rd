@@ -2,17 +2,20 @@
 % Please edit documentation in R/github_whoami.R
 \name{github_orgs}
 \alias{github_orgs}
-\title{Returns a tibble with details on the authenticated user's (based on the current PAT)
-GitHub organization memberships.}
+\title{Collect details on the authenticated user's GitHub organization memberships
+(based on the current PAT).}
 \usage{
 github_orgs(quiet = FALSE)
 }
 \arguments{
 \item{quiet}{Logical. Should status messages be shown.}
 }
+\value{
+Returns a tibble with organization details.
+}
 \description{
-Returns a tibble with details on the authenticated user's (based on the current PAT)
-GitHub organization memberships.
+Collect details on the authenticated user's GitHub organization memberships
+(based on the current PAT).
 }
 \examples{
 \dontrun{

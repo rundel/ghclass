@@ -39,11 +39,15 @@ and members of a team), default is "closed"}
 
 \item{new_team}{character, new team name.}
 }
+\value{
+All functions invisibly return a list containing
+the results of the relevant GitHub API calls.
+}
 \description{
 \itemize{
-\item \code{team_create} - create teams in a GitHub organization
-\item \code{team_delete} - delete a team from a GitHub organization.
-\item \code{team_rename} - rename an existing team
+\item \code{team_create()} - create teams in a GitHub organization
+\item \code{team_delete()} - delete a team from a GitHub organization.
+\item \code{team_rename()} - rename an existing team
 }
 }
 \examples{

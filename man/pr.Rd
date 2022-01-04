@@ -25,9 +25,12 @@ a pull request to one repository that requests a merge to a base of another repo
 \item{draft}{Logical. Should the pull request be created as a draft pull request
 (these cannot be merged until allowed by the author).}
 }
+\value{
+\code{pr_create()} invisibly return a list containing the results of the relevant GitHub API calls.
+}
 \description{
 \itemize{
-\item \code{pr_create} - create a pull request GitHub from the \code{base} branch to the \code{head} branch.
+\item \code{pr_create()} - create a pull request GitHub from the \code{base} branch to the \code{head} branch.
 }
 }
 \examples{

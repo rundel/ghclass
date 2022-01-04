@@ -70,7 +70,15 @@ repo_put_file(
 
 \item{quiet}{Logical. Should status messages be printed.}
 
-\item{include_details}{Logical. Should file details be attached as attributes.}
+\item{include_details}{Logical. Should file details be attached as attributes.
+
+\code{repo_delete_file()}m \code{repo_modify_file()}, and \code{repo_put_file()} all invisibly
+return a list containing the results of the relevant GitHub API calls.
+
+\code{repo_ls()} returns a character vector of repo files in the given path.
+
+\code{repo_get_file()} and \code{repo_get_readme()} return a character vector with API results
+attached as attributes if \code{include_details = TRUE}}
 
 \item{full_path}{Logical. Should the function return the full path of the files and directories.}
 
@@ -86,16 +94,16 @@ repo_put_file(
 }
 \description{
 \itemize{
-\item \code{repo_add_file} - Add / update files in a GitHub repository.
-Note that due to time delays in caching, files that have been added
+\item \code{repo_add_file()} - Add / update files in a GitHub repository.
+Note that due to delays in caching, files that have been added
 very recently might not yet be displayed as existing and might accidentally
 be overwritten.
-\item \code{repo_delete_file} - Delete a file from a GitHub repository
-\item \code{repo_modify_file} - Modify an existing file within a GitHub repository.
-\item \code{repo_ls} - Low level function for listing the files in a GitHub Repository
-\item \code{repo_put_file} - Low level function for adding a file to a GitHub repository
-\item \code{repo_get_file} - Low level function for retrieving the content of a file from a GitHub Repository
-\item \code{repo_get_readme} - Low level function for retrieving the content of the \code{README.md} of a GitHub Repository
+\item \code{repo_delete_file()} - Delete a file from a GitHub repository
+\item \code{repo_modify_file()} - Modify an existing file within a GitHub repository.
+\item \code{repo_ls()} - Low level function for listing the files in a GitHub Repository
+\item \code{repo_put_file()} - Low level function for adding a file to a GitHub repository
+\item \code{repo_get_file()} - Low level function for retrieving the content of a file from a GitHub Repository
+\item \code{repo_get_readme()} - Low level function for retrieving the content of the \code{README.md} of a GitHub Repository
 }
 }
 \examples{

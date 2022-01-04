@@ -17,6 +17,9 @@ local_pat(new, .local_envir = parent.frame())
 
 \item{.local_envir}{The environment to use for scoping.}
 }
+\value{
+The results of the evaluation of the code argument.
+}
 \description{
 Temporarily change the \code{GITHUB_PAT} environmental variable for
 GitHub authentication. Based on the \code{withr} interface.

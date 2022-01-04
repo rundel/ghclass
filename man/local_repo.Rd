@@ -67,19 +67,28 @@ local_repo_push(
 
 \item{prompt}{Prompt before force push?}
 }
+\value{
+\code{local_repo_clone()} invisibly returns a character vector of paths for
+the local repo directories.
+
+\code{local_repo_log()} returns a tibble containing repository details.`
+
+All other functions invisibly return a list containing the results of the relevant call
+to \code{gert}.
+}
 \description{
 \itemize{
-\item \code{local_repo_clone} - Clones a GitHub repository to a local directory.
-\item \code{local_repo_add} - Equivalent to \verb{git add} - stages a file in a local repository.
-\item \code{local_repo_commit} - Equivalent to \verb{git commit} - commits staged files in a local repository.
-\item \code{local_repo_push} - Equivalent to \verb{git push} - push a local repository.
-\item \code{local_repo_pull} - Equivalent to \verb{git pull} - pull a local repository.
-\item \code{local_repo_branch} - Equivalent to \verb{git branch} - create a branch in a local repository.
-\item \code{local_repo_log} - Equivalent to \verb{git log} - returns a data frame for git log entries.
+\item \code{local_repo_clone()} - Clones a GitHub repository to a local directory.
+\item \code{local_repo_add()} - Equivalent to \verb{git add} - stages a file in a local repository.
+\item \code{local_repo_commit()} - Equivalent to \verb{git commit} - commits staged files in a local repository.
+\item \code{local_repo_push()} - Equivalent to \verb{git push} - push a local repository.
+\item \code{local_repo_pull()} - Equivalent to \verb{git pull} - pull a local repository.
+\item \code{local_repo_branch()} - Equivalent to \verb{git branch} - create a branch in a local repository.
+\item \code{local_repo_log()} - Equivalent to \verb{git log} - returns a data frame for git log entries.
 }
 }
 \details{
-All of these functions depend on the gert library being installed.
+All \verb{local_repo_*} functions depend on the \code{gert} library being installed.
 }
 \examples{
 \dontrun{

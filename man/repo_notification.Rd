@@ -24,12 +24,18 @@ repo_watching(filter = NULL, exclude = FALSE)
 
 \item{exclude}{logical, should entries matching the regex be excluded or included.}
 }
+\value{
+\code{repo_ignore()}, \code{repo_unwatch()}, and \code{repo_watch()} all invisibly return a
+list containing the results of the relevant GitHub API call.
+
+\code{repo_watching()} returns a character vector of watched repos.
+}
 \description{
 \itemize{
-\item \code{repo_ignore} - Ignore a GitHub repository.
-\item \code{repo_unwatch} - Unwatch / unsubscribe from a GitHub repository.
-\item \code{repo_watch} - Watch / subscribe to a GitHub repository.
-\item \code{repo_watching} - Returns a vector of your watched repositories. This should
+\item \code{repo_ignore()} - Ignore a GitHub repository.
+\item \code{repo_unwatch()} - Unwatch / unsubscribe from a GitHub repository.
+\item \code{repo_watch()} - Watch / subscribe to a GitHub repository.
+\item \code{repo_watching()} - Returns a vector of your watched repositories. This should
 match the list at \href{https://github.com/watching}{github.com/watching}.
 }
 }
