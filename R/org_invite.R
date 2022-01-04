@@ -21,7 +21,7 @@ org_invite = function(org, user) {
   member = tolower(org_members(org))
   pending = tolower(org_pending(org))
 
-  purrr::walk(
+  res = purrr::map(
     user,
     function(user) {
       if (user %in% member) {
@@ -39,4 +39,6 @@ org_invite = function(org, user) {
       }
     }
   )
+
+  invisible(res)
 }

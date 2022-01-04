@@ -5,9 +5,9 @@
 #'
 #' @description
 #'
-#' * `org_sitrep` - Provides a situation report on a GitHub organization.
+#' * `org_sitrep()` - Provides a situation report on a GitHub organization.
 #'
-#' * `org_set_repo_permission` - Change the default permission level for org repositories.
+#' * `org_set_repo_permission()` - Change the default permission level for org repositories.
 #'
 #' @param org Character. Name of the GitHub organization(s).
 #' @param permission Default permission level members have for organization repositories:
@@ -15,6 +15,10 @@
 #' * write - can pull and push, but not administer this repository.
 #' * admin - can pull, push, and administer this repository.
 #' * none - no permissions granted by default.
+#'
+#' @return `org_sitep()` invisibly returns the `org` argument.
+#'
+#' `org_set_repo_permission()` invisibly return a the result of the relevant GitHub API call.
 #'
 #' @examples
 #' \dontrun{
@@ -37,15 +41,15 @@ NULL
 #'
 #' @description
 #'
-#' * `org_invite` - invites user(s) to a GitHub organization.
+#' * `org_invite()` - invites user(s) to a GitHub organization.
 #'
-#' * `org_remove` - remove user(s) from an organization (and all teams within that organization).
+#' * `org_remove()` - remove user(s) from an organization (and all teams within that organization).
 #'
-#' * `org_members` - returns a (filtered) vector of organization members.
+#' * `org_members()` - returns a (filtered) vector of organization members.
 #'
-#' * `org_pending` - returns a (filtered) vector of pending organization members.
+#' * `org_pending`() - returns a (filtered) vector of pending organization members.
 #'
-#' * `org_admins` - returns a vector of repository administrators. In the case of a
+#' * `org_admins()` - returns a vector of repository administrators. In the case of a
 #' non-organization owner (e.g. a user account) returns the owner's login.
 #'
 #'
@@ -53,6 +57,11 @@ NULL
 #' @param user Character. GitHub username(s).
 #' @param filter Character. Regular expression pattern for matching (or excluding) results
 #' @param exclude Logical. Should entries matching the regular expression be excluded or included.
+#'
+#' @return `org_members()`, `org_pending()`, and `org_admins` all return a character vector
+#' of GitHub account names.
+#'
+#' `org_invite()` and `org_remove()` invisibly return a list containing the results of the relevant GitHub API calls.
 #'
 #' @examples
 #' \dontrun{
@@ -90,22 +99,28 @@ NULL
 #'
 #' @description
 #'
-#' * `org_exists` - returns `TRUE` if the organization(s) exist on GitHub and `FALSE` otherwise.
+#' * `org_exists()` - returns `TRUE` if the organization(s) exist on GitHub and `FALSE` otherwise.
 #'
-#' * `org_teams` - returns a (filtered) vector of organization teams.
+#' * `org_teams()` - returns a (filtered) vector of organization teams.
 #'
-#' * `org_team_details` - returns a data frame of all organization teams containing identification and permission details.
+#' * `org_team_details()` - returns a data frame of all organization teams containing identification and permission details.
 #'
-#' * `org_repos` - returns a (filtered) vector of organization repositories.
+#' * `org_repos()` - returns a (filtered) vector of organization repositories.
 #'
-#' * `org_repo_search` - search for repositories within an organization (preferred for large organizations).
+#' * `org_repo_search()` - search for repositories within an organization (preferred for large organizations).
 #'
-#' * `org_repo_stats` - returns a tibble of repositories belonging to a GitHub organization along with some
+#' * `org_repo_stats()` - returns a tibble of repositories belonging to a GitHub organization along with some
 #' basic statistics about those repositories.
 #'
 #' @param org Character. Name of the GitHub organization(s).
 #' @param filter Character. Regular expression pattern for matching (or excluding) results
 #' @param exclude Logical. Should entries matching the regular expression be excluded or included.
+#'
+#' @return `org_exists()` returns a logical vector.
+#'
+#' `org_teams()`, `org_repos`, and `org_repo_search()` return a character vector of team or repo names.
+#'
+#' `org_team_details()` and `org_repo_stats()` return tibbles.
 #'
 #' @examples
 #' \dontrun{

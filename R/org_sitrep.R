@@ -12,11 +12,9 @@ github_api_org = function(org) {
 org_sitrep = function(org) {
   res = purrr::safely(github_api_org)(org)
 
-
-
   if (failed(res)) {
     status_msg(res, fail = "Failed to find org {.val org}.")
-    invisible()
+    invisible(org)
   } else {
     admins = org_admins(org)
 

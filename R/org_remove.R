@@ -40,7 +40,7 @@ org_remove = function(org, user, prompt = TRUE) {
 
   pending = user %in% org_pending(org)
 
-  purrr::walk2(
+  res = purrr::map2(
     user, pending,
     function(user, pending) {
       if (pending)
@@ -56,4 +56,6 @@ org_remove = function(org, user, prompt = TRUE) {
       )
     }
   )
+
+  invisible(res)
 }
