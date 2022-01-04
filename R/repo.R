@@ -5,29 +5,34 @@
 #'
 #' @description
 #'
-#' * `repo_create` - create a GitHub repository.
+#' * `repo_create()` - create a GitHub repository.
 #'
-#' * `repo_delete` - delete a GitHub repository.
+#' * `repo_delete()` - delete a GitHub repository.
 #'
-#' * `repo_rename` - rename a repository, note that renamed repositories retain their
+#' * `repo_rename()` - rename a repository, note that renamed repositories retain their
 #' unique identifier and can still be accessed via their old names due to
 #' GitHub re-directing.
 #'
-#' * `repo_exists` - returns `TRUE` if the GitHub repository exists. It will also print
+#' * `repo_exists()` - returns `TRUE` if the GitHub repository exists. It will also print
 #'  a message if a repository has been renamed, unless `quiet = TRUE`.
 #'
-#' * `repo_mirror` mirror the content of a repository to another repository,
+#' * `repo_mirror()` - mirror the content of a repository to another repository,
 #' the target repo must already exist.
 #'
-#' * `repo_mirror_template` - mirror the content of a source template repository to a new repository,
+#' * `repo_mirror_template()` - mirror the content of a source template repository to a new repository,
 #' the target repo must *not* already exist.
 #'
-#' * `repo_is_template` - returns `TRUE` if a repository is a template repo.
+#' * `repo_is_template()` - returns `TRUE` if a repository is a template repo.
 #'
-#' * `repo_set_template` - change the template status of a repository.
+#' * `repo_set_template()` - change the template status of a repository.
 #'
 #' @param repo Character. Address of repository in `owner/repo` format.
 #'
+#' @return `repo_create()` returns a character vector of created repos (in `owner/repo` format)
+#'
+#' `repo_exists()` and `repo_is_template()` both return a logical vector.
+#'
+#' All other functions invisibly return a list containing the results of the relevant GitHub API calls.
 #'
 #' @examples
 #' \dontrun{
@@ -82,20 +87,23 @@ NULL
 #'
 #' @description
 #'
-#' * `repo_clone_url` - Returns the url, for cloning, a GitHub repo (either ssh or https)
+#' * `repo_clone_url()` - Returns the url, for cloning, a GitHub repo (either ssh or https)
 #'
-#' * `repo_branches` - Returns a (filtered) vector of branch names.
+#' * `repo_branches()` - Returns a (filtered) vector of branch names.
 #'
-#' * `repo_commits` - Returns a tibble of commits to a GitHub repository.
+#' * `repo_commits()` - Returns a tibble of commits to a GitHub repository.
 #'
-#' * `repo_issues` - Returns a tibble of issues for a GitHub repository.
+#' * `repo_issues()` - Returns a tibble of issues for a GitHub repository.
 #'
-#' * `repo_n_commits` - Returns a tibble of the number of commits in a GitHub repository (and branch).
+#' * `repo_n_commits()` - Returns a tibble of the number of commits in a GitHub repository (and branch).
 #'
-#' * `repo_prs` - Returns a tibble of pull requests for a GitHub repository.
+#' * `repo_prs()` - Returns a tibble of pull requests for a GitHub repository.
 #'
 #' @param repo Character. Address of repository in `owner/repo` format.
 #'
+#' @return `repo_clone_url()` and `repo_branches()` both return a character vector.
+#'
+#' `repo_commits()`, `repo_issues()`, `repo_n_commits()`, and `repo_prs()` all return a tibble.
 #'
 #' @examples
 #' \dontrun{
@@ -122,22 +130,22 @@ NULL
 #'
 #' @description
 #'
-#' * `repo_add_file` - Add / update files in a GitHub repository.
-#' Note that due to time delays in caching, files that have been added
+#' * `repo_add_file()` - Add / update files in a GitHub repository.
+#' Note that due to delays in caching, files that have been added
 #' very recently might not yet be displayed as existing and might accidentally
 #' be overwritten.
 #'
-#' * `repo_delete_file` - Delete a file from a GitHub repository
+#' * `repo_delete_file()` - Delete a file from a GitHub repository
 #'
-#' * `repo_modify_file` - Modify an existing file within a GitHub repository.
+#' * `repo_modify_file()` - Modify an existing file within a GitHub repository.
 #'
-#' * `repo_ls` - Low level function for listing the files in a GitHub Repository
+#' * `repo_ls()` - Low level function for listing the files in a GitHub Repository
 #'
-#' * `repo_put_file` - Low level function for adding a file to a GitHub repository
+#' * `repo_put_file()` - Low level function for adding a file to a GitHub repository
 #'
-#' * `repo_get_file` - Low level function for retrieving the content of a file from a GitHub Repository
+#' * `repo_get_file()` - Low level function for retrieving the content of a file from a GitHub Repository
 #'
-#' * `repo_get_readme` - Low level function for retrieving the content of the `README.md` of a GitHub Repository
+#' * `repo_get_readme()` - Low level function for retrieving the content of the `README.md` of a GitHub Repository
 #'
 #'
 #' @param repo Character. Address of repository in `owner/name` format.
@@ -146,6 +154,14 @@ NULL
 #' @param branch Character. Name of branch to use.
 #' @param quiet Logical. Should status messages be printed.
 #' @param include_details Logical. Should file details be attached as attributes.
+#'
+#' `repo_delete_file()`m `repo_modify_file()`, and `repo_put_file()` all invisibly
+#' return a list containing the results of the relevant GitHub API calls.
+#'
+#' `repo_ls()` returns a character vector of repo files in the given path.
+#'
+#' `repo_get_file()` and `repo_get_readme()` return a character vector with API results
+#' attached as attributes if `include_details = TRUE`
 #'
 #' @examples
 #' \dontrun{
@@ -183,17 +199,21 @@ NULL
 #'
 #' @description
 #'
-#' * `repo_ignore` - Ignore a GitHub repository.
+#' * `repo_ignore()` - Ignore a GitHub repository.
 #'
-#' * `repo_unwatch` - Unwatch / unsubscribe from a GitHub repository.
+#' * `repo_unwatch()` - Unwatch / unsubscribe from a GitHub repository.
 #'
-#' * `repo_watch` - Watch / subscribe to a GitHub repository.
+#' * `repo_watch()` - Watch / subscribe to a GitHub repository.
 #'
-#' * `repo_watching` - Returns a vector of your watched repositories. This should
+#' * `repo_watching()` - Returns a vector of your watched repositories. This should
 #' match the list at [github.com/watching](https://github.com/watching).
 #'
 #' @param repo repository address in `owner/repo` format
 #'
+#' @return `repo_ignore()`, `repo_unwatch()`, and `repo_watch()` all invisibly return a
+#' list containing the results of the relevant GitHub API call.
+#'
+#' `repo_watching()` returns a character vector of watched repos.
 #'
 #' @examples
 #' \dontrun{
@@ -214,14 +234,14 @@ NULL
 #'
 #' @description
 #'
-#' * `repo_add_user` - Add a user to a repository
-#' * `repo_remove_user` - Remove a user from a repository
-#' * `repo_add_team` - Add a team to a repository
-#' * `repo_remove_team` - Remove a team from a repository
-#' * `repo_user_permission` - Change a collaborator's permissions for a repository
-#' * `repo_team_permission` - Change a team's permissions for a repository
-#' * `repo_collaborators` - Returns a data frame of repos, their collaborators, and their permissions.
-#' * `repo_contributors` - Returns a data frame containing details on repository contributor(s).
+#' * `repo_add_user()` - Add a user to a repository
+#' * `repo_remove_user()` - Remove a user from a repository
+#' * `repo_add_team()` - Add a team to a repository
+#' * `repo_remove_team()` - Remove a team from a repository
+#' * `repo_user_permission()` - Change a collaborator's permissions for a repository
+#' * `repo_team_permission()` - Change a team's permissions for a repository
+#' * `repo_collaborators()` - Returns a data frame of repos, their collaborators, and their permissions.
+#' * `repo_contributors()` - Returns a data frame containing details on repository contributor(s).
 #'
 #' @param repo Character. Address of repository in `owner/repo` format.
 #' @param user Character. One or more GitHub usernames.
@@ -229,6 +249,10 @@ NULL
 #' @param team Character. Slug or name of team to add.
 #' @param team_type Character. Either "slug" if the team names are slugs or "name" if full team names are provided.
 #' @param include_admins Logical. If `FALSE`, user names of users with Admin rights are not included, defaults to `TRUE`.
+#'
+#' @return `repo_collaborators()` and `repo_contributoes` return a tibble.
+#'
+#' All other functions invisibly return a list containing the results of the relevant GitHub API calls.
 #'
 #' @details
 #'

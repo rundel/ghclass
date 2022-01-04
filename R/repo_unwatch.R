@@ -13,7 +13,7 @@ github_api_repo_unwatch = function(repo){
 repo_unwatch = function(repo) {
   arg_is_chr(repo)
 
-  purrr::walk(
+  res = purrr::map(
     repo,
     function(repo) {
       res = purrr::safely(github_api_repo_unwatch)(repo)
@@ -25,4 +25,6 @@ repo_unwatch = function(repo) {
       )
     }
   )
+
+  invisible(res)
 }

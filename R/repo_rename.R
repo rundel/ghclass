@@ -14,7 +14,7 @@ github_api_repo_rename = function(repo, new_name){
 repo_rename = function(repo, new_repo) {
   arg_is_chr(repo, new_repo)
 
-  purrr::walk2(
+  res = purrr::map2(
     repo, new_repo,
     function(repo, new_repo) {
       res = purrr::safely(github_api_repo_rename)(repo, new_repo)
@@ -27,4 +27,6 @@ repo_rename = function(repo, new_repo) {
       )
     }
   )
+
+  invisible(res)
 }

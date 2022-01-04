@@ -19,7 +19,7 @@ repo_modify_file = function(repo, path, pattern, content, method = c("replace", 
   if (is.null(branch))
     branch = list(NULL)
 
-  purrr::pwalk(
+  res = purrr::pmap(
     list(repo, path, pattern, content, message, branch),
     function(repo, path, pattern, content, message, branch) {
       cur_content = repo_get_file(repo = repo, path = path, branch = branch, quiet = TRUE)
@@ -62,4 +62,6 @@ repo_modify_file = function(repo, path, pattern, content, method = c("replace", 
       }
     }
   )
+
+  invisible(res)
 }

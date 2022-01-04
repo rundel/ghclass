@@ -21,7 +21,7 @@ repo_set_template = function(repo, status = TRUE) {
   arg_is_lgl(status)
 
   # Checking if repo exists
-  purrr::walk2(
+  res = purrr::map2(
     repo, status,
     function(repo, status) {
       res = purrr::safely(github_api_repo_edit)(repo, is_template = status)
@@ -32,4 +32,6 @@ repo_set_template = function(repo, status = TRUE) {
       )
     }
   )
+
+  invisible(res)
 }

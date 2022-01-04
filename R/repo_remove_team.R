@@ -39,7 +39,7 @@ repo_remove_team = function(
 
   check_team_slug(d[["team"]])
 
-  purrr::pwalk(
+  res = purrr::pmap(
     d,
     function(team, repo) {
       if (is.na(team))
@@ -58,4 +58,6 @@ repo_remove_team = function(
       )
     }
   )
+
+  invisible(res)
 }

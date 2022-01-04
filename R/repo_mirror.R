@@ -34,7 +34,7 @@ repo_mirror = function(source_repo, target_repo, overwrite=FALSE, verbose=FALSE,
 
   warned = FALSE
 
-  purrr::pwalk(
+  res = purrr::pmap(
     repos,
     function(repo, n) {
       repo_url = cli_glue("https://github.com/{repo}.git")
@@ -64,4 +64,6 @@ repo_mirror = function(source_repo, target_repo, overwrite=FALSE, verbose=FALSE,
 
   unlink(dir, recursive = TRUE)
   cli::cli_alert_success("Removed local copy of {.val {source_repo}}")
+
+  invisible(res)
 }

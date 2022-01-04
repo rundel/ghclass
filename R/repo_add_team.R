@@ -46,7 +46,7 @@ repo_add_team = function(
 
   check_team_slug(d[["team"]])
 
-  purrr::pwalk(
+  res = purrr::pmap(
     d,
     function(team, repo) {
       if (is.na(team))
@@ -66,6 +66,8 @@ repo_add_team = function(
       )
     }
   )
+
+  invisible(res)
 }
 
 #' @rdname repo_user

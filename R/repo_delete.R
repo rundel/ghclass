@@ -22,7 +22,7 @@ repo_delete = function(repo, prompt = TRUE) {
     }
   }
 
-  purrr::walk(
+  res = purrr::map(
     repo,
     function(repo) {
       res = purrr::safely(github_api_repo_delete)(repo)
@@ -34,4 +34,6 @@ repo_delete = function(repo, prompt = TRUE) {
       )
     }
   )
+
+  invisible(res)
 }

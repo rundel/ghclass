@@ -14,7 +14,7 @@ github_api_repo_remove_user = function(repo, username){
 repo_remove_user = function(repo, user) {
   arg_is_chr(repo, user)
 
-  purrr::walk2(
+  res = purrr::map2(
     repo, user,
     function(repo, user) {
       res = purrr::safely(github_api_repo_remove_user)(
@@ -29,4 +29,6 @@ repo_remove_user = function(repo, user) {
       )
     }
   )
+
+  invisible(res)
 }

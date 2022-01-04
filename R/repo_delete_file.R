@@ -33,7 +33,7 @@ repo_delete_file = function(repo, path, message = NULL, branch = NULL) {
   if (is.null(branch))
     branch = list(NULL)
 
-  invisible(purrr::pmap(
+  res = purrr::pmap(
     list(repo, path, branch),
     function(repo, path, branch) {
       if (is.null(message))
@@ -53,5 +53,7 @@ repo_delete_file = function(repo, path, message = NULL, branch = NULL) {
 
       res
     }
-  ))
+  )
+
+  invisible(res)
 }

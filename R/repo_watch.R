@@ -44,7 +44,7 @@ repo_watch = function(repo) {
 repo_ignore = function(repo) {
   arg_is_chr(repo)
 
-  purrr::walk(
+  res = purrr::map(
     repo,
     function(repo, notifications) {
       res = purrr::safely(github_api_repo_subscribe)(
@@ -60,5 +60,7 @@ repo_ignore = function(repo) {
       )
     }
   )
+
+  invisible(res)
 }
 
