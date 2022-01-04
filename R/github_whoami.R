@@ -8,6 +8,8 @@ github_api_whoami = function() {
 #'
 #' @param quiet Logical. Should status messages be shown.
 #'
+#' @return Character value containing user login.
+#'
 #' @examples
 #' \dontrun{
 #' github_whoami()
@@ -36,10 +38,13 @@ github_api_orgs = function() {
   )
 }
 
-#' Returns a tibble with details on the authenticated user's (based on the current PAT)
-#' GitHub organization memberships.
+#' Collect details on the authenticated user's GitHub organization memberships
+#' (based on the current PAT).
 #'
 #' @param quiet Logical. Should status messages be shown.
+#'
+#' @return Returns a tibble with organization details.
+#'
 #'
 #' @examples
 #' \dontrun{

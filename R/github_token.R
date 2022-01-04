@@ -26,6 +26,15 @@
 #' * `usethis::create_github_token()` - to create the token and then,
 #' * `gitcreds::gitcreds_set()` - to securely cache the token.
 #'
+#' @return `github_get_token()` returns the current PAT as a character string with the `gh_pat`
+#' class. See [gh::gh_token()] for additional details.
+#'
+#' `github_set_token()` and `github_reset_token()` return the result of `Sys.setenv()` and
+#' `Sys.unsetenv()` respectively.
+#'
+#' `github_test_token()` invisibly returns a logical value, `TRUE` if the test passes,
+#' `FALSE` if not.
+#'
 #' @examples
 #' \dontrun{
 #' github_test_token()
@@ -147,4 +156,6 @@ github_test_token = function(token = github_get_token()) {
     "Your GitHub PAT authenticated correctly.",
     "Your GitHub PAT failed to authenticate.",
   )
+
+  invisible(succeeded(res))
 }

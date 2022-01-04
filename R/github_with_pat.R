@@ -13,6 +13,8 @@
 #'
 #' @details if `new = NA` is used the `GITHUB_PAT` environment variable will be unset.
 #'
+#' @return The results of the evaluation of the code argument.
+#'
 #' @examples
 #' \dontrun{
 #' with_pat("1234", print(github_get_token()))
