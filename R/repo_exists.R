@@ -29,7 +29,7 @@ repo_exists = function(repo, strict = FALSE, quiet = FALSE) {
 
   renamed = cur_names != repo
 
-  if (quiet) {
+  if (!quiet) {
     purrr::walk2(
       repo[renamed], cur_names[renamed],
       ~ cli::cli_alert_info("Repo {.val {.x}} has been renamed to {.val {.y}}.")

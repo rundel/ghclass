@@ -35,10 +35,10 @@ repo_add_file = function(repo, file, message = NULL, repo_folder = NULL, branch 
   if (is.null(branch))
     branch = list(NULL)
 
-  purrr::pwalk(
+  res = purrr::pmap(
     list(repo, file, branch),
     function(repo, file, branch) {
-      purrr::walk(
+      purrr::map(
         file,
         function(file){
           gh_path = file
@@ -59,14 +59,17 @@ repo_add_file = function(repo, file, message = NULL, repo_folder = NULL, branch 
               verbose = TRUE
             )
           } else {
-
             cli::cli_alert_danger( c(
               "Failed to add file {.val {gh_path}} to repo {.val {repo}}, this file already exists. ",
               "If you want to force add this file, re-run the command with {.code overwrite = TRUE}."
             ) )
+
+            NULL
           }
         }
       )
     }
   )
+
+  invisible(res)
 }

@@ -33,6 +33,9 @@ until allowed by the author)}
 
 \item{prompt}{Character. Prompt the user before overwriting an existing branch.}
 }
+\value{
+The functions returns NULL invisibly.
+}
 \description{
 \itemize{
 \item \code{repo_style} implements "non-invasive pretty-printing of R source code" of .R or .Rmd files

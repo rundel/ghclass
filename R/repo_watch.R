@@ -20,7 +20,7 @@ github_api_repo_subscribe = function(repo, subscribed, ignored){
 repo_watch = function(repo) {
   arg_is_chr(repo)
 
-  purrr::walk(
+  res = purrr::map(
     repo,
     function(repo, notifications) {
       res = purrr::safely(github_api_repo_subscribe)(
@@ -36,6 +36,8 @@ repo_watch = function(repo) {
       )
     }
   )
+
+  invisible(res)
 }
 
 #' @rdname repo_notification

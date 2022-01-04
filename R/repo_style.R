@@ -13,6 +13,8 @@
 #' @param tag_collaborators Logical. If TRUE, a message with the repository collaborators is displayed.
 #' @param prompt Character. Prompt the user before overwriting an existing branch.
 #'
+#' @return The functions returns NULL invisibly.
+#'
 #' @export
 #'
 repo_style = function(repo, files = c("*.R", "*.Rmd"), branch = "styler", base,
@@ -105,4 +107,6 @@ repo_style = function(repo, files = c("*.R", "*.Rmd"), branch = "styler", base,
       }
     }
   )
+
+  invisible(NULL)
 }
