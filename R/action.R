@@ -4,11 +4,17 @@
 #' @title Retrieve information about GitHub Actions workflows and their runs.
 #'
 #' @description
-#' * `action_workflows` - retrieve details on repo workflows.
+#' * `action_workflows()` - retrieve details on repo workflows.
 #'
-#' * `action_runs` - retrieve details on repo workflow runs.
+#' * `action_runs()` - retrieve details on repo workflow runs.
 #'
-#' * `action_status` - retrieve details on most recent workflow runs.
+#' * `action_status()` - retrieve details on most recent workflow runs.
+#'
+#' @return
+#'
+#' `action_workflows()`, `action_runs()`, and `action_status()` all return
+#' tibbles containing information on requested repos' available workflows,
+#' recent action runs, and recent action run statuses respectively.
 #'
 #' @examples
 #' \dontrun{
@@ -26,11 +32,10 @@ NULL
 #'
 #' @title Add or remove GitHub Actions badges from a repository
 #'
-#'
 #' @description
-#' * `action_add_badge` - Add a GitHub Actions badge to a file.
+#' * `action_add_badge()` - Add a GitHub Actions badge to a file.
 #'
-#' * `action_remove_badge` - Remove one or more GitHub Action badges from a file.
+#' * `action_remove_badge()` - Remove one or more GitHub Action badges from a file.
 #'
 #' @param repo Character. Address of repository in `owner/name` format.
 #' @param workflow Character. Name of the workflow.
@@ -40,6 +45,9 @@ NULL
 #' to the beginning of the target file.
 #' @param line_padding Character. What text should be added after the badge.
 #' @param file Character. Target file to be modified, defaults to `README.md`.#'
+#'
+#' @return Both `action_add_badge()` and `action_remove_badge()` invisibly return a list
+#' containing the results of the relevant GitHub API call.
 #'
 NULL
 
