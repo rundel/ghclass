@@ -17,6 +17,8 @@
 #' @param assignees Character. Vector of logins for users assigned to the issue.
 #' @param number Integer. GitHub issue number.
 #'
+#' @return All functions invisibly return a list containing the results of the relevant GitHub API call.
+#'
 #' @seealso [repo_issues]
 #'
 #' @examples
