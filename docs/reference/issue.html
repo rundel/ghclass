@@ -106,6 +106,10 @@ issue_edit edits the properties of an existing issue.
 Only users with push access can set the milestone for issues. The milestone is silently dropped otherwise.</p></dd>
 </dl></div>
     <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>All functions invisibly return a list containing the results of the relevant GitHub API call.</p>
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><a href="repo_details.html">repo_issues</a></p></div>
     </div>
@@ -153,8 +157,8 @@ Only users with push access can set the milestone for issues. The milestone is s
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 10</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   repo     number title   state comments created             updated            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> ghclass…      3 Issue 3 open         0 2021-12-16 <span style="color: #949494;">19:19:50</span> 2021-12-16 <span style="color: #949494;">19:19:50</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> ghclass…      2 New is… open         0 2021-12-16 <span style="color: #949494;">19:19:49</span> 2021-12-16 <span style="color: #949494;">19:19:51</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> ghclass…      3 Issue 3 open         0 2022-01-04 <span style="color: #949494;">21:16:12</span> 2022-01-04 <span style="color: #949494;">21:16:12</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> ghclass…      2 New is… open         0 2022-01-04 <span style="color: #949494;">21:16:11</span> 2022-01-04 <span style="color: #949494;">21:16:13</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 3 more variables: closed &lt;dttm&gt;, created_by &lt;chr&gt;, assignees &lt;list&gt;</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu"><a href="repo_core.html">repo_delete</a></span><span class="op">(</span><span class="st">"ghclass-test/test_issue"</span>, prompt<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>

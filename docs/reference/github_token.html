@@ -90,6 +90,14 @@ This value will persist until the session ends or <code>gihub_reset_token()</cod
 <dd><p>Character. Either the literal token, or the path to a file containing the token.</p></dd>
 </dl></div>
     <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p><code>github_get_token()</code> returns the current PAT as a character string with the <code>gh_pat</code>class. See <code><a href="https://gh.r-lib.org/reference/gh_token.html" class="external-link">gh::gh_token()</a></code> for additional details.
+<code>github_set_token()</code> and <code>github_reset_token()</code> return the result of <code><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv()</a></code> and
+<code><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.unsetenv()</a></code> respectively.
+<code>github_test_token()</code> invisibly returns a logical value, <code>TRUE</code> if the test passes,
+<code>FALSE</code> if not.</p>
+    </div>
+    <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This package looks for the personal access token (PAT) in the following places (in order):</p><ul><li><p>Value of <code>GITHUB_PAT</code> environmental variable.</p></li>
 <li><p>Any GitHub PAT token(s) stored with <code>gitcreds</code> via <code>gitcreds_set()</code>.</p></li>
