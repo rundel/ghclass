@@ -8,6 +8,9 @@
 #' @param pattern Character. One or more regexp patterns to match to directory names.
 #' @param replacement Character.  One or more text strings containing the replacement value for matched patterns.
 #'
+#' @return Returns a character vector of the new repo directory paths, or `NA` if the rename
+#' failed.
+#'
 #' @export
 #'
 local_repo_rename = function(repo_dir, pattern, replacement) {
@@ -27,7 +30,7 @@ local_repo_rename = function(repo_dir, pattern, replacement) {
   }
 
   sub = repos != cur_repos
-  purrr::walk2(
+  res = purrr::map2_chr(
     cur_repos[sub], repos[sub],
     function(cur, new) {
       res = purrr::safely(fs::file_move)(cur, new)
@@ -42,6 +45,10 @@ local_repo_rename = function(repo_dir, pattern, replacement) {
         "Renaming {.val {cur}} to {.val {new}}.",
         "Failed to rename {.val {cur}} to {.val {new}}."
       )
+
+      ifelse(succeeded(res), new, NA)
     }
   )
+
+  invisible(res)
 }

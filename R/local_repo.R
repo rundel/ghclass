@@ -5,19 +5,19 @@
 #'
 #' @description
 #'
-#' * `local_repo_clone` - Clones a GitHub repository to a local directory.
+#' * `local_repo_clone()` - Clones a GitHub repository to a local directory.
 #'
-#' * `local_repo_add` - Equivalent to `git add` - stages a file in a local repository.
+#' * `local_repo_add()` - Equivalent to `git add` - stages a file in a local repository.
 #'
-#' * `local_repo_commit` - Equivalent to `git commit` - commits staged files in a local repository.
+#' * `local_repo_commit()` - Equivalent to `git commit` - commits staged files in a local repository.
 #'
-#' * `local_repo_push` - Equivalent to `git push` - push a local repository.
+#' * `local_repo_push()` - Equivalent to `git push` - push a local repository.
 #'
-#' * `local_repo_pull` - Equivalent to `git pull` - pull a local repository.
+#' * `local_repo_pull()` - Equivalent to `git pull` - pull a local repository.
 #'
-#' * `local_repo_branch` - Equivalent to `git branch` - create a branch in a local repository.
+#' * `local_repo_branch()` - Equivalent to `git branch` - create a branch in a local repository.
 #'
-#' * `local_repo_log` - Equivalent to `git log` - returns a data frame for git log entries.
+#' * `local_repo_log()` - Equivalent to `git log` - returns a data frame for git log entries.
 #'
 #' @param repo_dir Vector of repo directories or a single directory containing one or more repos.
 #' @param files Files to be staged
@@ -29,7 +29,15 @@
 #' @param prompt Prompt before force push?
 #' @param verbose Display verbose output.
 #'
-#' @details All of these functions depend on the gert library being installed.
+#' @return `local_repo_clone()` invisibly returns a character vector of paths for
+#' the local repo directories.
+#'
+#' `local_repo_log()` returns a tibble containing repository details.`
+#'
+#' All other functions invisibly return a list containing the results of the relevant call
+#' to `gert`.
+#'
+#' @details All `local_repo_*` functions depend on the `gert` library being installed.
 #'
 #' @examples
 #' \dontrun{
