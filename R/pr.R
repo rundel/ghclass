@@ -5,7 +5,7 @@
 #'
 #' @description
 #'
-#' * `pr_create` - create a pull request GitHub from the `base` branch to the `head` branch.
+#' * `pr_create()` - create a pull request GitHub from the `base` branch to the `head` branch.
 #'
 #' @param repo Character. Address of one or more repositories in "owner/name" format.
 #' @param title Character. Title of the pull request.
@@ -18,6 +18,8 @@
 #' @param body Character. The text contents of the pull request.
 #' @param draft Logical. Should the pull request be created as a draft pull request
 #' (these cannot be merged until allowed by the author).
+#'
+#' @return `pr_create()` invisibly return a list containing the results of the relevant GitHub API calls.
 #'
 #' @seealso [repo_issues]
 #'

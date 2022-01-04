@@ -21,7 +21,7 @@ pr_create = function(repo, title, head, base, body = "", draft = FALSE) {
   arg_is_chr(repo, title, base, head, body)
   arg_is_lgl(draft)
 
-  purrr::pwalk(
+  res = purrr::pmap(
     list(repo, base, head, title, body, draft),
     function(repo, base, head, title, body, draft) {
       res = purrr::safely(github_api_pr_create)(
@@ -37,4 +37,6 @@ pr_create = function(repo, title, head, base, body = "", draft = FALSE) {
       )
     }
   )
+
+  invisible(res)
 }
