@@ -5,11 +5,11 @@
 #'
 #' @description
 #'
-#' * `team_create` - create teams in a GitHub organization
+#' * `team_create()` - create teams in a GitHub organization
 #'
-#' * `team_delete` - delete a team from a GitHub organization.
+#' * `team_delete()` - delete a team from a GitHub organization.
 #'
-#' * `team_rename` - rename an existing team
+#' * `team_rename()` - rename an existing team
 #'
 #' @param org Character. Name of the GitHub organization.
 #' @param team Character. Name of teams.
@@ -21,6 +21,9 @@
 #' and members of a team), default is "closed"
 #' @param prompt Logical. Should the user be prompted before deleting team. Default `true`.
 #' @param new_team Character. New team name.
+#'
+#' @return All functions invisibly return a list containing
+#' the results of the relevant GitHub API calls.
 #'
 #' @examples
 #' \dontrun{
@@ -52,20 +55,25 @@ NULL
 #'
 #' @description
 #'
-#' * `team_invite` - add members to team(s).
+#' * `team_invite()` - add members to team(s).
 #'
-#' * `team_remove` - remove members from team(s).
+#' * `team_remove()` - remove members from team(s).
 #'
-#' * `team_members` - returns a data frame of team members.
+#' * `team_members()` - returns a tibble of team members.
 #'
-#' * `team_pending` - returns a data frame of pending team members.
+#' * `team_pending()` - returns a tibble of pending team members.
 #'
-#' * `team_repos` - returns a data frame of teams and their repos.
+#' * `team_repos()` - returns a tibble of teams and their repos.
 #'
 #' @param org Character. Name of the GitHub organization.
 #' @param user Character. One or more GitHub users to invite.
 #' @param team Character. Name of teams.
 #' @param team_type Character. Either "slug" if the team names are slugs or "name" if full team names are provided.
+#'
+#' @return `team_members()`, `team_pending()`, and `team_repos()` all return a tibble.
+#'
+#' `team_invite()` and `team_remove()` invisibly return a list containing the results
+#' of the relevant GitHub API calls.
 #'
 #' @examples
 #' \dontrun{

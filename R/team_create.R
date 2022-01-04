@@ -28,7 +28,7 @@ team_create = function(
   if (length(existing_teams) > 0)
     cli::cli_alert_info("Skipping existing teams: {.val {existing_teams}}.")
 
-  r = purrr::map(
+  res = purrr::map(
     new_teams,
     function(team) {
       res = purrr::safely(github_api_team_create)(
@@ -43,5 +43,5 @@ team_create = function(
     }
   )
 
-  invisible(r)
+  invisible(res)
 }

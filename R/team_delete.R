@@ -28,7 +28,7 @@ team_delete = function(org, team, team_type = c("name", "slug"), prompt = TRUE) 
 
   check_team_slug(team)
 
-  r = purrr::map(
+  res = purrr::map(
     team,
     function(team) {
 
@@ -47,5 +47,5 @@ team_delete = function(org, team, team_type = c("name", "slug"), prompt = TRUE) 
     }
   )
 
-  invisible(r)
+  invisible(res)
 }

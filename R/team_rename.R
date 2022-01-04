@@ -32,7 +32,7 @@ team_rename = function(org, team, new_team, team_type = c("name", "slug")) {
 
   check_team_slug(slug)
 
-  purrr::pwalk(
+  res = purrr::pmap(
     tibble::tibble(team, slug, new_team),
     function(team, slug, new_team) {
       if (is.na(slug)) {
@@ -49,4 +49,6 @@ team_rename = function(org, team, new_team, team_type = c("name", "slug")) {
       )
     }
   )
+
+  invisible(res)
 }

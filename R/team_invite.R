@@ -25,7 +25,7 @@ team_invite = function(org, user, team, team_type = c("name", "slug")) {
 
   check_team_slug(slug)
 
-  r = purrr::pmap(
+  res = purrr::pmap(
     tibble::tibble(user, team, slug),
     function(user, team, slug) {
       if (is.na(slug)) {
@@ -45,5 +45,5 @@ team_invite = function(org, user, team, team_type = c("name", "slug")) {
     }
   )
 
-  invisible(r)
+  invisible(res)
 }
