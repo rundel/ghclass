@@ -41,7 +41,7 @@ github_api_branch_create = function(repo, branch, new_branch) {
 branch_create = function(repo, branch, new_branch) {
   arg_is_chr(repo, branch, new_branch)
 
-  purrr::pwalk(
+  invisible( purrr::pmap(
     list(repo, branch, new_branch),
     function(repo, branch, new_branch) {
 
@@ -67,6 +67,8 @@ branch_create = function(repo, branch, new_branch) {
         "Created branch {.val {new_branch}} in repo {.val {repo}}.",
         "Failed to create branch {.val {new_branch}} in repo {.val {repo}}."
       )
+
+      res
     }
-  )
+  ) )
 }

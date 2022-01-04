@@ -14,7 +14,7 @@ github_api_branch_delete = function(repo, branch) {
 branch_delete = function(repo, branch) {
   arg_is_chr(repo, branch)
 
-  purrr::pwalk(
+  invisible( purrr::pmap(
     list(repo, branch),
     function(repo, branch) {
       res = purrr::safely(github_api_branch_delete)(repo, branch)
@@ -24,8 +24,10 @@ branch_delete = function(repo, branch) {
         "Removed branch {.val {format_repo(repo, branch)}}.",
         "Failed to remove branch {.val {format_repo(repo, branch)}}."
       )
+
+      res
     }
-  )
+  ) )
 }
 
 #' @rdname branch
