@@ -15,6 +15,12 @@ managing organizations, teams, repositories, and users on GitHub and
 helps automate most of the tedious and repetitive tasks around creating
 and distributing assignments.
 
+Install ghclass from CRAN:
+
+``` r
+install.packages("ghclass")
+```
+
 Install the development version package from GitHub:
 
 ``` r

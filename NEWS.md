@@ -1,5 +1,7 @@
 # ghclass 0.2.1
 
+* ghclass is now on [CRAN](https://cran.r-project.org/web/packages/ghclass/)!
+
 * improved action support with `action_runs()` and `action_status()`
 
 * revised how GitHub PATs are handled - now uses `gitcreds` by way of ` gh::gh_token()`
