@@ -1,3 +1,5 @@
+# ghclass (development version)
+
 # ghclass 0.2.1
 
 * ghclass is now on [CRAN](https://cran.r-project.org/web/packages/ghclass/)!
