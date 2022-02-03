@@ -10,11 +10,14 @@
 #'
 #' * `action_status()` - retrieve details on most recent workflow runs.
 #'
+#' * `action_artifacts()` - retrieve details on available workflow artifacts.
+#'
 #' @return
 #'
-#' `action_workflows()`, `action_runs()`, and `action_status()` all return
-#' tibbles containing information on requested repos' available workflows,
-#' recent action runs, and recent action run statuses respectively.
+#' `action_workflows()`, `action_runs()`, `action_status()`, and `action_artifacts`
+#' all return tibbles containing information on requested repos' available workflows,
+#' recent action runs, recent action run statuses respectively, and generated artifacts
+#' respectively.
 #'
 #' @examples
 #' \dontrun{
@@ -23,6 +26,8 @@
 #' action_runs("rundel/ghclass")
 #'
 #' action_status(c("rundel/ghclass", "rundel/parsermd"))
+#'
+#' action_artifacts(c("rundel/ghclass", "rundel/parsermd"))
 #' }
 #'
 NULL

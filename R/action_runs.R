@@ -1,5 +1,5 @@
 github_api_action_runs = function(
-  repo, actor = NULL, string = NULL, event = NULL, status = NULL, limit = 30
+  repo, actor = NULL, string = NULL, event = NULL, status = NULL, limit
 ) {
   arg_is_chr_scalar(repo)
   arg_is_chr_scalar(actor, string, event, status, allow_null = TRUE)
@@ -20,7 +20,7 @@ github_api_action_runs = function(
 #' @rdname action
 #'
 #' @param repo Character. Address of repository in `owner/name` format.
-#' @param limit Numeric. Maximum number of workflow runs to return. Defualt `50`.
+#' @param limit Numeric. Maximum number of workflow runs to return. Default `50`.
 #'
 #' @export
 #'
