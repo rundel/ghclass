@@ -9,7 +9,7 @@
 \alias{action_workflows}
 \title{Retrieve information about GitHub Actions workflows and their runs.}
 \usage{
-action_artifacts(repo, keep_expired = FALSE)
+action_artifacts(repo, keep_expired = FALSE, which = c("latest", "all"))
 
 action_runs(repo, limit = 50)
 
@@ -21,6 +21,9 @@ action_workflows(repo, full = FALSE)
 \item{repo}{Character. Address of repository in \code{owner/name} format.}
 
 \item{keep_expired}{Logical. Should expired artifacts be returned.}
+
+\item{which}{Character. Either \code{"latest"} to return only the most recent of each
+artifact or \code{"all"} to return all artifacts.}
 
 \item{limit}{Numeric. Maximum number of workflow runs to return.}
 

@@ -1,6 +1,4 @@
-github_api_action_artifacts = function(
-  repo
-) {
+github_api_action_artifacts = function(repo) {
   arg_is_chr_scalar(repo)
 
   ghclass_api_v3_req(
@@ -15,11 +13,15 @@ github_api_action_artifacts = function(
 #'
 #' @param repo Character. Address of repositories in `owner/name` format.
 #' @param keep_expired Logical. Should expired artifacts be returned.
-#'
+#' @param which Character. Either `"latest"` to return only the most recent of each
+#'   artifact or `"all"` to return all artifacts.
 #' @export
 #'
-action_artifacts = function(repo, keep_expired=FALSE) {
+action_artifacts = function(repo, keep_expired=FALSE, which=c("latest", "all")) {
+  which = match.arg(which)
+
   arg_is_chr(repo)
+  arg_is_chr_scalar(which)
   arg_is_lgl_scalar(keep_expired)
 
   res = purrr::map_dfr(
@@ -63,10 +65,18 @@ action_artifacts = function(repo, keep_expired=FALSE) {
     }
   )
 
-  if (keep_expired) {
+  if (!keep_expired) {
+    res = dplyr::filter(res, .data[["expired"]] == FALSE)
+  }
+
+  if (which == "latest") {
+    res %>%
+      dplyr::group_by(.data[["repo"]], .data[["name"]]) %>%
+      dplyr::arrange(dplyr::desc(.data[["created"]])) %>%
+      dplyr::slice(1) %>%
+      dplyr::ungroup()
+  } else if (which == "all") {
     res
-  } else {
-    dplyr::filter(res, .data[["expired"]] == FALSE)
   }
 
 }
