@@ -1,5 +1,11 @@
 # ghclass (development version)
 
+# ghclass 0.2.1.9000
+
+* Added support for retrieving details for GitHub Action artifacts via `action_artifacts()`
+
+* Added additional parameters to `org_repos()` to control which repos are returns and in what order, see function docs.
+
 # ghclass 0.2.1
 
 * ghclass is now on [CRAN](https://cran.r-project.org/web/packages/ghclass/)!
