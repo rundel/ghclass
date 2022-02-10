@@ -61,6 +61,9 @@ Character values are converted using \code{lubridate::ymd_hms()}.}
 all return tibbles containing information on requested repos' available workflows,
 recent action runs, recent action run statuses respectively, and generated artifacts
 respectively.
+
+\code{action_artifact_download()} returns a character vector containing the paths of all
+downloaded fules
 }
 \description{
 \itemize{
@@ -68,6 +71,7 @@ respectively.
 \item \code{action_runs()} - retrieve details on repo workflow runs.
 \item \code{action_status()} - retrieve details on most recent workflow runs.
 \item \code{action_artifacts()} - retrieve details on available workflow artifacts.
+\item \code{action_artifact_download()} - downloads artifact(s) into a local directory.
 }
 }
 \examples{

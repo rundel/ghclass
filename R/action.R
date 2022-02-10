@@ -12,12 +12,17 @@
 #'
 #' * `action_artifacts()` - retrieve details on available workflow artifacts.
 #'
+#' * `action_artifact_download()` - downloads artifact(s) into a local directory.
+#'
 #' @return
 #'
 #' `action_workflows()`, `action_runs()`, `action_status()`, and `action_artifacts`
 #' all return tibbles containing information on requested repos' available workflows,
 #' recent action runs, recent action run statuses respectively, and generated artifacts
 #' respectively.
+#'
+#' `action_artifact_download()` returns a character vector containing the paths of all
+#' downloaded fules
 #'
 #' @examples
 #' \dontrun{
