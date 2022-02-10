@@ -30,8 +30,8 @@ org_repos(
   filter = NULL,
   exclude = FALSE,
   full_repo = TRUE,
-  sort = c("created", "updated", "pushed", "full_name"),
-  direction = c("desc", "asc"),
+  sort = c("full_name", "created", "updated", "pushed"),
+  direction = c("asc", "desc"),
   type = c("all", "public", "private", "forks", "sources", "member", "internal")
 )
 
