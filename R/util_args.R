@@ -103,3 +103,20 @@ arg_is_pos_int = function(..., allow_null = FALSE) {
     }
   )
 }
+
+arg_is_df = function(..., allow_null = FALSE, allow_empty = FALSE) {
+  handle_arg_list(
+    ...,
+    tests = function(name, value) {
+      if (!inherits(value, "data.frame") | (is.null(value) & allow_null))
+        cli_stop("Argument {.val {name}} must be a data frame.")
+      if (!is.null(value)) {
+        if (nrow(value) == 0)
+          cli_stop("Argument {.val {name}} must be a data frame with nrows >= 1.")
+        if (ncol(value) == 0)
+          cli_stop("Argument {.val {name}} must be a data frame with ncols >= 1.")
+      }
+    }
+  )
+}
+
