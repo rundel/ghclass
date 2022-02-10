@@ -22,8 +22,8 @@ github_api_org_repos = function(org, type = NULL, sort = NULL, direction = NULL)
 #'
 org_repos = function(
   org, filter = NULL, exclude = FALSE, full_repo = TRUE,
-  sort = c("created", "updated", "pushed", "full_name"),
-  direction = c("desc", "asc"),
+  sort = c("full_name", "created", "updated", "pushed"),
+  direction = c("asc", "desc"),
   type = c("all", "public", "private", "forks", "sources", "member", "internal")
 ) {
   sort = match.arg(sort)
