@@ -4,6 +4,8 @@
 
 * Added support for retrieving details for GitHub Action artifacts via `action_artifacts()`
 
+* Added support for downloading GitHub Action artifacts via `action_artifact_download()`
+
 * Added additional parameters to `org_repos()` to control which repos are returns and in what order, see function docs.
 
 # ghclass 0.2.1

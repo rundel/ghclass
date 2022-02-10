@@ -1,3 +1,25 @@
+github_api_download_file = function(url, dest) {
+  arg_is_chr_scalar(url, dest)
+
+  req = httr::GET(
+    url,
+    httr::add_headers(
+      Authorization = paste("bearer", github_get_token())
+    )
+  )
+
+  res = httr::content(req, as = "raw")
+  code = httr::status_code(req)
+
+  if (code >= 300) {
+    cli_stop("GitHub API Error ({code}) - {res[['message']]}")
+  }
+
+  writeBin(res, dest)
+
+  return(dest)
+}
+
 github_api_repo_tree = function(repo, sha = NULL) {
   arg_is_chr_scalar(repo)
   arg_is_chr_scalar(sha, allow_null = TRUE)
