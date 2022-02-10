@@ -53,9 +53,7 @@ action_artifact_download = function(
   ) %>%
     dplyr::select("repo", "id")
 
-  print(df)
-
-  purrr::pwalk(
+  res = purrr::pmap_chr(
     df,
     function(repo, id) {
       res = purrr::safely(github_api_download_artifact)(repo, id)
@@ -66,7 +64,7 @@ action_artifact_download = function(
           "Failed to download artifact with id {.val {id}} from repo {.val {repo}}.",
           wrap = FALSE
         )
-        return(NULL)
+        return(NA_character_)
       }
 
       if (keep_zip) {
@@ -77,12 +75,12 @@ action_artifact_download = function(
             "File {.file {dest_path}} already exists, set {.code overwrite = TRUE} to overwrite this file.",
             wrap = FALSE
           )
-          return(NULL)
+          return(NA_character_)
         }
 
         file.rename(file, dest_path)
       } else {
-        art_file = unzip(file, list=TRUE)[["Name"]]
+        art_file = utils::unzip(file, list=TRUE)[["Name"]]
         art_file = art_file[grepl(file_pat, art_file)]
 
         if (length(art_file) != 1) {
@@ -92,7 +90,7 @@ action_artifact_download = function(
                   ifelse(length(art_file), "\nMatching files: {.val {art_file}}.", "")),
             wrap = FALSE
           )
-          return(NULL)
+          return(NA_character_)
         }
         ext = fs::path_ext(art_file)
         if (ext != "") ext = paste0(".", ext)
@@ -106,7 +104,7 @@ action_artifact_download = function(
             "File {.file {dest_path}} already exists, set {.code overwrite = TRUE} to overwrite this file.",
             wrap = FALSE
           )
-          return(NULL)
+          return(NA_character_)
         }
 
         readr::write_file(data, dest_path)
@@ -118,8 +116,9 @@ action_artifact_download = function(
         NULL
       )
 
+      dest_path
     }
   )
 
-  invisible(NULL)
+  invisible(res)
 }
