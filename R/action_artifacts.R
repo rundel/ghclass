@@ -78,7 +78,7 @@ action_artifacts = function(repo, keep_expired=FALSE, which=c("latest", "all")) 
   } else if (which == "all") {
     res
   } else {
-    stop_cli("Invalid which choice.")
+    cli_stop("Invalid which choice.")
   }
 
 }
