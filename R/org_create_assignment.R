@@ -59,11 +59,11 @@ org_create_assignment = function(org, repo, user, team = NULL, source_repo = NUL
   if (!is.null(team)) {
     # Assume team assignment
     res[["team_create"]] = team_create(org, unique(team))
-    res[["team_invite"]] =team_invite(org, user, team)
+    res[["team_invite"]] = team_invite(org, user, team)
     res[["team_add"]] = repo_add_team(repo_full, team)
   } else {
     # Assume individual assignment
-    res[["user_invite"]] =repo_add_user(repo_full, user)
+    res[["user_invite"]] = repo_add_user(repo_full, user)
   }
 
   invisible(res)
