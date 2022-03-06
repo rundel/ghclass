@@ -15,6 +15,8 @@
 #' @param source_repo Character. Address of the repository to use as a template for all created repos.
 #' @param private Logical. Should the created repositories be private.
 #'
+#' @return An invisible list containing the results of each step.
+#'
 #' @export
 #'
 
@@ -37,8 +39,10 @@ org_create_assignment = function(org, repo, user, team = NULL, source_repo = NUL
     )
   }
 
+  res = list()
+
   if (!is.null(source_repo) && repo_is_template(source_repo)) {
-    repo_mirror_template(source_repo, repo_full, private = private)
+    res[["mirror"]] = repo_mirror_template(source_repo, repo_full, private = private)
   } else {
     repo_create(org, repo, private = private)
     if (!is.null(source_repo)) {
@@ -48,17 +52,19 @@ org_create_assignment = function(org, repo, user, team = NULL, source_repo = NUL
         "The repo {.val {source_repo}} can be made into a template repo using the {.fun repo_set_template} function."
       )
 
-      repo_mirror(source_repo, repo_full, overwrite = TRUE, warn = FALSE)
+      res[["mirror"]] = repo_mirror(source_repo, repo_full, overwrite = TRUE, warn = FALSE)
     }
   }
 
   if (!is.null(team)) {
     # Assume team assignment
-    team_create(org, unique(team))
-    team_invite(org, user, team)
-    repo_add_team(repo_full, team)
+    res[["team_create"]] = team_create(org, unique(team))
+    res[["team_invite"]] =team_invite(org, user, team)
+    res[["team_add"]] = repo_add_team(repo_full, team)
   } else {
     # Assume individual assignment
-    repo_add_user(repo_full, user)
+    res[["user_invite"]] =repo_add_user(repo_full, user)
   }
+
+  invisible(res)
 }

@@ -26,6 +26,9 @@ org_create_assignment(
 
 \item{private}{Logical. Should the created repositories be private.}
 }
+\value{
+An invisible list containing the results of each step.
+}
 \description{
 This is a higher level function that combines the following steps:
 \itemize{
