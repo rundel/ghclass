@@ -8,7 +8,9 @@
 #'
 #' * `action_runs()` - retrieve details on repo workflow runs.
 #'
-#' * `action_status()` - retrieve details on most recent workflow runs.
+#' * `action_status()` - DEPRECATED - retrieve details on most recent workflow runs.
+#'
+#' * `action_runtime()` - retrieves runtime durations for workflow runs.
 #'
 #' * `action_artifacts()` - retrieve details on available workflow artifacts.
 #'
@@ -16,9 +18,9 @@
 #'
 #' @return
 #'
-#' `action_workflows()`, `action_runs()`, `action_status()`, and `action_artifacts`
+#' `action_workflows()`, `action_runs()`, `action_runtime()`, and `action_artifacts`
 #' all return tibbles containing information on requested repos' available workflows,
-#' recent action runs, recent action run statuses respectively, and generated artifacts
+#' recent workflow runs, workflow runs runtimes, and generated artifacts
 #' respectively.
 #'
 #' `action_artifact_download()` returns a character vector containing the paths of all
@@ -30,7 +32,7 @@
 #'
 #' action_runs("rundel/ghclass")
 #'
-#' action_status(c("rundel/ghclass", "rundel/parsermd"))
+#' action_runtime(c("rundel/ghclass", "rundel/parsermd"))
 #'
 #' action_artifacts(c("rundel/ghclass", "rundel/parsermd"))
 #' }

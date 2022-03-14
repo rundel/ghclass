@@ -8,6 +8,10 @@
 
 * Added additional parameters to `org_repos()` to control which repos are returns and in what order, see function docs.
 
+* Reworked `action_runs()` to work with multiple repositories and included new filtering options. This makes `action_status()` redundant and as such it has been deprecated.
+
+* Added `action_runtime()` which supplements the results of `action_runs()` with the duration for each action run.
+
 # ghclass 0.2.1
 
 * ghclass is now on [CRAN](https://cran.r-project.org/web/packages/ghclass/)!
