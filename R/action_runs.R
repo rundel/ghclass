@@ -1,5 +1,7 @@
 github_api_action_runs = function(
-  repo, actor = NULL, branch = NULL, event = NULL, status = NULL, created = NULL, limit
+  repo, actor = NULL, branch = NULL, event = NULL, status = NULL,
+  created = NULL,
+  limit = 1
 ) {
   arg_is_chr_scalar(repo)
   arg_is_chr_scalar(actor, branch, event, status, allow_null = TRUE)
@@ -13,9 +15,35 @@ github_api_action_runs = function(
     event = event,
     status = status,
     created = created,
+    limit = limit,
+    check_suite_id = check_suite_id
+  )
+}
+
+github_api_action_workflow_runs = function(
+    repo, workflow_id,
+    actor = NULL, branch = NULL, event = NULL,
+    status = NULL, created = NULL,
+    limit = 1
+) {
+  arg_is_chr_scalar(repo)
+  arg_is_pos_int_scalar(workflow_id)
+  arg_is_chr_scalar(actor, branch, event, status, allow_null = TRUE)
+
+  ghclass_api_v3_req(
+    endpoint = "GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs",
+    owner = get_repo_owner(repo),
+    repo = get_repo_name(repo),
+    workflow_id = workflow_id,
+    actor	= actor,
+    branch = branch,
+    event = event,
+    status = status,
+    created = created,
     limit = limit
   )
 }
+
 
 #' @name action
 #' @rdname action
@@ -49,52 +77,49 @@ action_runs = function(
   purrr::map_dfr(
     repo,
     function(repo) {
-      res = purrr::safely(github_api_action_runs)(
-        repo, branch = branch,
-        event = event, status = status,
-        created = created, limit = limit
+      purrr::pmap_dfr(
+        action_workflows(repo)[,c("name", "id")],
+        function(name, id) {
+          res = purrr::safely(github_api_action_workflow_runs)(
+            repo, workflow_id = id,
+            branch = branch,
+            event = event, status = status,
+            created = created, limit = limit
+          )
+
+          status_msg(
+            res,
+            fail = "Failed to retrieve workflow runs for repo {.val {repo}}."
+          )
+
+          if (failed(res) || empty_result(res) || result(res)[["total_count"]] == 0) {
+            tibble::tibble(
+              repo = character(),
+              workflow = character(),
+              run_id = character(),
+              branch = character(),
+              commit = character(),
+              event = character(),
+              status = character(),
+              conclusion = character(),
+              created = lubridate::ymd_hms()
+            )
+          } else {
+            runs = result(res)[["workflow_runs"]]
+            run_df = tibble::tibble(
+              repo   = repo,
+              workflow = name,
+              run_id = purrr::map_chr(runs, "id", .default = NA),
+              branch = purrr::map_chr(runs, "head_branch", .default = NA),
+              commit = purrr::map_chr(runs, "head_sha", .default = NA),
+              event  = purrr::map_chr(runs, "event", .default = NA),
+              status = purrr::map_chr(runs, "status", .default = NA),
+              conclusion = purrr::map_chr(runs, "conclusion", .default = NA),
+              created = purrr::map_chr(runs, "created_at", .default = NA) %>% lubridate::ymd_hms()
+            )
+          }
+        }
       )
-
-      status_msg(
-        res,
-        fail = "Failed to retrieve workflow runs for repo {.val {repo}}."
-      )
-
-      if (failed(res) || empty_result(res) || result(res)[["total_count"]] == 0) {
-        tibble::tibble(
-          repo = character(),
-          run_name = character(),
-          run_id = character(),
-          branch = character(),
-          commit = character(),
-          event = character(),
-          status = character(),
-          conclusion = character(),
-          created = lubridate::ymd_hms()
-        )
-      } else {
-        runs = result(res)[["workflow_runs"]]
-        workflows = action_workflows(repo)[,c("name", "id")]
-        run_df = tibble::tibble(
-          repo   = repo,
-          run_id = purrr::map_chr(runs, "id", .default = NA),
-          workflow_id = purrr::map_int(runs, "workflow_id", .default = NA),
-          branch = purrr::map_chr(runs, "head_branch", .default = NA),
-          commit = purrr::map_chr(runs, "head_sha", .default = NA),
-          event  = purrr::map_chr(runs, "event", .default = NA),
-          status = purrr::map_chr(runs, "status", .default = NA),
-          conclusion = purrr::map_chr(runs, "conclusion", .default = NA),
-          created = purrr::map_chr(runs, "created_at", .default = NA) %>% lubridate::ymd_hms()
-        )
-
-        dplyr::full_join(
-          workflows,
-          run_df,
-          by = c("id" = "workflow_id")
-        ) %>%
-          dplyr::select(-"id", "run_name" = "name") %>%
-          dplyr::relocate("repo")
-      }
     }
   )
 }
