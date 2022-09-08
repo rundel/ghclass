@@ -12,6 +12,8 @@
 
 * Added `action_runtime()` which supplements the results of `action_runs()` with the duration for each action run.
 
+* Added `github_token_scopes()` which returns a vector of granted scopes for the given PAT.
+
 # ghclass 0.2.1
 
 * ghclass is now on [CRAN](https://cran.r-project.org/web/packages/ghclass/)!
