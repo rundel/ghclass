@@ -11,8 +11,8 @@ github_api_org_repo_create = function(repo, private, auto_init, gitignore_templa
 
 #' @rdname repo_core
 #'
-#' @param org Character. Name of the GitHub organization.
-#' @param name Character. One or more GitHub username or team name.
+#' @param org Character. GitHub organization that will own the repository
+#' @param name Character. Repository name
 #' @param prefix Character. Common repository name prefix
 #' @param suffix Character. Common repository name suffix
 #' @param private Logical. Create private repositories?

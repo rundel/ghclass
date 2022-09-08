@@ -12,6 +12,8 @@ valid_repo_error = function(repo) {
   ) )
 }
 
+
+## FIXME
 match_repo = function(repo, index=1) {
   arg_is_chr(repo)
 
