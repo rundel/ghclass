@@ -14,6 +14,7 @@
 #' @param team Character. Team names, if not provided an individual assignment will be created.
 #' @param source_repo Character. Address of the repository to use as a template for all created repos.
 #' @param private Logical. Should the created repositories be private.
+#' @param add_badges Logical. Should GitHub action badges be added to the README.
 #'
 #' @return An invisible list containing the results of each step.
 #'
@@ -21,7 +22,7 @@
 #'
 
 org_create_assignment = function(org, repo, user, team = NULL, source_repo = NULL,
-                                 private = TRUE) {
+                                 private = TRUE, add_badges = FALSE) {
 
   arg_is_chr_scalar(org)
   arg_is_chr(repo, user)
@@ -65,6 +66,9 @@ org_create_assignment = function(org, repo, user, team = NULL, source_repo = NUL
     # Assume individual assignment
     res[["user_invite"]] = repo_add_user(repo_full, user)
   }
+
+  if (add_badges)
+    res[["add_badge"]] = action_add_badge(repo_full)
 
   invisible(res)
 }

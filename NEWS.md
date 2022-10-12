@@ -16,6 +16,8 @@
 
 * Added `github_rate_limit()` for checking current rate limit status.
 
+* Added `add_badges` argument to `org_create_assignment()`
+
 # ghclass 0.2.1
 
 * ghclass is now on [CRAN](https://cran.r-project.org/web/packages/ghclass/)!
