@@ -14,6 +14,8 @@
 
 * Added `github_token_scopes()` which returns a vector of granted scopes for the given PAT.
 
+* Added `github_rate_limit()` for checking current rate limit status.
+
 # ghclass 0.2.1
 
 * ghclass is now on [CRAN](https://cran.r-project.org/web/packages/ghclass/)!
