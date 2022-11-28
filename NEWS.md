@@ -18,6 +18,8 @@
 
 * Added `add_badges` argument to `org_create_assignment()`
 
+* Added support for GitHub's versioned REST API
+
 # ghclass 0.2.1
 
 * ghclass is now on [CRAN](https://cran.r-project.org/web/packages/ghclass/)!
