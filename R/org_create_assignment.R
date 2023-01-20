@@ -14,12 +14,13 @@
 #' @param team Character. Team names, if not provided an individual assignment will be created.
 #' @param source_repo Character. Address of the repository to use as a template for all created repos.
 #' @param private Logical. Should the created repositories be private.
+#' @param ignore_existing Logical. Ignore any requested repos which already exist, create the remaining repos.
 #'
 #' @export
 #'
 
 org_create_assignment = function(org, repo, user, team = NULL, source_repo = NULL,
-                                 private = TRUE) {
+                                 private = TRUE, ignore_existing = FALSE) {
 
   arg_is_chr_scalar(org)
   arg_is_chr(repo, user)
@@ -30,13 +31,24 @@ org_create_assignment = function(org, repo, user, team = NULL, source_repo = NUL
   repo_full = paste0(org, "/", repo)
 
   existing = repo_exists(repo_full)
-  if (any(existing)) {
+  if (any(existing) && !ignore_existing) {
     cli_stop(
       "The following repo{?s} already exist{?s/}: {.val {repo_full[existing]}}. ",
       "Delete these repo{?s} or use an alternative method to create the assignment."
     )
   }
-
+  
+  if(ignore_existing){
+    cli_warn(
+      "The following repo{?s} already exist{?s/}: {.val {repo_full[existing]}}. ",
+      "We will attempt to create the other repo{?s} requested."
+     )
+    user = user[!existing]
+    repo = repo[!existing]
+    repo_full = paste0(org, "/", repo)
+    if(!is.null(team)) team = team[existing]
+  }
+  
   if (!is.null(source_repo) && repo_is_template(source_repo)) {
     repo_mirror_template(source_repo, repo_full, private = private)
   } else {
