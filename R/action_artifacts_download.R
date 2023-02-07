@@ -19,10 +19,6 @@ github_api_download_artifact = function(repo, id, dest) {
 #' @name action
 #' @rdname action
 #'
-#' @param repo Character. Address of repositories in `owner/name` format.
-#' @param dir Character. Path to the directory where artifacts will be saved.
-#' @param ids Integer or data frame. Artifact ids to be downloaded from the repositories.
-#' If a data frame is passed then the `id` column will be used.
 #' @param keep_zip Logical. Should the artifact zips be saved (`TRUE`) or their contents (`FALSE`).
 #' @param file_pat Character. If extracting zip with multiple files, regexp pattern to match filename.
 #' @param overwrite Logical. Should existing files be overwritten.

@@ -1,10 +1,12 @@
 # ghclass (development version)
 
-# ghclass 0.2.1.9000
+# ghclass 0.3.0.9000
 
 * Added support for retrieving details for GitHub Action artifacts via `action_artifacts()`
 
 * Added support for downloading GitHub Action artifacts via `action_artifact_download()`
+
+* Added support for deleting GitHub Action artifacts via `action_artifact_delete()`
 
 * Added additional parameters to `org_repos()` to control which repos are returns and in what order, see function docs.
 

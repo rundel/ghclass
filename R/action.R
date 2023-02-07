@@ -16,6 +16,13 @@
 #'
 #' * `action_artifact_download()` - downloads artifact(s) into a local directory.
 #'
+#' * `action_artifact_delete()` - deletes artifact(s).
+#'
+#' @param repo Character. Address of repositories in `owner/name` format.
+#' @param dir Character. Path to the directory where artifacts will be saved.
+#' @param ids Integer or data frame. Artifact ids to be downloaded or deleted.
+#' If a data frame is passed then the `id` column will be used.
+#'
 #' @return
 #'
 #' `action_workflows()`, `action_runs()`, `action_runtime()`, and `action_artifacts`
@@ -25,6 +32,9 @@
 #'
 #' `action_artifact_download()` returns a character vector containing the paths of all
 #' downloaded fules
+#'
+#' `action_artifact_delete()` returns an invisible data frame containing repository names and
+#'  ids of the deleted artifacts.
 #'
 #' @examples
 #' \dontrun{
