@@ -37,7 +37,8 @@ Imports:
     whisker,
     withr,
     dplyr,
-    cli (>= 3.0.0)
+    cli (>= 3.0.0),
+    lifecycle
 Suggests: 
     here,
     knitr,

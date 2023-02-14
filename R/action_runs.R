@@ -15,8 +15,7 @@ github_api_action_runs = function(
     event = event,
     status = status,
     created = created,
-    limit = limit,
-    check_suite_id = check_suite_id
+    limit = limit
   )
 }
 

@@ -182,9 +182,10 @@ github_token_scopes = function(token = github_get_token()) {
     fail = "Your GitHub PAT failed to authenticate."
   )
 
-  attr(result(res), "response")[["x-oauth-scopes"]] %>%
-    strsplit(", ") %>%
-    .[[1]]
+  strsplit(
+    attr(result(res), "response")[["x-oauth-scopes"]],
+    ", "
+  )[[1]]
 }
 
 
