@@ -2,6 +2,8 @@
 
 # ghclass 0.3.0.9000
 
+* Added support for basig GitHub Pages API endpoints - see `pages_enabled()`, `pages_status()`, `pages_create()`, and `pages_delete()`.
+
 * Added support for retrieving details for GitHub Action artifacts via `action_artifacts()`
 
 * Added support for downloading GitHub Action artifacts via `action_artifact_download()`
