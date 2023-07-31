@@ -25,7 +25,15 @@ org_repo_stats(
   inc_prs = TRUE
 )
 
-org_repos(org, filter = NULL, exclude = FALSE, full_repo = TRUE)
+org_repos(
+  org,
+  filter = NULL,
+  exclude = FALSE,
+  full_repo = TRUE,
+  sort = c("full_name", "created", "updated", "pushed"),
+  direction = c("asc", "desc"),
+  type = c("all", "public", "private", "forks", "sources", "member", "internal")
+)
 
 org_team_details(org)
 
@@ -40,7 +48,7 @@ org_teams(org, filter = NULL, exclude = FALSE, team_type = c("name", "slug"))
 \href{https://docs.github.com/en/free-pro-team@latest/github/searching-for-information-on-github/searching-for-repositories}{Searching for repositories}
 for details.}
 
-\item{full_repo}{Logical. Should the full repository address be returned (e.g. \code{owner/repo} instead of just \code{repo})?}
+\item{full_repo}{Logical. Should the full repository address be returned (e.g. \code{owner/repo} instead of just \code{repo}).}
 
 \item{branch}{Character. The branch to use for counting commits, if \code{NULL} then each repo's default branch is used.}
 
@@ -57,6 +65,13 @@ for more details.}
 \item{inc_prs}{Logical. Include pull request statistics (\code{open_prs}, \code{merged_prs}, \code{closed_prs})}
 
 \item{exclude}{Logical. Should entries matching the regular expression be excluded or included.}
+
+\item{sort}{Character. Sorting criteria to use, can be one of "created", "updated", "pushed", or "full_name".}
+
+\item{direction}{Character. Sorting order to use.}
+
+\item{type}{Character. Specifies the type of repositories you want, can be one of
+"all", "public", "private", "forks", "sources", "member", or "internal".}
 
 \item{team_type}{Character. Either "slug" if the team names are slugs or "name" if full team names are provided.}
 }

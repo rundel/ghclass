@@ -11,7 +11,9 @@
 #'
 #' * `github_reset_token` - removes the value stored in the `GITHUB_PAT` environmental variable.
 #'
-#' * `github_test_token` - checks if a PAT is valid by attempting to authenticate with the GitHub API
+#' * `github_test_token` - checks if a PAT is valid by attempting to authenticate with the GitHub API.
+#'
+#' * `github_token_scopes` - returns a vector of scopes granted to the token.
 #'
 #' @param token Character. Either the literal token, or the path to a file containing the token.
 #'
@@ -35,9 +37,13 @@
 #' `github_test_token()` invisibly returns a logical value, `TRUE` if the test passes,
 #' `FALSE` if not.
 #'
+#' `github_token_scopes()` returns a character vector of granted scopes.
+#'
 #' @examples
 #' \dontrun{
 #' github_test_token()
+#'
+#' github_token_scopes()
 #'
 #' (pat = github_get_token())
 #'
@@ -159,3 +165,27 @@ github_test_token = function(token = github_get_token()) {
 
   invisible(succeeded(res))
 }
+
+#' @rdname github_token
+#' @export
+#'
+github_token_scopes = function(token = github_get_token()) {
+  arg_is_chr_scalar(token)
+
+  if (file.exists(token))
+    token = readLines(token, warn=FALSE)
+
+  res = purrr::safely(gh::gh)("/user", .token = token)
+
+  status_msg(
+    res,
+    fail = "Your GitHub PAT failed to authenticate."
+  )
+
+  strsplit(
+    attr(result(res), "response")[["x-oauth-scopes"]],
+    ", "
+  )[[1]]
+}
+
+

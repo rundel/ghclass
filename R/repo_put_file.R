@@ -23,7 +23,7 @@ repo_put_file = function(repo, path, content, message = NULL, branch = NULL, ver
   arg_is_chr_scalar(message, branch, allow_null = TRUE)
 
   if (is.null(message))
-    message = cli_glue("Adding file {path}")
+    message = cli_glue("Adding file {as.character(path)}")
 
   if (is.character(content))
     content = charToRaw(content)

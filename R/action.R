@@ -8,13 +8,33 @@
 #'
 #' * `action_runs()` - retrieve details on repo workflow runs.
 #'
-#' * `action_status()` - retrieve details on most recent workflow runs.
+#' * `action_status()` - DEPRECATED - retrieve details on most recent workflow runs.
+#'
+#' * `action_runtime()` - retrieves runtime durations for workflow runs.
+#'
+#' * `action_artifacts()` - retrieve details on available workflow artifacts.
+#'
+#' * `action_artifact_download()` - downloads artifact(s) into a local directory.
+#'
+#' * `action_artifact_delete()` - deletes artifact(s).
+#'
+#' @param repo Character. Address of repositories in `owner/name` format.
+#' @param dir Character. Path to the directory where artifacts will be saved.
+#' @param ids Integer or data frame. Artifact ids to be downloaded or deleted.
+#' If a data frame is passed then the `id` column will be used.
 #'
 #' @return
 #'
-#' `action_workflows()`, `action_runs()`, and `action_status()` all return
-#' tibbles containing information on requested repos' available workflows,
-#' recent action runs, and recent action run statuses respectively.
+#' `action_workflows()`, `action_runs()`, `action_runtime()`, and `action_artifacts`
+#' all return tibbles containing information on requested repos' available workflows,
+#' recent workflow runs, workflow runs runtimes, and generated artifacts
+#' respectively.
+#'
+#' `action_artifact_download()` returns a character vector containing the paths of all
+#' downloaded fules
+#'
+#' `action_artifact_delete()` returns an invisible data frame containing repository names and
+#'  ids of the deleted artifacts.
 #'
 #' @examples
 #' \dontrun{
@@ -22,7 +42,9 @@
 #'
 #' action_runs("rundel/ghclass")
 #'
-#' action_status(c("rundel/ghclass", "rundel/parsermd"))
+#' action_runtime(c("rundel/ghclass", "rundel/parsermd"))
+#'
+#' action_artifacts(c("rundel/ghclass", "rundel/parsermd"))
 #' }
 #'
 NULL

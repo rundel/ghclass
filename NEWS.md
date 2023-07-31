@@ -1,3 +1,29 @@
+# ghclass (development version)
+
+# ghclass 0.3.0.9000
+
+* Added support for basig GitHub Pages API endpoints - see `pages_enabled()`, `pages_status()`, `pages_create()`, and `pages_delete()`.
+
+* Added support for retrieving details for GitHub Action artifacts via `action_artifacts()`
+
+* Added support for downloading GitHub Action artifacts via `action_artifact_download()`
+
+* Added support for deleting GitHub Action artifacts via `action_artifact_delete()`
+
+* Added additional parameters to `org_repos()` to control which repos are returns and in what order, see function docs.
+
+* Reworked `action_runs()` to work with multiple repositories and included new filtering options. This makes `action_status()` redundant and as such it has been deprecated.
+
+* Added `action_runtime()` which supplements the results of `action_runs()` with the duration for each action run.
+
+* Added `github_token_scopes()` which returns a vector of granted scopes for the given PAT.
+
+* Added `github_rate_limit()` for checking current rate limit status.
+
+* Added `add_badges` argument to `org_create_assignment()`
+
+* Added support for GitHub's versioned REST API
+
 # ghclass 0.2.1
 
 * ghclass is now on [CRAN](https://cran.r-project.org/web/packages/ghclass/)!

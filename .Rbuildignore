@@ -19,3 +19,4 @@ Makefile
 ^cran-comments\.md$
 ^\.github$
 ^CRAN-SUBMISSION$
+test/

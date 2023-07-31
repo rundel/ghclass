@@ -6,12 +6,14 @@ github_repo_pattern ="^([A-Za-z0-9-]+)/([A-Za-z0-9_.-]+)$"
 
 
 valid_repo_error = function(repo) {
-  cli_stop(
+  cli_stop( paste(
     "Invalid repository name(s) {.val {repo}}.",
     "Repository names must be in {.val 'owner/name'} format."
-  )
+  ) )
 }
 
+
+## FIXME
 match_repo = function(repo, index=1) {
   arg_is_chr(repo)
 

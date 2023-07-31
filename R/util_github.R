@@ -1,3 +1,25 @@
+github_api_download_file = function(url, dest) {
+  arg_is_chr_scalar(url, dest)
+
+  req = httr::GET(
+    url,
+    httr::add_headers(
+      Authorization = paste("bearer", github_get_token())
+    )
+  )
+
+  res = httr::content(req, as = "raw")
+  code = httr::status_code(req)
+
+  if (code >= 300) {
+    cli_stop("GitHub API Error ({code}) - {res[['message']]}")
+  }
+
+  writeBin(res, dest)
+
+  return(dest)
+}
+
 github_api_repo_tree = function(repo, sha = NULL) {
   arg_is_chr_scalar(repo)
   arg_is_chr_scalar(sha, allow_null = TRUE)
@@ -161,8 +183,18 @@ endpoint_verb = function(x) {
 }
 
 
-ghclass_api_v3_req = function(endpoint, ..., limit = github_get_api_limit()) {
+ghclass_api_v3_req = function(
+    endpoint, ..., .send_headers = character(),
+    version = "2022-11-28", limit = github_get_api_limit()
+) {
+  arg_is_chr_scalar(version)
+  arg_is_chr(.send_headers)
+
   method = endpoint_verb(endpoint)
+
+  # Support for GitHub API versioning
+  # https://github.blog/2022-11-28-to-infinity-and-beyond-enabling-the-future-of-githubs-rest-api-with-api-versioning/
+  .send_headers["X-GitHub-Api-Version"] = version
 
   if (method != "GET") { # Some non-GET methods don't like having a limit set
     limit = NULL
@@ -173,7 +205,8 @@ ghclass_api_v3_req = function(endpoint, ..., limit = github_get_api_limit()) {
       endpoint = endpoint,
       ...,
       .limit = limit,
-      .token = github_get_token()
+      .token = github_get_token(),
+      .send_headers = .send_headers
       # .progress = FALSE # TODO - giving an error for some reason
     )
   )

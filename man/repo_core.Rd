@@ -45,9 +45,9 @@ repo_rename(repo, new_repo)
 repo_set_template(repo, status = TRUE)
 }
 \arguments{
-\item{org}{Character. Name of the GitHub organization.}
+\item{org}{Character. GitHub organization that will own the repository}
 
-\item{name}{Character. One or more GitHub username or team name.}
+\item{name}{Character. Repository name}
 
 \item{prefix}{Character. Common repository name prefix}
 

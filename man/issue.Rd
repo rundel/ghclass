@@ -10,7 +10,14 @@
 \usage{
 issue_close(repo, number)
 
-issue_create(repo, title, body, labels = character(), assignees = character())
+issue_create(
+  repo,
+  title,
+  body,
+  labels = character(),
+  assignees = character(),
+  delay = 0
+)
 
 issue_edit(
   repo,
@@ -35,6 +42,8 @@ issue_edit(
 \item{labels}{Character. Vector of the labels to associate with this issue}
 
 \item{assignees}{Character. Vector of logins for users assigned to the issue.}
+
+\item{delay}{Numeric. Delay between each API request. Issue creation has a secondary rate limit (~ 20/min).}
 
 \item{state}{Character. State of the issue. Either "open" or "closed".}
 

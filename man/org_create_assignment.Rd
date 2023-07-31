@@ -10,7 +10,8 @@ org_create_assignment(
   user,
   team = NULL,
   source_repo = NULL,
-  private = TRUE
+  private = TRUE,
+  add_badges = FALSE
 )
 }
 \arguments{
@@ -25,6 +26,11 @@ org_create_assignment(
 \item{source_repo}{Character. Address of the repository to use as a template for all created repos.}
 
 \item{private}{Logical. Should the created repositories be private.}
+
+\item{add_badges}{Logical. Should GitHub action badges be added to the README.}
+}
+\value{
+An invisible list containing the results of each step.
 }
 \description{
 This is a higher level function that combines the following steps:
