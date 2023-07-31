@@ -1,6 +1,6 @@
 # ghclass (development version)
 
-# ghclass 0.3.0.9000
+# ghclass 0.3.0
 
 * Added support for basig GitHub Pages API endpoints - see `pages_enabled()`, `pages_status()`, `pages_create()`, and `pages_delete()`.
 
@@ -26,7 +26,7 @@
 
 # ghclass 0.2.1
 
-* ghclass is now on [CRAN](https://cran.r-project.org/web/packages/ghclass/)!
+* ghclass is now on [CRAN](https://CRAN.R-project.org/package=ghclass)!
 
 * improved action support with `action_runs()` and `action_status()`
 
