@@ -8,7 +8,7 @@ org_pending() - returns a (filtered) vector of pending organization members.
 org_admins() - returns a vector of repository administrators. In the case of a
 non-organization owner (e.g. a user account) returns the owner's login.
 
-"><title>Tools for managing organization membership — org_members • ghclass</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Tools for managing organization membership — org_members"><meta property="og:description" content="
+"><title>Tools for managing organization membership — org_members • ghclass</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Tools for managing organization membership — org_members"><meta property="og:description" content="
 
 org_invite() - invites user(s) to a GitHub organization.
 org_remove() - remove user(s) from an organization (and all teams within that organization).
@@ -28,14 +28,14 @@ non-organization owner (e.g. a user account) returns the owner's login.
     
     <a class="navbar-brand me-2" href="../index.html">ghclass</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
   <a class="nav-link" href="../articles/articles/ghclass.html">Introduction</a>
 </li>
@@ -78,81 +78,78 @@ non-organization owner (e.g. a user account) returns the owner's login.</p></li>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">org_admins</span><span class="op">(</span><span class="va">org</span><span class="op">)</span>
-
-<span class="fu">org_invite</span><span class="op">(</span><span class="va">org</span>, <span class="va">user</span><span class="op">)</span>
-
-<span class="fu">org_members</span><span class="op">(</span><span class="va">org</span>, filter <span class="op">=</span> <span class="cn">NULL</span>, exclude <span class="op">=</span> <span class="cn">FALSE</span>, include_admins <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu">org_pending</span><span class="op">(</span><span class="va">org</span>, filter <span class="op">=</span> <span class="cn">NULL</span>, exclude <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-
-<span class="fu">org_remove</span><span class="op">(</span><span class="va">org</span>, <span class="va">user</span>, prompt <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">org_admins</span><span class="op">(</span><span class="va">org</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">org_invite</span><span class="op">(</span><span class="va">org</span>, <span class="va">user</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">org_members</span><span class="op">(</span><span class="va">org</span>, filter <span class="op">=</span> <span class="cn">NULL</span>, exclude <span class="op">=</span> <span class="cn">FALSE</span>, include_admins <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">org_pending</span><span class="op">(</span><span class="va">org</span>, filter <span class="op">=</span> <span class="cn">NULL</span>, exclude <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">org_remove</span><span class="op">(</span><span class="va">org</span>, <span class="va">user</span>, prompt <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>org</dt>
 <dd><p>Character. Name of the GitHub organization(s).</p></dd>
+
+
 <dt>user</dt>
 <dd><p>Character. GitHub username(s).</p></dd>
+
+
 <dt>filter</dt>
 <dd><p>Character. Regular expression pattern for matching (or excluding) results</p></dd>
+
+
 <dt>exclude</dt>
 <dd><p>Logical. Should entries matching the regular expression be excluded or included.</p></dd>
+
+
 <dt>include_admins</dt>
 <dd><p>Logical. Should admin users be included in the results.</p></dd>
+
+
 <dt>prompt</dt>
 <dd><p>Logical. Prompt before removing member from organization.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p><code>org_members()</code>, <code>org_pending()</code>, and <code>org_admins</code> all return a character vector
-of GitHub account names.
-<code>org_invite()</code> and <code>org_remove()</code> invisibly return a list containing the results of the relevant GitHub API calls.</p>
+    
+
+<p><code>org_members()</code>, <code>org_pending()</code>, and <code>org_admins</code> all return a character vector
+of GitHub account names.</p>
+
+
+<p><code>org_invite()</code> and <code>org_remove()</code> invisibly return a list containing the results of the relevant GitHub API calls.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \dontrun{</span></span>
-<span class="r-in"><span class="co"># Org Details</span></span>
-<span class="r-in"><span class="fu">org_admins</span><span class="op">(</span><span class="st">"ghclass-test"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "mine-cetinkaya-rundel" "rundel"                "thereseanders"        </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">org_admins</span><span class="op">(</span><span class="st">"rundel"</span><span class="op">)</span> <span class="co"># User, not an organization</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "rundel"</span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Org Membership - Invite, Status, and Remove</span></span>
-<span class="r-in"><span class="va">students</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ghclass-anya"</span>, <span class="st">"ghclass-bruno"</span>, <span class="st">"ghclass-celine"</span>,</span>
-<span class="r-in">             <span class="st">"ghclass-diego"</span>, <span class="st">"ghclass-elijah"</span>,<span class="st">"ghclass-francis"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">org_invite</span><span class="op">(</span><span class="st">"ghclass-test"</span>, <span class="va">students</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Invited user <span style="color: #0000BB;">"ghclass-anya"</span> to org <span style="color: #0000BB;">"ghclass-test"</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Invited user <span style="color: #0000BB;">"ghclass-bruno"</span> to org <span style="color: #0000BB;">"ghclass-test"</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Invited user <span style="color: #0000BB;">"ghclass-celine"</span> to org <span style="color: #0000BB;">"ghclass-test"</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Invited user <span style="color: #0000BB;">"ghclass-diego"</span> to org <span style="color: #0000BB;">"ghclass-test"</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Invited user <span style="color: #0000BB;">"ghclass-elijah"</span> to org <span style="color: #0000BB;">"ghclass-test"</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Invited user <span style="color: #0000BB;">"ghclass-francis"</span> to org <span style="color: #0000BB;">"ghclass-test"</span>.</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">org_members</span><span class="op">(</span><span class="st">"ghclass-test"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "mine-cetinkaya-rundel" "rundel"                "thereseanders"        </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">org_pending</span><span class="op">(</span><span class="st">"ghclass-test"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ghclass-anya"    "ghclass-bruno"   "ghclass-diego"   "ghclass-elijah" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "ghclass-francis" "ghclass-celine" </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">org_remove</span><span class="op">(</span><span class="st">"ghclass-test"</span>, <span class="va">students</span>, prompt <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Removed pending user <span style="color: #0000BB;">"ghclass-anya"</span> from org <span style="color: #0000BB;">"ghclass-test"</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Removed pending user <span style="color: #0000BB;">"ghclass-bruno"</span> from org <span style="color: #0000BB;">"ghclass-test"</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Removed pending user <span style="color: #0000BB;">"ghclass-celine"</span> from org <span style="color: #0000BB;">"ghclass-test"</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Removed pending user <span style="color: #0000BB;">"ghclass-diego"</span> from org <span style="color: #0000BB;">"ghclass-test"</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Removed pending user <span style="color: #0000BB;">"ghclass-elijah"</span> from org <span style="color: #0000BB;">"ghclass-test"</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Removed pending user <span style="color: #0000BB;">"ghclass-francis"</span> from org <span style="color: #0000BB;">"ghclass-test"</span>.</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">org_pending</span><span class="op">(</span><span class="st">"ghclass-test"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> character(0)</span>
-<span class="r-in"><span class="co"># }</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># Org Details</span></span></span>
+<span class="r-in"><span><span class="fu">org_admins</span><span class="op">(</span><span class="st">"ghclass-test"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">org_admins</span><span class="op">(</span><span class="st">"rundel"</span><span class="op">)</span> <span class="co"># User, not an organization</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Org Membership - Invite, Status, and Remove</span></span></span>
+<span class="r-in"><span><span class="va">students</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ghclass-anya"</span>, <span class="st">"ghclass-bruno"</span>, <span class="st">"ghclass-celine"</span>,</span></span>
+<span class="r-in"><span>             <span class="st">"ghclass-diego"</span>, <span class="st">"ghclass-elijah"</span>,<span class="st">"ghclass-francis"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">org_invite</span><span class="op">(</span><span class="st">"ghclass-test"</span>, <span class="va">students</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">org_members</span><span class="op">(</span><span class="st">"ghclass-test"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">org_pending</span><span class="op">(</span><span class="st">"ghclass-test"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">org_remove</span><span class="op">(</span><span class="st">"ghclass-test"</span>, <span class="va">students</span>, prompt <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">org_pending</span><span class="op">(</span><span class="st">"ghclass-test"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -164,7 +161,7 @@ of GitHub account names.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
     </footer></div>

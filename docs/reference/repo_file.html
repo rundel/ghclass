@@ -12,7 +12,7 @@ repo_put_file() - Low level function for adding a file to a GitHub repository
 repo_get_file() - Low level function for retrieving the content of a file from a GitHub Repository
 repo_get_readme() - Low level function for retrieving the content of the README.md of a GitHub Repository
 
-"><title>GitHub Repository tools - file functions — repo_file • ghclass</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="GitHub Repository tools - file functions — repo_file"><meta property="og:description" content="
+"><title>GitHub Repository tools - file functions — repo_file • ghclass</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="GitHub Repository tools - file functions — repo_file"><meta property="og:description" content="
 
 repo_add_file() - Add / update files in a GitHub repository.
 Note that due to delays in caching, files that have been added
@@ -36,14 +36,14 @@ repo_get_readme() - Low level function for retrieving the content of the README.
     
     <a class="navbar-brand me-2" href="../index.html">ghclass</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
   <a class="nav-link" href="../articles/articles/ghclass.html">Introduction</a>
 </li>
@@ -90,65 +90,83 @@ be overwritten.</p></li>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">repo_add_file</span><span class="op">(</span>
-  <span class="va">repo</span>,
-  <span class="va">file</span>,
-  message <span class="op">=</span> <span class="cn">NULL</span>,
-  repo_folder <span class="op">=</span> <span class="cn">NULL</span>,
-  branch <span class="op">=</span> <span class="cn">NULL</span>,
-  preserve_path <span class="op">=</span> <span class="cn">FALSE</span>,
-  overwrite <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span>
-
-<span class="fu">repo_delete_file</span><span class="op">(</span><span class="va">repo</span>, <span class="va">path</span>, message <span class="op">=</span> <span class="cn">NULL</span>, branch <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-
-<span class="fu">repo_get_file</span><span class="op">(</span><span class="va">repo</span>, <span class="va">path</span>, branch <span class="op">=</span> <span class="cn">NULL</span>, quiet <span class="op">=</span> <span class="cn">FALSE</span>, include_details <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu">repo_get_readme</span><span class="op">(</span><span class="va">repo</span>, branch <span class="op">=</span> <span class="cn">NULL</span>, include_details <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu">repo_ls</span><span class="op">(</span><span class="va">repo</span>, path <span class="op">=</span> <span class="st">"."</span>, branch <span class="op">=</span> <span class="cn">NULL</span>, full_path <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-
-<span class="fu">repo_modify_file</span><span class="op">(</span>
-  <span class="va">repo</span>,
-  <span class="va">path</span>,
-  <span class="va">pattern</span>,
-  <span class="va">content</span>,
-  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"replace"</span>, <span class="st">"before"</span>, <span class="st">"after"</span><span class="op">)</span>,
-  all <span class="op">=</span> <span class="cn">FALSE</span>,
-  message <span class="op">=</span> <span class="st">"Modified content"</span>,
-  branch <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span>
-
-<span class="fu">repo_put_file</span><span class="op">(</span>
-  <span class="va">repo</span>,
-  <span class="va">path</span>,
-  <span class="va">content</span>,
-  message <span class="op">=</span> <span class="cn">NULL</span>,
-  branch <span class="op">=</span> <span class="cn">NULL</span>,
-  verbose <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">repo_add_file</span><span class="op">(</span></span>
+<span>  <span class="va">repo</span>,</span>
+<span>  <span class="va">file</span>,</span>
+<span>  message <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  repo_folder <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  branch <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  preserve_path <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">repo_delete_file</span><span class="op">(</span><span class="va">repo</span>, <span class="va">path</span>, message <span class="op">=</span> <span class="cn">NULL</span>, branch <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">repo_get_file</span><span class="op">(</span><span class="va">repo</span>, <span class="va">path</span>, branch <span class="op">=</span> <span class="cn">NULL</span>, quiet <span class="op">=</span> <span class="cn">FALSE</span>, include_details <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">repo_get_readme</span><span class="op">(</span><span class="va">repo</span>, branch <span class="op">=</span> <span class="cn">NULL</span>, include_details <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">repo_ls</span><span class="op">(</span><span class="va">repo</span>, path <span class="op">=</span> <span class="st">"."</span>, branch <span class="op">=</span> <span class="cn">NULL</span>, full_path <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">repo_modify_file</span><span class="op">(</span></span>
+<span>  <span class="va">repo</span>,</span>
+<span>  <span class="va">path</span>,</span>
+<span>  <span class="va">pattern</span>,</span>
+<span>  <span class="va">content</span>,</span>
+<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"replace"</span>, <span class="st">"before"</span>, <span class="st">"after"</span><span class="op">)</span>,</span>
+<span>  all <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  message <span class="op">=</span> <span class="st">"Modified content"</span>,</span>
+<span>  branch <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">repo_put_file</span><span class="op">(</span></span>
+<span>  <span class="va">repo</span>,</span>
+<span>  <span class="va">path</span>,</span>
+<span>  <span class="va">content</span>,</span>
+<span>  message <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  branch <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>repo</dt>
 <dd><p>Character. Address of repository in <code>owner/name</code> format.</p></dd>
+
+
 <dt>file</dt>
 <dd><p>Character. Local file path(s) of file or files to be added.</p></dd>
+
+
 <dt>message</dt>
 <dd><p>Character. Commit message.</p></dd>
+
+
 <dt>repo_folder</dt>
 <dd><p>Character. Name of folder on repository to save the file(s) to. If the folder does not exist on the repository, it will be created.</p></dd>
+
+
 <dt>branch</dt>
 <dd><p>Character. Name of branch to use.</p></dd>
+
+
 <dt>preserve_path</dt>
 <dd><p>Logical. Should the local relative path be preserved.</p></dd>
+
+
 <dt>overwrite</dt>
 <dd><p>Logical. Should existing file or files with same name be overwritten, defaults to FALSE.</p></dd>
+
+
 <dt>path</dt>
 <dd><p>Character. File's path within the repository.</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>Logical. Should status messages be printed.</p></dd>
+
+
 <dt>include_details</dt>
 <dd><p>Logical. Should file details be attached as attributes.</p>
 <p><code>repo_delete_file()</code>m <code>repo_modify_file()</code>, and <code>repo_put_file()</code> all invisibly
@@ -156,57 +174,60 @@ return a list containing the results of the relevant GitHub API calls.</p>
 <p><code>repo_ls()</code> returns a character vector of repo files in the given path.</p>
 <p><code>repo_get_file()</code> and <code>repo_get_readme()</code> return a character vector with API results
 attached as attributes if <code>include_details = TRUE</code></p></dd>
+
+
 <dt>full_path</dt>
 <dd><p>Logical. Should the function return the full path of the files and directories.</p></dd>
+
+
 <dt>pattern</dt>
 <dd><p>Character. Regex pattern.</p></dd>
+
+
 <dt>content</dt>
 <dd><p>Character or raw. Content of the file.</p></dd>
+
+
 <dt>method</dt>
 <dd><p>Character. Should the content <code>replace</code> the matched pattern or be inserted <code>before</code> or <code>after</code> the match.</p></dd>
+
+
 <dt>all</dt>
 <dd><p>Character. Should all instances of the pattern be modified (<code>TRUE</code>) or just the first (<code>FALSE</code>).</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>Logical. Should success / failure messages be printed</p></dd>
+
 </dl></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \dontrun{</span></span>
-<span class="r-in"><span class="va">repo</span> <span class="op">=</span> <span class="fu"><a href="repo_core.html">repo_create</a></span><span class="op">(</span><span class="st">"ghclass-test"</span>, <span class="st">"repo_file_test"</span>, auto_init<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Created repo <span style="color: #0000BB;">"ghclass-test/repo_file_test"</span>.</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">repo_ls</span><span class="op">(</span><span class="va">repo</span>, path <span class="op">=</span> <span class="st">"."</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ".gitignore" "README.md" </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">repo_get_readme</span><span class="op">(</span><span class="va">repo</span>, include_details <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# repo_file_test"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">repo_get_file</span><span class="op">(</span><span class="va">repo</span>, <span class="st">".gitignore"</span>, include_details <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# History files\n.Rhistory\n.Rapp.history\n\n# Session Data files\n.RData\n\n# User-specific files\n.Ruserdata\n\n# Example code in package build process\n*-Ex.R\n\n# Output files from R CMD build\n/*.tar.gz\n\n# Output files from R CMD check\n/*.Rcheck/\n\n# RStudio files\n.Rproj.user/\n\n# produced vignettes\nvignettes/*.html\nvignettes/*.pdf\n\n# OAuth2 token, see https://github.com/hadley/httr/releases/tag/v0.3\n.httr-oauth\n\n# knitr and R markdown default cache directories\n*_cache/\n/cache/\n\n# Temporary files created by R markdown\n*.utf8.md\n*.knit.md\n\n# R Environment Variables\n.Renviron\n"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">repo_modify_file</span><span class="op">(</span></span>
-<span class="r-in">  <span class="va">repo</span>, path <span class="op">=</span> <span class="st">"README.md"</span>, pattern <span class="op">=</span> <span class="st">"repo_file_test"</span>,</span>
-<span class="r-in">  content <span class="op">=</span> <span class="st">"\n\nHello world!\n"</span>, method <span class="op">=</span> <span class="st">"after"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Modified file <span style="color: #0000BB;">"ghclass-test/repo_file_test/README.md"</span>.</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">repo_get_readme</span><span class="op">(</span><span class="va">repo</span>, include_details <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# repo_file_test\n\nHello world!\n"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">repo_add_file</span><span class="op">(</span><span class="va">repo</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"DESCRIPTION"</span>, package<span class="op">=</span><span class="st">"ghclass"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Added file <span style="color: #0000BB;">"DESCRIPTION"</span> to repo <span style="color: #0000BB;">"ghclass-test/repo_file_test"</span>.</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">repo_get_file</span><span class="op">(</span><span class="va">repo</span>, <span class="st">"DESCRIPTION"</span>, include_details <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Package: ghclass\nTitle: Tools for Managing Classes on GitHub\nVersion: 0.2.1\nAuthors@R: \n    c(person(given = \"Colin\",\n             family = \"Rundel\",\n             role = c(\"aut\", \"cre\"),\n             email = \"rundel@gmail.com\"),\n      person(given = \"Mine\",\n             family = \"Cetinkaya-Rundel\",\n             role = \"aut\",\n             email = \"mine@rstudio.com\"),\n      person(given = \"Therese\",\n             family = \"Anders\",\n             role = \"ctb\",\n             email = \"tanders@usc.edu\"))\nDescription: Interface for the GitHub API that enables efficient \n    management of courses on GitHub. It has a functionality for \n    managing organizations, teams, repositories, and users on GitHub \n    and helps automate most of the tedious and repetitive tasks \n    around creating and distributing assignments.\nLicense: GPL-3\nURL: https://github.com/rundel/ghclass\nBugReports: https://github.com/rundel/ghclass/issues\nDepends: R (&gt;= 3.4.0)\nImports: base64enc, fs, gh, glue, httr, lubridate, purrr, rlang,\n        tibble, whisker, withr, dplyr, cli (&gt;= 3.0.0)\nSuggests: here, knitr, rmarkdown, sodium, styler, usethis, gert, readr,\n        gitcreds\nEncoding: UTF-8\nLazyData: true\nRoxygen: list(markdown = TRUE)\nRoxygenNote: 7.1.2\nAuthor: Colin Rundel [aut, cre],\n  Mine Cetinkaya-Rundel [aut],\n  Therese Anders [ctb]\nMaintainer: Colin Rundel &lt;rundel@gmail.com&gt;\nBuilt: R 4.1.2; ; 2022-01-07 03:29:45 UTC; unix\n"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">repo_delete_file</span><span class="op">(</span><span class="va">repo</span>, <span class="st">"DESCRIPTION"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Deleted file <span style="color: #0000BB;">DESCRIPTION</span> from repo <span style="color: #0000BB;">"ghclass-test/repo_file_test"</span>.</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="repo_core.html">repo_delete</a></span><span class="op">(</span><span class="va">repo</span>, prompt<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Deleted repo <span style="color: #0000BB;">"ghclass-test/repo_file_test"</span>.</span>
-<span class="r-in"><span class="co"># }</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">repo</span> <span class="op">=</span> <span class="fu"><a href="repo_core.html">repo_create</a></span><span class="op">(</span><span class="st">"ghclass-test"</span>, <span class="st">"repo_file_test"</span>, auto_init<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">repo_ls</span><span class="op">(</span><span class="va">repo</span>, path <span class="op">=</span> <span class="st">"."</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">repo_get_readme</span><span class="op">(</span><span class="va">repo</span>, include_details <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">repo_get_file</span><span class="op">(</span><span class="va">repo</span>, <span class="st">".gitignore"</span>, include_details <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">repo_modify_file</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">repo</span>, path <span class="op">=</span> <span class="st">"README.md"</span>, pattern <span class="op">=</span> <span class="st">"repo_file_test"</span>,</span></span>
+<span class="r-in"><span>  content <span class="op">=</span> <span class="st">"\n\nHello world!\n"</span>, method <span class="op">=</span> <span class="st">"after"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">repo_get_readme</span><span class="op">(</span><span class="va">repo</span>, include_details <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">repo_add_file</span><span class="op">(</span><span class="va">repo</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"DESCRIPTION"</span>, package<span class="op">=</span><span class="st">"ghclass"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">repo_get_file</span><span class="op">(</span><span class="va">repo</span>, <span class="st">"DESCRIPTION"</span>, include_details <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">repo_delete_file</span><span class="op">(</span><span class="va">repo</span>, <span class="st">"DESCRIPTION"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="repo_core.html">repo_delete</a></span><span class="op">(</span><span class="va">repo</span>, prompt<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -218,7 +239,7 @@ attached as attributes if <code>include_details = TRUE</code></p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
     </footer></div>

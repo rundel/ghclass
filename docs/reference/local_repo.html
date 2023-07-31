@@ -9,7 +9,7 @@ local_repo_pull() - Equivalent to git pull - pull a local repository.
 local_repo_branch() - Equivalent to git branch - create a branch in a local repository.
 local_repo_log() - Equivalent to git log - returns a data frame for git log entries.
 
-"><title>Functions for managing local git repositories — local_repo • ghclass</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Functions for managing local git repositories — local_repo"><meta property="og:description" content="
+"><title>Functions for managing local git repositories — local_repo • ghclass</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Functions for managing local git repositories — local_repo"><meta property="og:description" content="
 
 local_repo_clone() - Clones a GitHub repository to a local directory.
 local_repo_add() - Equivalent to git add - stages a file in a local repository.
@@ -30,14 +30,14 @@ local_repo_log() - Equivalent to git log - returns a data frame for git log entr
     
     <a class="navbar-brand me-2" href="../index.html">ghclass</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
   <a class="nav-link" href="../articles/articles/ghclass.html">Introduction</a>
 </li>
@@ -81,68 +81,97 @@ local_repo_log() - Equivalent to git log - returns a data frame for git log entr
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">local_repo_add</span><span class="op">(</span><span class="va">repo_dir</span>, files <span class="op">=</span> <span class="st">"."</span><span class="op">)</span>
-
-<span class="fu">local_repo_branch</span><span class="op">(</span><span class="va">repo_dir</span>, <span class="va">branch</span><span class="op">)</span>
-
-<span class="fu">local_repo_clone</span><span class="op">(</span>
-  <span class="va">repo</span>,
-  local_path <span class="op">=</span> <span class="st">"."</span>,
-  branch <span class="op">=</span> <span class="cn">NULL</span>,
-  mirror <span class="op">=</span> <span class="cn">FALSE</span>,
-  verbose <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span>
-
-<span class="fu">local_repo_commit</span><span class="op">(</span><span class="va">repo_dir</span>, <span class="va">message</span><span class="op">)</span>
-
-<span class="fu">local_repo_log</span><span class="op">(</span><span class="va">repo_dir</span>, max <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
-
-<span class="fu">local_repo_pull</span><span class="op">(</span><span class="va">repo_dir</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-
-<span class="fu">local_repo_push</span><span class="op">(</span>
-  <span class="va">repo_dir</span>,
-  remote <span class="op">=</span> <span class="st">"origin"</span>,
-  branch <span class="op">=</span> <span class="cn">NULL</span>,
-  force <span class="op">=</span> <span class="cn">FALSE</span>,
-  prompt <span class="op">=</span> <span class="cn">TRUE</span>,
-  mirror <span class="op">=</span> <span class="cn">FALSE</span>,
-  verbose <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">local_repo_add</span><span class="op">(</span><span class="va">repo_dir</span>, files <span class="op">=</span> <span class="st">"."</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">local_repo_branch</span><span class="op">(</span><span class="va">repo_dir</span>, <span class="va">branch</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">local_repo_clone</span><span class="op">(</span></span>
+<span>  <span class="va">repo</span>,</span>
+<span>  local_path <span class="op">=</span> <span class="st">"."</span>,</span>
+<span>  branch <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  mirror <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">local_repo_commit</span><span class="op">(</span><span class="va">repo_dir</span>, <span class="va">message</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">local_repo_log</span><span class="op">(</span><span class="va">repo_dir</span>, max <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">local_repo_pull</span><span class="op">(</span><span class="va">repo_dir</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">local_repo_push</span><span class="op">(</span></span>
+<span>  <span class="va">repo_dir</span>,</span>
+<span>  remote <span class="op">=</span> <span class="st">"origin"</span>,</span>
+<span>  branch <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  force <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  prompt <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  mirror <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>repo_dir</dt>
 <dd><p>Vector of repo directories or a single directory containing one or more repos.</p></dd>
+
+
 <dt>files</dt>
 <dd><p>Files to be staged</p></dd>
+
+
 <dt>branch</dt>
 <dd><p>Repository branch to use.</p></dd>
+
+
 <dt>repo</dt>
 <dd><p>GitHub repo address with the form <code>owner/name</code>.</p></dd>
+
+
 <dt>local_path</dt>
 <dd><p>Local directory to store cloned repos.</p></dd>
+
+
 <dt>mirror</dt>
 <dd><p>Equivalent to <code>--mirror</code></p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>Display verbose output.</p></dd>
+
+
 <dt>message</dt>
 <dd><p>Commit message</p></dd>
+
+
 <dt>max</dt>
 <dd><p>Maximum number of log entries to retrieve per repo.</p></dd>
+
+
 <dt>remote</dt>
 <dd><p>Repository remote to use.</p></dd>
+
+
 <dt>force</dt>
 <dd><p>Force push?</p></dd>
+
+
 <dt>prompt</dt>
 <dd><p>Prompt before force push?</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p><code>local_repo_clone()</code> invisibly returns a character vector of paths for
-the local repo directories.
-<code>local_repo_log()</code> returns a tibble containing repository details.`
-All other functions invisibly return a list containing the results of the relevant call
+    
+
+<p><code>local_repo_clone()</code> invisibly returns a character vector of paths for
+the local repo directories.</p>
+
+
+<p><code>local_repo_log()</code> returns a tibble containing repository details.`</p>
+
+
+<p>All other functions invisibly return a list containing the results of the relevant call
 to <code>gert</code>.</p>
     </div>
     <div class="section level2">
@@ -152,59 +181,35 @@ to <code>gert</code>.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \dontrun{</span></span>
-<span class="r-in"><span class="va">repo</span> <span class="op">=</span> <span class="fu"><a href="repo_core.html">repo_create</a></span><span class="op">(</span><span class="st">"ghclass-test"</span>, <span class="st">"local_repo_test"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Created repo <span style="color: #0000BB;">"ghclass-test/local_repo_test"</span>.</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dir</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"repos"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">local_repo</span> <span class="op">=</span> <span class="fu">local_repo_clone</span><span class="op">(</span><span class="va">repo</span>, <span class="va">dir</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Cloned <span style="color: #0000BB;">"ghclass-test/local_repo_test"</span>.</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">local_repo_log</span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 7</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   repo               commit     author   time                files merge message</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fs::path&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> …<span style="color: #0000BB; font-weight: bold;">s/local_repo_test</span> c9e001291… Colin R… 2022-01-06 <span style="color: #949494;">22:30:09</span>     1 FALSE Initia…</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Make a local change and push</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="st">"Hello World"</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">local_repo</span>, <span class="st">"hello.txt"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">local_repo_add</span><span class="op">(</span><span class="va">local_repo</span>, <span class="st">"hello.txt"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Added files <span style="color: #0000BB;">"hello.txt"</span> to <span style="color: #0000BB;">"local_repo_test"</span>.</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">local_repo_commit</span><span class="op">(</span><span class="va">local_repo</span>, <span class="st">"Added hello world"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Committed changes to <span style="color: #0000BB;">"local_repo_test"</span>.</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">local_repo_push</span><span class="op">(</span><span class="va">local_repo</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Pushed from local repo <span style="color: #0000BB;">"local_repo_test"</span> to <span style="color: #0000BB;">"origin/main"</span>.</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="repo_details.html">repo_commits</a></span><span class="op">(</span><span class="va">repo</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   repo                         login  name    email  date                msg    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> ghclass-test/local_repo_test rundel Colin … runde… 2022-01-07 <span style="color: #949494;">03:30:10</span> Added …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> ghclass-test/local_repo_test rundel Colin … runde… 2022-01-07 <span style="color: #949494;">03:30:09</span> Initia…</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Pulling remote changes</span></span>
-<span class="r-in"><span class="fu"><a href="repo_file.html">repo_modify_file</a></span><span class="op">(</span><span class="va">repo</span>, <span class="st">"hello.txt"</span>, pattern <span class="op">=</span> <span class="st">".*"</span>,  content <span class="op">=</span> <span class="st">"!!!"</span>, method <span class="op">=</span> <span class="st">"after"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Modified file <span style="color: #0000BB;">"ghclass-test/local_repo_test/hello.txt"</span>.</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">local_repo_pull</span><span class="op">(</span><span class="va">local_repo</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Performing fast-forward merge, no commit needed</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Pulled to local repo <span style="color: #0000BB;">"local_repo_test"</span>.</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">local_repo_log</span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 7</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   repo              commit     author   time                files merge message </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fs::path&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> …<span style="color: #0000BB; font-weight: bold;">/local_repo_test</span> de634cd39… Colin R… 2022-01-06 <span style="color: #949494;">22:30:12</span>     1 FALSE <span style="color: #949494;">"</span>Modifi…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> …<span style="color: #0000BB; font-weight: bold;">/local_repo_test</span> c3441586c… Colin R… 2022-01-06 <span style="color: #949494;">22:30:10</span>     1 FALSE <span style="color: #949494;">"</span>Added …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> …<span style="color: #0000BB; font-weight: bold;">/local_repo_test</span> c9e001291… Colin R… 2022-01-06 <span style="color: #949494;">22:30:09</span>     1 FALSE <span style="color: #949494;">"</span>Initia…</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="repo_core.html">repo_delete</a></span><span class="op">(</span><span class="st">"ghclass-test/local_repo_test"</span>, prompt<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Deleted repo <span style="color: #0000BB;">"ghclass-test/local_repo_test"</span>.</span>
-<span class="r-in"><span class="co"># }</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">repo</span> <span class="op">=</span> <span class="fu"><a href="repo_core.html">repo_create</a></span><span class="op">(</span><span class="st">"ghclass-test"</span>, <span class="st">"local_repo_test"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dir</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"repos"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">local_repo</span> <span class="op">=</span> <span class="fu">local_repo_clone</span><span class="op">(</span><span class="va">repo</span>, <span class="va">dir</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">local_repo_log</span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Make a local change and push</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="st">"Hello World"</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">local_repo</span>, <span class="st">"hello.txt"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">local_repo_add</span><span class="op">(</span><span class="va">local_repo</span>, <span class="st">"hello.txt"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">local_repo_commit</span><span class="op">(</span><span class="va">local_repo</span>, <span class="st">"Added hello world"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">local_repo_push</span><span class="op">(</span><span class="va">local_repo</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="repo_details.html">repo_commits</a></span><span class="op">(</span><span class="va">repo</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Pulling remote changes</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="repo_file.html">repo_modify_file</a></span><span class="op">(</span><span class="va">repo</span>, <span class="st">"hello.txt"</span>, pattern <span class="op">=</span> <span class="st">".*"</span>,  content <span class="op">=</span> <span class="st">"!!!"</span>, method <span class="op">=</span> <span class="st">"after"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">local_repo_pull</span><span class="op">(</span><span class="va">local_repo</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">local_repo_log</span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="repo_core.html">repo_delete</a></span><span class="op">(</span><span class="st">"ghclass-test/local_repo_test"</span>, prompt<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -216,7 +221,7 @@ to <code>gert</code>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
     </footer></div>

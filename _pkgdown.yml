@@ -54,3 +54,6 @@ reference:
   - title: Actions
     contents:
     - starts_with("action_")
+  - title: Pages
+    contents:
+    - starts_with("pages_")

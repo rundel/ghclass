@@ -9,7 +9,7 @@ org_repo_search() - search for repositories within an organization (preferred fo
 org_repo_stats() - returns a tibble of repositories belonging to a GitHub organization along with some
 basic statistics about those repositories.
 
-"><title>Obtain details on an organization's repos and teams — org_details • ghclass</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Obtain details on an organization's repos and teams — org_details"><meta property="og:description" content="
+"><title>Obtain details on an organization's repos and teams — org_details • ghclass</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Obtain details on an organization's repos and teams — org_details"><meta property="og:description" content="
 
 org_exists() - returns TRUE if the organization(s) exist on GitHub and FALSE otherwise.
 org_teams() - returns a (filtered) vector of organization teams.
@@ -30,14 +30,14 @@ basic statistics about those repositories.
     
     <a class="navbar-brand me-2" href="../index.html">ghclass</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
   <a class="nav-link" href="../articles/articles/ghclass.html">Introduction</a>
 </li>
@@ -81,83 +81,128 @@ basic statistics about those repositories.</p></li>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">org_exists</span><span class="op">(</span><span class="va">org</span><span class="op">)</span>
-
-<span class="fu">org_repo_search</span><span class="op">(</span><span class="va">org</span>, <span class="va">name</span>, extra <span class="op">=</span> <span class="st">""</span>, full_repo <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu">org_repo_stats</span><span class="op">(</span>
-  <span class="va">org</span>,
-  branch <span class="op">=</span> <span class="cn">NULL</span>,
-  filter <span class="op">=</span> <span class="st">""</span>,
-  filter_type <span class="op">=</span> <span class="st">"in:name"</span>,
-  inc_commits <span class="op">=</span> <span class="cn">TRUE</span>,
-  inc_issues <span class="op">=</span> <span class="cn">TRUE</span>,
-  inc_prs <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span>
-
-<span class="fu">org_repos</span><span class="op">(</span><span class="va">org</span>, filter <span class="op">=</span> <span class="cn">NULL</span>, exclude <span class="op">=</span> <span class="cn">FALSE</span>, full_repo <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu">org_team_details</span><span class="op">(</span><span class="va">org</span><span class="op">)</span>
-
-<span class="fu">org_teams</span><span class="op">(</span><span class="va">org</span>, filter <span class="op">=</span> <span class="cn">NULL</span>, exclude <span class="op">=</span> <span class="cn">FALSE</span>, team_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"name"</span>, <span class="st">"slug"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">org_exists</span><span class="op">(</span><span class="va">org</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">org_repo_search</span><span class="op">(</span><span class="va">org</span>, <span class="va">name</span>, extra <span class="op">=</span> <span class="st">""</span>, full_repo <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">org_repo_stats</span><span class="op">(</span></span>
+<span>  <span class="va">org</span>,</span>
+<span>  branch <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  filter <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  filter_type <span class="op">=</span> <span class="st">"in:name"</span>,</span>
+<span>  inc_commits <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  inc_issues <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  inc_prs <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">org_repos</span><span class="op">(</span></span>
+<span>  <span class="va">org</span>,</span>
+<span>  filter <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  exclude <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  full_repo <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  sort <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"full_name"</span>, <span class="st">"created"</span>, <span class="st">"updated"</span>, <span class="st">"pushed"</span><span class="op">)</span>,</span>
+<span>  direction <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"asc"</span>, <span class="st">"desc"</span><span class="op">)</span>,</span>
+<span>  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"public"</span>, <span class="st">"private"</span>, <span class="st">"forks"</span>, <span class="st">"sources"</span>, <span class="st">"member"</span>, <span class="st">"internal"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">org_team_details</span><span class="op">(</span><span class="va">org</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">org_teams</span><span class="op">(</span><span class="va">org</span>, filter <span class="op">=</span> <span class="cn">NULL</span>, exclude <span class="op">=</span> <span class="cn">FALSE</span>, team_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"name"</span>, <span class="st">"slug"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>org</dt>
 <dd><p>Character. Name of the GitHub organization(s).</p></dd>
+
+
 <dt>name</dt>
 <dd><p>Character. Full or partial repo name to search for within the org</p></dd>
+
+
 <dt>extra</dt>
 <dd><p>Character. Any additional search qualifiers, see
 <a href="https://docs.github.com/en/free-pro-team@latest/github/searching-for-information-on-github/searching-for-repositories" class="external-link">Searching for repositories</a>
 for details.</p></dd>
+
+
 <dt>full_repo</dt>
-<dd><p>Logical. Should the full repository address be returned (e.g. <code>owner/repo</code> instead of just <code>repo</code>)?</p></dd>
+<dd><p>Logical. Should the full repository address be returned (e.g. <code>owner/repo</code> instead of just <code>repo</code>).</p></dd>
+
+
 <dt>branch</dt>
 <dd><p>Character. The branch to use for counting commits, if <code>NULL</code> then each repo's default branch is used.</p></dd>
+
+
 <dt>filter</dt>
 <dd><p>Character. Regular expression pattern for matching (or excluding) results</p></dd>
+
+
 <dt>filter_type</dt>
 <dd><p>Character. One or more GitHub search <code>in</code> qualifiers.
 See <a href="https://help.github.com/en/articles/searching-for-repositories" class="external-link">documentation</a>
 for more details.</p></dd>
+
+
 <dt>inc_commits</dt>
 <dd><p>Logical. Include commit statistics (<code>branch</code>, <code>commits</code>, <code>last_update</code>)</p></dd>
+
+
 <dt>inc_issues</dt>
 <dd><p>Logical. Include issue statistics (<code>open_issues</code>, <code>closed_issues</code>)</p></dd>
+
+
 <dt>inc_prs</dt>
 <dd><p>Logical. Include pull request statistics (<code>open_prs</code>, <code>merged_prs</code>, <code>closed_prs</code>)</p></dd>
+
+
 <dt>exclude</dt>
 <dd><p>Logical. Should entries matching the regular expression be excluded or included.</p></dd>
+
+
+<dt>sort</dt>
+<dd><p>Character. Sorting criteria to use, can be one of "created", "updated", "pushed", or "full_name".</p></dd>
+
+
+<dt>direction</dt>
+<dd><p>Character. Sorting order to use.</p></dd>
+
+
+<dt>type</dt>
+<dd><p>Character. Specifies the type of repositories you want, can be one of
+"all", "public", "private", "forks", "sources", "member", or "internal".</p></dd>
+
+
 <dt>team_type</dt>
 <dd><p>Character. Either "slug" if the team names are slugs or "name" if full team names are provided.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p><code>org_exists()</code> returns a logical vector.
-<code>org_teams()</code>, <code>org_repos</code>, and <code>org_repo_search()</code> return a character vector of team or repo names.
-<code>org_team_details()</code> and <code>org_repo_stats()</code> return tibbles.</p>
+    
+
+<p><code>org_exists()</code> returns a logical vector.</p>
+
+
+<p><code>org_teams()</code>, <code>org_repos</code>, and <code>org_repo_search()</code> return a character vector of team or repo names.</p>
+
+
+<p><code>org_team_details()</code> and <code>org_repo_stats()</code> return tibbles.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \dontrun{</span></span>
-<span class="r-in"><span class="co"># Org repos and teams</span></span>
-<span class="r-in"><span class="fu">org_repos</span><span class="op">(</span><span class="st">"ghclass-test"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">org_repos</span><span class="op">(</span><span class="st">"ghclass-test"</span>, filter <span class="op">=</span> <span class="st">"hw1-"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">org_teams</span><span class="op">(</span><span class="st">"ghclass-test"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "team_awesome"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">org_team_details</span><span class="op">(</span><span class="st">"ghclass-test"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 5</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   slug              id name         privacy permission</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> team_awesome 5<span style="text-decoration: underline;">376</span>839 team_awesome secret  pull      </span>
-<span class="r-in"><span class="co"># }</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># Org repos and teams</span></span></span>
+<span class="r-in"><span><span class="fu">org_repos</span><span class="op">(</span><span class="st">"ghclass-test"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">org_repos</span><span class="op">(</span><span class="st">"ghclass-test"</span>, filter <span class="op">=</span> <span class="st">"hw1-"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">org_teams</span><span class="op">(</span><span class="st">"ghclass-test"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">org_team_details</span><span class="op">(</span><span class="st">"ghclass-test"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -169,7 +214,7 @@ for more details.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
     </footer></div>
