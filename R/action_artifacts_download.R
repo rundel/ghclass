@@ -29,18 +29,19 @@ action_artifact_download = function(
   repo, dir, ids = action_artifacts(repo),
   keep_zip=FALSE, file_pat = "", overwrite = FALSE
 ) {
-
   arg_is_chr(repo)
   arg_is_chr_scalar(dir, file_pat)
   arg_is_lgl_scalar(keep_zip)
 
-  # Fail for missing dir before we hit the API
-  if (!dir.exists(dir))
-    cli_stop("Directory {.val {dir}} does not exist.")
+
+  dir.create(dir, showWarnings = FALSE, recursive = TRUE)
 
   if (is.numeric(ids))
     ids = tibble::tibble(repo = repo, id = ids)
   arg_is_df(ids)
+
+  if (nrow(ids) == 0)
+    cli_stop("No artifacts available for the given repos.")
 
   df = dplyr::left_join(
     tibble::tibble(repo = repo),
