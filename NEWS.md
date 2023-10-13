@@ -18,7 +18,7 @@
 
 * Added `github_token_scopes()` which returns a vector of granted scopes for the given PAT.
 
-* Added `github_rate_limit()` for checking current rate limit status.
+* Added `github_rate_limit()` & `github_graphql_rate_limit()` for checking current rate limit status.
 
 * Added `add_badges` argument to `org_create_assignment()`
 
