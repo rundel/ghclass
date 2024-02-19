@@ -142,12 +142,11 @@ github_api_pages_create = function(repo, build_type, branch, path) {
 #'
 pages_create = function(
     repo,
-    build_type = c("workflow", "legacy"),
+    build_type = c("legacy", "workflow"),
     branch = "main",
-    path = c("/", "/docs")
+    path = "/docs"
 ) {
   build_type = match.arg(build_type)
-  path = match.arg(path)
   arg_is_chr(repo)
   arg_is_chr_scalar(build_type, branch, path)
 
