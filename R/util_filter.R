@@ -1,9 +1,9 @@
-filter_results = function(x, ...) {
-  UseMethod("filter_results", x)
+filter_results = function(res, col, pattern = NULL, exclude = FALSE) {
+  UseMethod("filter_results", res)
 }
 
 #' @exportS3Method
-filter_results.default = function(res, pattern = NULL, exclude = FALSE) {
+filter_results.default = function(res, col, pattern = NULL, exclude = FALSE) {
   if (!is.null(pattern)) {
     subset = grepl(pattern, res)
     if (exclude) res = res[!subset]
