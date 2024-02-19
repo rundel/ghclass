@@ -2,6 +2,7 @@
 % Please edit documentation in R/github_rate_limit.R, R/github_token.R
 \name{github_rate_limit}
 \alias{github_rate_limit}
+\alias{github_graphql_rate_limit}
 \alias{github_token}
 \alias{github_get_token}
 \alias{github_set_token}
@@ -11,6 +12,8 @@
 \title{Tools for handling GitHub personal access tokens (PAT)}
 \usage{
 github_rate_limit()
+
+github_graphql_rate_limit()
 
 github_get_token()
 
