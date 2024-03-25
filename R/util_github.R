@@ -211,7 +211,7 @@ ghclass_api_v3_req = function(
     )
   )
 
-  if (length(res) == limit) {
+  if (length(res) == github_get_api_limit()) {
     cli::cli_warn(
       c("The number of results is equal to the limit set by {.fn github_set_api_limit},",
         "consider increasing this limit and rerunning the previous function.")
