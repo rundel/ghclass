@@ -24,6 +24,10 @@
 
 * Added support for GitHub's versioned REST API
 
+* Increased the default value of `github_set_api_limit()` to 10,000.
+
+* Any rest API request will now report if the request limit is reached via a warning.
+
 # ghclass 0.2.1
 
 * ghclass is now on [CRAN](https://CRAN.R-project.org/package=ghclass)!

@@ -30,13 +30,13 @@ NULL
 #' @export
 #'
 github_get_api_limit = function() {
-  getOption("ghclass.api.limit", 1000L)
+  getOption("ghclass.api.limit", 10000L)
 }
 
 #' @rdname github_api_limit
 #' @export
 #'
-github_set_api_limit = function(limit = 1000L) {
+github_set_api_limit = function(limit = 10000L) {
   arg_is_pos_int(limit)
   options("ghclass.api.limit" = limit)
 

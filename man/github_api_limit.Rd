@@ -8,7 +8,7 @@
 \usage{
 github_get_api_limit()
 
-github_set_api_limit(limit = 1000L)
+github_set_api_limit(limit = 10000L)
 }
 \arguments{
 \item{limit}{The maximum number of records to return from an API request.}

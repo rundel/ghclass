@@ -200,7 +200,7 @@ ghclass_api_v3_req = function(
     limit = NULL
   }
 
-  suppressMessages(
+  res = suppressMessages(
     gh::gh(
       endpoint = endpoint,
       ...,
@@ -210,4 +210,13 @@ ghclass_api_v3_req = function(
       # .progress = FALSE # TODO - giving an error for some reason
     )
   )
+
+  if (length(res) == limit) {
+    cli::cli_warn(
+      c("The number of results is equal to the limit set by {.fn github_set_api_limit},",
+        "consider increasing this limit and rerunning the previous function.")
+    )
+  }
+
+  res
 }
