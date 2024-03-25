@@ -5,6 +5,7 @@
 
 [![R build
 status](https://github.com/rundel/ghclass/workflows/R-CMD-check/badge.svg)](https://github.com/rundel/ghclass/actions?query=workflow%3AR-CMD-check)
+[![R-CMD-check](https://github.com/rundel/ghclass/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/rundel/ghclass/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 ## Tools for managing GitHub class organization accounts
