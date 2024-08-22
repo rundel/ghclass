@@ -24,6 +24,10 @@ repo_mirror_template = function(source_repo, target_repo, private = TRUE) {
   arg_is_chr(target_repo)
   arg_is_lgl_scalar(private)
 
+  if (length(repo_ls(source_repo)) == 0) {
+    cli_stop("Cannot mirror {.val {source_repo}} because the repository is empty.")
+  }
+
   target_repo = unique(target_repo)
   exists = repo_exists(target_repo)
 
