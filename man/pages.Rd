@@ -14,9 +14,9 @@ pages_status(repo)
 
 pages_create(
   repo,
-  build_type = c("workflow", "legacy"),
+  build_type = c("legacy", "workflow"),
   branch = "main",
-  path = c("/", "/docs")
+  path = "/docs"
 )
 
 pages_delete(repo)

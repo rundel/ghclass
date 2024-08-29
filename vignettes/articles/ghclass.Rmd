@@ -1,7 +1,7 @@
 ---
 title: "Course management with ghclass"
 author: "Mine Çetinkaya-Rundel, Colin Rundel, Therese Anders"
-date: "2021-12-16"
+date: "2024-03-26"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Course management with ghclass}
@@ -548,45 +548,46 @@ Eventually the students will be finished with the work and or the assignment dea
 
 
 ```r
-local_repo_clone(
-  repo = org_repos("ghclass-vignette", "hw1-team"),
-  local_path = "hw1"
-)
+repo_dir = file.path(tempdir(), "hw1")
 ```
-
-<PRE class="fansi"><CODE>#&gt; <span style='color: #00BB00;'>✓</span> Cloned <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-team01&quot;</span>.
-#&gt; <span style='color: #00BB00;'>✓</span> Cloned <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-team02&quot;</span>.
-#&gt; <span style='color: #00BB00;'>✓</span> Cloned <span style='color: #0000BB;'>&quot;ghclass-vignette/hw1-team03&quot;</span>.</CODE></PRE>
-
 
 
 ```r
-fs::dir_tree("hw1/")
+local_repo_clone(
+  repo = org_repos("ghclass-vignette", "hw1-team"),
+  local_path = repo_dir
+)
+#> ✔ Cloned "ghclass-vignette/hw1-team01".
+#> ✔ Cloned "ghclass-vignette/hw1-team02".
+#> ✔ Cloned "ghclass-vignette/hw1-team03".
 ```
 
-<PRE class="fansi"><CODE>#&gt; <span style='color: #0000BB; font-weight: bold;'>hw1/</span>
-#&gt; ├── <span style='color: #0000BB; font-weight: bold;'>hw1-team01</span>
-#&gt; │   ├── README.md
-#&gt; │   ├── <span style='color: #BB00BB; font-weight: bold;'>fizzbuzz.png</span>
-#&gt; │   ├── <span style='color: #00BB00;'>hw1.Rmd</span>
-#&gt; │   ├── hw1.Rproj
-#&gt; │   ├── <span style='color: #00BB00;'>hw1_whitelist.R</span>
-#&gt; │   └── wercker.yml
-#&gt; ├── <span style='color: #0000BB; font-weight: bold;'>hw1-team02</span>
-#&gt; │   ├── README.md
-#&gt; │   ├── <span style='color: #BB00BB; font-weight: bold;'>fizzbuzz.png</span>
-#&gt; │   ├── <span style='color: #00BB00;'>hw1.Rmd</span>
-#&gt; │   ├── hw1.Rproj
-#&gt; │   ├── <span style='color: #00BB00;'>hw1_whitelist.R</span>
-#&gt; │   └── wercker.yml
-#&gt; └── <span style='color: #0000BB; font-weight: bold;'>hw1-team03</span>
-#&gt;     ├── README.md
-#&gt;     ├── <span style='color: #BB00BB; font-weight: bold;'>fizzbuzz.png</span>
-#&gt;     ├── <span style='color: #00BB00;'>hw1.Rmd</span>
-#&gt;     ├── hw1.Rproj
-#&gt;     ├── <span style='color: #00BB00;'>hw1_whitelist.R</span>
-#&gt;     └── wercker.yml</CODE></PRE>
 
+```r
+fs::dir_tree(repo_dir)
+#> /var/folders/v7/wrxd7cdj6l5gzr0191__m9lr0000gn/T//RtmpEkGyKu/hw1
+#> ├── hw1-team01
+#> │   ├── README.md
+#> │   ├── fizzbuzz.png
+#> │   ├── hw1.Rmd
+#> │   ├── hw1.Rproj
+#> │   ├── hw1_whitelist.R
+#> │   └── wercker.yml
+#> ├── hw1-team02
+#> │   ├── README.md
+#> │   ├── fizzbuzz.png
+#> │   ├── hw1.Rmd
+#> │   ├── hw1.Rproj
+#> │   ├── hw1_whitelist.R
+#> │   └── wercker.yml
+#> └── hw1-team03
+#>     ├── README.md
+#>     ├── fizzbuzz.png
+#>     ├── hw1.Rmd
+#>     ├── hw1.Rproj
+#>     ├── hw1_whitelist.R
+#>     └── wercker.yml
+```
 
 
 
