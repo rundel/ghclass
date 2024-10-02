@@ -99,6 +99,8 @@ NULL
 #'
 #' * `repo_prs()` - Returns a tibble of pull requests for a GitHub repository.
 #'
+#' * `repo_pushes()` - Returns a tibble of push activity to a GitHub repository.
+#'
 #' @param repo Character. Address of repository in `owner/repo` format.
 #'
 #' @return `repo_clone_url()` and `repo_branches()` both return a character vector.

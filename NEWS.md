@@ -2,6 +2,8 @@
 
 * Added check to `repo_mirror_template()` for empty repositories to avoid cryptic GitHub api error.
 
+* Added `repo_pushes()` to retrieve push activity for a repository.
+
 # ghclass 0.3.0
 
 * Added support for basig GitHub Pages API endpoints - see `pages_enabled()`, `pages_status()`, `pages_create()`, and `pages_delete()`.
