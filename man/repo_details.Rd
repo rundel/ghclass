@@ -47,6 +47,7 @@ repo_prs(repo, state = c("open", "closed", "all"))
 repo_pushes(
   repo,
   branch = NULL,
+  author = NULL,
   time_period = c("all time", "day", "week", "month", "quarter", "year"),
   quiet = FALSE
 )

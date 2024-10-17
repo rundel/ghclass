@@ -28,7 +28,7 @@ github_api_repo_activity = function(repo,  ref = NULL, actor = NULL, time_period
 #' @export
 #'
 
-repo_pushes = function(repo, branch = NULL, time_period = c("all time", "day", "week", "month", "quarter", "year"), quiet = FALSE) {
+repo_pushes = function(repo, branch = NULL, author = NULL, time_period = c("all time", "day", "week", "month", "quarter", "year"), quiet = FALSE) {
 
   time_period = match.arg(time_period)
 
@@ -36,14 +36,14 @@ repo_pushes = function(repo, branch = NULL, time_period = c("all time", "day", "
     time_period = NULL
 
   arg_is_chr(repo)
-  arg_is_chr_scalar(branch, time_period, allow_null = TRUE)
+  arg_is_chr_scalar(branch, author, time_period, allow_null = TRUE)
   arg_is_lgl_scalar(quiet)
 
   purrr::map_dfr(
     repo,
     function(repo) {
       res = purrr::safely(github_api_repo_activity)(
-        repo, ref = branch, time_period = time_period, activity_type = "push"
+        repo, ref = branch, actor = author, time_period = time_period, activity_type = "push"
       )
 
       if (!quiet) {
