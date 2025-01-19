@@ -4,6 +4,10 @@
 
 * Added `repo_pushes()` to retrieve push activity for a repository.
 
+* Added `org_workflow_permissions()` and `org_set_workflow_permissions()` to handle organization workflow permissions.
+
+* Added workflow permissions details to `org_sitrep()`
+
 # ghclass 0.3.0
 
 * Added support for basig GitHub Pages API endpoints - see `pages_enabled()`, `pages_status()`, `pages_create()`, and `pages_delete()`.

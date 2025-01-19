@@ -19,15 +19,15 @@ github_api_org_update = function(
 #' @rdname org_perm
 #' @export
 #'
-org_set_repo_permission = function(org, permission = c("none", "read", "write", "admin")) {
+org_set_repo_permission = function(org, repo_permission = c("none", "read", "write", "admin")) {
   arg_is_chr_scalar(org)
-  permission = match.arg(permission)
+  repo_permission = match.arg(repo_permission)
 
-  res = purrr::safely(github_api_org_update)(org, default_repository_permission = permission)
+  res = purrr::safely(github_api_org_update)(org, default_repository_permission = repo_permission)
 
   status_msg(
     res,
-    "Set org {.val {org}}'s repo permissions to {.val {permission}}.",
+    "Set org {.val {org}}'s repo permissions to {.val {repo_permission}}.",
     "failed to set org {.val {org}}'s repo permissions."
   )
 

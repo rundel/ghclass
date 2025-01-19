@@ -9,16 +9,28 @@
 #'
 #' * `org_set_repo_permission()` - Change the default permission level for org repositories.
 #'
+#' `org_workflow_permissions()` - Obtain the current default workflow permission value
+#' for the organization.
+#'
+#' `org_set_workflow_permissions()` - Change the current default workflow permission value
+#' for the organization.
+#'
 #' @param org Character. Name of the GitHub organization(s).
-#' @param permission Default permission level members have for organization repositories:
+#' @param repo_permission Default permission level members have for organization repositories:
 #' * read - can pull, but not push to or administer this repository.
 #' * write - can pull and push, but not administer this repository.
 #' * admin - can pull, push, and administer this repository.
 #' * none - no permissions granted by default.
+#' @param workflow_permission The default workflow permissions granted to the GITHUB_TOKEN when
+#' running workflows in the organization. Accepted values:`"read"` or `"write"`.
 #'
 #' @return `org_sitep()` invisibly returns the `org` argument.
 #'
 #' `org_set_repo_permission()` invisibly return a the result of the relevant GitHub API call.
+#'
+#' `org_workflow_permissions()` returns a character vector with value of either `"read"` or `"write"`.
+#'
+#' `org_set_workflow_permissions()` invisibly return a the result of the relevant GitHub API call.
 #'
 #' @examples
 #' \dontrun{
@@ -26,10 +38,15 @@
 #'
 #' org_set_repo_permission("ghclass-test", "read")
 #'
+#' org_workflow_permissions("ghclass-test")
+#'
+#' org_set_workflow_permissions("ghclass-test", "write")
+#'
 #' org_sitrep("ghclass-test")
 #'
 #' # Cleanup
 #' org_set_repo_permission("ghclass-test", "none")
+#' org_set_workflow_permissions("ghclass-test", "read")
 #' }
 #'
 NULL
