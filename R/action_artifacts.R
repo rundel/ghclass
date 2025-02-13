@@ -53,8 +53,8 @@ action_artifacts = function(repo, keep_expired=FALSE, which=c("latest", "all")) 
         tibble::tibble(
           repo    = r,
           name    = purrr::map_chr(artifacts, "name", .default = NA),
-          id      = purrr::map_int(artifacts, "id", .default = NA),
-          size    = purrr::map_int(artifacts, "size_in_bytes", .default = NA),
+          id      = purrr::map_dbl(artifacts, "id", .default = NA),
+          size    = purrr::map_dbl(artifacts, "size_in_bytes", .default = NA),
           url     = purrr::map_chr(artifacts, "url", .default = NA),
           expired = purrr::map_lgl(artifacts, "expired", .default = NA),
           created = purrr::map_chr(artifacts, "created_at", .default = NA) %>% lubridate::ymd_hms(),

@@ -68,7 +68,7 @@ org_create_assignment = function(org, repo, user, team = NULL, source_repo = NUL
   }
 
   if (add_badges)
-    res[["add_badge"]] = action_add_badge(repo_full)
+    res[["add_badge"]] = action_add_badge(unique(repo_full))
 
   invisible(res)
 }

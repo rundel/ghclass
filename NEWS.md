@@ -8,6 +8,12 @@
 
 * Added workflow permissions details to `org_sitrep()`
 
+* Bug fixes
+  
+  * Handle artifacts with large id values (causing an integer overflow)
+  
+  * Duplicate action badges from `org_create_assignment()`
+
 # ghclass 0.3.0
 
 * Added support for basig GitHub Pages API endpoints - see `pages_enabled()`, `pages_status()`, `pages_create()`, and `pages_delete()`.

@@ -1,7 +1,7 @@
 github_api_download_artifact = function(repo, id, dest) {
-  id = as.integer(id)
+  id = as.double(id)
   arg_is_chr_scalar(repo)
-  arg_is_pos_int(id)
+  #arg_is_pos_int(id)
 
   archive_format = "zip"
   if (missing(dest))
