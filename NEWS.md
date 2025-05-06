@@ -1,4 +1,4 @@
-# ghclass (development version)
+# ghclass 0.3.1
 
 * Added check to `repo_mirror_template()` for empty repositories to avoid cryptic GitHub api error.
 

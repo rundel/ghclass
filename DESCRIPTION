@@ -1,6 +1,6 @@
 Package: ghclass
 Title: Tools for Managing Classes on GitHub
-Version: 0.3.0.9000
+Version: 0.3.1
 Authors@R: 
     c(person(given = "Colin",
              family = "Rundel",
