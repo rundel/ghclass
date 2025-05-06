@@ -14,6 +14,8 @@
   
   * Duplicate action badges from `org_create_assignment()`
 
+* Altered `org_create_assignment()` to require the use of a template repository as `source_repo`.
+
 # ghclass 0.3.0
 
 * Added support for basig GitHub Pages API endpoints - see `pages_enabled()`, `pages_status()`, `pages_create()`, and `pages_delete()`.

@@ -32,6 +32,14 @@ org_create_assignment = function(org, repo, user, team = NULL, source_repo = NUL
 
   repo_full = paste0(org, "/", repo)
 
+  if (!is.null(source_repo) && !repo_is_template(source_repo)) {
+    expr = paste0("repo_set_template(", source_repo, ")")
+    cli_stop(
+      "{.val {source_repo}} is not a template repo - ",
+      "this can be set using {.code repo_set_template({.val {source_repo}})}}."
+    )
+  }
+
   existing = repo_exists(repo_full)
   if (any(existing)) {
     cli_stop(
@@ -42,19 +50,10 @@ org_create_assignment = function(org, repo, user, team = NULL, source_repo = NUL
 
   res = list()
 
-  if (!is.null(source_repo) && repo_is_template(source_repo)) {
+  if (!is.null(source_repo)) {
     res[["mirror"]] = repo_mirror_template(source_repo, repo_full, private = private)
   } else {
     repo_create(org, repo, private = private)
-    if (!is.null(source_repo)) {
-      cli_warn(
-        "Creating assignments from non-template repositories is deprecated, ",
-        "and will be removed in a future version of this package.\n",
-        "The repo {.val {source_repo}} can be made into a template repo using the {.fun repo_set_template} function."
-      )
-
-      res[["mirror"]] = repo_mirror(source_repo, repo_full, overwrite = TRUE, warn = FALSE)
-    }
   }
 
   if (!is.null(team)) {
