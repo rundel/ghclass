@@ -1,111 +1,38 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://rundel.github.io/ghclass/404.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/articles/articles/ghclass.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/articles/ghclass.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/index.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/reference/action.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/reference/action_badge.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/reference/branch.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/reference/github_api_limit.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/reference/github_orgs.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/reference/github_token.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/reference/github_whoami.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/reference/github_with_pat.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/reference/issue.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/reference/local_repo.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/reference/local_repo_rename.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/reference/org_create_assignment.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/reference/org_details.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/reference/org_members.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/reference/org_perm.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/reference/pages.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/reference/pr.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/reference/repo_core.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/reference/repo_details.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/reference/repo_file.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/reference/repo_notification.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/reference/repo_style.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/reference/repo_user.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/reference/team.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/reference/team_members.html</loc>
-  </url>
-  <url>
-    <loc>https://rundel.github.io/ghclass/reference/user.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://rundel.github.io/ghclass/404.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/LICENSE-text.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/LICENSE.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/articles/ghclass.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/articles/index.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/authors.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/index.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/news/index.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/reference/action.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/reference/action_badge.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/reference/branch.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/reference/github_api_limit.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/reference/github_orgs.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/reference/github_token.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/reference/github_whoami.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/reference/github_with_pat.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/reference/index.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/reference/issue.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/reference/local_repo.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/reference/local_repo_rename.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/reference/org_create_assignment.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/reference/org_details.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/reference/org_members.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/reference/org_perm.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/reference/pages.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/reference/pr.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/reference/repo_core.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/reference/repo_details.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/reference/repo_file.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/reference/repo_notification.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/reference/repo_style.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/reference/repo_user.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/reference/team.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/reference/team_members.html</loc></url>
+<url><loc>https://rundel.github.io/ghclass/reference/user.html</loc></url>
 </urlset>
+
