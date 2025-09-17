@@ -1,4 +1,6 @@
-# ghclass 0.3.2 - Development version
+# ghclass (development version)
+
+# ghclass 0.3.1.9000 - Development version
 
 * Tweaked how teams slugs are looked up due to API delays / caching issues which was causing errors in `org_create_assignment()`.
 
