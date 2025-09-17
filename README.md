@@ -2,10 +2,8 @@
 # ghclass <img src='man/figures/logo.png' align="right" height="140" />
 
 <!-- badges: start -->
-
-[![R build
-status](https://github.com/rundel/ghclass/workflows/R-CMD-check/badge.svg)](https://github.com/rundel/ghclass/actions?query=workflow%3AR-CMD-check)
 [![R-CMD-check](https://github.com/rundel/ghclass/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/rundel/ghclass/actions/workflows/R-CMD-check.yaml)
+[![CRAN status](https://www.r-pkg.org/badges/version/ghclass)](https://CRAN.R-project.org/package=ghclass)
 <!-- badges: end -->
 
 ## Tools for managing GitHub class organization accounts
