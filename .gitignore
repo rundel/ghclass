@@ -9,3 +9,6 @@ doc
 Meta
 vignettes/articles/cache/
 test
+
+/.quarto/
+**/*.quarto_ipynb
