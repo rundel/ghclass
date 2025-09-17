@@ -10,7 +10,7 @@ missing_team = function(team, id, org) {
 team_slug_lookup = function(org, name) {
   dplyr::left_join(
     tibble::tibble(name = name),
-    org_team_details(org),
+    org_team_details_v4(org),
     by = "name"
   )[["slug"]]
 }

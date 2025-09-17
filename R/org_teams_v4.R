@@ -11,6 +11,8 @@ github_api_org_teams_v4 = function(org) {
             node {
               id
               name
+              slug
+              privacy
             }
           }
         }
@@ -24,8 +26,8 @@ github_api_org_teams_v4 = function(org) {
 }
 
 
-org_teams_v4 = function(org) {
-  warn_experimental()
+org_team_details_v4 = function(org) {
+  #warn_experimental()
   arg_is_chr_scalar(org)
 
   pages = github_api_org_teams_v4(org)
@@ -37,8 +39,10 @@ org_teams_v4 = function(org) {
 
       tibble::tibble(
         org  = org,
-        team = purrr::map_chr(teams, c("node", "name")),
-        id   = purrr::map_chr(teams, c("node", "id"))
+        id   = purrr::map_chr(teams, c("node", "id")),
+        name = purrr::map_chr(teams, c("node", "name")),
+        slug   = purrr::map_chr(teams, c("node", "slug")),
+        privacy = purrr::map_chr(teams, c("node", "privacy")) |> tolower(),
       )
     }
   )
