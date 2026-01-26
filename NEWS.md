@@ -4,6 +4,7 @@
 
 * Tweaked how teams slugs are looked up due to API delays / caching issues which was causing errors in `org_create_assignment()`.
 
+* Fixed a minor issue with data handling in `action_runs()`
 
 # ghclass 0.3.1
 

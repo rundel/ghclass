@@ -109,7 +109,7 @@ action_runs = function(
             run_df = tibble::tibble(
               repo   = repo,
               workflow = name,
-              run_id = purrr::map_chr(runs, "id", .default = NA),
+              run_id = purrr::map_dbl(runs, "id", .default = NA),
               branch = purrr::map_chr(runs, "head_branch", .default = NA),
               commit = purrr::map_chr(runs, "head_sha", .default = NA),
               actor  = purrr::map_chr(runs, c("actor", "login"), .default = NA),
