@@ -42,7 +42,7 @@ org_team_details_v4 = function(org) {
         id   = purrr::map_chr(teams, c("node", "id")),
         name = purrr::map_chr(teams, c("node", "name")),
         slug   = purrr::map_chr(teams, c("node", "slug")),
-        privacy = purrr::map_chr(teams, c("node", "privacy")) |> tolower(),
+        privacy = purrr::map_chr(teams, c("node", "privacy")) %>% tolower(),
       )
     }
   )
