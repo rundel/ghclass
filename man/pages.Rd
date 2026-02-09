@@ -16,10 +16,10 @@ pages_create(
   repo,
   build_type = c("legacy", "workflow"),
   branch = "main",
-  path = "/docs"
+  path = "/"
 )
 
-pages_delete(repo)
+pages_delete(repo, prompt = TRUE)
 }
 \arguments{
 \item{repo}{Character. Address of repositories in \code{owner/name} format.}
@@ -30,6 +30,8 @@ build and publish the site (requires a workflow file to achieve this).}
 \item{branch}{Character. Repository branch to publish.}
 
 \item{path}{Character. Repository path to publish.}
+
+\item{prompt}{Logical. Should the user be prompted before deleting Pages sites. Default \code{TRUE}.}
 }
 \value{
 \code{pages_enabled()} returns a named logical vector - \code{TRUE} if a Pages site exists, \code{FALSE} otherwise.

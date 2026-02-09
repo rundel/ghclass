@@ -91,7 +91,10 @@ pages_status = function(repo) {
           build_type = character(),
           branch = character(),
           path   = character(),
-          public = logical()
+          public = logical(),
+          cname  = character(),
+          custom_404 = logical(),
+          https_enforced = logical()
         )
       } else {
         page = list(result(res))
@@ -102,7 +105,10 @@ pages_status = function(repo) {
           build_type = purrr::map_chr(page, "build_type", .default = NA),
           branch = purrr::map_chr(page, c("source", "branch"), .default = NA),
           path   = purrr::map_chr(page, c("source", "path"), .default = NA),
-          public = purrr::map_lgl(page, "public", .default = NA)
+          public = purrr::map_lgl(page, "public", .default = NA),
+          cname  = purrr::map_chr(page, "cname", .default = NA),
+          custom_404 = purrr::map_lgl(page, "custom_404", .default = NA),
+          https_enforced = purrr::map_lgl(page, "https_enforced", .default = NA)
         )
       }
     }
@@ -144,7 +150,7 @@ pages_create = function(
     repo,
     build_type = c("legacy", "workflow"),
     branch = "main",
-    path = "/docs"
+    path = "/"
 ) {
   build_type = match.arg(build_type)
   arg_is_chr(repo)
@@ -184,10 +190,20 @@ github_api_pages_delete = function(repo) {
 #' @name pages
 #' @rdname pages
 #'
+#' @param prompt Logical. Should the user be prompted before deleting Pages sites. Default `TRUE`.
+#'
 #' @export
 #'
-pages_delete = function(repo) {
+pages_delete = function(repo, prompt = TRUE) {
   arg_is_chr(repo)
+  arg_is_lgl_scalar(prompt)
+
+  if (prompt) {
+    delete = cli_yeah("This command will delete Pages sites for the following repositories permanently: {.val {repo}}.")
+    if (!delete) {
+      return(invisible())
+    }
+  }
 
   purrr::map(
     repo,
