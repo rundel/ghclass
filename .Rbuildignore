@@ -20,3 +20,5 @@ Makefile
 ^\.github$
 ^CRAN-SUBMISSION$
 test/
+CLAUDE.md
+.claude/
