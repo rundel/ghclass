@@ -26,11 +26,17 @@
 #'
 #' * `repo_set_template()` - change the template status of a repository.
 #'
+#' * `repo_allows_forking()` - returns `TRUE` if forking is enabled for a repository.
+#'
+#' * `repo_set_forking()` - enable or disable forking for a repository.
+#'
 #' @param repo Character. Address of repository in `owner/repo` format.
 #'
 #' @return `repo_create()` returns a character vector of created repos (in `owner/repo` format)
 #'
-#' `repo_exists()` and `repo_is_template()` both return a logical vector.
+#' `repo_exists()`, `repo_is_template()`, and `repo_allows_forking()` all return a logical vector.
+#'
+#' `repo_set_forking()` invisibly returns a list containing the results of the relevant GitHub API calls.
 #'
 #' All other functions invisibly return a list containing the results of the relevant GitHub API calls.
 #'

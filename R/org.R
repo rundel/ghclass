@@ -9,11 +9,13 @@
 #'
 #' * `org_set_repo_permission()` - Change the default permission level for org repositories.
 #'
-#' `org_workflow_permissions()` - Obtain the current default workflow permission value
+#' * `org_workflow_permissions()` - Obtain the current default workflow permission value
 #' for the organization.
 #'
-#' `org_set_workflow_permissions()` - Change the current default workflow permission value
+#' * `org_set_workflow_permissions()` - Change the current default workflow permission value
 #' for the organization.
+#'
+#' * `org_allows_forking()` - returns `TRUE` if members can fork private repositories in the organization.
 #'
 #' @param org Character. Name of the GitHub organization(s).
 #' @param repo_permission Default permission level members have for organization repositories:
@@ -31,6 +33,8 @@
 #' `org_workflow_permissions()` returns a character vector with value of either `"read"` or `"write"`.
 #'
 #' `org_set_workflow_permissions()` invisibly return a the result of the relevant GitHub API call.
+#'
+#' `org_allows_forking()` returns a logical scalar.
 #'
 #' @examples
 #' \dontrun{
@@ -129,6 +133,8 @@ NULL
 #' * `org_repo_stats()` - returns a tibble of repositories belonging to a GitHub organization along with some
 #' basic statistics about those repositories.
 #'
+#' * `org_repo_forking()` - returns a tibble of private repositories in an organization and whether forking is enabled for each.
+#'
 #' @param org Character. Name of the GitHub organization(s).
 #' @param filter Character. Regular expression pattern for matching (or excluding) results
 #' @param exclude Logical. Should entries matching the regular expression be excluded or included.
@@ -137,7 +143,7 @@ NULL
 #'
 #' `org_teams()`, `org_repos`, and `org_repo_search()` return a character vector of team or repo names.
 #'
-#' `org_team_details()` and `org_repo_stats()` return tibbles.
+#' `org_team_details()`, `org_repo_stats()`, and `org_repo_forking()` return tibbles.
 #'
 #' @examples
 #' \dontrun{

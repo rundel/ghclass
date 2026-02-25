@@ -2,6 +2,14 @@
 
 # ghclass 0.3.1.9000 - Development version
 
+* Added `repo_allows_forking()` to check if forking is enabled for a repository.
+
+* Added `org_allows_forking()` to check if members can fork private repositories in an organization.
+
+* Added `org_repo_forking()` to retrieve the forking status of all private repositories in an organization.
+
+* Added `repo_set_forking()` to enable or disable forking for a repository.
+
 * Tweaked how teams slugs are looked up due to API delays / caching issues which was causing errors in `org_create_assignment()`.
 
 * Fixed a minor issue with data handling in `action_runs()`

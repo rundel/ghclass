@@ -33,6 +33,12 @@ org_sitrep = function(org) {
     else
       workflow_perm_warn = NULL
 
+    allows_forking = res_org$members_can_fork_private_repositories
+    if (allows_forking)
+      forking_warn = "by default members can currently fork private repos in this org."
+    else
+      forking_warn = NULL
+
     #if (perm != "none")
     #  perm = cli::col_red(perm)
 
@@ -58,6 +64,7 @@ org_sitrep = function(org) {
     )
     cli::cli_li(cli_kv("Members can create public repos", res_org$members_can_create_public_repositories))
     cli::cli_li(cli_kv("Members can create private repos", res_org$members_can_create_private_repositories))
+    cli::cli_li(cli_kv("Members can fork private repos", allows_forking, forking_warn))
     cli::cli_end()
 
     invisible(res_org)
