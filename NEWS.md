@@ -2,6 +2,16 @@
 
 # ghclass 0.3.1.9000 - Development version
 
+* Improvements to `action_artifacts()` and `action_artifact_download()`
+
+  * Added `branch` column to `action_artifacts()` output
+
+  * Added `filter_branch` and `exclude` arguments to both functions
+
+  * `action_artifact_download()` better handles repos with multiple objects (errors only show for no matching artifacts)
+
+* Added `org_grade_assignment()` to automate grading setup: clones repos, downloads GitHub Actions artifacts, and creates comment template files.
+
 * Added `repo_allows_forking()` to check if forking is enabled for a repository.
 
 * Added `org_allows_forking()` to check if members can fork private repositories in an organization.

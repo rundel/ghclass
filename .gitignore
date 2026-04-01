@@ -13,4 +13,4 @@ test
 /.quarto/
 **/*.quarto_ipynb
 CLAUDE.md
-.claude/settings.local.json
+.claude/
