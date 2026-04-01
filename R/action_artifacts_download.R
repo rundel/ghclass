@@ -42,8 +42,10 @@ action_artifact_download = function(
     ids = tibble::tibble(repo = repo, id = ids)
   arg_is_df(ids)
 
-  if (nrow(ids) == 0)
-    cli_stop("No artifacts available for the given repos.")
+  if (nrow(ids) == 0) {
+    cli::cli_alert_danger("No artifacts available for the given repos.")
+    return(invisible(character()))
+  }
 
   df = dplyr::left_join(
     tibble::tibble(repo = repo),
@@ -59,6 +61,16 @@ action_artifact_download = function(
     function(repo_df) {
       cur_repo = repo_df[["repo"]][1]
       cur_ids = repo_df[["id"]]
+
+      if (all(is.na(cur_ids))) {
+        cli::cli_alert_danger(
+          "No artifacts found for repo {.val {cur_repo}}.",
+          wrap = FALSE
+        )
+        return(NA_character_)
+      }
+
+      cur_ids = cur_ids[!is.na(cur_ids)]
 
       downloads = purrr::map(
         cur_ids,
