@@ -9,7 +9,8 @@ org_grade_assignment(
   org,
   repo_filter,
   artifacts = character(),
-  comment_template = ""
+  comment_template = "",
+  key_repo = NULL
 )
 }
 \arguments{
@@ -26,6 +27,9 @@ file patterns for \code{\link[=action_artifact_download]{action_artifact_downloa
 
 \item{comment_template}{Character. Template text used to populate each comment
 markdown file. Defaults to \code{""}.}
+
+\item{key_repo}{Character. Optional repository address in \code{owner/name} format
+to clone into the root of the grading folder as an answer key.}
 }
 \value{
 An invisible list containing:
@@ -34,6 +38,7 @@ An invisible list containing:
 \item \code{cloned} — result from \code{\link[=local_repo_clone]{local_repo_clone()}}
 \item \code{artifacts} — named list of results from each \code{\link[=action_artifact_download]{action_artifact_download()}} call
 \item \code{comments} — character vector of comment file paths created
+\item \code{key} — result from cloning the key repo (if provided)
 }
 }
 \description{
