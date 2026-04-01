@@ -15,14 +15,18 @@ github_api_action_artifacts = function(repo) {
 #' @param keep_expired Logical. Should expired artifacts be returned.
 #' @param which Character. Either `"latest"` to return only the most recent of each
 #'   artifact or `"all"` to return all artifacts.
+#' @param filter_branch Character. Regex pattern to filter artifacts by branch name.
+#' @param exclude Logical. If `TRUE`, exclude matching branches instead of including them.
 #' @export
 #'
-action_artifacts = function(repo, keep_expired=FALSE, which=c("latest", "all")) {
+action_artifacts = function(repo, keep_expired=FALSE, which=c("latest", "all"),
+                           filter_branch = NULL, exclude = FALSE) {
   which = match.arg(which)
 
   arg_is_chr(repo)
   arg_is_chr_scalar(which)
-  arg_is_lgl_scalar(keep_expired)
+  arg_is_lgl_scalar(keep_expired, exclude)
+  arg_is_chr_scalar(filter_branch, allow_null = TRUE)
 
   res = purrr::map_dfr(
     repo,
@@ -33,11 +37,10 @@ action_artifacts = function(repo, keep_expired=FALSE, which=c("latest", "all")) 
         fail = "Failed to retrieve artifacts for repo {.val {repo}}."
       )
 
-      if (failed(res)) {
-        NULL
-      } else if (empty_result(res) || result(res)[["total_count"]] == 0) {
+      if (failed(res) || empty_result(res) || result(res)[["total_count"]] == 0) {
         tibble::tibble(
           repo    = character(),
+          branch  = character(),
           name    = character(),
           id      = integer(),
           size    = integer(),
@@ -52,6 +55,7 @@ action_artifacts = function(repo, keep_expired=FALSE, which=c("latest", "all")) 
 
         tibble::tibble(
           repo    = r,
+          branch  = purrr::map_chr(artifacts, c("workflow_run", "head_branch"), .default = NA),
           name    = purrr::map_chr(artifacts, "name", .default = NA),
           id      = purrr::map_dbl(artifacts, "id", .default = NA),
           size    = purrr::map_dbl(artifacts, "size_in_bytes", .default = NA),
@@ -68,6 +72,8 @@ action_artifacts = function(repo, keep_expired=FALSE, which=c("latest", "all")) 
   if (!keep_expired) {
     res = dplyr::filter(res, .data[["expired"]] == FALSE)
   }
+
+  res = filter_results(res, filter_branch, exclude, col = "branch")
 
   if (which == "latest") {
     res %>%

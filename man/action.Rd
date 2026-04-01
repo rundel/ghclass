@@ -15,17 +15,25 @@
 \alias{action_workflows}
 \title{Retrieve information about GitHub Actions workflows and their runs.}
 \usage{
-action_artifacts(repo, keep_expired = FALSE, which = c("latest", "all"))
+action_artifacts(
+  repo,
+  keep_expired = FALSE,
+  which = c("latest", "all"),
+  filter_branch = NULL,
+  exclude = FALSE
+)
 
 action_artifact_delete(repo, ids)
 
 action_artifact_download(
   repo,
   dir,
-  ids = action_artifacts(repo),
+  ids = action_artifacts(repo, filter_branch = filter_branch, exclude = exclude),
   keep_zip = FALSE,
   file_pat = "",
-  overwrite = FALSE
+  overwrite = FALSE,
+  filter_branch = NULL,
+  exclude = FALSE
 )
 
 action_run_logs(
@@ -72,6 +80,10 @@ action_workflows(repo, full = FALSE)
 
 \item{which}{Character. Either \code{"latest"} to return only the most recent of each
 artifact or \code{"all"} to return all artifacts.}
+
+\item{filter_branch}{Character. Regex pattern to filter artifacts by branch name.}
+
+\item{exclude}{Logical. If \code{TRUE}, exclude matching branches instead of including them.}
 
 \item{ids}{Integer or data frame. Artifact ids to be downloaded or deleted.
 If a data frame is passed then the \code{id} column will be used.}

@@ -26,12 +26,14 @@ github_api_download_artifact = function(repo, id, dest) {
 #' @export
 #'
 action_artifact_download = function(
-  repo, dir, ids = action_artifacts(repo),
-  keep_zip=FALSE, file_pat = "", overwrite = FALSE
+  repo, dir, ids = action_artifacts(repo, filter_branch = filter_branch, exclude = exclude),
+  keep_zip=FALSE, file_pat = "", overwrite = FALSE,
+  filter_branch = NULL, exclude = FALSE
 ) {
   arg_is_chr(repo)
   arg_is_chr_scalar(dir, file_pat)
-  arg_is_lgl_scalar(keep_zip)
+  arg_is_lgl_scalar(keep_zip, exclude)
+  arg_is_chr_scalar(filter_branch, allow_null = TRUE)
 
 
   dir.create(dir, showWarnings = FALSE, recursive = TRUE)
@@ -50,51 +52,99 @@ action_artifact_download = function(
   ) %>%
     dplyr::select("repo", "id")
 
-  res = purrr::pmap_chr(
-    df,
-    function(repo, id) {
-      res = purrr::safely(github_api_download_artifact)(repo, id)
-      file = result(res)
+  repo_groups = split(df, df[["repo"]])
 
-      if (failed(res)) {
+  res = purrr::map(
+    repo_groups,
+    function(repo_df) {
+      cur_repo = repo_df[["repo"]][1]
+      cur_ids = repo_df[["id"]]
+
+      downloads = purrr::map(
+        cur_ids,
+        function(id) {
+          dl = purrr::safely(github_api_download_artifact)(cur_repo, id)
+          if (failed(dl)) {
+            cli::cli_alert_danger(
+              "Failed to download artifact with id {.val {id}} from repo {.val {cur_repo}}.",
+              wrap = FALSE
+            )
+          }
+          list(id = id, res = dl)
+        }
+      )
+
+      if (keep_zip) {
+        return(purrr::map_chr(downloads, function(dl) {
+          if (failed(dl[["res"]])) return(NA_character_)
+
+          id = dl[["id"]]
+          file = result(dl[["res"]])
+          dest_path = fs::path_norm(glue::glue("{dir}/{get_repo_name(cur_repo)}.zip"))
+
+          if (file.exists(dest_path) & !overwrite) {
+            cli::cli_alert_danger(
+              "File {.file {dest_path}} already exists, set {.code overwrite = TRUE} to overwrite this file.",
+              wrap = FALSE
+            )
+            return(NA_character_)
+          }
+
+          file.rename(file, dest_path)
+
+          cli::cli_alert_success(
+            "Downloaded artifact {.val {id}} from repo {.val {cur_repo}} to {.val {dest_path}}.",
+            wrap = FALSE
+          )
+          dest_path
+        }))
+      }
+
+      matches = purrr::map(downloads, function(dl) {
+        if (failed(dl[["res"]])) return(NULL)
+
+        file = result(dl[["res"]])
+        art_files = utils::unzip(file, list = TRUE)[["Name"]]
+        matched = art_files[grepl(file_pat, art_files)]
+
+        if (length(matched) == 0) return(NULL)
+        if (length(matched) != 1) {
+          cli::cli_alert_danger(
+            paste0(
+              "Downloaded artifact with id {.val {dl[['id']]}} from repo {.val {cur_repo}} contains ",
+              "{.val {length(matched)}} files matching {.val {file_pat}}.",
+              "\nMatching files: {.val {matched}}."
+            ),
+            wrap = FALSE
+          )
+          return(NULL)
+        }
+
+        list(id = dl[["id"]], zip = file, art_file = matched)
+      })
+
+      matches = purrr::compact(matches)
+
+      if (length(matches) == 0) {
+        all_ids = cur_ids
         cli::cli_alert_danger(
-          "Failed to download artifact with id {.val {id}} from repo {.val {repo}}.",
+          "No artifacts from repo {.val {cur_repo}} (ids: {.val {all_ids}}) contain files matching {.val {file_pat}}.",
           wrap = FALSE
         )
         return(NA_character_)
       }
 
-      if (keep_zip) {
-        dest_path = fs::path_norm( glue::glue("{dir}/{get_repo_name(repo)}.zip") )
+      use_id_suffix = length(matches) > 1
 
-        if (file.exists(dest_path) & !overwrite) {
-          cli::cli_alert_danger(
-            "File {.file {dest_path}} already exists, set {.code overwrite = TRUE} to overwrite this file.",
-            wrap = FALSE
-          )
-          return(NA_character_)
-        }
-
-        file.rename(file, dest_path)
-      } else {
-        art_file = utils::unzip(file, list=TRUE)[["Name"]]
-        art_file = art_file[grepl(file_pat, art_file)]
-
-        if (length(art_file) != 1) {
-          cli::cli_alert_danger(
-            paste0("Downloaded artifact with id {.val {id}} from repo {.val {repo}} contains ",
-                  "{.val {length(art_file)}} files matching {.val {file_pat}}.",
-                  ifelse(length(art_file), "\nMatching files: {.val {art_file}}.", "")),
-            wrap = FALSE
-          )
-          return(NA_character_)
-        }
-        ext = fs::path_ext(art_file)
+      purrr::map_chr(matches, function(m) {
+        ext = fs::path_ext(m[["art_file"]])
         if (ext != "") ext = paste0(".", ext)
 
-        data = readr::read_file_raw(unz(file, art_file))
-
-        dest_path = fs::path_norm( glue::glue("{dir}/{get_repo_name(repo)}{ext}") )
+        if (use_id_suffix) {
+          dest_path = fs::path_norm(glue::glue("{dir}/{get_repo_name(cur_repo)}_{m[['id']]}{ext}"))
+        } else {
+          dest_path = fs::path_norm(glue::glue("{dir}/{get_repo_name(cur_repo)}{ext}"))
+        }
 
         if (file.exists(dest_path) & !overwrite) {
           cli::cli_alert_danger(
@@ -104,18 +154,17 @@ action_artifact_download = function(
           return(NA_character_)
         }
 
+        data = readr::read_file_raw(unz(m[["zip"]], m[["art_file"]]))
         readr::write_file(data, dest_path)
-      }
 
-      status_msg(
-        res,
-        "Downloaded artifact {.val {id}} from repo {.val {repo}} to {.val {dest_path}}.",
-        NULL
-      )
-
-      dest_path
+        cli::cli_alert_success(
+          "Downloaded artifact {.val {m[['id']]}} from repo {.val {cur_repo}} to {.val {dest_path}}.",
+          wrap = FALSE
+        )
+        dest_path
+      })
     }
   )
 
-  invisible(res)
+  invisible(unlist(res))
 }
