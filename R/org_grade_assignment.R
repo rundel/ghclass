@@ -47,6 +47,14 @@ org_grade_assignment = function(
     cli_stop("{.arg artifacts} must be a named character vector.")
   }
 
+  if (dir.exists(path)) {
+    cli_stop("Destination directory {.file {path}} already exists, please remove it or choose a different path.")
+  }
+
+  if (!is.null(key_repo) && !repo_exists(key_repo, quiet = TRUE)) {
+    cli_stop("Key repo {.val {key_repo}} does not exist.")
+  }
+
   repos = org_repos(org, repo_filter)
 
   if (length(repos) == 0) {
@@ -55,16 +63,10 @@ org_grade_assignment = function(
 
   res = list(repos = repos)
 
-  # Clone repos
   repos_dir = file.path(path, "repos")
   cli::cli_alert_info("Cloning {.val {length(repos)}} student repo{?s} matching {.val {repo_filter}}.")
-  if (dir.exists(repos_dir)) {
-    cli::cli_alert_warning("Directory {.file {repos_dir}} already exists, skipping clone.")
-  } else {
-    res[["cloned"]] = local_repo_clone(repos, repos_dir)
-  }
+  res[["cloned"]] = local_repo_clone(repos, repos_dir)
 
-  # Download artifacts
   res[["artifacts"]] = list()
   repo_names = get_repo_name(repos)
 
@@ -73,16 +75,11 @@ org_grade_assignment = function(
 
     for (nm in names(artifacts)) {
       art_dir = file.path(path, nm)
-      if (dir.exists(art_dir)) {
-        cli::cli_alert_warning("Directory {.file {art_dir}} already exists, skipping {.val {nm}} artifact download.")
-      } else {
-        res[["artifacts"]][[nm]] = action_artifact_download(
-          repos, art_dir, file_pat = artifacts[[nm]]
-        )
-      }
+      res[["artifacts"]][[nm]] = action_artifact_download(
+        repos, art_dir, file_pat = artifacts[[nm]]
+      )
     }
 
-    # Report missing artifacts
     for (nm in names(artifacts)) {
       art_dir = file.path(path, nm)
       if (!dir.exists(art_dir)) next
@@ -98,35 +95,24 @@ org_grade_assignment = function(
     }
   }
 
-  # Create comment files
   comments_dir = file.path(path, "comments")
   cli::cli_alert_info("Creating comment files.")
-  if (dir.exists(comments_dir)) {
-    cli::cli_alert_warning("Directory {.file {comments_dir}} already exists, skipping comment file creation.")
-  } else {
-    dir.create(comments_dir, showWarnings = FALSE, recursive = TRUE)
+  dir.create(comments_dir, showWarnings = FALSE, recursive = TRUE)
 
-    comment_files = file.path(comments_dir, paste0(repo_names, ".md"))
+  comment_files = file.path(comments_dir, paste0(repo_names, ".md"))
 
-    purrr::walk(
-      comment_files,
-      writeLines,
-      text = comment_template
-    )
+  purrr::walk(
+    comment_files,
+    writeLines,
+    text = comment_template
+  )
 
-    cli::cli_alert_success("Created {.val {length(comment_files)}} comment file{?s} in {.file {comments_dir}}.")
-    res[["comments"]] = comment_files
-  }
+  cli::cli_alert_success("Created {.val {length(comment_files)}} comment file{?s} in {.file {comments_dir}}.")
+  res[["comments"]] = comment_files
 
-  # Clone key repo
   if (!is.null(key_repo)) {
     cli::cli_alert_info("Cloning key repo {.val {key_repo}}.")
-    key_dir = file.path(path, get_repo_name(key_repo))
-    if (dir.exists(key_dir)) {
-      cli::cli_alert_warning("Directory {.file {key_dir}} already exists, skipping key repo clone.")
-    } else {
-      res[["key"]] = local_repo_clone(key_repo, path)
-    }
+    res[["key"]] = local_repo_clone(key_repo, path)
   }
 
   invisible(res)
