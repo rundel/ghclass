@@ -40,7 +40,7 @@ action_artifact_download = function(
 
   if (is.numeric(ids))
     ids = tibble::tibble(repo = repo, id = ids)
-  arg_is_df(ids)
+  arg_is_df(ids, allow_empty = TRUE)
 
   if (nrow(ids) == 0) {
     cli::cli_alert_danger("No artifacts available for the given repos.")

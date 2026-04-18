@@ -111,7 +111,7 @@ arg_is_df = function(..., allow_null = FALSE, allow_empty = FALSE) {
       if (!inherits(value, "data.frame") | (is.null(value) & allow_null))
         cli_stop("Argument {.val {name}} must be a data frame.")
       if (!is.null(value)) {
-        if (nrow(value) == 0)
+        if (nrow(value) == 0 & !allow_empty)
           cli_stop("Argument {.val {name}} must be a data frame with nrows >= 1.")
         if (ncol(value) == 0)
           cli_stop("Argument {.val {name}} must be a data frame with ncols >= 1.")
