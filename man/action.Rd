@@ -17,10 +17,12 @@
 \usage{
 action_artifacts(
   repo,
+  filter = NULL,
+  exclude = FALSE,
   keep_expired = FALSE,
   which = c("latest", "all"),
   filter_branch = NULL,
-  exclude = FALSE
+  exclude_branch = FALSE
 )
 
 action_artifact_delete(repo, ids)
@@ -28,12 +30,15 @@ action_artifact_delete(repo, ids)
 action_artifact_download(
   repo,
   dir,
-  ids = action_artifacts(repo, filter_branch = filter_branch, exclude = exclude),
+  filter = NULL,
+  exclude = FALSE,
+  filter_branch = NULL,
+  exclude_branch = FALSE,
   keep_zip = FALSE,
   file_pat = "",
   overwrite = FALSE,
-  filter_branch = NULL,
-  exclude = FALSE
+  ids = action_artifacts(repo, filter = filter, exclude = exclude, filter_branch =
+    filter_branch, exclude_branch = exclude_branch)
 )
 
 action_run_logs(
@@ -76,6 +81,10 @@ action_workflows(repo, full = FALSE)
 \arguments{
 \item{repo}{Character. Address of repository in \code{owner/name} format.}
 
+\item{filter}{Character. Regex pattern to filter artifacts by artifact name.}
+
+\item{exclude}{Logical. If \code{TRUE}, exclude artifact names matching \code{filter} instead of including them.}
+
 \item{keep_expired}{Logical. Should expired artifacts be returned.}
 
 \item{which}{Character. Either \code{"latest"} to return only the most recent of each
@@ -83,7 +92,7 @@ artifact or \code{"all"} to return all artifacts.}
 
 \item{filter_branch}{Character. Regex pattern to filter artifacts by branch name.}
 
-\item{exclude}{Logical. If \code{TRUE}, exclude matching branches instead of including them.}
+\item{exclude_branch}{Logical. If \code{TRUE}, exclude branches matching \code{filter_branch} instead of including them.}
 
 \item{ids}{Integer or data frame. Artifact ids to be downloaded or deleted.
 If a data frame is passed then the \code{id} column will be used.}

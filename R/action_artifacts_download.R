@@ -26,20 +26,27 @@ github_api_download_artifact = function(repo, id, dest) {
 #' @export
 #'
 action_artifact_download = function(
-  repo, dir, ids = action_artifacts(repo, filter_branch = filter_branch, exclude = exclude),
-  keep_zip=FALSE, file_pat = "", overwrite = FALSE,
-  filter_branch = NULL, exclude = FALSE
+  repo, dir, 
+  filter = NULL, exclude = FALSE,
+  filter_branch = NULL, exclude_branch = FALSE,
+  keep_zip = FALSE, file_pat = "", overwrite = FALSE,
+  ids = action_artifacts(
+    repo,
+    filter = filter, exclude = exclude,
+    filter_branch = filter_branch, exclude_branch = exclude_branch
+  )
 ) {
   arg_is_chr(repo)
   arg_is_chr_scalar(dir, file_pat)
-  arg_is_lgl_scalar(keep_zip, exclude)
+  arg_is_lgl_scalar(keep_zip, exclude_branch, exclude)
   arg_is_chr_scalar(filter_branch, allow_null = TRUE)
+  arg_is_chr_scalar(filter, allow_null = TRUE)
 
 
   dir.create(dir, showWarnings = FALSE, recursive = TRUE)
 
   if (is.numeric(ids))
-    ids = tibble::tibble(repo = repo, id = ids)
+    ids = tibble::tibble(repo = repo, id = ids, name = as.character(ids))
   arg_is_df(ids, allow_empty = TRUE)
 
   if (nrow(ids) == 0) {
@@ -52,7 +59,7 @@ action_artifact_download = function(
     ids,
     by = "repo"
   ) %>%
-    dplyr::select("repo", "id")
+    dplyr::select("repo", "id", "name")
 
   repo_groups = split(df, df[["repo"]])
 
@@ -61,6 +68,7 @@ action_artifact_download = function(
     function(repo_df) {
       cur_repo = repo_df[["repo"]][1]
       cur_ids = repo_df[["id"]]
+      cur_names = repo_df[["name"]]
 
       if (all(is.na(cur_ids))) {
         cli::cli_alert_danger(
@@ -70,11 +78,13 @@ action_artifact_download = function(
         return(NA_character_)
       }
 
-      cur_ids = cur_ids[!is.na(cur_ids)]
+      not_na = !is.na(cur_ids)
+      cur_ids = cur_ids[not_na]
+      cur_names = cur_names[not_na]
 
-      downloads = purrr::map(
-        cur_ids,
-        function(id) {
+      downloads = purrr::map2(
+        cur_ids, cur_names,
+        function(id, name) {
           dl = purrr::safely(github_api_download_artifact)(cur_repo, id)
           if (failed(dl)) {
             cli::cli_alert_danger(
@@ -82,17 +92,25 @@ action_artifact_download = function(
               wrap = FALSE
             )
           }
-          list(id = id, res = dl)
+          list(id = id, name = name, res = dl)
         }
       )
 
       if (keep_zip) {
-        return(purrr::map_chr(downloads, function(dl) {
+        use_name_suffix = sum(purrr::map_lgl(downloads, function(dl) !failed(dl[["res"]]))) > 1
+
+        res = purrr::map_chr(downloads, function(dl) {
           if (failed(dl[["res"]])) return(NA_character_)
 
           id = dl[["id"]]
+          name = dl[["name"]]
           file = result(dl[["res"]])
-          dest_path = fs::path_norm(glue::glue("{dir}/{get_repo_name(cur_repo)}.zip"))
+
+          if (use_name_suffix) {
+            dest_path = fs::path_norm(glue::glue("{dir}/{get_repo_name(cur_repo)}_{name}.zip"))
+          } else {
+            dest_path = fs::path_norm(glue::glue("{dir}/{get_repo_name(cur_repo)}.zip"))
+          }
 
           if (file.exists(dest_path) & !overwrite) {
             cli::cli_alert_danger(
@@ -109,7 +127,9 @@ action_artifact_download = function(
             wrap = FALSE
           )
           dest_path
-        }))
+        })
+
+        return(res)
       }
 
       matches = purrr::map(downloads, function(dl) {
@@ -132,7 +152,7 @@ action_artifact_download = function(
           return(NULL)
         }
 
-        list(id = dl[["id"]], zip = file, art_file = matched)
+        list(id = dl[["id"]], name = dl[["name"]], zip = file, art_file = matched)
       })
 
       matches = purrr::compact(matches)
@@ -146,14 +166,14 @@ action_artifact_download = function(
         return(NA_character_)
       }
 
-      use_id_suffix = length(matches) > 1
+      use_name_suffix = length(matches) > 1
 
       purrr::map_chr(matches, function(m) {
         ext = fs::path_ext(m[["art_file"]])
         if (ext != "") ext = paste0(".", ext)
 
-        if (use_id_suffix) {
-          dest_path = fs::path_norm(glue::glue("{dir}/{get_repo_name(cur_repo)}_{m[['id']]}{ext}"))
+        if (use_name_suffix) {
+          dest_path = fs::path_norm(glue::glue("{dir}/{get_repo_name(cur_repo)}_{m[['name']]}{ext}"))
         } else {
           dest_path = fs::path_norm(glue::glue("{dir}/{get_repo_name(cur_repo)}{ext}"))
         }

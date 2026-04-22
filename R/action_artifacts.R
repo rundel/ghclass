@@ -16,17 +16,21 @@ github_api_action_artifacts = function(repo) {
 #' @param which Character. Either `"latest"` to return only the most recent of each
 #'   artifact or `"all"` to return all artifacts.
 #' @param filter_branch Character. Regex pattern to filter artifacts by branch name.
-#' @param exclude Logical. If `TRUE`, exclude matching branches instead of including them.
+#' @param exclude_branch Logical. If `TRUE`, exclude branches matching `filter_branch` instead of including them.
+#' @param filter Character. Regex pattern to filter artifacts by artifact name.
+#' @param exclude Logical. If `TRUE`, exclude artifact names matching `filter` instead of including them.
 #' @export
 #'
-action_artifacts = function(repo, keep_expired=FALSE, which=c("latest", "all"),
-                           filter_branch = NULL, exclude = FALSE) {
+action_artifacts = function(repo, filter = NULL, exclude = FALSE,
+                            keep_expired = FALSE, which = c("latest", "all"),
+                            filter_branch = NULL, exclude_branch = FALSE) {
   which = match.arg(which)
 
   arg_is_chr(repo)
   arg_is_chr_scalar(which)
-  arg_is_lgl_scalar(keep_expired, exclude)
+  arg_is_lgl_scalar(keep_expired, exclude_branch, exclude)
   arg_is_chr_scalar(filter_branch, allow_null = TRUE)
+  arg_is_chr_scalar(filter, allow_null = TRUE)
 
   res = purrr::map_dfr(
     repo,
@@ -73,7 +77,8 @@ action_artifacts = function(repo, keep_expired=FALSE, which=c("latest", "all"),
     res = dplyr::filter(res, .data[["expired"]] == FALSE)
   }
 
-  res = filter_results(res, filter_branch, exclude, col = "branch")
+  res = filter_results(res, filter_branch, exclude_branch, col = "branch")
+  res = filter_results(res, filter,        exclude,        col = "name")
 
   if (which == "latest") {
     res %>%

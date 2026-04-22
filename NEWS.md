@@ -6,9 +6,11 @@
 
   * Added `branch` column to `action_artifacts()` output
 
-  * Added `filter_branch` and `exclude` arguments to both functions
+  * Added `filter_branch` / `exclude_branch` and `filter` / `exclude` arguments to both functions for filtering by branch name and artifact name respectively
 
   * `action_artifact_download()` better handles repos with multiple objects (errors only show for no matching artifacts)
+
+  * `action_artifact_download()` disambiguates output filenames for repos with multiple artifacts by appending the artifact name.
 
 * Added `org_grade_assignment()` to automate grading setup: clones repos, downloads GitHub Actions artifacts, and creates comment template files.
 
