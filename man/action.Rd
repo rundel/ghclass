@@ -35,7 +35,7 @@ action_artifact_download(
   filter_branch = NULL,
   exclude_branch = FALSE,
   keep_zip = FALSE,
-  file_pat = "",
+  nest = FALSE,
   overwrite = FALSE,
   ids = action_artifacts(repo, filter = filter, exclude = exclude, filter_branch =
     filter_branch, exclude_branch = exclude_branch)
@@ -101,7 +101,9 @@ If a data frame is passed then the \code{id} column will be used.}
 
 \item{keep_zip}{Logical. Should the log zips be saved (\code{TRUE}) or their contents extracted (\code{FALSE}).}
 
-\item{file_pat}{Character. If extracting zip with multiple files, regexp pattern to match filename.}
+\item{nest}{Logical. If \code{TRUE}, place each repo's artifacts under a
+\verb{dir/\{repo_name\}/} subdirectory; otherwise flatten into \verb{dir/} with
+repo-prefixed names.}
 
 \item{overwrite}{Logical. Should existing files be overwritten.}
 
@@ -132,8 +134,9 @@ all return tibbles containing information on requested repos' available workflow
 recent workflow runs, workflow runs runtimes, and generated artifacts
 respectively.
 
-\code{action_artifact_download()} returns a character vector containing the paths of all
-downloaded files.
+\code{action_artifact_download()} returns an invisible character vector containing the
+paths of the extraction directories for each successfully downloaded artifact
+(\code{NA} entries indicate failures).
 
 \code{action_artifact_delete()} returns an invisible data frame containing repository names and
 ids of the deleted artifacts.

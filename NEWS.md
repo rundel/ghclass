@@ -12,6 +12,8 @@
 
   * `action_artifact_download()` disambiguates output filenames for repos with multiple artifacts by appending the artifact name.
 
+  * Breaking: `action_artifact_download()` reworked. Removed `file_pat`; added `nest`. Each artifact is extracted into its own folder under `dir`; `keep_zip` controls whether the zip is retained. `org_grade_assignment()`'s `artifacts` values are now artifact-name filter patterns.
+
 * Added `org_grade_assignment()` to automate grading setup: clones repos, downloads GitHub Actions artifacts, and creates comment template files.
 
 * Added `repo_allows_forking()` to check if forking is enabled for a repository.

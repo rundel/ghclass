@@ -22,8 +22,8 @@ org_grade_assignment(
 argument to select repos (e.g. \code{"hw01_"}).}
 
 \item{artifacts}{Named character vector. Names are subfolder names, values are
-file patterns for \code{\link[=action_artifact_download]{action_artifact_download()}}. E.g.
-\code{c("html" = ".*\\\\.html", "md" = ".*\\\\.md")}.}
+regex patterns passed as \code{filter} to \code{\link[=action_artifact_download]{action_artifact_download()}} (matched
+against artifact names). E.g. \code{c("html" = "html-output", "report" = "pdf-report")}.}
 
 \item{comment_template}{Character. Template text used to populate each comment
 markdown file. Defaults to \code{""}.}

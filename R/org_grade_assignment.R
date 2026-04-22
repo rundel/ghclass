@@ -15,8 +15,8 @@
 #' @param repo_filter Character. Regex pattern passed to [org_repos()]'s `filter`
 #'   argument to select repos (e.g. `"hw01_"`).
 #' @param artifacts Named character vector. Names are subfolder names, values are
-#'   file patterns for [action_artifact_download()]. E.g.
-#'   `c("html" = ".*\\.html", "md" = ".*\\.md")`.
+#'   regex patterns passed as `filter` to [action_artifact_download()] (matched
+#'   against artifact names). E.g. `c("html" = "html-output", "report" = "pdf-report")`.
 #' @param comment_template Character. Template text used to populate each comment
 #'   markdown file. Defaults to `""`.
 #' @param key_repo Character. Optional repository address in `owner/name` format
@@ -76,7 +76,7 @@ org_grade_assignment = function(
     for (nm in names(artifacts)) {
       art_dir = file.path(path, nm)
       res[["artifacts"]][[nm]] = action_artifact_download(
-        repos, art_dir, file_pat = artifacts[[nm]]
+        repos, art_dir, filter = artifacts[[nm]]
       )
     }
 
@@ -84,8 +84,11 @@ org_grade_assignment = function(
       art_dir = file.path(path, nm)
       if (!dir.exists(art_dir)) next
 
-      downloaded = tools::file_path_sans_ext(dir(art_dir))
-      missing = setdiff(repo_names, downloaded)
+      subdirs = list.dirs(art_dir, recursive = FALSE, full.names = FALSE)
+
+      missing = purrr::keep(repo_names, function(rn) {
+        !any(subdirs == rn | startsWith(subdirs, paste0(rn, "_")))
+      })
 
       if (length(missing) > 0) {
         cli::cli_alert_warning(

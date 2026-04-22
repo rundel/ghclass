@@ -32,8 +32,9 @@
 #' recent workflow runs, workflow runs runtimes, and generated artifacts
 #' respectively.
 #'
-#' `action_artifact_download()` returns a character vector containing the paths of all
-#' downloaded files.
+#' `action_artifact_download()` returns an invisible character vector containing the
+#' paths of the extraction directories for each successfully downloaded artifact
+#' (`NA` entries indicate failures).
 #'
 #' `action_artifact_delete()` returns an invisible data frame containing repository names and
 #'  ids of the deleted artifacts.
