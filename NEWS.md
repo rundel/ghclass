@@ -16,6 +16,8 @@
 
 * Added `github_set_max_wait()` and `github_set_max_rate()` (and getters) to control how long requests wait when rate limited and to throttle the request rate.
 
+* GraphQL (v4) requests now retry with backoff when rate limited instead of failing immediately.
+
 # ghclass 0.4.0
 
 * Added `ignore_existing` argument to `org_create_assignment()` (#134, idea by @davidbuch).

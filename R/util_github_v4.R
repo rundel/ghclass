@@ -1,19 +1,36 @@
-github_api_v4_graphql = function(query, vars = list()) {
+github_api_v4_graphql = function(query, vars = list(), max_retries = 3L,
+                                 max_wait = github_get_max_wait()) {
   arg_is_chr_scalar(query)
 
   query = graphql_glue(query, vars)
+  cap = if (is.null(max_wait)) 600 else max_wait
 
-  req = httr::POST(
-    "https://api.github.com/graphql",
-    httr::add_headers(
-      Authorization = paste("bearer", github_get_token())
-    ),
-    encode = "json",
-    body = list(query = query)
-  )
+  attempt = 0
+  repeat {
+    req = httr::POST(
+      "https://api.github.com/graphql",
+      httr::add_headers(
+        Authorization = paste("bearer", github_get_token())
+      ),
+      encode = "json",
+      body = list(query = query)
+    )
 
-  res = httr::content(req)
-  code = httr::status_code(req)
+    res = httr::content(req)
+    code = httr::status_code(req)
+
+    wait = graphql_rate_limit_wait(req, res, code)
+
+    if (is.null(wait) || attempt >= max_retries)
+      break
+
+    attempt = attempt + 1
+    wait = min(max(wait, 0), cap)
+    cli::cli_alert_info(
+      "GitHub API v4 rate limit reached; waiting {round(wait)}s before retry {attempt}/{max_retries}."
+    )
+    Sys.sleep(wait)
+  }
 
   if (code >= 300) {
     cli_stop("GitHub API v4 error code ({code}) - {res[['message']]}")
@@ -25,6 +42,32 @@ github_api_v4_graphql = function(query, vars = list()) {
   }
 
   res
+}
+
+# Number of seconds to wait before retrying a rate-limited v4 request, or NULL
+# if the response is not a rate-limit response. GitHub signals GraphQL rate
+# limits either with a 403/429 status (secondary limits, usually carrying a
+# Retry-After header) or a 200 with a RATE_LIMITED error (the points budget,
+# with x-ratelimit-reset).
+graphql_rate_limit_wait = function(req, res, code) {
+  err_types = purrr::map_chr(res[["errors"]], "type", .default = NA_character_)
+  rate_limited = code %in% c(403L, 429L) || any(err_types == "RATE_LIMITED", na.rm = TRUE)
+
+  if (!rate_limited)
+    return(NULL)
+
+  hdr = httr::headers(req)
+
+  retry_after = hdr[["retry-after"]]
+  if (!is.null(retry_after))
+    return(as.numeric(retry_after))
+
+  remaining = hdr[["x-ratelimit-remaining"]]
+  reset = hdr[["x-ratelimit-reset"]]
+  if (!is.null(remaining) && remaining == "0" && !is.null(reset))
+    return(as.numeric(reset) - as.numeric(Sys.time()))
+
+  5
 }
 
 github_api_v4_graphql_paginated = function(query, page_info, cursor_var = "cursor") {
