@@ -37,11 +37,18 @@ org_repos = function(
 
   res = purrr::safely(
     function() {
-      org_type = user_type(org)
+      user = purrr::safely(github_api_get_user)(org)
 
-      if (is.na(org_type)) {
-        cli_stop("Organization {.val {org}} does not exist on GitHub.")
-      } else if (org_type == "Organization") {
+      if (failed(user)) {
+        if (inherits(error(user), "http_error_404"))
+          cli_stop("Organization {.val {org}} does not exist on GitHub.")
+        else
+          cli_stop("Unable to determine the account type for {.val {org}}; the request to GitHub failed.")
+      }
+
+      org_type = result(user)[["type"]]
+
+      if (org_type == "Organization") {
         github_api_org_repos(org, type = type, sort = sort, direction = direction)
       } else if (org_type == "User") {
         cli_stop("{.val {org}} is a user not an organization. Use {.fun user_repos} instead.")
