@@ -95,7 +95,7 @@ action_runs = function(
             tibble::tibble(
               repo = character(),
               workflow = character(),
-              run_id = character(),
+              run_id = double(),
               branch = character(),
               commit = character(),
               actor = character(),

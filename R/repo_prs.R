@@ -15,23 +15,29 @@ github_api_repo_prs = function(repo, state) {
 #' @param state Character. Pull request state.
 #' @export
 #'
-repo_prs = function(repo, state = c("open","closed","all")) {
+repo_prs = function(repo, state = c("open","closed","all"), quiet = FALSE) {
   state = match.arg(state)
   arg_is_chr(repo)
   arg_is_chr_scalar(state)
-
-  # TODO - check on id?
+  arg_is_lgl_scalar(quiet)
 
   purrr::map_dfr(
     repo,
     function(repo) {
       res = purrr::safely(github_api_repo_prs)(repo, state)
 
+      if (!quiet) {
+        status_msg(
+          res,
+          fail = "Failed to retrieve pull requests from {.val {repo}}."
+        )
+      }
+
       if (empty_result(res)) {
         tibble::tibble(
           repo = character(),
           pr = integer(),
-          id = integer(),
+          id = double(),
           title = character(),
           state = character(),
           base_ref = character(),
@@ -41,7 +47,7 @@ repo_prs = function(repo, state = c("open","closed","all")) {
         tibble::tibble(
           repo = repo,
           pr = purrr::map_int(result(res), "number", .default = NA),
-          id = purrr::map_int(result(res), "id", .default = NA),
+          id = purrr::map_dbl(result(res), "id", .default = NA),
           title = purrr::map_chr(result(res), "title", .default = NA),
           state = purrr::map_chr(result(res), "state", .default = NA),
           base_ref = purrr::map_chr(result(res), c("base","ref"), .default = NA),

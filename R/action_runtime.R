@@ -1,5 +1,6 @@
 github_api_action_run_usage = function(repo, run_id) {
-  arg_is_chr_scalar(repo, run_id)
+  arg_is_chr_scalar(repo)
+  arg_is_pos_int_scalar(run_id)
 
   ghclass_api_v3_req(
     endpoint = "GET /repos/{owner}/{repo}/actions/runs/{run_id}/timing",

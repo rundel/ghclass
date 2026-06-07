@@ -1,5 +1,7 @@
 # ghclass (development version)
 
+* Fixed bugs in `repo_prs()`, `action_runs()`, and `action_runtime()` that produced wrong or missing values.
+
 # ghclass 0.4.0
 
 * Added `ignore_existing` argument to `org_create_assignment()` (#134, idea by @davidbuch).
