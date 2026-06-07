@@ -22,3 +22,7 @@ Makefile
 test/
 CLAUDE.md
 .claude/
+\.DS_Store$
+^\.Rhistory$
+^\.\.Rcheck$
+^changes\.md$
