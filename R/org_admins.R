@@ -14,14 +14,15 @@ org_admins = function(org) {
 
   res = purrr::safely(github_api_org_admins)(owner = org)
 
-  if (failed(res)) {
-    if (user_exists(org)) {
-      ## In this case it is a user not an org, admin is just that user
-      return(org)
-    }
+  if (succeeded(res))
+    return(purrr::map_chr(result(res), "login"))
 
-    cli_stop("Failed to retrieve admins for org {.val {org}}.")
-  } else {
-    purrr::map_chr(result(res), "login")
-  }
+  # A user account has no org-members endpoint, so the call above fails and the
+  # user is their own sole admin. Use user_type() rather than user_exists()
+  # (which is also TRUE for organizations) so a transient failure on a real org
+  # errors instead of being misreported as a user.
+  if (identical(user_type(org), "User"))
+    return(org)
+
+  cli_stop("Failed to retrieve admins for org {.val {org}}.")
 }
