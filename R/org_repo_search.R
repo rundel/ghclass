@@ -39,6 +39,8 @@ org_repo_search = function(org, name, extra = "", full_repo = TRUE) {
   if (failed(res) | empty_result(res))
     return(character())
 
+  warn_if_search_capped(result(res)[["total_count"]])
+
   if (full_repo) {
     purrr::map_chr(result(res)[["items"]], "full_name")
   } else {

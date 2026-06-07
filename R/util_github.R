@@ -239,3 +239,21 @@ ghclass_api_v3_req = function(
 
   res
 }
+
+
+# GitHub's search APIs (REST and GraphQL) return at most 1000 results per query.
+# Warn when a search matches more than that, since the results are then a
+# truncated subset of the matches.
+warn_if_search_capped = function(total_count) {
+  if (length(total_count) != 1 || is.na(total_count) || total_count <= 1000)
+    return(invisible())
+
+  cli::cli_warn(
+    c(
+      "This search matched {total_count} repositories but GitHub returns at most 1000 results.",
+      i = "The results are truncated - narrow the search to capture the remaining repositories."
+    )
+  )
+
+  invisible()
+}

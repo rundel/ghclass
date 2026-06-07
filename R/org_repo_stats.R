@@ -101,6 +101,8 @@ org_repo_stats = function(org, branch = NULL, filter = "", filter_type="in:name"
 
   pages = github_api_org_repo_stats(org, branch, filter, filter_type, inc_commits, inc_issues, inc_prs)
 
+  warn_if_search_capped(purrr::pluck(pages, 1, "data", "search", "repositoryCount"))
+
   purrr::map_dfr(
     pages,
     function(page) {

@@ -118,6 +118,11 @@ The order of \code{org_repos()} is not guaranteed to match the order of
 calling functions like \code{\link[=repo_add_user]{repo_add_user()}}. To pair each user with their own
 repo deterministically, build the repo names from the user vector with
 \code{org_user_repos()}.
+
+\code{org_repo_search()} and \code{org_repo_stats()} use GitHub's search API, which
+returns at most 1000 results per query. For organizations with more than 1000
+matching repositories the results are truncated and a warning is issued; use
+\code{filter} (or \code{name} / \code{extra}) to narrow the search.
 }
 
 \examples{

@@ -157,6 +157,11 @@ NULL
 #' repo deterministically, build the repo names from the user vector with
 #' `org_user_repos()`.
 #'
+#' `org_repo_search()` and `org_repo_stats()` use GitHub's search API, which
+#' returns at most 1000 results per query. For organizations with more than 1000
+#' matching repositories the results are truncated and a warning is issued; use
+#' `filter` (or `name` / `extra`) to narrow the search.
+#'
 #' @examples
 #' \dontrun{
 #' # Org repos and teams
