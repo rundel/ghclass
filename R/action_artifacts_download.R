@@ -131,12 +131,20 @@ action_artifact_download = function(
           }
 
           dir.create(extract_dir, showWarnings = FALSE, recursive = TRUE)
-          unzipped = purrr::safely(utils::unzip)(zip_path, exdir = extract_dir)
+          unzipped = purrr::safely(
+            function() withCallingHandlers(
+              utils::unzip(zip_path, exdir = extract_dir),
+              warning = function(w) cli_stop("unzip reported a problem extracting artifact {.val {id}}.")
+            )
+          )()
           if (failed(unzipped)) {
             cli::cli_alert_danger(
               "Failed to extract artifact with id {.val {id}} from repo {.val {cur_repo}} to {.file {extract_dir}}.",
               wrap = FALSE
             )
+            unlink(extract_dir, recursive = TRUE, force = TRUE)
+            if (!keep_zip && file.exists(zip_path))
+              file.remove(zip_path)
             return(NA_character_)
           }
 

@@ -42,7 +42,7 @@ action_workflows = function(repo, full = FALSE) {
   }
 
   if (!full)
-    d = dplyr::select(d, .data$name, .data$id, .data$path, .data$state, .data$badge_url)
+    d = dplyr::select(d, "name", "id", "path", "state", "badge_url")
 
   d
 }

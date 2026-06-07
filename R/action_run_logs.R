@@ -92,6 +92,7 @@ action_run_logs = function(
 
         dir.create(dest_path, showWarnings = FALSE, recursive = TRUE)
         utils::unzip(file, exdir = dest_path, overwrite = overwrite)
+        file.remove(file)
       }
 
       status_msg(

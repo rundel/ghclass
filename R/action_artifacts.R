@@ -86,10 +86,8 @@ action_artifacts = function(repo, filter = NULL, exclude = FALSE,
       dplyr::arrange(dplyr::desc(.data[["created"]])) %>%
       dplyr::slice(1) %>%
       dplyr::ungroup()
-  } else if (which == "all") {
-    res
   } else {
-    cli_stop("Invalid which choice.")
+    res
   }
 
 }

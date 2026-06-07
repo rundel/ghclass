@@ -1,18 +1,31 @@
-github_api_download_file = function(url, dest) {
+github_api_download_file = function(url, dest, max_tries = 3) {
   arg_is_chr_scalar(url, dest)
 
-  req = httr::GET(
-    url,
-    httr::add_headers(
-      Authorization = paste("bearer", github_get_token())
+  for (i in seq_len(max_tries)) {
+    req = httr::GET(
+      url,
+      httr::add_headers(
+        Authorization = paste("bearer", github_get_token())
+      )
     )
-  )
+
+    if (httr::status_code(req) != 202)
+      break
+
+    Sys.sleep(2)
+  }
 
   res = httr::content(req, as = "raw")
   code = httr::status_code(req)
 
+  if (code == 202)
+    cli_stop("GitHub API Error (202) - the requested archive is still being generated, please retry shortly.")
+
   if (code >= 300) {
-    cli_stop("GitHub API Error ({code}) - {res[['message']]}")
+    msg = httr::content(req, as = "parsed")[["message"]]
+    if (is.null(msg))
+      msg = "request failed"
+    cli_stop("GitHub API Error ({code}) - {msg}")
   }
 
   writeBin(res, dest)
@@ -217,7 +230,7 @@ ghclass_api_v3_req = function(
     )
   )
 
-  if (length(res) == github_get_api_limit()) {
+  if (method == "GET" && is.null(names(res)) && length(res) == github_get_api_limit()) {
     cli::cli_warn(
       c("The number of results is equal to the limit set by {.fn github_set_api_limit},",
         "consider increasing this limit and rerunning the previous function.")
