@@ -127,16 +127,25 @@ github_get_token = function() {
   token
 }
 
+# Resolve a `token` argument that may be either a literal PAT or a path to a
+# file containing one. Only an existing file is read, taking the first
+# non-empty, whitespace-trimmed line.
+read_token = function(token) {
+  arg_is_chr_scalar(token)
+
+  if (file.exists(token)) {
+    lines = trimws(readLines(token, warn = FALSE))
+    token = lines[nzchar(lines)][1]
+  }
+
+  token
+}
+
 #' @rdname github_token
 #' @export
 #'
 github_set_token = function(token) {
-  arg_is_chr_scalar(token)
-
-  if (file.exists(token))
-    token = readLines(token, warn=FALSE)
-
-  Sys.setenv(GITHUB_PAT = token)
+  Sys.setenv(GITHUB_PAT = read_token(token))
 }
 
 #' @rdname github_token
@@ -150,10 +159,7 @@ github_reset_token = function() {
 #' @export
 #'
 github_test_token = function(token = github_get_token()) {
-  arg_is_chr_scalar(token)
-
-  if (file.exists(token))
-    token = readLines(token, warn=FALSE)
+  token = read_token(token)
 
   res = purrr::safely(gh::gh)("/user", .token = token)
 
@@ -170,10 +176,7 @@ github_test_token = function(token = github_get_token()) {
 #' @export
 #'
 github_token_scopes = function(token = github_get_token()) {
-  arg_is_chr_scalar(token)
-
-  if (file.exists(token))
-    token = readLines(token, warn=FALSE)
+  token = read_token(token)
 
   res = purrr::safely(gh::gh)("/user", .token = token)
 
