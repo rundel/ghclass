@@ -4,28 +4,55 @@
 \alias{github_api_limit}
 \alias{github_get_api_limit}
 \alias{github_set_api_limit}
+\alias{github_get_max_wait}
+\alias{github_set_max_wait}
+\alias{github_get_max_rate}
+\alias{github_set_max_rate}
 \title{Tools for limiting gh's GitHub api requests.}
 \usage{
 github_get_api_limit()
 
 github_set_api_limit(limit = 10000L)
+
+github_get_max_wait()
+
+github_set_max_wait(max_wait = NULL)
+
+github_get_max_rate()
+
+github_set_max_rate(max_rate = NULL)
 }
 \arguments{
 \item{limit}{The maximum number of records to return from an API request.}
+
+\item{max_wait}{The maximum number of seconds to wait when rate limited, or \code{NULL}
+to use gh's default. Passed to \code{\link[gh:gh]{gh::gh()}}'s \code{.max_wait}.}
+
+\item{max_rate}{The maximum request rate in requests per second, or \code{NULL} for no
+throttling. Passed to \code{\link[gh:gh]{gh::gh()}}'s \code{.max_rate}.}
 }
 \value{
 \code{github_get_api_limit()} returns a single integer value.
 
-\code{github_set_api_limit()} invisibily returns the value of the \code{limit} argument.
+\code{github_get_max_wait()} and \code{github_get_max_rate()} return their stored value or \code{NULL}.
+
+\verb{github_set_*()} functions invisibly return the value of their argument.
 }
 \description{
 \itemize{
 \item \code{github_get_api_limit()} - returns the current limit on results returned by gh.
 \item \code{github_set_api_limit()} - sets a limit on results returned by gh.
+\item \code{github_get_max_wait()} / \code{github_set_max_wait()} - get or set the maximum number
+of seconds gh will wait when it hits a rate limit. \code{NULL} (the default) uses gh's
+own default.
+\item \code{github_get_max_rate()} / \code{github_set_max_rate()} - get or set the maximum request
+rate, in requests per second, used to proactively throttle requests and avoid
+secondary rate limits. \code{NULL} (the default) disables throttling.
 }
 }
 \details{
-This value is stored in the "ghclass.api.limit" option globally.
+These values are stored in the \code{"ghclass.api.limit"}, \code{"ghclass.max.wait"},
+and \code{"ghclass.max.rate"} options globally.
 }
 \examples{
 github_get_api_limit()

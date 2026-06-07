@@ -14,6 +14,8 @@
 
 * `team_members()`, `team_pending()`, and `team_repos()` gain a `slug` column; the `team` column now echoes the supplied team values.
 
+* Added `github_set_max_wait()` and `github_set_max_rate()` (and getters) to control how long requests wait when rate limited and to throttle the request rate.
+
 # ghclass 0.4.0
 
 * Added `ignore_existing` argument to `org_create_assignment()` (#134, idea by @davidbuch).

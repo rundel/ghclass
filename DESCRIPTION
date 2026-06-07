@@ -27,7 +27,7 @@ Depends:
 Imports: 
     base64enc,
     fs,
-    gh,
+    gh (>= 1.4.0),
     glue,
     httr,
     lubridate,

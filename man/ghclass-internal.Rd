@@ -60,7 +60,9 @@ ghclass_api_v3_req(
   ...,
   .send_headers = character(),
   version = "2022-11-28",
-  limit = github_get_api_limit()
+  limit = github_get_api_limit(),
+  max_wait = github_get_max_wait(),
+  max_rate = github_get_max_rate()
 )
 
 match_repo(repo, index = 1)

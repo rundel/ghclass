@@ -204,7 +204,8 @@ endpoint_verb = function(x) {
 #' @export
 ghclass_api_v3_req = function(
     endpoint, ..., .send_headers = character(),
-    version = "2022-11-28", limit = github_get_api_limit()
+    version = "2022-11-28", limit = github_get_api_limit(),
+    max_wait = github_get_max_wait(), max_rate = github_get_max_rate()
 ) {
   arg_is_chr_scalar(version)
   arg_is_chr(.send_headers)
@@ -219,16 +220,18 @@ ghclass_api_v3_req = function(
     limit = NULL
   }
 
-  res = suppressMessages(
-    gh::gh(
-      endpoint = endpoint,
-      ...,
-      .limit = limit,
-      .token = github_get_token(),
-      .send_headers = .send_headers
-      # .progress = FALSE # TODO - giving an error for some reason
-    )
+  gh_args = list(
+    endpoint = endpoint,
+    ...,
+    .limit = limit,
+    .token = github_get_token(),
+    .send_headers = .send_headers
+    # .progress = FALSE # TODO - giving an error for some reason
   )
+  if (!is.null(max_wait)) gh_args[[".max_wait"]] = max_wait
+  if (!is.null(max_rate)) gh_args[[".max_rate"]] = max_rate
+
+  res = suppressMessages(do.call(gh::gh, gh_args))
 
   if (method == "GET" && is.null(names(res)) && length(res) == github_get_api_limit()) {
     cli::cli_warn(
