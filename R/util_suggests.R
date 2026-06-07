@@ -13,8 +13,3 @@ require_gert = function() {
 require_styler = function() {
   require_pkg("styler")
 }
-
-
-styler_available = function() {
-  "styler" %in% rownames(utils::installed.packages())
-}

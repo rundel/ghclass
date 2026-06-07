@@ -13,7 +13,7 @@ org_sitrep = function(org) {
   res = purrr::safely(github_api_org)(org)
 
   if (failed(res)) {
-    status_msg(res, fail = "Failed to find org {.val org}.")
+    status_msg(res, fail = "Failed to find org {.val {org}}.")
     invisible(org)
   } else {
     admins = org_admins(org)
@@ -38,9 +38,6 @@ org_sitrep = function(org) {
       forking_warn = "by default members can currently fork private repos in this org."
     else
       forking_warn = NULL
-
-    #if (perm != "none")
-    #  perm = cli::col_red(perm)
 
     cli::cli_h1("{.strong {res_org$login} sitrep:}")
     cli::cli_ul()

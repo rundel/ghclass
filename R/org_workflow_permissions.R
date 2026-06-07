@@ -15,7 +15,7 @@ org_workflow_permissions = function(org) {
   res = purrr::safely(github_api_org_workflow_permissions)(org)
 
   if (failed(res)) {
-    cli::cli_abort("Failed to find org {.val org}.")
+    cli::cli_abort("Failed to find org {.val {org}}.")
   }
 
   result(res)$default_workflow_permissions

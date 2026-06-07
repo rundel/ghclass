@@ -67,24 +67,6 @@ return_on_any_failed = function(x) {
 }
 
 error_msg = function(x) {
-  msg = error(x)[["message"]]
-  msg = gsub("\\n", " ", msg)
-
-  if (grepl("GitHub API error", msg)) {
-    # Handle GitHub API error messages to be a bit nicer looking
-    pre = sub("Message: .*", "", msg)
-    suf = sub(".* Message: ", "", msg)
-
-
-
-    msg = paste0(pre, " (", cli::col_grey(suf), ")")
-  }
-
-  trimws(msg)
-}
-
-
-error_msg = function(x) {
   msg = trimws( error(x)[["message"]] )
 
   if (grepl("GitHub API error", msg)) {
@@ -151,7 +133,7 @@ has_doc_attr = function(x) {
 }
 
 has_404_attr = function(x) {
-  !is.null(attr(x, "doc"))
+  !is.null(attr(x, "404"))
 }
 
 # TODO - fix error_msg processing - doesnt work for PR and some others

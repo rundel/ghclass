@@ -27,7 +27,7 @@ repo_remove_team = function(
   org = unique(get_repo_owner(repo))
 
   if (length(org) != 1) {
-    cli_stop("Repositories can only be added to one organization at a time.",
+    cli_stop("Teams can only be removed from repositories within a single organization. ",
              "Requested orgs: {.val {org}}")
   }
 

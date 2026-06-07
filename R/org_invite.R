@@ -34,7 +34,7 @@ org_invite = function(org, user) {
         status_msg(
           res,
           "Invited user {.val {user}} to org {.val {org}}.",
-          "Failed to invite user {.val {user}} to org {.val {org}}: does not exist."
+          "Failed to invite user {.val {user}} to org {.val {org}}."
         )
       }
     }

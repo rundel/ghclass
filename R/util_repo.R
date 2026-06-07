@@ -13,7 +13,6 @@ valid_repo_error = function(repo) {
 }
 
 
-## FIXME
 #' @rdname ghclass-internal
 #' @export
 match_repo = function(repo, index=1) {
@@ -43,23 +42,6 @@ get_repo_owner = function(repo) {
   match_repo(repo, 2)
 }
 
-get_repo_url = function(repo, type = c("https","ssh"), use_token = TRUE)
-{
-  #TO DO: Fix since require_valid_repo is no longer vectorized
-  #require_valid_repo(repo)
-  type = match.arg(type)
-
-  if (type == "https") {
-    if (use_token)
-      paste0("https://", github_get_token(), "@github.com/",repo,".git")
-    else
-      paste0("https://github.com/",repo,".git")
-  } else {
-    paste0("git@github.com:",repo,".git")
-  }
-}
-
-
 #' @rdname ghclass-internal
 #' @export
 format_repo = function(repo, branch = NULL, path = NULL) {
@@ -71,21 +53,4 @@ format_repo = function(repo, branch = NULL, path = NULL) {
     repo = file.path(repo, path)
 
   repo
-}
-
-repo_default_branch = function(repo) {
-  arg_is_chr(repo)
-
-  purrr::map_chr(
-    repo,
-    function(repo) {
-      r = purrr::safely(github_api_repo)(repo)
-
-      if (succeeded(r)) {
-        result(r)[["default_branch"]]
-      } else {
-        NA_character_
-      }
-    }
-  )
 }

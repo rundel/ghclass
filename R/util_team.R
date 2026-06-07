@@ -1,12 +1,3 @@
-missing_team = function(team, id, org) {
-  if (is.na(id)) {
-    cli::cli_alert_danger()
-    TRUE
-  } else {
-    FALSE
-  }
-}
-
 team_slug_lookup = function(org, name) {
   dplyr::left_join(
     tibble::tibble(name = name),
