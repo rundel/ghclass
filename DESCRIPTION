@@ -38,17 +38,20 @@ Imports:
     withr,
     dplyr,
     cli (>= 3.0.0),
-    lifecycle
-Suggests: 
+    lifecycle,
+    readr,
+    tidyselect
+Suggests:
     here,
     knitr,
     rmarkdown,
     sodium,
     styler,
+    testthat (>= 3.0.0),
     usethis,
     gert,
-    readr,
     gitcreds
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Config/roxygen2/version: 8.0.0
+Config/testthat/edition: 3
