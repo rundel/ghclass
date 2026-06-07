@@ -12,7 +12,7 @@ repo_dir_helper = function(repo_dir) {
   if(!all(exists))
     cli_stop("Unable to locate the repo{?s}: {.val {repo_dir[!exists]}}.")
 
-  if (length(repo_dir) == 1 & !is_git_repo(repo_dir[1])) {
+  if (length(repo_dir) == 1 && !is_git_repo(repo_dir[1])) {
     dir = fs::dir_ls(repo_dir, type="directory")
   } else {
     dir = repo_dir

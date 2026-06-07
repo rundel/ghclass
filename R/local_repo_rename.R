@@ -4,12 +4,22 @@
 #' something more useful like `Last, First name` or a unique identifier
 #' for the purposes of ordering repository folders.
 #'
-#' @param repo_dir Character. Vector of repo directories or a single directory containing one or more repos.
+#' @param repo_dir Character. A single directory containing one or more repos.
 #' @param pattern Character. One or more regexp patterns to match to directory names.
 #' @param replacement Character.  One or more text strings containing the replacement value for matched patterns.
 #'
 #' @return Returns a character vector of the new repo directory paths, or `NA` if the rename
 #' failed.
+#'
+#' @examples
+#' \dontrun{
+#' # Prefix each cloned repo directory with a roster identifier
+#' local_repo_rename(
+#'   "/path/to/cloned/repos",
+#'   pattern = "hw1-(.*)",
+#'   replacement = "\\1"
+#' )
+#' }
 #'
 #' @export
 #'
@@ -35,15 +45,10 @@ local_repo_rename = function(repo_dir, pattern, replacement) {
     function(cur, new) {
       res = purrr::safely(fs::file_move)(cur, new)
 
-      pattern = glue::glue(".*?({repo_dir})")
-
-      cur = sub(pattern, replacement = "\\1", x = cur)
-      new = sub(pattern, replacement = "\\1", x = new)
-
       status_msg(
         res,
-        "Renaming {.val {cur}} to {.val {new}}.",
-        "Failed to rename {.val {cur}} to {.val {new}}."
+        "Renaming {.val {fs::path_file(cur)}} to {.val {fs::path_file(new)}}.",
+        "Failed to rename {.val {fs::path_file(cur)}} to {.val {fs::path_file(new)}}."
       )
 
       ifelse(succeeded(res), new, NA)

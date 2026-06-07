@@ -21,7 +21,7 @@ local_repo_clone = function(repo, local_path=".", branch = NULL, mirror = FALSE,
   local_path = fs::path_expand(local_path)
   dir.create(local_path, showWarnings = FALSE, recursive = TRUE)
 
-  res = purrr::map2(
+  dirs = purrr::map2_chr(
     repo, branch,
     function(repo, branch) {
       dir = fs::path(local_path, get_repo_name(repo))
@@ -39,18 +39,16 @@ local_repo_clone = function(repo, local_path=".", branch = NULL, mirror = FALSE,
         "Failed to clone {.val {fmt_repo}}."
       )
 
-      # TODO - think about should this be NULL or NA
-      ternary(succeeded(res), dir, NULL)
+      ternary(succeeded(res), as.character(dir), NA_character_)
     }
   )
 
-  dirs = purrr::flatten_chr(res)
   names(dirs) = repo
 
   invisible(dirs)
 }
 
 #' @export
-repo_clone = function(repo, local_path="./", branch = NULL, verbose = FALSE) {
-  local_repo_clone(repo=repo, local_path=local_path, branch=branch, verbose=verbose)
+repo_clone = function(repo, local_path = ".", branch = NULL, mirror = FALSE, verbose = FALSE) {
+  local_repo_clone(repo = repo, local_path = local_path, branch = branch, mirror = mirror, verbose = verbose)
 }

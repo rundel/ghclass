@@ -7,7 +7,7 @@
 local_repo_rename(repo_dir, pattern, replacement)
 }
 \arguments{
-\item{repo_dir}{Character. Vector of repo directories or a single directory containing one or more repos.}
+\item{repo_dir}{Character. A single directory containing one or more repos.}
 
 \item{pattern}{Character. One or more regexp patterns to match to directory names.}
 
@@ -21,4 +21,15 @@ failed.
 This function is meant to help with renaming local student repos to include
 something more useful like \verb{Last, First name} or a unique identifier
 for the purposes of ordering repository folders.
+}
+\examples{
+\dontrun{
+# Prefix each cloned repo directory with a roster identifier
+local_repo_rename(
+  "/path/to/cloned/repos",
+  pattern = "hw1-(.*)",
+  replacement = "\\\\1"
+)
+}
+
 }

@@ -13,10 +13,8 @@ local_repo_pull = function(repo_dir, verbose = FALSE) {
   res = purrr::map(
     dir,
     function(dir) {
-      withr::local_dir(dir)
-
       res = purrr::safely(gert::git_pull)(
-        repo = dir, verbose = verbose
+        repo = dir
       )
 
       repo = fs::path_file(dir)
