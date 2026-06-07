@@ -19,6 +19,11 @@ github_api_v4_graphql = function(query, vars = list()) {
     cli_stop("GitHub API v4 error code ({code}) - {res[['message']]}")
   }
 
+  if (!is.null(res$errors)) {
+    msgs = unlist(purrr::map(res$errors, "message"))
+    cli_stop(paste(msgs, collapse = "\n"))
+  }
+
   res
 }
 
@@ -42,12 +47,6 @@ github_api_v4_graphql_paginated = function(query, page_info, cursor_var = "curso
   repeat {
     res[[i]] = github_api_v4_graphql(query, vars)
     page = purrr::pluck(res[[i]], !!!page_info)
-
-    if (!is.null(res[[i]]$errors)) {
-      msgs = purrr::map(res[[i]]$errors, "message")
-      msg = paste(unlist(msgs), collapse="\n")
-      cli_stop(msg)
-    }
 
     if (is.null(page)) {
       cli_stop("Unable to locate page info for this query.")
@@ -76,4 +75,12 @@ graphql_quote = function(x) {
   } else {
     glue::double_quote(x)
   }
+}
+
+graphql_escape = function(x) {
+  if (is.null(x))
+    return(x)
+
+  x = gsub("\\", "\\\\", x, fixed = TRUE)
+  gsub('"', '\\"', x, fixed = TRUE)
 }

@@ -1,10 +1,10 @@
 github_api_repo_n_commits = function(repo) {
-  org = get_repo_owner(repo)
-  repo = get_repo_name(repo)
+  org = graphql_escape(get_repo_owner(repo))
+  repo = graphql_escape(get_repo_name(repo))
 
   query = '
     query {
-      repository(owner:"{{org}}", name:"{{repo}}") {
+      repository(owner:"{{{org}}}", name:"{{{repo}}}") {
         nameWithOwner
         defaultBranchRef {
           name
@@ -36,16 +36,14 @@ github_api_repo_n_commits = function(repo) {
 #'
 repo_n_commits = function(repo, quiet = FALSE) {
   arg_is_chr(repo)
+  arg_is_lgl_scalar(quiet)
 
   purrr::map_dfr(
     repo,
     function(repo) {
-      res = github_api_repo_n_commits(repo)
+      res = purrr::safely(github_api_repo_n_commits)(repo)
 
-      if (!is.null(res[["errors"]])) {
-        # TODO - work on a status_msg_v4 function
-        # TODO - retrieve error message from graphql response
-
+      if (failed(res)) {
         if (!quiet)
           cli::cli_alert_danger("Failed to retrieve commits for {.val {repo}}.")
 
@@ -55,6 +53,7 @@ repo_n_commits = function(repo, quiet = FALSE) {
           n = NA_integer_
         )
       } else {
+        res = result(res)
         tibble::tibble(
           repo = purrr::pluck(res, "data", "repository", "nameWithOwner"),
           branch = purrr::pluck(res, "data", "repository", "defaultBranchRef", "name", .default=NA_character_),

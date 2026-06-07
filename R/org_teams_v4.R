@@ -1,7 +1,9 @@
 github_api_org_teams_v4 = function(org) {
+  org = graphql_escape(org)
+
   query = '
     query {
-      organization(login: "{{org}}") {
+      organization(login: "{{{org}}}") {
         teams(first: 100, after: <graphql_quote(cursor)>) {
           pageInfo {
              hasNextPage
@@ -27,7 +29,6 @@ github_api_org_teams_v4 = function(org) {
 
 
 org_team_details_v4 = function(org) {
-  #warn_experimental()
   arg_is_chr_scalar(org)
 
   pages = github_api_org_teams_v4(org)

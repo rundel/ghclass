@@ -4,6 +4,8 @@
 
 * Fixed several bugs in the `local_repo_*()` functions.
 
+* GraphQL-based functions now escape special characters in names and filters and report API errors instead of failing silently.
+
 # ghclass 0.4.0
 
 * Added `ignore_existing` argument to `org_create_assignment()` (#134, idea by @davidbuch).

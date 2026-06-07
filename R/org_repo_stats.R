@@ -1,9 +1,15 @@
 github_api_org_repo_stats = function(org, branch = NULL, filter = "", filter_type="in:name", inc_commits = TRUE, inc_issues = TRUE, inc_prs = TRUE) {
   filter_type = paste(filter_type, collapse = ",")
 
+  org = graphql_escape(org)
+  filter = graphql_escape(filter)
+  filter_type = graphql_escape(filter_type)
+  if (!is.null(branch))
+    branch = graphql_escape(branch)
+
   query = '
     query {
-      search(query: "org:{{org}} {{filter}} {{filter_type}}", type: REPOSITORY, first: 100, after: <graphql_quote(cursor)>) {
+      search(query: "org:{{{org}}} {{{filter}}} {{{filter_type}}}", type: REPOSITORY, first: 100, after: <graphql_quote(cursor)>) {
         repositoryCount
         pageInfo {
           hasNextPage
@@ -16,7 +22,7 @@ github_api_org_repo_stats = function(org, branch = NULL, filter = "", filter_typ
               isPrivate
               {{#inc_commits}}
               {{#branch}}
-              object(expression: "{{branch}}") {
+              object(expression: "{{{branch}}}") {
                 ... on Commit {
                   history {
                     totalCount
@@ -114,7 +120,6 @@ org_repo_stats = function(org, branch = NULL, filter = "", filter_type="in:name"
           df$commits = purrr::map_int(repos, c("node", "object", "history", "totalCount"), .default=NA_integer_)
         }
 
-        #df$last_push  = lubridate::ymd_hms(purrr::map_chr(repos, c("node", "pushedAt")))
         df$last_update = lubridate::ymd_hms(purrr::map_chr(repos, c("node", "updatedAt")))
       }
 

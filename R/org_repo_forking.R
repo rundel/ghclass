@@ -1,7 +1,9 @@
 github_api_org_repo_forking = function(org) {
+  org = graphql_escape(org)
+
   query = '
     query {
-      organization(login: "{{org}}") {
+      organization(login: "{{{org}}}") {
         repositories(first: 100, after: <graphql_quote(cursor)>, privacy: PRIVATE) {
           totalCount
           pageInfo {
