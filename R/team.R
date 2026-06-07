@@ -71,6 +71,8 @@ NULL
 #' @param team_type Character. Either "slug" if the team names are slugs or "name" if full team names are provided.
 #'
 #' @return `team_members()`, `team_pending()`, and `team_repos()` all return a tibble.
+#' The `team` column echoes the supplied `team` values (names or slugs, per `team_type`)
+#' and a `slug` column gives the corresponding team slug used for the API calls.
 #'
 #' `team_invite()` and `team_remove()` invisibly return a list containing the results
 #' of the relevant GitHub API calls.

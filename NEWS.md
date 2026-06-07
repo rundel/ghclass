@@ -12,6 +12,8 @@
 
 * `org_repo_search()` and `org_repo_stats()` now warn when a search exceeds GitHub's 1000-result limit.
 
+* `team_members()`, `team_pending()`, and `team_repos()` gain a `slug` column; the `team` column now echoes the supplied team values.
+
 # ghclass 0.4.0
 
 * Added `ignore_existing` argument to `org_create_assignment()` (#134, idea by @davidbuch).

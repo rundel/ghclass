@@ -30,6 +30,8 @@ team_repos(org, team = org_teams(org), team_type = c("name", "slug"))
 }
 \value{
 \code{team_members()}, \code{team_pending()}, and \code{team_repos()} all return a tibble.
+The \code{team} column echoes the supplied \code{team} values (names or slugs, per \code{team_type})
+and a \code{slug} column gives the corresponding team slug used for the API calls.
 
 \code{team_invite()} and \code{team_remove()} invisibly return a list containing the results
 of the relevant GitHub API calls.
