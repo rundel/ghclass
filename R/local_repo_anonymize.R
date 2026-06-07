@@ -10,38 +10,33 @@
 #' * **File contents** - every text file is scanned and any roster-derived value
 #'   (names, NetIDs, emails, GitHub usernames, ...) is replaced with a stable
 #'   per-student token (e.g. `student_07`).
-#' * **Git history** - commit author/committer details (and commit messages) are
-#'   rewritten so they no longer identify students.
+#' * **Git history** - each repository's `.git` directory is either deleted
+#'   outright (the default) or kept untouched.
 #'
 #' @details
-#' Anonymizing git history necessarily rewrites every commit, which changes all
-#' commit hashes and decouples the repository from its `origin` remote. Pulling
-#' from the original remote afterwards would also re-introduce the un-anonymized
-#' commits. For this reason the function works on a *copy* by default (the
-#' original is left untouched and remains pushable/pullable) and removes the
-#' `origin` remote from the copy. The copy is intended as a shareable / archival
-#' artifact, not a working clone.
+#' Git history cannot be reliably anonymized while also being preserved. Even
+#' after rewriting commit author and committer identities, the *original file
+#' contents* of older commits remain recoverable (`git show <old-sha>:README.md`),
+#' and real names routinely survive in commit messages and branch names. Because
+#' anyone you hand the repository to receives its full history, there are only two
+#' honest options, selected with `git_history`:
 #'
-#' The `git_history` argument controls how git is handled:
+#' * `"delete"` (default) - remove each repository's `.git` directory entirely.
+#'   The result is the scrubbed working tree with no recoverable history. This is
+#'   the safe choice for sharing student work.
+#' * `"keep"` - leave `.git` untouched. The working-tree files are still scrubbed,
+#'   but the original commit history (with real names and emails) is retained, so
+#'   the result is **not** safe to distribute.
 #'
-#' * `"metadata"` (default) - rewrite author/committer name and email on every
-#'   commit and scrub commit messages, keeping the full commit history. Uses
-#'   `git filter-repo` when available (recommended), otherwise falls back to the
-#'   slower `git filter-branch`. Historical file *blobs* are not scrubbed in this
-#'   tier (only the working tree and commit metadata).
-#' * `"flatten"` - delete `.git` and re-initialise the repo with a single
-#'   anonymized commit. Removes all historical PII but loses commit history.
-#' * `"none"` - skip git entirely (text contents only).
+#' The function works on a *copy* by default (`<path>_anon`), leaving the original
+#' intact, so deleting history is non-destructive to your working copy.
 #'
-#' The `"metadata"` tier requires a system `git` on the `PATH`; installing
-#' `git-filter-repo` (<https://github.com/newren/git-filter-repo>) is recommended
-#' for a faster and more robust rewrite.
-#'
-#' Only files whose names match `types` are scanned, so binary and other
-#' non-text files are skipped by design. Matching is best effort: word boundaries
-#' are used for names / NetIDs to avoid clobbering unrelated text, but short or
-#' common names may still over-match, and HTML-entity-encoded names are not
-#' detected.
+#' Only files whose names match `types` are scanned, so binary and other non-text
+#' files are skipped by design. Matching is best effort: word boundaries are used
+#' for names / NetIDs to avoid clobbering unrelated text, but short or common
+#' names may still over-match, and HTML-entity-encoded names are not detected.
+#' Anonymization is roster-driven, so anyone absent from the roster (e.g. a
+#' student who later dropped) will not be matched.
 #'
 #' @param path Character. Path to a git repository, a directory of repositories,
 #'   or a grading project folder (one containing a `repos/` subdirectory of
@@ -58,16 +53,14 @@
 #'   file name to decide which files are treated as text and scanned. Defaults to
 #'   common text formats found in student work (markdown, R / Python source,
 #'   notebooks, html, csv, yaml, ...).
-#' @param git_history Character. How to handle git history, see Details. One of
-#'   `"metadata"`, `"flatten"`, or `"none"`.
-#' @param remove_origin Logical. Remove the `origin` remote from rewritten repos
-#'   (applies to the `"metadata"` and `"flatten"` tiers). Defaults to `TRUE`.
+#' @param git_history Character. How each repository's git history is handled.
+#'   Either `"delete"` (default, remove the `.git` directory entirely) or `"keep"`
+#'   (leave it untouched, retaining the un-anonymized history).
 #' @param prompt Logical. Prompt for confirmation before modifying a folder in
 #'   place. Defaults to [interactive()].
 #'
 #' @return Invisibly, a list with two tibbles: `text` (files scrubbed and
-#'   replacements made per directory) and `git` (history tier and origin status
-#'   per repo).
+#'   replacements made per directory) and `git` (the action taken per repo).
 #'
 #' @examples
 #' \dontrun{
@@ -76,12 +69,12 @@
 #'   roster = "rosters/hw1_roster.csv"
 #' )
 #'
-#' # text only, choosing the columns explicitly
+#' # scrub text but keep history, choosing the columns explicitly
 #' local_repo_anonymize(
 #'   "grading/hw1",
 #'   roster = roster_df,
 #'   cols = c(name, netid, email),
-#'   git_history = "none"
+#'   git_history = "keep"
 #' )
 #' }
 #'
@@ -96,35 +89,20 @@ local_repo_anonymize = function(
     ".md", ".qmd", ".[Rr]md", ".txt", ".csv", ".tsv", ".html?", ".[Rr]",
     ".py", ".ipynb", ".json", ".ya?ml", ".tex", ".bib", ".toml", ".[Rr]proj"
   ),
-  git_history = c("metadata", "flatten", "none"),
-  remove_origin = TRUE,
+  git_history = c("delete", "keep"),
   prompt = interactive()
 ) {
   require_gert()
   arg_is_chr_scalar(path)
   arg_is_chr_scalar(output, allow_null = TRUE)
   arg_is_chr(types)
-  arg_is_lgl_scalar(remove_origin, prompt)
+  arg_is_lgl_scalar(prompt)
   git_history = match.arg(git_history)
   cols = rlang::enquo(cols)
 
   if (!fs::dir_exists(path))
     cli_stop("Unable to locate {.file {path}}.")
   path = as.character(fs::path_real(path))
-
-  git_tool = anon_git_tool()
-  if (git_history == "metadata" && is.na(git_tool)) {
-    cli_stop(
-      'History rewriting ({.val metadata}) requires {.code git} on the system PATH. ',
-      'Install git, or use {.code git_history = "flatten"}.'
-    )
-  }
-  if (git_history == "metadata" && git_tool == "filter-branch") {
-    cli_warn(
-      '{.code git filter-repo} not found; falling back to the slower {.code git filter-branch}. ',
-      'Install {.pkg git-filter-repo} for a faster, more robust history rewrite.'
-    )
-  }
 
   # The roster + map are validated before we copy anything potentially large.
   roster = anon_read_roster(roster)
@@ -138,7 +116,7 @@ local_repo_anonymize = function(
   in_place = identical(as.character(fs::path_norm(output)), path)
 
   if (in_place) {
-    if (prompt && !cli_yeah("Modify {.file {path}} in place? This rewrites files and git history and cannot be undone."))
+    if (prompt && !cli_yeah("Modify {.file {path}} in place? This rewrites files and deletes git history and cannot be undone."))
       return(invisible(NULL))
     work = path
   } else {
@@ -164,37 +142,33 @@ local_repo_anonymize = function(
   )
 
   git_summ = tibble::tibble()
-  if (git_history != "none" && length(layout$repos) > 0) {
-    git_summ = dplyr::bind_rows(purrr::map(
-      layout$repos,
-      function(repo) {
-        res = purrr::safely(anon_git_dispatch)(repo, map, git_history, git_tool)
-        status_msg(
-          res,
-          "Rewrote git history for {.val {fs::path_file(repo)}}.",
-          "Failed to rewrite git history for {.val {fs::path_file(repo)}}."
-        )
-
-        origin_removed = FALSE
-        if (succeeded(res) && remove_origin && git_history %in% c("metadata", "flatten")) {
-          if ("origin" %in% gert::git_remote_list(repo = repo)[["name"]])
-            purrr::safely(gert::git_remote_remove)("origin", repo = repo)
-          origin_removed = !"origin" %in% gert::git_remote_list(repo = repo)[["name"]]
+  if (length(layout$repos) > 0) {
+    if (git_history == "delete") {
+      git_summ = dplyr::bind_rows(purrr::map(
+        layout$repos,
+        function(repo) {
+          res = purrr::safely(anon_git_delete)(repo)
+          status_msg(
+            res,
+            "Deleted git history for {.val {fs::path_file(repo)}}.",
+            "Failed to delete git history for {.val {fs::path_file(repo)}}."
+          )
+          tibble::tibble(
+            repo = fs::path_file(repo),
+            git_history = git_history,
+            deleted = succeeded(res)
+          )
         }
-
-        tibble::tibble(
-          repo = fs::path_file(repo),
-          git_history = git_history,
-          origin_removed = origin_removed,
-          success = succeeded(res)
-        )
-      }
-    ))
-
-    if (remove_origin && git_history %in% c("metadata", "flatten")) {
+      ))
+    } else {
+      git_summ = tibble::tibble(
+        repo = fs::path_file(layout$repos),
+        git_history = git_history,
+        deleted = FALSE
+      )
       cli_warn(
-        "Rewriting history decoupled the anonymized repos from GitHub; any ",
-        "{.val origin} remote was removed, so they can no longer be pushed or pulled."
+        "Git history was kept; the original commit history (including real names ",
+        "and emails) is retained, so the result is not safe to distribute."
       )
     }
   }
@@ -377,227 +351,11 @@ anon_scrub_dir = function(dir, map, types) {
 
 # Git history ------------------------------------------------------------------
 
-anon_git_tool = function() {
-  git = Sys.which("git")
-  if (!nzchar(git))
-    return(NA_character_)
-
-  fr = suppressWarnings(
-    system2(git, c("filter-repo", "--version"), stdout = TRUE, stderr = TRUE)
-  )
-  status = attr(fr, "status")
-  if (is.null(status) || status == 0L)
-    return("filter-repo")
-
-  "filter-branch"
-}
-
-anon_git_dispatch = function(repo, map, history, git_tool) {
-  switch(
-    history,
-    metadata = anon_git_metadata(repo, map, git_tool),
-    flatten = anon_git_flatten(repo),
-    none = NULL
-  )
+anon_git_delete = function(repo) {
+  git_dir = fs::path(repo, ".git")
+  if (fs::dir_exists(git_dir))
+    fs::dir_delete(git_dir)
+  else if (fs::file_exists(git_dir))
+    fs::file_delete(git_dir)
   invisible(TRUE)
-}
-
-anon_git_identities = function(repo, git = Sys.which("git")) {
-  sep = intToUtf8(31)
-  empty = tibble::tibble(name = character(), email = character())
-
-  if (nzchar(git)) {
-    fmt = paste0("--format=%an", sep, "%ae", sep, "%cn", sep, "%ce")
-    out = suppressWarnings(
-      system2(git, c("-C", shQuote(repo), "log", "--all", fmt),
-              stdout = TRUE, stderr = FALSE)
-    )
-    if (length(out) > 0 && is.null(attr(out, "status"))) {
-      parts = strsplit(out, sep, fixed = TRUE)
-      field = function(i) vapply(parts, function(x) if (length(x) >= i) x[i] else "", character(1))
-      ids = tibble::tibble(
-        name = c(field(1), field(3)),
-        email = c(field(2), field(4))
-      )
-      return(dplyr::distinct(ids))
-    }
-  }
-
-  log = purrr::safely(gert::git_log)(repo = repo, max = 1e6)
-  if (failed(log))
-    return(empty)
-  who = c(result(log)[["author"]], result(log)[["committer"]])
-  who = who[!is.na(who)]
-  if (length(who) == 0)
-    return(empty)
-  name = trimws(sub("\\s*<.*$", "", who))
-  email = sub("^.*<([^>]*)>.*$", "\\1", who)
-  email[!grepl("<", who)] = ""
-  dplyr::distinct(tibble::tibble(name = name, email = email))
-}
-
-anon_resolve_token = function(name, email, map) {
-  for (i in seq_len(nrow(map))) {
-    lit = map$literal[i]
-    if ((nzchar(email) && grepl(lit, email, fixed = TRUE)) ||
-        (nzchar(name) && grepl(lit, name, fixed = TRUE)))
-      return(map$token[i])
-  }
-  "anon"
-}
-
-anon_resolve_ids = function(repo, map, git) {
-  ids = anon_git_identities(repo, git)
-  if (nrow(ids) == 0)
-    return(ids)
-  ids$token = purrr::map2_chr(ids$name, ids$email, anon_resolve_token, map = map)
-  ids$new_name = ids$token
-  ids$new_email = paste0(ids$token, "@anon.invalid")
-  ids
-}
-
-anon_git_commit_pending = function(repo) {
-  st = purrr::safely(gert::git_status)(repo = repo)
-  if (failed(st))
-    return(invisible(NULL))
-  st = result(st)
-
-  to_add = st$file[st$status %in% c("modified", "typechange", "renamed")]
-  if (length(to_add) == 0)
-    return(invisible(NULL))
-
-  gert::git_add(to_add, repo = repo)
-  purrr::safely(gert::git_commit)(
-    "Anonymize repository contents",
-    repo = repo,
-    author = gert::git_signature("anon", "anon@anon.invalid")
-  )
-  invisible(NULL)
-}
-
-anon_git_metadata = function(repo, map, git_tool) {
-  git = Sys.which("git")
-  anon_git_commit_pending(repo)
-
-  ids = anon_resolve_ids(repo, map, git)
-  if (nrow(ids) == 0)
-    return(invisible(NULL))
-
-  if (identical(git_tool, "filter-repo"))
-    anon_filter_repo(repo, ids, map, git)
-  else
-    anon_filter_branch(repo, ids, map, git)
-}
-
-anon_filter_branch = function(repo, ids, map, git) {
-  em = ids[nzchar(ids$email), c("email", "new_name", "new_email")]
-  em = em[!duplicated(em$email), ]
-
-  dq = function(x) paste0('"', x, '"')
-  branches = sprintf(
-    "    %s) N=%s; E=%s;;",
-    dq(anon_glob_escape(em$email)), dq(em$new_name), dq(em$new_email)
-  )
-  branches = paste(branches, collapse = "\n")
-
-  block = function(in_email, out_name, out_email) {
-    paste0(
-      'case "$', in_email, '" in\n',
-      branches, "\n",
-      '    *) N="anon"; E="anon@anon.invalid";;\n',
-      "esac\n",
-      "export ", out_name, '="$N"\n',
-      "export ", out_email, '="$E"\n'
-    )
-  }
-  env_filter = paste0(
-    block("GIT_AUTHOR_EMAIL", "GIT_AUTHOR_NAME", "GIT_AUTHOR_EMAIL"),
-    block("GIT_COMMITTER_EMAIL", "GIT_COMMITTER_NAME", "GIT_COMMITTER_EMAIL")
-  )
-
-  args = c(
-    "-C", shQuote(repo), "filter-branch", "-f",
-    "--env-filter", shQuote(env_filter)
-  )
-
-  msg_script = anon_perl_msg_script(map)
-  perl = Sys.which("perl")
-  if (!is.null(msg_script) && nzchar(perl))
-    args = c(args, "--msg-filter", shQuote(paste("perl", shQuote(msg_script))))
-
-  args = c(args, "--", "--all")
-
-  out = suppressWarnings(
-    system2(git, args, env = "FILTER_BRANCH_SQUELCH_WARNING=1",
-            stdout = TRUE, stderr = TRUE)
-  )
-  status = attr(out, "status")
-  if (!is.null(status) && status != 0L)
-    stop(paste(out, collapse = "\n"), call. = FALSE)
-
-  orig = fs::path(repo, ".git", "refs", "original")
-  if (fs::dir_exists(orig))
-    fs::dir_delete(orig)
-  suppressWarnings(system2(git, c("-C", shQuote(repo), "reflog", "expire", "--expire=now", "--all"), stdout = TRUE, stderr = TRUE))
-  suppressWarnings(system2(git, c("-C", shQuote(repo), "gc", "--prune=now", "--quiet"), stdout = TRUE, stderr = TRUE))
-  invisible(NULL)
-}
-
-anon_filter_repo = function(repo, ids, map, git) {
-  ids = ids[nzchar(ids$email), ]
-  old = ifelse(
-    nzchar(ids$name),
-    paste0(ids$name, " <", ids$email, ">"),
-    paste0("<", ids$email, ">")
-  )
-  mailmap = paste0(ids$new_name, " <", ids$new_email, "> ", old)
-  mm_file = tempfile(fileext = ".mailmap")
-  writeLines(mailmap, mm_file)
-
-  rules_file = tempfile(fileext = ".txt")
-  writeLines(paste0(map$literal, "==>", map$token), rules_file)
-
-  out = suppressWarnings(system2(
-    git,
-    c("-C", shQuote(repo), "filter-repo", "--force",
-      "--mailmap", shQuote(mm_file),
-      "--replace-message", shQuote(rules_file)),
-    stdout = TRUE, stderr = TRUE
-  ))
-  status = attr(out, "status")
-  if (!is.null(status) && status != 0L)
-    stop(paste(out, collapse = "\n"), call. = FALSE)
-  invisible(NULL)
-}
-
-anon_git_flatten = function(repo) {
-  fs::dir_delete(fs::path(repo, ".git"))
-  gert::git_init(repo)
-  gert::git_add(".", repo = repo)
-  gert::git_commit(
-    "Anonymized snapshot",
-    repo = repo,
-    author = gert::git_signature("anon", "anon@anon.invalid")
-  )
-  invisible(NULL)
-}
-
-anon_glob_escape = function(x) {
-  gsub("([\\\\*?\\[])", "\\\\\\1", x, perl = TRUE)
-}
-
-anon_perl_msg_script = function(map) {
-  ok = !grepl("[{}\\\\]", map$literal)
-  m = map[ok, ]
-  if (nrow(m) == 0)
-    return(NULL)
-  script = c(
-    "while (<>) {",
-    sprintf("  s{\\Q%s\\E}{%s}g;", m$literal, m$token),
-    "  print;",
-    "}"
-  )
-  f = tempfile(fileext = ".pl")
-  writeLines(script, f)
-  f
 }

@@ -11,8 +11,7 @@ local_repo_anonymize(
   output = NULL,
   types = c(".md", ".qmd", ".[Rr]md", ".txt", ".csv", ".tsv", ".html?", ".[Rr]", ".py",
     ".ipynb", ".json", ".ya?ml", ".tex", ".bib", ".toml", ".[Rr]proj"),
-  git_history = c("metadata", "flatten", "none"),
-  remove_origin = TRUE,
+  git_history = c("delete", "keep"),
   prompt = interactive()
 )
 }
@@ -37,19 +36,16 @@ file name to decide which files are treated as text and scanned. Defaults to
 common text formats found in student work (markdown, R / Python source,
 notebooks, html, csv, yaml, ...).}
 
-\item{git_history}{Character. How to handle git history, see Details. One of
-\code{"metadata"}, \code{"flatten"}, or \code{"none"}.}
-
-\item{remove_origin}{Logical. Remove the \code{origin} remote from rewritten repos
-(applies to the \code{"metadata"} and \code{"flatten"} tiers). Defaults to \code{TRUE}.}
+\item{git_history}{Character. How each repository's git history is handled.
+Either \code{"delete"} (default, remove the \code{.git} directory entirely) or \code{"keep"}
+(leave it untouched, retaining the un-anonymized history).}
 
 \item{prompt}{Logical. Prompt for confirmation before modifying a folder in
 place. Defaults to \code{\link[=interactive]{interactive()}}.}
 }
 \value{
 Invisibly, a list with two tibbles: \code{text} (files scrubbed and
-replacements made per directory) and \code{git} (history tier and origin status
-per repo).
+replacements made per directory) and \code{git} (the action taken per repo).
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
@@ -61,40 +57,35 @@ removes student personally identifying information (PII). Two things happen:
 \item \strong{File contents} - every text file is scanned and any roster-derived value
 (names, NetIDs, emails, GitHub usernames, ...) is replaced with a stable
 per-student token (e.g. \code{student_07}).
-\item \strong{Git history} - commit author/committer details (and commit messages) are
-rewritten so they no longer identify students.
+\item \strong{Git history} - each repository's \code{.git} directory is either deleted
+outright (the default) or kept untouched.
 }
 }
 \details{
-Anonymizing git history necessarily rewrites every commit, which changes all
-commit hashes and decouples the repository from its \code{origin} remote. Pulling
-from the original remote afterwards would also re-introduce the un-anonymized
-commits. For this reason the function works on a \emph{copy} by default (the
-original is left untouched and remains pushable/pullable) and removes the
-\code{origin} remote from the copy. The copy is intended as a shareable / archival
-artifact, not a working clone.
-
-The \code{git_history} argument controls how git is handled:
+Git history cannot be reliably anonymized while also being preserved. Even
+after rewriting commit author and committer identities, the \emph{original file
+contents} of older commits remain recoverable (\verb{git show <old-sha>:README.md}),
+and real names routinely survive in commit messages and branch names. Because
+anyone you hand the repository to receives its full history, there are only two
+honest options, selected with \code{git_history}:
 \itemize{
-\item \code{"metadata"} (default) - rewrite author/committer name and email on every
-commit and scrub commit messages, keeping the full commit history. Uses
-\verb{git filter-repo} when available (recommended), otherwise falls back to the
-slower \verb{git filter-branch}. Historical file \emph{blobs} are not scrubbed in this
-tier (only the working tree and commit metadata).
-\item \code{"flatten"} - delete \code{.git} and re-initialise the repo with a single
-anonymized commit. Removes all historical PII but loses commit history.
-\item \code{"none"} - skip git entirely (text contents only).
+\item \code{"delete"} (default) - remove each repository's \code{.git} directory entirely.
+The result is the scrubbed working tree with no recoverable history. This is
+the safe choice for sharing student work.
+\item \code{"keep"} - leave \code{.git} untouched. The working-tree files are still scrubbed,
+but the original commit history (with real names and emails) is retained, so
+the result is \strong{not} safe to distribute.
 }
 
-The \code{"metadata"} tier requires a system \code{git} on the \code{PATH}; installing
-\code{git-filter-repo} (\url{https://github.com/newren/git-filter-repo}) is recommended
-for a faster and more robust rewrite.
+The function works on a \emph{copy} by default (\verb{<path>_anon}), leaving the original
+intact, so deleting history is non-destructive to your working copy.
 
-Only files whose names match \code{types} are scanned, so binary and other
-non-text files are skipped by design. Matching is best effort: word boundaries
-are used for names / NetIDs to avoid clobbering unrelated text, but short or
-common names may still over-match, and HTML-entity-encoded names are not
-detected.
+Only files whose names match \code{types} are scanned, so binary and other non-text
+files are skipped by design. Matching is best effort: word boundaries are used
+for names / NetIDs to avoid clobbering unrelated text, but short or common
+names may still over-match, and HTML-entity-encoded names are not detected.
+Anonymization is roster-driven, so anyone absent from the roster (e.g. a
+student who later dropped) will not be matched.
 }
 \examples{
 \dontrun{
@@ -103,12 +94,12 @@ local_repo_anonymize(
   roster = "rosters/hw1_roster.csv"
 )
 
-# text only, choosing the columns explicitly
+# scrub text but keep history, choosing the columns explicitly
 local_repo_anonymize(
   "grading/hw1",
   roster = roster_df,
   cols = c(name, netid, email),
-  git_history = "none"
+  git_history = "keep"
 )
 }
 

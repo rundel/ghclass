@@ -1,6 +1,6 @@
 # ghclass (development version)
 
-* Added experimental `local_repo_anonymize()` to strip roster-derived student PII from the files and git history of a local repo or grading project.
+* Added experimental `local_repo_anonymize()` to scrub roster-derived student PII from the files of a local repo or grading project and delete (or keep) their git history.
 
 * Fixed bugs in `repo_prs()`, `action_runs()`, and `action_runtime()` that produced wrong or missing values.
 

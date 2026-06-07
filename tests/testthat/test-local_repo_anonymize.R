@@ -55,7 +55,9 @@ test_that("text PII is replaced and non-PII is preserved", {
   out = paste0(root, "_anon")
   withr::defer(unlink(out, recursive = TRUE))
 
-  local_repo_anonymize(root, roster = roster_fixture(), git_history = "none", prompt = FALSE, output = out)
+  suppressWarnings(
+    local_repo_anonymize(root, roster = roster_fixture(), git_history = "keep", prompt = FALSE, output = out)
+  )
 
   readme = readr::read_file(fs::path(out, "repos", "hw1-team01", "README.md"))
   expect_false(grepl("Alice|Smith|alice.smith@duke.edu|as99|alicesmith", readme))
@@ -77,7 +79,9 @@ test_that("binary files are left untouched", {
   out = paste0(root, "_anon")
   withr::defer(unlink(out, recursive = TRUE))
 
-  local_repo_anonymize(root, roster = roster_fixture(), git_history = "none", prompt = FALSE, output = out)
+  suppressWarnings(
+    local_repo_anonymize(root, roster = roster_fixture(), git_history = "keep", prompt = FALSE, output = out)
+  )
 
   png = readBin(fs::path(out, "repos", "hw1-team01", "logo.png"), "raw", 10)
   expect_identical(png, as.raw(c(1L, 0L, 2L, 0L, 255L)))
@@ -92,12 +96,16 @@ test_that("only files matching types are scrubbed", {
 
   out1 = paste0(root, "_a")
   withr::defer(unlink(out1, recursive = TRUE))
-  local_repo_anonymize(root, roster = roster_fixture(), git_history = "none", prompt = FALSE, output = out1)
+  suppressWarnings(
+    local_repo_anonymize(root, roster = roster_fixture(), git_history = "keep", prompt = FALSE, output = out1)
+  )
   expect_match(readr::read_file(fs::path(out1, "repos", "hw1-team01", "extra.log")), "Alice Smith")
 
   out2 = paste0(root, "_b")
   withr::defer(unlink(out2, recursive = TRUE))
-  local_repo_anonymize(root, roster = roster_fixture(), types = ".log", git_history = "none", prompt = FALSE, output = out2)
+  suppressWarnings(
+    local_repo_anonymize(root, roster = roster_fixture(), types = ".log", git_history = "keep", prompt = FALSE, output = out2)
+  )
   expect_false(grepl("Alice Smith", readr::read_file(fs::path(out2, "repos", "hw1-team01", "extra.log"))))
 })
 
@@ -109,15 +117,16 @@ test_that("the original directory is untouched when writing to a copy", {
   out = paste0(root, "_anon")
   withr::defer(unlink(out, recursive = TRUE))
 
-  local_repo_anonymize(root, roster = roster_fixture(), git_history = "flatten", remove_origin = FALSE, prompt = FALSE, output = out)
+  local_repo_anonymize(root, roster = roster_fixture(), git_history = "delete", prompt = FALSE, output = out)
 
   orig = readr::read_file(fs::path(fx$repo, "README.md"))
   expect_match(orig, "Alice Smith")
+  expect_true(fs::dir_exists(fs::path(fx$repo, ".git")))
   log = gert::git_log(repo = fx$repo, max = 5)
   expect_true(any(grepl("Alice", log$author)))
 })
 
-test_that("flatten removes all author history", {
+test_that("delete removes the .git directory entirely", {
   skip_if_not_installed("gert")
 
   root = withr::local_tempdir()
@@ -125,49 +134,32 @@ test_that("flatten removes all author history", {
   out = paste0(root, "_anon")
   withr::defer(unlink(out, recursive = TRUE))
 
-  local_repo_anonymize(root, roster = roster_fixture(), git_history = "flatten", remove_origin = FALSE, prompt = FALSE, output = out)
+  res = local_repo_anonymize(root, roster = roster_fixture(), git_history = "delete", prompt = FALSE, output = out)
 
-  log = gert::git_log(repo = fs::path(out, "repos", "hw1-team01"), max = 50)
-  expect_false(any(grepl("Alice|Bob|duke.edu", log$author)))
-  expect_equal(nrow(log), 1L)
+  arepo = fs::path(out, "repos", "hw1-team01")
+  expect_false(fs::dir_exists(fs::path(arepo, ".git")))
+  # working tree is still scrubbed
+  expect_false(grepl("Alice Smith", readr::read_file(fs::path(arepo, "README.md"))))
+  expect_true(all(res$git$deleted))
 })
 
-test_that("metadata tier rewrites authors, messages, and drops backup refs", {
+test_that("keep retains git history and warns", {
   skip_if_not_installed("gert")
-  skip_if(!nzchar(Sys.which("git")), "system git not available")
 
   root = withr::local_tempdir()
   grading_fixture(root)
   out = paste0(root, "_anon")
   withr::defer(unlink(out, recursive = TRUE))
 
-  res = local_repo_anonymize(
-    root, roster = roster_fixture(), git_history = "metadata",
-    remove_origin = FALSE, prompt = FALSE, output = out
+  expect_warning(
+    local_repo_anonymize(root, roster = roster_fixture(), git_history = "keep", prompt = FALSE, output = out),
+    "not safe to distribute"
   )
 
   arepo = fs::path(out, "repos", "hw1-team01")
-  log = gert::git_log(repo = arepo, max = 50)
-  expect_false(any(grepl("Alice|Bob|duke.edu|as99|bj12", log$author)))
-  expect_false(any(grepl("Alice|Bob|bj12", log$message)))
-  expect_false(fs::dir_exists(fs::path(arepo, ".git", "refs", "original")))
-  expect_true(all(res$git$success))
-})
-
-test_that("origin remote is removed from rewritten repos", {
-  skip_if_not_installed("gert")
-
-  root = withr::local_tempdir()
-  fx = grading_fixture(root)
-  gert::git_remote_add("https://github.com/example/hw1-team01.git", "origin", repo = fx$repo)
-  out = paste0(root, "_anon")
-  withr::defer(unlink(out, recursive = TRUE))
-
-  suppressWarnings(
-    local_repo_anonymize(root, roster = roster_fixture(), git_history = "flatten", prompt = FALSE, output = out)
-  )
-
-  expect_false("origin" %in% gert::git_remote_list(repo = fs::path(out, "repos", "hw1-team01"))$name)
+  expect_true(fs::dir_exists(fs::path(arepo, ".git")))
+  log = gert::git_log(repo = arepo, max = 5)
+  expect_true(any(grepl("Alice|Bob", log$author)))
 })
 
 test_that("cols accepts tidyselect expressions", {
