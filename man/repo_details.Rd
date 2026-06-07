@@ -42,7 +42,7 @@ repo_issues(
 
 repo_n_commits(repo, quiet = FALSE)
 
-repo_prs(repo, state = c("open", "closed", "all"))
+repo_prs(repo, state = c("open", "closed", "all"), quiet = FALSE)
 
 repo_pushes(
   repo,

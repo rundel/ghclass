@@ -10,6 +10,8 @@
 
 * Various fixes to the `action_*()` functions and file downloads.
 
+* Documentation, vignette, and website fixes.
+
 # ghclass 0.4.0
 
 * Added `ignore_existing` argument to `org_create_assignment()` (#134, idea by @davidbuch).

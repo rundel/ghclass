@@ -18,7 +18,7 @@
 #' @param branch Repository branch to use.
 #' @param new_branch Name of branch to create.
 #'
-#' @return `branch_create()`and `branch_remove()` invisibly return a list containing
+#' @return `branch_create()` and `branch_delete()` invisibly return a list containing
 #' the results of the relevant GitHub API call.
 #'
 #' @seealso [repo_branches]

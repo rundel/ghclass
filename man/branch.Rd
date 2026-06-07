@@ -21,7 +21,7 @@ branch_remove(repo, branch)
 \item{new_branch}{Name of branch to create.}
 }
 \value{
-\code{branch_create()}and \code{branch_remove()} invisibly return a list containing
+\code{branch_create()} and \code{branch_delete()} invisibly return a list containing
 the results of the relevant GitHub API call.
 }
 \description{

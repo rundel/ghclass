@@ -70,15 +70,7 @@ repo_put_file(
 
 \item{quiet}{Logical. Should status messages be printed. Default \code{FALSE}.}
 
-\item{include_details}{Logical. Should file details be attached as attributes. Default \code{TRUE}.
-
-\code{repo_delete_file()}m \code{repo_modify_file()}, and \code{repo_put_file()} all invisibly
-return a list containing the results of the relevant GitHub API calls.
-
-\code{repo_ls()} returns a character vector of repo files in the given path.
-
-\code{repo_get_file()} and \code{repo_get_readme()} return a character vector with API results
-attached as attributes if \code{include_details = TRUE}}
+\item{include_details}{Logical. Should file details be attached as attributes. Default \code{TRUE}.}
 
 \item{full_path}{Logical. Should the function return the full path of the files and directories. Default \code{FALSE}.}
 
@@ -91,6 +83,15 @@ attached as attributes if \code{include_details = TRUE}}
 \item{all}{Character. Should all instances of the pattern be modified (\code{TRUE}) or just the first (\code{FALSE}).}
 
 \item{verbose}{Logical. Should success / failure messages be printed. Default \code{TRUE}.}
+}
+\value{
+\code{repo_delete_file()}, \code{repo_modify_file()}, and \code{repo_put_file()} all invisibly
+return a list containing the results of the relevant GitHub API calls.
+
+\code{repo_ls()} returns a character vector of repo files in the given path.
+
+\code{repo_get_file()} and \code{repo_get_readme()} return a character vector with API results
+attached as attributes if \code{include_details = TRUE}
 }
 \description{
 \itemize{

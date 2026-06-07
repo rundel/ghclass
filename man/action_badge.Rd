@@ -41,3 +41,15 @@ containing the results of the relevant GitHub API call.
 \item \code{action_remove_badge()} - Remove one or more GitHub Action badges from a file.
 }
 }
+\note{
+\code{action_add_badge()} is not idempotent; re-running it adds another badge
+block, so use \code{action_remove_badge()} first if you need to avoid duplicates.
+}
+\examples{
+\dontrun{
+action_add_badge("ghclass-test/hw1-team01")
+
+action_remove_badge("ghclass-test/hw1-team01")
+}
+
+}

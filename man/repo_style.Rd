@@ -42,3 +42,9 @@ The functions returns NULL invisibly.
 within a repository using the \code{styler} package and adhering to \code{tidyverse} formatting guidelines.
 }
 }
+\examples{
+\dontrun{
+repo_style("ghclass-test/hw1-team01", base = "main")
+}
+
+}

@@ -15,6 +15,11 @@
 #'
 #' @return The functions returns NULL invisibly.
 #'
+#' @examples
+#' \dontrun{
+#' repo_style("ghclass-test/hw1-team01", base = "main")
+#' }
+#'
 #' @export
 #'
 repo_style = function(repo, files = c("*.R", "*.Rmd"), branch = "styler", base,

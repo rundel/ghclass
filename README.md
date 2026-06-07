@@ -28,17 +28,14 @@ remotes::install_github("rundel/ghclass")
 ```
 
 See package
-[vignette](https://rundel.github.io/ghclass/articles/articles/ghclass.html)
+[vignette](https://rundel.github.io/ghclass/articles/ghclass.html)
 for details on how to use the package.
 
 ## Peer Review
 
-In order to speed up the process of getting this package submitted to
-CRAN we have decided to move the peer review functionality to the
-`peer_review` branch for the time being. This functionality will be
-included in the CRAN release as soon as possible, hopefully in the next,
-v0.2.1, release. If you were using this functionality and need access to
-a version of ghclass with it then you can install this branch using:
+The peer review functionality currently lives on the `peer_review` branch
+and is not part of the CRAN release. If you need it you can install that
+branch using:
 
 ``` r
 remotes::install_github("rundel/ghclass@peer_review")
@@ -46,10 +43,8 @@ remotes::install_github("rundel/ghclass@peer_review")
 
 ## GitHub & default branches
 
-Recently, GitHub has announced that they will be changing the default
-branch for all new repositories on their platform to `main` from
-`master`. Details on this change and the timeline for implementation are
-available [here](https://github.com/github/renaming). In anticipation of
-these changes we have updated `ghclass` to support alternative default
-branch names across the entire package. See the FAQ in the Getting
-Started vignette for more details.
+GitHub now uses `main` as the default branch for new repositories (see
+[here](https://github.com/github/renaming) for background). `ghclass`
+supports alternative default branch names across the entire package, so
+for the vast majority of use cases you will not need to do anything
+differently. See the FAQ in the Getting Started vignette for more details.

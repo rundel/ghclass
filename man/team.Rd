@@ -31,7 +31,7 @@ team_rename(org, team, new_team, team_type = c("name", "slug"))
 
 \item{privacy}{Character. Level of privacy for team, "closed" (visible to all
 members of the organization) or "secret" (only visible to organization owners
-and members of a team), default is "closed"}
+and members of a team), default is "secret"}
 
 \item{team_type}{Character. Either "slug" if the team names are slugs or "name" if full team names are provided.}
 

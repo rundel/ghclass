@@ -17,7 +17,7 @@ navbar:
   type: default
   left:
   - text: Introduction
-    href: articles/articles/ghclass.html
+    href: articles/ghclass.html
   - text: Reference
     href: reference/index.html
   - text: News
@@ -27,6 +27,8 @@ reference:
   - title: GitHub
     contents:
     - starts_with("github_")
+    - with_pat
+    - local_pat
   - title: Local Repositories
     contents:
     - starts_with("local_repo_")

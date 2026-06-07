@@ -18,7 +18,7 @@
 #' @param suffix Character. Shared suffix.
 #' @param privacy Character. Level of privacy for team, "closed" (visible to all
 #' members of the organization) or "secret" (only visible to organization owners
-#' and members of a team), default is "closed"
+#' and members of a team), default is "secret"
 #' @param prompt Logical. Should the user be prompted before deleting team. Default `true`.
 #' @param new_team Character. New team name.
 #'

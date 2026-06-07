@@ -174,7 +174,8 @@ NULL
 #' @param quiet Logical. Should status messages be printed. Default `FALSE`.
 #' @param include_details Logical. Should file details be attached as attributes. Default `TRUE`.
 #'
-#' `repo_delete_file()`m `repo_modify_file()`, and `repo_put_file()` all invisibly
+#' @return
+#' `repo_delete_file()`, `repo_modify_file()`, and `repo_put_file()` all invisibly
 #' return a list containing the results of the relevant GitHub API calls.
 #'
 #' `repo_ls()` returns a character vector of repo files in the given path.
@@ -269,7 +270,7 @@ NULL
 #' @param team_type Character. Either "slug" if the team names are slugs or "name" if full team names are provided.
 #' @param include_admins Logical. If `FALSE`, user names of users with Admin rights are not included, defaults to `TRUE`.
 #'
-#' @return `repo_collaborators()` and `repo_contributoes` return a tibble.
+#' @return `repo_collaborators()` and `repo_contributors()` return a tibble.
 #'
 #' All other functions invisibly return a list containing the results of the relevant GitHub API calls.
 #'

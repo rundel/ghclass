@@ -1,4 +1,15 @@
 #' @rdname action_badge
+#'
+#' @note `action_add_badge()` is not idempotent; re-running it adds another badge
+#' block, so use `action_remove_badge()` first if you need to avoid duplicates.
+#'
+#' @examples
+#' \dontrun{
+#' action_add_badge("ghclass-test/hw1-team01")
+#'
+#' action_remove_badge("ghclass-test/hw1-team01")
+#' }
+#'
 #' @export
 #'
 action_add_badge = function(repo, workflow = NULL, where = "^.",

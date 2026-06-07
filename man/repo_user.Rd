@@ -62,7 +62,7 @@ repo_remove_user(repo, user)
 \item{include_admins}{Logical. If \code{FALSE}, user names of users with Admin rights are not included, defaults to \code{TRUE}.}
 }
 \value{
-\code{repo_collaborators()} and \code{repo_contributoes} return a tibble.
+\code{repo_collaborators()} and \code{repo_contributors()} return a tibble.
 
 All other functions invisibly return a list containing the results of the relevant GitHub API calls.
 }
