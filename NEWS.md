@@ -6,11 +6,9 @@
 
 * GraphQL-based functions now escape special characters in names and filters and report API errors instead of failing silently.
 
-* Improved argument validation and error reporting across many functions.
+* Improved argument validation and error reporting.
 
 * Various fixes to the `action_*()` functions and file downloads.
-
-* Documentation, vignette, and website fixes.
 
 # ghclass 0.4.0
 
