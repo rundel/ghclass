@@ -28,6 +28,8 @@ repo_modify_file = function(repo, path, pattern, content, method = c("replace", 
 
       if (is.null(cur_content)) {
         cli::cli_alert_danger("Unable to retrieve {.val {repo_txt}}.")
+      } else if (!is.character(cur_content)) {
+        cli::cli_alert_danger("Cannot modify non-text file {.val {repo_txt}}.")
       } else {
 
         if (all) sub_func = gsub

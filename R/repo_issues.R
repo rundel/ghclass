@@ -93,7 +93,18 @@ repo_issues = function(
           assignees = purrr::map(iss, ~ purrr::map_chr(.x$assignees, "login"))
         )
       } else {
-        list()
+        tibble::tibble(
+          repo = character(),
+          number = integer(),
+          title = character(),
+          state = character(),
+          comments = integer(),
+          created = as.POSIXct(character()),
+          updated = as.POSIXct(character()),
+          closed = as.POSIXct(character()),
+          created_by = character(),
+          assignees = list()
+        )
       }
     }
   )

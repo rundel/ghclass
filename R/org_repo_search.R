@@ -1,6 +1,6 @@
 github_api_repo_search = function(q, sort = NULL, order = c("desc", "asc")) {
   if (!is.null(sort))
-    stopifnot(sort %in% "stars", "forks", "help-wanted-issues", "updated")
+    stopifnot(sort %in% c("stars", "forks", "help-wanted-issues", "updated"))
 
   order = match.arg(order)
 

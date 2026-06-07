@@ -6,6 +6,8 @@
 
 * GraphQL-based functions now escape special characters in names and filters and report API errors instead of failing silently.
 
+* Improved argument validation and error reporting across many functions.
+
 # ghclass 0.4.0
 
 * Added `ignore_existing` argument to `org_create_assignment()` (#134, idea by @davidbuch).

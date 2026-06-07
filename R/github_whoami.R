@@ -27,6 +27,9 @@ github_whoami = function(quiet = FALSE) {
     )
   }
 
+  if (failed(res))
+    return(invisible(NULL))
+
   result(res)[["login"]]
 }
 
@@ -64,6 +67,14 @@ github_orgs = function(quiet = FALSE) {
   }
 
   res = result(res)
+
+  if (empty_result(res))
+    return(tibble::tibble(
+      org = character(),
+      role = character(),
+      state = character()
+    ))
+
   tibble::tibble(
     org = purrr::map_chr(res, c("organization", "login")),
     role = purrr::map_chr(res, "role"),

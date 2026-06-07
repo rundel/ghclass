@@ -32,15 +32,19 @@ org_create_assignment = function(org, repo, user, team = NULL, source_repo = NUL
   arg_is_chr(repo, user)
   arg_is_chr(team, allow_null = TRUE)
   arg_is_chr_scalar(source_repo, allow_null = TRUE)
-  arg_is_lgl_scalar(private, ignore_existing)
+  arg_is_lgl_scalar(private, add_badges, ignore_existing)
+
+  if (length(repo) != length(user))
+    cli_stop("{.arg repo} and {.arg user} must have the same length.")
+  if (!is.null(team) && length(team) != length(user))
+    cli_stop("{.arg team} and {.arg user} must have the same length.")
 
   repo_full = paste0(org, "/", repo)
 
   if (!is.null(source_repo) && !repo_is_template(source_repo)) {
-    expr = paste0("repo_set_template(", source_repo, ")")
     cli_stop(
       "{.val {source_repo}} is not a template repo - ",
-      "this can be set using {.code repo_set_template({.val {source_repo}})}}."
+      "this can be set using {.code repo_set_template({.val {source_repo}})}."
     )
   }
 
@@ -73,7 +77,7 @@ org_create_assignment = function(org, repo, user, team = NULL, source_repo = NUL
   if (!is.null(source_repo)) {
     res[["mirror"]] = repo_mirror_template(source_repo, repo_full, private = private)
   } else {
-    repo_create(org, repo, private = private)
+    res[["create"]] = repo_create(org, repo, private = private)
   }
 
   if (!is.null(team)) {

@@ -6,7 +6,7 @@
 handle_arg_list = function(..., tests) {
   values = list(...)
   names = eval(substitute(alist(...)))
-  names = purrr::map(names, deparse)
+  names = purrr::map_chr(names, ~ paste(deparse(.x), collapse = " "))
 
   purrr::walk2(names, values, tests)
 }
@@ -94,24 +94,18 @@ arg_is_raw = function(..., allow_null = FALSE) {
   )
 }
 
-arg_is_pos_int = function(..., allow_null = FALSE) {
-  handle_arg_list(
-    ...,
-    tests = function(name, value) {
-      if (!(is.integer(value) | (is.numeric(value) && value > 0 && value%%1 == 0) | (is.null(value) & allow_null)))
-        cli_stop("Argument {.val {name}} must be a whole positive number.")
-    }
-  )
-}
-
 #' @rdname ghclass-internal
 #' @export
 arg_is_pos_int = function(..., allow_null = FALSE) {
   handle_arg_list(
     ...,
     tests = function(name, value) {
-      if (!(is.integer(value) | (is.numeric(value) && value > 0 && value%%1 == 0) | (is.null(value) & allow_null)))
+      if (is.null(value)) {
+        if (!allow_null)
+          cli_stop("Argument {.val {name}} must be a whole positive non-zero number.")
+      } else if (!(is.numeric(value) && all(value > 0 & value %% 1 == 0))) {
         cli_stop("Argument {.val {name}} must be a whole positive non-zero number.")
+      }
     }
   )
 }

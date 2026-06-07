@@ -12,6 +12,7 @@ github_api_repo_collaborators = function(repo) {
 #'
 repo_collaborators = function(repo, include_admins = TRUE) {
   arg_is_chr(repo)
+  arg_is_lgl_scalar(include_admins)
 
   purrr::map_dfr(
     repo,

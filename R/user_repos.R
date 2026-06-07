@@ -25,10 +25,13 @@ user_repos = function(user, type = c("owner", "all", "public", "private", "membe
 
   arg_is_chr_scalar(user, type)
   arg_is_chr_scalar(filter, allow_null = TRUE)
+  arg_is_lgl_scalar(exclude, full_repo)
+
+  me = github_whoami(quiet = TRUE)
 
   res = purrr::safely(
     function() {
-      if (user == github_whoami()) {
+      if (!is.null(me) && tolower(user) == tolower(me)) {
         github_api_your_repos(type)
       } else {
         github_api_user_repos(user, type)

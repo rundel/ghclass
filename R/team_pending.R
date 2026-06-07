@@ -22,12 +22,16 @@ team_pending = function(org, team = org_teams(org), team_type = c("name", "slug"
   purrr::map_dfr(
     team,
     function(team) {
-      res = purrr::safely(github_api_team_pending)(org, team)
+      if (is.na(team)) {
+        res = NULL
+      } else {
+        res = purrr::safely(github_api_team_pending)(org, team)
 
-      status_msg(
-        res,
-        fail = "Failed to retrieve team members for {.val {team}}."
-      )
+        status_msg(
+          res,
+          fail = "Failed to retrieve pending members for {.val {team}}."
+        )
+      }
 
       if (failed(res) | empty_result(res)) {
         tibble::tibble(

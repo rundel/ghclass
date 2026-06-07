@@ -23,8 +23,7 @@ issue_close = function(repo, number, comment = NULL) {
 
   arg_is_chr(repo)
   arg_is_chr(comment, allow_null = TRUE)
-  #FIXME
-  #arg_is_int(number)
+  arg_is_pos_int(number)
 
   if (is.null(comment))
     comment = list(NULL)

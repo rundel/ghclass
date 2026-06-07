@@ -12,6 +12,7 @@ github_api_org_pending = function(owner){
 org_pending = function(org, filter = NULL, exclude = FALSE) {
   arg_is_chr_scalar(org)
   arg_is_chr_scalar(filter, allow_null = TRUE)
+  arg_is_lgl_scalar(exclude)
 
   res = purrr::safely(github_api_org_pending)(org)
   status_msg(
