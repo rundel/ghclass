@@ -1,5 +1,7 @@
 # ghclass (development version)
 
+* Added `team_roster()` to assign roster members to teams of a given size, optionally within groups.
+
 * Added experimental `local_repo_anonymize()` to scrub roster-derived student PII from the files of a local repo or grading project and delete (or keep) their git history.
 
 * Fixed bugs in `repo_prs()`, `action_runs()`, and `action_runtime()` that produced wrong or missing values.

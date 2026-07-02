@@ -33,6 +33,7 @@ Imports:
     lubridate,
     purrr,
     rlang,
+    stringr,
     tibble,
     whisker,
     withr,
