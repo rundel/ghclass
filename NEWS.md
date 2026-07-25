@@ -1,4 +1,4 @@
-# ghclass (development version)
+# ghclass 0.4.1
 
 * Added `team_roster()` to assign roster members to teams of a given size, optionally within groups.
 
@@ -12,7 +12,11 @@
 
 * Improved argument validation and error reporting.
 
+* `team_invite()` now de-duplicates repeated user / team pairs before inviting.
+
 * Various fixes to the `action_*()` functions and file downloads.
+
+* `action_artifact_download()` now treats unzip warnings as failures and removes partially extracted files (and the downloaded zip, unless `keep_zip`).
 
 * `org_repo_search()` and `org_repo_stats()` now warn when a search exceeds GitHub's 1000-result limit.
 
