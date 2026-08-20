@@ -160,6 +160,8 @@ NULL
 #'
 #' * `repo_ls()` - Low level function for listing the files in a GitHub Repository
 #'
+#' * `repo_tree()` - Print the file tree of a GitHub repository, similar to `fs::dir_tree()`
+#'
 #' * `repo_put_file()` - Low level function for adding a file to a GitHub repository
 #'
 #' * `repo_get_file()` - Low level function for retrieving the content of a file from a GitHub Repository
@@ -180,6 +182,8 @@ NULL
 #'
 #' `repo_ls()` returns a character vector of repo files in the given path.
 #'
+#' `repo_tree()` invisibly returns a character vector of the displayed paths.
+#'
 #' `repo_get_file()` and `repo_get_readme()` return a character vector with API results
 #' attached as attributes if `include_details = TRUE`
 #'
@@ -188,6 +192,8 @@ NULL
 #' repo = repo_create("ghclass-test", "repo_file_test", auto_init=TRUE)
 #'
 #' repo_ls(repo, path = ".")
+#'
+#' repo_tree(repo)
 #'
 #' repo_get_readme(repo, include_details = FALSE)
 #'

@@ -1,3 +1,7 @@
+# ghclass (development version)
+
+* Added `repo_tree()` to print the file tree of a repository, similar to `fs::dir_tree()`.
+
 # ghclass 0.4.1
 
 * Added `team_roster()` to assign roster members to teams of a given size, optionally within groups.
