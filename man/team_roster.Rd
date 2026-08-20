@@ -20,7 +20,8 @@ team_roster(
 
 \item{size}{Integer. Target (maximum) team size. Within each group members are
 split into \code{ceiling(n / size)} teams of as-equal-as-possible size. An error
-is thrown if a group has fewer than \code{size} members.}
+is thrown if the roster (or any group defined by \code{by}) has fewer than
+\code{size} members.}
 
 \item{name}{Character. A glue template for the team / repo name, used as-is if
 supplied. May reference any column of \code{roster} as well as \code{team_id} (the
