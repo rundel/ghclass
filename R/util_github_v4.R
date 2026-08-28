@@ -8,7 +8,7 @@ github_api_v4_graphql = function(query, vars = list(), max_retries = 3L,
   attempt = 0
   repeat {
     req = httr::POST(
-      "https://api.github.com/graphql",
+      github_graphql_url(),
       httr::add_headers(
         Authorization = paste("bearer", github_get_token())
       ),

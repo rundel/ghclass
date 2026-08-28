@@ -28,6 +28,16 @@
 #' * `usethis::create_github_token()` - to create the token and then,
 #' * `gitcreds::gitcreds_set()` - to securely cache the token.
 #'
+#' ## GitHub Enterprise
+#'
+#' To use ghclass with a GitHub Enterprise Server instance, set the `GITHUB_API_URL`
+#' environment variable to the instance's REST API endpoint, e.g.
+#' `https://github.example.edu/api/v3`. This is the same variable used by [gh::gh()]
+#' and is honored by all ghclass functions, including those that construct clone, push,
+#' badge, and GraphQL URLs directly. Tokens are looked up per host, so
+#' `gitcreds::gitcreds_set("https://github.example.edu")` can store an Enterprise token
+#' alongside one for github.com.
+#'
 #' @return `github_get_token()` returns the current PAT as a character string with the `gh_pat`
 #' class. See [gh::gh_token()] for additional details.
 #'

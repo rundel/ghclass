@@ -64,6 +64,16 @@ For those who do not wish to read the entire article, the quick start method is 
 \item \code{usethis::create_github_token()} - to create the token and then,
 \item \code{gitcreds::gitcreds_set()} - to securely cache the token.
 }
+\subsection{GitHub Enterprise}{
+
+To use ghclass with a GitHub Enterprise Server instance, set the \code{GITHUB_API_URL}
+environment variable to the instance's REST API endpoint, e.g.
+\verb{https://github.example.edu/api/v3}. This is the same variable used by \code{\link[gh:gh]{gh::gh()}}
+and is honored by all ghclass functions, including those that construct clone, push,
+badge, and GraphQL URLs directly. Tokens are looked up per host, so
+\code{gitcreds::gitcreds_set("https://github.example.edu")} can store an Enterprise token
+alongside one for github.com.
+}
 }
 \examples{
 \dontrun{

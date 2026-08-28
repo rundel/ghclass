@@ -33,8 +33,9 @@ action_add_badge = function(repo, workflow = NULL, where = "^.",
     )
   }
 
-  d[["url"]] =  glue::glue_data(d, "https://github.com/{repo}/workflows/{workflow}/badge.svg")
-  d[["dest"]] = glue::glue_data(d, "https://github.com/{repo}/actions?query=workflow:\"{workflow}\"")
+  host = github_host_url()
+  d[["url"]] =  glue::glue_data(d, "{host}/{repo}/workflows/{workflow}/badge.svg")
+  d[["dest"]] = glue::glue_data(d, "{host}/{repo}/actions?query=workflow:\"{workflow}\"")
   d[["link"]] = glue::glue_data(d, "[![{workflow}]({url_encode(url)})]({url_encode(dest)})")
 
   # Collapse by repo to save multiple changes to a single file
@@ -70,7 +71,7 @@ action_remove_badge = function(repo, workflow_pat = ".*?", file = "README.md") {
     repo, workflow_pat,
     function(repo, workflow_pat) {
       pattern = glue::glue(
-        "\\[!\\[{workflow_pat}\\]\\(.*?\\)\\]\\(https://github.com/.*?/actions.*?\\)\\s*"
+        "\\[!\\[{workflow_pat}\\]\\(.*?\\)\\]\\(https?://[^/]+/.*?/actions.*?\\)\\s*"
       )
 
       repo_modify_file(
