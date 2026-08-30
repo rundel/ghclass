@@ -42,6 +42,13 @@ test_that("expand_scopes() includes implied scopes", {
   expect_equal(expand_scopes("workflow"), "workflow")
 })
 
+test_that("ghclass_scopes includes independently required classic scopes", {
+  expect_setequal(
+    names(ghclass_scopes),
+    c("repo", "admin:org", "workflow", "notifications", "delete_repo")
+  )
+})
+
 test_that("token_type() recognizes token prefixes", {
   expect_equal(token_type("ghp_abc"), "classic personal access token")
   expect_equal(token_type("github_pat_abc"), "fine-grained personal access token")
@@ -51,14 +58,34 @@ test_that("token_type() recognizes token prefixes", {
   expect_equal(token_type("0123456789abcdef"), "unknown")
 })
 
+test_that("token types unsupported by repository subscriptions are identified", {
+  expect_setequal(
+    repo_subscription_unsupported_token_types,
+    c(
+      "fine-grained personal access token",
+      "GitHub App user access token",
+      "GitHub App installation access token"
+    )
+  )
+  expect_false("classic personal access token" %in% repo_subscription_unsupported_token_types)
+  expect_false("OAuth access token" %in% repo_subscription_unsupported_token_types)
+})
+
 test_that("token_source() reports where a token came from", {
   withr::with_envvar(c(GITHUB_PAT = fake_token("a"), GITHUB_TOKEN = NA), {
-    expect_equal(token_source(fake_token("a")), "GITHUB_PAT environment variable")
+    expect_equal(
+      token_source(fake_token("a"), supplied = FALSE),
+      "GITHUB_PAT environment variable"
+    )
+    expect_equal(token_source(fake_token("a"), supplied = TRUE), "supplied directly")
     expect_equal(token_source(fake_token("b")), "supplied directly")
   })
 
   withr::with_envvar(c(GITHUB_PAT = NA, GITHUB_TOKEN = fake_token("a")), {
-    expect_equal(token_source(fake_token("a")), "GITHUB_TOKEN environment variable")
+    expect_equal(
+      token_source(fake_token("a"), supplied = FALSE),
+      "GITHUB_TOKEN environment variable"
+    )
   })
 })
 
@@ -108,6 +135,16 @@ test_that("error_msg() extracts details from gh errors", {
   expect_null(attr(msg, "scopes"))
 })
 
+test_that("error_msg() only suggests scope mismatches for authorization-like errors", {
+  headers = list("x-oauth-scopes" = "repo", "x-accepted-oauth-scopes" = "admin:org")
+
+  not_found = error_msg(fake_gh_error(404, "Not Found", headers = headers))
+  expect_equal(attr(not_found, "scopes"), "admin:org (token has repo)")
+
+  server_error = error_msg(fake_gh_error(500, "Internal Server Error", headers = headers))
+  expect_null(attr(server_error, "scopes"))
+})
+
 test_that("error_msg() parses legacy multiline gh messages", {
   e = structure(
     list(message = paste0(
@@ -143,13 +180,13 @@ test_that("error_msg_tree() and error_bullets() include the details", {
   tree = error_msg_tree(error_msg(res))
   expect_true(any(grepl("GitHub API error (403): Forbidden.", tree, fixed = TRUE)))
   expect_true(any(grepl("API docs: https://docs.github.com/x", tree, fixed = TRUE)))
-  expect_true(any(grepl("Missing scope: admin:org (token has repo)", tree, fixed = TRUE)))
+  expect_true(any(grepl("Possible missing scope: admin:org (token has repo)", tree, fixed = TRUE)))
 
   bullets = error_bullets(res)
   expect_equal(names(bullets), c("x", "i", "i"))
   expect_equal(bullets[["x"]], "GitHub API error (403): Forbidden.")
   expect_true(any(grepl("API docs: {.url https://docs.github.com/x}", bullets, fixed = TRUE)))
-  expect_true(any(grepl("Missing scope: admin:org (token has repo)", bullets, fixed = TRUE)))
+  expect_true(any(grepl("Possible missing scope: admin:org (token has repo)", bullets, fixed = TRUE)))
 })
 
 test_that("error_bullets() escapes braces for cli", {

@@ -23,7 +23,8 @@
 #' @details
 #' This package looks for the personal access token (PAT) in the following places (in order):
 #' * Value of `GITHUB_PAT` environmental variable.
-#' * Any GitHub PAT token(s) stored with `gitcreds` via `gitcreds_set()`.
+#' * A credential returned by `gh::gh_token()`, such as `GITHUB_TOKEN`, a token stored with
+#' `gitcreds`, or a Posit Connect viewer token.
 #'
 #' For additional details on creating a GitHub PAT see the usethis vignette on
 #' [Managing Git(Hub) Credentials](https://usethis.r-lib.org/articles/articles/git-credentials.html).
@@ -35,9 +36,11 @@
 #'
 #' A classic PAT needs the `repo` and `admin:org` scopes for ghclass to manage an organization's
 #' repositories and teams, the `workflow` scope to add or modify files under `.github/workflows/`,
-#' and the `delete_repo` scope to use `repo_delete()`. Note that `usethis::create_github_token()`
-#' does not select `admin:org` by default. Fine-grained tokens do not report scopes, so
-#' `github_token_sitrep()` cannot check them.
+#' the `notifications` scope to use `repo_watch()`, `repo_ignore()`, and `repo_unwatch()`, and the
+#' `delete_repo` scope to use `repo_delete()`. Note that `usethis::create_github_token()` does not
+#' select `admin:org` by default. Fine-grained tokens do not report scopes, so
+#' `github_token_sitrep()` cannot check them. GitHub does not support fine-grained
+#' or GitHub App tokens for `repo_watch()`, `repo_ignore()`, or `repo_unwatch()`.
 #'
 #' @return `github_get_token()` returns the current PAT as a character string with the `gh_pat`
 #' class. See [gh::gh_token()] for additional details.
@@ -211,6 +214,7 @@ github_token_scopes = function(token = github_get_token()) {
 #' @export
 #'
 github_token_sitrep = function(token = github_get_token()) {
+  token_supplied = !missing(token)
   token = read_token(token)
 
   res = purrr::safely(github_api_user)(token)
@@ -235,7 +239,7 @@ github_token_sitrep = function(token = github_get_token()) {
 
   info = list(
     type = token_type(token),
-    source = token_source(token),
+    source = token_source(token, supplied = token_supplied),
     api_url = Sys.getenv("GITHUB_API_URL", "https://api.github.com"),
     login = user[["login"]],
     scopes = if (is.null(scopes_header)) NULL else scopes,
@@ -263,9 +267,13 @@ github_token_sitrep = function(token = github_get_token()) {
     cli::cli_end(ul)
     cli::cli_alert_info(paste0(
       "ghclass needs read and write access to repository administration, contents, issues, ",
-      "pull requests, pages, and workflows, read access to actions and metadata, ",
+      "pull requests, pages, workflows, and actions, read access to metadata, ",
       "and read and write access to organization administration and members."
     ))
+    if (info$type %in% repo_subscription_unsupported_token_types)
+      cli::cli_alert_warning(
+        "GitHub does not support this token type for {.fun repo_watch}, {.fun repo_ignore}, or {.fun repo_unwatch}."
+      )
   } else {
     cli::cli_li(paste0(cli::col_silver("Recommended scopes"), ":"))
     scope_ul = cli::cli_ul()

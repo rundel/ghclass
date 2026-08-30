@@ -136,7 +136,8 @@ Personal access tokens) or use
 [`usethis::create_github_token()`](https://usethis.r-lib.org/articles/git-credentials.html).
 When creating the token make sure it has the `repo` and `admin:org` scopes, along
 with `workflow` if you plan to add GitHub Actions workflows to student repos and
-`delete_repo` if you plan to use `repo_delete()`. Note that
+`notifications` if you plan to use `repo_watch()`, `repo_ignore()`, or
+`repo_unwatch()`, and `delete_repo` if you plan to use `repo_delete()`. Note that
 `usethis::create_github_token()` does not select `admin:org` by default.
 
 You can test that your token is working correctly using the `github_test_token()` function. If everything is working correctly you should see something like the following:

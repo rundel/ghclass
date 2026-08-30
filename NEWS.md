@@ -2,7 +2,7 @@
 
 * Added `github_token_sitrep()` to report a token's type, source, scopes, and rate limit, and flag missing scopes that ghclass needs (#144).
 
-* API error reports now show the token's scopes when they do not satisfy the failed endpoint, and include the API's documentation link (#144).
+* API error reports now flag possible token-scope mismatches for authorization-like failures, and include the API's documentation link (#144).
 
 * `org_sitrep()` no longer fails when workflow permissions or admin-only org settings cannot be retrieved, and `org_workflow_permissions()` and `org_allows_forking()` now report the underlying API error instead of "Failed to find org" (#144).
 

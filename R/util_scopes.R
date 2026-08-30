@@ -27,6 +27,7 @@ ghclass_scopes = c(
   "repo" = "needed by nearly all repo_*(), org_*(), and team_*() functions.",
   "admin:org" = "needed by org_sitrep(), org_invite(), org_set_*(), and the team_*() functions.",
   "workflow" = "needed to add or modify files under .github/workflows/.",
+  "notifications" = "needed by repo_watch(), repo_ignore(), and repo_unwatch().",
   "delete_repo" = "needed by repo_delete()."
 )
 
@@ -61,8 +62,17 @@ token_type = function(token) {
     unname(prefixes[match[1]])
 }
 
-token_source = function(token) {
+repo_subscription_unsupported_token_types = c(
+  "fine-grained personal access token",
+  "GitHub App user access token",
+  "GitHub App installation access token"
+)
+
+token_source = function(token, supplied = TRUE) {
   token = as.character(token)
+
+  if (isTRUE(supplied))
+    return("supplied directly")
 
   if (identical(token, Sys.getenv("GITHUB_PAT")))
     return("GITHUB_PAT environment variable")
@@ -71,9 +81,9 @@ token_source = function(token) {
     return("GITHUB_TOKEN environment variable")
 
   if (identical(token, as.character(gh::gh_token())))
-    return("gitcreds")
+    return("gh credential provider (for example, gitcreds)")
 
-  "supplied directly"
+  "unknown"
 }
 
 # GitHub reports the token's scopes and the scopes an endpoint accepts on every

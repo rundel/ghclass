@@ -107,7 +107,8 @@ error_msg = function(x) {
   attr(error, "doc") = doc
 
   attr(error, "404") = strip_url(sub_replace(lines, "URL not found: "))
-  attr(error, "scopes") = missing_scope_hint(e[["response_headers"]])
+  if (inherits(e, c("http_error_403", "http_error_404")))
+    attr(error, "scopes") = missing_scope_hint(e[["response_headers"]])
 
   error
 }
@@ -179,7 +180,10 @@ status_msg = function(x, success = NULL, fail = NULL, include_error_msg = TRUE,
 
 # Labeled details attached to an error by error_msg()
 error_msg_details = function(msg) {
-  labels = c(msg = "API message", doc = "API docs", "404" = "Missing page", scopes = "Missing scope")
+  labels = c(
+    msg = "API message", doc = "API docs", "404" = "Missing page",
+    scopes = "Possible missing scope"
+  )
   labels = labels[names(labels) %in% names(attributes(msg))]
 
   details = purrr::map_chr(names(labels), ~ attr(msg, .x))
@@ -224,5 +228,4 @@ error_bullets = function(x) {
 
   c("x" = escape(as.vector(msg)), details)
 }
-
 
