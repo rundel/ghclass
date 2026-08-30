@@ -126,14 +126,18 @@ This can allow for some automatic checking and feedback each time students push 
 ## Authentication
 
 This package uses GitHub personal access tokens for authentication with
-[GitHub](https://github.com/settings/tokens), these values can be supplied via
-environmental variables `GITHUB_PAT` or `GITHUB_TOKEN` or saved as text in
-`~/.github/token`.
+[GitHub](https://github.com/settings/tokens). The token is read from the
+`GITHUB_PAT` environment variable if it is set, and otherwise from the
+credentials stored with `gitcreds::gitcreds_set()`, see `?github_token` for details.
 
 If this is your first time setting up a personal access token (PAT), generate a
 token in the browser after logging into Github (Settings > Developer Settings >
 Personal access tokens) or use
 [`usethis::create_github_token()`](https://usethis.r-lib.org/articles/git-credentials.html).
+When creating the token make sure it has the `repo` and `admin:org` scopes, along
+with `workflow` if you plan to add GitHub Actions workflows to student repos and
+`delete_repo` if you plan to use `repo_delete()`. Note that
+`usethis::create_github_token()` does not select `admin:org` by default.
 
 You can test that your token is working correctly using the `github_test_token()` function. If everything is working correctly you should see something like the following:
 ```{r test_token}
@@ -143,6 +147,13 @@ github_test_token()
 If your token is not working you will see an error message like this instead:
 ```{r bad_token}
 github_test_token("bad token")
+```
+
+`github_token_sitrep()` provides a more detailed report on the token, including
+its type, source, and granted scopes, and flags any of the scopes above that are
+missing:
+```{r token_sitrep}
+github_token_sitrep()
 ```
 
 ## Step-by-step guide

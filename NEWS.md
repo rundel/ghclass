@@ -1,5 +1,13 @@
 # ghclass (development version)
 
+* Added `github_token_sitrep()` to report a token's type, source, scopes, and rate limit, and flag missing scopes that ghclass needs (#144).
+
+* API error reports now show the token's scopes when they do not satisfy the failed endpoint, and include the API's documentation link (#144).
+
+* `org_sitrep()` no longer fails when workflow permissions or admin-only org settings cannot be retrieved, and `org_workflow_permissions()` and `org_allows_forking()` now report the underlying API error instead of "Failed to find org" (#144).
+
+* `github_test_token()`, `github_token_scopes()`, and `github_token_sitrep()` bypass gh's response cache, which could otherwise report a recently cached result for a different (or invalid) token.
+
 * Added `repo_tree()` to print the file tree of a repository, similar to `fs::dir_tree()`.
 
 # ghclass 0.4.1

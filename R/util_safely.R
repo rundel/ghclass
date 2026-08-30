@@ -67,31 +67,49 @@ return_on_any_failed = function(x) {
 }
 
 error_msg = function(x) {
-  msg = trimws( error(x)[["message"]] )
+  e = error(x)
+  msg = trimws(e[["message"]])
 
-  if (grepl("GitHub API error", msg)) {
-    msg = gsub("\n+", "\n", msg)
-    msg = strsplit(msg, "\n")[[1]]
+  if (!grepl("GitHub API error", msg))
+    return(msg)
 
-    sub_replace = function(m, pat) {
-      res = gsub(pat, "", m[grepl(pat, m)])
+  # gh >= 1.5 splits the message into a header and bullets and attaches the
+  # parsed response, older versions put everything in a multiline message
+  lines = trimws(unname(unlist(strsplit(c(msg, e[["body"]]), "\n"))))
+  lines = lines[nzchar(lines)]
 
-      if(length(res) == 0)
-        NULL
-      else
-        res
-    }
+  content = e[["response_content"]]
 
-    error = msg[1]
+  sub_replace = function(m, pat) {
+    res = gsub(pat, "", m[grepl(pat, m)])
 
-    attr(error, "msg") = sub_replace(msg, "Message: ")
-    attr(error, "doc") = sub_replace(msg, "Read more at ")
-    attr(error, "404") = sub_replace(msg, "URL not found: ")
-
-    error
-  } else {
-    msg
+    if (length(res) == 0)
+      NULL
+    else
+      res
   }
+
+  strip_url = function(x) {
+    if (is.null(x)) NULL else gsub("^<|>$", "", x)
+  }
+
+  error = gsub("\\s+", " ", lines[1])
+
+  api_msg = content[["message"]]
+  if (is.null(api_msg))
+    api_msg = sub_replace(lines, "Message: ")
+  if (!is.null(api_msg) && !grepl(gsub("\\s+", " ", api_msg), error, fixed = TRUE))
+    attr(error, "msg") = api_msg
+
+  doc = content[["documentation_url"]]
+  if (is.null(doc))
+    doc = strip_url(sub_replace(lines, "Read more at "))
+  attr(error, "doc") = doc
+
+  attr(error, "404") = strip_url(sub_replace(lines, "URL not found: "))
+  attr(error, "scopes") = missing_scope_hint(e[["response_headers"]])
+
+  error
 }
 
 allow_error = function(res, message = NULL, class = NULL, result = "") {
@@ -159,24 +177,52 @@ status_msg = function(x, success = NULL, fail = NULL, include_error_msg = TRUE,
   invisible(x)
 }
 
+# Labeled details attached to an error by error_msg()
+error_msg_details = function(msg) {
+  labels = c(msg = "API message", doc = "API docs", "404" = "Missing page", scopes = "Missing scope")
+  labels = labels[names(labels) %in% names(attributes(msg))]
+
+  details = purrr::map_chr(names(labels), ~ attr(msg, .x))
+  names(details) = labels
+
+  details
+}
+
 error_msg_tree = function(msg) {
-  # Only use the attrs that are provided
-  attrs = names(attributes(msg))
+  details = error_msg_details(msg)
+  ids = paste0("detail_", seq_along(details))
+
+  extra = list()
+  if (length(details) > 0)
+    extra = as.list(paste0(" ", names(details), ": ", cli::col_grey(details)))
 
   d = data.frame(
-    id = c("root", "error", "msg", "doc", "404"),
-    nodes = I(list("error", attrs, NULL, NULL, NULL)),
-    extra = I(list(
-      "Error Tree",
-      msg,
-      paste0(" ", cli_glue('API message: {cli::col_grey(attr(msg,"msg"))}')),
-      paste0(" ", cli_glue('API docs: {cli::col_grey(attr(msg,"doc"))}')),
-      paste0(" ", cli_glue('Missing page: {cli::col_grey(attr(msg,"404"))}'))
-    )),
+    id = c("root", "error", ids),
+    nodes = I(c(list("error", ids), rep(list(NULL), length(ids)))),
+    extra = I(c(list("Error Tree", as.vector(msg)), extra)),
     stringsAsFactors = FALSE
   )
 
-  cli::tree(d)[-1]
+  # Let long urls and messages wrap in the console rather than being truncated
+  cli::tree(d, width = 10000L)[-1]
+}
+
+# Bullets describing a failed API call, for use in cli::cli_abort() messages
+error_bullets = function(x) {
+  msg = error_msg(x)
+  escape = function(x) gsub("\\}", "}}", gsub("\\{", "{{", x))
+
+  details = purrr::imap_chr(error_msg_details(msg), function(value, label) {
+    if (grepl("^https?://", value))
+      value = paste0("{.url ", value, "}")
+    else
+      value = escape(value)
+
+    paste0(label, ": ", value)
+  })
+  names(details) = rep("i", length(details))
+
+  c("x" = escape(as.vector(msg)), details)
 }
 
 

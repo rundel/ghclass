@@ -15,6 +15,9 @@
 #'
 #' * `github_token_scopes` - returns a vector of scopes granted to the token.
 #'
+#' * `github_token_sitrep` - reports on the token: its type and source, the authenticated user,
+#' the granted scopes (flagging any that ghclass needs but are missing), and the API rate limit.
+#'
 #' @param token Character. Either the literal token, or the path to a file containing the token.
 #'
 #' @details
@@ -28,6 +31,14 @@
 #' * `usethis::create_github_token()` - to create the token and then,
 #' * `gitcreds::gitcreds_set()` - to securely cache the token.
 #'
+#' ## Scopes
+#'
+#' A classic PAT needs the `repo` and `admin:org` scopes for ghclass to manage an organization's
+#' repositories and teams, the `workflow` scope to add or modify files under `.github/workflows/`,
+#' and the `delete_repo` scope to use `repo_delete()`. Note that `usethis::create_github_token()`
+#' does not select `admin:org` by default. Fine-grained tokens do not report scopes, so
+#' `github_token_sitrep()` cannot check them.
+#'
 #' @return `github_get_token()` returns the current PAT as a character string with the `gh_pat`
 #' class. See [gh::gh_token()] for additional details.
 #'
@@ -39,11 +50,17 @@
 #'
 #' `github_token_scopes()` returns a character vector of granted scopes.
 #'
+#' `github_token_sitrep()` invisibly returns a list with the token's type, source, API url,
+#' the authenticated user's login, the granted scopes (`NULL` when the token does not report
+#' them), the scopes ghclass uses that are missing, and rate limit details.
+#'
 #' @examples
 #' \dontrun{
 #' github_test_token()
 #'
 #' github_token_scopes()
+#'
+#' github_token_sitrep()
 #'
 #' (pat = github_get_token())
 #'
@@ -161,7 +178,7 @@ github_reset_token = function() {
 github_test_token = function(token = github_get_token()) {
   token = read_token(token)
 
-  res = purrr::safely(gh::gh)("/user", .token = token)
+  res = purrr::safely(github_api_user)(token)
 
   status_msg(
     res,
@@ -178,19 +195,97 @@ github_test_token = function(token = github_get_token()) {
 github_token_scopes = function(token = github_get_token()) {
   token = read_token(token)
 
-  res = purrr::safely(gh::gh)("/user", .token = token)
+  res = purrr::safely(github_api_user)(token)
 
   status_msg(
     res,
     fail = "Your GitHub PAT failed to authenticate."
   )
 
-  scopes = attr(result(res), "response")[["x-oauth-scopes"]]
-
-  if (is.null(scopes))
-    return(character())
-
-  strsplit(scopes, ", ")[[1]]
+  parse_scopes(attr(result(res), "response")[["x-oauth-scopes"]])
 }
 
 
+
+#' @rdname github_token
+#' @export
+#'
+github_token_sitrep = function(token = github_get_token()) {
+  token = read_token(token)
+
+  res = purrr::safely(github_api_user)(token)
+
+  status_msg(res, fail = "Your GitHub PAT failed to authenticate.")
+
+  if (failed(res))
+    return(invisible(NULL))
+
+  user = result(res)
+  headers = attr(user, "response")
+
+  scopes_header = headers[["x-oauth-scopes"]]
+  scopes = parse_scopes(scopes_header)
+  missing = names(ghclass_scopes)[!names(ghclass_scopes) %in% expand_scopes(scopes)]
+
+  rate_limit = list(
+    limit = as.integer(headers[["x-ratelimit-limit"]]),
+    remaining = as.integer(headers[["x-ratelimit-remaining"]]),
+    reset = as.POSIXct(as.numeric(headers[["x-ratelimit-reset"]]), origin = "1970-01-01")
+  )
+
+  info = list(
+    type = token_type(token),
+    source = token_source(token),
+    api_url = Sys.getenv("GITHUB_API_URL", "https://api.github.com"),
+    login = user[["login"]],
+    scopes = if (is.null(scopes_header)) NULL else scopes,
+    missing_scopes = if (is.null(scopes_header)) NULL else missing,
+    rate_limit = rate_limit
+  )
+
+  cli::cli_h1("{.strong GitHub token sitrep:}")
+  ul = cli::cli_ul()
+  cli::cli_li(cli_kv("Token type", info$type))
+  cli::cli_li(cli_kv("Token source", info$source))
+  cli::cli_li(cli_kv("API url", info$api_url))
+  cli::cli_li(cli_kv("Authenticated as", info$login))
+
+  if (length(rate_limit$remaining) == 1) {
+    reset = format(rate_limit$reset, "%H:%M:%S")
+    cli::cli_li(cli_glue(
+      "{cli::col_silver('Rate limit')}: {.val {rate_limit$remaining}} of {.val {rate_limit$limit}} ",
+      "requests remaining, resets at {.val {reset}}."
+    ))
+  }
+
+  if (is.null(scopes_header)) {
+    cli::cli_li(cli_kv("Scopes", "not reported", "scopes cannot be checked for this token type."))
+    cli::cli_end(ul)
+    cli::cli_alert_info(paste0(
+      "ghclass needs read and write access to repository administration, contents, issues, ",
+      "pull requests, pages, and workflows, read access to actions and metadata, ",
+      "and read and write access to organization administration and members."
+    ))
+  } else {
+    cli::cli_li(paste0(cli::col_silver("Recommended scopes"), ":"))
+    scope_ul = cli::cli_ul()
+    purrr::walk(names(ghclass_scopes), function(scope) {
+      warn = if (scope %in% missing) ghclass_scopes[[scope]] else NULL
+      cli::cli_li(cli_kv(scope, !scope %in% missing, warn))
+    })
+    cli::cli_end(scope_ul)
+    cli::cli_end(ul)
+  }
+
+  invisible(info)
+}
+
+# gh (>= 1.5) caches GET responses by url, so a recent /user response would be
+# returned for whatever token is supplied (even an invalid one) unless the
+# cache is bypassed
+github_api_user = function(token) {
+  withr::with_options(
+    list(gh_cache = FALSE),
+    gh::gh("/user", .token = token)
+  )
+}

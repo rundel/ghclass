@@ -9,6 +9,7 @@
 \alias{github_reset_token}
 \alias{github_test_token}
 \alias{github_token_scopes}
+\alias{github_token_sitrep}
 \title{Tools for handling GitHub personal access tokens (PAT)}
 \usage{
 github_rate_limit()
@@ -24,6 +25,8 @@ github_reset_token()
 github_test_token(token = github_get_token())
 
 github_token_scopes(token = github_get_token())
+
+github_token_sitrep(token = github_get_token())
 }
 \arguments{
 \item{token}{Character. Either the literal token, or the path to a file containing the token.}
@@ -39,6 +42,10 @@ class. See \code{\link[gh:gh_token]{gh::gh_token()}} for additional details.
 \code{FALSE} if not.
 
 \code{github_token_scopes()} returns a character vector of granted scopes.
+
+\code{github_token_sitrep()} invisibly returns a list with the token's type, source, API url,
+the authenticated user's login, the granted scopes (\code{NULL} when the token does not report
+them), the scopes ghclass uses that are missing, and rate limit details.
 }
 \description{
 \itemize{
@@ -48,6 +55,8 @@ This value will persist until the session ends or \code{gihub_reset_token()} is 
 \item \code{github_reset_token} - removes the value stored in the \code{GITHUB_PAT} environmental variable.
 \item \code{github_test_token} - checks if a PAT is valid by attempting to authenticate with the GitHub API.
 \item \code{github_token_scopes} - returns a vector of scopes granted to the token.
+\item \code{github_token_sitrep} - reports on the token: its type and source, the authenticated user,
+the granted scopes (flagging any that ghclass needs but are missing), and the API rate limit.
 }
 }
 \details{
@@ -64,12 +73,22 @@ For those who do not wish to read the entire article, the quick start method is 
 \item \code{usethis::create_github_token()} - to create the token and then,
 \item \code{gitcreds::gitcreds_set()} - to securely cache the token.
 }
+\subsection{Scopes}{
+
+A classic PAT needs the \code{repo} and \code{admin:org} scopes for ghclass to manage an organization's
+repositories and teams, the \code{workflow} scope to add or modify files under \verb{.github/workflows/},
+and the \code{delete_repo} scope to use \code{repo_delete()}. Note that \code{usethis::create_github_token()}
+does not select \code{admin:org} by default. Fine-grained tokens do not report scopes, so
+\code{github_token_sitrep()} cannot check them.
+}
 }
 \examples{
 \dontrun{
 github_test_token()
 
 github_token_scopes()
+
+github_token_sitrep()
 
 (pat = github_get_token())
 
