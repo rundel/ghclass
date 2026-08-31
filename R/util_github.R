@@ -231,7 +231,13 @@ ghclass_api_v3_req = function(
   if (!is.null(max_wait)) gh_args[[".max_wait"]] = max_wait
   if (!is.null(max_rate)) gh_args[[".max_rate"]] = max_rate
 
-  res = suppressMessages(do.call(gh::gh, gh_args))
+  # gh (>= 1.5) caches GET responses by url for up to 60s, which can return
+  # stale results for read-after-write checks (e.g. org_sitrep() after
+  # org_set_repo_permission()), so the cache is always bypassed
+  res = withr::with_options(
+    list(gh_cache = FALSE),
+    suppressMessages(do.call(gh::gh, gh_args))
+  )
 
   if (method == "GET" && is.null(names(res)) && length(res) == github_get_api_limit()) {
     cli::cli_warn(

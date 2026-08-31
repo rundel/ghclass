@@ -2,6 +2,8 @@
 
 * Added `repo_tree()` to print the file tree of a repository, similar to `fs::dir_tree()`.
 
+* API requests now bypass gh's response cache (gh >= 1.5) to avoid stale results when checking recently changed values (#144).
+
 # ghclass 0.4.1
 
 * Added `team_roster()` to assign roster members to teams of a given size, optionally within groups.
