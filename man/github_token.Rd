@@ -84,6 +84,17 @@ select \code{admin:org} by default. Fine-grained tokens do not report scopes, so
 \code{github_token_sitrep()} cannot check them. GitHub does not support fine-grained
 or GitHub App tokens for \code{repo_watch()}, \code{repo_ignore()}, or \code{repo_unwatch()}.
 }
+
+\subsection{GitHub Enterprise}{
+
+To use ghclass with a GitHub Enterprise Server instance, set the \code{GITHUB_API_URL}
+environment variable to the instance's REST API endpoint, e.g.
+\verb{https://github.example.edu/api/v3}. This is the same variable used by \code{\link[gh:gh]{gh::gh()}}
+and is honored by all ghclass functions, including those that construct clone, push,
+badge, and GraphQL URLs directly. Tokens are looked up per host, so
+\code{gitcreds::gitcreds_set("https://github.example.edu")} can store an Enterprise token
+alongside one for github.com.
+}
 }
 \examples{
 \dontrun{

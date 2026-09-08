@@ -10,7 +10,7 @@ github_api_download_artifact = function(repo, id, dest) {
   owner = get_repo_owner(repo)
   repo = get_repo_name(repo)
 
-  url = glue::glue("https://api.github.com/repos/{owner}/{repo}/actions/artifacts/{id}/{archive_format}")
+  url = glue::glue("{github_api_url()}/repos/{owner}/{repo}/actions/artifacts/{id}/{archive_format}")
 
   github_api_download_file(url, dest)
 }

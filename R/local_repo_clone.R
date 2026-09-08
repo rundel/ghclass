@@ -25,7 +25,7 @@ local_repo_clone = function(repo, local_path=".", branch = NULL, mirror = FALSE,
     repo, branch,
     function(repo, branch) {
       dir = fs::path(local_path, get_repo_name(repo))
-      url = glue::glue("https://github.com/{repo}.git")
+      url = glue::glue("{github_host_url()}/{repo}.git")
 
       res = purrr::safely(gert::git_clone)(
         url = url, path = dir, branch = branch, mirror = mirror, verbose = verbose

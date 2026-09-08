@@ -157,6 +157,16 @@ missing:
 github_token_sitrep()
 ```
 
+### GitHub Enterprise
+
+ghclass can also be used with a GitHub Enterprise Server instance by setting the
+`GITHUB_API_URL` environment variable to the instance's REST API endpoint, e.g.
+`https://github.example.edu/api/v3`, for example in a project level `.Renviron`.
+All API requests, clone and push URLs, and badge links will then use that host.
+Tokens are looked up per host, so a token for github.com and one for your
+Enterprise instance can be stored side by side with
+`gitcreds::gitcreds_set("https://github.example.edu")`.
+
 ## Step-by-step guide
 
 Start with creating an organization on GitHub for the course. We recommend using the course number, semester/quarter, and year in the organization name, e.g. for a course numbered Sta 199 in Spring 18, you can use something like `Sta199-Sp18`.

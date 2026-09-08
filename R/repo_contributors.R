@@ -2,7 +2,7 @@ github_api_repo_contributors = function(repo, max_retries = 5, retry_delay = 2) 
   owner = get_repo_owner(repo)
   name  = get_repo_name(repo)
 
-  url = paste0("https://api.github.com/repos/", owner, "/", name, "/stats/contributors")
+  url = paste0(github_api_url(), "/repos/", owner, "/", name, "/stats/contributors")
 
   for (i in seq_len(max_retries + 1)) {
     req = httr::GET(
