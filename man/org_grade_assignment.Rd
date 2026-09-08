@@ -11,6 +11,7 @@ org_grade_assignment(
   artifacts = character(),
   comment_template = "",
   key_repo = NULL,
+  branch = NULL,
   allow_stale = FALSE
 )
 }
@@ -31,6 +32,11 @@ markdown file. Defaults to \code{""}.}
 
 \item{key_repo}{Character. Optional repository address in \code{owner/name} format
 to clone into the root of the grading folder as an answer key.}
+
+\item{branch}{Character. Optional branch to clone and to collect artifacts
+from for the student repos. Defaults to each repo's default branch, in
+which case artifacts from any branch are considered. Does not apply to
+\code{key_repo}.}
 
 \item{allow_stale}{Logical. Should out of sync artifacts be downloaded.
 Default \code{FALSE}, in which case they are reported and skipped.}

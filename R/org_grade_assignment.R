@@ -26,6 +26,10 @@
 #'   markdown file. Defaults to `""`.
 #' @param key_repo Character. Optional repository address in `owner/name` format
 #'   to clone into the root of the grading folder as an answer key.
+#' @param branch Character. Optional branch to clone and to collect artifacts
+#'   from for the student repos. Defaults to each repo's default branch, in
+#'   which case artifacts from any branch are considered. Does not apply to
+#'   `key_repo`.
 #' @param allow_stale Logical. Should out of sync artifacts be downloaded.
 #'   Default `FALSE`, in which case they are reported and skipped.
 #'
@@ -46,10 +50,11 @@ org_grade_assignment = function(
   artifacts = character(),
   comment_template = "",
   key_repo = NULL,
+  branch = NULL,
   allow_stale = FALSE
 ) {
   arg_is_chr_scalar(path, org, repo_filter, comment_template)
-  arg_is_chr_scalar(key_repo, allow_null = TRUE)
+  arg_is_chr_scalar(key_repo, branch, allow_null = TRUE)
   arg_is_chr(artifacts)
   arg_is_lgl_scalar(allow_stale)
 
@@ -75,7 +80,7 @@ org_grade_assignment = function(
 
   repos_dir = file.path(path, "repos")
   cli::cli_alert_info("Cloning {.val {length(repos)}} student repo{?s} matching {.val {repo_filter}}.")
-  res[["cloned"]] = local_repo_clone(repos, repos_dir)
+  res[["cloned"]] = local_repo_clone(repos, repos_dir, branch = branch)
 
   res[["artifacts"]] = list()
   res[["stale"]] = list()
@@ -87,9 +92,11 @@ org_grade_assignment = function(
     head_shas = local_repo_head_sha(res[["cloned"]])
     skipped = list()
 
+    branch_filter = ternary(is.null(branch), NULL, paste0("^", stringr::str_escape(branch), "$"))
+
     for (nm in names(artifacts)) {
       ids = flag_stale_artifacts(
-        action_artifacts(repos, filter = artifacts[[nm]]),
+        action_artifacts(repos, filter = artifacts[[nm]], filter_branch = branch_filter),
         head_shas
       )
       stale = ids[ids[["stale"]], ]
