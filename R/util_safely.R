@@ -194,7 +194,7 @@ error_msg_details = function(msg) {
 
 error_msg_tree = function(msg) {
   details = error_msg_details(msg)
-  ids = paste0("detail_", seq_along(details))
+  ids = ternary(length(details) > 0, paste0("detail_", seq_along(details)), character())
 
   extra = list()
   if (length(details) > 0)

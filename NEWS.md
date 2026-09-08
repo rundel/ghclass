@@ -1,5 +1,7 @@
 # ghclass (development version)
 
+* Fixed a bug when reporting failures of non-API operations such as `local_repo_clone()`.
+
 # ghclass 0.4.2
 
 * Added `github_token_sitrep()` to report a token's type, source, scopes, and rate limit, and flag missing scopes that ghclass needs (#144).
