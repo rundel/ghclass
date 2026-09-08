@@ -2,17 +2,29 @@
 title: "Course management with ghclass"
 author: "Mine Çetinkaya-Rundel, Colin Rundel, Therese Anders"
 date: "`r Sys.Date()`"
-knitr:
-  opts_chunk:
-    comment: "#>"
 ---
 
 ```{r}
 #| label: setup
 #| include: false
-options(cli.num_colors = 256)
-fansi::set_knit_hooks(knitr::knit_hooks, which = c("output", "message", "warning", "error"))
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+options(width = 80)
+```
+
+```{r}
+#| include: false
 library(ghclass)
+
+wait_until = function(cond, tries = 12, delay = 5) {
+  for (i in seq_len(tries)) {
+    if (isTRUE(cond())) break
+    Sys.sleep(delay)
+  }
+}
 ```
 
 ```{r}
@@ -38,6 +50,7 @@ users = org_members("ghclass-vignette", include_admins = FALSE)
 repo_delete(repos, prompt = FALSE)
 team_delete("ghclass-vignette", teams, prompt = FALSE)
 org_remove("ghclass-vignette", users, prompt = FALSE)
+wait_until(function() length(org_members("ghclass-vignette", include_admins = FALSE)) == 0)
 
 repo_set_template("Sta323-Sp19/hw1", FALSE)
 org_set_repo_permission("ghclass-vignette", "read")
@@ -53,14 +66,14 @@ This package is for everyone!
 But really, if you're an instructor who uses GitHub for your class management, e.g. students submit assignments via GitHub repos, this package is definitely for you!
 The package also assumes that you're familiar with R, but teaching with R is not a requirement since this package is entirely agnostic to the contents of your repositories.
 
-(If you're a Python user, see [this post](https://ubc-mds.github.io/2017-08-24-teaching-with-github/) for a Python based alternative.)
+(If you're a Python user, see [this post](https://ubc-mds.github.io/2017-08-24-teaching-with-github/) for a Python-based alternative.)
 
-## What is this vignette about?
+## What is this article about?
 
-This vignette is about the nitty-gritty of setting your class up in GitHub with
+This article is about the nitty-gritty of setting your class up in GitHub with
 ghclass.
 For a higher level discussion of why and how to use Git/GitHub in data
-science education, see [this paper](https://peerj.com/preprints/3181/) by the
+science education, see [this paper](https://doi.org/10.1080/00031305.2017.1397549) by the
 package authors.
 
 ## Structuring your class on GitHub
@@ -81,9 +94,9 @@ Going forward we will refer to this group of people as
 
 - One repo per student (or team) per assignment: The instructors have admin
 access to repos, i.e. they can clone, read, and write to every repository.
-Additionally, they can adjust repo and team memberships by adding or removing collaborators to assignment repositories as well as delete them.
+Additionally, they can adjust repo and team memberships by adding or removing collaborators to assignment repositories as well as deleting them.
 The students have write access to their assigned repo, which means that they can clone, read, and write to their assigned repositories but they cannot delete them and they cannot add or remove collaborators to them.
-This can help with minimizing accidents that cannot be undone and makes sure students cannot peek into each others' repositories unless you explicitly allow them to do so.
+This can help with minimizing accidents that cannot be undone and makes sure students cannot peek into each other's repositories unless you explicitly allow them to do so.
 
 If you have a teamwork component to your course, you can also set up teams on
 GitHub with your organization and each team can be given similar repository level access privileges for team assignments.
@@ -94,13 +107,13 @@ Suppose also that students turn in the following throughout a semester:
 - Individual: 10 homework assignments + 2 exams
 - Teamwork: 8 lab assignments + 1 project
 
-Then, throughout the semester you will need to create total of 570 repositories.
+Then, throughout the semester you will need to create a total of 570 repositories.
 
 That is a lot of repos to create and permissions to set manually! It's also a lot of repos to clone when it comes time to grade.
 ghclass addresses this problem, and more!
 It does not, however, address the problem that that's a lot of grading. Sorry, you're on your own there!
 
-That being said, ghclass does facilitate setting up continuous integration tools using GitHub actions for students' assignment repos.
+That being said, ghclass does facilitate setting up continuous integration tools using GitHub Actions for students' assignment repos (see below).
 This can allow for some automatic checking and feedback each time students push to a repo.
 
 ## Authentication
@@ -111,14 +124,18 @@ This package uses GitHub personal access tokens for authentication with
 credentials stored with `gitcreds::gitcreds_set()`, see `?github_token` for details.
 
 If this is your first time setting up a personal access token (PAT), generate a
-token in the browser after logging into Github (Settings > Developer Settings >
-Personal access tokens) or use
+token in the browser after logging into GitHub (Settings > Developer settings >
+Personal access tokens > Tokens (classic)) or use
 [`usethis::create_github_token()`](https://usethis.r-lib.org/articles/git-credentials.html).
 When creating the token make sure it has the `repo` and `admin:org` scopes, along
 with `workflow` if you plan to add GitHub Actions workflows to student repos and
 `notifications` if you plan to use `repo_watch()`, `repo_ignore()`, or
 `repo_unwatch()`, and `delete_repo` if you plan to use `repo_delete()`. Note that
 `usethis::create_github_token()` does not select `admin:org` by default.
+These scopes apply to classic tokens. Fine-grained tokens can also be used, but
+GitHub does not report their permissions so `github_token_sitrep()` cannot
+check them, and GitHub does not support them for `repo_watch()`, `repo_ignore()`,
+or `repo_unwatch()`.
 
 You can test that your token is working correctly using the `github_test_token()` function. If everything is working correctly you should see something like the following:
 ```{r}
@@ -129,7 +146,7 @@ github_test_token()
 If your token is not working you will see an error message like this instead:
 ```{r}
 #| label: bad_token
-github_test_token("bad token")
+github_test_token("badtoken")
 ```
 
 `github_token_sitrep()` provides a more detailed report on the token, including
@@ -144,7 +161,7 @@ github_token_sitrep()
 
 ghclass can also be used with a GitHub Enterprise Server instance by setting the
 `GITHUB_API_URL` environment variable to the instance's REST API endpoint, e.g.
-`https://github.example.edu/api/v3`, for example in a project level `.Renviron`.
+`https://github.example.edu/api/v3`, typically in a project-level `.Renviron`.
 All API requests, clone and push URLs, and badge links will then use that host.
 Tokens are looked up per host, so a token for github.com and one for your
 Enterprise instance can be stored side by side with
@@ -152,33 +169,28 @@ Enterprise instance can be stored side by side with
 
 ## Step-by-step guide
 
-Start with creating an organization on GitHub for the course. We recommend using the course number, semester/quarter, and year in the organization name, e.g. for a course numbered Sta 199 in Spring 18, you can use something like `Sta199-Sp18`.
+Start with creating an organization on GitHub for the course. We recommend using the course number, semester/quarter, and year in the organization name, e.g. for a course numbered Sta 199 in Spring 2026, you can use something like `Sta199-Sp26`.
 The exact format is not critical, but being consistent is helpful so that you can keep track
 of all of your different courses.
 
-Previously, it was necessary to apply for GitHub's Education Discount in order to obtain the ability to create private organization repositories for free.
-Recently, GitHub [announced](https://github.blog/2019-01-07-new-year-new-github/) that they would be providing free unlimited private repositories for all users, making this step no longer necessary.
+Private repositories have been free for all GitHub users and organizations since 2019, so no special discount or plan is needed to keep student work private.
+GitHub Education does still offer [benefits for verified teachers](https://github.com/education/teachers), including a free upgrade of your course organization to the GitHub Team plan.
 
-GitHub still provides educational benefits which are available [here](https://education.github.com/benefits) via a simple verification process.
-The list of the available benefits for teachers is provided in the [teacher toolbox](https://education.github.com/toolbox/offers).
-Of particular note is the availability of [GitHub swag](https://education.github.com/toolbox/redeem/github-swag) for your students and [free GitHub Teams plans for academic organizations](https://education.github.com/toolbox/redeem/github-org-upgrades) and a free [GitHub Pro plan for educators](https://github.com/settings/billing).
-
-All of this is an optional step, but one that many will want to do.
+This is an optional step, but one that many will want to do.
 Approval is usually very quick, but it is not something you would want to do the night before classes begin.
 Give yourself at least a week to be safe.
 
 ### Permissions
 
-By default, each new GitHub organization defaults to repositories being readable by all members, regardless of whether they are private or public. This is clearly undesirable for most classroom settings.
+Each new GitHub organization defaults to repositories being readable by all members, regardless of whether they are private or public. This is clearly undesirable for most classroom settings.
 
 Individual-level permissions can be set via the "People" tab on the
-organization page. We recommend the course instructor to be the owner of the
-organization and teaching assistants to receive admin privileges. Students
-should receive member privileges.
+organization page. We recommend that the course instructor and any teaching
+assistants be owners of the organization and that students be members.
 
-Github allows further permissions for accessing and changing repositories to be
+GitHub allows further permissions for accessing and changing repositories to be
 set for each individual member or at the organization-level (under Settings >
-Member Privileges). We suggest the organization-level settings below.
+Member privileges). We suggest the organization-level settings below.
 
 *Member repository permissions*
 
@@ -203,8 +215,8 @@ We can get a quick snapshot of our organization using the `org_sitrep` function 
 org_sitrep("ghclass-vignette")
 ```
 
-We can see that this function indicates that the current default repository permission settings is "read" and provides a helpful warning that this enables members to view all repositories.
-This permission can easily be addressed within the Organization Settings page under Member privileges. Alternatively, we can also use ghclass to change this directly with `org_set_repo_permission`
+We can see that this function indicates that the current default repository permission setting is "read" and provides a helpful warning that this enables members to view all repositories.
+This permission can easily be addressed within the Organization Settings page under Member privileges. Alternatively, we can also use ghclass to change this directly with `org_set_repo_permission`.
 
 ```{r}
 #| label: set_perm
@@ -218,9 +230,11 @@ After changing this setting we can once again check the org's sitrep and see tha
 org_sitrep("ghclass-vignette")
 ```
 
+The sitrep also reports the organization's default workflow permissions for GitHub Actions, which can be changed with `org_set_workflow_permissions`.
+
 ### Adding students to the organization
 
-Next, collect your students' GitHub usernames. You can do this using your web form tool of choice (e.g. Google Forms, MS Forms, etc.) or via a quiz or survey on your school's learning management system (LMS). We will assume that you are able to then read in these data into an R data frame.
+Next, collect your students' GitHub usernames. You can do this using your web form tool of choice (e.g. Google Forms, MS Forms, etc.) or via a quiz or survey on your school's learning management system (LMS). We will assume that you are able to then read these data into an R data frame.
 
 For example, your roster file might look something like the following:
 ```{r}
@@ -231,7 +245,8 @@ roster = readr::read_csv( system.file("roster.csv", package = "ghclass") )
 #| label: roster
 roster
 ```
-Here we are using the student's school email address as a unique identifier, we also have their GitHub username and we have also assigned them to different teams for our three homework assignments.
+Here we are using the students' school email addresses as unique identifiers. We also have their GitHub usernames, and we have assigned them to different teams for our three homework assignments.
+If you would rather have ghclass form the teams for you, `team_roster` randomly assigns the members of a roster to teams of a given size and adds the team names as a new column.
 
 Using the `roster` data frame, we can then invite the students to the class' organization. Each of these students will be notified via email from GitHub asking them to join the `ghclass-vignette` organization.
 
@@ -263,6 +278,7 @@ After some time, some of the students will have accepted the invitation.
 ```{r}
 #| include: false
 ghclass:::org_accept_invite("ghclass-vignette", names(pats)[c(1,3,6)], pats[c(1,3,6)])
+wait_until(function() !any(names(pats)[c(1,3,6)] %in% org_pending("ghclass-vignette")))
 ```
 
 ```{r}
@@ -280,17 +296,24 @@ We can now see that Anya, Celine, and Francis have accepted the invite and we ar
 ```{r}
 #| include: false
 ghclass:::org_accept_invite("ghclass-vignette", names(pats), pats)
+wait_until(function() length(org_pending("ghclass-vignette")) == 0)
 ```
 
 ### Preparing an assignment
 
 As described above, ghclass uses a workflow where each team or individual is given access to a single repo for each assignment.
 To create these repositories we use a single template repository which contains all of the files necessary for the assignment.
-Generally, this will consist of things like a `README.md` with instructions, a scaffolded `Rmd` or `R` file where the students will enter their answers, and any other necessary support files (e.g. data, images, support scripts, etc.).
-For an example of such a repository you can take a look at [hw1](https://github.com/sta323-sp19/hw1) from a Statistical Computing course offered at Duke in the Spring of 2019.
+Generally, this will consist of things like a `README.md` with instructions, a scaffolded `qmd`, `Rmd`, or `R` file where the students will enter their answers, and any other necessary support files (e.g. data, images, support scripts, etc.).
+For an example of such a repository you can take a look at [hw1](https://github.com/Sta323-Sp19/hw1) from a Statistical Computing course offered at Duke in the Spring of 2019.
 Note that this repository is public and viewable by anyone, but this is not necessary for your template repository.
+We can view the contents of a repository without cloning it using `repo_tree`,
 
-Once you have created the repository and are ready to distribute it to students there is one more suggest step - setting the repo's template status to `TRUE`.
+```{r}
+#| label: repo_tree
+repo_tree("Sta323-Sp19/hw1")
+```
+
+Once you have created the repository and are ready to distribute it to students there is one more suggested step - setting the repo's template status to `TRUE`.
 This is a GitHub specific detail, but doing so makes it much more efficient to create copies of the repo for your students.
 We can set this option under the repo's Settings on GitHub, just check the box labelled "Template Repository" on the main settings page, or use the `repo_set_template` function.
 This status can also be checked with ghclass using `repo_is_template`.
@@ -307,8 +330,7 @@ repo_set_template("Sta323-Sp19/hw1")
 
 ```{r}
 #| include: false
-# Doesn't change immediately
-Sys.sleep(3)
+wait_until(function() repo_is_template("Sta323-Sp19/hw1"))
 ```
 
 ```{r}
@@ -318,7 +340,7 @@ repo_is_template("Sta323-Sp19/hw1")
 
 ### Distributing a team assignment
 
-Once you have created your template repository, it is then straight forward process to create the team or individual repositories for your students.
+Once you have created your template repository, it is then a straightforward process to create the team or individual repositories for your students.
 The recommended process is to use the `org_create_assignment` function, which is a high level function that takes care of each of the underlying steps for you.
 To start we will create the hw1 team-based assignment given the teams in `roster`.
 
@@ -363,7 +385,7 @@ The underlying process here is very similar with the only difference being that 
 
 ### Listing Repos
 
-Once the repos are created we can interact with them with ghclass, one of the most common needs is simply to list which repos exist within our organization and or selecting some subset of them.
+Once the repos are created we can interact with them using ghclass. One of the most common needs is simply to list which repos exist within our organization and/or select some subset of them.
 
 ```{r}
 #| label: repos
@@ -378,18 +400,18 @@ org_repos("ghclass-vignette", filter="hw1-team")
 
 ### Modifying Repos
 
-Mirroring repos is somewhat heavy handed, since it forces the target repo to be identical to the source repo.
+Mirroring repos is somewhat heavy-handed, since it forces the target repo to be identical to the source repo.
 In some cases we only want to add or modify a single file in the repository. Most often this occurs after distributing an assignment and discovering that there is an issue with the instructions, the data, etc.
 
 ghclass allows you to automate the process of adding, modifying, or replacing files across repos after they have been created.
-While this process does overwrite existing files in the repo everything is being done within the context of git and changes can be rolled back or merged if they conflict.
+While this process does overwrite existing files in the repo, everything is being done within the context of Git and changes can be rolled back or merged if they conflict.
 
 
-Lets assume that we distributed hw1 with the wrong version of the `README.md` included, if we want to replace this with the correct version across all of the hw1 repositories then we could do the following,
+Let's assume that we distributed hw1 with the wrong version of the `README.md` included. If we want to replace this with the correct version across all of the hw1 repositories, we could do the following:
 
 ```{r}
 #| label: add_file
-file = system.file("README.md", package = "ghclass")
+file = system.file("hw1/README.md", package = "ghclass")
 
 repo_add_file(
   org_repos("ghclass-vignette","hw1-team"),
@@ -399,13 +421,13 @@ repo_add_file(
 )
 ```
 
-The updated version looks like the following,
+The updated version looks like the following:
 ```{r}
 #| label: get_readme
 repo_get_readme("ghclass-vignette/hw1-team01", include_details = FALSE)
 ```
 
-We can also use the function `repo_modify_file` to make changes to existing files,
+We can also use the function `repo_modify_file` to make changes to existing files:
 
 ```{r}
 #| label: modify_file
@@ -425,7 +447,7 @@ repo_get_readme("ghclass-vignette/hw1-team01", include_details = FALSE)
 
 ### Collecting Student Work
 
-Eventually the students will be finished with the work and or the assignment deadline will have passed. ghclass makes it easy to collect all of the student work off of GitHub and make it accessible on your local computer for grading. We make use of the [gert](https://github.com/r-lib/gert) package to provide basic git functionality within ghclass.
+Eventually the students will be finished with the work and/or the assignment deadline will have passed. ghclass makes it easy to collect all of the student work from GitHub and make it accessible on your local computer for grading. We make use of the [gert](https://github.com/r-lib/gert) package to provide basic git functionality within ghclass.
 
 ```{r}
 #| label: repo_dir
@@ -450,6 +472,31 @@ fs::dir_tree(repo_dir)
 unlink(repo_dir, recursive = TRUE)
 ```
 
+### Automated checking with GitHub Actions
+
+If your template repository includes a workflow under `.github/workflows/`, for example one that renders the students' document or runs a set of checks, then GitHub Actions will run it each time a student pushes to their repository.
+ghclass provides several tools for working with these workflows across many repositories:
+
+- `org_create_assignment(add_badges = TRUE)` adds a status badge for each workflow to the README of every assignment repo so students can see whether their most recent push succeeded (see also `action_add_badge` and `action_remove_badge`).
+- `action_workflows` and `action_runs` report on the workflows and their runs across repos, and `action_runtime` reports how long the runs took.
+- `action_artifacts` and `action_artifact_download` list and download the artifacts produced by the workflows, e.g. rendered html or pdf output.
+- `org_grade_assignment` combines these steps for grading: it clones all repos matching a filter, downloads the requested artifacts (skipping any that are out of sync with the current commit), and creates a comment file for each repo.
+
+For example, to set up grading for hw1 and collect the rendered html artifacts from each repo:
+
+```{r}
+#| label: grade_assignment
+#| eval: false
+org_grade_assignment(
+  path = "hw1-grading",
+  org = "ghclass-vignette",
+  repo_filter = "hw1-team",
+  artifacts = c("html" = "html-output")
+)
+```
+
+Note that adding or modifying workflow files in student repos requires the `workflow` scope on your token.
+
 
 ## FAQ
 
@@ -466,20 +513,12 @@ Also, your students may not want their coursework to be publicly available.
 They are bound to make mistakes as they learn and it should be up to them
 whether they want those to be a piece of their public profile on GitHub.
 
-2. Why not use [GitHub Classroom](https://classroom.github.com/)? \
+2. What about GitHub Classroom? \
 \
-Actually you don't have to choose between ghclass and GitHub Classroom, your workflow can use either or both - they are just different interfaces to the same underlying API. Generally, it is mostly a matter of preference, but there are a couple of features in ghclass that are not present in GitHub Classroom:
-    - Instructor defined teams -- GitHub Classroom asks students to choose their teammates when creating their repository.
-    - Editing existing repositories -- being able to push changes to student repositories after an assignment is released can be quite valuable.
-    - Command-line interface -- if you like writing R code to solve your problems
-this may be a better fit for you as it provides a greater level of control and
-more flexibility.
+GitHub retired GitHub Classroom on August 28, 2026 (see [here](https://github.com/orgs/community/discussions/205975) for the announcement). Organizations, repositories, and user accounts created through Classroom were not affected, so existing classroom organizations can continue to be managed with ghclass, which works directly with the GitHub API. The workflow described above covers the distribution of individual and team assignments, and GitHub Actions workflows can provide the automatic checking and feedback that Classroom's autograding did.
 
 3. Does the default branch of my repository matter (`master` vs `main`)? \
 \
-Yes and no - GitHub now uses `main` as the default branch for new repositories (see [here](https://github.com/github/renaming) for background). `ghclass` supports alternative default branch names across the entire package. For the vast majority of use cases you will not see any differences as the GitHub API and/or Git will already use the default branch without any additional specification. In a small number of cases a branch name is required, in which case the package no longer provides a default value and you will be prompted to specify that argument. Hopefully these changes will have a minimal impact on our users in terms of both backwards and forwards compatibility.\
+Yes and no - since October 2020 GitHub has used `main` as the default branch for new repositories (see [here](https://github.com/github/renaming) for background), while repositories and organizations created before then kept `master` unless they were changed. ghclass supports either name across the entire package. For the vast majority of use cases you will not see any differences as the GitHub API and/or Git will already use the default branch without any additional specification. In a small number of cases a branch name is required, in which case the package does not provide a default value and you will be prompted to specify that argument.\
 \
-A couple other quick points about this change:
-    - Existing repositories and organizations were not affected by the change.
-    - Our recommendation is that if your classroom org is already using `master` you can leave it as is, particularly for repos already distributed to students.
-    - For new classroom orgs, before the GitHub wide change, you can choose a new default branch name organization wide under `Org > Settings > Repository Defaults > Repository default branch`. Note that this will only affect newly created repositories, not existing repositories.
+If your classroom org is already using `master` you can leave it as is, particularly for repos already distributed to students. For new organizations, the default branch name for newly created repositories can be set under `Org > Settings > Repository Defaults > Repository default branch`. Note that this only affects newly created repositories, not existing ones.
