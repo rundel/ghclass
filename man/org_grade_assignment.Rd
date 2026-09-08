@@ -10,7 +10,8 @@ org_grade_assignment(
   repo_filter,
   artifacts = character(),
   comment_template = "",
-  key_repo = NULL
+  key_repo = NULL,
+  allow_stale = FALSE
 )
 }
 \arguments{
@@ -22,7 +23,7 @@ org_grade_assignment(
 argument to select repos (e.g. \code{"hw01_"}).}
 
 \item{artifacts}{Named character vector. Names are subfolder names, values are
-regex patterns passed as \code{filter} to \code{\link[=action_artifact_download]{action_artifact_download()}} (matched
+regex patterns passed as \code{filter} to \code{\link[=action_artifacts]{action_artifacts()}} (matched
 against artifact names). E.g. \code{c("html" = "html-output", "report" = "pdf-report")}.}
 
 \item{comment_template}{Character. Template text used to populate each comment
@@ -30,6 +31,9 @@ markdown file. Defaults to \code{""}.}
 
 \item{key_repo}{Character. Optional repository address in \code{owner/name} format
 to clone into the root of the grading folder as an answer key.}
+
+\item{allow_stale}{Logical. Should out of sync artifacts be downloaded.
+Default \code{FALSE}, in which case they are reported and skipped.}
 }
 \value{
 An invisible list containing:
@@ -37,6 +41,7 @@ An invisible list containing:
 \item \code{repos} — character vector of matched repo addresses
 \item \code{cloned} — result from \code{\link[=local_repo_clone]{local_repo_clone()}}
 \item \code{artifacts} — named list of results from each \code{\link[=action_artifact_download]{action_artifact_download()}} call
+\item \code{stale} — named list of tibbles of out of sync artifacts for each entry of \code{artifacts}
 \item \code{comments} — character vector of comment file paths created
 \item \code{key} — result from cloning the key repo (if provided)
 }
@@ -48,7 +53,12 @@ setting up grading of an assignment:
 \item Find repos matching a filter pattern in an organization
 \item Clone all matched repos locally
 \item Download GitHub Actions artifacts (e.g. rendered html, md files)
-\item Report any missing artifacts
+\item Report any missing or out of sync artifacts
 \item Create comment template files for each repo
 }
+
+Artifacts are considered out of sync when they were built from a commit
+other than the current commit of the cloned repo (e.g. the student pushed
+after the last successful workflow run). These are skipped by default,
+see \code{allow_stale}.
 }

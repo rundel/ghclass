@@ -1,5 +1,7 @@
 # ghclass (development version)
 
+* `org_grade_assignment()` now skips artifacts built from a commit other than the current commit of the cloned repo and reports them; use `allow_stale = TRUE` to download them anyway.
+
 * `action_artifacts()` now includes a `commit` column giving the commit each artifact was built from.
 
 * Fixed a bug when reporting failures of non-API operations such as `local_repo_clone()`.
