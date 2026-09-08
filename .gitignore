@@ -7,10 +7,12 @@ inst/doc
 .DS_Store
 doc
 Meta
-vignettes/articles/cache/
 test
 
-/.quarto/
+.quarto/
+vignettes/articles/*.html
+vignettes/articles/*_files/
 **/*.quarto_ipynb
 CLAUDE.md
 .claude/
+credentials/

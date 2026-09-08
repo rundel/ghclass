@@ -15,15 +15,11 @@ pkgdown_quick:
 
 
 articles:
-	Rscript vignettes/articles/precompile.R
+	Rscript -e "pkgdown::build_article('articles/ghclass', quiet = FALSE)"
 
-clean: clean_cache
+clean:
 	rm -rf doc/
 	rm -rf docs/
-	rm -rf vignettes/articles/figure/
-	rm -f vignettes/articles/ghclass.Rmd
+	rm -rf vignettes/.quarto/
 
-clean_cache:
-	rm -rf vignettes/articles/cache/
-
-.PHONY: all install docs pkgdown articles clean clean_cache
+.PHONY: all install docs pkgdown pkgdown_quick articles clean

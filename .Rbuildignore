@@ -15,6 +15,9 @@ pkgdown/
 ^docs$
 ^pkgdown$
 vignettes/articles/
+^vignettes/_quarto\.yaml$
+^vignettes/_freeze
+(^|/)\.quarto$
 Makefile
 ^cran-comments\.md$
 ^\.github$

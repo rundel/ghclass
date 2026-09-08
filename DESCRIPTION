@@ -45,7 +45,6 @@ Imports:
 Suggests:
     here,
     knitr,
-    rmarkdown,
     sodium,
     styler,
     testthat (>= 3.0.0),
@@ -56,3 +55,4 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Config/roxygen2/version: 8.1.0
 Config/testthat/edition: 3
+Config/Needs/website: fansi

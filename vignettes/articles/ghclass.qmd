@@ -2,54 +2,34 @@
 title: "Course management with ghclass"
 author: "Mine Çetinkaya-Rundel, Colin Rundel, Therese Anders"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Course management with ghclass}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+knitr:
+  opts_chunk:
+    comment: "#>"
 ---
 
-```{r include = FALSE, cache = FALSE}
-knitr::opts_chunk$set(
-  out.width = "100%",
-  collapse = TRUE,
-  comment = "#>",
-  cache = TRUE
-)
-```
-
-
-```{r color, include = FALSE}
-# crayon needs to be explicitly activated in Rmd
-options(crayon.enabled = TRUE)
-
-# Support for collapsing chunks with ascii color codes
-source("util/knitr_hook.R")
-prev_chunk_hook = knitr::knit_hooks$get("chunk")
-
-knitr::knit_hooks$set("chunk" = function(x, options) {
-  options$collapse = FALSE
-  x = prev_chunk_hook(x, options)
-  find_input(x)
-})
-```
-
-
-
-```{r setup, include=FALSE}
+```{r}
+#| label: setup
+#| include: false
+options(cli.num_colors = 256)
+fansi::set_knit_hooks(knitr::knit_hooks, which = c("output", "message", "warning", "error"))
 library(ghclass)
 ```
 
-```{r pats, include = FALSE}
+```{r}
+#| label: pats
+#| include: false
 enc = readRDS(here::here("credentials/example_users.enc.rds"))
-key = sodium::sha256(charToRaw(Sys.getenv("GHCLASS_PAT")))
+key = system2("op", c("read", shQuote("op://Employee/ghclass credentials key/password")), stdout = TRUE)
+key = sodium::sha256(charToRaw(key))
 pats = unserialize( sodium::data_decrypt(enc, key) )
 
 rm(enc, key)
 ```
 
 
-```{r reset, include = FALSE}
+```{r}
+#| label: reset
+#| include: false
 # Remove all repos, teams, and members
 repos = org_repos("ghclass-vignette")
 teams = org_teams("ghclass-vignette")
@@ -141,19 +121,22 @@ with `workflow` if you plan to add GitHub Actions workflows to student repos and
 `usethis::create_github_token()` does not select `admin:org` by default.
 
 You can test that your token is working correctly using the `github_test_token()` function. If everything is working correctly you should see something like the following:
-```{r test_token}
+```{r}
+#| label: test_token
 github_test_token()
 ```
 
 If your token is not working you will see an error message like this instead:
-```{r bad_token}
+```{r}
+#| label: bad_token
 github_test_token("bad token")
 ```
 
 `github_token_sitrep()` provides a more detailed report on the token, including
 its type, source, and granted scopes, and flags any of the scopes above that are
 missing:
-```{r token_sitrep}
+```{r}
+#| label: token_sitrep
 github_token_sitrep()
 ```
 
@@ -215,20 +198,23 @@ Member Privileges). We suggest the organization-level settings below.
 
 We can get a quick snapshot of our organization using the `org_sitrep` function which reports on this permission as well as other important details.
 
-```{r sitrep}
+```{r}
+#| label: sitrep
 org_sitrep("ghclass-vignette")
 ```
 
 We can see that this function indicates that the current default repository permission settings is "read" and provides a helpful warning that this enables members to view all repositories.
 This permission can easily be addressed within the Organization Settings page under Member privileges. Alternatively, we can also use ghclass to change this directly with `org_set_repo_permission`
 
-```{r set_perm}
-org_set_repo_permission("ghclass-vignette", permission = "none")
+```{r}
+#| label: set_perm
+org_set_repo_permission("ghclass-vignette", repo_permission = "none")
 ```
 
 After changing this setting we can once again check the org's sitrep and see that the warning is now resolved.
 
-```{r sitrep2}
+```{r}
+#| label: sitrep2
 org_sitrep("ghclass-vignette")
 ```
 
@@ -237,52 +223,62 @@ org_sitrep("ghclass-vignette")
 Next, collect your students' GitHub usernames. You can do this using your web form tool of choice (e.g. Google Forms, MS Forms, etc.) or via a quiz or survey on your school's learning management system (LMS). We will assume that you are able to then read in these data into an R data frame.
 
 For example, your roster file might look something like the following:
-```{r message=FALSE}
+```{r}
+#| message: false
 roster = readr::read_csv( system.file("roster.csv", package = "ghclass") )
 ```
-```{r roster}
+```{r}
+#| label: roster
 roster
 ```
 Here we are using the student's school email address as a unique identifier, we also have their GitHub username and we have also assigned them to different teams for our three homework assignments.
 
 Using the `roster` data frame, we can then invite the students to the class' organization. Each of these students will be notified via email from GitHub asking them to join the `ghclass-vignette` organization.
 
-```{r invite}
+```{r}
+#| label: invite
 org_invite(org = "ghclass-vignette", user = roster$github)
 ```
 
 We now need to wait for the students to accept these invitations before they will have access to the organization.
 We can check the status of these acceptances using the `org_members()` and `org_pending()` functions to see which students have accepted or not accepted the invitation.
 
-```{r members}
+```{r}
+#| label: members
 org_members("ghclass-vignette")
 ```
 
-```{r members2}
+```{r}
+#| label: members2
 org_members("ghclass-vignette", include_admins = FALSE)
 ```
 
-```{r pending}
+```{r}
+#| label: pending
 org_pending("ghclass-vignette")
 ```
 
 After some time, some of the students will have accepted the invitation.
 
-```{r include = FALSE}
+```{r}
+#| include: false
 ghclass:::org_accept_invite("ghclass-vignette", names(pats)[c(1,3,6)], pats[c(1,3,6)])
 ```
 
-```{r members3}
+```{r}
+#| label: members3
 org_members("ghclass-vignette", include_admins = FALSE)
 ```
 
-```{r pending2}
+```{r}
+#| label: pending2
 org_pending("ghclass-vignette")
 ```
 
 We can now see that Anya, Celine, and Francis have accepted the invite and we are still waiting on Bruno, Diego, and Elijah. Gentle prodding and reminder emails are often necessary to get all of the students into the organization.
 
-```{r include = FALSE}
+```{r}
+#| include: false
 ghclass:::org_accept_invite("ghclass-vignette", names(pats), pats)
 ```
 
@@ -299,20 +295,24 @@ This is a GitHub specific detail, but doing so makes it much more efficient to c
 We can set this option under the repo's Settings on GitHub, just check the box labelled "Template Repository" on the main settings page, or use the `repo_set_template` function.
 This status can also be checked with ghclass using `repo_is_template`.
 
-```{r is_template}
+```{r}
+#| label: is_template
 repo_is_template("Sta323-Sp19/hw1")
 ```
 
-```{r set_template}
+```{r}
+#| label: set_template
 repo_set_template("Sta323-Sp19/hw1")
 ```
 
-```{r include=FALSE}
+```{r}
+#| include: false
 # Doesn't change immediately
 Sys.sleep(3)
 ```
 
-```{r is_template2}
+```{r}
+#| label: is_template2
 repo_is_template("Sta323-Sp19/hw1")
 ```
 
@@ -322,7 +322,8 @@ Once you have created your template repository, it is then straight forward proc
 The recommended process is to use the `org_create_assignment` function, which is a high level function that takes care of each of the underlying steps for you.
 To start we will create the hw1 team-based assignment given the teams in `roster`.
 
-```{r create_team_assign}
+```{r}
+#| label: create_team_assign
 org_create_assignment(
   org = "ghclass-vignette",
   user = roster$github,
@@ -347,7 +348,8 @@ Based on the output we can see that multiple steps are involved in this process:
 
 If instead of hw1 being a team assignment, we wanted to distribute it as an individual assignment, we can also achieve this using the `org_create_assignment` function by simply excluding the `team` argument (and providing appropriate repo names).
 
-```{r create_ind_assign}
+```{r}
+#| label: create_ind_assign
 org_create_assignment(
   org = "ghclass-vignette",
   user = roster$github,
@@ -363,11 +365,13 @@ The underlying process here is very similar with the only difference being that 
 
 Once the repos are created we can interact with them with ghclass, one of the most common needs is simply to list which repos exist within our organization and or selecting some subset of them.
 
-```{r repos}
+```{r}
+#| label: repos
 org_repos("ghclass-vignette")
 ```
 
-```{r repos_filter}
+```{r}
+#| label: repos_filter
 org_repos("ghclass-vignette", filter="hw1-team")
 ```
 
@@ -383,7 +387,8 @@ While this process does overwrite existing files in the repo everything is being
 
 Lets assume that we distributed hw1 with the wrong version of the `README.md` included, if we want to replace this with the correct version across all of the hw1 repositories then we could do the following,
 
-```{r add_file}
+```{r}
+#| label: add_file
 file = system.file("README.md", package = "ghclass")
 
 repo_add_file(
@@ -395,13 +400,15 @@ repo_add_file(
 ```
 
 The updated version looks like the following,
-```{r get_readme}
+```{r}
+#| label: get_readme
 repo_get_readme("ghclass-vignette/hw1-team01", include_details = FALSE)
 ```
 
 We can also use the function `repo_modify_file` to make changes to existing files,
 
-```{r modify_file}
+```{r}
+#| label: modify_file
 repo_modify_file(
   repo = org_repos("ghclass-vignette","hw1-team"),
   path = "README.md",
@@ -411,7 +418,8 @@ repo_modify_file(
 )
 ```
 
-```{r get_readme2}
+```{r}
+#| label: get_readme2
 repo_get_readme("ghclass-vignette/hw1-team01", include_details = FALSE)
 ```
 
@@ -419,22 +427,26 @@ repo_get_readme("ghclass-vignette/hw1-team01", include_details = FALSE)
 
 Eventually the students will be finished with the work and or the assignment deadline will have passed. ghclass makes it easy to collect all of the student work off of GitHub and make it accessible on your local computer for grading. We make use of the [gert](https://github.com/r-lib/gert) package to provide basic git functionality within ghclass.
 
-```{r repo_dir}
+```{r}
+#| label: repo_dir
 repo_dir = file.path(tempdir(), "hw1")
 ```
 
-```{r local_clone}
+```{r}
+#| label: local_clone
 local_repo_clone(
   repo = org_repos("ghclass-vignette", "hw1-team"),
   local_path = repo_dir
 )
 ```
 
-```{r dir}
+```{r}
+#| label: dir
 fs::dir_tree(repo_dir)
 ```
 
-```{r include=FALSE}
+```{r}
+#| include: false
 unlink(repo_dir, recursive = TRUE)
 ```
 
