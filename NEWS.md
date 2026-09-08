@@ -1,5 +1,11 @@
 # ghclass (development version)
 
+* Added `org_set_permissions()` to change organization member privileges (default repository permission, repository creation, forking, and team creation); `org_sitrep()` now also reports the read-only member privileges.
+
+* `org_set_repo_permission()` and `org_set_permissions()` now wait for GitHub to finish applying a previous default repository permission change instead of failing with a 409 error.
+
+* API error reports now include the explanation GitHub returns in the `errors` field, e.g. for 409 and 422 responses.
+
 * `org_grade_assignment()` now skips artifacts built from a commit other than the current commit of the cloned repo and reports them; use `allow_stale = TRUE` to download them anyway.
 
 * `org_grade_assignment()` now has a `branch` argument to clone and collect artifacts from a specific branch.

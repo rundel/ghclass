@@ -53,7 +53,9 @@ org_remove("ghclass-vignette", users, prompt = FALSE)
 wait_until(function() length(org_members("ghclass-vignette", include_admins = FALSE)) == 0)
 
 repo_set_template("Sta323-Sp19/hw1", FALSE)
-org_set_repo_permission("ghclass-vignette", "read")
+org_set_permissions(
+  "ghclass-vignette", repo_permission = "read", create_repositories = TRUE, create_teams = TRUE
+)
 ```
 
 ## What is ghclass?
@@ -208,22 +210,29 @@ Member privileges). We suggest the organization-level settings below.
 
 * Allow members to create teams: Disabled
 
-We can get a quick snapshot of our organization using the `org_sitrep` function which reports on this permission as well as other important details.
+We can get a quick snapshot of our organization using the `org_sitrep` function which reports on these settings as well as other important details.
 
 ```{r}
 #| label: sitrep
 org_sitrep("ghclass-vignette")
 ```
 
-We can see that this function indicates that the current default repository permission setting is "read" and provides a helpful warning that this enables members to view all repositories.
-This permission can easily be addressed within the Organization Settings page under Member privileges. Alternatively, we can also use ghclass to change this directly with `org_set_repo_permission`.
+We can see that the current default repository permission setting is "read", with a helpful warning that this enables members to view all repositories, and that members are currently able to create repositories and teams.
+These settings can be changed within the Organization Settings page under Member privileges. Alternatively, we can use ghclass to apply the member repository and team settings directly with `org_set_permissions` (the default repository permission on its own can also be changed with `org_set_repo_permission`).
+The admin repository permissions (visibility change, deletion and transfer, and issue deletion) are read-only in the GitHub API, so these still need to be set on the settings page.
 
 ```{r}
 #| label: set_perm
-org_set_repo_permission("ghclass-vignette", repo_permission = "none")
+org_set_permissions(
+  "ghclass-vignette",
+  repo_permission = "none",
+  create_repositories = FALSE,
+  fork_private_repositories = FALSE,
+  create_teams = FALSE
+)
 ```
 
-After changing this setting we can once again check the org's sitrep and see that the warning is now resolved.
+After changing these settings we can once again check the org's sitrep and see that the warning is now resolved.
 
 ```{r}
 #| label: sitrep2

@@ -9,6 +9,12 @@
 #'
 #' * `org_set_repo_permission()` - Change the default permission level for org repositories.
 #'
+#' * `org_set_permissions()` - Change organization member privileges: the default repository
+#' permission and whether members can create repositories, fork private repositories, or create
+#' teams. Settings left as `NULL` are not changed, and any setting GitHub does not apply is
+#' reported with a warning. The remaining member privileges reported by `org_sitrep()` (visibility
+#' changes, repository and issue deletion, outside collaborators) are read-only in the GitHub API.
+#'
 #' * `org_workflow_permissions()` - Obtain the current default workflow permission value
 #' for the organization.
 #'
@@ -23,12 +29,19 @@
 #' * write - can pull and push, but not administer this repository.
 #' * admin - can pull, push, and administer this repository.
 #' * none - no permissions granted by default.
+#' @param create_repositories Logical. Can members create repositories.
+#' @param create_public_repositories Logical. Can members create public repositories.
+#' @param create_private_repositories Logical. Can members create private repositories.
+#' @param fork_private_repositories Logical. Can members fork private repositories.
+#' @param create_teams Logical. Can members create teams.
 #' @param workflow_permission The default workflow permissions granted to the GITHUB_TOKEN when
 #' running workflows in the organization. Accepted values:`"read"` or `"write"`.
 #'
 #' @return `org_sitep()` invisibly returns the `org` argument.
 #'
 #' `org_set_repo_permission()` invisibly return a the result of the relevant GitHub API call.
+#'
+#' `org_set_permissions()` invisibly returns the result of the relevant GitHub API call.
 #'
 #' `org_workflow_permissions()` returns a character vector with value of either `"read"` or `"write"`.
 #'
@@ -42,6 +55,8 @@
 #'
 #' org_set_repo_permission("ghclass-test", "read")
 #'
+#' org_set_permissions("ghclass-test", create_repositories = FALSE, create_teams = FALSE)
+#'
 #' org_workflow_permissions("ghclass-test")
 #'
 #' org_set_workflow_permissions("ghclass-test", "write")
@@ -50,6 +65,7 @@
 #'
 #' # Cleanup
 #' org_set_repo_permission("ghclass-test", "none")
+#' org_set_permissions("ghclass-test", create_repositories = TRUE, create_teams = TRUE)
 #' org_set_workflow_permissions("ghclass-test", "read")
 #' }
 #'

@@ -30,7 +30,9 @@ org_sitrep = function(org) {
   settings = c(
     "collaborators", "total_private_repos", "default_repository_permission",
     "members_can_create_public_repositories", "members_can_create_private_repositories",
-    "members_can_fork_private_repositories"
+    "members_can_fork_private_repositories", "members_can_change_repo_visibility",
+    "members_can_delete_repositories", "members_can_delete_issues",
+    "members_can_create_teams", "members_can_invite_outside_collaborators"
   )
   unavailable = purrr::map_lgl(settings, ~ is.null(res_org[[.x]]))
 
@@ -66,6 +68,11 @@ org_sitrep = function(org) {
   cli::cli_li(cli_kv("Members can create public repos", setting("members_can_create_public_repositories")))
   cli::cli_li(cli_kv("Members can create private repos", setting("members_can_create_private_repositories")))
   cli::cli_li(cli_kv("Members can fork private repos", setting("members_can_fork_private_repositories"), forking_warn))
+  cli::cli_li(cli_kv("Members can change repo visibility", setting("members_can_change_repo_visibility")))
+  cli::cli_li(cli_kv("Members can delete repos", setting("members_can_delete_repositories")))
+  cli::cli_li(cli_kv("Members can delete issues", setting("members_can_delete_issues")))
+  cli::cli_li(cli_kv("Members can create teams", setting("members_can_create_teams")))
+  cli::cli_li(cli_kv("Members can invite outside collaborators", setting("members_can_invite_outside_collaborators")))
   cli::cli_end()
 
   if (any(unavailable))

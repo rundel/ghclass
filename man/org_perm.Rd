@@ -6,6 +6,7 @@
 \alias{org_allows_forking}
 \alias{org_sitrep}
 \alias{org_set_repo_permission}
+\alias{org_set_permissions}
 \alias{org_workflow_permissions}
 \alias{org_set_workflow_permissions}
 \title{Organization permissions}
@@ -17,6 +18,16 @@ org_sitrep(org)
 org_set_repo_permission(
   org,
   repo_permission = c("none", "read", "write", "admin")
+)
+
+org_set_permissions(
+  org,
+  repo_permission = NULL,
+  create_repositories = NULL,
+  create_public_repositories = NULL,
+  create_private_repositories = NULL,
+  fork_private_repositories = NULL,
+  create_teams = NULL
 )
 
 org_workflow_permissions(org)
@@ -34,6 +45,16 @@ org_set_workflow_permissions(org, workflow_permission = c("read", "write"))
 \item none - no permissions granted by default.
 }}
 
+\item{create_repositories}{Logical. Can members create repositories.}
+
+\item{create_public_repositories}{Logical. Can members create public repositories.}
+
+\item{create_private_repositories}{Logical. Can members create private repositories.}
+
+\item{fork_private_repositories}{Logical. Can members fork private repositories.}
+
+\item{create_teams}{Logical. Can members create teams.}
+
 \item{workflow_permission}{The default workflow permissions granted to the GITHUB_TOKEN when
 running workflows in the organization. Accepted values:\code{"read"} or \code{"write"}.}
 }
@@ -41,6 +62,8 @@ running workflows in the organization. Accepted values:\code{"read"} or \code{"w
 \code{org_sitep()} invisibly returns the \code{org} argument.
 
 \code{org_set_repo_permission()} invisibly return a the result of the relevant GitHub API call.
+
+\code{org_set_permissions()} invisibly returns the result of the relevant GitHub API call.
 
 \code{org_workflow_permissions()} returns a character vector with value of either \code{"read"} or \code{"write"}.
 
@@ -52,6 +75,11 @@ running workflows in the organization. Accepted values:\code{"read"} or \code{"w
 \itemize{
 \item \code{org_sitrep()} - Provides a situation report on a GitHub organization.
 \item \code{org_set_repo_permission()} - Change the default permission level for org repositories.
+\item \code{org_set_permissions()} - Change organization member privileges: the default repository
+permission and whether members can create repositories, fork private repositories, or create
+teams. Settings left as \code{NULL} are not changed, and any setting GitHub does not apply is
+reported with a warning. The remaining member privileges reported by \code{org_sitrep()} (visibility
+changes, repository and issue deletion, outside collaborators) are read-only in the GitHub API.
 \item \code{org_workflow_permissions()} - Obtain the current default workflow permission value
 for the organization.
 \item \code{org_set_workflow_permissions()} - Change the current default workflow permission value
@@ -65,6 +93,8 @@ org_sitrep("ghclass-test")
 
 org_set_repo_permission("ghclass-test", "read")
 
+org_set_permissions("ghclass-test", create_repositories = FALSE, create_teams = FALSE)
+
 org_workflow_permissions("ghclass-test")
 
 org_set_workflow_permissions("ghclass-test", "write")
@@ -73,6 +103,7 @@ org_sitrep("ghclass-test")
 
 # Cleanup
 org_set_repo_permission("ghclass-test", "none")
+org_set_permissions("ghclass-test", create_repositories = TRUE, create_teams = TRUE)
 org_set_workflow_permissions("ghclass-test", "read")
 }
 

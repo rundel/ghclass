@@ -98,8 +98,22 @@ error_msg = function(x) {
   api_msg = content[["message"]]
   if (is.null(api_msg))
     api_msg = sub_replace(lines, "Message: ")
-  if (!is.null(api_msg) && !grepl(gsub("\\s+", " ", api_msg), error, fixed = TRUE))
-    attr(error, "msg") = api_msg
+  if (!is.null(api_msg) && grepl(gsub("\\s+", " ", api_msg), error, fixed = TRUE))
+    api_msg = NULL
+
+  # Validation and conflict responses put the useful explanation in `errors`
+  errors = purrr::map_chr(content[["errors"]], function(x) {
+    if (!is.list(x))
+      as.character(x)
+    else if (!is.null(x[["message"]]))
+      x[["message"]]
+    else
+      paste(c(x[["resource"]], x[["field"]], x[["code"]]), collapse = " ")
+  })
+  api_msg = gsub("\\s+", " ", trimws(c(api_msg, errors)))
+  api_msg = api_msg[nzchar(api_msg)]
+  if (length(api_msg) > 0)
+    attr(error, "msg") = paste(api_msg, collapse = "; ")
 
   doc = content[["documentation_url"]]
   if (is.null(doc))
