@@ -1,5 +1,7 @@
 # ghclass (development version)
 
+* `action_artifacts()` now includes a `commit` column giving the commit each artifact was built from.
+
 * Fixed a bug when reporting failures of non-API operations such as `local_repo_clone()`.
 
 # ghclass 0.4.2
