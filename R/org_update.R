@@ -97,12 +97,14 @@ org_set_permissions = function(
   org_res = result(res)
   applied = purrr::map_lgl(names(params), function(f) identical(org_res[[f]], params[[f]]))
 
-  if (any(applied))
-    cli::cli_alert_success("Set org {.val {org}} permissions: {.field {changes[applied]}}.")
-  if (any(!applied))
-    cli::cli_alert_warning(
-      "GitHub did not apply {.field {changes[!applied]}} for org {.val {org}}."
-    )
+  if (any(applied)) {
+    cli::cli_alert_success("Set org {.val {org}} permissions:")
+    cli_ul_indent(paste0("{.field ", changes[applied], "}"))
+  }
+  if (any(!applied)) {
+    cli::cli_alert_warning("GitHub did not apply the following settings for org {.val {org}}:")
+    cli_ul_indent(paste0("{.field ", changes[!applied], "}"))
+  }
 
   invisible(org_res)
 }

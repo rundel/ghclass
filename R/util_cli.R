@@ -43,3 +43,9 @@ cli_kv = function(key, value, warning = NULL) {
     cli_glue("{key}: {.val {value}} <- {.strong {cli::col_red('Warning:')}} {cli::col_red(warning)}")
   }
 }
+
+cli_ul_indent = function(items) {
+  cli::cli_div(theme = list(ul = list("margin-left" = 2)))
+  cli::cli_ul(items)
+  cli::cli_end()
+}
