@@ -1,0 +1,69 @@
+# Internal ghclass helpers
+
+These functions are exported so that companion packages (e.g.
+ghclasspeer) can reuse them. They are not intended for end users and
+their interfaces may change without notice.
+
+## Usage
+
+``` r
+read_bin_file(x)
+
+github_api_repo_get_file(repo, path, branch = NULL)
+
+arg_is_chr_scalar(..., allow_null = FALSE, allow_na = FALSE)
+
+arg_is_lgl_scalar(..., allow_null = FALSE, allow_na = FALSE)
+
+arg_is_pos_int_scalar(..., allow_null = FALSE, allow_na = FALSE)
+
+arg_is_chr(..., allow_null = FALSE, allow_na = FALSE, allow_empty = TRUE)
+
+arg_is_lgl(..., allow_null = FALSE, allow_na = FALSE, allow_empty = TRUE)
+
+arg_is_pos_int(..., allow_null = FALSE)
+
+cli_glue(..., .envir = parent.frame())
+
+cli_stop(..., .envir = parent.frame())
+
+cli_warn(..., .envir = parent.frame())
+
+github_api_repo_tree(repo, sha = NULL)
+
+repo_files(repo, branch = NULL)
+
+ghclass_api_v3_req(
+  endpoint,
+  ...,
+  .send_headers = character(),
+  version = "2022-11-28",
+  limit = github_get_api_limit(),
+  max_wait = github_get_max_wait(),
+  max_rate = github_get_max_rate()
+)
+
+match_repo(repo, index = 1)
+
+get_repo_name(repo)
+
+get_repo_owner(repo)
+
+format_repo(repo, branch = NULL, path = NULL)
+
+result(x)
+
+error(x)
+
+succeeded(x)
+
+failed(x)
+
+status_msg(
+  x,
+  success = NULL,
+  fail = NULL,
+  include_error_msg = TRUE,
+  .envir = parent.frame()
+)
+```
