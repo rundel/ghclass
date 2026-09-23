@@ -51,24 +51,9 @@ failed = function(x) {
   !is.null(error(x))
 }
 
-any_failed = function(x) {
-  any(purrr::map_lgl(x, failed))
-}
-
 # A purrr::safely() style result for failures detected before any API call
 failed_result = function(msg) {
   list(result = NULL, error = simpleError(msg))
-}
-
-
-
-
-
-
-return_on_any_failed = function(x) {
-  if (any_failed(x)) {
-    do.call("return", list(), envir = sys.frame(-1))
-  }
 }
 
 error_msg = function(x) {

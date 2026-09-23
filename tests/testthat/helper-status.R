@@ -49,3 +49,9 @@ fake_loop = function(items, die_at = NULL, interrupt_at = NULL) {
 outside_reporter = function() {
   status_msg(ok_result(), "Reporter ran.", "Reporter failed.")
 }
+
+# Keeps what a terminal shows after carriage return redraws
+visible_lines = function(out) {
+  out = sub("^.*\r", "", out)
+  out[out != ""]
+}

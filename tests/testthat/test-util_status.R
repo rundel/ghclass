@@ -24,6 +24,7 @@ test_that("status_scope() summarizes mixed results and keeps failure details", {
   expect_equal(
     out,
     c(
+      "i Skipping repo \"skip\", it already exists.",
       "x Failed to create repo \"bad\".",
       "\\-GitHub API error (422): Unprocessable Entity",
       "  +- API message: Validation Failed",
@@ -36,14 +37,14 @@ test_that("status_scope() summarizes mixed results and keeps failure details", {
   expect_length(status_env[["scopes"]], 0)
 })
 
-test_that("status_scope() summarizes success, all skipped, and empty input", {
+test_that("status_scope() summarizes success and all skipped, and bypasses single and empty input", {
   local_status_output()
 
   expect_equal(cli::cli_fmt(with_progress(fake_loop(c("a", "b")))), "v Created 2 of 2 repos")
-  expect_equal(cli::cli_fmt(with_progress(fake_loop("a"))), "v Created 1 of 1 repo")
+  expect_equal(cli::cli_fmt(with_progress(fake_loop("a"))), "v Created repo \"a\".")
   expect_equal(
     cli::cli_fmt(with_progress(fake_loop(c("skip", "skip")))),
-    "i Created 0 of 2 repos, 2 skipped"
+    c("i Skipping repo \"skip\", it already exists.", "i Skipping repo \"skip\", it already exists.", "i Created 0 of 2 repos, 2 skipped")
   )
   expect_equal(cli::cli_fmt(with_progress(fake_loop(character()))), character())
 })
@@ -57,7 +58,7 @@ test_that("events belong to the innermost scope only", {
         "Outer", 2, done = "Outer finished {n_ok} of {total}",
         {
           fake_loop(c("a", "b"))
-          fake_loop("skip")
+          fake_loop(c("skip", "skip"))
           status_msg(ok_result(), "Outer item done.", "Outer item failed.")
         }
       )
@@ -67,7 +68,9 @@ test_that("events belong to the innermost scope only", {
     out,
     c(
       "v Created 2 of 2 repos",
-      "i Created 0 of 1 repo, 1 skipped",
+      "i Skipping repo \"skip\", it already exists.",
+      "i Skipping repo \"skip\", it already exists.",
+      "i Created 0 of 2 repos, 2 skipped",
       "v Outer finished 1 of 2"
     )
   )
@@ -124,7 +127,7 @@ test_that("reporters called from inside a loop are not counted by its scope", {
   out = cli::cli_fmt(
     with_progress(
       status_scope(
-        "Outer", 1, done = "Outer {n_ok} of {total}",
+        "Outer", 2, done = "Outer {n_ok} of {total}",
         {
           outside_reporter()
           status_msg(ok_result(), "Own item.", "Own item failed.")
@@ -132,7 +135,7 @@ test_that("reporters called from inside a loop are not counted by its scope", {
       )
     )
   )
-  expect_equal(out, c("v Reporter ran.", "v Outer 1 of 1"))
+  expect_equal(out, c("v Reporter ran.", "v Outer 1 of 2"))
 })
 
 test_that("status_msg() counts outcomes without messages and status_note() counts nothing", {
@@ -159,4 +162,48 @@ test_that("status_msg() counts outcomes without messages and status_note() count
     status_msg(api_error_result(), fail = NULL)
   })
   expect_equal(out, "v Half way there.")
+})
+
+test_that("status_scope() draws and clears a progress bar in dynamic terminals", {
+  local_status_output()
+  withr::local_options(cli.dynamic = TRUE)
+
+  out = cli::cli_fmt(with_progress(fake_loop(c("a", "bad", "skip", "b"))))
+  expect_match(out[1], "Creating repos", fixed = TRUE)
+  expect_match(out[1], "1/4 | Created repo \"a\".", fixed = TRUE)
+  expect_equal(
+    visible_lines(out),
+    c(
+      "x Failed to create repo \"bad\".",
+      "\\-GitHub API error (422): Unprocessable Entity",
+      "  +- API message: Validation Failed",
+      "  \\- API docs: https://docs.github.com/rest",
+      "i Skipping repo \"skip\", it already exists.",
+      "x Created 2 of 4 repos, 1 failed, 1 skipped"
+    )
+  )
+  expect_length(status_env[["scopes"]], 0)
+
+  out = cli::cli_fmt(
+    expect_error(with_progress(fake_loop(c("a", "b", "c"), die_at = "b")), "unexpected death")
+  )
+  expect_equal(visible_lines(out), "x Creating repos aborted after 1 of 3: 1 succeeded")
+  expect_length(status_env[["scopes"]], 0)
+
+  outer = function() {
+    status_scope(
+      "Outer", 2, done = "Outer {n_ok} of {total}",
+      purrr::walk(1:2, function(i) {
+        fake_loop(c("a", "b"))
+        status_msg(ok_result(), "Outer item {i}.")
+      })
+    )
+  }
+
+  out = cli::cli_fmt(with_progress(outer()))
+  expect_equal(
+    visible_lines(out),
+    c("v Created 2 of 2 repos", "v Created 2 of 2 repos", "v Outer 2 of 2")
+  )
+  expect_length(status_env[["scopes"]], 0)
 })

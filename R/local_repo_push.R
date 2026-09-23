@@ -41,7 +41,7 @@ local_repo_push = function(repo_dir, remote = "origin", branch = NULL,
         }
 
         if (!run) {
-          status_fail("User canceled force push (overwrite) of {.val {ref}}")
+          status_skip("User canceled force push (overwrite) of {.val {ref}}.")
           return(NULL)
         }
 

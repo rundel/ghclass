@@ -2,7 +2,9 @@
 
 * Added progress mode, enabled with `with_progress()` or `options(ghclass.progress = TRUE)`, which replaces per-item success messages with a progress bar and a summary line for functions that act on multiple repos, teams, users, issues, branches, or files.
 
-* `repo_add_team()`, `repo_remove_team()`, `team_members()`, and `team_pending()` now report teams that do not exist instead of silently skipping them; `branch_create()` reports an existing branch as skipped rather than failed; `action_artifacts()` failure messages now name the repo.
+* `repo_add_team()`, `repo_remove_team()`, `team_members()`, and `team_pending()` now report teams that do not exist instead of silently skipping them; `branch_create()` reports an existing branch, and `local_repo_push()` a canceled force push, as skipped rather than failed; `action_artifacts()` failure messages now name the repo.
+
+* Removed `repo_style()`.
 
 * API error details are now printed as a cli message, so `suppressMessages()` silences them; requires cli >= 3.6.0.
 

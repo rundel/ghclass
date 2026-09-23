@@ -94,7 +94,7 @@ org_accept_invite = function(org, user, pat) {
 
   d = tibble::tibble(org, user, pat)
 
-  status_scope(
+  res = status_scope(
     "Accepting invites", nrow(d),
     done = "Accepted {n_ok} of {total} invite{?s}",
     purrr::pwalk(
@@ -110,6 +110,8 @@ org_accept_invite = function(org, user, pat) {
       }
     )
   )
+
+  invisible(res)
 }
 
 # Extracts base64 encoded content from files

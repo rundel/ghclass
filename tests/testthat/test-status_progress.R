@@ -6,7 +6,10 @@ test_that("repo_create() counts unique repos and skips existing ones", {
   )
 
   out = cli::cli_fmt(res <- with_progress(repo_create("org", c("a", "b", "a"))))
-  expect_equal(out, "v Created 1 of 2 repos, 1 skipped")
+  expect_equal(
+    out,
+    c("i Skipping repo \"org/b\", it already exists.", "v Created 1 of 2 repos, 1 skipped")
+  )
   expect_equal(res, c("org/a", "org/b"))
 
   out = cli::cli_fmt(repo_create("org", c("a", "b", "a")))
@@ -24,7 +27,10 @@ test_that("team_create() counts grouped skips", {
   )
 
   out = cli::cli_fmt(with_progress(team_create("org", c("t1", "t2", "t3", "t1"))))
-  expect_equal(out, "v Created 1 of 3 teams, 2 skipped")
+  expect_equal(
+    out,
+    c("i Skipping existing teams: \"t1\" and \"t2\".", "v Created 1 of 3 teams, 2 skipped")
+  )
 
   out = cli::cli_fmt(team_create("org", c("t1", "t2", "t3", "t1")))
   expect_equal(
@@ -117,8 +123,10 @@ test_that("action_add_badge() counts repos after grouping workflows", {
     modify_file = function(...) ok_result()
   )
 
-  out = cli::cli_fmt(with_progress(action_add_badge("org/r1", workflow = c("w1", "w2"))))
-  expect_equal(out, "v Added badges to 1 of 1 repo")
+  out = cli::cli_fmt(with_progress(
+    action_add_badge(c("org/r1", "org/r2"), workflow = c("w1", "w2"))
+  ))
+  expect_equal(out, "v Added badges to 2 of 2 repos")
 })
 
 test_that("org_create_assignment() prints one summary per step", {
@@ -209,9 +217,10 @@ test_that("branch_create() counts skips and missing branches", {
   out = cli::cli_fmt(
     with_progress(branch_create("org/r", c("main", "nope", "main"), c("dev", "x", "new")))
   )
-  expect_length(out, 2)
-  expect_match(out[1], "^x Failed to create branch, .*nope.* does not exist\\.$")
-  expect_equal(out[2], "x Created 1 of 3 branches, 1 failed, 1 skipped")
+  expect_length(out, 3)
+  expect_equal(out[1], "i Skipping creation of branch \"org/r@dev\", it already exists.")
+  expect_match(out[2], "^x Failed to create branch, .*nope.* does not exist\\.$")
+  expect_equal(out[3], "x Created 1 of 3 branches, 1 failed, 1 skipped")
 })
 
 test_that("team_delete() and team_members() report missing teams", {
@@ -271,6 +280,98 @@ test_that("verbose and quiet arguments suppress the summary", {
       "x Failed to retrieve commits from \"org/bad\".",
       "\\-GitHub API error (404): Not Found",
       "x Retrieved commits for 1 of 2 repos, 1 failed"
+    )
+  )
+})
+
+test_that("org_accept_invite() returns invisibly in progress mode", {
+  local_status_output()
+  local_mocked_bindings(
+    github_api_org_accept_invite = function(org, token) list()
+  )
+
+  out = cli::cli_fmt(
+    res <- withVisible(with_progress(org_accept_invite("org", c("a", "b"), "pat")))
+  )
+  expect_equal(out, "v Accepted 2 of 2 invites")
+  expect_false(res[["visible"]])
+})
+
+test_that("action_artifact_download() counts artifacts and repos without artifacts", {
+  skip_if(Sys.which("zip") == "")
+  local_status_output()
+
+  src = withr::local_tempdir()
+  writeLines("x", file.path(src, "a.txt"))
+  zip_file = file.path(withr::local_tempdir(), "art.zip")
+  withr::with_dir(src, utils::zip(zip_file, "a.txt", flags = "-q"))
+
+  local_mocked_bindings(
+    github_api_download_artifact = function(repo, id, dest) {
+      if (id == 2) stop("GitHub API error (404): Not Found")
+      file.copy(zip_file, dest)
+    }
+  )
+
+  ids = tibble::tibble(
+    repo = c("org/a", "org/a"), id = c(1, 2), name = c("one", "two")
+  )
+  dir = withr::local_tempdir()
+
+  out = cli::cli_fmt(with_progress(
+    action_artifact_download(c("org/a", "org/b"), dir, ids = ids)
+  ))
+  expect_equal(out, c(
+    "x Failed to download artifact with id 2 from repo \"org/a\".",
+    "x No artifacts found for repo \"org/b\".",
+    "x Downloaded 1 of 3 artifacts, 2 failed"
+  ))
+})
+
+test_that("repo_mirror() counts mirrored, missing, and non-empty repos", {
+  local_status_output()
+  local_mocked_bindings(
+    repo_n_commits = function(repo, ...) tibble::tibble(repo = repo, n = c(1, NA, 5)),
+    local_repo_clone = function(...) invisible(),
+    local_repo_push = function(...) list(ok_result())
+  )
+
+  out = cli::cli_fmt(with_progress(
+    repo_mirror("org/src", c("org/a", "org/b", "org/c"), warn = FALSE)
+  ))
+  out = out[!startsWith(out, "https://")]
+  expect_equal(out[1], "x The repo \"org/b\" does not exist")
+  expect_match(out[2], "has more than one commit", fixed = TRUE)
+  expect_equal(
+    tail(out, 2),
+    c(
+      "x Mirrored \"org/src\" to 1 of 3 repos, 2 failed",
+      "v Removed local copy of \"org/src\""
+    )
+  )
+})
+
+test_that("local_repo_push() counts a canceled force push as skipped", {
+  skip_if_not_installed("gert")
+  local_status_output()
+  local_mocked_bindings(cli_yeah = function(...) FALSE)
+
+  root = withr::local_tempdir()
+  dirs = file.path(root, c("a", "b"))
+  for (d in dirs) {
+    gert::git_init(d)
+    gert::git_remote_add("https://example.com/repo.git", repo = d)
+  }
+
+  out = cli::cli_fmt(with_progress(
+    local_repo_push(dirs, branch = "main", force = TRUE, prompt = TRUE)
+  ))
+  expect_equal(
+    out,
+    c(
+      "i User canceled force push (overwrite) of \"origin/main\".",
+      "i User canceled force push (overwrite) of \"origin/main\".",
+      "i Pushed 0 of 2 repos, 2 skipped"
     )
   )
 })

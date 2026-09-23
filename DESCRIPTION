@@ -46,7 +46,6 @@ Suggests:
     here,
     knitr,
     sodium,
-    styler,
     testthat (>= 3.2.0),
     usethis,
     gert,

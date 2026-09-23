@@ -16,8 +16,9 @@ The result of evaluating \code{code}.
 By default ghclass functions that act on many repositories, teams or users
 print one line per item. Progress mode replaces the per-item success
 messages with a progress bar that shows the most recently completed step
-and prints a single summary line when the operation finishes. Failures are
-still reported in full as they happen.
+and prints a single summary line when the operation finishes. Failures and
+skipped items are still reported in full as they happen. Operations on a single item print
+their usual message.
 
 Progress mode is enabled by setting \code{options(ghclass.progress = TRUE)} or
 by wrapping code in \code{with_progress()}. Functions that do not yet support

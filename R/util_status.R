@@ -7,8 +7,9 @@
 #' By default ghclass functions that act on many repositories, teams or users
 #' print one line per item. Progress mode replaces the per-item success
 #' messages with a progress bar that shows the most recently completed step
-#' and prints a single summary line when the operation finishes. Failures are
-#' still reported in full as they happen.
+#' and prints a single summary line when the operation finishes. Failures and
+#' skipped items are still reported in full as they happen. Operations on a single item print
+#' their usual message.
 #'
 #' Progress mode is enabled by setting `options(ghclass.progress = TRUE)` or
 #' by wrapping code in `with_progress()`. Functions that do not yet support
@@ -71,7 +72,7 @@ env_encloses = function(owner, envir) {
 # Runs a loop that reports through status_msg(), status_skip(), status_fail()
 # and status_note() as a single progress bar with a summary line.
 status_scope = function(name, total, expr, done = NULL) {
-  if (!progress_enabled() || total == 0)
+  if (!progress_enabled() || total <= 1)
     return(expr)
 
   scope = new.env(parent = emptyenv())
@@ -88,7 +89,7 @@ status_scope = function(name, total, expr, done = NULL) {
   status_env[["scopes"]][[scope[["depth"]]]] = scope
   on.exit(status_scope_pop(scope), add = TRUE)
 
-  # Static output cannot clear progress lines; keep only failures and summaries.
+  # Static output cannot clear progress lines; keep only failures, skips and summaries.
   scope[["bar"]] = NULL
   if (cli::is_dynamic_tty()) {
     scope[["bar"]] = cli::cli_progress_bar(
@@ -179,9 +180,8 @@ status_text = function(msg, .envir) {
 status_skip = function(msg, n = 1L, .envir = parent.frame()) {
   scope = status_scope_for(.envir)
 
-  if (is.null(scope))
-    cli::cli_alert_info(msg, wrap = FALSE, .envir = .envir)
-  else
+  cli::cli_alert_info(msg, wrap = FALSE, .envir = .envir)
+  if (!is.null(scope))
     status_scope_event(scope, "skip", status_text(msg, .envir), n = n)
 
   invisible(NULL)
