@@ -40,9 +40,10 @@ An invisible list containing the results of each step.
 \description{
 This is a higher level function that combines the following steps:
 \itemize{
-\item Create repos
-\item Create teams and invite students if necessary
-\item Add teams or individuals to the repositories
-\item Mirror a template repository to assignment repositories
+\item Create the assignment repos, generated from \code{source_repo} if provided
+(which must be a template repository, see \code{\link[=repo_set_template]{repo_set_template()}})
+\item Create the teams and add the students to them (team assignments only)
+\item Give each team, or each individual student, push access to their repo
+\item Optionally add GitHub Actions status badges to each README (\code{add_badges = TRUE})
 }
 }

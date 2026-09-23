@@ -3,10 +3,11 @@
 #' @description
 #' This is a higher level function that combines the following steps:
 #'
-#' * Create repos
-#' * Create teams and invite students if necessary
-#' * Add teams or individuals to the repositories
-#' * Mirror a template repository to assignment repositories
+#' * Create the assignment repos, generated from `source_repo` if provided
+#'   (which must be a template repository, see [repo_set_template()])
+#' * Create the teams and add the students to them (team assignments only)
+#' * Give each team, or each individual student, push access to their repo
+#' * Optionally add GitHub Actions status badges to each README (`add_badges = TRUE`)
 #'
 #' @param org Character. Name of the GitHub organization.
 #' @param repo Character. Name of the repo(s) for the assignment.
