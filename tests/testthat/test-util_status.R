@@ -1,0 +1,119 @@
+test_that("status helpers are unchanged when progress mode is off", {
+  local_status_output()
+  withr::local_options(list(ghclass.progress = FALSE))
+
+  expect_equal(
+    cli::cli_fmt(fake_loop(c("a", "skip", "bad", "missing"))),
+    c(
+      "v Created repo \"a\".",
+      "i Skipping repo \"skip\", it already exists.",
+      "x Failed to create repo \"bad\".",
+      "\\-GitHub API error (422): Unprocessable Entity",
+      "  +- API message: Validation Failed",
+      "  \\- API docs: https://docs.github.com/rest",
+      "x Team \"missing\" does not exist."
+    )
+  )
+  expect_length(status_env[["scopes"]], 0)
+})
+
+test_that("status_scope() summarizes mixed results and keeps failure details", {
+  local_status_output()
+
+  out = cli::cli_fmt(res <- with_progress(fake_loop(c("a", "b", "skip", "bad", "missing"))))
+  expect_equal(
+    out,
+    c(
+      "x Failed to create repo \"bad\".",
+      "\\-GitHub API error (422): Unprocessable Entity",
+      "  +- API message: Validation Failed",
+      "  \\- API docs: https://docs.github.com/rest",
+      "x Team \"missing\" does not exist.",
+      "x Created 2 of 5 repos, 2 failed, 1 skipped"
+    )
+  )
+  expect_equal(res, c("a", "b", "skip", "bad", "missing"))
+  expect_length(status_env[["scopes"]], 0)
+})
+
+test_that("status_scope() summarizes success, all skipped, and empty input", {
+  local_status_output()
+
+  expect_equal(cli::cli_fmt(with_progress(fake_loop(c("a", "b")))), "v Created 2 of 2 repos")
+  expect_equal(cli::cli_fmt(with_progress(fake_loop("a"))), "v Created 1 of 1 repo")
+  expect_equal(
+    cli::cli_fmt(with_progress(fake_loop(c("skip", "skip")))),
+    "i Created 0 of 2 repos, 2 skipped"
+  )
+  expect_equal(cli::cli_fmt(with_progress(fake_loop(character()))), character())
+})
+
+test_that("events belong to the innermost scope only", {
+  local_status_output()
+
+  out = cli::cli_fmt(
+    with_progress(
+      status_scope(
+        "Outer", 2, done = "Outer finished {n_ok} of {total}",
+        {
+          fake_loop(c("a", "b"))
+          fake_loop("skip")
+          status_msg(ok_result(), "Outer item done.", "Outer item failed.")
+        }
+      )
+    )
+  )
+  expect_equal(
+    out,
+    c(
+      "v Created 2 of 2 repos",
+      "i Created 0 of 1 repo, 1 skipped",
+      "v Outer finished 1 of 2"
+    )
+  )
+  expect_length(status_env[["scopes"]], 0)
+})
+
+test_that("status_scope() reports aborted work and preserves the error", {
+  local_status_output()
+
+  out = cli::cli_fmt(
+    err <- tryCatch(with_progress(fake_loop(c("a", "b", "c"), die_at = "c")), error = identity)
+  )
+  expect_s3_class(err, "simpleError")
+  expect_equal(conditionMessage(err), "unexpected death")
+  expect_equal(out, "x Creating repos aborted after 2 of 3: 2 succeeded")
+  expect_length(status_env[["scopes"]], 0)
+  expect_false(isTRUE(getOption("ghclass.progress")))
+})
+
+test_that("status_scope() reports aborted work on interrupt", {
+  local_status_output()
+
+  out = cli::cli_fmt(
+    res <- tryCatch(
+      with_progress(fake_loop(c("bad", "skip", "c"), interrupt_at = "c")),
+      interrupt = function(e) "interrupted"
+    )
+  )
+  expect_equal(res, "interrupted")
+  expect_equal(
+    out[length(out)],
+    "x Creating repos aborted after 2 of 3: 1 failed, 1 skipped"
+  )
+  expect_length(status_env[["scopes"]], 0)
+  expect_false(isTRUE(getOption("ghclass.progress")))
+})
+
+test_that("with_progress() preserves values, visibility, and nests", {
+  local_status_output()
+
+  expect_equal(with_progress(1 + 1), 2)
+  expect_true(withVisible(with_progress(1 + 1))[["visible"]])
+  expect_false(withVisible(with_progress(invisible(1)))[["visible"]])
+  expect_true(with_progress(getOption("ghclass.progress")))
+  expect_false(isTRUE(getOption("ghclass.progress")))
+
+  out = cli::cli_fmt(with_progress(with_progress(fake_loop(c("a", "b")))))
+  expect_equal(out, "v Created 2 of 2 repos")
+})

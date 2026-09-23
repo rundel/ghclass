@@ -182,8 +182,13 @@ status_msg = function(x, success = NULL, fail = NULL, include_error_msg = TRUE,
                       .envir = parent.frame()) {
 
 
+  scope = status_scope_current()
+
   if (succeeded(x) & !is.null(success)) {
-    cli::cli_alert_success(success, wrap = FALSE, .envir = .envir)
+    if (is.null(scope))
+      cli::cli_alert_success(success, wrap = FALSE, .envir = .envir)
+    else
+      status_scope_event("ok", status_text(success, .envir))
   }
 
   if (failed(x) & !is.null(fail)) {
@@ -192,6 +197,8 @@ status_msg = function(x, success = NULL, fail = NULL, include_error_msg = TRUE,
       msg = error_msg(x)
       cli::cli_verbatim(error_msg_tree(msg))
     }
+    if (!is.null(scope))
+      status_scope_event("fail", status_text(fail, .envir))
   }
 
   invisible(x)

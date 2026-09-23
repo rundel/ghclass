@@ -42,28 +42,32 @@ repo_create = function(
 
   exists = repo_exists(repo)
 
-  res = purrr::map2(
-    repo, exists,
-    function(repo, exists) {
-      if (exists) {
-        cli::cli_alert_info("Skipping repo {.val {repo}}, it already exists.")
-        return(repo)
+  res = status_scope(
+    "Creating repos", length(repo),
+    done = "Created {n_ok} of {total} repo{?s}",
+    purrr::map2(
+      repo, exists,
+      function(repo, exists) {
+        if (exists) {
+          status_skip("Skipping repo {.val {repo}}, it already exists.")
+          return(repo)
+        }
+        res = purrr::safely(github_api_org_repo_create)(
+          repo,
+          private = private,
+          auto_init = auto_init,
+          gitignore_template = gitignore_template
+        )
+
+        status_msg(
+          res,
+          "Created repo {.val {repo}}.",
+          "Failed to create repo {.val {repo}}."
+        )
+
+        ternary(succeeded(res), repo, NULL)
       }
-      res = purrr::safely(github_api_org_repo_create)(
-        repo,
-        private = private,
-        auto_init = auto_init,
-        gitignore_template = gitignore_template
-      )
-
-      status_msg(
-        res,
-        "Created repo {.val {repo}}.",
-        "Failed to create repo {.val {repo}}."
-      )
-
-      ternary(succeeded(res), repo, NULL)
-    }
+    )
   )
 
   invisible(purrr::flatten_chr(res))

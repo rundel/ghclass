@@ -1,5 +1,9 @@
 # ghclass (development version)
 
+* Added progress mode, enabled with `with_progress()` or `options(ghclass.progress = TRUE)`, which replaces per-item success messages with a progress bar and a summary line for `repo_create()`, `repo_mirror_template()`, `repo_delete()`, `repo_add_file()`, `repo_add_user()`, `repo_add_team()`, `team_create()`, `team_invite()`, `org_invite()`, and `action_add_badge()`.
+
+* `repo_add_team()` now reports teams that do not exist instead of silently skipping them.
+
 * API error details are now printed as a cli message, so `suppressMessages()` silences them; requires cli >= 3.6.0.
 
 * `action_add_badge()` and `action_remove_badge()` now report which badges were added or removed and use descriptive commit messages; `repo_modify_file()` gained a `verbose` argument, and it and `repo_add_file()` now return an error result instead of `NULL` when the file or pattern is not found or the file already exists.

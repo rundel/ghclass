@@ -45,24 +45,28 @@ action_add_badge = function(repo, workflow = NULL, where = "^.",
       workflows = list(workflow)
     )
 
-  res = purrr::pmap(
-    d,
-    function(repo, link, workflows) {
-      repo_txt = format_repo(repo, NULL, file)
+  res = status_scope(
+    "Adding badges", nrow(d),
+    done = "Added badges to {n_ok} of {total} repo{?s}",
+    purrr::pmap(
+      d,
+      function(repo, link, workflows) {
+        repo_txt = format_repo(repo, NULL, file)
 
-      res = modify_file(
-        repo = repo, path = file, pattern = where, content = link,
-        method = "before", all = FALSE,
-        message = cli::pluralize("Add {workflows} badge{?s} to {repo_txt}"),
-        branch = NULL
-      )
+        res = modify_file(
+          repo = repo, path = file, pattern = where, content = link,
+          method = "before", all = FALSE,
+          message = cli::pluralize("Add {workflows} badge{?s} to {repo_txt}"),
+          branch = NULL
+        )
 
-      status_msg(
-        res,
-        "Added {.val {workflows}} badge{?s} to {.val {repo_txt}}.",
-        "Failed to add {.val {workflows}} badge{?s} to {.val {repo_txt}}."
-      )
-    }
+        status_msg(
+          res,
+          "Added {.val {workflows}} badge{?s} to {.val {repo_txt}}.",
+          "Failed to add {.val {workflows}} badge{?s} to {.val {repo_txt}}."
+        )
+      }
+    )
   )
 
   invisible(res)

@@ -29,6 +29,7 @@ reference:
     - starts_with("github_")
     - with_pat
     - local_pat
+    - with_progress
   - title: Local Repositories
     contents:
     - starts_with("local_repo_")

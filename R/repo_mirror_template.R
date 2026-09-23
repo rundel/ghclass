@@ -31,27 +31,31 @@ repo_mirror_template = function(source_repo, target_repo, private = TRUE) {
   target_repo = unique(target_repo)
   exists = repo_exists(target_repo)
 
-  res = purrr::map2(
-    target_repo, exists,
-    function(repo, exists) {
-      res = purrr::safely(
-        function() {
-          if (exists) {
-            cli_stop("Cannot mirror (template) to repo {.val {repo}} because this reposistory already exists.")
+  res = status_scope(
+    "Mirroring repos", length(target_repo),
+    done = "Mirrored {.val {source_repo}} to {n_ok} of {total} repo{?s}",
+    purrr::map2(
+      target_repo, exists,
+      function(repo, exists) {
+        res = purrr::safely(
+          function() {
+            if (exists) {
+              cli_stop("Cannot mirror (template) to repo {.val {repo}} because this reposistory already exists.")
+            }
+
+            github_api_repo_mirror_template(source_repo, repo, private)
           }
+        )()
 
-          github_api_repo_mirror_template(source_repo, repo, private)
-        }
-      )()
+        status_msg(
+          res,
+          "Mirrored repo {.val {source_repo}} to repo {.val {repo}}.",
+          "Failed to mirror repo {.val {source_repo}} to repo {.val {repo}}."
+        )
 
-      status_msg(
-        res,
-        "Mirrored repo {.val {source_repo}} to repo {.val {repo}}.",
-        "Failed to mirror repo {.val {source_repo}} to repo {.val {repo}}."
-      )
-
-      res
-    }
+        res
+      }
+    )
   )
 
   invisible(res)
