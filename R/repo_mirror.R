@@ -51,10 +51,11 @@ repo_mirror = function(source_repo, target_repo, overwrite=FALSE, verbose=FALSE,
           )
 
           if (!warned) {
-            msg = c(msg, paste(
+            msg = paste(
+              msg,
               "Use {.code overwrite = TRUE} if you want to permanently",
               "overwrite this repository."
-            ))
+            )
             warned <<- TRUE
           }
 

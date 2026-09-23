@@ -341,7 +341,13 @@ test_that("repo_mirror() counts mirrored, missing, and non-empty repos", {
   ))
   out = out[!startsWith(out, "https://")]
   expect_equal(out[1], "x The repo \"org/b\" does not exist")
-  expect_match(out[2], "has more than one commit", fixed = TRUE)
+  expect_equal(
+    out[2],
+    paste(
+      "x The repo \"org/c\" has more than one commit (n_commit = 5).",
+      "Use `overwrite = TRUE` if you want to permanently overwrite this repository."
+    )
+  )
   expect_equal(
     tail(out, 2),
     c(
