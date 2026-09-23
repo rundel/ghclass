@@ -1,5 +1,7 @@
 # ghclass (development version)
 
+* `action_add_badge()` and `action_remove_badge()` now report which badges were added or removed and use descriptive commit messages; `repo_modify_file()` gained a `verbose` argument, and it and `repo_add_file()` now return an error result instead of `NULL` when the file or pattern is not found or the file already exists.
+
 * Added `org_set_permissions()` to change organization member privileges (default repository permission, repository creation, forking, and team creation); `org_sitrep()` now also reports the read-only member privileges.
 
 * `org_set_repo_permission()` and `org_set_permissions()` now wait for GitHub to finish applying a previous default repository permission change instead of failing with a 409 error.

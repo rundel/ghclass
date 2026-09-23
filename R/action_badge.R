@@ -48,10 +48,19 @@ action_add_badge = function(repo, workflow = NULL, where = "^.",
   res = purrr::pmap(
     d,
     function(repo, link, workflows) {
-      repo_modify_file(
-        repo = repo, path = file,
-        pattern = where, content = link,
-        method = "before"
+      repo_txt = format_repo(repo, NULL, file)
+
+      res = modify_file(
+        repo = repo, path = file, pattern = where, content = link,
+        method = "before", all = FALSE,
+        message = cli::pluralize("Add {workflows} badge{?s} to {repo_txt}"),
+        branch = NULL
+      )
+
+      status_msg(
+        res,
+        "Added {.val {workflows}} badge{?s} to {.val {repo_txt}}.",
+        "Failed to add {.val {workflows}} badge{?s} to {.val {repo_txt}}."
       )
     }
   )
@@ -74,10 +83,19 @@ action_remove_badge = function(repo, workflow_pat = ".*?", file = "README.md") {
         "\\[!\\[{workflow_pat}\\]\\(.*?\\)\\]\\(https?://[^/]+/.*?/actions.*?\\)\\s*"
       )
 
-      repo_modify_file(
-        repo = repo, path = file,
-        pattern = pattern, content = "",
-        method = "replace", all = TRUE
+      repo_txt = format_repo(repo, NULL, file)
+
+      res = modify_file(
+        repo = repo, path = file, pattern = pattern, content = "",
+        method = "replace", all = TRUE,
+        message = paste0("Remove workflow badges from ", repo_txt),
+        branch = NULL
+      )
+
+      status_msg(
+        res,
+        "Removed workflow badges from {.val {repo_txt}}.",
+        "Failed to remove workflow badges from {.val {repo_txt}}."
       )
     }
   )

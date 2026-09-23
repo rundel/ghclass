@@ -40,7 +40,8 @@ repo_modify_file(
   method = c("replace", "before", "after"),
   all = FALSE,
   message = "Modified content",
-  branch = NULL
+  branch = NULL,
+  verbose = TRUE
 )
 
 repo_put_file(

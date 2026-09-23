@@ -52,22 +52,25 @@ repo_add_file = function(repo, file, message = NULL, repo_folder = NULL, branch 
             gh_path = fs::path(repo_folder, gh_path)
 
           if (!file_exists(repo, gh_path, branch) | overwrite) {
-            repo_put_file(
+            res = repo_put_file(
               repo = repo,
               path = gh_path,
               content = read_bin_file(file),
               message = message,
               branch = branch,
-              verbose = TRUE
+              verbose = FALSE
             )
           } else {
-            cli::cli_alert_danger( c(
-              "Failed to add file {.val {gh_path}} to repo {.val {repo}}, this file already exists. ",
-              "If you want to force add this file, re-run the command with {.code overwrite = TRUE}."
-            ) )
-
-            NULL
+            res = failed_result(
+              "File already exists, re-run with overwrite = TRUE to replace it."
+            )
           }
+
+          status_msg(
+            res,
+            "Added file {.val {gh_path}} to repo {.val {repo}}.",
+            "Failed to add file {.val {gh_path}} to repo {.val {repo}}."
+          )
         }
       )
     }
