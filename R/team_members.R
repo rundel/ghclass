@@ -36,7 +36,7 @@ team_members = function(org, team = org_teams(org), team_type = c("name", "slug"
 
           status_msg(
             res,
-            fail = "Failed to retrieve team members for {.val {team}}."
+            fail = "Failed to retrieve members for team {.val {team}}."
           )
         }
 

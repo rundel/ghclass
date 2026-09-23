@@ -68,8 +68,8 @@ repo_add_team = function(
 
         status_msg(
           res,
-          "Team {.val {slug}} given {.val {permission}} access to repo {.val {repo}}",
-          "Failed to give team {.val {slug}} {.val {permission}} access to repo {.val {repo}}."
+          "Team {.val {team}} given {.val {permission}} access to repo {.val {repo}}.",
+          "Failed to give team {.val {team}} {.val {permission}} access to repo {.val {repo}}."
         )
       }
     )

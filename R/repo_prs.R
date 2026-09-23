@@ -30,7 +30,7 @@ repo_prs = function(repo, state = c("open","closed","all"), quiet = FALSE) {
         if (!quiet) {
           status_msg(
             res,
-            fail = "Failed to retrieve pull requests from {.val {repo}}."
+            fail = "Failed to retrieve pull requests for repo {.val {repo}}."
           )
         }
 

@@ -48,10 +48,12 @@ issue_edit = function(
     state = state, milestone = milestone, labels = labels, assignees = assignees
   )
 
+  num_text = paste0("#", number)
+
   status_msg(
     res,
-    "Edited issue #{.val {number}} for repo {.val {repo}}.",
-    "Failed to edit issue #{.val {number}} for repo {.val {repo}}."
+    "Edited issue {.val {num_text}} for repo {.val {repo}}.",
+    "Failed to edit issue {.val {num_text}} for repo {.val {repo}}."
   )
 
   invisible(res)

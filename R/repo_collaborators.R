@@ -24,7 +24,7 @@ repo_collaborators = function(repo, include_admins = TRUE) {
 
         status_msg(
           res,
-          fail = "Failed to retrieve collaborators for {.val {repo}}."
+          fail = "Failed to retrieve collaborators for repo {.val {repo}}."
         )
 
         collabs = result(res)

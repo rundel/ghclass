@@ -104,8 +104,8 @@ org_accept_invite = function(org, user, pat) {
 
         status_msg(
           res,
-          "Accepted {.val {user}}s invite to org {.val {org}}.",
-          "Failed to accept {.val {user}}s invite to org {.val {org}}."
+          "Accepted invite for user {.val {user}} to org {.val {org}}.",
+          "Failed to accept invite for user {.val {user}} to org {.val {org}}."
         )
       }
     )

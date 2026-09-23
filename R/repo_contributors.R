@@ -54,7 +54,7 @@ repo_contributors = function(repo) {
 
         status_msg(
           res,
-          fail = "Failed to retrieve contributors for {.val {repo}}."
+          fail = "Failed to retrieve contributors for repo {.val {repo}}."
         )
 
         contribs = result(res)

@@ -40,7 +40,7 @@ org_remove = function(org, user, prompt = TRUE) {
   pending = user %in% org_pending(org)
 
   res = status_scope(
-    "Removing users", length(user),
+    "Removing users from org", length(user),
     done = "Removed {n_ok} of {total} user{?s} from org {.val {org}}",
     purrr::map2(
       user, pending,

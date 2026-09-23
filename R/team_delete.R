@@ -46,8 +46,8 @@ team_delete = function(org, team, team_type = c("name", "slug"), prompt = TRUE) 
 
         status_msg(
           res,
-          "Deleted team {.val {slug}} from org {.val {org}}.",
-          "Failed to delete team {.val {slug}} from org {.val {org}}."
+          "Deleted team {.val {team}} from org {.val {org}}.",
+          "Failed to delete team {.val {team}} from org {.val {org}}."
         )
       }
     )

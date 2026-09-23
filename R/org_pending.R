@@ -17,7 +17,7 @@ org_pending = function(org, filter = NULL, exclude = FALSE) {
   res = purrr::safely(github_api_org_pending)(org)
   status_msg(
     res,
-    fail = "Failed to retrieve pending members for org {.val {org}}"
+    fail = "Failed to retrieve pending members for org {.val {org}}."
   )
 
   invite = purrr::map(result(res), "login")

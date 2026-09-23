@@ -31,7 +31,7 @@ team_pending = function(org, team = org_teams(org), team_type = c("name", "slug"
 
           status_msg(
             res,
-            fail = "Failed to retrieve pending members for {.val {team}}."
+            fail = "Failed to retrieve pending members for team {.val {team}}."
           )
         }
 

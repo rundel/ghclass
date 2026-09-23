@@ -4,6 +4,8 @@
 
 * `repo_add_team()`, `repo_remove_team()`, `team_members()`, and `team_pending()` now report teams that do not exist instead of silently skipping them; `branch_create()` reports an existing branch, and `local_repo_push()` a canceled force push, as skipped rather than failed; `action_artifacts()` failure messages now name the repo.
 
+* Status messages now use consistent wording, and `repo_issues()` no longer prints a message for each repo retrieved.
+
 * Removed `repo_style()`.
 
 * API error details are now printed as a cli message, so `suppressMessages()` silences them; requires cli >= 3.6.0.

@@ -90,7 +90,7 @@ repo_commits = function(repo, branch = NULL, sha = branch, path = NULL,
         if (!quiet) {
           status_msg(
             res,
-            fail = "Failed to retrieve commits from {.val {repo}}."
+            fail = "Failed to retrieve commits for repo {.val {repo}}."
           )
         }
 

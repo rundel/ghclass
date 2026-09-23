@@ -76,8 +76,7 @@ repo_issues = function(
 
         status_msg(
           res,
-          "Retrieved issues for repo {.val {repo}}.",
-          "Failed to retrieve issues for repo {.val {repo}}."
+          fail = "Failed to retrieve issues for repo {.val {repo}}."
         )
 
         if (succeeded(res)) {

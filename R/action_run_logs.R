@@ -74,7 +74,7 @@ action_run_logs = function(
           dest_path = fs::path_norm(glue::glue("{dir}/{get_repo_name(repo)}_{run_id}.zip"))
           if (file.exists(dest_path) & !overwrite) {
             status_fail(
-              "File {.file {dest_path}} already exists, set {.code overwrite = TRUE} to overwrite this file."
+              "File {.file {dest_path}} already exists, set {.code overwrite = TRUE} to overwrite."
             )
             return(NA_character_)
           }
@@ -94,7 +94,7 @@ action_run_logs = function(
 
         status_msg(
           res,
-          "Downloaded logs for run {.val {run_id}} from repo {.val {repo}} to {.val {dest_path}}.",
+          "Downloaded logs for run {.val {run_id}} from repo {.val {repo}} to {.file {dest_path}}.",
           NULL
         )
 

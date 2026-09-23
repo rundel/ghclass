@@ -37,7 +37,7 @@ pr_create = function(repo, title, head, base, body = "", draft = FALSE) {
         status_msg(
           res,
           "Created pull request for {.val {details}}.",
-          "Failed create pull request for {.val {details}}."
+          "Failed to create pull request for {.val {details}}."
         )
       }
     )

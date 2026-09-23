@@ -52,8 +52,8 @@ repo_delete_file = function(repo, path, message = NULL, branch = NULL) {
 
         status_msg(
           res,
-          "Deleted file {.file {path}} from repo {.val {repo}}.",
-          "Failed to delete file {.file {path}} from repo {.val {repo}}."
+          "Deleted file {.val {path}} from repo {.val {repo}}.",
+          "Failed to delete file {.val {path}} from repo {.val {repo}}."
         )
 
         res

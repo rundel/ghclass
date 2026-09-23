@@ -48,7 +48,7 @@ repo_pushes = function(repo, branch = NULL, author = NULL, time_period = c("all 
         if (!quiet) {
           status_msg(
             res,
-            fail = "Failed to retrieve activity from {.val {repo}}."
+            fail = "Failed to retrieve pushes for repo {.val {repo}}."
           )
         }
 

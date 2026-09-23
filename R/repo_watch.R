@@ -34,8 +34,8 @@ repo_watch = function(repo) {
 
         status_msg(
           res,
-          "Watched {.val {repo}}.",
-          "Failed to watch {.val {repo}}."
+          "Watched repo {.val {repo}}.",
+          "Failed to watch repo {.val {repo}}."
         )
       }
     )

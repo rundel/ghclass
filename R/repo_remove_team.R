@@ -60,8 +60,8 @@ repo_remove_team = function(
 
         status_msg(
           res,
-          "Removed team {.val {slug}} from repo {.val {repo}}.",
-          "Failed to remove team {.val {slug}} from repo {.val {repo}}."
+          "Removed team {.val {team}} from repo {.val {repo}}.",
+          "Failed to remove team {.val {team}} from repo {.val {repo}}."
         )
       }
     )

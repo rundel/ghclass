@@ -33,7 +33,7 @@ repo_add_user = function(repo, user, permission = c("push", "pull", "admin", "ma
 
         status_msg(
           res,
-          "User {.val {user}} given {.val {permission}} access to repo {.val {repo}}",
+          "User {.val {user}} given {.val {permission}} access to repo {.val {repo}}.",
           "Failed to give user {.val {user}} {.val {permission}} access to repo {.val {repo}}."
         )
       }

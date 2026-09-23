@@ -41,7 +41,7 @@ team_rename = function(org, team, new_team, team_type = c("name", "slug")) {
       d,
       function(team, slug, new_team) {
         if (is.na(slug)) {
-          status_fail("Team {.val {team}} does not exist.")
+          status_fail("Team {.val {team}} does not exist in org {.val {org}}.")
           return()
         }
 

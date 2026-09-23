@@ -83,7 +83,7 @@ test_that("repo_add_team() reports missing teams", {
   expect_equal(
     out,
     c(
-      "v Team \"t1\" given \"push\" access to repo \"org/r1\"",
+      "v Team \"t1\" given \"push\" access to repo \"org/r1\".",
       "x Team \"missing\" does not exist in org \"org\"."
     )
   )
@@ -277,7 +277,7 @@ test_that("verbose and quiet arguments suppress the summary", {
   expect_equal(
     out,
     c(
-      "x Failed to retrieve commits from \"org/bad\".",
+      "x Failed to retrieve commits for repo \"org/bad\".",
       "\\-GitHub API error (404): Not Found",
       "x Retrieved commits for 1 of 2 repos, 1 failed"
     )
@@ -340,7 +340,7 @@ test_that("repo_mirror() counts mirrored, missing, and non-empty repos", {
     repo_mirror("org/src", c("org/a", "org/b", "org/c"), warn = FALSE)
   ))
   out = out[!startsWith(out, "https://")]
-  expect_equal(out[1], "x The repo \"org/b\" does not exist")
+  expect_equal(out[1], "x The repo \"org/b\" does not exist.")
   expect_equal(
     out[2],
     paste(

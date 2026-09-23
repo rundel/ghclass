@@ -83,7 +83,7 @@ pages_status = function(repo) {
 
         status_msg(
           res,
-          fail = "Failed find Pages information for repo {.val {repo}}."
+          fail = "Failed to retrieve Pages information for repo {.val {repo}}."
         )
 
         if (failed(res) || empty_result(res)) {

@@ -31,7 +31,7 @@ action_runtime = function(
 
     status_msg(
       res,
-      fail = "Failed to retrieve workflow runs for repo {.val {repo}}."
+      fail = "Failed to retrieve run time for run {.val {run_id}} from repo {.val {repo}}."
     )
 
     run_dur = result(res)$run_duration_ms

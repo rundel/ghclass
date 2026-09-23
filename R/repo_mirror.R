@@ -43,7 +43,7 @@ repo_mirror = function(source_repo, target_repo, overwrite=FALSE, verbose=FALSE,
         repo_url = cli_glue("{github_host_url()}/{repo}.git")
 
         if (is.na(n)) {
-          status_fail("The repo {.val {repo}} does not exist")
+          status_fail("The repo {.val {repo}} does not exist.")
         } else if (n > 1 & !overwrite) {
           msg = paste(
             "The repo {.val {repo}} has more than one commit",

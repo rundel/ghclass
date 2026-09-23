@@ -51,7 +51,7 @@ local_repo_rename = function(repo_dir, pattern, replacement) {
 
         status_msg(
           res,
-          "Renaming {.val {fs::path_file(cur)}} to {.val {fs::path_file(new)}}.",
+          "Renamed {.val {fs::path_file(cur)}} to {.val {fs::path_file(new)}}.",
           "Failed to rename {.val {fs::path_file(cur)}} to {.val {fs::path_file(new)}}."
         )
 
