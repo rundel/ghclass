@@ -11,7 +11,6 @@ repo_modify_file = function(repo, path, pattern, content, method = c("replace", 
                             message = "Modified content", branch = NULL, verbose = TRUE) {
   arg_is_chr(repo, path, pattern, content, message)
   arg_is_chr(branch, allow_null=TRUE)
-
   method = match.arg(method)
   arg_is_chr_scalar(method)
   arg_is_lgl_scalar(all, verbose)
@@ -19,24 +18,38 @@ repo_modify_file = function(repo, path, pattern, content, method = c("replace", 
   if (is.null(branch))
     branch = list(NULL)
 
-  res = purrr::pmap(
-    list(repo, path, pattern, content, message, branch),
-    function(repo, path, pattern, content, message, branch) {
-      repo_txt = format_repo(repo, branch, path)
+  d = tibble::tibble(repo, path, pattern, content, message, branch)
 
-      res = modify_file(repo, path, pattern, content, method, all, message, branch)
+  modify = function() {
+    purrr::pmap(
+      d,
+      function(repo, path, pattern, content, message, branch) {
+        repo_txt = format_repo(repo, branch, path)
 
-      if (verbose) {
-        status_msg(
-          res,
-          "Modified file {.val {repo_txt}}.",
-          "Failed to modify file {.val {repo_txt}}."
-        )
+        res = modify_file(repo, path, pattern, content, method, all, message, branch)
+
+        if (verbose) {
+          status_msg(
+            res,
+            "Modified file {.val {repo_txt}}.",
+            "Failed to modify file {.val {repo_txt}}."
+          )
+        }
+
+        res
       }
+    )
+  }
 
-      res
-    }
-  )
+  if (verbose) {
+    res = status_scope(
+      "Modifying files", nrow(d),
+      done = "Modified {n_ok} of {total} file{?s}",
+      modify()
+    )
+  } else {
+    res = modify()
+  }
 
   invisible(res)
 }

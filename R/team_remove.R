@@ -21,24 +21,30 @@ team_remove = function(org, user, team, team_type = c("name", "slug")) {
 
   check_team_slug(slug)
 
-  res = purrr::pmap(
-    unique( tibble::tibble(user, team, slug) ),
-    function(user, team, slug) {
-      if (is.na(slug)) {
-        cli::cli_alert_danger("Team {.val {team}} does not exist in org {.val {org}}.")
-        return(NULL)
+  d = unique(tibble::tibble(user, team, slug))
+
+  res = status_scope(
+    "Removing users from teams", nrow(d),
+    done = "Removed {n_ok} of {total} user{?s} from teams",
+    purrr::pmap(
+      d,
+      function(user, team, slug) {
+        if (is.na(slug)) {
+          status_fail("Team {.val {team}} does not exist in org {.val {org}}.")
+          return(NULL)
+        }
+
+        res = purrr::safely(github_api_team_remove)(org, slug, user)
+
+        status_msg(
+          res,
+          "Removed user {.val {user}} from team {.val {team}}.",
+          "Failed to remove user {.val {user}} from team {.val {team}}."
+        )
+
+        result(res)
       }
-
-      res = purrr::safely(github_api_team_remove)(org, slug, user)
-
-      status_msg(
-        res,
-        "Removed user {.val {user}} from team {.val {team}}.",
-        "Failed to remove user {.val {user}} from team {.val {team}}."
-      )
-
-      result(res)
-    }
+    )
   )
 
   invisible(res)

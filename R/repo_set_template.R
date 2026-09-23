@@ -16,21 +16,26 @@ github_api_repo_edit = function(repo, ...) {
 #' @export
 #'
 repo_set_template = function(repo, status = TRUE) {
-
   arg_is_chr(repo)
   arg_is_lgl(status)
 
-  # Checking if repo exists
-  res = purrr::map2(
-    repo, status,
-    function(repo, status) {
-      res = purrr::safely(github_api_repo_edit)(repo, is_template = status)
-      status_msg(
-        res,
-        "Changed the template status of repo {.val {repo}} to {.val {status}}.",
-        "Failed to change template status of repo {.val {repo}}."
-      )
-    }
+  d = tibble::tibble(repo, status)
+
+  res = status_scope(
+    "Changing template status", nrow(d),
+    done = "Changed template status for {n_ok} of {total} repo{?s}",
+    purrr::pmap(
+      d,
+      function(repo, status) {
+        res = purrr::safely(github_api_repo_edit)(repo, is_template = status)
+
+        status_msg(
+          res,
+          "Changed the template status of repo {.val {repo}} to {.val {status}}.",
+          "Failed to change template status of repo {.val {repo}}."
+        )
+      }
+    )
   )
 
   invisible(res)

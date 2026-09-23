@@ -23,7 +23,6 @@ github_api_org_remove_membership = function(org, user) {
 #' @export
 #'
 org_remove = function(org, user, prompt = TRUE) {
-
   arg_is_chr_scalar(org)
   arg_is_chr(user, allow_null = TRUE)
   arg_is_lgl_scalar(prompt)
@@ -40,21 +39,26 @@ org_remove = function(org, user, prompt = TRUE) {
 
   pending = user %in% org_pending(org)
 
-  res = purrr::map2(
-    user, pending,
-    function(user, pending) {
-      if (pending)
-        res = purrr::safely(github_api_org_remove_membership)(org, user)
-      else
-        res = purrr::safely(github_api_org_remove)(org, user)
+  res = status_scope(
+    "Removing users", length(user),
+    done = "Removed {n_ok} of {total} user{?s} from org {.val {org}}",
+    purrr::map2(
+      user, pending,
+      function(user, pending) {
+        if (pending)
+          res = purrr::safely(github_api_org_remove_membership)(org, user)
+        else
+          res = purrr::safely(github_api_org_remove)(org, user)
 
-      type = ternary(pending, "pending user", "user")
-      status_msg(
-        res,
-        "Removed {type} {.val {user}} from org {.val {org}}.",
-        "Failed to remove {type} {.val {user}} from org {.val {org}}."
-      )
-    }
+        type = ternary(pending, "pending user", "user")
+
+        status_msg(
+          res,
+          "Removed {type} {.val {user}} from org {.val {org}}.",
+          "Failed to remove {type} {.val {user}} from org {.val {org}}."
+        )
+      }
+    )
   )
 
   invisible(res)

@@ -117,3 +117,46 @@ test_that("with_progress() preserves values, visibility, and nests", {
   out = cli::cli_fmt(with_progress(with_progress(fake_loop(c("a", "b")))))
   expect_equal(out, "v Created 2 of 2 repos")
 })
+
+test_that("reporters called from inside a loop are not counted by its scope", {
+  local_status_output()
+
+  out = cli::cli_fmt(
+    with_progress(
+      status_scope(
+        "Outer", 1, done = "Outer {n_ok} of {total}",
+        {
+          outside_reporter()
+          status_msg(ok_result(), "Own item.", "Own item failed.")
+        }
+      )
+    )
+  )
+  expect_equal(out, c("v Reporter ran.", "v Outer 1 of 1"))
+})
+
+test_that("status_msg() counts outcomes without messages and status_note() counts nothing", {
+  local_status_output()
+
+  out = cli::cli_fmt(
+    with_progress(
+      status_scope(
+        "Fetching", 3, done = "Fetched {n_ok} of {total}",
+        {
+          status_msg(ok_result(), fail = "Failed one.")
+          status_note("Half way there.")
+          status_msg(api_error_result(), fail = NULL)
+          status_msg(ok_result())
+        }
+      )
+    )
+  )
+  expect_equal(out, "x Fetched 2 of 3, 1 failed")
+
+  out = cli::cli_fmt({
+    status_msg(ok_result(), fail = "Failed one.")
+    status_note("Half way there.")
+    status_msg(api_error_result(), fail = NULL)
+  })
+  expect_equal(out, "v Half way there.")
+})

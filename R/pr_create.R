@@ -17,25 +17,30 @@ github_api_pr_create = function(repo, head, base, title, body, draft = TRUE){
 #' @export
 #'
 pr_create = function(repo, title, head, base, body = "", draft = FALSE) {
-
   arg_is_chr(repo, title, base, head, body)
   arg_is_lgl(draft)
 
-  res = purrr::pmap(
-    list(repo, base, head, title, body, draft),
-    function(repo, base, head, title, body, draft) {
-      res = purrr::safely(github_api_pr_create)(
-        repo, base = base, head = head, title = title, body = body, draft = draft
-      )
+  d = tibble::tibble(repo, base, head, title, body, draft)
 
-      details = cli_glue("{repo} ({base} <- {head})")
+  res = status_scope(
+    "Creating pull requests", nrow(d),
+    done = "Created {n_ok} of {total} pull request{?s}",
+    purrr::pmap(
+      d,
+      function(repo, base, head, title, body, draft) {
+        res = purrr::safely(github_api_pr_create)(
+          repo, base = base, head = head, title = title, body = body, draft = draft
+        )
 
-      status_msg(
-        res,
-        "Created pull request for {.val {details}}.",
-        "Failed create pull request for {.val {details}}."
-      )
-    }
+        details = cli_glue("{repo} ({base} <- {head})")
+
+        status_msg(
+          res,
+          "Created pull request for {.val {details}}.",
+          "Failed create pull request for {.val {details}}."
+        )
+      }
+    )
   )
 
   invisible(res)

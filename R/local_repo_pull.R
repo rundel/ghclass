@@ -3,29 +3,33 @@
 #'
 local_repo_pull = function(repo_dir, verbose = FALSE) {
   # TODO - add support for remotes when added to gert
-  require_gert()
 
+  require_gert()
   arg_is_chr(repo_dir)
   arg_is_lgl_scalar(verbose)
 
   dir = repo_dir_helper(repo_dir)
 
-  res = purrr::map(
-    dir,
-    function(dir) {
-      res = purrr::safely(gert::git_pull)(
-        repo = dir
-      )
+  res = status_scope(
+    "Pulling repos", length(dir),
+    done = "Pulled {n_ok} of {total} repo{?s}",
+    purrr::map(
+      dir,
+      function(dir) {
+        res = purrr::safely(gert::git_pull)(
+          repo = dir
+        )
 
-      repo = fs::path_file(dir)
-      status_msg(
-        res,
-        "Pulled to local repo {.val {repo}}.",
-        "Failed to pull to local repo {.val {repo}}."
-      )
+        repo = fs::path_file(dir)
+        status_msg(
+          res,
+          "Pulled to local repo {.val {repo}}.",
+          "Failed to pull to local repo {.val {repo}}."
+        )
 
-      res
-    }
+        res
+      }
+    )
   )
 
   invisible(res)

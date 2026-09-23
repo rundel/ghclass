@@ -14,20 +14,26 @@ github_api_repo_remove_user = function(repo, username){
 repo_remove_user = function(repo, user) {
   arg_is_chr(repo, user)
 
-  res = purrr::map2(
-    repo, user,
-    function(repo, user) {
-      res = purrr::safely(github_api_repo_remove_user)(
-        repo = repo,
-        username = user
-      )
+  d = tibble::tibble(repo, user)
 
-      status_msg(
-        res,
-        "Removed user {.val {user}} from repo {.val {repo}}.",
-        "Failed to remove user {.val {user}} from repo {.val {repo}}."
-      )
-    }
+  res = status_scope(
+    "Removing users from repos", nrow(d),
+    done = "Removed {n_ok} of {total} user{?s} from repos",
+    purrr::pmap(
+      d,
+      function(repo, user) {
+        res = purrr::safely(github_api_repo_remove_user)(
+          repo = repo,
+          username = user
+        )
+
+        status_msg(
+          res,
+          "Removed user {.val {user}} from repo {.val {repo}}.",
+          "Failed to remove user {.val {user}} from repo {.val {repo}}."
+        )
+      }
+    )
   )
 
   invisible(res)

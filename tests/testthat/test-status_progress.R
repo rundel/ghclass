@@ -150,3 +150,127 @@ test_that("org_create_assignment() prints one summary per step", {
     )
   )
 })
+
+test_that("action_runs() counts workflows across repos", {
+  local_status_output()
+  local_mocked_bindings(
+    action_workflows = function(repo, ...) tibble::tibble(name = c("w1", "w2"), id = c(1L, 2L)),
+    github_api_action_workflow_runs = function(repo, workflow_id, ...) {
+      list(total_count = 1, workflow_runs = list(list(
+        id = workflow_id, head_branch = "main", head_sha = "abc", actor = list(login = "a"),
+        event = "push", status = "completed", conclusion = "success",
+        created_at = "2024-01-01T00:00:00Z"
+      )))
+    }
+  )
+
+  out = cli::cli_fmt(res <- with_progress(action_runs(c("org/r1", "org/r2"))))
+  expect_equal(out, "v Retrieved runs for 4 of 4 workflows")
+  expect_equal(nrow(res), 4)
+  expect_equal(res[["workflow"]], c("w1", "w2", "w1", "w2"))
+})
+
+test_that("issue_close() counts each issue once", {
+  local_status_output()
+  local_mocked_bindings(
+    github_api_issue_comment = function(repo, number, body) {
+      if (number == 2) stop("GitHub API error (404): Not Found") else list(id = 1)
+    },
+    github_api_issue_edit = function(repo, number, ...) list(state = "closed")
+  )
+
+  out = cli::cli_fmt(with_progress(issue_close("org/r", c(1, 2), comment = "Done")))
+  expect_equal(
+    out,
+    c(
+      "x Failed to comment on issue \"#2\" for repo \"org/r\".",
+      "\\-GitHub API error (404): Not Found",
+      "x Closed 1 of 2 issues, 1 failed"
+    )
+  )
+
+  out = cli::cli_fmt(issue_close("org/r", 1, comment = "Done"))
+  expect_equal(
+    out,
+    c(
+      "v Commented on issue \"#1\" for repo \"org/r\".",
+      "v Closed issue \"#1\" for repo \"org/r\"."
+    )
+  )
+})
+
+test_that("branch_create() counts skips and missing branches", {
+  local_status_output()
+  local_mocked_bindings(
+    repo_branches = function(repo, ...) c("main", "dev"),
+    github_api_branch_create = function(repo, branch, new_branch) list(ref = new_branch)
+  )
+
+  out = cli::cli_fmt(
+    with_progress(branch_create("org/r", c("main", "nope", "main"), c("dev", "x", "new")))
+  )
+  expect_length(out, 2)
+  expect_match(out[1], "^x Failed to create branch, .*nope.* does not exist\\.$")
+  expect_equal(out[2], "x Created 1 of 3 branches, 1 failed, 1 skipped")
+})
+
+test_that("team_delete() and team_members() report missing teams", {
+  local_status_output()
+  local_mocked_bindings(
+    team_slug_lookup = function(org, name) ifelse(name == "missing", NA, name),
+    github_api_team_delete = function(org, team_slug) list(),
+    github_api_team_members = function(org, team_slug, ...) list(list(login = "u1"))
+  )
+
+  out = cli::cli_fmt(with_progress(team_delete("org", c("t1", "missing"), prompt = FALSE)))
+  expect_equal(
+    out,
+    c(
+      "x Team \"missing\" does not exist in org \"org\".",
+      "x Deleted 1 of 2 teams from org \"org\", 1 failed"
+    )
+  )
+
+  out = cli::cli_fmt(res <- with_progress(team_members("org", c("t1", "missing"))))
+  expect_equal(
+    out,
+    c(
+      "x Team \"missing\" does not exist in org \"org\".",
+      "x Retrieved members for 1 of 2 teams, 1 failed"
+    )
+  )
+  expect_equal(res[["user"]], "u1")
+})
+
+test_that("verbose and quiet arguments suppress the summary", {
+  local_status_output()
+  local_mocked_bindings(
+    modify_file = function(...) ok_result(),
+    github_api_repo_commits = function(repo, ...) {
+      if (repo == "org/bad") stop("GitHub API error (404): Not Found") else list()
+    }
+  )
+
+  out = cli::cli_fmt(
+    with_progress(repo_modify_file(c("org/r1", "org/r2"), "README.md", "a", "b", verbose = FALSE))
+  )
+  expect_equal(out, character())
+
+  out = cli::cli_fmt(
+    with_progress(repo_modify_file(c("org/r1", "org/r2"), "README.md", "a", "b"))
+  )
+  expect_equal(out, "v Modified 2 of 2 files")
+
+  out = cli::cli_fmt(with_progress(repo_commits(c("org/r1", "org/bad"), quiet = TRUE)))
+  expect_equal(out, character())
+
+  out = cli::cli_fmt(with_progress(repo_commits(c("org/r1", "org/bad"))))
+  expect_equal(
+    out,
+    c(
+      "x Failed to retrieve commits from \"org/bad\".",
+      "\\-GitHub API error (404): Not Found",
+      "x Retrieved commits for 1 of 2 repos, 1 failed"
+    )
+  )
+})

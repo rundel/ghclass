@@ -41,34 +41,41 @@ github_api_branch_create = function(repo, branch, new_branch) {
 branch_create = function(repo, branch, new_branch) {
   arg_is_chr(repo, branch, new_branch)
 
-  invisible( purrr::pmap(
-    list(repo, branch, new_branch),
-    function(repo, branch, new_branch) {
+  d = tibble::tibble(repo, branch, new_branch)
 
-      cur_repo = format_repo(repo, branch)
-      new_repo = format_repo(repo, new_branch)
+  res = status_scope(
+    "Creating branches", nrow(d),
+    done = "Created {n_ok} of {total} branch{?es}",
+    purrr::pmap(
+      d,
+      function(repo, branch, new_branch) {
+        cur_repo = format_repo(repo, branch)
+        new_repo = format_repo(repo, new_branch)
 
-      branches = repo_branches(repo)
+        branches = repo_branches(repo)
 
-      if (!branch %in% branches) {
-        cli::cli_alert_danger("Failed to create branch, {.val {cur_repo}} does not exist.")
-        return()
+        if (!branch %in% branches) {
+          status_fail("Failed to create branch, {.val {cur_repo}} does not exist.")
+          return()
+        }
+
+        if (new_branch %in% branches) {
+          status_skip("Skipping creation of branch {.val {new_repo}}, it already exists.")
+          return()
+        }
+
+        res = purrr::safely(github_api_branch_create)(repo, branch, new_branch)
+
+        status_msg(
+          res,
+          "Created branch {.val {new_branch}} in repo {.val {repo}}.",
+          "Failed to create branch {.val {new_branch}} in repo {.val {repo}}."
+        )
+
+        res
       }
+    )
+  )
 
-      if (new_branch %in% branches) {
-        cli::cli_alert_danger("Skipping creation of branch {.val {new_repo}}, it already exists.")
-        return()
-      }
-
-      res = purrr::safely(github_api_branch_create)(repo, branch, new_branch)
-
-      status_msg(
-        res,
-        "Created branch {.val {new_branch}} in repo {.val {repo}}.",
-        "Failed to create branch {.val {new_branch}} in repo {.val {repo}}."
-      )
-
-      res
-    }
-  ) )
+  invisible(res)
 }

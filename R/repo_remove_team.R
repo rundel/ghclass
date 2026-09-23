@@ -35,28 +35,36 @@ repo_remove_team = function(
   d = dplyr::distinct(d)
 
   if (team_type == "name")
-    d[["team"]] = team_slug_lookup(org, d[["team"]])
+    d[["slug"]] = team_slug_lookup(org, d[["team"]])
+  else
+    d[["slug"]] = d[["team"]]
 
-  check_team_slug(d[["team"]])
+  check_team_slug(d[["slug"]])
 
-  res = purrr::pmap(
-    d,
-    function(team, repo) {
-      if (is.na(team))
-        return()
+  res = status_scope(
+    "Removing teams from repos", nrow(d),
+    done = "Removed {n_ok} of {total} team{?s} from repos",
+    purrr::pmap(
+      d,
+      function(team, repo, slug) {
+        if (is.na(slug)) {
+          status_fail("Team {.val {team}} does not exist in org {.val {org}}.")
+          return()
+        }
 
-      res = purrr::safely(github_api_repo_remove_team)(
-        org = org,
-        team_slug = team,
-        repo = repo
-      )
+        res = purrr::safely(github_api_repo_remove_team)(
+          org = org,
+          team_slug = slug,
+          repo = repo
+        )
 
-      status_msg(
-        res,
-        "Removed team {.val {team}} from repo {.val {repo}}.",
-        "Failed to remove team {.val {team}} from repo {.val {repo}}."
-      )
-    }
+        status_msg(
+          res,
+          "Removed team {.val {slug}} from repo {.val {repo}}.",
+          "Failed to remove team {.val {slug}} from repo {.val {repo}}."
+        )
+      }
+    )
   )
 
   invisible(res)

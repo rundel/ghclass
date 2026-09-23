@@ -144,22 +144,26 @@ local_repo_anonymize = function(
   git_summ = tibble::tibble()
   if (length(layout$repos) > 0) {
     if (git_history == "delete") {
-      git_summ = dplyr::bind_rows(purrr::map(
-        layout$repos,
-        function(repo) {
-          res = purrr::safely(anon_git_delete)(repo)
-          status_msg(
-            res,
-            "Deleted git history for {.val {fs::path_file(repo)}}.",
-            "Failed to delete git history for {.val {fs::path_file(repo)}}."
-          )
-          tibble::tibble(
-            repo = fs::path_file(repo),
-            git_history = git_history,
-            deleted = succeeded(res)
-          )
-        }
-      ))
+      git_summ = status_scope(
+        "Deleting git history", length(layout$repos),
+        done = "Deleted git history for {n_ok} of {total} repo{?s}",
+        dplyr::bind_rows(purrr::map(
+          layout$repos,
+          function(repo) {
+            res = purrr::safely(anon_git_delete)(repo)
+            status_msg(
+              res,
+              "Deleted git history for {.val {fs::path_file(repo)}}.",
+              "Failed to delete git history for {.val {fs::path_file(repo)}}."
+            )
+            tibble::tibble(
+              repo = fs::path_file(repo),
+              git_history = git_history,
+              deleted = succeeded(res)
+            )
+          }
+        ))
+      )
     } else {
       git_summ = tibble::tibble(
         repo = fs::path_file(layout$repos),

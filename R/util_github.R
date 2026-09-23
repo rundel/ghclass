@@ -92,17 +92,23 @@ github_api_org_accept_invite = function(org, token) {
 org_accept_invite = function(org, user, pat) {
   arg_is_chr(org, pat)
 
-  purrr::pwalk(
-    list(org, user, pat),
-    function(org, user, pat) {
-      res = purrr::safely(github_api_org_accept_invite)(org, pat)
+  d = tibble::tibble(org, user, pat)
 
-      status_msg(
-        res,
-        "Accepted {.val {user}}s invite to org {.val {org}}.",
-        "Failed to accept {.val {user}}s invite to org {.val {org}}."
-      )
-    }
+  status_scope(
+    "Accepting invites", nrow(d),
+    done = "Accepted {n_ok} of {total} invite{?s}",
+    purrr::pwalk(
+      d,
+      function(org, user, pat) {
+        res = purrr::safely(github_api_org_accept_invite)(org, pat)
+
+        status_msg(
+          res,
+          "Accepted {.val {user}}s invite to org {.val {org}}.",
+          "Failed to accept {.val {user}}s invite to org {.val {org}}."
+        )
+      }
+    )
   )
 }
 

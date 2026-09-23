@@ -45,3 +45,7 @@ fake_loop = function(items, die_at = NULL, interrupt_at = NULL) {
     }
   )
 }
+
+outside_reporter = function() {
+  status_msg(ok_result(), "Reporter ran.", "Reporter failed.")
+}

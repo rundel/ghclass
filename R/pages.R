@@ -73,45 +73,50 @@ pages_enabled = function(repo) {
 pages_status = function(repo) {
   arg_is_chr(repo)
 
-  purrr::map_dfr(
-    repo,
-    function(repo) {
-      res = purrr::safely(github_api_pages)(repo)
+  status_scope(
+    "Retrieving Pages status", length(repo),
+    done = "Retrieved Pages status for {n_ok} of {total} repo{?s}",
+    purrr::map_dfr(
+      repo,
+      function(repo) {
+        res = purrr::safely(github_api_pages)(repo)
 
-      status_msg(
-        res,
-        fail = "Failed find Pages information for repo {.val {repo}}."
-      )
+        status_msg(
+          res,
+          fail = "Failed find Pages information for repo {.val {repo}}."
+        )
 
-      if (failed(res) || empty_result(res)) {
-        tibble::tibble(
-          repo = character(),
-          status = character(),
-          url    = character(),
-          build_type = character(),
-          branch = character(),
-          path   = character(),
-          public = logical(),
-          cname  = character(),
-          custom_404 = logical(),
-          https_enforced = logical()
-        )
-      } else {
-        page = list(result(res))
-        tibble::tibble(
-          repo   = repo,
-          status = purrr::map_chr(page, "status", .default = NA),
-          url    = purrr::map_chr(page, "html_url", .default = NA),
-          build_type = purrr::map_chr(page, "build_type", .default = NA),
-          branch = purrr::map_chr(page, c("source", "branch"), .default = NA),
-          path   = purrr::map_chr(page, c("source", "path"), .default = NA),
-          public = purrr::map_lgl(page, "public", .default = NA),
-          cname  = purrr::map_chr(page, "cname", .default = NA),
-          custom_404 = purrr::map_lgl(page, "custom_404", .default = NA),
-          https_enforced = purrr::map_lgl(page, "https_enforced", .default = NA)
-        )
+        if (failed(res) || empty_result(res)) {
+          tibble::tibble(
+            repo = character(),
+            status = character(),
+            url    = character(),
+            build_type = character(),
+            branch = character(),
+            path   = character(),
+            public = logical(),
+            cname  = character(),
+            custom_404 = logical(),
+            https_enforced = logical()
+          )
+        } else {
+          page = list(result(res))
+
+          tibble::tibble(
+            repo   = repo,
+            status = purrr::map_chr(page, "status", .default = NA),
+            url    = purrr::map_chr(page, "html_url", .default = NA),
+            build_type = purrr::map_chr(page, "build_type", .default = NA),
+            branch = purrr::map_chr(page, c("source", "branch"), .default = NA),
+            path   = purrr::map_chr(page, c("source", "path"), .default = NA),
+            public = purrr::map_lgl(page, "public", .default = NA),
+            cname  = purrr::map_chr(page, "cname", .default = NA),
+            custom_404 = purrr::map_lgl(page, "custom_404", .default = NA),
+            https_enforced = purrr::map_lgl(page, "https_enforced", .default = NA)
+          )
+        }
       }
-    }
+    )
   )
 }
 
@@ -153,24 +158,30 @@ pages_create = function(
     path = "/"
 ) {
   build_type = match.arg(build_type)
+
   arg_is_chr(repo)
   arg_is_chr_scalar(build_type, branch, path)
 
-  purrr::map(
-    repo,
-    function(repo) {
-      res = purrr::safely(github_api_pages_create)(repo, build_type, branch, path)
+  res = status_scope(
+    "Creating Pages sites", length(repo),
+    done = "Created Pages sites for {n_ok} of {total} repo{?s}",
+    purrr::map(
+      repo,
+      function(repo) {
+        res = purrr::safely(github_api_pages_create)(repo, build_type, branch, path)
 
-      status_msg(
-        res,
-        "Created Pages site for {.val {repo}}.",
-        "Failed to create Pages site for repo {.val {repo}}."
-      )
+        status_msg(
+          res,
+          "Created Pages site for {.val {repo}}.",
+          "Failed to create Pages site for repo {.val {repo}}."
+        )
 
-      res
-    }
-  ) %>%
-    invisible()
+        res
+      }
+    )
+  )
+
+  invisible(res)
 }
 
 
@@ -205,20 +216,25 @@ pages_delete = function(repo, prompt = TRUE) {
     }
   }
 
-  purrr::map(
-    repo,
-    function(repo) {
-      res = purrr::safely(github_api_pages_delete)(repo)
+  res = status_scope(
+    "Deleting Pages sites", length(repo),
+    done = "Deleted Pages sites for {n_ok} of {total} repo{?s}",
+    purrr::map(
+      repo,
+      function(repo) {
+        res = purrr::safely(github_api_pages_delete)(repo)
 
-      status_msg(
-        res,
-        "Deleted Pages site for repo {.val {repo}}.",
-        "Failed to delete Pages site for repo {.val {repo}}."
-      )
+        status_msg(
+          res,
+          "Deleted Pages site for repo {.val {repo}}.",
+          "Failed to delete Pages site for repo {.val {repo}}."
+        )
 
-      res
-    }
-  ) %>%
-    invisible()
+        res
+      }
+    )
+  )
+
+  invisible(res)
 }
 

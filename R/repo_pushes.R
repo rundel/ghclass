@@ -29,9 +29,7 @@ github_api_repo_activity = function(repo,  ref = NULL, actor = NULL, time_period
 #'
 
 repo_pushes = function(repo, branch = NULL, author = NULL, time_period = c("all time", "day", "week", "month", "quarter", "year"), quiet = FALSE) {
-
   time_period = match.arg(time_period)
-
   if (time_period == "all time")
     time_period = NULL
 
@@ -39,45 +37,56 @@ repo_pushes = function(repo, branch = NULL, author = NULL, time_period = c("all 
   arg_is_chr_scalar(branch, author, time_period, allow_null = TRUE)
   arg_is_lgl_scalar(quiet)
 
-  purrr::map_dfr(
-    repo,
-    function(repo) {
-      res = purrr::safely(github_api_repo_activity)(
-        repo, ref = branch, actor = author, time_period = time_period, activity_type = "push"
-      )
-
-      if (!quiet) {
-        status_msg(
-          res,
-          fail = "Failed to retrieve activity from {.val {repo}}."
+  retrieve = function() {
+    purrr::map_dfr(
+      repo,
+      function(repo) {
+        res = purrr::safely(github_api_repo_activity)(
+          repo, ref = branch, actor = author, time_period = time_period, activity_type = "push"
         )
+
+        if (!quiet) {
+          status_msg(
+            res,
+            fail = "Failed to retrieve activity from {.val {repo}}."
+          )
+        }
+
+        pushes = result(res)
+
+        if (empty_result(pushes)) {
+          tibble::tibble(
+            repo  = character(),
+            login = character(),
+            ref  = character(),
+            activity = character(),
+            date  = as.POSIXct(character()),
+            before = character(),
+            after = character()
+          )
+        } else {
+          tibble::tibble(
+            repo   = repo,
+            login  = purrr::map_chr(pushes, c("actor", "login"), .default = NA),
+            ref    = purrr::map_chr(pushes, c("ref"), .default = NA),
+            activity = purrr::map_chr(pushes, c("activity_type"), .default = NA),
+            date   = lubridate::ymd_hms(
+              purrr::map_chr(pushes, c("timestamp"), .default = NA)
+            ),
+            before = purrr::map_chr(pushes, c("before"), .default = NA),
+            after  = purrr::map_chr(pushes, c("after"), .default = NA)
+          )
+        }
       }
+    )
+  }
 
-      pushes = result(res)
+  if (quiet)
+    return(retrieve())
 
-      if (empty_result(pushes)) {
-        tibble::tibble(
-          repo  = character(),
-          login = character(),
-          ref  = character(),
-          activity = character(),
-          date  = as.POSIXct(character()),
-          before = character(),
-          after = character()
-        )
-      } else {
-        tibble::tibble(
-          repo   = repo,
-          login  = purrr::map_chr(pushes, c("actor", "login"), .default = NA),
-          ref    = purrr::map_chr(pushes, c("ref"), .default = NA),
-          activity = purrr::map_chr(pushes, c("activity_type"), .default = NA),
-          date   = lubridate::ymd_hms(
-            purrr::map_chr(pushes, c("timestamp"), .default = NA)
-          ),
-          before = purrr::map_chr(pushes, c("before"), .default = NA),
-          after  = purrr::map_chr(pushes, c("after"), .default = NA)
-        )
-      }
-    }
+  status_scope(
+    "Retrieving pushes", length(repo),
+    done = "Retrieved pushes for {n_ok} of {total} repo{?s}",
+    retrieve()
   )
 }

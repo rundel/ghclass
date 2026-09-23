@@ -13,17 +13,21 @@ github_api_repo_unwatch = function(repo){
 repo_unwatch = function(repo) {
   arg_is_chr(repo)
 
-  res = purrr::map(
-    repo,
-    function(repo) {
-      res = purrr::safely(github_api_repo_unwatch)(repo)
+  res = status_scope(
+    "Unwatching repos", length(repo),
+    done = "Unwatched {n_ok} of {total} repo{?s}",
+    purrr::map(
+      repo,
+      function(repo) {
+        res = purrr::safely(github_api_repo_unwatch)(repo)
 
-      status_msg(
-        res,
-        "Unwatched repo {.val {repo}}.",
-        "Failed to unwatch repo {.val {repo}}."
-      )
-    }
+        status_msg(
+          res,
+          "Unwatched repo {.val {repo}}.",
+          "Failed to unwatch repo {.val {repo}}."
+        )
+      }
+    )
   )
 
   invisible(res)

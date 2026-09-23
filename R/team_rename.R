@@ -32,22 +32,28 @@ team_rename = function(org, team, new_team, team_type = c("name", "slug")) {
 
   check_team_slug(slug)
 
-  res = purrr::pmap(
-    tibble::tibble(team, slug, new_team),
-    function(team, slug, new_team) {
-      if (is.na(slug)) {
-        cli::cli_alert_danger("Team {.val {team}} does not exist.")
-        return()
+  d = tibble::tibble(team, slug, new_team)
+
+  res = status_scope(
+    "Renaming teams", nrow(d),
+    done = "Renamed {n_ok} of {total} team{?s}",
+    purrr::pmap(
+      d,
+      function(team, slug, new_team) {
+        if (is.na(slug)) {
+          status_fail("Team {.val {team}} does not exist.")
+          return()
+        }
+
+        res = purrr::safely(github_api_team_update)(org, slug, name = new_team)
+
+        status_msg(
+          res,
+          "Renamed team {.val {team}} to {.val {new_team}}.",
+          "Failed to rename team {.val {team}} to {.val {new_team}}."
+        )
       }
-
-      res = purrr::safely(github_api_team_update)(org, slug, name = new_team)
-
-      status_msg(
-        res,
-        "Renamed team {.val {team}} to {.val {new_team}}.",
-        "Failed to rename team {.val {team}} to {.val {new_team}}."
-      )
-    }
+    )
   )
 
   invisible(res)

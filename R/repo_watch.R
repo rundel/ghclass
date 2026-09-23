@@ -20,21 +20,25 @@ github_api_repo_subscribe = function(repo, subscribed, ignored){
 repo_watch = function(repo) {
   arg_is_chr(repo)
 
-  res = purrr::map(
-    repo,
-    function(repo, notifications) {
-      res = purrr::safely(github_api_repo_subscribe)(
-        repo,
-        subscribed = TRUE,
-        ignored = FALSE
-      )
+  res = status_scope(
+    "Watching repos", length(repo),
+    done = "Watched {n_ok} of {total} repo{?s}",
+    purrr::map(
+      repo,
+      function(repo) {
+        res = purrr::safely(github_api_repo_subscribe)(
+          repo,
+          subscribed = TRUE,
+          ignored = FALSE
+        )
 
-      status_msg(
-        res,
-        "Watched {.val {repo}}.",
-        "Failed to watch {.val {repo}}."
-      )
-    }
+        status_msg(
+          res,
+          "Watched {.val {repo}}.",
+          "Failed to watch {.val {repo}}."
+        )
+      }
+    )
   )
 
   invisible(res)
@@ -46,21 +50,25 @@ repo_watch = function(repo) {
 repo_ignore = function(repo) {
   arg_is_chr(repo)
 
-  res = purrr::map(
-    repo,
-    function(repo, notifications) {
-      res = purrr::safely(github_api_repo_subscribe)(
-        repo,
-        subscribed = FALSE,
-        ignored = TRUE
-      )
+  res = status_scope(
+    "Ignoring repos", length(repo),
+    done = "Ignored {n_ok} of {total} repo{?s}",
+    purrr::map(
+      repo,
+      function(repo) {
+        res = purrr::safely(github_api_repo_subscribe)(
+          repo,
+          subscribed = FALSE,
+          ignored = TRUE
+        )
 
-      status_msg(
-        res,
-        "Ignored repo {.val {repo}}.",
-        "Failed to ignore repo {.val {repo}}."
-      )
-    }
+        status_msg(
+          res,
+          "Ignored repo {.val {repo}}.",
+          "Failed to ignore repo {.val {repo}}."
+        )
+      }
+    )
   )
 
   invisible(res)

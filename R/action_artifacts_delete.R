@@ -18,11 +18,11 @@ github_api_delete_artifact = function(repo, id) {
 #' @export
 #'
 action_artifact_delete = function(repo, ids) {
-
   arg_is_chr(repo)
 
   if (is.numeric(ids))
     ids = tibble::tibble(repo = repo, id = ids)
+
   arg_is_df(ids)
 
   df = dplyr::left_join(
@@ -31,17 +31,21 @@ action_artifact_delete = function(repo, ids) {
   ) %>%
     dplyr::select("repo", "id")
 
-  purrr::pwalk(
-    df,
-    function(repo, id) {
-      res = purrr::safely(github_api_delete_artifact)(repo, id)
+  status_scope(
+    "Deleting artifacts", nrow(df),
+    done = "Deleted {n_ok} of {total} artifact{?s}",
+    purrr::pwalk(
+      df,
+      function(repo, id) {
+        res = purrr::safely(github_api_delete_artifact)(repo, id)
 
-      status_msg(
-        res,
-        "Deleted artifact {.val {id}} from repo {.val {repo}}.",
-        "Failed to delete artifact with id {.val {id}} from repo {.val {repo}}."
-      )
-    }
+        status_msg(
+          res,
+          "Deleted artifact {.val {id}} from repo {.val {repo}}.",
+          "Failed to delete artifact with id {.val {id}} from repo {.val {repo}}."
+        )
+      }
+    )
   )
 
   invisible(df)

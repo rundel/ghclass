@@ -61,51 +61,55 @@ repo_issues = function(
   sort = match.arg(sort)
   direction = match.arg(direction)
 
-  purrr::map_dfr(
-    repo,
-    function(repo) {
-      res = purrr::safely(github_api_repo_issues)(
-        repo = repo,
-        state = state, assignee = assignee, creator = creator,
-        mentioned = mentioned, labels = labels, sort = sort,
-        direction = direction, since = since
-      )
-
-      status_msg(
-        res,
-        "Retrieved issues for repo {.val {repo}}.",
-        "Failed to retrieve issues for repo {.val {repo}}."
-      )
-
-      if (succeeded(res)) {
-        iss = result(res)
-
-        tibble::tibble(
+  status_scope(
+    "Retrieving issues", length(repo),
+    done = "Retrieved issues for {n_ok} of {total} repo{?s}",
+    purrr::map_dfr(
+      repo,
+      function(repo) {
+        res = purrr::safely(github_api_repo_issues)(
           repo = repo,
-          number = purrr::map_int(iss, "number"),
-          title = purrr::map_chr(iss, "title"),
-          state = purrr::map_chr(iss, "state"),
-          comments = purrr::map_int(iss, "comments"),
-          created = purrr::map_chr(iss, "created_at") %>% lubridate::ymd_hms(),
-          updated = purrr::map_chr(iss, "updated_at") %>% lubridate::ymd_hms(),
-          closed = purrr::map_chr(iss, "closed_at", .default = NA) %>% lubridate::ymd_hms(),
-          created_by = purrr::map_chr(iss, c("user","login")),
-          assignees = purrr::map(iss, ~ purrr::map_chr(.x$assignees, "login"))
+          state = state, assignee = assignee, creator = creator,
+          mentioned = mentioned, labels = labels, sort = sort,
+          direction = direction, since = since
         )
-      } else {
-        tibble::tibble(
-          repo = character(),
-          number = integer(),
-          title = character(),
-          state = character(),
-          comments = integer(),
-          created = as.POSIXct(character()),
-          updated = as.POSIXct(character()),
-          closed = as.POSIXct(character()),
-          created_by = character(),
-          assignees = list()
+
+        status_msg(
+          res,
+          "Retrieved issues for repo {.val {repo}}.",
+          "Failed to retrieve issues for repo {.val {repo}}."
         )
+
+        if (succeeded(res)) {
+          iss = result(res)
+
+          tibble::tibble(
+            repo = repo,
+            number = purrr::map_int(iss, "number"),
+            title = purrr::map_chr(iss, "title"),
+            state = purrr::map_chr(iss, "state"),
+            comments = purrr::map_int(iss, "comments"),
+            created = purrr::map_chr(iss, "created_at") %>% lubridate::ymd_hms(),
+            updated = purrr::map_chr(iss, "updated_at") %>% lubridate::ymd_hms(),
+            closed = purrr::map_chr(iss, "closed_at", .default = NA) %>% lubridate::ymd_hms(),
+            created_by = purrr::map_chr(iss, c("user","login")),
+            assignees = purrr::map(iss, ~ purrr::map_chr(.x$assignees, "login"))
+          )
+        } else {
+          tibble::tibble(
+            repo = character(),
+            number = integer(),
+            title = character(),
+            state = character(),
+            comments = integer(),
+            created = as.POSIXct(character()),
+            updated = as.POSIXct(character()),
+            closed = as.POSIXct(character()),
+            created_by = character(),
+            assignees = list()
+          )
+        }
       }
-    }
+    )
   )
 }

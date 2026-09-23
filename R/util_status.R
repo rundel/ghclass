@@ -41,14 +41,35 @@ progress_enabled = function() {
   isTRUE(getOption("ghclass.progress", FALSE))
 }
 
-status_scope_current = function() {
-  n = length(status_env[["scopes"]])
-  if (n == 0) NULL else status_env[["scopes"]][[n]]
+# An event belongs to the innermost scope whose owner function lexically
+# encloses the reporting call, so helpers called from inside a loop that
+# report on their own (e.g. repo_branches()) are not counted by the loop.
+status_scope_for = function(envir) {
+  scopes = status_env[["scopes"]]
+
+  for (i in rev(seq_along(scopes))) {
+    if (env_encloses(scopes[[i]][["envir"]], envir))
+      return(scopes[[i]])
+  }
+
+  NULL
 }
 
-# Runs a loop that reports through status_msg(), status_skip() and
-# status_fail() as a single progress bar with a summary line. Events are
-# attributed to the innermost active scope only.
+env_encloses = function(owner, envir) {
+  e = envir
+  while (!identical(e, emptyenv())) {
+    if (identical(e, owner))
+      return(TRUE)
+    if (isNamespace(e) || identical(e, globalenv()))
+      return(FALSE)
+    e = parent.env(e)
+  }
+
+  FALSE
+}
+
+# Runs a loop that reports through status_msg(), status_skip(), status_fail()
+# and status_note() as a single progress bar with a summary line.
 status_scope = function(name, total, expr, done = NULL) {
   if (!progress_enabled() || total == 0)
     return(expr)
@@ -134,11 +155,7 @@ status_scope_summary = function(scope) {
   invisible(NULL)
 }
 
-status_scope_event = function(outcome, msg, n = 1L) {
-  scope = status_scope_current()
-  if (is.null(scope))
-    return(invisible(FALSE))
-
+status_scope_event = function(scope, outcome, msg = NULL, n = 1L) {
   field = switch(outcome, ok = "n_ok", fail = "n_fail", skip = "n_skip")
   scope[[field]] = scope[[field]] + n
 
@@ -153,18 +170,35 @@ status_text = function(msg, .envir) {
 
 # Reports an item that was skipped before any API call
 status_skip = function(msg, n = 1L, .envir = parent.frame()) {
-  if (is.null(status_scope_current()))
+  scope = status_scope_for(.envir)
+
+  if (is.null(scope))
     cli::cli_alert_info(msg, wrap = FALSE, .envir = .envir)
   else
-    status_scope_event("skip", status_text(msg, .envir), n = n)
+    status_scope_event(scope, "skip", status_text(msg, .envir), n = n)
 
   invisible(NULL)
 }
 
 # Reports a failure detected before any API call
 status_fail = function(msg, .envir = parent.frame()) {
+  scope = status_scope_for(.envir)
+
   cli::cli_alert_danger(msg, wrap = FALSE, .envir = .envir)
-  status_scope_event("fail", status_text(msg, .envir))
+  if (!is.null(scope))
+    status_scope_event(scope, "fail", status_text(msg, .envir))
+
+  invisible(NULL)
+}
+
+# Reports progress within an item without counting an outcome
+status_note = function(msg, .envir = parent.frame()) {
+  scope = status_scope_for(.envir)
+
+  if (is.null(scope))
+    cli::cli_alert_success(msg, wrap = FALSE, .envir = .envir)
+  else
+    cli::cli_progress_update(id = scope[["bar"]], inc = 0, status = status_text(msg, .envir))
 
   invisible(NULL)
 }
