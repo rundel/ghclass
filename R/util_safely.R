@@ -190,7 +190,7 @@ status_msg = function(x, success = NULL, fail = NULL, include_error_msg = TRUE,
     cli::cli_alert_danger(fail, wrap = FALSE, .envir = .envir)
     if (include_error_msg) {
       msg = error_msg(x)
-      cli::cat_line(error_msg_tree(msg))
+      cli::cli_verbatim(error_msg_tree(msg))
     }
   }
 
