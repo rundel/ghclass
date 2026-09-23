@@ -88,15 +88,19 @@ status_scope = function(name, total, expr, done = NULL) {
   status_env[["scopes"]][[scope[["depth"]]]] = scope
   on.exit(status_scope_pop(scope), add = TRUE)
 
-  scope[["bar"]] = cli::cli_progress_bar(
-    name = name, total = total,
-    format = paste(
-      "{cli::pb_spin} {cli::pb_name} {cli::pb_bar}",
-      "{cli::pb_current}/{cli::pb_total} | {cli::pb_status}"
-    ),
-    auto_terminate = FALSE, clear = TRUE,
-    .envir = environment()
-  )
+  # Static output cannot clear progress lines; keep only failures and summaries.
+  scope[["bar"]] = NULL
+  if (cli::is_dynamic_tty()) {
+    scope[["bar"]] = cli::cli_progress_bar(
+      name = name, total = total,
+      format = paste(
+        "{cli::pb_spin} {cli::pb_name} {cli::pb_bar}",
+        "{cli::pb_current}/{cli::pb_total} | {cli::pb_status}"
+      ),
+      auto_terminate = FALSE, clear = TRUE,
+      .envir = environment()
+    )
+  }
 
   res = withCallingHandlers(
     expr,
@@ -111,10 +115,12 @@ status_scope = function(name, total, expr, done = NULL) {
 status_scope_pop = function(scope) {
   status_env[["scopes"]] = status_env[["scopes"]][seq_len(scope[["depth"]] - 1L)]
 
-  tryCatch(
-    cli::cli_progress_done(id = scope[["bar"]], result = "clear"),
-    error = function(e) NULL
-  )
+  if (!is.null(scope[["bar"]])) {
+    tryCatch(
+      cli::cli_progress_done(id = scope[["bar"]], result = "clear"),
+      error = function(e) NULL
+    )
+  }
 
   status_scope_summary(scope)
 }
@@ -159,7 +165,8 @@ status_scope_event = function(scope, outcome, msg = NULL, n = 1L) {
   field = switch(outcome, ok = "n_ok", fail = "n_fail", skip = "n_skip")
   scope[[field]] = scope[[field]] + n
 
-  cli::cli_progress_update(id = scope[["bar"]], inc = n, status = msg)
+  if (!is.null(scope[["bar"]]))
+    cli::cli_progress_update(id = scope[["bar"]], inc = n, status = msg)
 
   invisible(TRUE)
 }
@@ -197,7 +204,7 @@ status_note = function(msg, .envir = parent.frame()) {
 
   if (is.null(scope))
     cli::cli_alert_success(msg, wrap = FALSE, .envir = .envir)
-  else
+  else if (!is.null(scope[["bar"]]))
     cli::cli_progress_update(id = scope[["bar"]], inc = 0, status = status_text(msg, .envir))
 
   invisible(NULL)
