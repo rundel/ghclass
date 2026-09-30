@@ -213,3 +213,23 @@ test_that("status_scope() draws and clears a progress bar in dynamic terminals",
   )
   expect_length(status_env[["scopes"]], 0)
 })
+
+test_that("status_scope() aborts the batch on a secondary rate limit", {
+  local_status_output()
+
+  out = cli::cli_fmt(
+    err <- tryCatch(with_progress(fake_loop(c("a", "limited", "c"))), error = identity)
+  )
+  expect_s3_class(err, "ghclass_rate_limit_error")
+  expect_equal(out[1], "x Failed to create repo \"limited\".")
+  expect_equal(out[length(out)], "x Creating repos aborted after 2 of 3: 1 succeeded, 1 failed")
+  expect_length(status_env[["scopes"]], 0)
+
+  withr::local_options(list(ghclass.progress = FALSE))
+  out = cli::cli_fmt(
+    err <- tryCatch(fake_loop(c("a", "limited", "c")), error = identity)
+  )
+  expect_s3_class(err, "ghclass_rate_limit_error")
+  expect_equal(out[1:2], c("v Created repo \"a\".", "x Failed to create repo \"limited\"."))
+  expect_false(any(grepl("\"c\"", out)))
+})
