@@ -15,6 +15,13 @@
 #' after the last successful workflow run). These are skipped by default,
 #' see `allow_stale`.
 #'
+#' The function refuses to run if `path` already contains any of the folders it
+#' creates (`repos/`, a folder for each entry of `artifacts`, `comments/`, and
+#' the `key_repo` clone), see `overwrite`. In interactive sessions it also asks
+#' for confirmation before creating a `path` with the same name as the current
+#' working directory, as this usually means the grading folder is being nested
+#' inside of itself.
+#'
 #' @param path Character. Root directory for the grading folder (created if it doesn't exist).
 #' @param org Character. Name of the GitHub organization.
 #' @param repo_filter Character. Regex pattern passed to [org_repos()]'s `filter`
@@ -32,8 +39,12 @@
 #'   `key_repo`.
 #' @param allow_stale Logical. Should out of sync artifacts be downloaded.
 #'   Default `FALSE`, in which case they are reported and skipped.
+#' @param overwrite Logical. Should existing repos, artifacts, comment files,
+#'   and key repo in `path` be overwritten. Default `FALSE`, in which case the
+#'   function stops if any of them exist. If `TRUE` the existing folders are
+#'   deleted and recreated, any other contents of `path` are left untouched.
 #'
-#' @return An invisible list containing:
+#' @return An invisible list (or `NULL` if canceled at the prompt) containing:
 #'   * `repos` — character vector of matched repo addresses
 #'   * `cloned` — result from [local_repo_clone()]
 #'   * `artifacts` — named list of results from each [action_artifact_download()] call
@@ -51,19 +62,34 @@ org_grade_assignment = function(
   comment_template = "",
   key_repo = NULL,
   branch = NULL,
-  allow_stale = FALSE
+  allow_stale = FALSE,
+  overwrite = FALSE
 ) {
   arg_is_chr_scalar(path, org, repo_filter, comment_template)
   arg_is_chr_scalar(key_repo, branch, allow_null = TRUE)
   arg_is_chr(artifacts)
-  arg_is_lgl_scalar(allow_stale)
+  arg_is_lgl_scalar(allow_stale, overwrite)
 
-  if (length(artifacts) > 0 && is.null(names(artifacts))) {
-    cli_stop("{.arg artifacts} must be a named character vector.")
+  if (length(artifacts) > 0 && !is_dir_name(names(artifacts))) {
+    cli_stop("{.arg artifacts} must be a named character vector, with names that are valid folder names.")
   }
 
-  if (dir.exists(path)) {
-    cli_stop("Destination directory {.file {path}} already exists, please remove it or choose a different path.")
+  existing = purrr::keep(grade_assignment_dirs(path, artifacts, key_repo), file.exists)
+
+  if (length(existing) > 0 && !overwrite) {
+    cli_stop(
+      "Destination {.file {path}} already contains {.file {basename(existing)}}, ",
+      "set {.code overwrite = TRUE} to replace {?it/them}."
+    )
+  }
+
+  if (is_wd_name(path)) {
+    target = fs::path_abs(fs::path_expand(path))
+    if (!rlang::is_interactive()) {
+      cli::cli_alert_warning("Creating {.file {target}}, which has the same name as the current directory.")
+    } else if (!cli_yeah("This will create {.file {target}}, which has the same name as the current directory. Are you sure?")) {
+      return(invisible(NULL))
+    }
   }
 
   if (!is.null(key_repo) && !repo_exists(key_repo, quiet = TRUE)) {
@@ -77,6 +103,14 @@ org_grade_assignment = function(
   }
 
   res = list(repos = repos)
+
+  if (length(existing) > 0) {
+    cli::cli_alert_warning("Removing existing {.file {basename(existing)}} from {.file {path}}.")
+    unlink(existing, recursive = TRUE, force = TRUE)
+
+    if (any(file.exists(existing)))
+      cli_stop("Failed to remove {.file {purrr::keep(existing, file.exists)}}.")
+  }
 
   repos_dir = file.path(path, "repos")
   cli::cli_alert_info("Cloning {.val {length(repos)}} student repo{?s} matching {.val {repo_filter}}.")
@@ -159,6 +193,25 @@ org_grade_assignment = function(
   invisible(res)
 }
 
+
+grade_assignment_dirs = function(path, artifacts, key_repo) {
+  dirs = c("repos", names(artifacts), "comments")
+  if (!is.null(key_repo))
+    dirs = c(dirs, get_repo_name(key_repo))
+
+  file.path(path, unique(dirs))
+}
+
+is_wd_name = function(path) {
+  target = fs::path_abs(fs::path_expand(path))
+  !fs::dir_exists(target) && fs::path_file(target) == fs::path_file(fs::path_wd())
+}
+
+# These names are joined to the grading folder's path and may then be deleted,
+# so anything that could resolve to the folder itself or outside of it is rejected.
+is_dir_name = function(x) {
+  !is.null(x) && !anyNA(x) && all(x != "" & basename(x) == x & !x %in% c(".", ".."))
+}
 
 local_repo_head_sha = function(dirs) {
   purrr::map_chr(

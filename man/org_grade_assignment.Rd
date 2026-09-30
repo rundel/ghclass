@@ -12,7 +12,8 @@ org_grade_assignment(
   comment_template = "",
   key_repo = NULL,
   branch = NULL,
-  allow_stale = FALSE
+  allow_stale = FALSE,
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -40,9 +41,14 @@ which case artifacts from any branch are considered. Does not apply to
 
 \item{allow_stale}{Logical. Should out of sync artifacts be downloaded.
 Default \code{FALSE}, in which case they are reported and skipped.}
+
+\item{overwrite}{Logical. Should existing repos, artifacts, comment files,
+and key repo in \code{path} be overwritten. Default \code{FALSE}, in which case the
+function stops if any of them exist. If \code{TRUE} the existing folders are
+deleted and recreated, any other contents of \code{path} are left untouched.}
 }
 \value{
-An invisible list containing:
+An invisible list (or \code{NULL} if canceled at the prompt) containing:
 \itemize{
 \item \code{repos} — character vector of matched repo addresses
 \item \code{cloned} — result from \code{\link[=local_repo_clone]{local_repo_clone()}}
@@ -67,4 +73,11 @@ Artifacts are considered out of sync when they were built from a commit
 other than the current commit of the cloned repo (e.g. the student pushed
 after the last successful workflow run). These are skipped by default,
 see \code{allow_stale}.
+
+The function refuses to run if \code{path} already contains any of the folders it
+creates (\verb{repos/}, a folder for each entry of \code{artifacts}, \verb{comments/}, and
+the \code{key_repo} clone), see \code{overwrite}. In interactive sessions it also asks
+for confirmation before creating a \code{path} with the same name as the current
+working directory, as this usually means the grading folder is being nested
+inside of itself.
 }
