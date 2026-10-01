@@ -9,6 +9,9 @@ local_repo_push = function(repo_dir, remote = "origin", branch = NULL,
   arg_is_chr(branch, allow_null = TRUE)
   arg_is_lgl_scalar(verbose)
 
+  # A caller with a progress scope reports the final push outcome itself.
+  caller_scope = status_scope_for(parent.frame())
+
   if (is.null(branch))
     branch = list(NULL)
 
@@ -59,7 +62,7 @@ local_repo_push = function(repo_dir, remote = "origin", branch = NULL,
 
         status_msg(
           res,
-          "Pushed from local repo {.val {repo}} to {.val {ref}}.",
+          if (is.null(caller_scope)) "Pushed from local repo {.val {repo}} to {.val {ref}}.",
           "Failed to push from local repo {.val {repo}} to {.val {ref}}."
         )
 

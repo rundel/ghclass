@@ -357,6 +357,66 @@ test_that("repo_mirror() counts mirrored, missing, and non-empty repos", {
   )
 })
 
+test_that("repo_mirror() suppresses helper successes but preserves failures", {
+  skip_if_not_installed("gert")
+  local_status_output()
+  fail_push = FALSE
+  local_mocked_bindings(
+    repo_n_commits = function(repo, ...) tibble::tibble(repo = repo, n = 1L),
+    local_repo_clone = function(...) invisible(),
+    repo_dir_helper = function(dir) dir,
+    cli_glue = function(..., .envir = parent.frame()) {
+      cli::format_inline(..., .envir = .envir)
+    }
+  )
+  local_mocked_bindings(
+    git_info = function(...) list(shorthand = NA_character_),
+    git_push = function(remote, ...) {
+      if (fail_push && endsWith(remote, "/b.git")) stop("push failed")
+      "ok"
+    },
+    .package = "gert"
+  )
+
+  mirror = function(target = c("org/a", "org/b")) {
+    repo_mirror("org/src", target, warn = FALSE)
+  }
+
+  for (dynamic in c(FALSE, TRUE)) {
+    withr::local_options(cli.dynamic = dynamic)
+    out = cli::cli_fmt(res <- withVisible(with_progress(mirror())))
+    expect_equal(visible_lines(out), c(
+      "v Mirrored \"org/src\" to 2 of 2 repos",
+      "v Removed local copy of \"org/src\""
+    ))
+    expect_false(res[["visible"]])
+    expect_true(all(vapply(res[["value"]], function(x) succeeded(x[[1]]), logical(1))))
+
+    fail_push = TRUE
+    out = cli::cli_fmt(with_progress(mirror()))
+    expect_equal(visible_lines(out), c(
+      "x Failed to push from local repo \"src\" to \"https://github.com/org/b.git\".",
+      "\\-push failed",
+      "x Mirrored \"org/src\" to 1 of 2 repos, 1 failed",
+      "v Removed local copy of \"org/src\""
+    ))
+    fail_push = FALSE
+  }
+
+  withr::local_options(cli.dynamic = FALSE)
+  out = cli::cli_fmt(mirror())
+  expect_equal(out, c(
+    "v Pushed from local repo \"src\" to \"https://github.com/org/a.git\".",
+    "v Pushed from local repo \"src\" to \"https://github.com/org/b.git\".",
+    "v Removed local copy of \"org/src\""
+  ))
+  out = cli::cli_fmt(with_progress(mirror("org/a")))
+  expect_equal(out, c(
+    "v Pushed from local repo \"src\" to \"https://github.com/org/a.git\".",
+    "v Removed local copy of \"org/src\""
+  ))
+})
+
 test_that("local_repo_push() counts a canceled force push as skipped", {
   skip_if_not_installed("gert")
   local_status_output()

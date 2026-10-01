@@ -167,6 +167,12 @@ test_that("status_msg() counts outcomes without messages and status_note() count
 test_that("status_scope() draws and clears a progress bar in dynamic terminals", {
   local_status_output()
   withr::local_options(cli.dynamic = TRUE)
+  # cli shares a redraw timer across bars; force updates for this output test.
+  progress_update = cli::cli_progress_update
+  local_mocked_bindings(
+    cli_progress_update = function(..., force = FALSE) progress_update(..., force = TRUE),
+    .package = "cli"
+  )
 
   out = cli::cli_fmt(with_progress(fake_loop(c("a", "bad", "skip", "b"))))
   expect_match(out[1], "Creating repos", fixed = TRUE)
