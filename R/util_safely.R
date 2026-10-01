@@ -159,6 +159,38 @@ has_404_attr = function(x) {
   !is.null(attr(x, "404"))
 }
 
+# GitHub's secondary (abuse) rate limit on content creation is a 403 with primary
+# quota remaining, which gh does not retry, and the template generate endpoint
+# reports the same block as a 422. Neither response carries a retry-after header
+# and the block was observed to last ~30 minutes.
+is_rate_limit_error = function(e) {
+  if (is.null(e))
+    return(FALSE)
+
+  if (inherits(e, "http_error_429"))
+    return(TRUE)
+
+  content = e[["response_content"]]
+  msg = paste(
+    c(e[["message"]], e[["body"]], content[["message"]], unlist(content[["errors"]])),
+    collapse = " "
+  )
+
+  (inherits(e, "http_error_403") && grepl("secondary rate limit|abuse detection", msg, ignore.case = TRUE)) ||
+    (inherits(e, "http_error_422") && grepl("submitted too quickly", msg, ignore.case = TRUE))
+}
+
+abort_rate_limited = function() {
+  cli::cli_abort(
+    c(
+      "GitHub has temporarily blocked content creation for this token (secondary rate limit).",
+      "i" = "Nothing else will succeed until the block clears, which took about 30 minutes in testing.",
+      "i" = "Items completed before the block are kept, rerun the remaining ones later."
+    ),
+    call = NULL, class = "ghclass_rate_limit_error"
+  )
+}
+
 # TODO - fix error_msg processing - doesnt work for PR and some others
 
 #' @rdname ghclass-internal
@@ -185,6 +217,9 @@ status_msg = function(x, success = NULL, fail = NULL, include_error_msg = TRUE,
     }
     if (!is.null(scope))
       status_scope_event(scope, "fail", if (is.null(fail)) NULL else status_text(fail, .envir))
+
+    if (is_rate_limit_error(error(x)))
+      abort_rate_limited()
   }
 
   invisible(x)

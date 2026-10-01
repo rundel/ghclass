@@ -21,6 +21,27 @@ api_error_result = function() {
   list(result = NULL, error = e)
 }
 
+rate_limit_result = function(status = 403) {
+  content = switch(
+    as.character(status),
+    "403" = list(
+      message = "You have exceeded a secondary rate limit and have been temporarily blocked from content creation. Please retry your request again later.",
+      documentation_url = "/rest/overview/rate-limits-for-the-rest-api#about-secondary-rate-limits"
+    ),
+    "422" = list(
+      message = "Could not clone: was submitted too quickly",
+      errors = list("Could not clone: was submitted too quickly"),
+      documentation_url = "https://docs.github.com/rest/repos/repos#create-a-repository-using-a-template"
+    ),
+    "429" = list(message = "Too Many Requests")
+  )
+  e = structure(
+    class = c("github_error", paste0("http_error_", status), "error", "condition"),
+    list(message = paste0("GitHub API error (", status, ")"), response_content = content)
+  )
+  list(result = NULL, error = e)
+}
+
 fake_loop = function(items, die_at = NULL, interrupt_at = NULL) {
   status_scope(
     "Creating repos", length(items),
@@ -37,7 +58,7 @@ fake_loop = function(items, die_at = NULL, interrupt_at = NULL) {
         } else if (i == "missing") {
           status_fail("Team {.val {i}} does not exist.")
         } else {
-          res = if (i == "bad") api_error_result() else ok_result()
+          res = switch(i, bad = api_error_result(), limited = rate_limit_result(), ok_result())
           status_msg(res, "Created repo {.val {i}}.", "Failed to create repo {.val {i}}.")
         }
       }
