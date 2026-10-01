@@ -40,19 +40,24 @@ local_repo_rename = function(repo_dir, pattern, replacement) {
   }
 
   sub = repos != cur_repos
-  res = purrr::map2_chr(
-    cur_repos[sub], repos[sub],
-    function(cur, new) {
-      res = purrr::safely(fs::file_move)(cur, new)
 
-      status_msg(
-        res,
-        "Renaming {.val {fs::path_file(cur)}} to {.val {fs::path_file(new)}}.",
-        "Failed to rename {.val {fs::path_file(cur)}} to {.val {fs::path_file(new)}}."
-      )
+  res = status_scope(
+    "Renaming repos", sum(sub),
+    done = "Renamed {n_ok} of {total} repo{?s}",
+    purrr::map2_chr(
+      cur_repos[sub], repos[sub],
+      function(cur, new) {
+        res = purrr::safely(fs::file_move)(cur, new)
 
-      ifelse(succeeded(res), new, NA)
-    }
+        status_msg(
+          res,
+          "Renamed {.val {fs::path_file(cur)}} to {.val {fs::path_file(new)}}.",
+          "Failed to rename {.val {fs::path_file(cur)}} to {.val {fs::path_file(new)}}."
+        )
+
+        ifelse(succeeded(res), new, NA)
+      }
+    )
   )
 
   invisible(res)

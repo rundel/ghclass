@@ -32,47 +32,52 @@ action_artifacts = function(repo, filter = NULL, exclude = FALSE,
   arg_is_chr_scalar(filter_branch, allow_null = TRUE)
   arg_is_chr_scalar(filter, allow_null = TRUE)
 
-  res = purrr::map_dfr(
-    repo,
-    function(r) {
-      res = purrr::safely(github_api_action_artifacts)(r)
-      status_msg(
-        res,
-        fail = "Failed to retrieve artifacts for repo {.val {repo}}."
-      )
+  res = status_scope(
+    "Retrieving artifacts", length(repo),
+    done = "Retrieved artifacts for {n_ok} of {total} repo{?s}",
+    purrr::map_dfr(
+      repo,
+      function(r) {
+        res = purrr::safely(github_api_action_artifacts)(r)
 
-      if (failed(res) || empty_result(res) || result(res)[["total_count"]] == 0) {
-        tibble::tibble(
-          repo    = character(),
-          branch  = character(),
-          commit  = character(),
-          name    = character(),
-          id      = integer(),
-          size    = integer(),
-          url     = character(),
-          expired = logical(),
-          created = lubridate::ymd_hms(),
-          updated = lubridate::ymd_hms(),
-          expires = lubridate::ymd_hms()
+        status_msg(
+          res,
+          fail = "Failed to retrieve artifacts for repo {.val {r}}."
         )
-      } else {
-        artifacts = result(res)[["artifacts"]]
 
-        tibble::tibble(
-          repo    = r,
-          branch  = purrr::map_chr(artifacts, c("workflow_run", "head_branch"), .default = NA),
-          commit  = purrr::map_chr(artifacts, c("workflow_run", "head_sha"), .default = NA),
-          name    = purrr::map_chr(artifacts, "name", .default = NA),
-          id      = purrr::map_dbl(artifacts, "id", .default = NA),
-          size    = purrr::map_dbl(artifacts, "size_in_bytes", .default = NA),
-          url     = purrr::map_chr(artifacts, "url", .default = NA),
-          expired = purrr::map_lgl(artifacts, "expired", .default = NA),
-          created = purrr::map_chr(artifacts, "created_at", .default = NA) %>% lubridate::ymd_hms(),
-          updated = purrr::map_chr(artifacts, "updated_at", .default = NA) %>% lubridate::ymd_hms(),
-          expires = purrr::map_chr(artifacts, "expires_at", .default = NA) %>% lubridate::ymd_hms()
-        )
+        if (failed(res) || empty_result(res) || result(res)[["total_count"]] == 0) {
+          tibble::tibble(
+            repo    = character(),
+            branch  = character(),
+            commit  = character(),
+            name    = character(),
+            id      = integer(),
+            size    = integer(),
+            url     = character(),
+            expired = logical(),
+            created = lubridate::ymd_hms(),
+            updated = lubridate::ymd_hms(),
+            expires = lubridate::ymd_hms()
+          )
+        } else {
+          artifacts = result(res)[["artifacts"]]
+
+          tibble::tibble(
+            repo    = r,
+            branch  = purrr::map_chr(artifacts, c("workflow_run", "head_branch"), .default = NA),
+            commit  = purrr::map_chr(artifacts, c("workflow_run", "head_sha"), .default = NA),
+            name    = purrr::map_chr(artifacts, "name", .default = NA),
+            id      = purrr::map_dbl(artifacts, "id", .default = NA),
+            size    = purrr::map_dbl(artifacts, "size_in_bytes", .default = NA),
+            url     = purrr::map_chr(artifacts, "url", .default = NA),
+            expired = purrr::map_lgl(artifacts, "expired", .default = NA),
+            created = purrr::map_chr(artifacts, "created_at", .default = NA) %>% lubridate::ymd_hms(),
+            updated = purrr::map_chr(artifacts, "updated_at", .default = NA) %>% lubridate::ymd_hms(),
+            expires = purrr::map_chr(artifacts, "expires_at", .default = NA) %>% lubridate::ymd_hms()
+          )
+        }
       }
-    }
+    )
   )
 
   if (!keep_expired) {
@@ -91,5 +96,4 @@ action_artifacts = function(repo, filter = NULL, exclude = FALSE,
   } else {
     res
   }
-
 }

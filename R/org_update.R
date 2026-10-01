@@ -33,7 +33,7 @@ org_set_repo_permission = function(org, repo_permission = c("none", "read", "wri
   status_msg(
     res,
     "Set org {.val {org}}'s repo permissions to {.val {repo_permission}}.",
-    "failed to set org {.val {org}}'s repo permissions."
+    "Failed to set org {.val {org}}'s repo permissions."
   )
 
   invisible(result(res))

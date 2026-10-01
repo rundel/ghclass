@@ -7,22 +7,26 @@ local_repo_branch = function(repo_dir, branch) {
 
   repo_dir = repo_dir_helper(repo_dir)
 
-  res = purrr::map(
-    repo_dir,
-    function(dir) {
-      res = purrr::safely(gert::git_branch_create)(
-        name = branch, repo = dir
-      )
+  res = status_scope(
+    "Adding branches", length(repo_dir),
+    done = "Added branch {.val {branch}} to {n_ok} of {total} repo{?s}",
+    purrr::map(
+      repo_dir,
+      function(dir) {
+        res = purrr::safely(gert::git_branch_create)(
+          name = branch, repo = dir
+        )
 
-      repo = fs::path_file(dir)
-      status_msg(
-        res,
-        "Added branch {.val {branch}} to {.val {repo}}.",
-        "Failed to add branch {.val {branch}} to {.val {repo}}."
-      )
+        repo = fs::path_file(dir)
+        status_msg(
+          res,
+          "Added branch {.val {branch}} to {.val {repo}}.",
+          "Failed to add branch {.val {branch}} to {.val {repo}}."
+        )
 
-      res
-    }
+        res
+      }
+    )
   )
 
   invisible(res)

@@ -25,24 +25,30 @@ team_invite = function(org, user, team, team_type = c("name", "slug")) {
 
   check_team_slug(slug)
 
-  res = purrr::pmap(
-    unique(tibble::tibble(user, team, slug)),
-    function(user, team, slug) {
-      if (is.na(slug)) {
-        cli::cli_alert_danger("Team {.val {team}} does not exist in org {.val {org}}.")
-        return(NULL)
+  d = unique(tibble::tibble(user, team, slug))
+
+  res = status_scope(
+    "Adding users to teams", nrow(d),
+    done = "Added {n_ok} of {total} user{?s} to teams",
+    purrr::pmap(
+      d,
+      function(user, team, slug) {
+        if (is.na(slug)) {
+          status_fail("Team {.val {team}} does not exist in org {.val {org}}.")
+          return(NULL)
+        }
+
+        res = purrr::safely(github_api_team_invite)(org, slug, user)
+
+        status_msg(
+          res,
+          "Added user {.val {user}} to team {.val {team}}.",
+          "Failed to add user {.val {user}} to team {.val {team}}."
+        )
+
+        result(res)
       }
-
-      res = purrr::safely(github_api_team_invite)(org, slug, user)
-
-      status_msg(
-        res,
-        "Added user {.val {user}} to team {.val {team}}.",
-        "Failed to add user {.val {user}} to team {.val {team}}."
-      )
-
-      result(res)
-    }
+    )
   )
 
   invisible(res)

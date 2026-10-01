@@ -14,20 +14,28 @@ github_api_branch_delete = function(repo, branch) {
 branch_delete = function(repo, branch) {
   arg_is_chr(repo, branch)
 
-  invisible( purrr::pmap(
-    list(repo, branch),
-    function(repo, branch) {
-      res = purrr::safely(github_api_branch_delete)(repo, branch)
+  d = tibble::tibble(repo, branch)
 
-      status_msg(
-        res,
-        "Removed branch {.val {format_repo(repo, branch)}}.",
-        "Failed to remove branch {.val {format_repo(repo, branch)}}."
-      )
+  res = status_scope(
+    "Deleting branches", nrow(d),
+    done = "Deleted {n_ok} of {total} branch{?es}",
+    purrr::pmap(
+      d,
+      function(repo, branch) {
+        res = purrr::safely(github_api_branch_delete)(repo, branch)
 
-      res
-    }
-  ) )
+        status_msg(
+          res,
+          "Removed branch {.val {format_repo(repo, branch)}}.",
+          "Failed to remove branch {.val {format_repo(repo, branch)}}."
+        )
+
+        res
+      }
+    )
+  )
+
+  invisible(res)
 }
 
 #' @rdname branch

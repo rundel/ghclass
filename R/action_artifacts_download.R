@@ -65,101 +65,100 @@ action_artifact_download = function(
     dplyr::select("repo", "id", "name")
 
   repo_groups = split(df, df[["repo"]])
+  n_items = purrr::map_int(repo_groups, function(d) max(1L, sum(!is.na(d[["id"]]))))
 
-  res = purrr::map(
-    repo_groups,
-    function(repo_df) {
-      cur_repo = repo_df[["repo"]][1]
-      cur_ids = repo_df[["id"]]
-      cur_names = repo_df[["name"]]
+  res = status_scope(
+    "Downloading artifacts", sum(n_items),
+    done = "Downloaded {n_ok} of {total} artifact{?s}",
+    purrr::map(
+      repo_groups,
+      function(repo_df) {
+        cur_repo = repo_df[["repo"]][1]
+        cur_ids = repo_df[["id"]]
+        cur_names = repo_df[["name"]]
 
-      if (all(is.na(cur_ids))) {
-        cli::cli_alert_danger(
-          "No artifacts found for repo {.val {cur_repo}}.",
-          wrap = FALSE
-        )
-        return(NA_character_)
-      }
-
-      not_na = !is.na(cur_ids)
-      cur_ids = cur_ids[not_na]
-      cur_names = cur_names[not_na]
-
-      repo_name = get_repo_name(cur_repo)
-
-      purrr::map2_chr(
-        cur_ids, cur_names,
-        function(id, name) {
-          if (nest) {
-            repo_dir = fs::path_norm(fs::path(dir, repo_name))
-            zip_path = fs::path_norm(fs::path(repo_dir, name, ext = "zip"))
-            extract_dir = fs::path_norm(fs::path(repo_dir, name))
-          } else {
-            base = paste0(repo_name, "_", name)
-            zip_path = fs::path_norm(fs::path(dir, base, ext = "zip"))
-            extract_dir = fs::path_norm(fs::path(dir, base))
-          }
-
-          if ((file.exists(zip_path) || dir.exists(extract_dir)) && !overwrite) {
-            cli::cli_alert_danger(
-              paste0(
-                "Destination {.file {extract_dir}} or {.file {zip_path}} already exists, ",
-                "set {.code overwrite = TRUE} to overwrite."
-              ),
-              wrap = FALSE
-            )
-            return(NA_character_)
-          }
-
-          if (overwrite) {
-            if (dir.exists(extract_dir))
-              unlink(extract_dir, recursive = TRUE, force = TRUE)
-            if (file.exists(zip_path))
-              file.remove(zip_path)
-          }
-
-          if (nest)
-            dir.create(fs::path_dir(zip_path), showWarnings = FALSE, recursive = TRUE)
-
-          dl = purrr::safely(github_api_download_artifact)(cur_repo, id, dest = zip_path)
-          if (failed(dl)) {
-            cli::cli_alert_danger(
-              "Failed to download artifact with id {.val {id}} from repo {.val {cur_repo}}.",
-              wrap = FALSE
-            )
-            return(NA_character_)
-          }
-
-          dir.create(extract_dir, showWarnings = FALSE, recursive = TRUE)
-          unzipped = purrr::safely(
-            function() withCallingHandlers(
-              utils::unzip(zip_path, exdir = extract_dir),
-              warning = function(w) cli_stop("unzip reported a problem extracting artifact {.val {id}}.")
-            )
-          )()
-          if (failed(unzipped)) {
-            cli::cli_alert_danger(
-              "Failed to extract artifact with id {.val {id}} from repo {.val {cur_repo}} to {.file {extract_dir}}.",
-              wrap = FALSE
-            )
-            unlink(extract_dir, recursive = TRUE, force = TRUE)
-            if (!keep_zip && file.exists(zip_path))
-              file.remove(zip_path)
-            return(NA_character_)
-          }
-
-          if (!keep_zip)
-            file.remove(zip_path)
-
-          cli::cli_alert_success(
-            "Downloaded artifact {.val {id}} from repo {.val {cur_repo}} to {.file {extract_dir}}.",
-            wrap = FALSE
-          )
-
-          extract_dir
+        if (all(is.na(cur_ids))) {
+          status_fail("No artifacts found for repo {.val {cur_repo}}.")
+          return(NA_character_)
         }
-      )
-    }
+
+        not_na = !is.na(cur_ids)
+        cur_ids = cur_ids[not_na]
+        cur_names = cur_names[not_na]
+
+        repo_name = get_repo_name(cur_repo)
+
+        purrr::map2_chr(
+          cur_ids, cur_names,
+          function(id, name) {
+            if (nest) {
+              repo_dir = fs::path_norm(fs::path(dir, repo_name))
+              zip_path = fs::path_norm(fs::path(repo_dir, name, ext = "zip"))
+              extract_dir = fs::path_norm(fs::path(repo_dir, name))
+            } else {
+              base = paste0(repo_name, "_", name)
+              zip_path = fs::path_norm(fs::path(dir, base, ext = "zip"))
+              extract_dir = fs::path_norm(fs::path(dir, base))
+            }
+
+            if ((file.exists(zip_path) || dir.exists(extract_dir)) && !overwrite) {
+              status_fail(
+                paste0(
+                  "Destination {.file {extract_dir}} or {.file {zip_path}} already exists, ",
+                  "set {.code overwrite = TRUE} to overwrite."
+                )
+              )
+              return(NA_character_)
+            }
+
+            if (overwrite) {
+              if (dir.exists(extract_dir))
+                unlink(extract_dir, recursive = TRUE, force = TRUE)
+              if (file.exists(zip_path))
+                file.remove(zip_path)
+            }
+
+            if (nest)
+              dir.create(fs::path_dir(zip_path), showWarnings = FALSE, recursive = TRUE)
+
+            dl = purrr::safely(github_api_download_artifact)(cur_repo, id, dest = zip_path)
+            if (failed(dl)) {
+              status_fail(
+                "Failed to download artifact with id {.val {id}} from repo {.val {cur_repo}}."
+              )
+              return(NA_character_)
+            }
+
+            dir.create(extract_dir, showWarnings = FALSE, recursive = TRUE)
+            unzipped = purrr::safely(
+              function() withCallingHandlers(
+                utils::unzip(zip_path, exdir = extract_dir),
+                warning = function(w) cli_stop("unzip reported a problem extracting artifact {.val {id}}.")
+              )
+            )()
+            if (failed(unzipped)) {
+              status_fail(
+                "Failed to extract artifact with id {.val {id}} from repo {.val {cur_repo}} to {.file {extract_dir}}."
+              )
+              unlink(extract_dir, recursive = TRUE, force = TRUE)
+              if (!keep_zip && file.exists(zip_path))
+                file.remove(zip_path)
+              return(NA_character_)
+            }
+
+            if (!keep_zip)
+              file.remove(zip_path)
+
+            status_msg(
+              unzipped,
+              "Downloaded artifact {.val {id}} from repo {.val {cur_repo}} to {.file {extract_dir}}."
+            )
+
+            extract_dir
+          }
+        )
+      }
+    )
   )
 
   invisible(unlist(res))

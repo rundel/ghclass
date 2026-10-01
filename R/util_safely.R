@@ -51,24 +51,9 @@ failed = function(x) {
   !is.null(error(x))
 }
 
-any_failed = function(x) {
-  any(purrr::map_lgl(x, failed))
-}
-
 # A purrr::safely() style result for failures detected before any API call
 failed_result = function(msg) {
   list(result = NULL, error = simpleError(msg))
-}
-
-
-
-
-
-
-return_on_any_failed = function(x) {
-  if (any_failed(x)) {
-    do.call("return", list(), envir = sys.frame(-1))
-  }
 }
 
 error_msg = function(x) {
@@ -181,17 +166,25 @@ has_404_attr = function(x) {
 status_msg = function(x, success = NULL, fail = NULL, include_error_msg = TRUE,
                       .envir = parent.frame()) {
 
+  scope = status_scope_for(.envir)
 
-  if (succeeded(x) & !is.null(success)) {
-    cli::cli_alert_success(success, wrap = FALSE, .envir = .envir)
+  if (succeeded(x)) {
+    if (!is.null(scope))
+      status_scope_event(scope, "ok", if (is.null(success)) NULL else status_text(success, .envir))
+    else if (!is.null(success))
+      cli::cli_alert_success(success, wrap = FALSE, .envir = .envir)
   }
 
-  if (failed(x) & !is.null(fail)) {
-    cli::cli_alert_danger(fail, wrap = FALSE, .envir = .envir)
-    if (include_error_msg) {
-      msg = error_msg(x)
-      cli::cat_line(error_msg_tree(msg))
+  if (failed(x)) {
+    if (!is.null(fail)) {
+      cli::cli_alert_danger(fail, wrap = FALSE, .envir = .envir)
+      if (include_error_msg) {
+        msg = error_msg(x)
+        cli::cli_verbatim(error_msg_tree(msg))
+      }
     }
+    if (!is.null(scope))
+      status_scope_event(scope, "fail", if (is.null(fail)) NULL else status_text(fail, .envir))
   }
 
   invisible(x)

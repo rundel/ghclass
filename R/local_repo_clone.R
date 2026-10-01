@@ -21,29 +21,35 @@ local_repo_clone = function(repo, local_path=".", branch = NULL, mirror = FALSE,
   local_path = fs::path_expand(local_path)
   dir.create(local_path, showWarnings = FALSE, recursive = TRUE)
 
-  dirs = purrr::map2_chr(
-    repo, branch,
-    function(repo, branch) {
-      dir = fs::path(local_path, get_repo_name(repo))
-      url = glue::glue("{github_host_url()}/{repo}.git")
+  d = tibble::tibble(repo, branch)
 
-      res = purrr::safely(gert::git_clone)(
-        url = url, path = dir, branch = branch, mirror = mirror, verbose = verbose
-      )
+  dirs = status_scope(
+    "Cloning repos", nrow(d),
+    done = "Cloned {n_ok} of {total} repo{?s}",
+    purrr::pmap_chr(
+      d,
+      function(repo, branch) {
+        dir = fs::path(local_path, get_repo_name(repo))
+        url = glue::glue("{github_host_url()}/{repo}.git")
 
-      fmt_repo = format_repo(repo, branch)
+        res = purrr::safely(gert::git_clone)(
+          url = url, path = dir, branch = branch, mirror = mirror, verbose = verbose
+        )
 
-      status_msg(
-        res,
-        "Cloned {.val {fmt_repo}}.",
-        "Failed to clone {.val {fmt_repo}}."
-      )
+        fmt_repo = format_repo(repo, branch)
 
-      ternary(succeeded(res), as.character(dir), NA_character_)
-    }
+        status_msg(
+          res,
+          "Cloned {.val {fmt_repo}}.",
+          "Failed to clone {.val {fmt_repo}}."
+        )
+
+        ternary(succeeded(res), as.character(dir), NA_character_)
+      }
+    )
   )
 
-  names(dirs) = repo
+  names(dirs) = d[["repo"]]
 
   invisible(dirs)
 }

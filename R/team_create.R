@@ -25,20 +25,29 @@ team_create = function(
   new_teams = setdiff(team, org_teams)
   existing_teams = intersect(team, org_teams)
 
-  if (length(existing_teams) > 0)
-    cli::cli_alert_info("Skipping existing teams: {.val {existing_teams}}.")
+  res = status_scope(
+    "Creating teams", length(team),
+    done = "Created {n_ok} of {total} team{?s}",
+    {
+      if (length(existing_teams) > 0)
+        status_skip(
+          "Skipping existing teams: {.val {existing_teams}}.",
+          n = length(existing_teams)
+        )
 
-  res = purrr::map(
-    new_teams,
-    function(team) {
-      res = purrr::safely(github_api_team_create)(
-        org = org, name = team, privacy = privacy
-      )
+      purrr::map(
+        new_teams,
+        function(team) {
+          res = purrr::safely(github_api_team_create)(
+            org = org, name = team, privacy = privacy
+          )
 
-      status_msg(
-        res,
-        "Created team {.val {team}} in org {.val {org}}.",
-        "Failed to create team {.val {team}} in org {.val {org}}."
+          status_msg(
+            res,
+            "Created team {.val {team}} in org {.val {org}}.",
+            "Failed to create team {.val {team}} in org {.val {org}}."
+          )
+        }
       )
     }
   )

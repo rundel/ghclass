@@ -41,6 +41,7 @@ action_run_logs = function(
 
   if (is.numeric(run_ids))
     run_ids = tibble::tibble(repo = repo, run_id = run_ids)
+
   arg_is_df(run_ids)
 
   if (nrow(run_ids) == 0)
@@ -53,56 +54,53 @@ action_run_logs = function(
   ) %>%
     dplyr::select("repo", "run_id")
 
-  res = purrr::pmap_chr(
-    df,
-    function(repo, run_id) {
-      res = purrr::safely(github_api_download_run_logs)(repo, run_id)
-      file = result(res)
+  res = status_scope(
+    "Downloading logs", nrow(df),
+    done = "Downloaded logs for {n_ok} of {total} run{?s}",
+    purrr::pmap_chr(
+      df,
+      function(repo, run_id) {
+        res = purrr::safely(github_api_download_run_logs)(repo, run_id)
+        file = result(res)
 
-      if (failed(res)) {
-        cli::cli_alert_danger(
-          "Failed to download logs for run {.val {run_id}} from repo {.val {repo}}.",
-          wrap = FALSE
+        if (failed(res)) {
+          status_fail(
+            "Failed to download logs for run {.val {run_id}} from repo {.val {repo}}."
+          )
+          return(NA_character_)
+        }
+
+        if (keep_zip) {
+          dest_path = fs::path_norm(glue::glue("{dir}/{get_repo_name(repo)}_{run_id}.zip"))
+          if (file.exists(dest_path) & !overwrite) {
+            status_fail(
+              "File {.file {dest_path}} already exists, set {.code overwrite = TRUE} to overwrite."
+            )
+            return(NA_character_)
+          }
+          file.rename(file, dest_path)
+        } else {
+          dest_path = fs::path_norm(glue::glue("{dir}/{get_repo_name(repo)}_{run_id}"))
+          if (dir.exists(dest_path) & !overwrite) {
+            status_fail(
+              "Directory {.file {dest_path}} already exists, set {.code overwrite = TRUE} to overwrite."
+            )
+            return(NA_character_)
+          }
+          dir.create(dest_path, showWarnings = FALSE, recursive = TRUE)
+          utils::unzip(file, exdir = dest_path, overwrite = overwrite)
+          file.remove(file)
+        }
+
+        status_msg(
+          res,
+          "Downloaded logs for run {.val {run_id}} from repo {.val {repo}} to {.file {dest_path}}.",
+          NULL
         )
-        return(NA_character_)
+
+        dest_path
       }
-
-      if (keep_zip) {
-        dest_path = fs::path_norm(glue::glue("{dir}/{get_repo_name(repo)}_{run_id}.zip"))
-
-        if (file.exists(dest_path) & !overwrite) {
-          cli::cli_alert_danger(
-            "File {.file {dest_path}} already exists, set {.code overwrite = TRUE} to overwrite this file.",
-            wrap = FALSE
-          )
-          return(NA_character_)
-        }
-
-        file.rename(file, dest_path)
-      } else {
-        dest_path = fs::path_norm(glue::glue("{dir}/{get_repo_name(repo)}_{run_id}"))
-
-        if (dir.exists(dest_path) & !overwrite) {
-          cli::cli_alert_danger(
-            "Directory {.file {dest_path}} already exists, set {.code overwrite = TRUE} to overwrite.",
-            wrap = FALSE
-          )
-          return(NA_character_)
-        }
-
-        dir.create(dest_path, showWarnings = FALSE, recursive = TRUE)
-        utils::unzip(file, exdir = dest_path, overwrite = overwrite)
-        file.remove(file)
-      }
-
-      status_msg(
-        res,
-        "Downloaded logs for run {.val {run_id}} from repo {.val {repo}} to {.val {dest_path}}.",
-        NULL
-      )
-
-      dest_path
-    }
+    )
   )
 
   invisible(res)

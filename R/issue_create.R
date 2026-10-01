@@ -21,7 +21,6 @@ github_api_issue_create = function(repo, title, body, labels=character(), assign
 #' @export
 #'
 issue_create = function(repo, title, body, labels = character(), assignees = character(), delay=0) {
-
   arg_is_chr(repo, title, body)
 
   if (!is.list(labels))
@@ -36,33 +35,35 @@ issue_create = function(repo, title, body, labels = character(), assignees = cha
   )
 
   n = nrow(df)
-
   if (n > 20 & delay == 0) {
     cli::cli_alert_info(c(
       "Attempting to create {.val {n}} issues - this is likely to trigger GitHub's secondary rate limit.",
       "Setting a delay of 5 seconds per request to avoid this, override this using {.field delay}."
     ), wrap=TRUE)
-
     delay = 5
   }
 
-  res = purrr::pmap(
-    df,
-    function(repo, title, body, labels, assignees) {
-      res = purrr::safely(github_api_issue_create)(
-        repo, title, body, labels, assignees
-      )
+  res = status_scope(
+    "Creating issues", n,
+    done = "Created {n_ok} of {total} issue{?s}",
+    purrr::pmap(
+      df,
+      function(repo, title, body, labels, assignees) {
+        res = purrr::safely(github_api_issue_create)(
+          repo, title, body, labels, assignees
+        )
 
-      status_msg(
-        res,
-        "Created issue {.val {title}} for repo {.val {repo}}.",
-        "Failed to create issue {.val {title}} for repo {.val {repo}}."
-      )
+        status_msg(
+          res,
+          "Created issue {.val {title}} for repo {.val {repo}}.",
+          "Failed to create issue {.val {title}} for repo {.val {repo}}."
+        )
 
-      Sys.sleep(delay)
+        Sys.sleep(delay)
 
-      res
-    }
+        res
+      }
+    )
   )
 
   invisible(res)

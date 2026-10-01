@@ -14,18 +14,25 @@ github_api_repo_rename = function(repo, new_name){
 repo_rename = function(repo, new_repo) {
   arg_is_chr(repo, new_repo)
 
-  res = purrr::map2(
-    repo, new_repo,
-    function(repo, new_repo) {
-      res = purrr::safely(github_api_repo_rename)(repo, new_repo)
-      new_full = paste0(get_repo_owner(repo), "/", new_repo)
+  d = tibble::tibble(repo, new_repo)
 
-      status_msg(
-        res,
-        "Renamed repo {.val {repo}} to {.val {new_full}}.",
-        "Failed to rename repo {.val {repo}} to {.val {new_full}}."
-      )
-    }
+  res = status_scope(
+    "Renaming repos", nrow(d),
+    done = "Renamed {n_ok} of {total} repo{?s}",
+    purrr::pmap(
+      d,
+      function(repo, new_repo) {
+        res = purrr::safely(github_api_repo_rename)(repo, new_repo)
+
+        new_full = paste0(get_repo_owner(repo), "/", new_repo)
+
+        status_msg(
+          res,
+          "Renamed repo {.val {repo}} to {.val {new_full}}.",
+          "Failed to rename repo {.val {repo}} to {.val {new_full}}."
+        )
+      }
+    )
   )
 
   invisible(res)

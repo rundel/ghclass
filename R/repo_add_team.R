@@ -42,29 +42,37 @@ repo_add_team = function(
   d = dplyr::distinct(d)
 
   if (team_type == "name")
-    d[["team"]] = team_slug_lookup(org, d[["team"]])
+    d[["slug"]] = team_slug_lookup(org, d[["team"]])
+  else
+    d[["slug"]] = d[["team"]]
 
-  check_team_slug(d[["team"]])
+  check_team_slug(d[["slug"]])
 
-  res = purrr::pmap(
-    d,
-    function(team, repo) {
-      if (is.na(team))
-        return()
+  res = status_scope(
+    "Adding teams to repos", nrow(d),
+    done = "Gave {n_ok} of {total} team{?s} {.val {permission}} access to repos",
+    purrr::pmap(
+      d,
+      function(team, repo, slug) {
+        if (is.na(slug)) {
+          status_fail("Team {.val {team}} does not exist in org {.val {org}}.")
+          return()
+        }
 
-      res = purrr::safely(github_api_team_add)(
-        org = org,
-        team_slug = team,
-        repo = repo,
-        permission = permission
-      )
+        res = purrr::safely(github_api_team_add)(
+          org = org,
+          team_slug = slug,
+          repo = repo,
+          permission = permission
+        )
 
-      status_msg(
-        res,
-        "Team {.val {team}} given {.val {permission}} access to repo {.val {repo}}",
-        "Failed to give team {.val {team}} {.val {permission}} access to repo {.val {repo}}."
-      )
-    }
+        status_msg(
+          res,
+          "Team {.val {team}} given {.val {permission}} access to repo {.val {repo}}.",
+          "Failed to give team {.val {team}} {.val {permission}} access to repo {.val {repo}}."
+        )
+      }
+    )
   )
 
   invisible(res)

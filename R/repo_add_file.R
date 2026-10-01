@@ -37,43 +37,49 @@ repo_add_file = function(repo, file, message = NULL, repo_folder = NULL, branch 
   if (is.null(branch))
     branch = list(NULL)
 
-  res = purrr::pmap(
-    list(repo, file, branch),
-    function(repo, file, branch) {
-      purrr::map(
-        file,
-        function(file){
-          gh_path = file
+  d = tibble::tibble(repo = repo, file = file, branch = branch)
 
-          if (!preserve_path)
-            gh_path = fs::path_file(file)
+  res = status_scope(
+    "Adding files", sum(lengths(d[["file"]])),
+    done = "Added {n_ok} of {total} file{?s}",
+    purrr::pmap(
+      d,
+      function(repo, file, branch) {
+        purrr::map(
+          file,
+          function(file){
+            gh_path = file
 
-          if(!is.null(repo_folder))
-            gh_path = fs::path(repo_folder, gh_path)
+            if (!preserve_path)
+              gh_path = fs::path_file(file)
 
-          if (!file_exists(repo, gh_path, branch) | overwrite) {
-            res = repo_put_file(
-              repo = repo,
-              path = gh_path,
-              content = read_bin_file(file),
-              message = message,
-              branch = branch,
-              verbose = FALSE
-            )
-          } else {
-            res = failed_result(
-              "File already exists, re-run with overwrite = TRUE to replace it."
+            if(!is.null(repo_folder))
+              gh_path = fs::path(repo_folder, gh_path)
+
+            if (!file_exists(repo, gh_path, branch) | overwrite) {
+              res = repo_put_file(
+                repo = repo,
+                path = gh_path,
+                content = read_bin_file(file),
+                message = message,
+                branch = branch,
+                verbose = FALSE
+              )
+            } else {
+              res = failed_result(
+                "File already exists, re-run with overwrite = TRUE to replace it."
+              )
+            }
+
+            status_msg(
+              res,
+              "Added file {.val {gh_path}} to repo {.val {repo}}.",
+              "Failed to add file {.val {gh_path}} to repo {.val {repo}}."
             )
           }
-
-          status_msg(
-            res,
-            "Added file {.val {gh_path}} to repo {.val {repo}}.",
-            "Failed to add file {.val {gh_path}} to repo {.val {repo}}."
-          )
-        }
-      )
-    }
+        )
+      }
+    )
   )
 
   invisible(res)

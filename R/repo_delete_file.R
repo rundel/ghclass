@@ -33,26 +33,32 @@ repo_delete_file = function(repo, path, message = NULL, branch = NULL) {
   if (is.null(branch))
     branch = list(NULL)
 
-  res = purrr::pmap(
-    list(repo, path, branch),
-    function(repo, path, branch) {
-      if (is.null(message))
-        message = cli_glue("Deleting file {path}")
+  d = tibble::tibble(repo, path, branch)
 
-      res = purrr::safely(
-        function() {
-          github_api_repo_delete_file(repo, path, message, branch = branch)
-        }
-      )()
+  res = status_scope(
+    "Deleting files", nrow(d),
+    done = "Deleted {n_ok} of {total} file{?s}",
+    purrr::pmap(
+      d,
+      function(repo, path, branch) {
+        if (is.null(message))
+          message = cli_glue("Deleting file {path}")
 
-      status_msg(
-        res,
-        "Deleted file {.file {path}} from repo {.val {repo}}.",
-        "Failed to delete file {.file {path}} from repo {.val {repo}}."
-      )
+        res = purrr::safely(
+          function() {
+            github_api_repo_delete_file(repo, path, message, branch = branch)
+          }
+        )()
 
-      res
-    }
+        status_msg(
+          res,
+          "Deleted file {.val {path}} from repo {.val {repo}}.",
+          "Failed to delete file {.val {path}} from repo {.val {repo}}."
+        )
+
+        res
+      }
+    )
   )
 
   invisible(res)

@@ -10,7 +10,6 @@ github_api_team_delete = function(org, team_slug) {
 #' @export
 #'
 team_delete = function(org, team, team_type = c("name", "slug"), prompt = TRUE) {
-
   arg_is_chr_scalar(org)
   arg_is_chr(team)
   arg_is_lgl_scalar(prompt)
@@ -24,27 +23,34 @@ team_delete = function(org, team, team_type = c("name", "slug"), prompt = TRUE) 
   }
 
   if (team_type == "name")
-    team = team_slug_lookup(org, team)
+    slug = team_slug_lookup(org, team)
+  else
+    slug = team
 
-  check_team_slug(team)
+  check_team_slug(slug)
 
-  res = purrr::map(
-    team,
-    function(team) {
+  d = tibble::tibble(team, slug)
 
-      if (is.na(team)) {
-        cli::cli_alert_danger("Team {.val {team}} does not exist in org {.val {org}}.")
-        return()
+  res = status_scope(
+    "Deleting teams", nrow(d),
+    done = "Deleted {n_ok} of {total} team{?s} from org {.val {org}}",
+    purrr::pmap(
+      d,
+      function(team, slug) {
+        if (is.na(slug)) {
+          status_fail("Team {.val {team}} does not exist in org {.val {org}}.")
+          return()
+        }
+
+        res = purrr::safely(github_api_team_delete)(org, slug)
+
+        status_msg(
+          res,
+          "Deleted team {.val {team}} from org {.val {org}}.",
+          "Failed to delete team {.val {team}} from org {.val {org}}."
+        )
       }
-
-      res = purrr::safely(github_api_team_delete)(org, team)
-
-      status_msg(
-        res,
-        "Deleted team {.val {team}} from org {.val {org}}.",
-        "Failed to delete team {.val {team}} from org {.val {org}}."
-      )
-    }
+    )
   )
 
   invisible(res)

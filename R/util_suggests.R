@@ -12,7 +12,3 @@ require_pkg = function(pkg, call = rlang::caller_call()) {
 require_gert = function(call = rlang::caller_call()) {
   require_pkg("gert", call = call)
 }
-
-require_styler = function(call = rlang::caller_call()) {
-  require_pkg("styler", call = call)
-}

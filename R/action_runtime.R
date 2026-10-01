@@ -26,13 +26,12 @@ action_runtime = function(
   d = action_runs(repo = repo, branch = branch, event = event,
                   status = status, created = created, limit = limit)
 
-
   get_run_dur = function(repo, run_id) {
     res = purrr::safely(github_api_action_run_usage)(repo, run_id)
 
     status_msg(
       res,
-      fail = "Failed to retrieve workflow runs for repo {.val {repo}}."
+      fail = "Failed to retrieve run time for run {.val {run_id}} from repo {.val {repo}}."
     )
 
     run_dur = result(res)$run_duration_ms
@@ -42,9 +41,13 @@ action_runtime = function(
     run_dur
   }
 
-  dplyr::mutate(
-    d,
-    run_dur = purrr::map2_dbl(.data$repo, .data$run_id, get_run_dur),
-    run_dur = lubridate::duration(.data$run_dur/1000)
+  run_dur = status_scope(
+    "Retrieving run times", nrow(d),
+    done = "Retrieved run times for {n_ok} of {total} run{?s}",
+    purrr::map2_dbl(d[["repo"]], d[["run_id"]], get_run_dur)
   )
+
+  d[["run_dur"]] = lubridate::duration(run_dur / 1000)
+
+  d
 }

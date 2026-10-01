@@ -22,17 +22,21 @@ repo_delete = function(repo, prompt = TRUE) {
     }
   }
 
-  res = purrr::map(
-    repo,
-    function(repo) {
-      res = purrr::safely(github_api_repo_delete)(repo)
+  res = status_scope(
+    "Deleting repos", length(repo),
+    done = "Deleted {n_ok} of {total} repo{?s}",
+    purrr::map(
+      repo,
+      function(repo) {
+        res = purrr::safely(github_api_repo_delete)(repo)
 
-      status_msg(
-        res,
-        "Deleted repo {.val {repo}}.",
-        "Failed to delete repo {.val {repo}}."
-      )
-    }
+        status_msg(
+          res,
+          "Deleted repo {.val {repo}}.",
+          "Failed to delete repo {.val {repo}}."
+        )
+      }
+    )
   )
 
   invisible(res)

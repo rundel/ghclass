@@ -38,7 +38,7 @@ Imports:
     whisker,
     withr,
     dplyr,
-    cli (>= 3.0.0),
+    cli (>= 3.6.0),
     lifecycle,
     readr,
     tidyselect
@@ -46,8 +46,7 @@ Suggests:
     here,
     knitr,
     sodium,
-    styler,
-    testthat (>= 3.0.0),
+    testthat (>= 3.2.0),
     usethis,
     gert,
     gitcreds

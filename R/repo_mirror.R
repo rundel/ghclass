@@ -28,38 +28,45 @@ repo_mirror = function(source_repo, target_repo, overwrite=FALSE, verbose=FALSE,
   unlink(dir, recursive = TRUE) # Make sure the source repo local folder does not exist
 
   repos = repo_n_commits(target_repo, quiet = TRUE) %>%
-    dplyr::select(.data$repo, .data$n)
+    dplyr::select("repo", "n")
 
   local_repo_clone(source_repo, tmpdir, mirror = TRUE, verbose = verbose)
 
   warned = FALSE
 
-  res = purrr::pmap(
-    repos,
-    function(repo, n) {
-      repo_url = cli_glue("{github_host_url()}/{repo}.git")
+  res = status_scope(
+    "Mirroring repos", nrow(repos),
+    done = "Mirrored {.val {source_repo}} to {n_ok} of {total} repo{?s}",
+    purrr::pmap(
+      repos,
+      function(repo, n) {
+        repo_url = cli_glue("{github_host_url()}/{repo}.git")
 
-      if (is.na(n)) {
-        cli::cli_alert_danger("The repo {.val {repo}} does not exist")
-      } else if (n > 1 & !overwrite) {
-        msg = paste(
-          "The repo {.val {repo}} has more than one commit",
-          "(n_commit = {.val {n}})."
-        )
+        if (is.na(n)) {
+          status_fail("The repo {.val {repo}} does not exist.")
+        } else if (n > 1 & !overwrite) {
+          msg = paste(
+            "The repo {.val {repo}} has more than one commit",
+            "(n_commit = {.val {n}})."
+          )
 
-        if (!warned) {
-          msg = c(msg, paste(
-            "Use {.code overwrite = TRUE} if you want to permanently",
-            "overwrite this repository."
-          ))
-          warned <<- TRUE
+          if (!warned) {
+            msg = paste(
+              msg,
+              "Use {.code overwrite = TRUE} if you want to permanently",
+              "overwrite this repository."
+            )
+            warned <<- TRUE
+          }
+
+          status_fail(msg)
+        } else {
+          res = local_repo_push(dir, remote = repo_url, force = TRUE, prompt = FALSE, mirror = TRUE, verbose = verbose)
+          status_msg(res[[1]])
+          res
         }
-
-        cli::cli_alert_danger( msg )
-      } else {
-        local_repo_push(dir, remote = repo_url, force = TRUE, prompt = FALSE, mirror = TRUE, verbose = verbose)
       }
-    }
+    )
   )
 
   unlink(dir, recursive = TRUE)
