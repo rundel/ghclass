@@ -12,6 +12,8 @@
 
 * `org_grade_assignment()` now has a `branch` argument to clone and collect artifacts from a specific branch.
 
+* `org_grade_assignment()` gained an `overwrite` argument; by default it stops if `path` already contains repos, artifacts, comments, or the key repo, rather than whenever `path` exists, and asks for confirmation before creating a `path` with the same name as the working directory.
+
 * `action_artifacts()` now includes a `commit` column giving the commit each artifact was built from.
 
 * Fixed a bug when reporting failures of non-API operations such as `local_repo_clone()`.
