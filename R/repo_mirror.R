@@ -36,7 +36,7 @@ repo_mirror = function(source_repo, target_repo, overwrite=FALSE, verbose=FALSE,
 
   res = status_scope(
     "Mirroring repos", nrow(repos),
-    done = "Mirrored {.val {source_repo}} to {n_ok} of {total} repo{?s}",
+    done = "Mirrored {n_ok} of {total} repo{?s} from {.val {source_repo}}",
     purrr::pmap(
       repos,
       function(repo, n) {

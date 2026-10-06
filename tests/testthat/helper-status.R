@@ -2,7 +2,7 @@ local_status_output = function(.local_envir = parent.frame()) {
   withr::local_options(
     list(
       cli.num_colors = 1, cli.unicode = FALSE, cli.dynamic = FALSE,
-      cli.progress_show_after = 0
+      cli.progress_show_after = 0, ghclass.progress = FALSE
     ),
     .local_envir = .local_envir
   )

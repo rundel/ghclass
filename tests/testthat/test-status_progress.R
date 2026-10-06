@@ -75,7 +75,7 @@ test_that("repo_add_team() reports missing teams", {
     out,
     c(
       "x Team \"missing\" does not exist in org \"org\".",
-      "x Gave 1 of 2 teams \"push\" access to repos, 1 failed"
+      "x Granted 1 of 2 teams \"push\" access to repos, 1 failed"
     )
   )
 
@@ -83,7 +83,7 @@ test_that("repo_add_team() reports missing teams", {
   expect_equal(
     out,
     c(
-      "v Team \"t1\" given \"push\" access to repo \"org/r1\".",
+      "v Team \"t1\" granted \"push\" access to repo \"org/r1\".",
       "x Team \"missing\" does not exist in org \"org\"."
     )
   )
@@ -154,7 +154,7 @@ test_that("org_create_assignment() prints one summary per step", {
       "v Created 2 of 2 repos",
       "v Created 2 of 2 teams",
       "v Added 2 of 2 users to teams",
-      "v Gave 2 of 2 teams \"push\" access to repos"
+      "v Granted 2 of 2 teams \"push\" access to repos"
     )
   )
 })
@@ -351,7 +351,7 @@ test_that("repo_mirror() counts mirrored, missing, and non-empty repos", {
   expect_equal(
     tail(out, 2),
     c(
-      "x Mirrored \"org/src\" to 1 of 3 repos, 2 failed",
+      "x Mirrored 1 of 3 repos from \"org/src\", 2 failed",
       "v Removed local copy of \"org/src\""
     )
   )
@@ -386,7 +386,7 @@ test_that("repo_mirror() suppresses helper successes but preserves failures", {
     withr::local_options(cli.dynamic = dynamic)
     out = cli::cli_fmt(res <- withVisible(with_progress(mirror())))
     expect_equal(visible_lines(out), c(
-      "v Mirrored \"org/src\" to 2 of 2 repos",
+      "v Mirrored 2 of 2 repos from \"org/src\"",
       "v Removed local copy of \"org/src\""
     ))
     expect_false(res[["visible"]])
@@ -397,7 +397,7 @@ test_that("repo_mirror() suppresses helper successes but preserves failures", {
     expect_equal(visible_lines(out), c(
       "x Failed to push from local repo \"src\" to \"https://github.com/org/b.git\".",
       "\\-push failed",
-      "x Mirrored \"org/src\" to 1 of 2 repos, 1 failed",
+      "x Mirrored 1 of 2 repos from \"org/src\", 1 failed",
       "v Removed local copy of \"org/src\""
     ))
     fail_push = FALSE

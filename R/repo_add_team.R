@@ -49,8 +49,8 @@ repo_add_team = function(
   check_team_slug(d[["slug"]])
 
   res = status_scope(
-    "Adding teams to repos", nrow(d),
-    done = "Gave {n_ok} of {total} team{?s} {.val {permission}} access to repos",
+    "Granting repo access", nrow(d),
+    done = "Granted {n_ok} of {total} team{?s} {.val {permission}} access to repos",
     purrr::pmap(
       d,
       function(team, repo, slug) {
@@ -68,8 +68,8 @@ repo_add_team = function(
 
         status_msg(
           res,
-          "Team {.val {team}} given {.val {permission}} access to repo {.val {repo}}.",
-          "Failed to give team {.val {team}} {.val {permission}} access to repo {.val {repo}}."
+          "Team {.val {team}} granted {.val {permission}} access to repo {.val {repo}}.",
+          "Failed to grant team {.val {team}} {.val {permission}} access to repo {.val {repo}}."
         )
       }
     )
