@@ -27,7 +27,7 @@ pages_delete(repo, prompt = TRUE)
 \item{build_type}{Character. Either \code{"workflow"} or \code{"legacy"} - the former uses GitHub actions to
 build and publish the site (requires a workflow file to achieve this).}
 
-\item{branch}{Character. Repository branch to publish.}
+\item{branch}{Character. Repository branch to publish, which must already exist.}
 
 \item{path}{Character. Repository path to publish.}
 
@@ -47,6 +47,12 @@ build and publish the site (requires a workflow file to achieve this).}
 \item \code{pages_create()} - creates a Pages site for the provided repos.
 \item \code{pages_delete()} - deletes the Pages site for the provided repos.
 }
+}
+\details{
+For the \code{"legacy"} build type the branch being published must already exist, otherwise
+\code{pages_create()} fails. GitHub enables Pages automatically when a branch named \code{gh-pages}
+is created (e.g. with \code{\link[=branch_create]{branch_create()}}), publishing that branch from \code{/}, so
+\code{pages_create()} is not needed in that case.
 }
 \examples{
 \dontrun{

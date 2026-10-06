@@ -12,6 +12,12 @@
 #'
 #' * `pages_delete()` - deletes the Pages site for the provided repos.
 #'
+#' @details
+#' For the `"legacy"` build type the branch being published must already exist, otherwise
+#' `pages_create()` fails. GitHub enables Pages automatically when a branch named `gh-pages`
+#' is created (e.g. with [branch_create()]), publishing that branch from `/`, so
+#' `pages_create()` is not needed in that case.
+#'
 #' @param repo Character. Address of repositories in `owner/name` format.
 #'
 #' @return
@@ -167,7 +173,7 @@ pages_site_matches = function(site, build_type, branch, path) {
 #' @param build_type Character. Either `"workflow"` or `"legacy"` - the former uses GitHub actions to
 #' build and publish the site (requires a workflow file to achieve this).
 #'
-#' @param branch Character. Repository branch to publish.
+#' @param branch Character. Repository branch to publish, which must already exist.
 #'
 #' @param path Character. Repository path to publish.
 #'
