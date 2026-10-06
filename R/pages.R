@@ -139,6 +139,28 @@ github_api_pages_create = function(repo, build_type, branch, path) {
 
 
 
+# GitHub enables Pages on its own when a `gh-pages` branch is created
+pages_already_enabled = function(res) {
+  e = error(res)
+
+  inherits(e, "http_error_409") &&
+    grepl(
+      "already enabled",
+      paste(c(e[["message"]], e[["response_content"]][["message"]]), collapse = " "),
+      fixed = TRUE
+    )
+}
+
+pages_site_matches = function(site, build_type, branch, path) {
+  if (!identical(site[["build_type"]], build_type))
+    return(FALSE)
+
+  build_type == "workflow" ||
+    (identical(site[["source"]][["branch"]], branch) && identical(site[["source"]][["path"]], path))
+}
+
+
+
 #' @name pages
 #' @rdname pages
 #'
@@ -169,6 +191,15 @@ pages_create = function(
       repo,
       function(repo) {
         res = purrr::safely(github_api_pages_create)(repo, build_type, branch, path)
+
+        if (pages_already_enabled(res)) {
+          cur = purrr::safely(github_api_pages)(repo)
+
+          if (succeeded(cur) && pages_site_matches(result(cur), build_type, branch, path)) {
+            status_skip("Skipping Pages site for repo {.val {repo}}, it already exists.")
+            return(cur)
+          }
+        }
 
         status_msg(
           res,
