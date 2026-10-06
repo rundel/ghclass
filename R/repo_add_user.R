@@ -20,8 +20,8 @@ repo_add_user = function(repo, user, permission = c("push", "pull", "admin", "ma
   d = tibble::tibble(repo, user)
 
   res = status_scope(
-    "Adding users to repos", nrow(d),
-    done = "Gave {n_ok} of {total} user{?s} {.val {permission}} access to repos",
+    "Granting repo access", nrow(d),
+    done = "Granted {n_ok} of {total} user{?s} {.val {permission}} access to repos",
     purrr::pmap(
       d,
       function(repo, user) {
@@ -33,8 +33,8 @@ repo_add_user = function(repo, user, permission = c("push", "pull", "admin", "ma
 
         status_msg(
           res,
-          "User {.val {user}} given {.val {permission}} access to repo {.val {repo}}.",
-          "Failed to give user {.val {user}} {.val {permission}} access to repo {.val {repo}}."
+          "User {.val {user}} granted {.val {permission}} access to repo {.val {repo}}.",
+          "Failed to grant user {.val {user}} {.val {permission}} access to repo {.val {repo}}."
         )
       }
     )

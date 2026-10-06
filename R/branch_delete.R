@@ -26,8 +26,8 @@ branch_delete = function(repo, branch) {
 
         status_msg(
           res,
-          "Removed branch {.val {format_repo(repo, branch)}}.",
-          "Failed to remove branch {.val {format_repo(repo, branch)}}."
+          "Deleted branch {.val {format_repo(repo, branch)}}.",
+          "Failed to delete branch {.val {format_repo(repo, branch)}}."
         )
 
         res

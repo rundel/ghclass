@@ -5,8 +5,8 @@ repo_is_template = function(repo) {
   arg_is_chr(repo)
 
   status_scope(
-    "Retrieving repos", length(repo),
-    done = "Retrieved {n_ok} of {total} repo{?s}",
+    "Retrieving template status", length(repo),
+    done = "Retrieved template status for {n_ok} of {total} repo{?s}",
     purrr::map_lgl(
       repo,
       function(repo) {
@@ -14,7 +14,7 @@ repo_is_template = function(repo) {
 
         status_msg(
           res,
-          fail = "Failed to retrieve repo {.val {repo}}."
+          fail = "Failed to retrieve template status for repo {.val {repo}}."
         )
 
         if (succeeded(res)) {

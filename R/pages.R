@@ -83,7 +83,7 @@ pages_status = function(repo) {
 
         status_msg(
           res,
-          fail = "Failed to retrieve Pages information for repo {.val {repo}}."
+          fail = "Failed to retrieve Pages status for repo {.val {repo}}."
         )
 
         if (failed(res) || empty_result(res)) {
@@ -172,7 +172,7 @@ pages_create = function(
 
         status_msg(
           res,
-          "Created Pages site for {.val {repo}}.",
+          "Created Pages site for repo {.val {repo}}.",
           "Failed to create Pages site for repo {.val {repo}}."
         )
 
