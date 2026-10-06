@@ -1,5 +1,7 @@
 # ghclass (development version)
 
+* `pages_create()` now reports a repo whose Pages site already exists with the requested settings as skipped rather than failed.
+
 * Functions that create content now abort the batch with an error of class `ghclass_rate_limit_error` when GitHub reports a secondary rate limit (including the `422 Could not clone: was submitted too quickly` response from template generation), instead of failing each remaining item.
 
 * Added progress mode, enabled with `with_progress()` or `options(ghclass.progress = TRUE)`, which replaces per-item success messages with a progress bar and a summary line for functions that act on multiple repos, teams, users, issues, branches, or files.
