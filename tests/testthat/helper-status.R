@@ -71,6 +71,19 @@ outside_reporter = function() {
   status_msg(ok_result(), "Reporter ran.", "Reporter failed.")
 }
 
+# Capture bytes written to the terminal without muffling message conditions.
+capture_status_output = function(code) {
+  con = rawConnection(raw(), "w")
+  previous = getConnection(sink.number(type = "message"))
+  on.exit({
+    sink(previous, type = "message")
+    close(con)
+  })
+  sink(con, type = "message")
+  force(code)
+  rawToChar(rawConnectionValue(con))
+}
+
 # Replays carriage returns, newlines, erase-to-end-of-line and cursor-up so a
 # captured stream shows what a terminal would display at the end
 visible_lines = function(out) {
@@ -91,7 +104,7 @@ visible_lines = function(out) {
       if (r > length(rows)) rows[r] = ""
     } else if (t == "\033[K") {
       rows[r] = substr(rows[r], 1L, col - 1L)
-    } else if (grepl("A$", t)) {
+    } else if (grepl("^\033\\[[0-9]*A$", t)) {
       up = as.integer(sub("\033\\[([0-9]*)A", "\\1", t))
       r = max(1L, r - if (is.na(up)) 1L else up)
     } else if (!startsWith(t, "\033[?25")) {
@@ -107,7 +120,8 @@ visible_lines = function(out) {
   rows[rows != ""]
 }
 
-# Elements of a captured message stream that draw the progress display
+# Progress frames in the captured terminal stream (each starts and ends with CR).
 display_frames = function(out, name) {
-  out[grepl("^(\033\\[\\?25l)?\r", out) & grepl(name, out, fixed = TRUE)]
+  frames = regmatches(out, gregexpr("(\033\\[\\?25l)?\r[^\r]*\r", out))[[1]]
+  frames[grepl(name, frames, fixed = TRUE)]
 }

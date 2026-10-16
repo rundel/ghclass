@@ -243,11 +243,7 @@ ghclass_api_v3_req = function(
   # gh (>= 1.5) caches GET responses by url for up to 60s, which can return
   # stale results for read-after-write checks (e.g. org_sitrep() after
   # org_set_repo_permission()), so the cache is always bypassed
-  opts = list(gh_cache = FALSE)
-  # The progress hook cannot see the download path gh passes to req_perform()
-  # and must not replace an existing mock with real HTTP requests.
-  if (is.null(gh_args[[".destfile"]]) && is.null(getOption("httr2_mock")))
-    opts[["httr2_mock"]] = status_httr2_hook()
+  opts = c(list(gh_cache = FALSE), status_httr2_options(gh_args[[".destfile"]]))
 
   # gh's own messages are silenced, but progress frames drawn during the
   # request must still reach the terminal
