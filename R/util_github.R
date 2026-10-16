@@ -245,7 +245,8 @@ ghclass_api_v3_req = function(
   # org_set_repo_permission()), so the cache is always bypassed
   opts = list(gh_cache = FALSE)
   # The progress hook cannot see the download path gh passes to req_perform()
-  if (is.null(gh_args[[".destfile"]]))
+  # and must not replace an existing mock with real HTTP requests.
+  if (is.null(gh_args[[".destfile"]]) && is.null(getOption("httr2_mock")))
     opts[["httr2_mock"]] = status_httr2_hook()
 
   # gh's own messages are silenced, but progress frames drawn during the

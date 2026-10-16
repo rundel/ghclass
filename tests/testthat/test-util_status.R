@@ -362,6 +362,40 @@ test_that("ghclass_api_v3_req() attaches the hook except for downloads", {
   expect_length(display_frames(out, "Fetching"), 2)
 })
 
+test_that("progress mode preserves existing httr2 mocks for API requests", {
+  local_status_output()
+  withr::local_options(cli.ansi = FALSE)
+  local_mocked_bindings(github_get_token = function(...) "")
+  local_mocked_bindings(
+    req_perform1 = function(...) stop("Unexpected real HTTP request"),
+    .package = "httr2"
+  )
+
+  methods = character()
+  mock = function(req) {
+    methods <<- c(methods, req[["method"]])
+    httr2::response(
+      200,
+      headers = list(`content-type` = "application/json"),
+      body = charToRaw('{"login":"mock-user"}')
+    )
+  }
+  withr::local_options(list(httr2_mock = mock))
+
+  for (dynamic in c(FALSE, TRUE)) {
+    withr::local_options(cli.dynamic = dynamic)
+    suppressMessages(with_progress(status_scope("Fetching", 2, {
+      for (endpoint in c("GET /user", "POST /user/repos")) {
+        res = ghclass_api_v3_req(endpoint)
+        expect_equal(res[["login"]], "mock-user")
+        expect_identical(getOption("httr2_mock"), mock)
+      }
+    })))
+  }
+
+  expect_equal(methods, c("GET", "POST", "GET", "POST"))
+})
+
 test_that("status_scope() aborts the batch on a secondary rate limit", {
   local_status_output()
 
