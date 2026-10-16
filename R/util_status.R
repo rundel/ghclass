@@ -15,6 +15,15 @@
 #' by wrapping code in `with_progress()`. Functions that do not yet support
 #' progress mode print their usual per-item messages.
 #'
+#' The progress bar is only drawn in dynamic terminals, after the delay set by
+#' `options(cli.progress_show_after)` (2 seconds by default). Its layout follows
+#' `cli::console_width()`, which can be overridden with `options(cli.width)`:
+#' when the console is too narrow for the bar and the latest message to share
+#' a line, the message is shown on a second line in terminals that support
+#' cursor movement, and is truncated otherwise. The spinner keeps turning while
+#' GitHub API requests are waiting on a response, but not during local git
+#' operations.
+#'
 #' @param code Code to execute with progress mode enabled.
 #'
 #' @return The result of evaluating `code`.
@@ -86,25 +95,20 @@ status_scope = function(name, total, expr, done = NULL) {
   scope[["depth"]] = length(status_env[["scopes"]]) + 1L
   scope[["envir"]] = parent.frame()
 
+  # Static output cannot clear progress lines; keep only failures, skips and summaries.
+  scope[["display"]] = cli::is_dynamic_tty()
+  scope[["status"]] = NULL
+  scope[["show_at"]] = status_now() + getOption("cli.progress_show_after", 2)
+
   status_env[["scopes"]][[scope[["depth"]]]] = scope
   on.exit(status_scope_pop(scope), add = TRUE)
 
-  # Static output cannot clear progress lines; keep only failures, skips and summaries.
-  scope[["bar"]] = NULL
-  if (cli::is_dynamic_tty()) {
-    scope[["bar"]] = cli::cli_progress_bar(
-      name = name, total = total,
-      format = paste(
-        "{cli::pb_spin} {cli::pb_name} {cli::pb_bar}",
-        "{cli::pb_current}/{cli::pb_total} | {cli::pb_status}"
-      ),
-      auto_terminate = FALSE, clear = TRUE,
-      .envir = environment()
-    )
-  }
-
   res = withCallingHandlers(
     expr,
+    message = function(m) {
+      if (!inherits(m, "ghclass_status_frame"))
+        status_display_clear()
+    },
     error = function(e) scope[["state"]] = "error",
     interrupt = function(e) scope[["state"]] = "interrupt"
   )
@@ -115,14 +119,7 @@ status_scope = function(name, total, expr, done = NULL) {
 
 status_scope_pop = function(scope) {
   status_env[["scopes"]] = status_env[["scopes"]][seq_len(scope[["depth"]] - 1L)]
-
-  if (!is.null(scope[["bar"]])) {
-    tryCatch(
-      cli::cli_progress_done(id = scope[["bar"]], result = "clear"),
-      error = function(e) NULL
-    )
-  }
-
+  status_display_clear()
   status_scope_summary(scope)
 }
 
@@ -166,8 +163,9 @@ status_scope_event = function(scope, outcome, msg = NULL, n = 1L) {
   field = switch(outcome, ok = "n_ok", fail = "n_fail", skip = "n_skip")
   scope[[field]] = scope[[field]] + n
 
-  if (!is.null(scope[["bar"]]))
-    cli::cli_progress_update(id = scope[["bar"]], inc = n, status = msg)
+  if (!is.null(msg))
+    scope[["status"]] = msg
+  status_redraw(force = TRUE)
 
   invisible(TRUE)
 }
@@ -202,10 +200,12 @@ status_fail = function(msg, .envir = parent.frame()) {
 status_note = function(msg, .envir = parent.frame()) {
   scope = status_scope_for(.envir)
 
-  if (is.null(scope))
+  if (is.null(scope)) {
     cli::cli_alert_success(msg, wrap = FALSE, .envir = .envir)
-  else if (!is.null(scope[["bar"]]))
-    cli::cli_progress_update(id = scope[["bar"]], inc = 0, status = status_text(msg, .envir))
+  } else {
+    scope[["status"]] = status_text(msg, .envir)
+    status_redraw(force = TRUE)
+  }
 
   invisible(NULL)
 }

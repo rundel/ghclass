@@ -13,7 +13,8 @@ github_api_v4_graphql = function(query, vars = list(), max_retries = 3L,
         Authorization = paste("bearer", github_get_token())
       ),
       encode = "json",
-      body = list(query = query)
+      body = list(query = query),
+      status_httr_config()
     )
 
     res = httr::content(req)

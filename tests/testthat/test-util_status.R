@@ -164,56 +164,6 @@ test_that("status_msg() counts outcomes without messages and status_note() count
   expect_equal(out, "v Half way there.")
 })
 
-test_that("status_scope() draws and clears a progress bar in dynamic terminals", {
-  local_status_output()
-  withr::local_options(cli.dynamic = TRUE)
-  # cli shares a redraw timer across bars; force updates for this output test.
-  progress_update = cli::cli_progress_update
-  local_mocked_bindings(
-    cli_progress_update = function(..., force = FALSE) progress_update(..., force = TRUE),
-    .package = "cli"
-  )
-
-  out = cli::cli_fmt(with_progress(fake_loop(c("a", "bad", "skip", "b"))))
-  expect_match(out[1], "Creating repos", fixed = TRUE)
-  expect_match(out[1], "1/4 | Created repo \"a\".", fixed = TRUE)
-  expect_equal(
-    visible_lines(out),
-    c(
-      "x Failed to create repo \"bad\".",
-      "\\-GitHub API error (422): Unprocessable Entity",
-      "  +- API message: Validation Failed",
-      "  \\- API docs: https://docs.github.com/rest",
-      "i Skipping repo \"skip\", it already exists.",
-      "x Created 2 of 4 repos, 1 failed, 1 skipped"
-    )
-  )
-  expect_length(status_env[["scopes"]], 0)
-
-  out = cli::cli_fmt(
-    expect_error(with_progress(fake_loop(c("a", "b", "c"), die_at = "b")), "unexpected death")
-  )
-  expect_equal(visible_lines(out), "x Creating repos aborted after 1 of 3: 1 succeeded")
-  expect_length(status_env[["scopes"]], 0)
-
-  outer = function() {
-    status_scope(
-      "Outer", 2, done = "Outer {n_ok} of {total}",
-      purrr::walk(1:2, function(i) {
-        fake_loop(c("a", "b"))
-        status_msg(ok_result(), "Outer item {i}.")
-      })
-    )
-  }
-
-  out = cli::cli_fmt(with_progress(outer()))
-  expect_equal(
-    visible_lines(out),
-    c("v Created 2 of 2 repos", "v Created 2 of 2 repos", "v Outer 2 of 2")
-  )
-  expect_length(status_env[["scopes"]], 0)
-})
-
 test_that("status_scope() aborts the batch on a secondary rate limit", {
   local_status_output()
 

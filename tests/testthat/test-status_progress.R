@@ -384,7 +384,7 @@ test_that("repo_mirror() suppresses helper successes but preserves failures", {
 
   for (dynamic in c(FALSE, TRUE)) {
     withr::local_options(cli.dynamic = dynamic)
-    out = cli::cli_fmt(res <- withVisible(with_progress(mirror())))
+    out = capture_status_output(res <- withVisible(with_progress(mirror())))
     expect_equal(visible_lines(out), c(
       "v Mirrored 2 of 2 repos from \"org/src\"",
       "v Removed local copy of \"org/src\""
@@ -393,7 +393,7 @@ test_that("repo_mirror() suppresses helper successes but preserves failures", {
     expect_true(all(vapply(res[["value"]], function(x) succeeded(x[[1]]), logical(1))))
 
     fail_push = TRUE
-    out = cli::cli_fmt(with_progress(mirror()))
+    out = capture_status_output(with_progress(mirror()))
     expect_equal(visible_lines(out), c(
       "x Failed to push from local repo \"src\" to \"https://github.com/org/b.git\".",
       "\\-push failed",
