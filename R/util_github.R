@@ -6,7 +6,8 @@ github_api_download_file = function(url, dest, max_tries = 3) {
       url,
       httr::add_headers(
         Authorization = paste("bearer", github_get_token())
-      )
+      ),
+      status_httr_config()
     )
 
     if (httr::status_code(req) != 202)
@@ -242,9 +243,19 @@ ghclass_api_v3_req = function(
   # gh (>= 1.5) caches GET responses by url for up to 60s, which can return
   # stale results for read-after-write checks (e.g. org_sitrep() after
   # org_set_repo_permission()), so the cache is always bypassed
-  res = withr::with_options(
-    list(gh_cache = FALSE),
-    suppressMessages(do.call(gh::gh, gh_args))
+  opts = list(gh_cache = FALSE)
+  # The progress hook cannot see the download path gh passes to req_perform()
+  if (is.null(gh_args[[".destfile"]]))
+    opts[["httr2_mock"]] = status_httr2_hook()
+
+  # gh's own messages are silenced, but progress frames drawn during the
+  # request must still reach the terminal
+  res = withCallingHandlers(
+    withr::with_options(opts, do.call(gh::gh, gh_args)),
+    message = function(m) {
+      if (!inherits(m, "ghclass_status_frame"))
+        tryInvokeRestart("muffleMessage")
+    }
   )
 
   if (method == "GET" && is.null(names(res)) && length(res) == github_get_api_limit()) {

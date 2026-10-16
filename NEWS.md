@@ -6,6 +6,8 @@
 
 * Added progress mode, enabled with `with_progress()` or `options(ghclass.progress = TRUE)`, which replaces per-item success messages with a progress bar and a summary line for functions that act on multiple repos, teams, users, issues, branches, or files.
 
+* The progress bar spinner now keeps turning while API requests wait, and the bar moves the latest message to a second line when the console is too narrow for both.
+
 * `repo_add_team()`, `repo_remove_team()`, `team_members()`, and `team_pending()` now report teams that do not exist instead of silently skipping them; `branch_create()` reports an existing branch, and `local_repo_push()` a canceled force push, as skipped rather than failed; `action_artifacts()` failure messages now name the repo.
 
 * Status messages now use consistent wording, and `repo_issues()` no longer prints a message for each repo retrieved.

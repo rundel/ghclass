@@ -23,6 +23,15 @@ their usual message.
 Progress mode is enabled by setting \code{options(ghclass.progress = TRUE)} or
 by wrapping code in \code{with_progress()}. Functions that do not yet support
 progress mode print their usual per-item messages.
+
+The progress bar is only drawn in dynamic terminals, after the delay set by
+\code{options(cli.progress_show_after)} (2 seconds by default). Its layout follows
+\code{cli::console_width()}, which can be overridden with \code{options(cli.width)}:
+when the console is too narrow for the bar and the latest message to share
+a line, the message is shown on a second line in terminals that support
+cursor movement, and is truncated otherwise. The spinner keeps turning while
+GitHub API requests are waiting on a response, but not during local git
+operations.
 }
 \examples{
 \dontrun{
